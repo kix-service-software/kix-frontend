@@ -1,4 +1,4 @@
-import { IPluginService } from './IPlugin.service';
+import { IPluginService } from './IPluginService';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import jsonfile = require('jsonfile');
 import Plugins = require('js-plugins');

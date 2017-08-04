@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/Server.js",
     "test": "export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register 'tests/**/*.test.ts'"
   },
   "repository": {

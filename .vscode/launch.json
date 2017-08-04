@@ -8,7 +8,7 @@
                 "NODE_ENV": "development"
             },
             "name": "KIXng",
-            "program": "${workspaceRoot}/src/server.ts",
+            "program": "${workspaceRoot}/src/Server.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
