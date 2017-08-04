@@ -1,0 +1,37 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "indent": [
+            true,
+            "spaces",
+            4
+        ],
+        "max-line-length": [
+            true,
+            120
+        ],
+        "new-parens": true,
+        "no-arg": true,
+        "no-bitwise": true,
+        "no-conditional-assignment": true,
+        "no-consecutive-blank-lines": false,
+        "quotemark": [
+            "single"
+        ],
+        "trailing-comma": [
+            false
+        ],
+        "no-console": [
+            "log"
+        ],
+        "object-literal-sort-keys": [
+            false
+        ]
+    },
+    "jsRules": {
+        "max-line-length": [
+            true,
+            120
+        ]
+    }
+}
