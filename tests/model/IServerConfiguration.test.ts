@@ -1,6 +1,8 @@
+
 import { IServerConfiguration } from './../../src/model/configuration/IServerConfiguration';
 import * as chai from 'chai';
 
+/* tslint:disable:no-unused-expression*/
 describe('Server Configuration', () => {
 
     const serverConfiguration: IServerConfiguration = require('../../server.config.json');
