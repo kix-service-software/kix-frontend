@@ -16,6 +16,7 @@
     "compression": "^1.7.0",
     "express": "^4.15.3",
     "js-plugins": "0.0.3",
+    "jsonfile": "^3.0.1",
     "lasso": "^2.11.16",
     "lasso-less": "^2.4.5",
     "lasso-marko": "^2.3.0",

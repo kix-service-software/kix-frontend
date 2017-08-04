@@ -1,3 +1,6 @@
+import { ApplicationRouter } from './routes/application.router';
+import { IPluginService } from './services/IPlugin.service';
+import { PluginService } from './services/Plugin.service';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
@@ -32,11 +35,19 @@ export class Server {
 
     private serverConfig: IServerConfiguration;
 
+    private pluginService: IPluginService;
+
     public constructor() {
-        this.application = express();
-        this.serverConfig = require('../server.config.json');
-        this.initializeApplication();
-        this.initializeRoutes();
+        this.pluginService = new PluginService();
+
+        this.pluginService.loadPlugins().then(() => {
+            this.application = express();
+            this.serverConfig = require('../server.config.json');
+            this.initializeApplication();
+            this.initializeRoutes();
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     private initializeApplication(): void {
@@ -57,10 +68,7 @@ export class Server {
     }
 
     private initializeRoutes(): void {
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            const template = require('./components/app/index.marko');
-            res.marko(template, {});
-        });
+        this.router.use("/", new ApplicationRouter().router);
     }
 }
 

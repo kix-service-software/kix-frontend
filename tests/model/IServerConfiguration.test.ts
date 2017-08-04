@@ -1,5 +1,5 @@
+import { IServerConfiguration } from './../../src/model/configuration/IServerConfiguration';
 import * as chai from 'chai';
-import { IServerConfiguration } from './../../dist/model/configuration/IServerConfiguration.d';
 
 describe('Server Configuration', () => {
 
@@ -12,6 +12,11 @@ describe('Server Configuration', () => {
     it('Should contain SERVER_PORT as type of number.', () => {
         chai.expect(serverConfiguration.SERVER_PORT).to.not.be.undefined;
         chai.expect(serverConfiguration.SERVER_PORT).to.be.an('number');
+    });
+
+    it('Should contain PLUGIN_FOLDERS as type of array', () => {
+        chai.expect(serverConfiguration.PLUGIN_FOLDERS).to.not.be.undefined;
+        chai.expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');
     });
 
 });
