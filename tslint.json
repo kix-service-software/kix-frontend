@@ -29,7 +29,7 @@
         ],
         "ordered-imports": [
             false
-        ]
+        ]        
     },
     "jsRules": {
         "max-line-length": [

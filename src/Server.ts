@@ -1,10 +1,10 @@
+import { ApplicationRouter } from './routes/ApplicationRouter';
+import { PluginService } from './services/PluginService';
+import { IServerConfiguration } from './model/configuration/IServerConfiguration';
+import { IPluginService } from './services/IPluginService';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
-import { ApplicationRouter } from './routes/application.router';
-import { IPluginService } from './services/IPlugin.service';
-import { IServerConfiguration } from './model/configuration/IServerConfiguration';
-import { PluginService } from './services/Plugin.service';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
