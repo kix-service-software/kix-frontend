@@ -7,6 +7,30 @@ const tslint = require("gulp-tslint");
 
 const tslintConfig = require('./tslint.json');
 
+const devTSCConfig = {
+    target: "es6",
+    lib: ["es6"],
+    types: ["node"],
+    module: "commonjs",
+    moduleResolution: "node",
+    experimentalDecorators: true,
+    emitDecoratorMetadata: true,
+    sourceMap: true,
+    declaration: true
+};
+
+const prodTSCConfig = {
+    target: "es6",
+    lib: ["es6"],
+    types: ["node"],
+    module: "commonjs",
+    moduleResolution: "node",
+    experimentalDecorators: true,
+    emitDecoratorMetadata: true,
+    sourceMap: false,
+    declaration: false
+};
+
 gulp.task('default', (cb) => {
     runseq('tslint', 'test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', cb);
 });
@@ -32,19 +56,14 @@ gulp.task('clean', () => {
 });
 
 gulp.task('compile-src', () => {
+    let config = prodTSCConfig;
+    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+        config = devTSCConfig;
+    }
+
     return gulp
         .src(['src/**/*.ts'])
-        .pipe(tsc({
-            target: "es6",
-            lib: ["es6"],
-            types: ["node"],
-            module: "commonjs",
-            moduleResolution: "node",
-            experimentalDecorators: true,
-            emitDecoratorMetadata: true,
-            sourceMap: true,
-            declaration: true
-        }))
+        .pipe(tsc(config))
         .pipe(gulp.dest('dist'));
 });
 
