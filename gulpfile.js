@@ -3,19 +3,26 @@ const tsc = require('gulp-tsc');
 const runseq = require('run-sequence');
 const clean = require('gulp-clean');
 const mocha = require('gulp-mocha');
+const tslint = require("gulp-tslint");
+
+const tslintConfig = require('./tslint.json');
 
 gulp.task('default', (cb) => {
-    runseq('test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', cb);
+    runseq('tslint', 'test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', cb);
+});
+
+gulp.task('tslint', () => {
+    gulp.src(['src/**/*.ts'])
+        .pipe(tslint(tslintConfig))
+        .pipe(tslint.report());
 });
 
 gulp.task('test', () => {
-
     return gulp.src(['tests/**/*.test.ts'])
         .pipe(mocha({
             reporter: 'spec',
             compilers: 'ts:ts-node/register'
         }));
-
 });
 
 gulp.task('clean', () => {

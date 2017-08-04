@@ -29,7 +29,7 @@ export class PluginService implements IPluginService {
     }
 
     /**
-     * Retrieves all registered markeo dependency extension and 
+     * Retrieves all registered markeo dependency extension and
      * provides the dependencies to the browser.json of the app component.
      * This is needed that the lasso framework is able to build the static
      * folder with the marko content from the external plugins.
