@@ -3,6 +3,11 @@
         {
             "taskName": "gulp",
             "command": "gulp",
+            "options": {
+                "env": {
+                    "NODE_ENV": "development"
+                }
+            },
             "type": "process"
         }
     ]
