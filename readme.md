@@ -61,7 +61,7 @@ npm install --all
 
 # 3. Server Konfiguration
 Die Konfiguration des Servers befindet sich in dem File server.config.json.
-```
+```json
 {
     "SERVER_PORT": 3000,
     "PLUGIN_FOLDERS": [
@@ -104,12 +104,9 @@ Beispiel-Logeintrag:
 ### 4.3.1. Beschreibung
 Der Service scant konfigurierte Verzeichnisse nach Extension-Points. Die zu durchsuchenden Verzeichnisse werden in der server.config.json konfiguriert. In den Verzeichnissen wird rekursiv nach package.json Files gesucht und in diesen Files wird auf einen Abschnitt Extensions geprüft. Alle darin enthaltenen Definitionen werden entsprechend geladen und im Pluginmanager gehalten. Die Erweiterungen können dann an Hand einer ID vom Plugin Manager abgerufen werden.
 
-Beispiel für eine Extension-Verwendung:
-```
-package.json eines externen Node-Modules:
-
+Beispiel für eine Extension-Verwendung (package.json eines externen Node-Modules:):
+```json
 {
-...
     "extensions": {
         "extension-id-1": {
             "forms": "dist/register-extension-1"
@@ -118,13 +115,12 @@ package.json eines externen Node-Modules:
             "forms-marko": "dist/register-extension-2"
         }
     }
-...
 }
 ```
 
 ### 4.3.2. Interface
 
-```
+```javascript
 loadPlugins(): Promise<any>;
 ```
 
@@ -150,7 +146,7 @@ An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. sta
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
 Zum Beispiel:
-```
+```json
 [
     "@kix/ticket/components/ticket-table",
     "@kix/ticket/components/ticket-core-data"
@@ -158,9 +154,8 @@ Zum Beispiel:
 ```
 
 ### 5.1.1. TODO: Interface
-```
-ID: "kix-marko-dependencies"
-
+* ID: "kix-marko-dependencies"
+```javascript
 interface IMarkoDependency {
     getDependencyPaths(): string[];
 }
