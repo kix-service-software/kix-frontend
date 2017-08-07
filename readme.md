@@ -25,6 +25,9 @@
     - [3.10. readme.md](#310-readmemd)
     - [3.11. server.config.json](#311-serverconfigjson)
     - [3.12. tslint.json](#312-tslintjson)
+- [4. Extension-Points](#4-extension-points)
+    - [4.1. Marko-Dependencies](#41-marko-dependencies)
+        - [4.1.1. Interface](#411-interface)
 
 <!-- /TOC -->
 # 1. KIXng Webapplication
@@ -108,3 +111,26 @@ Enthält die grundlegende Konfiguration der Webanwendung.
 
 ## 3.12. tslint.json
 Enthält die Konfiguration der tslint Regeln zur Prüfung des Quellcodes.
+
+# 4. Extension-Points
+Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte für die Anwendung.
+## 4.1. Marko-Dependencies
+An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. statischen Content registrieren, welcher durch Lasso mit in die Anwendung eingebunden werden soll.
+Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
+
+Zum Beispiel:
+```
+[
+    "@kix/ticket/components/ticket-table",
+    "@kix/ticket/components/ticket-core-data"
+]
+```
+
+### 4.1.1. Interface
+```
+ID: "kix-marko-dependencies"
+
+interface IMarkoDependency {
+    getDependencyPaths(): string[];
+}
+```
