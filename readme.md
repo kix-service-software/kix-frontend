@@ -25,9 +25,17 @@
     - [3.10. readme.md](#310-readmemd)
     - [3.11. server.config.json](#311-serverconfigjson)
     - [3.12. tslint.json](#312-tslintjson)
-- [4. Extension-Points](#4-extension-points)
-    - [4.1. Marko-Dependencies](#41-marko-dependencies)
-        - [4.1.1. Interface](#411-interface)
+- [4. Services](#4-services)
+    - [4.1. TODO: Logging Service](#41-todo-logging-service)
+    - [4.2. TODO: Authentication Service](#42-todo-authentication-service)
+    - [4.3. TODO: PluginService](#43-todo-pluginservice)
+        - [4.3.1. Beschreibung](#431-beschreibung)
+        - [4.3.2. Interface](#432-interface)
+    - [4.4. TODO: Backend/API HTTP-Service](#44-todo-backendapi-http-service)
+    - [4.5. TODO: Object Services](#45-todo-object-services)
+- [5. Extension-Points](#5-extension-points)
+    - [5.1. Marko-Dependencies](#51-marko-dependencies)
+        - [5.1.1. TODO: Interface](#511-todo-interface)
 
 <!-- /TOC -->
 # 1. KIXng Webapplication
@@ -112,9 +120,82 @@ Enthält die grundlegende Konfiguration der Webanwendung.
 ## 3.12. tslint.json
 Enthält die Konfiguration der tslint Regeln zur Prüfung des Quellcodes.
 
-# 4. Extension-Points
+# 4. Services
+
+## 4.1. TODO: Logging Service
+* speichern von Logmeldungen
+* Loglevel: ERROR, WARNING, INFO, DEBUG
+* Loglevel per Umgebungsvariable definierbar
+* Logeintrag:
+    * DATUM / Uhrzeit
+    * LOGLEVEL
+    * KOMPONENTE
+    * FUNCTION / CALLER
+    * MESSAGE 
+
+Beispiel-Logeintrag: 
+```
+20170708-0926|WARNING|DASHBOARD|LOAD_WIDGET|Extension not found.
+20170708-0925|ERROR|TICKET|GET_ALL|Backend not reachable.
+20170408-1425|INFO|LOGIN|USER_LOGIN|Login successful.
+20170408-1425|DEBUG|TICKET_OVERVIEW|LOAD_ARTICLES|12 Articles retrieved from backend.
+```
+
+
+## 4.2. TODO: Authentication Service
+* JWT (Json Web Token) https://jwt.io/
+* Validierung des Tokens auf Gültigkeit
+* Token Cache?
+* Redirect zum Login
+* Login Request gegen Backend / API 
+
+## 4.3. TODO: PluginService
+
+### 4.3.1. Beschreibung
+Der Service scant konfigurierte Verzeichnisse nach Extension-Points. Die zu durchsuchenden Verzeichnisse werden in der server.config.json konfiguriert. In den Verzeichnissen wird rekursiv nach package.json Files gesucht und in diesen Files wird auf einen Abschnitt Extensions geprüft. Alle darin enthaltenen Definitionen werden entsprechend geladen und im Pluginmanager gehalten. Die Erweiterungen können dann an Hand einer ID vom Plugin Manager abgerufen werden.
+
+Beispiel für eine Extension-Verwendung:
+```
+package.json eines externen Node-Modules:
+
+{
+...
+    "extensions": {
+        "extension-id-1": {
+            "forms": "dist/register-extension-1"
+        },
+        "extension-id-2": {
+            "forms-marko": "dist/register-extension-2"
+        }
+    }
+...
+}
+```
+
+### 4.3.2. Interface
+
+```
+loadPlugins(): Promise<any>;
+```
+
+## 4.4. TODO: Backend/API HTTP-Service
+* Kappselung HTTP-Request/Response
+* HTTP-Status-Codes
+* HTTP-Methoden (GET, POST, PUT, UPDATE, DELETE)
+* Fehlerhandling
+
+## 4.5. TODO: Object Services
+* Kappselung von Geschäftslogik für Businessobjekte (Ticket, Queue, CI, ...)
+* Hauptaufgaben:
+    * Daten laden
+    * Daten ändern
+    * Daten erstellen/hinzufügen
+    * Daten löschen 
+
+# 5. Extension-Points
 Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte für die Anwendung.
-## 4.1. Marko-Dependencies
+
+## 5.1. Marko-Dependencies
 An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. statischen Content registrieren, welcher durch Lasso mit in die Anwendung eingebunden werden soll.
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
@@ -126,7 +207,7 @@ Zum Beispiel:
 ]
 ```
 
-### 4.1.1. Interface
+### 5.1.1. TODO: Interface
 ```
 ID: "kix-marko-dependencies"
 
