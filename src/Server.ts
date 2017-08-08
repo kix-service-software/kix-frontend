@@ -48,7 +48,7 @@ export class Server {
         this.initializeServer();
     }
 
-    private async initializeServer() {
+    private async initializeServer(): Promise<void> {
         await this.initializeServices();
         this.application = express();
         this.serverConfig = require('../server.config.json');
@@ -56,7 +56,7 @@ export class Server {
         this.initializeRoutes();
     }
 
-    private async initializeServices() {
+    private async initializeServices(): Promise<void> {
         this.pluginService = new PluginService();
         this.markoService = new MarkoService(this.pluginService);
 
