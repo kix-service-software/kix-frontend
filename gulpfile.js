@@ -16,7 +16,8 @@ const devTSCConfig = {
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: true,
-    declaration: true
+    declaration: true,
+    strict: true
 };
 
 const prodTSCConfig = {
@@ -28,7 +29,8 @@ const prodTSCConfig = {
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: false,
-    declaration: false
+    declaration: false,
+    strict: true
 };
 
 gulp.task('default', (cb) => {
