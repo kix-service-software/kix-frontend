@@ -78,6 +78,7 @@ export class Server {
 
         this.application.use(markoExpress());
         this.application.use(express.static('dist/static/'));
+        // TODO: retrieve extensions for static content from plugins
 
         this.router = express.Router();
         this.application.use(this.router);
@@ -85,6 +86,7 @@ export class Server {
         const port = this.serverConfig.SERVER_PORT || process.env.PORT || 3000;
         this.application.listen(port);
 
+        // TODO: Use LoggingService
         console.log("KIXng running on http://<host>:" + port);
     }
 

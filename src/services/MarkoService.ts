@@ -6,6 +6,7 @@ import jsonfile = require('jsonfile');
 
 export class MarkoService implements IMarkoService {
 
+    private browserJsonPath: string = '../components/app/browser.json';
     private pluginService: IPluginService;
 
     public constructor(pluginService: IPluginService) {
@@ -16,10 +17,14 @@ export class MarkoService implements IMarkoService {
         const markoDependencies: IMarkoDependency[] =
             await this.pluginService.getExtensions<IMarkoDependency>(KIXExtensions.MARKO_DEPENDENCIES);
 
-        const browserJsonPath = '../components/app/browser.json';
-        const browserJSON = require(browserJsonPath);
+        const browserJSON = require(this.browserJsonPath);
         browserJSON.dependencies = [];
 
+        this.fillDependencies(browserJSON, markoDependencies);
+        await this.saveBrowserJSON(browserJSON);
+    }
+
+    private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependency[]): void {
         for (const plugin of markoDependencies) {
             for (const dependencyPath of plugin.getDependencies()) {
                 const dependency = 'require: ../../../node_modules/' + dependencyPath;
@@ -29,12 +34,21 @@ export class MarkoService implements IMarkoService {
                 }
             }
         }
+    }
 
-        jsonfile.writeFile(__dirname + "/" + browserJsonPath, browserJSON,
-            (fileError) => {
-                if (fileError) {
-                    console.error(fileError);
-                }
-            });
+    private async saveBrowserJSON(browserJSON: any): Promise<void> {
+        await new Promise<void>((resolve, reject) => {
+            jsonfile.writeFile(__dirname + "/" + this.browserJsonPath, browserJSON,
+                (fileError) => {
+                    if (fileError) {
+                        // TODO: Use LogginService
+                        // TODO: Throw an exception
+                        console.error(fileError);
+                        reject(fileError);
+                    }
+
+                    resolve();
+                });
+        });
     }
 }
