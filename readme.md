@@ -68,7 +68,8 @@ Die Konfiguration des Servers befindet sich in dem File server.config.json.
     "SERVER_PORT": 3000,
     "PLUGIN_FOLDERS": [
         "node_modules/@kix"
-    ]
+    ],
+    "BACKEND_API_HOST": "http://localhost:3123"
 }
 ```
 
