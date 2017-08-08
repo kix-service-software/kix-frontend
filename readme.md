@@ -4,6 +4,7 @@
 - [2. Installation & Start](#2-installation-start)
     - [2.1. Command Line](#21-command-line)
     - [2.2. debuggen im VSCode](#22-debuggen-im-vscode)
+    - [2.3. MOCK-HTTP-Server](#23-mock-http-server)
 - [3. Server Konfiguration](#3-server-konfiguration)
 - [4. Services](#4-services)
     - [4.1. TODO: Logging Service](#41-todo-logging-service)
@@ -60,6 +61,11 @@ npm install --all
 * mit F5 DEBUG starten
     * führt gulp aus
     * startet Webanwendung im DEBUG Modus (NODE_ENV="development")
+
+## 2.3. MOCK-HTTP-Server
+Wird die Anwendung im "development" Modus gestartet, so wird ein Mock-HTTP-Server gestartet. Dieser kann verwendet werden solange noch kein Backend zur Verfügung steht.
+Dieser Server wird auf Port 3123 gestartet.
+**ACHTUNG:** Die Mockimplementierung wird wieder entfernt!
 
 # 3. Server Konfiguration
 Die Konfiguration des Servers befindet sich in dem File server.config.json.
