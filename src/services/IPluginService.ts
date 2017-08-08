@@ -1,5 +1,5 @@
 export interface IPluginService {
 
-    loadPlugins(): Promise<any>;
+    getExtensions<T>(extensionId: string): Promise<T[]>;
 
 }

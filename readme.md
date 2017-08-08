@@ -52,9 +52,11 @@ npm start
 ## 2.2. debuggen im VSCode
 * Haupordner im VSCode öffnen.
 * Integriertes Terminal öffnen
+
 ```
 npm install --all
 ```
+
 * mit F5 DEBUG starten
     * führt gulp aus
     * startet Webanwendung im DEBUG Modus (NODE_ENV="development")
