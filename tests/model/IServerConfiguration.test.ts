@@ -21,4 +21,9 @@ describe('Server Configuration', () => {
         chai.expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');
     });
 
+    it('Should contain BACKEND_API_HOST as type of string', () => {
+        chai.expect(serverConfiguration.BACKEND_API_HOST).to.not.be.undefined;
+        chai.expect(serverConfiguration.BACKEND_API_HOST).to.be.an('string');
+        chai.expect(serverConfiguration.BACKEND_API_HOST).to.not.be.empty;
+    });
 });
