@@ -7,8 +7,9 @@ import {
     IPluginService,
     MarkoService,
     PluginService
-} from './services/';
+    } from './services/';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
+import { MockHTTPServer } from './mock-http/MockHTTPServer';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -77,6 +78,11 @@ export class Server {
     private initializeRoutes(): void {
         this.router.use("/", new ApplicationRouter().router);
     }
+}
+
+// Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
+if (process.env.NODE_ENV === 'development') {
+    const mockServer = new MockHTTPServer();
 }
 
 export default new Server();
