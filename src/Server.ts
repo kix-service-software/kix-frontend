@@ -10,6 +10,7 @@ import {
 } from './services/';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
+import { logMethod } from './decorators';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -48,6 +49,7 @@ export class Server {
         this.initializeServer();
     }
 
+    @logMethod
     private async initializeServer() {
         await this.initializeServices();
         this.application = express();
@@ -56,6 +58,7 @@ export class Server {
         this.initializeRoutes();
     }
 
+    @logMethod
     private async initializeServices() {
         this.pluginService = new PluginService();
         this.markoService = new MarkoService(this.pluginService);
@@ -67,6 +70,7 @@ export class Server {
         // TODO: Authentication-Service initialize
     }
 
+    @logMethod
     private initializeApplication(): void {
         this.application.use(compression());
         this.application.use(bodyParser.json());
@@ -84,6 +88,7 @@ export class Server {
         console.log("KIXng running on http://<host>:" + port);
     }
 
+    @logMethod
     private initializeRoutes(): void {
         this.router.use("/", new ApplicationRouter().router);
     }
