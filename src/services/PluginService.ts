@@ -21,8 +21,8 @@ export class PluginService implements IPluginService {
         this.pluginManager.scan();
     }
 
-    public getExtensions<T>(extensionId: string): Promise<T[]> {
-        return new Promise<T[]>((resolve, reject) => {
+    public async getExtensions<T>(extensionId: string): Promise<T[]> {
+        return await new Promise<T[]>((resolve, reject) => {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (err, extensions: T[], names) => {

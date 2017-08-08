@@ -7,7 +7,7 @@ import {
     IPluginService,
     MarkoService,
     PluginService
-    } from './services/';
+} from './services/';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 
@@ -45,17 +45,26 @@ export class Server {
     private markoService: IMarkoService;
 
     public constructor() {
+        this.initializeServer();
+    }
+
+    private async initializeServer() {
+        await this.initializeServices();
+        this.application = express();
+        this.serverConfig = require('../server.config.json');
+        this.initializeApplication();
+        this.initializeRoutes();
+    }
+
+    private async initializeServices() {
         this.pluginService = new PluginService();
         this.markoService = new MarkoService(this.pluginService);
 
-        this.markoService.registerMarkoDependencies().then(() => {
-            this.application = express();
-            this.serverConfig = require('../server.config.json');
-            this.initializeApplication();
-            this.initializeRoutes();
-        }).catch((error) => {
-            console.error(error);
-        });
+        await this.markoService.registerMarkoDependencies();
+
+        // TODO: Logging-Service initialize
+        // TODO: HTTP-Service initialize
+        // TODO: Authentication-Service initialize
     }
 
     private initializeApplication(): void {
