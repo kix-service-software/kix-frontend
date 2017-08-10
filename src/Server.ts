@@ -79,7 +79,7 @@ export class Server {
         this.router = express.Router();
         this.application.use(this.router);
 
-        const port = this.serverConfig.SERVER_PORT || process.env.PORT || 3000;
+        const port = process.env.PORT || this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
         // TODO: Use LoggingService
