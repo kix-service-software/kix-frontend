@@ -4,5 +4,5 @@ export interface IServerConfiguration {
 
     PLUGIN_FOLDERS: string[];
 
-    BACKEND_API_HOST: string;
+    BACKEND_API_URL: string;
 }
