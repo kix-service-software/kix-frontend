@@ -1,4 +1,3 @@
-
 import { IServerConfiguration } from './../../src/model/configuration/IServerConfiguration';
 import * as chai from 'chai';
 
@@ -21,9 +20,9 @@ describe('Server Configuration', () => {
         chai.expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');
     });
 
-    it('Should contain BACKEND_API_HOST as type of string', () => {
-        chai.expect(serverConfiguration.BACKEND_API_HOST).to.not.be.undefined;
-        chai.expect(serverConfiguration.BACKEND_API_HOST).to.be.an('string');
-        chai.expect(serverConfiguration.BACKEND_API_HOST).to.not.be.empty;
+    it('Should contain BACKEND_API_URL as type of string', () => {
+        chai.expect(serverConfiguration.BACKEND_API_URL).to.not.be.undefined;
+        chai.expect(serverConfiguration.BACKEND_API_URL).to.be.an('string');
+        chai.expect(serverConfiguration.BACKEND_API_URL).to.not.be.empty;
     });
 });
