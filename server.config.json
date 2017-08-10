@@ -1,5 +1,6 @@
 {
     "SERVER_PORT": 3000,
+    "BACKEND_API_URL": "http://localhost:54918",    
     "PLUGIN_FOLDERS": [
         "node_modules/@kix"
     ]
