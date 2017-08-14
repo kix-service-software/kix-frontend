@@ -1,7 +1,6 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { HttpError } from './../model/http/HttpError';
 import { IHttpService } from './IHttpService';
-import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
+import { IServerConfiguration, HttpError } from './../model/';
 
 export class HttpService implements IHttpService {
 
@@ -24,7 +23,7 @@ export class HttpService implements IHttpService {
             });
     }
 
-    public async post(resource: string, content: any): Promise<string> {
+    public async post(resource: string, content: any): Promise<any> {
         return await this.axios.post(this.buildRequestUrl(resource), content)
             .then((response: AxiosResponse) => {
                 return response.data;
