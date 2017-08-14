@@ -32,7 +32,7 @@ const prodTSCConfig = {
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: false,
-    declaration: false,
+    declaration: true,
     strict: true,
     exclude: [
         "node_modules"

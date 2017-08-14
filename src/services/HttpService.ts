@@ -16,7 +16,7 @@ export class HttpService implements IHttpService {
     }
 
     public async get(resource: string, queryParameters: any = {}): Promise<any> {
-        return await this.axios.get(`${this.apiURL}/${resource}`, { params: queryParameters })
+        return await this.axios.get(this.buildRequestUrl(resource), { params: queryParameters })
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
@@ -25,8 +25,8 @@ export class HttpService implements IHttpService {
     }
 
     public async post(resource: string, content: any): Promise<string> {
-        return await this.axios.post(`${this.apiURL}/${resource}`, content)
-            .then((response) => {
+        return await this.axios.post(this.buildRequestUrl(resource), content)
+            .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
                 return this.createHttpError(error);
@@ -34,8 +34,8 @@ export class HttpService implements IHttpService {
     }
 
     public async put(resource: string, content: any): Promise<string> {
-        return await this.axios.put(`${this.apiURL}/${resource}`, content)
-            .then((response) => {
+        return await this.axios.put(this.buildRequestUrl(resource), content)
+            .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
                 return this.createHttpError(error);
@@ -43,8 +43,8 @@ export class HttpService implements IHttpService {
     }
 
     public async patch(resource: string, content: any): Promise<string> {
-        return await this.axios.patch(`${this.apiURL}/${resource}`, content)
-            .then((response) => {
+        return await this.axios.patch(this.buildRequestUrl(resource), content)
+            .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
                 return this.createHttpError(error);
@@ -52,12 +52,16 @@ export class HttpService implements IHttpService {
     }
 
     public async delete(resource: string): Promise<any> {
-        return await this.axios.delete(`${this.apiURL}/${resource}`)
+        return await this.axios.delete(this.buildRequestUrl(resource))
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
                 return this.createHttpError(error);
             });
+    }
+
+    private buildRequestUrl(resource: string): string {
+        return `${this.apiURL}/${resource}`;
     }
 
     private createHttpError(err: AxiosError): HttpError {

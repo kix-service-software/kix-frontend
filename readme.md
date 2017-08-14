@@ -151,10 +151,10 @@ Dieser Service kappselt die HTTP-FUnktionalität und kümmert sich um das senden
 
 | Methode | Beschreibung                                                 | Result                             |
 | ------- | ------------------------------------------------------------ | ---------------------------------- |
-| GET     | Abfrage von einzelenn objekten oder Listen                   | Object (Json) oder Liste (Array)   |
-| POST    | Erstellt ein **neues** Objekt.                               | Die ID des neu erstellten Objektes |
-| PUT     | Ersetzt ein vorhandenes Objekt                               | Die Id des ersetzten Objektes      |
-| PATCH   | Aktualisiert ein existierendes Objekt (einzelne Properties). | Die Id des aktualisierten Objektes |
+| GET     | Abfrage von einzelen Objekten oder Listen                   | Object (Json) oder Liste (Array)   |
+| POST    | Erstellt ein **neues** Objekt.                               | Die Id des neu erstellten Objektes |
+| PUT     | **Ersetzt** ein vorhandenes Objekt                               | Die Id des ersetzten Objektes      |
+| PATCH   | Aktualisiert ein vorhandens Objekt (einzelne Properties). | Die Id des aktualisierten Objektes |
 | DELETE  | Löscht eine Resource                                         | Nichts.                            |
 
 ### 4.4.3. Interface
