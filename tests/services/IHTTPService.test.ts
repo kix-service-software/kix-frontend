@@ -1,5 +1,6 @@
+import { HttpError } from './../../src/model/http/HttpError';
+import { HttpService, IHttpService } from './../../src/services/';
 /* tslint:disable no-var-requires no-unused-expression */
-import { HTTPService, IHTTPService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
 import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
@@ -7,7 +8,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const httpService: HTTPService = new HTTPService();
+const httpService: IHttpService = new HttpService();
 const axios = require('axios');
 const mock = new MockAdapter(axios);
 
@@ -33,25 +34,27 @@ describe('HTTP Service', () => {
             done();
         });
 
-        it('should response an empty object', async () => {
-            const res = await httpService.get('testGet');
+        it('should return an empty object', async () => {
+            const res = await httpService.get('testGet', {});
             expect(res).not.to.be.undefined;
             expect(res).to.deep.equal({});
         });
 
-        it('should response a object with properties.', async () => {
-            const res = await httpService.get("testGetObject");
+        it('should return a object with properties.', async () => {
+            const res = await httpService.get("testGetObject", {});
             expect(res).to.deep.equal(this.testObject);
         });
 
-        it('should response with a error if resource not exists', async () => {
-            const res = await httpService.get('unknownResource')
-                .catch((err) => {
+        it('should return a correct http error if resource not exists', async () => {
+            const res = await httpService.get('unknownResource', {})
+                .catch((err: HttpError) => {
                     expect(err).not.to.be.undefined;
+                    expect(err).to.be.instanceof(HttpError);
+                    expect(err.status).to.be.equal(404);
                 });
         });
 
-        it('should response a object with the values of the query parameter.', async () => {
+        it('should return a object with the values of the query parameter.', async () => {
             const res = await httpService.get('object', { id: '12345' });
             expect(res).to.deep.equal(this.parameterObject);
         });
