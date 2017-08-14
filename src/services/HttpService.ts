@@ -19,8 +19,35 @@ export class HttpService implements IHttpService {
         return await this.axios.get(`${this.apiURL}/${resource}`, { params: queryParameters })
             .then((response: AxiosResponse) => {
                 return response.data;
-            }).catch((err: AxiosError) => {
-                return this.createHttpError(err);
+            }).catch((error: AxiosError) => {
+                return this.createHttpError(error);
+            });
+    }
+
+    public async post(resource: string, content: any): Promise<string> {
+        return await this.axios.post(`${this.apiURL}/${resource}`, content)
+            .then((response) => {
+                return response.data;
+            }).catch((error: AxiosError) => {
+                return this.createHttpError(error);
+            });
+    }
+
+    public async put(resource: string, content: any): Promise<string> {
+        return await this.axios.put(`${this.apiURL}/${resource}`, content)
+            .then((response) => {
+                return response.data;
+            }).catch((error: AxiosError) => {
+                return this.createHttpError(error);
+            });
+    }
+
+    public async delete(resource: string): Promise<any> {
+        return await this.axios.delete(`${this.apiURL}/${resource}`)
+            .then((response: AxiosResponse) => {
+                return response.data;
+            }).catch((error: AxiosError) => {
+                return this.createHttpError(error);
             });
     }
 
