@@ -3,6 +3,8 @@ import * as express from 'express';
 import * as path from 'path';
 import { ApplicationRouter } from './routes/ApplicationRouter';
 import {
+    HttpService,
+    IHttpService,
     IMarkoService,
     IPluginService,
     MarkoService,
@@ -42,6 +44,8 @@ export class Server {
 
     private pluginService: IPluginService;
 
+    private httpService: IHttpService;
+
     private markoService: IMarkoService;
 
     public constructor() {
@@ -58,12 +62,12 @@ export class Server {
 
     private async initializeServices(): Promise<void> {
         this.pluginService = new PluginService();
+        this.httpService = new HttpService();
         this.markoService = new MarkoService(this.pluginService);
 
         await this.markoService.registerMarkoDependencies();
 
         // TODO: Logging-Service initialize
-        // TODO: HTTP-Service initialize
         // TODO: Authentication-Service initialize
     }
 

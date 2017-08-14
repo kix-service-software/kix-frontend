@@ -17,7 +17,10 @@ const devTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: true,
     declaration: true,
-    strict: true
+    strict: true,
+    exclude: [
+        "node_modules"
+    ]
 };
 
 const prodTSCConfig = {
@@ -29,8 +32,11 @@ const prodTSCConfig = {
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: false,
-    declaration: false,
-    strict: true
+    declaration: true,
+    strict: true,
+    exclude: [
+        "node_modules"
+    ]
 };
 
 gulp.task('default', (cb) => {
@@ -60,6 +66,7 @@ gulp.task('clean', () => {
 gulp.task('compile-src', () => {
     let config = prodTSCConfig;
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+        console.log("Use tsconfig for development.")
         config = devTSCConfig;
     }
 
