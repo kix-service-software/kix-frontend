@@ -1,3 +1,5 @@
+import { HTTPService } from './HTTPService';
+import { IHTTPService } from './IHTTPService';
 import { IMarkoService } from './IMarkoService';
 import { IPluginService } from './IPluginService';
 import { MarkoService } from './MarkoService';
@@ -7,5 +9,7 @@ export {
     IMarkoService,
     IPluginService,
     MarkoService,
-    PluginService
+    PluginService,
+    IHTTPService,
+    HTTPService
 };
