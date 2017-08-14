@@ -38,18 +38,18 @@ describe('HTTP Service', () => {
         });
 
         it('should return an empty object', async () => {
-            const res = await httpService.get('testGet', {});
+            const res = await httpService.get('testGet');
             expect(res).not.to.be.undefined;
             expect(res).to.deep.equal({});
         });
 
         it('should return a object with properties.', async () => {
-            const res = await httpService.get("testGetObject", {});
+            const res = await httpService.get("testGetObject");
             expect(res).to.deep.equal(this.testObject);
         });
 
         it('should return a correct http error if resource not exists', async () => {
-            const res = await httpService.get('unknownResource', {})
+            const res = await httpService.get('unknownResource')
                 .catch((err: HttpError) => {
                     expect(err).not.to.be.undefined;
                     expect(err).to.be.instanceof(HttpError);
@@ -105,6 +105,31 @@ describe('HTTP Service', () => {
 
         it('should return a correct http error if resource not exists', async () => {
             const res = await httpService.put('unknownResource', {})
+                .catch((err: HttpError) => {
+                    expect(err).not.to.be.undefined;
+                    expect(err).to.be.instanceof(HttpError);
+                    expect(err.status).to.be.equal(404);
+                });
+        });
+    });
+
+    describe('HTTP Service - PATCH Requests', () => {
+        before((done) => {
+            mock.onPatch(apiURL + '/patch/12345')
+                .reply(204, 'Object#12345');
+
+            done();
+        });
+
+        it('should return the id of the patched object.', async () => {
+            const response: string = await httpService.patch("patch/12345", { name: 'testobject' });
+            expect(response).not.to.be.undefined;
+            expect(response).to.be.an('string');
+            expect(response).to.be.equal('Object#12345');
+        });
+
+        it('should return a correct http error if resource not exists', async () => {
+            const res = await httpService.patch('unknownResource', { name: 'testobject' })
                 .catch((err: HttpError) => {
                     expect(err).not.to.be.undefined;
                     expect(err).to.be.instanceof(HttpError);

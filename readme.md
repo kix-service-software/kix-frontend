@@ -12,7 +12,13 @@
     - [4.3. TODO: PluginService](#43-todo-pluginservice)
         - [4.3.1. Beschreibung](#431-beschreibung)
         - [4.3.2. Interface](#432-interface)
-    - [4.4. TODO: Backend/API HTTP-Service](#44-todo-backendapi-http-service)
+    - [4.4. HTTP-Service](#44-http-service)
+        - [4.4.1. Beschreibung](#441-beschreibung)
+        - [4.4.2. Verwendung](#442-verwendung)
+        - [4.4.3. Interface](#443-interface)
+        - [4.4.4. Fehlerbehandlung](#444-fehlerbehandlung)
+            - [4.4.4.1. HttpError](#4441-httperror)
+        - [4.4.5. Beispiel](#445-beispiel)
     - [4.5. TODO: Object Services](#45-todo-object-services)
 - [5. Extension-Points](#5-extension-points)
     - [5.1. Marko-Dependencies](#51-marko-dependencies)
@@ -130,14 +136,66 @@ Beispiel für eine Extension-Verwendung (package.json eines externen Node-Module
 ### 4.3.2. Interface
 
 ```javascript
-loadPlugins(): Promise<any>;
+interface IPluginService {
+
+    getExtensions<T>(extensionId: string): Promise<T[]>;
+
+}
 ```
 
-## 4.4. TODO: Backend/API HTTP-Service
-* Kappselung HTTP-Request/Response
-* HTTP-Status-Codes
-* HTTP-Methoden (GET, POST, PUT, UPDATE, DELETE)
-* Fehlerhandling
+## 4.4. HTTP-Service
+### 4.4.1. Beschreibung
+Dieser Service kappselt die HTTP-FUnktionalität und kümmert sich um das senden von Requests gegen das Backend, sowie dem Empfangen und Verarbeiten von Responses und Fehlern.
+
+### 4.4.2. Verwendung
+
+| Methode | Beschreibung                                                 | Result                             |
+| ------- | ------------------------------------------------------------ | ---------------------------------- |
+| GET     | Abfrage von einzelenn objekten oder Listen                   | Object (Json) oder Liste (Array)   |
+| POST    | Erstellt ein **neues** Objekt.                               | Die ID des neu erstellten Objektes |
+| PUT     | Ersetzt ein vorhandenes Objekt                               | Die Id des ersetzten Objektes      |
+| PATCH   | Aktualisiert ein existierendes Objekt (einzelne Properties). | Die Id des aktualisierten Objektes |
+| DELETE  | Löscht eine Resource                                         | Nichts.                            |
+
+### 4.4.3. Interface
+```javascript
+interface IHttpService {
+
+    get(resource: string, queryParameters?: any): Promise<any>;
+
+    post(resource: string, content: any): Promise<string>;
+
+    put(resource: string, content: any): Promise<string>;
+
+    patch(resource: string, content: any): Promise<string>;
+
+    delete(resource: string): Promise<any>;
+}
+```
+### 4.4.4. Fehlerbehandlung
+Sollte der Response einen Fehler Repräsentieren (HTTP-Status-Code), so liefert der Service ein Fehlerobjekt vom Typ ```HttpError```.
+
+#### 4.4.4.1. HttpError
+```javascript
+class HttpError {
+
+    public status: number;
+
+    public error: any;
+
+    ...
+}
+```
+
+### 4.4.5. Beispiel
+```javascript
+const httpService: IHttpService = new HttpService();
+
+const ticket = await httpService.get('ticket/12345')
+    .catch((err: HttpError) => {
+        console.error(err.status + ': ' + err.error);
+    });
+```
 
 ## 4.5. TODO: Object Services
 * Kappselung von Geschäftslogik für Businessobjekte (Ticket, Queue, CI, ...)

@@ -42,6 +42,15 @@ export class HttpService implements IHttpService {
             });
     }
 
+    public async patch(resource: string, content: any): Promise<string> {
+        return await this.axios.patch(`${this.apiURL}/${resource}`, content)
+            .then((response) => {
+                return response.data;
+            }).catch((error: AxiosError) => {
+                return this.createHttpError(error);
+            });
+    }
+
     public async delete(resource: string): Promise<any> {
         return await this.axios.delete(`${this.apiURL}/${resource}`)
             .then((response: AxiosResponse) => {
