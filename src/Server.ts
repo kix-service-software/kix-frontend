@@ -15,33 +15,26 @@ import compression = require('compression');
 
 import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
-lasso.configure({
-    bundlingEnabled: false,
-    fingerprintsEnabled: false,
-    includeSlotNames: false,
-    minify: false,
-    plugins: [
-        "lasso-marko",
-        "lasso-less"
-    ],
-    outputDir: "dist/static"
-});
 
 export class Server {
 
     public application: express.Application;
 
+    // TODO: Extract Router in separate class
     private router: express.Router;
 
     private serverConfig: IServerConfiguration;
 
     public constructor() {
+        // TODO: split lasso config for production and dev
+        lasso.configure(require('../lasso.config.json'));
         this.initializeServer();
     }
 
     private initializeServer(): void {
-        this.application = express();
+        // TODO: Implement and use a ConfigurationService
         this.serverConfig = require('../server.config.json');
+        this.application = express();
         this.initializeApplication();
         this.initializeRoutes();
     }
@@ -67,6 +60,8 @@ export class Server {
     }
 
     private initializeRoutes(): void {
+
+        // TODO: Request all router with the interface IRouter. Extend the interface for the base route path.
         const applicationRouter = container.get<IApplicationRouter>("IApplicationRouter");
         this.router.use("/", applicationRouter.router);
 
@@ -76,6 +71,7 @@ export class Server {
 }
 
 // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
+// TODO: Remove MOck HTTP Server
 if (process.env.NODE_ENV === 'development') {
     const mockServer = new MockHTTPServer();
 }

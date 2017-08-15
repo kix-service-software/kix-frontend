@@ -29,7 +29,7 @@ export class AuthenticationService implements IAuthenticationService {
             if (!token) {
                 res.redirect('/auth');
             } else {
-                // TODO validate token?
+                // TODO: validate token?
                 next();
             }
         }
