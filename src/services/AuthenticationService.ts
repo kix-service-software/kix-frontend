@@ -35,7 +35,7 @@ export class AuthenticationService implements IAuthenticationService {
 
     public async login(user: string, password: string, type: UserType): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
-        return await this.httpService.post('auth/login', userLogin)
+        return await this.httpService.post('sessions', userLogin)
             .then((response: LoginResponse) => {
                 return response.token;
             }).catch((error: HttpError) => {
