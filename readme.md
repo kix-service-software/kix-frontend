@@ -4,6 +4,8 @@
 - [2. Installation & Start](#2-installation-start)
     - [2.1. Command Line](#21-command-line)
     - [2.2. debuggen im VSCode](#22-debuggen-im-vscode)
+    - [Dependency Injection](#dependency-injection)
+        - [Verwendung](#verwendung)
     - [2.3. MOCK-HTTP-Server](#23-mock-http-server)
 - [3. Server Konfiguration](#3-server-konfiguration)
 - [4. Services](#4-services)
@@ -70,6 +72,25 @@ npm install --all
 * mit F5 DEBUG starten
     * führt gulp aus
     * startet Webanwendung im DEBUG Modus (NODE_ENV="development")
+
+## Dependency Injection
+Für die Instanzierung von Services wird das KOnzept der Dependency Injection (DI) verwendet. Dazu gibt es eine "Container"-Implementierung, welche sich um die Bindung der Instanzen kümmert.
+### Verwendung
+Eine neue Instanz im Container registrieren:
+```javascript
+this.container.bind<IPluginService>("IPluginService").to(PluginService);
+```
+Eine Instanz am Container abfragen:
+```javascript
+const applicationRouter = container.get<IApplicationRouter>("IApplicationRouter");
+```
+Eine Instanz per @inject im Konstruktor:
+```javascript
+public constructor( @inject("IHttpService") httpService: IHttpService) {
+...
+}
+```
+
 
 ## 2.3. MOCK-HTTP-Server
 Wird die Anwendung im "development" Modus gestartet, so wird ein Mock-HTTP-Server gestartet. Dieser kann verwendet werden solange noch kein Backend zur Verfügung steht.
