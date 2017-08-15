@@ -8,11 +8,11 @@
 - [3. Server Konfiguration](#3-server-konfiguration)
 - [4. Services](#4-services)
     - [4.1. TODO: Logging Service](#41-todo-logging-service)
-    - [4.2. TODO: Authentication Service](#42-todo-authentication-service)
+    - [4.2. Authentication Service](#42-authentication-service)
         - [4.2.1. Beschreibung](#421-beschreibung)
         - [4.2.2. Verwendung](#422-verwendung)
         - [4.2.3. Interface](#423-interface)
-    - [4.3. TODO: PluginService](#43-todo-pluginservice)
+    - [4.3. PluginService](#43-pluginservice)
         - [4.3.1. Beschreibung](#431-beschreibung)
         - [4.3.2. Interface](#432-interface)
     - [4.4. HTTP-Service](#44-http-service)
@@ -110,7 +110,7 @@ Beispiel-Logeintrag:
 ```
 
 
-## 4.2. TODO: Authentication Service
+## 4.2. Authentication Service
 ### 4.2.1. Beschreibung
 Dieser Service hat die Aufgabe zu prüfen ob Requests eine gültigen Authorization Header mit Token haben. Sollten Requests ungültig sein, so wird zum Login weitergeleitet.
 Weiterhin bietet der Service die Funktion sich als Nutzer einzuloggen.
@@ -134,7 +134,7 @@ interface IAuthenticationService {
 }
 ```
 
-## 4.3. TODO: PluginService
+## 4.3. PluginService
 
 ### 4.3.1. Beschreibung
 Der Service scant konfigurierte Verzeichnisse nach Extension-Points. Die zu durchsuchenden Verzeichnisse werden in der server.config.json konfiguriert. In den Verzeichnissen wird rekursiv nach package.json Files gesucht und in diesen Files wird auf einen Abschnitt Extensions geprüft. Alle darin enthaltenen Definitionen werden entsprechend geladen und im Pluginmanager gehalten. Die Erweiterungen können dann an Hand einer ID vom Plugin Manager abgerufen werden.
