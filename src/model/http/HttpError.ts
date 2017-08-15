@@ -1,12 +1,12 @@
-export class HttpError {
+import { KIXError } from './../KIXError';
+
+export class HttpError extends KIXError {
 
     public status: number;
 
-    public error: any;
-
     public constructor(status: number, error: string) {
+        super(error);
         this.status = status;
-        this.error = error;
     }
 
 }

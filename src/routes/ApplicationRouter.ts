@@ -1,10 +1,14 @@
+import { IAuthenticationService } from './../services/IAuthenticationService';
 import { Request, Response, Router } from 'express';
 
 export class ApplicationRouter {
 
     public router: Router;
 
-    constructor() {
+    private authenticationService: IAuthenticationService;
+
+    constructor(authenticationService: IAuthenticationService) {
+        this.authenticationService = authenticationService;
         this.router = Router();
         this.router.get("/", this.getRoot.bind(this));
     }

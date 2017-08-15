@@ -1,6 +1,6 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { HttpError, IServerConfiguration } from './../model/';
 import { IHttpService } from './IHttpService';
-import { IServerConfiguration, HttpError } from './../model/';
 
 export class HttpService implements IHttpService {
 
@@ -19,7 +19,8 @@ export class HttpService implements IHttpService {
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
-                return this.createHttpError(error);
+                // TODO: LoggingService log error
+                throw this.createHttpError(error);
             });
     }
 
@@ -28,7 +29,8 @@ export class HttpService implements IHttpService {
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
-                return this.createHttpError(error);
+                // TODO: LoggingService log error
+                throw this.createHttpError(error);
             });
     }
 
@@ -37,7 +39,8 @@ export class HttpService implements IHttpService {
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
-                return this.createHttpError(error);
+                // TODO: LoggingService log error
+                throw this.createHttpError(error);
             });
     }
 
@@ -46,7 +49,8 @@ export class HttpService implements IHttpService {
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
-                return this.createHttpError(error);
+                // TODO: LoggingService log error
+                throw this.createHttpError(error);
             });
     }
 
@@ -55,7 +59,8 @@ export class HttpService implements IHttpService {
             .then((response: AxiosResponse) => {
                 return response.data;
             }).catch((error: AxiosError) => {
-                return this.createHttpError(error);
+                // TODO: LoggingService log error
+                throw this.createHttpError(error);
             });
     }
 

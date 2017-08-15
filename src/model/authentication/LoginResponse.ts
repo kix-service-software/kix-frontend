@@ -1,5 +1,5 @@
-export interface ILoginResponse {
+export class LoginResponse {
 
-    token: string;
+    public token: string;
 
 }

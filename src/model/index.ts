@@ -1,12 +1,16 @@
+import { UserLogin } from './authentication/UserLogin';
+import { KIXError } from './KIXError';
 import { HttpError } from './http/HttpError';
-import { ILoginResponse } from './authentication/LoginResponse';
+import { LoginResponse } from './authentication/LoginResponse';
 import { IServerConfiguration } from './configuration/IServerConfiguration';
 import { UserType } from './authentication/UserType';
 
 
 export {
-    ILoginResponse,
+    LoginResponse,
     UserType,
     HttpError,
-    IServerConfiguration
+    IServerConfiguration,
+    KIXError,
+    UserLogin
 };

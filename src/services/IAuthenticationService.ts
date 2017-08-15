@@ -1,5 +1,6 @@
+import { Request, Response } from 'express';
 import { UserType } from '../model';
-import { Request } from 'express';
+
 export interface IAuthenticationService {
 
     isAuthenticated(req: Request, res: Response, next: () => void): void;
