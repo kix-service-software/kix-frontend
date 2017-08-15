@@ -17,7 +17,9 @@ export class AuthenticationRouter implements IAuthenticationRouter {
     }
 
     public login(req: Request, res: Response): void {
-        const template = require('../components/login/index.marko');
-        res.marko(template, {});
+        const template = require('../components/app/index.marko');
+        res.marko(template, {
+            template: require('../components/login/index.marko')
+        });
     }
 }

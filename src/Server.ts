@@ -13,7 +13,19 @@ nodeRequire.install(); // Allow Node.js to require and load `.marko` files
 import markoExpress = require('marko/express');
 import compression = require('compression');
 
+import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
+lasso.configure({
+    bundlingEnabled: false,
+    fingerprintsEnabled: false,
+    includeSlotNames: false,
+    minify: false,
+    plugins: [
+        "lasso-marko",
+        "lasso-less"
+    ],
+    outputDir: "dist/static"
+});
 
 export class Server {
 
@@ -24,7 +36,6 @@ export class Server {
     private serverConfig: IServerConfiguration;
 
     public constructor() {
-        lasso.configure(require('../lasso.config.json'));
         this.initializeServer();
     }
 
@@ -41,6 +52,7 @@ export class Server {
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
         this.application.use(markoExpress());
+        this.application.use(lassoMiddleware.serveStatic());
         this.application.use(express.static('dist/static/'));
         // TODO: retrieve extensions for static content from plugins
 
