@@ -1,3 +1,4 @@
+import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
@@ -56,6 +57,9 @@ export class Server {
     private initializeRoutes(): void {
         const applicationRouter = container.get<IApplicationRouter>("IApplicationRouter");
         this.router.use("/", applicationRouter.router);
+
+        const authenticationRouter = container.get<IAuthenticationRouter>("IAuthenticationRouter");
+        this.router.use("/auth", authenticationRouter.router);
     }
 }
 
