@@ -21,7 +21,6 @@ export class MarkoService implements IMarkoService {
             await this.pluginService.getExtensions<IMarkoDependency>(KIXExtensions.MARKO_DEPENDENCIES);
 
         const browserJSON = require(this.browserJsonPath);
-        browserJSON.dependencies = [];
 
         this.fillDependencies(browserJSON, markoDependencies);
         await this.saveBrowserJSON(browserJSON);

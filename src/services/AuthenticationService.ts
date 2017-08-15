@@ -23,11 +23,11 @@ export class AuthenticationService implements IAuthenticationService {
     public isAuthenticated(req: Request, res: Response, next: () => void): void {
         const authorizationHeader: string = req.headers['authorization'];
         if (!authorizationHeader) {
-            res.redirect('/login');
+            res.redirect('/auth');
         } else {
             const token = this.getToken(authorizationHeader);
             if (!token) {
-                res.redirect('/login');
+                res.redirect('/auth');
             } else {
                 // TODO validate token?
                 next();

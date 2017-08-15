@@ -1,5 +1,10 @@
 import 'reflect-metadata';
-import { ApplicationRouter, IApplicationRouter } from './routes/';
+import {
+    ApplicationRouter,
+    AuthenticationRouter,
+    IApplicationRouter,
+    IAuthenticationRouter
+} from './routes/';
 import {
     AuthenticationService,
     HttpService,
@@ -9,7 +14,7 @@ import {
     IPluginService,
     MarkoService,
     PluginService
-    } from './services/';
+} from './services/';
 import { Container } from 'inversify';
 
 class ServiceContainer {
@@ -31,6 +36,7 @@ class ServiceContainer {
 
     private bindRouter(): void {
         this.container.bind<IApplicationRouter>("IApplicationRouter").to(ApplicationRouter);
+        this.container.bind<IAuthenticationRouter>("IAuthenticationRouter").to(AuthenticationRouter);
     }
 
 }
