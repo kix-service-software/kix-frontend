@@ -35,19 +35,19 @@ describe('Authentication Service', () => {
     describe('Login', () => {
 
         before(() => {
-            mock.onPost(apiURL + '/auth/login', {
+            mock.onPost(apiURL + '/sessions', {
                 UserLogin: 'agent',
                 Password: 'agent',
                 UserType: UserType.AGENT
             }).reply(200, { token: 'ABCDEFG12345' });
 
-            mock.onPost(apiURL + '/auth/login', {
+            mock.onPost(apiURL + '/sessions', {
                 UserLogin: 'customer',
                 Password: 'customer',
                 UserType: UserType.CUSTOMER
             }).reply(200, { token: 'ABCDEFG12345' });
 
-            mock.onPost(apiURL + '/auth/login', {
+            mock.onPost(apiURL + '/sessions', {
                 UserLogin: 'wrong',
                 Password: 'wrong',
                 UserType: UserType.AGENT
