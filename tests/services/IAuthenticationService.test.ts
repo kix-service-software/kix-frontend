@@ -1,3 +1,4 @@
+import { Container } from 'inversify';
 import {
     AuthenticationService,
     HttpService,
@@ -14,10 +15,12 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const httpService: IHttpService = new HttpService();
+import { container } from "./../../src/Container";
+
+const httpService: IHttpService = container.get<IHttpService>("IHttpService");
 const axios = require('axios');
 
-const authenticationService: IAuthenticationService = new AuthenticationService(httpService);
+const authenticationService: IAuthenticationService = container.get<IAuthenticationService>("IAuthenticationService");
 
 const apiURL = require('../../server.config.json').BACKEND_API_URL;
 

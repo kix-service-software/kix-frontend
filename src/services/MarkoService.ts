@@ -1,16 +1,19 @@
 import { IMarkoDependency, KIXExtensions } from '../extensions/';
 import { IMarkoService } from './IMarkoService';
+import { inject, injectable } from 'inversify';
 import { IPluginService } from './IPluginService';
 import { PluginService } from './PluginService';
 import jsonfile = require('jsonfile');
 
+@injectable()
 export class MarkoService implements IMarkoService {
 
     private browserJsonPath: string = '../components/app/browser.json';
     private pluginService: IPluginService;
 
-    public constructor(pluginService: IPluginService) {
+    public constructor( @inject("IPluginService") pluginService: IPluginService) {
         this.pluginService = pluginService;
+        this.registerMarkoDependencies();
     }
 
     public async registerMarkoDependencies(): Promise<void> {

@@ -1,20 +1,22 @@
+import { injectable, inject } from 'inversify';
 import {
     HttpError,
     LoginResponse,
     UserLogin,
     UserType
-    } from '../model';
+} from '../model';
 import { IAuthenticationService } from './IAuthenticationService';
 import { IHttpService } from './IHttpService';
 import { Request, Response } from 'express';
 
+@injectable()
 export class AuthenticationService implements IAuthenticationService {
 
     private httpService: IHttpService;
 
     private TOKEN_PREFIX: string = 'Token ';
 
-    public constructor(httpService: IHttpService) {
+    public constructor( @inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
     }
 
