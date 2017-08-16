@@ -1,8 +1,7 @@
+import { IRouter } from './IRouter';
 import { Request, Response } from 'express';
 
-export interface IApplicationRouter {
-
-    router: any;
+export interface IApplicationRouter extends IRouter {
 
     getRoot(req: Request, res: Response): void;
 

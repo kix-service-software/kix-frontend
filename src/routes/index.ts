@@ -1,3 +1,4 @@
+import { IRouter } from './IRouter';
 import { AuthenticationRouter } from './AuthenticationRouter';
 import { IAuthenticationRouter } from './IAuthenticationRouter';
 import { ApplicationRouter } from './ApplicationRouter';
@@ -7,5 +8,6 @@ export {
     IApplicationRouter,
     ApplicationRouter,
     IAuthenticationRouter,
-    AuthenticationRouter
+    AuthenticationRouter,
+    IRouter
 };

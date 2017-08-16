@@ -1,3 +1,4 @@
+import { IRouter } from './routes/IRouter';
 import { Container } from 'inversify';
 import 'reflect-metadata';
 import {
@@ -38,8 +39,8 @@ class ServiceContainer {
     }
 
     private bindRouter(): void {
-        this.container.bind<IApplicationRouter>("IApplicationRouter").to(ApplicationRouter);
-        this.container.bind<IAuthenticationRouter>("IAuthenticationRouter").to(AuthenticationRouter);
+        this.container.bind<IRouter>("Router").to(ApplicationRouter);
+        this.container.bind<IRouter>("Router").to(AuthenticationRouter);
     }
 
 }
