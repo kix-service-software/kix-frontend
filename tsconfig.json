@@ -10,7 +10,7 @@
     "src/**/*.ts"
   ],
   "types": [
-    "node"
+    "node", "reflect-metadata"
   ],
   "exclude": [
     "node_modules"

@@ -1,0 +1,11 @@
+{
+    "bundlingEnabled": true,
+    "fingerprintsEnabled": false,
+    "includeSlotNames": false,
+    "minify": true,
+    "plugins": [
+        "lasso-marko",
+        "lasso-less"
+    ],
+    "outputDir": "dist/static"
+}

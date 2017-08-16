@@ -35,6 +35,7 @@
             true,
             1
         ],
+        "no-string-literal": false,
         "interface-name": [
             true,
             "always-prefix"

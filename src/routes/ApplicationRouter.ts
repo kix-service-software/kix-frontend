@@ -1,15 +1,22 @@
+import { IApplicationRouter } from './IApplicationRouter';
+import { IAuthenticationService } from './../services/IAuthenticationService';
+import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 
-export class ApplicationRouter {
+@injectable()
+export class ApplicationRouter implements IApplicationRouter {
 
     public router: Router;
 
-    constructor() {
+    private authenticationService: IAuthenticationService;
+
+    constructor( @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+        this.authenticationService = authenticationService;
         this.router = Router();
-        this.router.get("/", this.getRoot.bind(this));
+        this.router.get("/", this.authenticationService.isAuthenticated.bind(this), this.getRoot.bind(this));
     }
 
-    private getRoot(req: Request, res: Response): void {
+    public getRoot(req: Request, res: Response): void {
         const template = require('../components/app/index.marko');
         res.marko(template, {});
     }
