@@ -28,6 +28,10 @@
 - [6. Extension-Points](#6-extension-points)
     - [6.1. Static Content](#61-static-content)
         - [6.1.1. Extension ID](#611-extension-id)
+        - [6.1.1. Interface](#611-interface)
+        - [6.1.2. Beispiel](#612-beispiel)
+    - [6.2. Marko-Dependencies](#62-marko-dependencies)
+        - [Extension ID](#extension-id)
         - [6.1.2. Interface](#612-interface)
         - [6.1.3. Beispiel](#613-beispiel)
 - [7. Projekt-Struktur](#7-projekt-struktur)
@@ -253,7 +257,9 @@ Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte
 An diesem Erweiterungspunkt können externe Module *"static content"*-Verzeichnisse registrieren. Diese Verzeichnisse werden dann in Express als static eingebunden. An der Extension muss ein Name für den *"static content"* und der Pfad zum Verzeichnis definiert werden.
 
 ### 6.1.1. Extension ID
-```kix:static:content```
+```
+kix:static:content
+```
 
 ### 6.1.1. Interface
 ```javascript
@@ -287,7 +293,9 @@ An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. sta
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
 ### Extension ID
-```kix:marko:dependencies```
+```
+kix:marko:dependencies
+```
 
 ### 6.1.2. Interface
 
