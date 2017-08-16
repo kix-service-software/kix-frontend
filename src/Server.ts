@@ -6,6 +6,7 @@ import { container } from './Container';
 import { IApplicationRouter } from './routes/IApplicationRouter';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
+import { Environment } from './model';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -26,16 +27,22 @@ export class Server {
     private serverConfig: IServerConfiguration;
 
     public constructor() {
-        // TODO: split lasso config for production and dev
-        lasso.configure(require('../lasso.config.json'));
+        // TODO: Use a [ConfigurationService] to retrieve the correct lasso configuration!
+        if (this.isProductionMode()) {
+            lasso.configure(require('../lasso.prod.config.json'));
+        } else {
+            lasso.configure(require('../lasso.dev.config.json'));
+        }
         this.initializeServer();
     }
 
     private initializeServer(): void {
-        // TODO: Implement and use a ConfigurationService
+        // TODO: Implement and use a [ConfigurationService]
         this.serverConfig = require('../server.config.json');
         this.application = express();
         this.initializeApplication();
+
+        // TODO: Extract Router and the route initialization to a separate class
         this.initializeRoutes();
     }
 
@@ -49,6 +56,7 @@ export class Server {
         this.application.use(express.static('dist/static/'));
         // TODO: retrieve extensions for static content from plugins
 
+        // TODO: Extract Router and the route initialization to a separate class
         this.router = express.Router();
         this.application.use(this.router);
 
@@ -59,6 +67,7 @@ export class Server {
         console.log("KIXng running on http://<host>:" + port);
     }
 
+    // TODO: Extract Router and the route initialization to a separate class
     private initializeRoutes(): void {
 
         // TODO: Request all router with the interface IRouter. Extend the interface for the base route path.
@@ -68,11 +77,18 @@ export class Server {
         const authenticationRouter = container.get<IAuthenticationRouter>("IAuthenticationRouter");
         this.router.use("/auth", authenticationRouter.router);
     }
+
+    // TODO: Use a [ConfigurationService] to retrieve the current environment
+    private isProductionMode(): boolean {
+        const environment = process.env.NODE_ENV.toLowerCase();
+        return environment === Environment.PRODUCTION ||
+            (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
+    }
 }
 
 // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
 // TODO: Remove MOck HTTP Server
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === Environment.DEVELOPMENT) {
     const mockServer = new MockHTTPServer();
 }
 
