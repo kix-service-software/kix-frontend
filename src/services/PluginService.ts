@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { IPluginService } from './IPluginService';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import Plugins = require('js-plugins');
@@ -5,6 +6,7 @@ const host = {
     debug: true
 };
 
+@injectable()
 export class PluginService implements IPluginService {
 
     private pluginManager: any;

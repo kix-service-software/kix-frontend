@@ -4,49 +4,51 @@
 - [2. Installation & Start](#2-installation-start)
     - [2.1. Command Line](#21-command-line)
     - [2.2. debuggen im VSCode](#22-debuggen-im-vscode)
-    - [2.3. MOCK-HTTP-Server](#23-mock-http-server)
-- [3. Server Konfiguration](#3-server-konfiguration)
-- [4. Services](#4-services)
-    - [4.1. TODO: Logging Service](#41-todo-logging-service)
-    - [4.2. Authentication Service](#42-authentication-service)
-        - [4.2.1. Beschreibung](#421-beschreibung)
-        - [4.2.2. Verwendung](#422-verwendung)
-        - [4.2.3. Interface](#423-interface)
-    - [4.3. PluginService](#43-pluginservice)
-        - [4.3.1. Beschreibung](#431-beschreibung)
-        - [4.3.2. Interface](#432-interface)
-    - [4.4. HTTP-Service](#44-http-service)
-        - [4.4.1. Beschreibung](#441-beschreibung)
-        - [4.4.2. Verwendung](#442-verwendung)
-        - [4.4.3. Interface](#443-interface)
-        - [4.4.4. Fehlerbehandlung](#444-fehlerbehandlung)
-            - [4.4.4.1. HttpError](#4441-httperror)
-        - [4.4.5. Beispiel](#445-beispiel)
-    - [4.5. TODO: Object Services](#45-todo-object-services)
-- [5. Extension-Points](#5-extension-points)
-    - [5.1. Marko-Dependencies](#51-marko-dependencies)
-        - [5.1.1. TODO: Interface](#511-todo-interface)
-- [6. Projekt-Struktur](#6-projekt-struktur)
-    - [6.1. .vscode](#61-vscode)
-    - [6.2. src](#62-src)
-        - [6.2.1. src/components](#621-srccomponents)
-            - [6.2.1.1. src/components/app](#6211-srccomponentsapp)
-                - [6.2.1.1.1. browser.json](#62111-browserjson)
-        - [6.2.2. src/model](#622-srcmodel)
-        - [6.2.3. src/routes](#623-srcroutes)
-        - [6.2.4. src/services](#624-srcservices)
-        - [6.2.5. src/static](#625-srcstatic)
-        - [6.2.6. src/Server.ts](#626-srcserverts)
-    - [6.3. tests](#63-tests)
-    - [6.4. gitignore](#64-gitignore)
-    - [6.5. npmignore](#65-npmignore)
-    - [6.6. gitlab-ci.yml](#66-gitlab-ciyml)
-    - [6.7. gulpfile.js](#67-gulpfilejs)
-    - [6.8. LICENSE](#68-license)
-    - [6.9. package.json](#69-packagejson)
-    - [6.10. readme.md](#610-readmemd)
-    - [6.11. server.config.json](#611-serverconfigjson)
-    - [6.12. tslint.json](#612-tslintjson)
+- [3. Dependency Injection](#3-dependency-injection)
+    - [3.1. Verwendung](#31-verwendung)
+    - [3.2. MOCK-HTTP-Server](#32-mock-http-server)
+- [4. Server Konfiguration](#4-server-konfiguration)
+- [5. Services](#5-services)
+    - [5.1. TODO: Logging Service](#51-todo-logging-service)
+    - [5.2. Authentication Service](#52-authentication-service)
+        - [5.2.1. Beschreibung](#521-beschreibung)
+        - [5.2.2. Verwendung](#522-verwendung)
+        - [5.2.3. Interface](#523-interface)
+    - [5.3. PluginService](#53-pluginservice)
+        - [5.3.1. Beschreibung](#531-beschreibung)
+        - [5.3.2. Interface](#532-interface)
+    - [5.4. HTTP-Service](#54-http-service)
+        - [5.4.1. Beschreibung](#541-beschreibung)
+        - [5.4.2. Verwendung](#542-verwendung)
+        - [5.4.3. Interface](#543-interface)
+        - [5.4.4. Fehlerbehandlung](#544-fehlerbehandlung)
+            - [5.4.4.1. HttpError](#5441-httperror)
+        - [5.4.5. Beispiel](#545-beispiel)
+    - [5.5. TODO: Object Services](#55-todo-object-services)
+- [6. Extension-Points](#6-extension-points)
+    - [6.1. Marko-Dependencies](#61-marko-dependencies)
+        - [6.1.1. TODO: Interface](#611-todo-interface)
+- [7. Projekt-Struktur](#7-projekt-struktur)
+    - [7.1. .vscode](#71-vscode)
+    - [7.2. src](#72-src)
+        - [7.2.1. src/components](#721-srccomponents)
+            - [7.2.1.1. src/components/app](#7211-srccomponentsapp)
+                - [7.2.1.1.1. browser.json](#72111-browserjson)
+        - [7.2.2. src/model](#722-srcmodel)
+        - [7.2.3. src/routes](#723-srcroutes)
+        - [7.2.4. src/services](#724-srcservices)
+        - [7.2.5. src/static](#725-srcstatic)
+        - [7.2.6. src/Server.ts](#726-srcserverts)
+    - [7.3. tests](#73-tests)
+    - [7.4. gitignore](#74-gitignore)
+    - [7.5. npmignore](#75-npmignore)
+    - [7.6. gitlab-ci.yml](#76-gitlab-ciyml)
+    - [7.7. gulpfile.js](#77-gulpfilejs)
+    - [7.8. LICENSE](#78-license)
+    - [7.9. package.json](#79-packagejson)
+    - [7.10. readme.md](#710-readmemd)
+    - [7.11. server.config.json](#711-serverconfigjson)
+    - [7.12. tslint.json](#712-tslintjson)
 
 <!-- /TOC -->
 # 1. KIXng Webapplication
@@ -71,12 +73,31 @@ npm install --all
     * führt gulp aus
     * startet Webanwendung im DEBUG Modus (NODE_ENV="development")
 
-## 2.3. MOCK-HTTP-Server
+# 3. Dependency Injection
+Für die Instanzierung von Services wird das KOnzept der Dependency Injection (DI) verwendet. Dazu gibt es eine "Container"-Implementierung, welche sich um die Bindung der Instanzen kümmert.
+## 3.1. Verwendung
+Eine neue Instanz im Container registrieren:
+```javascript
+this.container.bind<IPluginService>("IPluginService").to(PluginService);
+```
+Eine Instanz am Container abfragen:
+```javascript
+const applicationRouter = container.get<IApplicationRouter>("IApplicationRouter");
+```
+Eine Instanz per @inject im Konstruktor:
+```javascript
+public constructor( @inject("IHttpService") httpService: IHttpService) {
+...
+}
+```
+
+
+## 3.2. MOCK-HTTP-Server
 Wird die Anwendung im "development" Modus gestartet, so wird ein Mock-HTTP-Server gestartet. Dieser kann verwendet werden solange noch kein Backend zur Verfügung steht.
 Dieser Server wird auf Port 3123 gestartet.
 **ACHTUNG:** Die Mockimplementierung wird wieder entfernt!
 
-# 3. Server Konfiguration
+# 4. Server Konfiguration
 Die Konfiguration des Servers befindet sich in dem File server.config.json.
 ```json
 {
@@ -88,9 +109,9 @@ Die Konfiguration des Servers befindet sich in dem File server.config.json.
 }
 ```
 
-# 4. Services
+# 5. Services
 
-## 4.1. TODO: Logging Service
+## 5.1. TODO: Logging Service
 * speichern von Logmeldungen
 * Loglevel: ERROR, WARNING, INFO, DEBUG
 * Loglevel per Umgebungsvariable definierbar
@@ -110,12 +131,12 @@ Beispiel-Logeintrag:
 ```
 
 
-## 4.2. Authentication Service
-### 4.2.1. Beschreibung
+## 5.2. Authentication Service
+### 5.2.1. Beschreibung
 Dieser Service hat die Aufgabe zu prüfen ob Requests eine gültigen Authorization Header mit Token haben. Sollten Requests ungültig sein, so wird zum Login weitergeleitet.
 Weiterhin bietet der Service die Funktion sich als Nutzer einzuloggen.
 
-### 4.2.2. Verwendung
+### 5.2.2. Verwendung
 Zum Absichern von Routen:
 ```javascript
 const auhtenticationService = ...;
@@ -123,7 +144,7 @@ const auhtenticationService = ...;
 this.router.get("/", this.authenticationService.isAuthenticated.bind(this), this.getRoot.bind(this));
 ```
 
-### 4.2.3. Interface
+### 5.2.3. Interface
 ```javascript
 interface IAuthenticationService {
 
@@ -134,9 +155,9 @@ interface IAuthenticationService {
 }
 ```
 
-## 4.3. PluginService
+## 5.3. PluginService
 
-### 4.3.1. Beschreibung
+### 5.3.1. Beschreibung
 Der Service scant konfigurierte Verzeichnisse nach Extension-Points. Die zu durchsuchenden Verzeichnisse werden in der server.config.json konfiguriert. In den Verzeichnissen wird rekursiv nach package.json Files gesucht und in diesen Files wird auf einen Abschnitt Extensions geprüft. Alle darin enthaltenen Definitionen werden entsprechend geladen und im Pluginmanager gehalten. Die Erweiterungen können dann an Hand einer ID vom Plugin Manager abgerufen werden.
 
 Beispiel für eine Extension-Verwendung (package.json eines externen Node-Modules:):
@@ -153,7 +174,7 @@ Beispiel für eine Extension-Verwendung (package.json eines externen Node-Module
 }
 ```
 
-### 4.3.2. Interface
+### 5.3.2. Interface
 
 ```javascript
 interface IPluginService {
@@ -163,11 +184,11 @@ interface IPluginService {
 }
 ```
 
-## 4.4. HTTP-Service
-### 4.4.1. Beschreibung
+## 5.4. HTTP-Service
+### 5.4.1. Beschreibung
 Dieser Service kappselt die HTTP-FUnktionalität und kümmert sich um das senden von Requests gegen das Backend, sowie dem Empfangen und Verarbeiten von Responses und Fehlern.
 
-### 4.4.2. Verwendung
+### 5.4.2. Verwendung
 
 | Methode | Beschreibung                                              | Result                             |
 | ------- | --------------------------------------------------------- | ---------------------------------- |
@@ -177,7 +198,7 @@ Dieser Service kappselt die HTTP-FUnktionalität und kümmert sich um das senden
 | PATCH   | Aktualisiert ein vorhandens Objekt (einzelne Properties). | Die Id des aktualisierten Objektes |
 | DELETE  | Löscht eine Resource                                      | Nichts.                            |
 
-### 4.4.3. Interface
+### 5.4.3. Interface
 ```javascript
 interface IHttpService {
 
@@ -192,10 +213,10 @@ interface IHttpService {
     delete(resource: string): Promise<any>;
 }
 ```
-### 4.4.4. Fehlerbehandlung
+### 5.4.4. Fehlerbehandlung
 Sollte der Response einen Fehler Repräsentieren (HTTP-Status-Code), so liefert der Service ein Fehlerobjekt vom Typ ```HttpError```.
 
-#### 4.4.4.1. HttpError
+#### 5.4.4.1. HttpError
 ```javascript
 class HttpError extends KIXError {
 
@@ -205,7 +226,7 @@ class HttpError extends KIXError {
 }
 ```
 
-### 4.4.5. Beispiel
+### 5.4.5. Beispiel
 ```javascript
 const httpService: IHttpService = new HttpService();
 
@@ -215,7 +236,7 @@ const ticket = await httpService.get('ticket/12345')
     });
 ```
 
-## 4.5. TODO: Object Services
+## 5.5. TODO: Object Services
 * Kappselung von Geschäftslogik für Businessobjekte (Ticket, Queue, CI, ...)
 * Hauptaufgaben:
     * Daten laden
@@ -223,10 +244,10 @@ const ticket = await httpService.get('ticket/12345')
     * Daten erstellen/hinzufügen
     * Daten löschen 
 
-# 5. Extension-Points
+# 6. Extension-Points
 Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte für die Anwendung.
 
-## 5.1. Marko-Dependencies
+## 6.1. Marko-Dependencies
 An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. statischen Content registrieren, welcher durch Lasso mit in die Anwendung eingebunden werden soll.
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
@@ -238,7 +259,7 @@ Zum Beispiel:
 ]
 ```
 
-### 5.1.1. TODO: Interface
+### 6.1.1. TODO: Interface
 * ID: "kix-marko-dependencies"
 
 ```javascript
@@ -247,64 +268,64 @@ interface IMarkoDependency {
 }
 ```
 
-# 6. Projekt-Struktur
+# 7. Projekt-Struktur
 
-## 6.1. .vscode
+## 7.1. .vscode
 Enthält grundlegende EInstellungen VSCode für Tasks, Launch und generelle IDE Settings.
 
-## 6.2. src
+## 7.2. src
 Enthält alle Quellen (TypeScript) für die Webanwendung. Themen/Schichten/Komponenten sind durch eine Ordnerstruktur organisiert.
 
-### 6.2.1. src/components
+### 7.2.1. src/components
 Enthält alle Marko-Komponenten für die Webanwendung. Pro Komponente gibt es ein Verzeichnis.
 
-#### 6.2.1.1. src/components/app
+#### 7.2.1.1. src/components/app
 Enthält die Haupt-Marko-Komponente und die browser.json. 
 
-##### 6.2.1.1.1. browser.json
+##### 7.2.1.1.1. browser.json
 In der Browser.json werden durch die Anwendung automatisiert beim Start alle Abhängigkeiten eingetragen, welche notwendig sind und durch Lasso für den static content gebundlet werden müssen. Der Pluginmanager sucht nach Extensions "kix:markodependencies" und trägt die definierten Abhänigkeiten in die browser.json ein.
 
-### 6.2.2. src/model
+### 7.2.2. src/model
 Enthält die TypeScript-Klassen für Datenmodelle.
 
-### 6.2.3. src/routes
+### 7.2.3. src/routes
 Enthält die TypeScript-Klassen für das Routing der Webanwendung.
 
-### 6.2.4. src/services
+### 7.2.4. src/services
 Enthält die Klassen für die Geschäftslogig der Webanwendung.
 
-### 6.2.5. src/static
+### 7.2.5. src/static
 Enthält den static Content für die Webanwendung, welcher über den Webserver zur Verfügung gestellt wird.
 
-### 6.2.6. src/Server.ts
+### 7.2.6. src/Server.ts
 Hauptklasse für die Webanwendung. Kümmert sich um das bootstrapping des Webservers, sowie die Registrierung aller notwendigen Komponenten, wir Router o.Ä.
 
-## 6.3. tests
+## 7.3. tests
 Enthält alle Funktionstests (uni-Tests) für die Webanwendung. Diese Test werden auch im CI ausgeführt.
 
-## 6.4. gitignore
+## 7.4. gitignore
 Enthält Einträge mit Pfaden oder Dateien, welche nicht im GIT-Repository gepflegt werden.
 
-## 6.5. npmignore
+## 7.5. npmignore
 Enthält Einträge mit Pfaden oder Dateien, welche nicht mit in das NPM-Modul "gepublished" werden.
 
-## 6.6. gitlab-ci.yml
+## 7.6. gitlab-ci.yml
 Pipeline Config für Gitlab.
 
-## 6.7. gulpfile.js
+## 7.7. gulpfile.js
 Gulp Tasks zum Bauen und Testen der Webanwendung. TSLINT, TSC, COPY ...
 
-## 6.8. LICENSE
+## 7.8. LICENSE
 Lizenz.
 
-## 6.9. package.json
+## 7.9. package.json
 Enthält die grundlegende Beschreibung der Node Anwendung und alle benötigten Abhängigkeiten der Webanwendung.
 
-## 6.10. readme.md
+## 7.10. readme.md
 Dokumentation der Webanwendung.
 
-## 6.11. server.config.json
+## 7.11. server.config.json
 Enthält die grundlegende Konfiguration der Webanwendung.
 
-## 6.12. tslint.json
+## 7.12. tslint.json
 Enthält die Konfiguration der tslint Regeln zur Prüfung des Quellcodes.

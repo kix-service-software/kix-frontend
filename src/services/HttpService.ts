@@ -1,7 +1,9 @@
+import { injectable } from 'inversify';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { HttpError, IServerConfiguration } from './../model/';
 import { IHttpService } from './IHttpService';
 
+@injectable()
 export class HttpService implements IHttpService {
 
     private axios: AxiosInstance;

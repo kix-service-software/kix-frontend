@@ -1,2 +1,14 @@
-<h1>KIXng Webapplication</h1>
-<span>KIXng Welcome!</span>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>KIX 2018</title>
+    <lasso-head/>
+  </head>
+  <body>
+    <if(data.template)>
+      <include(data.template)/>
+    </if>
+    <lasso-body/>
+  </body>
+</html>

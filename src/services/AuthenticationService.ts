@@ -1,33 +1,35 @@
+import { injectable, inject } from 'inversify';
 import {
     HttpError,
     LoginResponse,
     UserLogin,
     UserType
-    } from '../model';
+} from '../model';
 import { IAuthenticationService } from './IAuthenticationService';
 import { IHttpService } from './IHttpService';
 import { Request, Response } from 'express';
 
+@injectable()
 export class AuthenticationService implements IAuthenticationService {
 
     private httpService: IHttpService;
 
     private TOKEN_PREFIX: string = 'Token ';
 
-    public constructor(httpService: IHttpService) {
+    public constructor( @inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
     }
 
     public isAuthenticated(req: Request, res: Response, next: () => void): void {
         const authorizationHeader: string = req.headers['authorization'];
         if (!authorizationHeader) {
-            res.redirect('/login');
+            res.redirect('/auth');
         } else {
             const token = this.getToken(authorizationHeader);
             if (!token) {
-                res.redirect('/login');
+                res.redirect('/auth');
             } else {
-                // TODO validate token?
+                // TODO: validate token?
                 next();
             }
         }

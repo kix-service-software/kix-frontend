@@ -1,3 +1,4 @@
+import { container } from './../../src/Container';
 import { HttpError } from './../../src/model/http/HttpError';
 import { HttpService, IHttpService } from './../../src/services/';
 /* tslint:disable no-var-requires no-unused-expression */
@@ -8,7 +9,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const httpService: IHttpService = new HttpService();
+const httpService: IHttpService = container.get<IHttpService>("IHttpService");
 const axios = require('axios');
 
 const apiURL = require('../../server.config.json').BACKEND_API_URL;
