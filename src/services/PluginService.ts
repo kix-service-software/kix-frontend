@@ -1,4 +1,5 @@
-import { injectable } from 'inversify';
+import { IConfigurationService } from './IConfigurationService';
+import { injectable, inject } from 'inversify';
 import { IPluginService } from './IPluginService';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import Plugins = require('js-plugins');
@@ -11,8 +12,8 @@ export class PluginService implements IPluginService {
 
     private pluginManager: any;
 
-    public constructor() {
-        const serverConfiguration: IServerConfiguration = require('../../server.config.json');
+    public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
+        const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
         this.pluginManager = new Plugins();
 
         const pluginDirs = [];
