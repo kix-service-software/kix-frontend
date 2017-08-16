@@ -10,7 +10,7 @@ const tslintConfig = require('./tslint.json');
 const devTSCConfig = {
     target: "es6",
     lib: ["es6"],
-    types: ["node"],
+    types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
     experimentalDecorators: true,
@@ -26,7 +26,7 @@ const devTSCConfig = {
 const prodTSCConfig = {
     target: "es6",
     lib: ["es6"],
-    types: ["node"],
+    types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
     experimentalDecorators: true,

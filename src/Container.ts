@@ -1,3 +1,4 @@
+import { Container } from 'inversify';
 import 'reflect-metadata';
 import {
     ApplicationRouter,
@@ -15,7 +16,6 @@ import {
     MarkoService,
     PluginService
 } from './services/';
-import { Container } from 'inversify';
 
 class ServiceContainer {
 
@@ -40,5 +40,6 @@ class ServiceContainer {
     }
 
 }
+
 const container = new ServiceContainer().container;
 export { container };
