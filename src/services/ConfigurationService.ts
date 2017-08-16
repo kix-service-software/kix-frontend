@@ -38,13 +38,11 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     public isDevelopmentMode(): boolean {
-        const environment = this.getEnvironment();
-        return environment === Environment.DEVELOPMENT;
+        return this.getEnvironment() === Environment.DEVELOPMENT;
     }
 
     public isTestMode(): boolean {
-        const environment = this.getEnvironment();
-        return environment === Environment.TEST;
+        return this.getEnvironment() === Environment.TEST;
     }
 
     private getEnvironment(): string {
