@@ -6,7 +6,9 @@ import { IAuthenticationRouter } from './IAuthenticationRouter';
 @injectable()
 export class AuthenticationRouter implements IAuthenticationRouter {
 
-    public router: any;
+    public router: Router;
+
+    public baseRoute = "/auth";
 
     private authenticationService: IAuthenticationService;
 

@@ -8,6 +8,8 @@ export class ApplicationRouter implements IApplicationRouter {
 
     public router: Router;
 
+    public baseRoute = "/";
+
     private authenticationService: IAuthenticationService;
 
     constructor( @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
