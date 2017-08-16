@@ -4,7 +4,7 @@ import { HttpError } from './http/HttpError';
 import { LoginResponse } from './authentication/LoginResponse';
 import { IServerConfiguration } from './configuration/IServerConfiguration';
 import { UserType } from './authentication/UserType';
-
+import { Environment } from './Environment';
 
 export {
     LoginResponse,
@@ -12,5 +12,6 @@ export {
     HttpError,
     IServerConfiguration,
     KIXError,
-    UserLogin
+    UserLogin,
+    Environment
 };
