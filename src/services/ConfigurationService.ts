@@ -32,19 +32,28 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     public isProductionMode(): boolean {
-        const environment = process.env.NODE_ENV.toLowerCase();
+        const environment = this.getEnvironment();
         return environment === Environment.PRODUCTION ||
             (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
     }
 
     public isDevelopmentMode(): boolean {
-        const environment = process.env.NODE_ENV.toLowerCase();
+        const environment = this.getEnvironment();
         return environment === Environment.DEVELOPMENT;
     }
 
     public isTestMode(): boolean {
-        const environment = process.env.NODE_ENV.toLowerCase();
+        const environment = this.getEnvironment();
         return environment === Environment.TEST;
+    }
+
+    private getEnvironment(): string {
+        let nodeEnv = process.env.NODE_ENV;
+        if (!nodeEnv) {
+            nodeEnv = Environment.PRODUCTION;
+        }
+
+        return nodeEnv.toLocaleLowerCase();
     }
 
 }
