@@ -26,23 +26,21 @@ export class Server {
     private serverConfig: IServerConfiguration;
 
     public constructor() {
+        this.initializeApplication();
+    }
+
+    private initializeApplication(): void {
         // TODO: Use a [ConfigurationService] to retrieve the correct lasso configuration!
         if (this.isProductionMode()) {
             lasso.configure(require('../lasso.prod.config.json'));
         } else {
             lasso.configure(require('../lasso.dev.config.json'));
         }
-        this.initializeServer();
-    }
 
-    private initializeServer(): void {
         // TODO: Implement and use a [ConfigurationService]
         this.serverConfig = require('../server.config.json');
-        this.application = express();
-        this.initializeApplication();
-    }
 
-    private initializeApplication(): void {
+        this.application = express();
         this.application.use(compression());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
