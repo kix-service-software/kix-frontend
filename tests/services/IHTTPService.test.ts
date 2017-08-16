@@ -27,6 +27,10 @@ describe('HTTP Service', () => {
         mock.restore();
     });
 
+    it('service instance is registered in container.', () => {
+        expect(httpService).not.undefined;
+    });
+
     describe('GET Requests', () => {
         before(() => {
             mock.onGet(apiURL + '/testGet')

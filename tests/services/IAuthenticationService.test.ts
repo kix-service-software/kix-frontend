@@ -35,6 +35,10 @@ describe('Authentication Service', () => {
         mock.restore();
     });
 
+    it('service instance is registered in container.', () => {
+        expect(authenticationService).not.undefined;
+    });
+
     describe('Login', () => {
 
         before(() => {

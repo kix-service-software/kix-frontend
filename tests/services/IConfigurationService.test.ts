@@ -13,6 +13,10 @@ const configurationService: IConfigurationService = container.get<IConfiguration
 
 describe('Configuration Service', () => {
 
+    it('service instance is registered in container.', () => {
+        expect(configurationService).not.undefined;
+    });
+
     describe('Server Configuration', () => {
         it('should return a server configuration.', () => {
             const serverConfiguration = configurationService.getServerConfiguration();
