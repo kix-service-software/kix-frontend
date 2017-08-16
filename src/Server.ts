@@ -29,7 +29,7 @@ export class Server {
     public constructor() {
         // TODO: Use a [ConfigurationService] to retrieve the correct lasso configuration!
         if (this.isProductionMode()) {
-            lasso.configure(require('../lasso.config.json'));
+            lasso.configure(require('../lasso.prod.config.json'));
         } else {
             lasso.configure(require('../lasso.dev.config.json'));
         }
@@ -80,8 +80,8 @@ export class Server {
 
     // TODO: Use a [ConfigurationService] to retrieve the current environment
     private isProductionMode(): boolean {
-        const environment = process.env.NODE_ENV;
-        return environment === Environment.Production ||
+        const environment = process.env.NODE_ENV.toLowerCase();
+        return environment === Environment.PRODUCTION ||
             (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
     }
 }
