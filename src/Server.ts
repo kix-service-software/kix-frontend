@@ -1,4 +1,5 @@
 import { ServerRouter } from './ServerRouter';
+import { container } from './Container';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
@@ -6,6 +7,7 @@ import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
+import { ILoggingService } from './services';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -24,7 +26,10 @@ export class Server {
 
     private serverConfig: IServerConfiguration;
 
+    private loggingService: ILoggingService;
+
     public constructor() {
+        this.loggingService = container.get<ILoggingService>("ILoggingService");
         this.initializeApplication();
     }
 

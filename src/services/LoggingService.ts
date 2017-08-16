@@ -1,10 +1,10 @@
+import { injectable } from 'inversify';
 import { ILoggingService } from './ILoggingService';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import { LogLevel } from './../model/logging/LogLevel';
 import * as winston from 'winston';
 
-
-
+@injectable()
 export class LoggingService implements ILoggingService {
 
     private kixLogger: any;

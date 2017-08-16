@@ -14,7 +14,9 @@ import {
     IMarkoService,
     IPluginService,
     MarkoService,
-    PluginService
+    PluginService,
+    ILoggingService,
+    LoggingService
 } from './services/';
 
 class ServiceContainer {
@@ -28,6 +30,7 @@ class ServiceContainer {
     }
 
     private bindServices(): void {
+        this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
