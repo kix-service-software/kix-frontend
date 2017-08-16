@@ -1,8 +1,8 @@
+import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
-import { container } from './Container';
 import { IApplicationRouter } from './routes/IApplicationRouter';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
@@ -21,8 +21,7 @@ export class Server {
 
     public application: express.Application;
 
-    // TODO: Extract Router in separate class
-    private router: express.Router;
+    private router: ServerRouter;
 
     private serverConfig: IServerConfiguration;
 
@@ -41,9 +40,6 @@ export class Server {
         this.serverConfig = require('../server.config.json');
         this.application = express();
         this.initializeApplication();
-
-        // TODO: Extract Router and the route initialization to a separate class
-        this.initializeRoutes();
     }
 
     private initializeApplication(): void {
@@ -56,26 +52,13 @@ export class Server {
         this.application.use(express.static('dist/static/'));
         // TODO: retrieve extensions for static content from plugins
 
-        // TODO: Extract Router and the route initialization to a separate class
-        this.router = express.Router();
-        this.application.use(this.router);
+        this.router = new ServerRouter(this.application);
 
         const port = process.env.PORT || this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
         // TODO: Use LoggingService
         console.log("KIXng running on http://<host>:" + port);
-    }
-
-    // TODO: Extract Router and the route initialization to a separate class
-    private initializeRoutes(): void {
-
-        // TODO: Request all router with the interface IRouter. Extend the interface for the base route path.
-        const applicationRouter = container.get<IApplicationRouter>("IApplicationRouter");
-        this.router.use("/", applicationRouter.router);
-
-        const authenticationRouter = container.get<IAuthenticationRouter>("IAuthenticationRouter");
-        this.router.use("/auth", authenticationRouter.router);
     }
 
     // TODO: Use a [ConfigurationService] to retrieve the current environment
