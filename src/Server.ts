@@ -1,3 +1,5 @@
+import { container } from './Container';
+import { IConfigurationService } from './services/';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
@@ -25,20 +27,22 @@ export class Server {
 
     private serverConfig: IServerConfiguration;
 
+    private configurationService: IConfigurationService;
+
     public constructor() {
+        this.configurationService = container.get<IConfigurationService>("IConfigurationService");
+        this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
+
+        // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
+        // TODO: Remove Mock HTTP Server
+        if (this.configurationService.isDevelopmentMode()) {
+            const mockServer = new MockHTTPServer();
+        }
     }
 
     private initializeApplication(): void {
-        // TODO: Use a [ConfigurationService] to retrieve the correct lasso configuration!
-        if (this.isProductionMode()) {
-            lasso.configure(require('../lasso.prod.config.json'));
-        } else {
-            lasso.configure(require('../lasso.dev.config.json'));
-        }
-
-        // TODO: Implement and use a [ConfigurationService]
-        this.serverConfig = require('../server.config.json');
+        lasso.configure(this.configurationService.getLassoConfiguration());
 
         this.application = express();
         this.application.use(compression());
@@ -58,19 +62,6 @@ export class Server {
         // TODO: Use LoggingService
         console.log("KIXng running on http://<host>:" + port);
     }
-
-    // TODO: Use a [ConfigurationService] to retrieve the current environment
-    private isProductionMode(): boolean {
-        const environment = process.env.NODE_ENV.toLowerCase();
-        return environment === Environment.PRODUCTION ||
-            (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
-    }
-}
-
-// Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
-// TODO: Remove MOck HTTP Server
-if (process.env.NODE_ENV === Environment.DEVELOPMENT) {
-    const mockServer = new MockHTTPServer();
 }
 
 export default new Server();

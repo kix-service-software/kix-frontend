@@ -1,4 +1,5 @@
-import { injectable } from 'inversify';
+import { IConfigurationService } from './IConfigurationService';
+import { injectable, inject } from 'inversify';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { HttpError, IServerConfiguration } from './../model/';
 import { IHttpService } from './IHttpService';
@@ -10,8 +11,8 @@ export class HttpService implements IHttpService {
 
     private apiURL: string;
 
-    public constructor() {
-        const serverConfig: IServerConfiguration = require('../../server.config.json');
+    public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
+        const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
         this.axios = require('axios');
     }

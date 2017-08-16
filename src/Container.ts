@@ -8,6 +8,8 @@ import {
 } from './routes/';
 import {
     AuthenticationService,
+    ConfigurationService,
+    IConfigurationService,
     HttpService,
     IAuthenticationService,
     IHttpService,
@@ -28,6 +30,7 @@ class ServiceContainer {
     }
 
     private bindServices(): void {
+        this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);

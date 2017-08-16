@@ -1,13 +1,12 @@
-import { Container } from 'inversify';
+/* tslint:disable no-var-requires no-unused-expression */
 import {
-    AuthenticationService,
     HttpService,
     IAuthenticationService,
-    IHttpService
+    IHttpService,
+    IConfigurationService
 } from './../../src/services/';
 import { HttpError, UserType } from './../../src/model/';
 import { Request, Response } from 'express';
-/* tslint:disable no-var-requires no-unused-expression */
 import chaiAsPromised = require('chai-as-promised');
 import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
@@ -21,8 +20,9 @@ const httpService: IHttpService = container.get<IHttpService>("IHttpService");
 const axios = require('axios');
 
 const authenticationService: IAuthenticationService = container.get<IAuthenticationService>("IAuthenticationService");
+const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
 
-const apiURL = require('../../server.config.json').BACKEND_API_URL;
+const apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
 
 describe('Authentication Service', () => {
     let mock;

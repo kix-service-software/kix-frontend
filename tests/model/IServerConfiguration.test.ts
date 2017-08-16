@@ -1,12 +1,16 @@
-import { IServerConfiguration } from './../../src/model/configuration/IServerConfiguration';
+import { container } from './../../src/Container';
+import { IConfigurationService } from './../../src/services/';
+import { IServerConfiguration } from './../../src/model/';
 import * as chai from 'chai';
 
 const expect = chai.expect;
 
+const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
+
 /* tslint:disable:no-unused-expression*/
 describe('Server Configuration', () => {
 
-    const serverConfiguration: IServerConfiguration = require('../../server.config.json');
+    const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
 
     it('Should exists', () => {
         expect(serverConfiguration).to.not.be.undefined;
