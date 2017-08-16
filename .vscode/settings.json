@@ -8,7 +8,7 @@
         "**/.DS_Store": true,
         "node_modules": true,
         ".cache": true,
-        "dist": false
+        "dist": true
     },
     "editor.tabSize": 4
 }
