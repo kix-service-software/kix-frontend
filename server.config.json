@@ -1,7 +1,11 @@
 {
-    "SERVER_PORT": 3000,
+    "SERVER_PORT": 3001,
     "PLUGIN_FOLDERS": [
         "node_modules/@kix"
     ],
-    "BACKEND_API_URL": "http://localhost:3123"
+    "BACKEND_API_URL": "http://localhost:3123",
+
+    "LOG_LEVEL": 2,
+    "LOG_FILE": "dist/logs/kix.log",
+    "LOG_TRACE": true
 }

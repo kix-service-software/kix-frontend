@@ -5,8 +5,10 @@ import { ApplicationRouter } from './routes/ApplicationRouter';
 import {
     IMarkoService,
     IPluginService,
+    ILoggingService,
     MarkoService,
-    PluginService
+    PluginService,
+    LoggingService
 } from './services/';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
@@ -44,6 +46,8 @@ export class Server {
 
     private markoService: IMarkoService;
 
+    private loggingService: ILoggingService;
+
     public constructor() {
         this.initializeServer();
     }
@@ -63,6 +67,8 @@ export class Server {
         await this.markoService.registerMarkoDependencies();
 
         // TODO: Logging-Service initialize
+        this.loggingService = new LoggingService();
+
         // TODO: HTTP-Service initialize
         // TODO: Authentication-Service initialize
     }
@@ -84,6 +90,11 @@ export class Server {
 
         // TODO: Use LoggingService
         console.log("KIXng running on http://<host>:" + port);
+        this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
+        this.loggingService.error("LogService: generic error message");
+        this.loggingService.debug("LogService: generic debug message", { bla: 'bla', blub: 'blub'});
+        this.loggingService.warning("LogService: generic warning message", { warn1: 'bla', warn2: 'blub'});
+
     }
 
     private initializeRoutes(): void {
