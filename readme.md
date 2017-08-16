@@ -27,11 +27,9 @@
     - [5.5. TODO: Object Services](#55-todo-object-services)
 - [6. Extension-Points](#6-extension-points)
     - [6.1. Static Content](#61-static-content)
-        - [6.1.1. Interface](#611-interface)
-        - [6.1.2. Beispiel](#612-beispiel)
-    - [6.2. Marko-Dependencies](#62-marko-dependencies)
-        - [6.2.1. Interface](#621-interface)
-        - [6.2.2. Beispiel](#622-beispiel)
+        - [6.1.1. Extension ID](#611-extension-id)
+        - [6.1.2. Interface](#612-interface)
+        - [6.1.3. Beispiel](#613-beispiel)
 - [7. Projekt-Struktur](#7-projekt-struktur)
     - [7.1. .vscode](#71-vscode)
     - [7.2. src](#72-src)
@@ -254,6 +252,9 @@ Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte
 ## 6.1. Static Content
 An diesem Erweiterungspunkt können externe Module *"static content"*-Verzeichnisse registrieren. Diese Verzeichnisse werden dann in Express als static eingebunden. An der Extension muss ein Name für den *"static content"* und der Pfad zum Verzeichnis definiert werden.
 
+### 6.1.1. Extension ID
+```kix:static:content```
+
 ### 6.1.1. Interface
 ```javascript
 interface IStaticContentExtension {
@@ -281,13 +282,14 @@ class TicketStaticContentExtension implements IStaticContentExtension {
 ```
 Der statische Content für das "Ticketmodul" kann dann vom Client via ```http://<FQDN>/ticket-static/...``` abgerufen werden.
 
-
 ## 6.2. Marko-Dependencies
 An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. statischen Content registrieren, welcher durch Lasso mit in die Anwendung eingebunden werden soll.
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
-### 6.2.1. Interface
-* ID: "kix-marko-dependencies"
+### Extension ID
+```kix:marko:dependencies```
+
+### 6.1.2. Interface
 
 ```javascript
 interface IMarkoDependency {
@@ -295,7 +297,7 @@ interface IMarkoDependency {
 }
 ```
 
-### 6.2.2. Beispiel
+### 6.1.3. Beispiel
 ```javascript
 class TicketMarcoDependencyExtension implements IMarkoDependencyExtension {
 
