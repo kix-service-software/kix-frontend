@@ -1,4 +1,4 @@
-import { IMarkoDependency, KIXExtensions } from '../extensions/';
+import { IMarkoDependencyExtension, KIXExtensions } from '../extensions/';
 import { IMarkoService } from './IMarkoService';
 import { inject, injectable } from 'inversify';
 import { IPluginService } from './IPluginService';
@@ -17,8 +17,8 @@ export class MarkoService implements IMarkoService {
     }
 
     public async registerMarkoDependencies(): Promise<void> {
-        const markoDependencies: IMarkoDependency[] =
-            await this.pluginService.getExtensions<IMarkoDependency>(KIXExtensions.MARKO_DEPENDENCIES);
+        const markoDependencies: IMarkoDependencyExtension[] =
+            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
 
         const browserJSON = require(this.browserJsonPath);
 
@@ -26,7 +26,7 @@ export class MarkoService implements IMarkoService {
         await this.saveBrowserJSON(browserJSON);
     }
 
-    private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependency[]): void {
+    private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependencyExtension[]): void {
         for (const plugin of markoDependencies) {
             for (const dependencyPath of plugin.getDependencies()) {
                 const dependency = 'require: ../../../node_modules/' + dependencyPath;
