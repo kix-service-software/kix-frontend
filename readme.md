@@ -26,8 +26,12 @@
         - [5.4.5. Beispiel](#545-beispiel)
     - [5.5. TODO: Object Services](#55-todo-object-services)
 - [6. Extension-Points](#6-extension-points)
-    - [6.1. Marko-Dependencies](#61-marko-dependencies)
-        - [6.1.1. TODO: Interface](#611-todo-interface)
+    - [6.1. Static Content](#61-static-content)
+        - [6.1.1. Interface](#611-interface)
+        - [6.1.2. Beispiel](#612-beispiel)
+    - [6.2. Marko-Dependencies](#62-marko-dependencies)
+        - [6.2.1. Interface](#621-interface)
+        - [6.2.2. Beispiel](#622-beispiel)
 - [7. Projekt-Struktur](#7-projekt-struktur)
     - [7.1. .vscode](#71-vscode)
     - [7.2. src](#72-src)
@@ -247,24 +251,60 @@ const ticket = await httpService.get('ticket/12345')
 # 6. Extension-Points
 Folgender Abschnitt dient der Beschreibung der Verwendung der Erweiterungspunkte für die Anwendung.
 
-## 6.1. Marko-Dependencies
+## 6.1. Static Content
+An diesem Erweiterungspunkt können externe Module *"static content"*-Verzeichnisse registrieren. Diese Verzeichnisse werden dann in Express als static eingebunden. An der Extension muss ein Name für den *"static content"* und der Pfad zum Verzeichnis definiert werden.
+
+### 6.1.1. Interface
+```javascript
+interface IStaticContentExtension {
+
+    getName(): string;
+
+    getPath(): string;
+
+}
+```
+
+### 6.1.2. Beispiel
+```javascript
+class TicketStaticContentExtension implements IStaticContentExtension {
+
+    public getName(): string {
+        return "ticket-static";
+    }
+
+    public getPath(): string {
+        return "@kix/ticket/static";
+    }
+
+}
+```
+Der statische Content für das "Ticketmodul" kann dann vom Client via ```http://<FQDN>/ticket-static/...``` abgerufen werden.
+
+
+## 6.2. Marko-Dependencies
 An diesem Erweiterungspunkt können externe Module ihre Marko-Templates bzw. statischen Content registrieren, welcher durch Lasso mit in die Anwendung eingebunden werden soll.
 Die Erweiterung muss ein Array mit Pfaden liefern, welche sich ab Modulverzeichnis aufbauen. 
 
-Zum Beispiel:
-```json
-[
-    "@kix/ticket/components/ticket-table",
-    "@kix/ticket/components/ticket-core-data"
-]
-```
-
-### 6.1.1. TODO: Interface
+### 6.2.1. Interface
 * ID: "kix-marko-dependencies"
 
 ```javascript
 interface IMarkoDependency {
     getDependencyPaths(): string[];
+}
+```
+
+### 6.2.2. Beispiel
+```javascript
+class TicketMarcoDependencyExtension implements IMarkoDependencyExtension {
+
+    getDependencies(): string[] {
+        return [
+            "@kix/ticket/components/ticket-table",
+            "@kix/ticket/components/ticket-core-data"
+        ];
+    }
 }
 ```
 
