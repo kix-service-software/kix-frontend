@@ -1,7 +1,9 @@
-import { IMarkoDependency } from './IMarkoDependency';
+import { IStaticContentExtension } from './IStaticContentExtension';
+import { IMarkoDependencyExtension } from './IMarkoDependencyExtension';
 import { KIXExtensions } from './KIXExtensions';
 
 export {
-    IMarkoDependency,
+    IMarkoDependencyExtension,
+    IStaticContentExtension,
     KIXExtensions
 };

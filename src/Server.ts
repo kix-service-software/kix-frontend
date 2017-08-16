@@ -1,5 +1,5 @@
 import { container } from './Container';
-import { IConfigurationService } from './services/';
+import { IConfigurationService, IPluginService } from './services/';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
@@ -9,6 +9,7 @@ import { IApplicationRouter } from './routes/IApplicationRouter';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
+import { KIXExtensions, IStaticContentExtension } from './extensions';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -29,8 +30,12 @@ export class Server {
 
     private configurationService: IConfigurationService;
 
+    private pluginService: IPluginService;
+
     public constructor() {
         this.configurationService = container.get<IConfigurationService>("IConfigurationService");
+        this.pluginService = container.get<IPluginService>("IPluginService");
+
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
 
@@ -50,9 +55,8 @@ export class Server {
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
         this.application.use(markoExpress());
-        this.application.use(lassoMiddleware.serveStatic());
-        this.application.use(express.static('dist/static/'));
-        // TODO: retrieve extensions for static content from plugins
+
+        this.registerStaticContent();
 
         this.router = new ServerRouter(this.application);
 
@@ -61,6 +65,17 @@ export class Server {
 
         // TODO: Use LoggingService
         console.log("KIXng running on http://<host>:" + port);
+    }
+
+    private async registerStaticContent(): Promise<void> {
+        this.application.use(lassoMiddleware.serveStatic());
+        this.application.use(express.static('dist/static/'));
+
+        const extensions = await this.pluginService
+            .getExtensions<IStaticContentExtension>(KIXExtensions.STATIC_CONTENT);
+        for (const staticContent of extensions) {
+            this.application.use(staticContent.getName(), express.static('node_modules/' + staticContent.getPath()));
+        }
     }
 }
 
