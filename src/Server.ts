@@ -1,7 +1,6 @@
 import { container } from './Container';
-import { IConfigurationService, IPluginService } from './services/';
+import { IConfigurationService, IPluginService, ILoggingService } from './services/';
 import { ServerRouter } from './ServerRouter';
-import { container } from './Container';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
@@ -9,11 +8,7 @@ import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
-<<<<<<< HEAD
-import { ILoggingService } from './services';
-=======
 import { KIXExtensions, IStaticContentExtension } from './extensions';
->>>>>>> rel-18_FEATURE
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
