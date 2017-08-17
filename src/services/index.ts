@@ -1,6 +1,8 @@
 import { AuthenticationService } from './AuthenticationService';
-import { IAuthenticationService } from './IAuthenticationService';
+import { ConfigurationService } from './ConfigurationService';
 import { HttpService } from './HttpService';
+import { IAuthenticationService } from './IAuthenticationService';
+import { IConfigurationService } from './IConfigurationService';
 import { IHttpService } from './IHttpService';
 import { IMarkoService } from './IMarkoService';
 import { IPluginService } from './IPluginService';
@@ -10,6 +12,8 @@ import { PluginService } from './PluginService';
 import { LoggingService } from './LoggingService';
 
 export {
+    IConfigurationService,
+    ConfigurationService,
     IAuthenticationService,
     AuthenticationService,
     IMarkoService,

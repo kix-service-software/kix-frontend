@@ -1,7 +1,7 @@
+/* tslint:disable no-var-requires no-unused-expression */
 import { container } from './../../src/Container';
 import { HttpError } from './../../src/model/http/HttpError';
-import { HttpService, IHttpService } from './../../src/services/';
-/* tslint:disable no-var-requires no-unused-expression */
+import { HttpService, IHttpService, IConfigurationService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
 import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
@@ -10,9 +10,11 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 const httpService: IHttpService = container.get<IHttpService>("IHttpService");
+const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
+
 const axios = require('axios');
 
-const apiURL = require('../../server.config.json').BACKEND_API_URL;
+const apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
 
 describe('HTTP Service', () => {
     let mock;
@@ -23,6 +25,10 @@ describe('HTTP Service', () => {
 
     after(() => {
         mock.restore();
+    });
+
+    it('service instance is registered in container.', () => {
+        expect(httpService).not.undefined;
     });
 
     describe('GET Requests', () => {
