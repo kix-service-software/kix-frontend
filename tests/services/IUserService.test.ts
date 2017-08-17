@@ -1,9 +1,14 @@
-import { UserLogin } from './../../src/model/authentication/UserLogin';
-import { CreateUserResponse } from './../../src/model/user/CreateUserResponse';
-import { CreateUserRequest } from './../../src/model/user/CreateUser';
-import { UserResponse } from './../../src/model/user/UserResponse';
-import { UsersResponse } from './../../src/model/user/UsersResponse';
-import { User, SortOrder } from './../../src/model/';
+import { HttpError } from './../../src/model/http/HttpError';
+import {
+    User,
+    SortOrder,
+    UsersResponse,
+    UserResponse,
+    CreateUserResponse,
+    CreateUserRequest,
+    UserLogin,
+    UserServiceError
+} from './../../src/model/';
 /* tslint:disable no-var-requires no-unused-expression max-line-length */
 import { container } from './../../src/Container';
 import { IConfigurationService, IUserService } from './../../src/services/';
@@ -186,15 +191,8 @@ describe('User Service', () => {
     describe('Create User', () => {
         describe('Create a valid request to create a new user.', () => {
 
-            const user = new User();
-            user.UserLogin = 'test';
-            user.UserTitle = 'test';
-            user.UserFirstname = 'test';
-            user.UserLastname = 'test';
-            user.UserFullname = 'test';
-
             before(() => {
-                mock.onPost(apiURL + '/users', new CreateUserRequest(user))
+                mock.onPost(apiURL + '/users', new CreateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
                     .reply(200, buildCreateUserResponse(123456));
             });
 
@@ -203,14 +201,96 @@ describe('User Service', () => {
             });
 
             it('should return a the id of the new users.', async () => {
-                const userId = await userService.createUser(
-                    user.UserLogin,
-                    user.UserTitle,
-                    user.UserFirstname,
-                    user.UserLastname,
-                    user.UserFullname
-                );
+                const userId = await userService.createUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title');
                 expect(userId).equal(123456);
+            });
+
+        });
+
+        describe('Create a invalid create request with empty login.', () => {
+            before(() => {
+                mock.onPost(apiURL + '/users', new CreateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    .reply(400, {});
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should throw an error if login is empty.', async () => {
+                const userId = await userService.createUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title')
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+
+        describe('Create a invalid create request with empty firstName.', () => {
+            before(() => {
+                mock.onPost(apiURL + '/users', new CreateUserRequest('login', '', 'lastName', 'email', 'password', 'phone', 'title'))
+                    .reply(400, {});
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should throw an error if firstName is empty.', async () => {
+                const userId = await userService.createUser('login', '', 'lastName', 'email', 'password', 'phone', 'title')
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+
+        describe('Create a invalid create request with empty lastName.', () => {
+            before(() => {
+                mock.onPost(apiURL + '/users', new CreateUserRequest('login', 'firstName', '', 'email', 'password', 'phone', 'title'))
+                    .reply(400, {});
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should throw an error if lastName is empty.', async () => {
+                const userId = await userService.createUser('login', 'firstName', '', 'email', 'password', 'phone', 'title')
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+
+        describe('Create a invalid create request with empty email.', () => {
+            before(() => {
+                mock.onPost(apiURL + '/users', new CreateUserRequest('login', 'firstName', 'lastName', '', 'password', 'phone', 'title'))
+                    .reply(400, {});
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should throw an error if email is empty.', async () => {
+                const userId = await userService.createUser('login', 'firstName', 'lastName', '', 'password', 'phone', 'title')
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
             });
 
         });

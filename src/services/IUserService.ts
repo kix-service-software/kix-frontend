@@ -6,5 +6,7 @@ export interface IUserService {
 
     getUser(id: number): Promise<User>;
 
-    createUser(login: string, title: string, firstName: string, lastName: string, fullName: string): Promise<number>;
+    createUser(
+        login: string, firstName: string, lastName: string,
+        email: string, password: string, phone: string, title: string): Promise<number>;
 }

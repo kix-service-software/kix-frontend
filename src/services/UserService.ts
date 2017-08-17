@@ -44,16 +44,10 @@ export class UserService implements IUserService {
     }
 
     public async createUser(
-        login: string, title: string, firstName: string, lastName: string, fullName: string): Promise<number> {
+        login: string, firstName: string, lastName: string,
+        email: string, password: string, phone: string, title: string): Promise<number> {
 
-        const user = new User();
-        user.UserLogin = login;
-        user.UserTitle = title;
-        user.UserFirstname = firstName;
-        user.UserLastname = lastName;
-        user.UserFullname = fullName;
-
-        const createUserRequest = new CreateUserRequest(user);
+        const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
         const response = await this.httpService.post<CreateUserResponse>("users", createUserRequest);
         return response.UserID;

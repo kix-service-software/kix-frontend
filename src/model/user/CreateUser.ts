@@ -1,11 +1,30 @@
-import { User } from './User';
+import { UserLogin } from './../authentication/UserLogin';
+export class CreateUser {
 
-export class CreateUserRequest {
+    public UserLogin: string;
 
-    public User: User;
+    public UserFirstname: string;
 
-    public constructor(user: User) {
-        this.User = user;
+    public UserLastname: string;
+
+    public UserEmail: string;
+
+    public UserPassword: string;
+
+    public UserPhone: string;
+
+    public UserTitle: string;
+
+    public constructor(
+        login: string, firstName: string, lastName: string,
+        email: string, password: string, phone: string, title: string) {
+
+        this.UserLogin = login;
+        this.UserFirstname = firstName;
+        this.UserLastname = lastName;
+        this.UserEmail = email;
+        this.UserPassword = password;
+        this.UserPhone = phone;
+        this.UserTitle = title;
     }
-
 }

@@ -1,5 +1,6 @@
+import { UserServiceError } from './user/UserServiceError';
 import { CreateUserResponse } from './user/CreateUserResponse';
-import { CreateUserRequest } from './user/CreateUser';
+import { CreateUserRequest } from './user/CreateUserRequest';
 import { UsersResponse } from './user/UsersResponse';
 import { UserResponse } from './user/UserResponse';
 import { User } from './user/User';
@@ -27,5 +28,6 @@ export {
     UsersResponse,
     SortOrder,
     CreateUserRequest,
-    CreateUserResponse
+    CreateUserResponse,
+    UserServiceError
 };
