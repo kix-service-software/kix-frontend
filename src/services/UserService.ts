@@ -1,4 +1,4 @@
-import { UsersResponse } from './../model/user/UsersResponse';
+import { UsersResponse, CreateUserRequest, CreateUserResponse } from './../model/';
 import { IHttpService } from './IHttpService';
 import { injectable, inject } from 'inversify';
 import { User, SortOrder, UserQuery, UserResponse } from './../model/';
@@ -41,6 +41,22 @@ export class UserService implements IUserService {
     public async  getUser(id: number): Promise<User> {
         const response = await this.httpService.get<UserResponse>("users/" + id);
         return response.User;
+    }
+
+    public async createUser(
+        login: string, title: string, firstName: string, lastName: string, fullName: string): Promise<number> {
+
+        const user = new User();
+        user.UserLogin = login;
+        user.UserTitle = title;
+        user.UserFirstname = firstName;
+        user.UserLastname = lastName;
+        user.UserFullname = fullName;
+
+        const createUserRequest = new CreateUserRequest(user);
+
+        const response = await this.httpService.post<CreateUserResponse>("users", createUserRequest);
+        return response.UserID;
     }
 
 }

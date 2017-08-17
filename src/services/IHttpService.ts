@@ -2,11 +2,11 @@ export interface IHttpService {
 
     get<T>(resource: string, queryParameters?: any): Promise<T>;
 
-    post(resource: string, content: any): Promise<any>;
+    post<T>(resource: string, content: any): Promise<T>;
 
-    put(resource: string, content: any): Promise<string>;
+    put<T>(resource: string, content: any): Promise<T>;
 
-    patch(resource: string, content: any): Promise<string>;
+    patch<T>(resource: string, content: any): Promise<T>;
 
-    delete(resource: string): Promise<any>;
+    delete<T>(resource: string): Promise<T>;
 }

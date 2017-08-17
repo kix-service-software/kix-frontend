@@ -1,3 +1,5 @@
+import { CreateUserResponse } from './user/CreateUserResponse';
+import { CreateUserRequest } from './user/CreateUser';
 import { UsersResponse } from './user/UsersResponse';
 import { UserResponse } from './user/UserResponse';
 import { User } from './user/User';
@@ -23,5 +25,7 @@ export {
     UserQuery,
     UserResponse,
     UsersResponse,
-    SortOrder
+    SortOrder,
+    CreateUserRequest,
+    CreateUserResponse
 };

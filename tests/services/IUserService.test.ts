@@ -1,3 +1,6 @@
+import { UserLogin } from './../../src/model/authentication/UserLogin';
+import { CreateUserResponse } from './../../src/model/user/CreateUserResponse';
+import { CreateUserRequest } from './../../src/model/user/CreateUser';
 import { UserResponse } from './../../src/model/user/UserResponse';
 import { UsersResponse } from './../../src/model/user/UsersResponse';
 import { User, SortOrder } from './../../src/model/';
@@ -36,7 +39,7 @@ describe('User Service', () => {
     describe('Create a valid request to retrieve a user.', () => {
         before(() => {
             mock.onGet(apiURL + '/users/12345')
-                .reply(200, createUserResponse());
+                .reply(200, buildUserResponse());
         });
 
         after(() => {
@@ -53,7 +56,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve all users.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users')
-                    .reply(200, createUsersResponse(4));
+                    .reply(200, buildUsersResponse(4));
             });
 
             after(() => {
@@ -72,7 +75,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a list of 5 users', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Limit=5')
-                    .reply(200, createUsersResponse(5));
+                    .reply(200, buildUsersResponse(5));
             });
 
             after(() => {
@@ -91,7 +94,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a sorted list of users.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Order=Down')
-                    .reply(200, createUsersResponse(2));
+                    .reply(200, buildUsersResponse(2));
             });
 
             after(() => {
@@ -109,7 +112,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a list of users witch where changed after defined date.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?ChangedAfter=20170815')
-                    .reply(200, createUsersResponse(3));
+                    .reply(200, buildUsersResponse(3));
             });
 
             after(() => {
@@ -127,7 +130,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a limeted of users witch where changed after defined date.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Limit=6&ChangedAfter=20170815')
-                    .reply(200, createUsersResponse(6));
+                    .reply(200, buildUsersResponse(6));
             });
 
             after(() => {
@@ -146,7 +149,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a limeted, sorted of users', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Limit=6&Order=Up')
-                    .reply(200, createUsersResponse(6));
+                    .reply(200, buildUsersResponse(6));
             });
 
             after(() => {
@@ -165,7 +168,7 @@ describe('User Service', () => {
         describe('Create a valid request to retrieve a sorted list of users witch where changed after defined date.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Order=Up&ChangedAfter=20170815')
-                    .reply(200, createUsersResponse(4));
+                    .reply(200, buildUsersResponse(4));
             });
 
             after(() => {
@@ -179,18 +182,57 @@ describe('User Service', () => {
             });
         });
     });
+
+    describe('Create User', () => {
+        describe('Create a valid request to create a new user.', () => {
+
+            const user = new User();
+            user.UserLogin = 'test';
+            user.UserTitle = 'test';
+            user.UserFirstname = 'test';
+            user.UserLastname = 'test';
+            user.UserFullname = 'test';
+
+            before(() => {
+                mock.onPost(apiURL + '/users', new CreateUserRequest(user))
+                    .reply(200, buildCreateUserResponse(123456));
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should return a the id of the new users.', async () => {
+                const userId = await userService.createUser(
+                    user.UserLogin,
+                    user.UserTitle,
+                    user.UserFirstname,
+                    user.UserLastname,
+                    user.UserFullname
+                );
+                expect(userId).equal(123456);
+            });
+
+        });
+    });
 });
 
-function createUserResponse(): UserResponse {
+function buildUserResponse(): UserResponse {
     const response = new UserResponse();
     response.User = new User();
     return response;
 }
 
-function createUsersResponse(userCount: number): UsersResponse {
+function buildUsersResponse(userCount: number): UsersResponse {
     const response = new UsersResponse();
     for (let i = 0; i < userCount; i++) {
         response.User.push(new User());
     }
+    return response;
+}
+
+function buildCreateUserResponse(id: number): CreateUserResponse {
+    const response = new CreateUserResponse();
+    response.UserID = id;
     return response;
 }
