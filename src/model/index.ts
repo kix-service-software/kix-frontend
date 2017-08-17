@@ -1,3 +1,5 @@
+import { UsersResponse } from './user/UsersResponse';
+import { UserResponse } from './user/UserResponse';
 import { User } from './user/User';
 import { UserQuery } from './user/UserQuery';
 import { UserLogin } from './authentication/UserLogin';
@@ -19,5 +21,7 @@ export {
     Environment,
     User,
     UserQuery,
+    UserResponse,
+    UsersResponse,
     SortOrder
 };

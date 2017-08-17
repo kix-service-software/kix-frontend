@@ -1,5 +1,7 @@
+import { UserResponse } from './../../src/model/user/UserResponse';
+import { UsersResponse } from './../../src/model/user/UsersResponse';
 import { User, SortOrder } from './../../src/model/';
-/* tslint:disable no-var-requires no-unused-expression */
+/* tslint:disable no-var-requires no-unused-expression max-line-length */
 import { container } from './../../src/Container';
 import { IConfigurationService, IUserService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
@@ -31,10 +33,10 @@ describe('User Service', () => {
         expect(userService).not.undefined;
     });
 
-    describe('Get a user', () => {
+    describe('should create a valid request to retrieve a user.', () => {
         before(() => {
             mock.onGet(apiURL + '/users/12345')
-                .reply(200, new User());
+                .reply(200, createUserResponse());
         });
 
         after(() => {
@@ -48,12 +50,10 @@ describe('User Service', () => {
     });
 
     describe('Get multiple users', () => {
-        describe('Get all users', () => {
+        describe('Create a valid request to retrieve all users.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users')
-                    .reply(200, {
-                        UserID: [1, 2, 3, 4]
-                    });
+                    .reply(200, createUsersResponse(4));
             });
 
             after(() => {
@@ -69,19 +69,17 @@ describe('User Service', () => {
 
         });
 
-        describe('Get a list of 5 users', () => {
+        describe('Create a valid request to retrieve a list of 5 users', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Limit=5')
-                    .reply(200, {
-                        UserID: [1, 2, 3, 4, 5]
-                    });
+                    .reply(200, createUsersResponse(5));
             });
 
             after(() => {
                 mock.reset();
             });
 
-            it('should return a limited list of users.', async () => {
+            it('should return a limited list of 5 users.', async () => {
                 const users: User[] = await userService.getUsers(5);
                 expect(users).not.undefined;
                 expect(users).an('array');
@@ -90,12 +88,10 @@ describe('User Service', () => {
             });
         });
 
-        describe('Get a sorted list of users.', () => {
+        describe('Create a valid request to retrieve a sorted list of users.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Order=Down')
-                    .reply(200, {
-                        UserID: [5, 4, 3, 2, 1]
-                    });
+                    .reply(200, createUsersResponse(2));
             });
 
             after(() => {
@@ -110,12 +106,10 @@ describe('User Service', () => {
             });
         });
 
-        describe('Get a of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of users witch where changed after defined date.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?ChangedAfter=20170815')
-                    .reply(200, {
-                        UserID: [5, 4, 3, 2, 1]
-                    });
+                    .reply(200, createUsersResponse(3));
             });
 
             after(() => {
@@ -130,12 +124,10 @@ describe('User Service', () => {
             });
         });
 
-        describe('Get a limeted of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted of users witch where changed after defined date.', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Limit=5&ChangedAfter=20170815')
-                    .reply(200, {
-                        UserID: [6, 5, 4, 3, 2, 1]
-                    });
+                mock.onGet(apiURL + '/users?Limit=6&ChangedAfter=20170815')
+                    .reply(200, createUsersResponse(6));
             });
 
             after(() => {
@@ -151,12 +143,10 @@ describe('User Service', () => {
             });
         });
 
-        describe('Get a limeted, sorted of users', () => {
+        describe('Create a valid request to retrieve a limeted, sorted of users', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Limit=5&Order=Up')
-                    .reply(200, {
-                        UserID: [6, 5, 4, 3, 2, 1]
-                    });
+                mock.onGet(apiURL + '/users?Limit=6&Order=Up')
+                    .reply(200, createUsersResponse(6));
             });
 
             after(() => {
@@ -172,12 +162,10 @@ describe('User Service', () => {
             });
         });
 
-        describe('Get a sorted of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of users witch where changed after defined date.', () => {
             before(() => {
                 mock.onGet(apiURL + '/users?Order=Up&ChangedAfter=20170815')
-                    .reply(200, {
-                        UserID: [6, 5, 4, 3, 2, 1]
-                    });
+                    .reply(200, createUsersResponse(4));
             });
 
             after(() => {
@@ -192,3 +180,17 @@ describe('User Service', () => {
         });
     });
 });
+
+function createUserResponse(): UserResponse {
+    const response = new UserResponse();
+    response.User = new User();
+    return response;
+}
+
+function createUsersResponse(userCount: number): UsersResponse {
+    const response = new UsersResponse();
+    for (let i = 0; i < userCount; i++) {
+        response.User.push(new User());
+    }
+    return response;
+}
