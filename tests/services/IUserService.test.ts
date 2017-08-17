@@ -33,7 +33,7 @@ describe('User Service', () => {
         expect(userService).not.undefined;
     });
 
-    describe('should create a valid request to retrieve a user.', () => {
+    describe('Create a valid request to retrieve a user.', () => {
         before(() => {
             mock.onGet(apiURL + '/users/12345')
                 .reply(200, createUserResponse());
