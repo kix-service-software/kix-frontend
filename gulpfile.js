@@ -40,7 +40,7 @@ const prodTSCConfig = {
 };
 
 gulp.task('default', (cb) => {
-    runseq('tslint', 'test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', 'copy-logs', cb);
+    runseq('tslint', 'test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', cb);
 });
 
 gulp.task('tslint', () => {
@@ -86,10 +86,4 @@ gulp.task('copy-static', () => {
     return gulp
         .src(['src/static/**/*'])
         .pipe(gulp.dest('dist/static'));
-});
-
-gulp.task('copy-logs', () => {
-    return gulp
-        .src(['src/logs/**/*'])
-        .pipe(gulp.dest('dist/logs'));
 });

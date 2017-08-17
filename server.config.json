@@ -6,6 +6,6 @@
     "BACKEND_API_URL": "http://localhost:3123",
 
     "LOG_LEVEL": 2,
-    "LOG_FILE": "dist/logs/kix.log",
+    "LOG_FILEDIR": "logs",
     "LOG_TRACE": true
 }

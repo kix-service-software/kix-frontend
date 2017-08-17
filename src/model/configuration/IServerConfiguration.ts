@@ -1,4 +1,4 @@
-import { LogLevel } from './../../model/logging/LogLevel';
+import { LogLevel } from '../logging/LogLevel';
 export interface IServerConfiguration {
 
     SERVER_PORT: number;
@@ -8,6 +8,6 @@ export interface IServerConfiguration {
     BACKEND_API_URL: string;
 
     LOG_LEVEL: LogLevel;
-    LOG_FILE: string;
+    LOG_FILEDIR: string;
     LOG_TRACE: boolean;
 }
