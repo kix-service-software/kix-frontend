@@ -1,18 +1,20 @@
-import { UserServiceError } from './user/UserServiceError';
-import { CreateUserResponse } from './user/CreateUserResponse';
+import { UpdateUserResponse } from './user/UpdateUserResponse';
 import { CreateUserRequest } from './user/CreateUserRequest';
-import { UsersResponse } from './user/UsersResponse';
-import { UserResponse } from './user/UserResponse';
-import { User } from './user/User';
-import { UserQuery } from './user/UserQuery';
-import { UserLogin } from './authentication/UserLogin';
-import { KIXError } from './KIXError';
-import { HttpError } from './http/HttpError';
-import { LoginResponse } from './authentication/LoginResponse';
-import { IServerConfiguration } from './configuration/IServerConfiguration';
-import { UserType } from './authentication/UserType';
+import { CreateUserResponse } from './user/CreateUserResponse';
 import { Environment } from './Environment';
+import { HttpError } from './http/HttpError';
+import { IServerConfiguration } from './configuration/IServerConfiguration';
+import { KIXError } from './KIXError';
+import { LoginResponse } from './authentication/LoginResponse';
 import { SortOrder } from './SortOrder';
+import { UpdateUserRequest } from './user/UpdateUserRequest';
+import { User } from './user/User';
+import { UserLogin } from './authentication/UserLogin';
+import { UserQuery } from './user/UserQuery';
+import { UserResponse } from './user/UserResponse';
+import { UserServiceError } from './user/UserServiceError';
+import { UsersResponse } from './user/UsersResponse';
+import { UserType } from './authentication/UserType';
 
 export {
     LoginResponse,
@@ -29,5 +31,7 @@ export {
     SortOrder,
     CreateUserRequest,
     CreateUserResponse,
-    UserServiceError
+    UserServiceError,
+    UpdateUserRequest,
+    UpdateUserResponse
 };
