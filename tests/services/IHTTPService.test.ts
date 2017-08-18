@@ -92,7 +92,7 @@ describe('HTTP Service', () => {
         });
 
         it('should return the id of the new created object', async () => {
-            const response: string = await httpService.post("post", { name: 'testobject' });
+            const response: string = await httpService.post<string>("post", { name: 'testobject' });
             expect(response).not.undefined;
             expect(response).an('string');
             expect(response).equal('Object#12345');
@@ -119,7 +119,7 @@ describe('HTTP Service', () => {
         });
 
         it('should return the id of the updated object', async () => {
-            const response: string = await httpService.put("put/12345", { name: 'testobject' });
+            const response: string = await httpService.put<string>("put/12345", { name: 'testobject' });
             expect(response).not.undefined;
             expect(response).an('string');
             expect(response).equal('Object#12345');
@@ -146,7 +146,7 @@ describe('HTTP Service', () => {
         });
 
         it('should return the id of the patched object.', async () => {
-            const response: string = await httpService.patch("patch/12345", { name: 'testobject' });
+            const response: string = await httpService.patch<string>("patch/12345", { name: 'testobject' });
             expect(response).not.undefined;
             expect(response).an('string');
             expect(response).equal('Object#12345');
@@ -173,7 +173,7 @@ describe('HTTP Service', () => {
         });
 
         it('should return nothing if object is deleted', async () => {
-            const response: string = await httpService.delete("delete/12345");
+            const response = await httpService.delete("delete/12345");
             expect(response).undefined;
         });
 

@@ -1,3 +1,5 @@
+import { UserService } from './UserService';
+import { IUserService } from './IUserService';
 import { AuthenticationService } from './AuthenticationService';
 import { ConfigurationService } from './ConfigurationService';
 import { HttpService } from './HttpService';
@@ -19,5 +21,7 @@ export {
     MarkoService,
     PluginService,
     IHttpService,
-    HttpService
+    HttpService,
+    IUserService,
+    UserService
 };
