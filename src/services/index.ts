@@ -1,3 +1,5 @@
+import { SocketCommunicationService } from './SocketCommuncationService';
+import { ISocketCommunicationService } from './ISocketCommunicationService';
 import { UserService } from './UserService';
 import { IUserService } from './IUserService';
 import { AuthenticationService } from './AuthenticationService';
@@ -23,5 +25,7 @@ export {
     IHttpService,
     HttpService,
     IUserService,
-    UserService
+    UserService,
+    ISocketCommunicationService,
+    SocketCommunicationService
 };

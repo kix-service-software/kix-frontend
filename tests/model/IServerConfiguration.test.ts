@@ -21,6 +21,11 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.SERVER_PORT).to.be.an('number');
     });
 
+    it('Should contain SOCKET_COMMUNICATION_PORT as type of number.', () => {
+        expect(serverConfiguration.SOCKET_COMMUNICATION_PORT).to.not.be.undefined;
+        expect(serverConfiguration.SOCKET_COMMUNICATION_PORT).to.be.an('number');
+    });
+
     it('Should contain PLUGIN_FOLDERS as type of array', () => {
         expect(serverConfiguration.PLUGIN_FOLDERS).to.not.be.undefined;
         expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');

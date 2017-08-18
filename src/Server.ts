@@ -1,5 +1,5 @@
 import { container } from './Container';
-import { IConfigurationService, IPluginService } from './services/';
+import { IConfigurationService, IPluginService, ISocketCommunicationService } from './services/';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
@@ -30,11 +30,14 @@ export class Server {
 
     private configurationService: IConfigurationService;
 
+    private socketCommunicationService: ISocketCommunicationService;
+
     private pluginService: IPluginService;
 
     public constructor() {
         this.configurationService = container.get<IConfigurationService>("IConfigurationService");
         this.pluginService = container.get<IPluginService>("IPluginService");
+        this.socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();

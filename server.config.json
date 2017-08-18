@@ -1,5 +1,6 @@
 {
     "SERVER_PORT": 3000,
+    "SOCKET_COMMUNICATION_PORT": 3001,
     "PLUGIN_FOLDERS": [
         "node_modules/@kix"
     ],

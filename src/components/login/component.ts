@@ -1,6 +1,10 @@
+declare var io;
+
 class LoginFormComponent {
 
     public state: any;
+
+    public socket: any;
 
     public onCreate(input: any): void {
         this.state = {
@@ -11,11 +15,15 @@ class LoginFormComponent {
     }
 
     public onMount(): void {
-        console.log("onMount() Login");
+        this.socket = io("http://localhost:3001/authentication");
     }
 
     public login(): void {
         console.log('login ...');
+        this.socket.emit('login', { userName: this.state.userName, password: this.state.password });
+        this.socket.on('LoginResult', (data) => {
+            console.log(data);
+        });
     }
 
     public userNameChanged(event: any): void {
