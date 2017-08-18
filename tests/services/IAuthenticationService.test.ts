@@ -41,48 +41,83 @@ describe('Authentication Service', () => {
 
     describe('Login', () => {
 
-        before(() => {
-            mock.onPost(apiURL + '/sessions', {
-                UserLogin: 'agent',
-                Password: 'agent',
-                UserType: UserType.AGENT
-            }).reply(200, { token: 'ABCDEFG12345' });
+        describe('Create a valid login request.', async () => {
+            before(() => {
+                mock.onPost(apiURL + '/sessions', {
+                    UserLogin: 'agent',
+                    Password: 'agent',
+                    UserType: UserType.AGENT
+                }).reply(200, { token: 'ABCDEFG12345' });
+            });
 
-            mock.onPost(apiURL + '/sessions', {
-                UserLogin: 'customer',
-                Password: 'customer',
-                UserType: UserType.CUSTOMER
-            }).reply(200, { token: 'ABCDEFG12345' });
+            after(() => {
+                mock.reset();
+            });
 
-            mock.onPost(apiURL + '/sessions', {
-                UserLogin: 'wrong',
-                Password: 'wrong',
-                UserType: UserType.AGENT
-            }).reply(400, { error: 'Wrong credentials.' });
+            it('should return a token if valid agent credentials are given', async () => {
+                const response = await authenticationService.login('agent', 'agent', UserType.AGENT);
+                expect(response).equal('ABCDEFG12345');
+            });
         });
 
-        after(() => {
-            mock.reset();
+        describe('Create a valid login request.', async () => {
+            before(() => {
+                mock.onPost(apiURL + '/sessions', {
+                    UserLogin: 'customer',
+                    Password: 'customer',
+                    UserType: UserType.CUSTOMER
+                }).reply(200, { token: 'ABCDEFG12345' });
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should return a token if valid customer credentials are given', async () => {
+                const response = await authenticationService.login('customer', 'customer', UserType.CUSTOMER);
+                expect(response).equal('ABCDEFG12345');
+            });
+        });
+        describe('Create a valid login request.', async () => {
+            before(() => {
+                mock.onPost(apiURL + '/sessions', {
+                    UserLogin: 'wrong',
+                    Password: 'wrong',
+                    UserType: UserType.AGENT
+                }).reply(400, { error: 'Wrong credentials.' });
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should return a correct http error if incorrect credentials are provided.', async () => {
+                const response = await authenticationService.login('wrong', 'wrong', UserType.AGENT)
+                    .catch((error: HttpError) => {
+                        expect(error).to.not.undefined;
+                        expect(error.status).equal(400);
+                    });
+            });
         });
 
-        it('should return a token if valid agent credentials are given', async () => {
-            const response = await authenticationService.login('agent', 'agent', UserType.AGENT);
-            expect(response).equal('ABCDEFG12345');
-        });
+    });
 
-        it('should return a token if valid customer credentials are given', async () => {
-            const response = await authenticationService.login('customer', 'customer', UserType.CUSTOMER);
-            expect(response).equal('ABCDEFG12345');
-        });
+    describe('Logout', () => {
+        describe('Create a valid logout reqeuest.', () => {
+            before(() => {
+                mock.onDelete(apiURL + '/sessions/ABCDEFG123456')
+                    .reply(200);
+            });
 
-        it('should return a correct http error if incorrect credentials are provided.', async () => {
-            const response = await authenticationService.login('wrong', 'wrong', UserType.AGENT)
-                .catch((error: HttpError) => {
-                    expect(error).to.not.undefined;
-                    expect(error.status).equal(400);
-                });
-        });
+            after(() => {
+                mock.reset();
+            });
 
+            it('should do a logout.', async () => {
+                const response = await authenticationService.logout('ABCDEFG123456');
+                expect(response).true;
+            });
+        });
     });
 
     describe('isAuthenticated Middleware', () => {

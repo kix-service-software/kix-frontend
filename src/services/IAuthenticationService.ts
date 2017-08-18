@@ -7,4 +7,6 @@ export interface IAuthenticationService {
 
     login(user: string, password: string, type: UserType): Promise<string>;
 
+    logout(token: string): Promise<boolean>;
+
 }
