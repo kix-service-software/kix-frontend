@@ -65,16 +65,7 @@ export class Server {
         const port = process.env.PORT || this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
-        // TODO: Use LoggingService
-        console.log("KIXng running on http://<host>:" + port);
         this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
-        this.loggingService.error("LogService: generic error message");
-        this.loggingService.debug("LogService: generic debug message", { bla: 'bla', blub: 'blub'});
-        this.loggingService.warning("LogService: generic warning message", { warn1: 'bla', warn2: 'blub'});
-        this.loggingService.log('error', "LogService: generic log message with level 'error'", { test: 'test' });
-        this.loggingService.log('warning', "LogService: generic log message with level 'warning'");
-        // throw Error('Boom!');
-
     }
 
     private async registerStaticContent(): Promise<void> {

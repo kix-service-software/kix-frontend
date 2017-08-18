@@ -1,3 +1,4 @@
+import { LogLevel } from './logging/LogLevel';
 import { UserLogin } from './authentication/UserLogin';
 import { KIXError } from './KIXError';
 import { HttpError } from './http/HttpError';
@@ -7,6 +8,7 @@ import { UserType } from './authentication/UserType';
 import { Environment } from './Environment';
 
 export {
+    LogLevel,
     LoginResponse,
     UserType,
     HttpError,
