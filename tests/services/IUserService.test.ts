@@ -81,7 +81,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a list of 5 users', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Limit=5')
+                mock.onGet(apiURL + '/users', { params: { Limit: 5 } })
                     .reply(200, buildUsersResponse(5));
             });
 
@@ -100,7 +100,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a sorted list of users.', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Order=Down')
+                mock.onGet(apiURL + '/users', { params: { Order: 'Down' } })
                     .reply(200, buildUsersResponse(2));
             });
 
@@ -118,7 +118,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a list of users witch where changed after defined date.', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?ChangedAfter=20170815')
+                mock.onGet(apiURL + '/users', { params: { ChangedAfter: '20170815' } })
                     .reply(200, buildUsersResponse(3));
             });
 
@@ -136,7 +136,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a limeted of users witch where changed after defined date.', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Limit=6&ChangedAfter=20170815')
+                mock.onGet(apiURL + '/users', { params: { Limit: 6, ChangedAfter: '20170815' } })
                     .reply(200, buildUsersResponse(6));
             });
 
@@ -155,7 +155,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a limeted, sorted of users', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Limit=6&Order=Up')
+                mock.onGet(apiURL + '/users', { params: { Limit: 6, Order: 'Up' } })
                     .reply(200, buildUsersResponse(6));
             });
 
@@ -174,7 +174,7 @@ describe('User Service', () => {
 
         describe('Create a valid request to retrieve a sorted list of users witch where changed after defined date.', () => {
             before(() => {
-                mock.onGet(apiURL + '/users?Order=Up&ChangedAfter=20170815')
+                mock.onGet(apiURL + '/users', { params: { Order: 'Up', ChangedAfter: '20170815' } })
                     .reply(200, buildUsersResponse(4));
             });
 
@@ -247,6 +247,30 @@ describe('User Service', () => {
 
             it('should return a the id of the new users.', async () => {
                 const userId = await userService.updateUser(123456, 'login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1);
+                expect(userId).equal(123456);
+            });
+
+        });
+
+        describe('Create a valid request to partial update an existing user.', () => {
+
+            before(() => {
+                mock.onPatch(apiURL + '/users/123456',
+                    {
+                        User: {
+                            UserFirstname: 'firstName',
+                            UserLastname: 'lastName'
+                        }
+                    })
+                    .reply(200, buildUpdateUserResponse(123456));
+            });
+
+            after(() => {
+                mock.reset();
+            });
+
+            it('should return a the id of the new users.', async () => {
+                const userId = await userService.updateUser(123456, null, 'firstName', 'lastName', null, null, null, null, null);
                 expect(userId).equal(123456);
             });
 

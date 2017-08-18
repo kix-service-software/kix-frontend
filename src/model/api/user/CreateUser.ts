@@ -1,4 +1,3 @@
-import { UserLogin } from './../authentication/UserLogin';
 export class CreateUser {
 
     public UserLogin: string;

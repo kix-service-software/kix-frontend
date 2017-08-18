@@ -20,37 +20,35 @@ export class UserService implements IUserService {
 
     private httpService: IHttpService;
 
+    private RESOURCE_URI = "users";
+
     public constructor( @inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
     }
 
     public async getUsers(limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]> {
-        const queryOptions = [];
+        const queryParameters = {};
 
         if (limit) {
-            queryOptions.push(UserQuery.LIMIT + "=" + limit);
+            queryParameters[UserQuery.LIMIT] = limit;
         }
 
         if (order) {
-            queryOptions.push(UserQuery.ORDER + "=" + order);
+            queryParameters[UserQuery.ORDER] = order;
         }
 
         if (changedAfter) {
-            queryOptions.push(UserQuery.CHANGED_AFTER + "=" + changedAfter);
+            queryParameters[UserQuery.CHANGED_AFTER] = changedAfter;
         }
 
-        let uri = "users";
-        if (queryOptions.length) {
-            const query = queryOptions.join('&');
-            uri += "?" + query;
-        }
+        const response = await this.httpService.get<UsersResponse>(this.RESOURCE_URI, queryParameters);
 
-        const response = await this.httpService.get<UsersResponse>(uri);
         return response.User;
     }
 
     public async  getUser(id: number): Promise<User> {
-        const response = await this.httpService.get<UserResponse>("users/" + id);
+        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id);
+
         return response.User;
     }
 
@@ -60,7 +58,8 @@ export class UserService implements IUserService {
 
         const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
-        const response = await this.httpService.post<CreateUserResponse>("users", createUserRequest);
+        const response = await this.httpService.post<CreateUserResponse>(this.RESOURCE_URI, createUserRequest);
+
         return response.UserID;
     }
 
@@ -71,7 +70,9 @@ export class UserService implements IUserService {
         const updateUserRequest = new UpdateUserRequest(
             login, firstName, lastName, email, password, phone, title, valid);
 
-        const response = await this.httpService.patch<UpdateUserResponse>("users/" + userId, updateUserRequest);
+        const response = await this.httpService
+            .patch<UpdateUserResponse>(this.RESOURCE_URI + "/" + userId, updateUserRequest);
+
         return response.UserID;
     }
 
