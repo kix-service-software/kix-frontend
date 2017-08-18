@@ -5,6 +5,7 @@ import { Environment } from './Environment';
 import { HttpError } from './http/HttpError';
 import { IServerConfiguration } from './configuration/IServerConfiguration';
 import { KIXError } from './KIXError';
+import { RequiredError } from './decorators/RequiredError';
 import { LoginResponse } from './authentication/LoginResponse';
 import { SortOrder } from './SortOrder';
 import { UpdateUserRequest } from './api/user/UpdateUserRequest';
@@ -24,6 +25,7 @@ export {
     HttpError,
     IServerConfiguration,
     KIXError,
+    RequiredError,
     UserLogin,
     Environment,
     User,

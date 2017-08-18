@@ -1,6 +1,7 @@
+import 'reflect-metadata';
+import { RequiredError } from "../model";
 const requiredMetadataKey = "required";
 function validate(target: any, propertyName: string, descriptor: any) {
-    // descriptor = Object.getOwnPropertyDescriptor(target, propertyName);
     const method = descriptor.value;
     descriptor.value = (...args: any[]) => {
         const requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
@@ -9,11 +10,12 @@ function validate(target: any, propertyName: string, descriptor: any) {
                 if (parameterIndex >= args.length
                     || args[parameterIndex] === undefined
                     || args[parameterIndex] === null) {
-                    throw new Error("Missing required argument.");
+
+                    throw new RequiredError("Missing required argument.");
                 }
             }
         }
-
+        const bla = this;
         const result = method.apply(target, args);
         return result;
     };

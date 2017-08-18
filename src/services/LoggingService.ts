@@ -9,9 +9,8 @@ import * as fs from 'fs';
 @injectable()
 export class LoggingService implements ILoggingService {
 
+    public defaultLevelNumber: number;
     private kixLogger: any;
-    private defaultLevelNumber: number;
-    private logFileDir: string;
     private trace: boolean;
 
     public constructor() {
@@ -21,15 +20,65 @@ export class LoggingService implements ILoggingService {
 
         this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;
 
-        this.logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
-        this.logFileDir = __dirname + '/../' + this.logFileDir.replace(/\/\w+\.log$/, '');
+        this.trace = serverConfig.LOG_TRACE || true;
 
-        // create log directory if necessary
-        if (!fs.existsSync(this.logFileDir)) {
-            fs.mkdirSync(this.logFileDir);
+        const logDirectory = this.createLogDirectory(serverConfig);
+
+        this.createLogger(logDirectory);
+    }
+
+    @validate
+    public error( @required message: string, meta?: any): void {
+
+        // get stack trace
+        if (this.trace) {
+            if (!meta) {
+                meta = {};
+            }
+
+            meta.stackTrace = this.getStackTrace();
         }
 
-        this.trace = serverConfig.LOG_TRACE || true;
+        if (this.checkLogLevel(LogLevel.ERROR)) {
+            this.kixLogger.error(message, meta);
+        }
+    }
+
+    @validate
+    public warning( @required message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.WARNING)) {
+            this.kixLogger.warn(message, meta);
+        }
+    }
+
+    @validate
+    public info( @required message: string, meta?: any): void {
+        console.log('info called: ' + LogLevel.INFO + '...'
+            + this.checkLogLevel(LogLevel.INFO) + ' #### '
+            + this.defaultLevelNumber);
+        if (this.checkLogLevel(LogLevel.INFO)) {
+            this.kixLogger.info(message, meta);
+        }
+    }
+
+    @validate
+    public debug( @required message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.DEBUG)) {
+            this.kixLogger.debug(message, meta);
+        }
+    }
+
+    private createLogDirectory(serverConfig: IServerConfiguration): string {
+
+        let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
+        logFileDir = __dirname + '/../' + logFileDir.replace(/\/\w+\.log$/, '');
+        if (!fs.existsSync(logFileDir)) {
+            fs.mkdirSync(logFileDir);
+        }
+        return logFileDir;
+    }
+
+    private createLogger(logDirectory: string) {
 
         const winstonLevels = {
             ERROR: 'error',
@@ -37,6 +86,9 @@ export class LoggingService implements ILoggingService {
             INFO: 'info',
             DEBUG: 'debug',
         };
+        console.log(this.defaultLevelNumber + '###'
+            + LogLevel[this.defaultLevelNumber] + '###'
+            + winstonLevels[LogLevel[this.defaultLevelNumber]]);
         // create kix logger with comand line and file output
         this.kixLogger = new winston.Logger({
             level: winstonLevels[LogLevel[this.defaultLevelNumber]],
@@ -50,7 +102,7 @@ export class LoggingService implements ILoggingService {
                 new (require('winston-daily-rotate-file'))({
                     // new winston.transports.File({
                     name: 'default-file',
-                    filename: this.logFileDir + '/kix.log',
+                    filename: logDirectory + '/kix.log',
                     // label: 'blablub123',
                     humanReadableUnhandledException: true,
                     handleExceptions: true,
@@ -60,14 +112,14 @@ export class LoggingService implements ILoggingService {
             ]
         });
 
-        // TODO: wenn error allein geloggt werden soll
+        // TODO: if error messages should also be in a single file
         // add error if necessary
         const useError: boolean = true;
         if (useError) {
-            this.kixLogger.add(require('winston-daily-rotate-file'), {
+            this.kixLogger.add((require('winston-daily-rotate-file')), {
                 level: 'error',
                 name: 'error-file',
-                filename: this.logFileDir + '/kix-error.log',
+                filename: logDirectory + '/kix-error.log',
                 humanReadableUnhandledException: true,
                 handleExceptions: true,
                 json: false,
@@ -77,81 +129,15 @@ export class LoggingService implements ILoggingService {
         }
     }
 
-    // TODO: @required message
-    // log function for error
-    @validate
-    public error( @required message: string, meta?: any): void {
-        // TODO: if kann weg, wenn @required implementiert
-        if (!message) {
-            message = 'No log-message given!';
-        } else {
-
-            // get stack trace
-            if (this.trace) {
-                if (!meta) {
-                    meta = {};
-                }
-
-                meta.stackTrace = this.getStackTrace();
-            }
-
-            // check if level is valid
-            if (LogLevel.ERROR <= this.defaultLevelNumber) {
-                this.kixLogger.error(message, meta);
-            }
-        }
-    }
-
-    // TODO: @required message
-    // log function for warning
-    public warning( @required message: string, meta?: any): void {
-        // TODO: if kann weg, wenn @required implementiert
-        if (!message) {
-            message = 'No log-message given!';
-        } else {
-
-            // check if level is valid
-            if (LogLevel.WARNING <= this.defaultLevelNumber) {
-                this.kixLogger.warn(message, meta);
-            }
-        }
-    }
-
-    // TODO: @required message
-    // log function for info
-    public info( @required message: string, meta?: any): void {
-        // TODO: if kann weg, wenn @required implementiert
-        if (!message) {
-            message = 'No log-message given!';
-        } else {
-
-            // check if level is valid
-            if (LogLevel.INFO <= this.defaultLevelNumber) {
-                this.kixLogger.info(message, meta);
-            }
-        }
-    }
-
-    // TODO: @required message
-    // log function for debug
-    public debug( @required message: string, meta?: any): void {
-        // TODO: if kann weg, wenn @required implementiert
-        if (!message) {
-            message = 'No log-message given!';
-        } else {
-
-            // check if level is valid
-            if (LogLevel.DEBUG <= this.defaultLevelNumber) {
-                this.kixLogger.debug(message, meta);
-            }
-        }
-    }
-
-    // function to get stack trace
     private getStackTrace() {
         const stack = new Error().stack;
 
         // return but remove first 3 lines (with "Error", this function and log function from this class)
         return '\n' + stack.substring(stack.indexOf("\n", stack.indexOf("\n", stack.indexOf("\n") + 1) + 1) + 1);
+    }
+
+    private checkLogLevel(level: LogLevel): boolean {
+        console.log(level + '...' + this.defaultLevelNumber);
+        return (level <= this.defaultLevelNumber);
     }
 }

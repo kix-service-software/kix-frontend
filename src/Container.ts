@@ -1,6 +1,6 @@
-import { IRouter } from './routes/IRouter';
-import { Container } from 'inversify';
 import 'reflect-metadata';
+import { Container } from 'inversify';
+import { IRouter } from './routes/IRouter';
 import {
     ApplicationRouter,
     AuthenticationRouter,
