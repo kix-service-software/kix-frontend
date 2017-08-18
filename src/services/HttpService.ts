@@ -17,7 +17,7 @@ export class HttpService implements IHttpService {
         this.axios = require('axios');
     }
 
-    public async get(resource: string, queryParameters: any = {}): Promise<any> {
+    public async get<T>(resource: string, queryParameters: any = {}): Promise<T> {
         return await this.axios.get(this.buildRequestUrl(resource), { params: queryParameters })
             .then((response: AxiosResponse) => {
                 return response.data;
@@ -27,7 +27,7 @@ export class HttpService implements IHttpService {
             });
     }
 
-    public async post(resource: string, content: any): Promise<any> {
+    public async post<T>(resource: string, content: any): Promise<T> {
         return await this.axios.post(this.buildRequestUrl(resource), content)
             .then((response: AxiosResponse) => {
                 return response.data;
@@ -37,7 +37,7 @@ export class HttpService implements IHttpService {
             });
     }
 
-    public async put(resource: string, content: any): Promise<string> {
+    public async put<T>(resource: string, content: any): Promise<T> {
         return await this.axios.put(this.buildRequestUrl(resource), content)
             .then((response: AxiosResponse) => {
                 return response.data;
@@ -47,7 +47,7 @@ export class HttpService implements IHttpService {
             });
     }
 
-    public async patch(resource: string, content: any): Promise<string> {
+    public async patch<T>(resource: string, content: any): Promise<T> {
         return await this.axios.patch(this.buildRequestUrl(resource), content)
             .then((response: AxiosResponse) => {
                 return response.data;
@@ -57,7 +57,7 @@ export class HttpService implements IHttpService {
             });
     }
 
-    public async delete(resource: string): Promise<any> {
+    public async delete<T>(resource: string): Promise<T> {
         return await this.axios.delete(this.buildRequestUrl(resource))
             .then((response: AxiosResponse) => {
                 return response.data;

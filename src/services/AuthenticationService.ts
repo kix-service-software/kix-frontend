@@ -46,6 +46,16 @@ export class AuthenticationService implements IAuthenticationService {
             });
     }
 
+    public async logout(token: string): Promise<boolean> {
+        return await this.httpService.delete<any>('sessions/' + token)
+            .then((response) => {
+                return true;
+            }).catch((error: HttpError) => {
+                // TODO: LoggingService log error
+                throw error;
+            });
+    }
+
     private getToken(authorizationHeader: string): string {
         if (authorizationHeader.startsWith(this.TOKEN_PREFIX)) {
             const token = authorizationHeader.substr(this.TOKEN_PREFIX.length, authorizationHeader.length);

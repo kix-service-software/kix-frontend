@@ -19,7 +19,9 @@ import {
     MarkoService,
     PluginService,
     ILoggingService,
-    LoggingService
+    LoggingService,
+    UserService,
+    IUserService
 } from './services/';
 
 class ServiceContainer {
@@ -39,6 +41,7 @@ class ServiceContainer {
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
         this.container.bind<IAuthenticationService>("IAuthenticationService").to(AuthenticationService);
+        this.container.bind<IUserService>("IUserService").to(UserService);
     }
 
     private bindRouter(): void {
