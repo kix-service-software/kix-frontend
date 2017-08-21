@@ -21,7 +21,7 @@ export class MockHTTPServer {
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
         this.application.use((req: express.Request, res: express.Response, next: () => void) => {
-            res.header("Access-Control-Allow-Origin", "http://localhost:3123");
+            res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, Content-Type, Accept");
             res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
             res.header("Access-Control-Allow-Credentials", "true");

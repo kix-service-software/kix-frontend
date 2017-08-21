@@ -1,3 +1,4 @@
+import { AuthenticationResult } from './../model-client/AuthenticationResult';
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
 import { IAuthenticationService } from './../services/';
@@ -26,12 +27,11 @@ export class AuthenticationCommunicator implements ICommunicator {
             await this.authenticationService
                 .login(data.userName, data.password, UserType.AGENT)
                 .then((token) => {
-                    console.log("Login successful.");
-                    client.emit('LoginResult', 'Login successful: ' + token);
+                    client.emit('authorized', new AuthenticationResult(token, 'http://localhost:3000'));
                 }).catch((error: HttpError) => {
                     // TODO: Use LogginsService
                     console.log("Login error.");
-                    client.emit('LoginResult', 'Login error: ' + error);
+                    client.emit('unauthorized', error);
                 });
         });
     }

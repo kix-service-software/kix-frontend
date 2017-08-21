@@ -1,3 +1,5 @@
+import { AuthenticationResult } from './../../model-client/AuthenticationResult';
+
 declare var io;
 
 class LoginFormComponent {
@@ -10,19 +12,26 @@ class LoginFormComponent {
         this.state = {
             userName: "",
             password: "",
-            valid: false
+            valid: false,
+            error: null
         };
     }
 
     public onMount(): void {
-        this.socket = io("http://localhost:3001/authentication");
+        this.socket = io.connect("http://localhost:3001/authentication", {
+        });
     }
 
     public login(): void {
-        console.log('login ...');
         this.socket.emit('login', { userName: this.state.userName, password: this.state.password });
-        this.socket.on('LoginResult', (data) => {
-            console.log(data);
+
+        this.socket.on('authorized', (result: AuthenticationResult) => {
+            window.localStorage.setItem('token', result.token);
+            window.location.replace(result.redirectUrl);
+        });
+
+        this.socket.on('unauthorized', (error) => {
+            this.state.error = error;
         });
     }
 
