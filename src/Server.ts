@@ -1,11 +1,10 @@
 import { container } from './Container';
-import { IConfigurationService, IPluginService, ISocketCommunicationService } from './services/';
+import { IConfigurationService, IPluginService, ISocketCommunicationService, ILoggingService } from './services/';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
-import { IApplicationRouter } from './routes/IApplicationRouter';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
@@ -28,6 +27,8 @@ export class Server {
 
     private serverConfig: IServerConfiguration;
 
+    private loggingService: ILoggingService;
+
     private configurationService: IConfigurationService;
 
     private socketCommunicationService: ISocketCommunicationService;
@@ -35,6 +36,7 @@ export class Server {
     private pluginService: IPluginService;
 
     public constructor() {
+        this.loggingService = container.get<ILoggingService>("ILoggingService");
         this.configurationService = container.get<IConfigurationService>("IConfigurationService");
         this.pluginService = container.get<IPluginService>("IPluginService");
         this.socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
@@ -66,8 +68,7 @@ export class Server {
         const port = process.env.PORT || this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
-        // TODO: Use LoggingService
-        console.log("KIXng running on http://<host>:" + port);
+        this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
     }
 
     private async registerStaticContent(): Promise<void> {
