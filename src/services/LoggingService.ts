@@ -9,7 +9,7 @@ import * as fs from 'fs';
 @injectable()
 export class LoggingService implements ILoggingService {
 
-    public defaultLevelNumber: number;
+    private defaultLevelNumber: number;
     private kixLogger: any;
     private trace: boolean;
 
@@ -22,9 +22,14 @@ export class LoggingService implements ILoggingService {
 
         this.trace = serverConfig.LOG_TRACE || true;
 
-        const logDirectory = this.createLogDirectory(serverConfig);
+        // do not log in test mode
+        if (configurationService.isTestMode()) {
+            this.createLogger();
+        } else {
+            const logDirectory = this.createLogDirectory(serverConfig);
+            this.createLogger(logDirectory);
+        }
 
-        this.createLogger(logDirectory);
     }
 
     @validate
@@ -53,9 +58,6 @@ export class LoggingService implements ILoggingService {
 
     @validate
     public info( @required message: string, meta?: any): void {
-        console.log('info called: ' + LogLevel.INFO + '...'
-            + this.checkLogLevel(LogLevel.INFO) + ' #### '
-            + this.defaultLevelNumber);
         if (this.checkLogLevel(LogLevel.INFO)) {
             this.kixLogger.info(message, meta);
         }
@@ -78,7 +80,7 @@ export class LoggingService implements ILoggingService {
         return logFileDir;
     }
 
-    private createLogger(logDirectory: string) {
+    private createLogger(logDirectory?: string) {
 
         const winstonLevels = {
             ERROR: 'error',
@@ -86,46 +88,59 @@ export class LoggingService implements ILoggingService {
             INFO: 'info',
             DEBUG: 'debug',
         };
-        console.log(this.defaultLevelNumber + '###'
-            + LogLevel[this.defaultLevelNumber] + '###'
-            + winstonLevels[LogLevel[this.defaultLevelNumber]]);
-        // create kix logger with comand line and file output
-        this.kixLogger = new winston.Logger({
-            level: winstonLevels[LogLevel[this.defaultLevelNumber]],
-            transports: [
-                new winston.transports.Console({
-                    timestamp: true,
-                    colorize: true,
-                    handleExceptions: true,
-                    humanReadableUnhandledException: true
-                }),
-                new (require('winston-daily-rotate-file'))({
-                    // new winston.transports.File({
-                    name: 'default-file',
-                    filename: logDirectory + '/kix.log',
-                    // label: 'blablub123',
+
+        if (!logDirectory) {
+
+            // create empty kix logger (test mode)
+            this.kixLogger = new winston.Logger({
+                transports: []
+            });
+        } else {
+
+            // create kix logger with comand line and file output
+            this.kixLogger = new winston.Logger({
+                level: winstonLevels[LogLevel[this.defaultLevelNumber]],
+                transports: [
+                    new winston.transports.Console({
+                        timestamp: true,
+                        colorize: true,
+                        handleExceptions: true,
+                        humanReadableUnhandledException: true,
+                        silent: logDirectory ? false : true
+                    }),
+                    new (require('winston-daily-rotate-file'))({
+                        level: winstonLevels[LogLevel[this.defaultLevelNumber]],
+                        name: 'default-file',
+                        filename: logDirectory + '/kix.log',
+                        humanReadableUnhandledException: true,
+                        handleExceptions: true,
+                        maxsize: 100000000,
+                        prepend: true,
+                        timestamp: () => {
+                            return new Date().toString();
+                        }
+                    })
+                ]
+            });
+
+            // TODO: if error messages should also be in a single file
+            // add error if necessary
+            const useError: boolean = true;
+            if (useError) {
+                this.kixLogger.add((require('winston-daily-rotate-file')), {
+                    level: 'error',
+                    name: 'error-file',
+                    filename: logDirectory + '/kix-error.log',
                     humanReadableUnhandledException: true,
                     handleExceptions: true,
+                    json: false,
                     maxsize: 100000000,
-                    prepend: true
-                })
-            ]
-        });
-
-        // TODO: if error messages should also be in a single file
-        // add error if necessary
-        const useError: boolean = true;
-        if (useError) {
-            this.kixLogger.add((require('winston-daily-rotate-file')), {
-                level: 'error',
-                name: 'error-file',
-                filename: logDirectory + '/kix-error.log',
-                humanReadableUnhandledException: true,
-                handleExceptions: true,
-                json: false,
-                maxsize: 100000000,
-                prepend: true
-            });
+                    prepend: true,
+                    timestamp: () => {
+                        return new Date().toString();
+                    }
+                });
+            }
         }
     }
 
@@ -137,7 +152,6 @@ export class LoggingService implements ILoggingService {
     }
 
     private checkLogLevel(level: LogLevel): boolean {
-        console.log(level + '...' + this.defaultLevelNumber);
         return (level <= this.defaultLevelNumber);
     }
 }

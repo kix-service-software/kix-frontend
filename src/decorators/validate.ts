@@ -1,22 +1,22 @@
 import 'reflect-metadata';
 import { RequiredError } from "../model";
-const requiredMetadataKey = "required";
-function validate(target: any, propertyName: string, descriptor: any) {
+
+function validate(target: any, propertyName: string, descriptor: any): MethodDecorator {
+    const requiredMetadataKey = "required";
     const method = descriptor.value;
-    descriptor.value = (...args: any[]) => {
+    descriptor.value = function () {
         const requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
         if (requiredParameters) {
             for (const parameterIndex of requiredParameters) {
-                if (parameterIndex >= args.length
-                    || args[parameterIndex] === undefined
-                    || args[parameterIndex] === null) {
+                if (parameterIndex >= arguments.length
+                    || arguments[parameterIndex] === undefined
+                    || arguments[parameterIndex] === null) {
 
                     throw new RequiredError("Missing required argument.");
                 }
             }
         }
-        const bla = this;
-        const result = method.apply(target, args);
+        const result = method.apply(this, arguments);
         return result;
     };
     return descriptor;
