@@ -1,4 +1,4 @@
-import { AuthenticationResult } from './../../model-client/AuthenticationResult';
+import { AuthenticationResult, LoginRequest, UserType } from './../../model-client/';
 
 declare var io;
 
@@ -23,7 +23,7 @@ class LoginFormComponent {
     }
 
     public login(): void {
-        this.socket.emit('login', { userName: this.state.userName, password: this.state.password });
+        this.socket.emit('login', new LoginRequest(this.state.userName, this.state.password, UserType.AGENT));
 
         this.socket.on('authorized', (result: AuthenticationResult) => {
             window.localStorage.setItem('token', result.token);

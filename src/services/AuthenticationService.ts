@@ -3,8 +3,8 @@ import {
     HttpError,
     LoginResponse,
     UserLogin,
-    UserType
 } from '../model';
+import { UserType } from '../model-client';
 import { IAuthenticationService } from './IAuthenticationService';
 import { IHttpService } from './IHttpService';
 import { Request, Response } from 'express';

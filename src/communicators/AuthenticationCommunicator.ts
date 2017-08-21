@@ -1,9 +1,8 @@
-import { AuthenticationResult } from './../model-client/AuthenticationResult';
+import { AuthenticationResult, LoginRequest, UserType } from './../model-client/';
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
 import { IAuthenticationService } from './../services/';
 import { ICommunicator } from './ICommunicator';
-import { UserType } from '../model';
 
 @injectable()
 export class AuthenticationCommunicator implements ICommunicator {
@@ -22,10 +21,10 @@ export class AuthenticationCommunicator implements ICommunicator {
     }
 
     private registerLogin(client: any): void {
-        client.on('login', async (data) => {
+        client.on('login', async (data: LoginRequest) => {
             console.log("Login via Auth Service ...");
             await this.authenticationService
-                .login(data.userName, data.password, UserType.AGENT)
+                .login(data.userName, data.password, data.userType)
                 .then((token) => {
                     client.emit('authorized', new AuthenticationResult(token, 'http://localhost:3000'));
                 }).catch((error: HttpError) => {
