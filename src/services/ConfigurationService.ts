@@ -56,7 +56,7 @@ export class ConfigurationService implements IConfigurationService {
 
     private loadServerConfig(serverConfig: string): IServerConfiguration {
         const config: IServerConfiguration = require(serverConfig);
-        // check if config option has been overridden by enironment
+        // check if config option has been overridden by environment
         Object.keys(config).forEach((key) => {
             if (process.env[key]) {
                 config[key] = process.env[key];
