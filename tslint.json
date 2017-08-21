@@ -52,7 +52,14 @@
         ],
         "switch-default": true,
         "no-var-keyword": true,
-        "no-shadowed-variable": true
+        "no-shadowed-variable": true,
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "always",
+                "asyncArrow": "always"
+            }
+        ]
     },
     "jsRules": {
         "max-line-length": [

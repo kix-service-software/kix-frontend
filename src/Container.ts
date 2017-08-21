@@ -1,6 +1,6 @@
-import { IRouter } from './routes/IRouter';
-import { Container } from 'inversify';
 import 'reflect-metadata';
+import { Container } from 'inversify';
+import { IRouter } from './routes/IRouter';
 import {
     ApplicationRouter,
     AuthenticationRouter,
@@ -18,6 +18,8 @@ import {
     IPluginService,
     MarkoService,
     PluginService,
+    ILoggingService,
+    LoggingService,
     UserService,
     IUserService
 } from './services/';
@@ -33,6 +35,7 @@ class ServiceContainer {
     }
 
     private bindServices(): void {
+        this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);

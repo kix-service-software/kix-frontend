@@ -1,9 +1,11 @@
+import { LogLevel } from './logging/LogLevel';
 import { CreateUserRequest } from './api/user/CreateUserRequest';
 import { CreateUserResponse } from './api/user/CreateUserResponse';
 import { Environment } from './Environment';
 import { HttpError } from './http/HttpError';
 import { IServerConfiguration } from './configuration/IServerConfiguration';
 import { KIXError } from './KIXError';
+import { RequiredError } from './decorators/RequiredError';
 import { LoginResponse } from './authentication/LoginResponse';
 import { SortOrder } from './SortOrder';
 import { UpdateUserRequest } from './api/user/UpdateUserRequest';
@@ -17,11 +19,13 @@ import { UsersResponse } from './api/user/UsersResponse';
 import { UserType } from './authentication/UserType';
 
 export {
+    LogLevel,
     LoginResponse,
     UserType,
     HttpError,
     IServerConfiguration,
     KIXError,
+    RequiredError,
     UserLogin,
     Environment,
     User,

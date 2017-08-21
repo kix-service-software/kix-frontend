@@ -4,7 +4,7 @@
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
     "start": "node dist/Server.js",
-    "test": "export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register 'tests/**/*.test.ts'"
+    "test": "export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/**/*.test.ts'"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,8 @@
     "marko-loader": "^1.3.1",
     "redux": "^3.7.2",
     "redux-promise-middleware": "^4.3.0",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6",
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {

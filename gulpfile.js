@@ -6,6 +6,7 @@ const mocha = require('gulp-mocha');
 const tslint = require("gulp-tslint");
 
 const tslintConfig = require('./tslint.json');
+const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
     target: "es6",
@@ -50,6 +51,7 @@ gulp.task('tslint', () => {
 });
 
 gulp.task('test', () => {
+    process.env.NODE_ENV = 'test';
     return gulp.src(['tests/**/*.test.ts'])
         .pipe(mocha({
             reporter: 'spec',
@@ -58,6 +60,7 @@ gulp.task('test', () => {
 });
 
 gulp.task('clean', () => {
+    process.env.NODE_ENV = orgEnv;
     return gulp
         .src(['dist', 'components'])
         .pipe(clean());
