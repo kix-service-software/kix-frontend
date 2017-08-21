@@ -62,7 +62,7 @@ export class Server {
 
         this.router = new ServerRouter(this.application);
 
-        const port = process.env.PORT || this.serverConfig.SERVER_PORT || 3000;
+        const port = this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
         this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
