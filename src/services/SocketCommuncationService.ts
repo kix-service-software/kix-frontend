@@ -25,10 +25,6 @@ export class SocketCommunicationService implements ISocketCommunicationService {
         this.registerListener();
     }
 
-    public emit(message): void {
-        console.log("emit");
-    }
-
     private registerListener(): void {
         const communicators = container.getAll<ICommunicator>("Communicator");
         for (const communicator of communicators) {

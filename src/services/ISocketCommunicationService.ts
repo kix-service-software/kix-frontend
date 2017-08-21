@@ -1,5 +1,4 @@
+// tslint:disable-next-line:no-empty-interface
 export interface ISocketCommunicationService {
-
-    emit(message: string): void;
 
 }
