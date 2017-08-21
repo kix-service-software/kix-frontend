@@ -50,11 +50,13 @@ class ServiceContainer {
     }
 
     private bindRouters(): void {
+        // TODO: create extension for router from external modules
         this.container.bind<IRouter>("Router").to(ApplicationRouter);
         this.container.bind<IRouter>("Router").to(AuthenticationRouter);
     }
 
     private bindCommunicators(): void {
+        // TODO: create extension for communicator from external modules
         this.container.bind<ICommunicator>("Communicator").to(AuthenticationCommunicator);
     }
 

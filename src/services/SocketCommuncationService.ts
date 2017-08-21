@@ -8,7 +8,7 @@ import * as express from 'express';
 @injectable()
 export class SocketCommunicationService implements ISocketCommunicationService {
 
-    private socketIO: any;
+    private socketIO: SocketIO.Server;
 
     public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
         const app = express();

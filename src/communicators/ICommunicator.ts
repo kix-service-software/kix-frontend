@@ -1,5 +1,5 @@
 export interface ICommunicator {
 
-    registerNamespace(socketIO: any): void;
+    registerNamespace(socketIO: SocketIO.Server): void;
 
 }

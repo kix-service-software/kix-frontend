@@ -13,14 +13,14 @@ export class AuthenticationCommunicator implements ICommunicator {
         this.authenticationService = authenticationService;
     }
 
-    public registerNamespace(socketIO: any): void {
+    public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/authentication');
-        nsp.on('connection', (client) => {
+        nsp.on('connection', (client: SocketIO.Socket) => {
             this.registerLogin(client);
         });
     }
 
-    private registerLogin(client: any): void {
+    private registerLogin(client: SocketIO.Socket): void {
         client.on('login', async (data: LoginRequest) => {
             console.log("Login via Auth Service ...");
             await this.authenticationService
