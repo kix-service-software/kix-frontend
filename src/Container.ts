@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { Server } from './Server';
 import { Container } from 'inversify';
 import { ICommunicator, AuthenticationCommunicator } from './communicators/';
 import { IRouter } from './routes/IRouter';
@@ -36,6 +37,8 @@ class ServiceContainer {
         this.bindServices();
         this.bindRouters();
         this.bindCommunicators();
+
+        this.container.bind<Server>("Server").to(Server);
     }
 
     private bindServices(): void {

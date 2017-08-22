@@ -10,7 +10,7 @@
                 "https_proxy": ""
             },
             "name": "KIXng",
-            "program": "${workspaceRoot}/src/Server.ts",
+            "program": "${workspaceRoot}/src/index.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
