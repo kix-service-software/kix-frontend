@@ -1,5 +1,6 @@
+import { IServerConfiguration } from './../model/';
 import { IApplicationRouter } from './IApplicationRouter';
-import { IAuthenticationService } from './../services/IAuthenticationService';
+import { IAuthenticationService, IConfigurationService } from './../services/';
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 
@@ -12,7 +13,13 @@ export class ApplicationRouter implements IApplicationRouter {
 
     private authenticationService: IAuthenticationService;
 
-    constructor( @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+    private serverConfig: IServerConfiguration;
+
+    constructor(
+        @inject("IConfigurationService") configurationService: IConfigurationService,
+        @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+
+        this.serverConfig = configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
         this.router = Router();
         this.router.get("/", this.getRoot.bind(this));
@@ -22,7 +29,9 @@ export class ApplicationRouter implements IApplicationRouter {
         const template = require('../components/app/index.marko');
         res.marko(template, {
             template: require('../components/base-template/index.marko'),
-            data: {}
+            data: {
+                frontendUrl: this.serverConfig.FRONTEND_URL
+            }
         });
     }
 
