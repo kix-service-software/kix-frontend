@@ -39,7 +39,11 @@ export class AuthenticationService implements IAuthenticationService {
         const userLogin = new UserLogin(user, password, type);
         return await this.httpService.post('sessions', userLogin)
             .then((response: LoginResponse) => {
-                return response.token;
+                if (response.Token) {
+                    return response.Token;
+                } else {
+                    throw new HttpError(403, 'Invalid Login');
+                }
             }).catch((error: HttpError) => {
                 throw error;
             });
