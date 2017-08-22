@@ -1,12 +1,11 @@
 import { container } from './Container';
-import { IConfigurationService, IPluginService, ILoggingService } from './services/';
+import { IConfigurationService, IPluginService, ISocketCommunicationService, ILoggingService } from './services/';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
-import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
 import { KIXExtensions, IStaticContentExtension } from './extensions';
 
@@ -31,21 +30,18 @@ export class Server {
 
     private configurationService: IConfigurationService;
 
+    private socketCommunicationService: ISocketCommunicationService;
+
     private pluginService: IPluginService;
 
     public constructor() {
         this.loggingService = container.get<ILoggingService>("ILoggingService");
         this.configurationService = container.get<IConfigurationService>("IConfigurationService");
         this.pluginService = container.get<IPluginService>("IPluginService");
+        this.socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
-
-        // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
-        // TODO: Remove Mock HTTP Server
-        if (this.configurationService.isDevelopmentMode()) {
-            const mockServer = new MockHTTPServer();
-        }
     }
 
     private initializeApplication(): void {

@@ -1,21 +1,38 @@
+import { AuthenticationResult, LoginRequest, UserType } from './../../model-client/';
+
+declare var io;
+
 class LoginFormComponent {
 
     public state: any;
+
+    public socket: any;
 
     public onCreate(input: any): void {
         this.state = {
             userName: "",
             password: "",
-            valid: false
+            valid: false,
+            error: null
         };
     }
 
     public onMount(): void {
-        console.log("onMount() Login");
+        this.socket = io.connect("http://localhost:3001/authentication", {
+        });
     }
 
     public login(): void {
-        console.log('login ...');
+        this.socket.emit('login', new LoginRequest(this.state.userName, this.state.password, UserType.AGENT));
+
+        this.socket.on('authorized', (result: AuthenticationResult) => {
+            window.localStorage.setItem('token', result.token);
+            window.location.replace(result.redirectUrl);
+        });
+
+        this.socket.on('unauthorized', (error) => {
+            this.state.error = error;
+        });
     }
 
     public userNameChanged(event: any): void {

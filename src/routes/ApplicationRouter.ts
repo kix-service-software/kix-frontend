@@ -15,12 +15,14 @@ export class ApplicationRouter implements IApplicationRouter {
     constructor( @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
         this.authenticationService = authenticationService;
         this.router = Router();
-        this.router.get("/", this.authenticationService.isAuthenticated.bind(this), this.getRoot.bind(this));
+        this.router.get("/", this.getRoot.bind(this));
     }
 
     public getRoot(req: Request, res: Response): void {
         const template = require('../components/app/index.marko');
-        res.marko(template, {});
+        res.marko(template, {
+            template: require('../components/base-template/index.marko')
+        });
     }
 
 }

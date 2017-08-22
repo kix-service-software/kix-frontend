@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
+import { ICommunicator, AuthenticationCommunicator } from './communicators/';
 import { IRouter } from './routes/IRouter';
 import {
     ApplicationRouter,
@@ -21,7 +22,9 @@ import {
     ILoggingService,
     LoggingService,
     UserService,
-    IUserService
+    IUserService,
+    ISocketCommunicationService,
+    SocketCommunicationService
 } from './services/';
 
 class ServiceContainer {
@@ -31,12 +34,14 @@ class ServiceContainer {
     public constructor() {
         this.container = new Container();
         this.bindServices();
-        this.bindRouter();
+        this.bindRouters();
+        this.bindCommunicators();
     }
 
     private bindServices(): void {
         this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
+        this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
@@ -44,9 +49,15 @@ class ServiceContainer {
         this.container.bind<IUserService>("IUserService").to(UserService);
     }
 
-    private bindRouter(): void {
+    private bindRouters(): void {
+        // TODO: create extension for router from external modules
         this.container.bind<IRouter>("Router").to(ApplicationRouter);
         this.container.bind<IRouter>("Router").to(AuthenticationRouter);
+    }
+
+    private bindCommunicators(): void {
+        // TODO: create extension for communicator from external modules
+        this.container.bind<ICommunicator>("Communicator").to(AuthenticationCommunicator);
     }
 
 }

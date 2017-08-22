@@ -1,5 +1,7 @@
 {
     "dependencies": [
-        "require ../login"
+        "require ../../model-client",
+        "require ../login",
+        "require ../base-template"
     ]
 }
