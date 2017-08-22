@@ -62,7 +62,6 @@ export class Server {
         this.application.listen(port);
 
         this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
-        this.loggingService.error("generic error message with data", { foo: 'bar', bla: 'blub' });
     }
 
     private async registerStaticContent(): Promise<void> {
