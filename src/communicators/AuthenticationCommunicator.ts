@@ -1,15 +1,22 @@
+import { IServerConfiguration } from './../model/';
 import { AuthenticationResult, LoginRequest, UserType, AuthenticationEvent } from './../model-client/';
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
-import { IAuthenticationService } from './../services/';
+import { IAuthenticationService, IConfigurationService } from './../services/';
 import { ICommunicator } from './ICommunicator';
 
 @injectable()
 export class AuthenticationCommunicator implements ICommunicator {
 
+    private serverConfig: IServerConfiguration;
+
     private authenticationService: IAuthenticationService;
 
-    public constructor( @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+    public constructor(
+        @inject("IConfigurationService") configurationService: IConfigurationService,
+        @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+
+        this.serverConfig = configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
     }
 
@@ -27,7 +34,7 @@ export class AuthenticationCommunicator implements ICommunicator {
                 .login(data.userName, data.password, data.userType)
                 .then((token) => {
                     client.emit(AuthenticationEvent.AUTHORIZED,
-                        new AuthenticationResult(token, 'http://localhost:3000'));
+                        new AuthenticationResult(token, this.serverConfig.FRONTEND_URL));
                 }).catch((error: HttpError) => {
                     // TODO: Use LogginsService
                     console.log("Login error.");
