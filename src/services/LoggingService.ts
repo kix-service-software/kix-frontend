@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { validate, required } from '../decorators';
 import { container } from '../Container';
 import { IConfigurationService, ILoggingService } from './';
@@ -13,9 +13,9 @@ export class LoggingService implements ILoggingService {
     private kixLogger: any;
     private trace: boolean;
 
-    public constructor() {
+    public constructor(
+        @inject("IConfigurationService") configurationService: IConfigurationService) {
 
-        const configurationService = container.get<IConfigurationService>("IConfigurationService");
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
 
         this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;

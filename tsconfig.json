@@ -4,14 +4,18 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "dist",
-    "experimentalDecorators": true
+    "lib": [
+      "es6"
+    ],
+    "types": [
+      "node",
+      "reflect-metadata"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts"
-  ],
-  "types": [
-    "node",
-    "reflect-metadata"
   ],
   "exclude": [
     "node_modules"
