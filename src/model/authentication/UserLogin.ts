@@ -1,4 +1,4 @@
-import { UserType } from './UserType';
+import { UserType } from '../../model-client';
 
 export class UserLogin {
 

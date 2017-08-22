@@ -3,8 +3,8 @@ import {
     HttpError,
     LoginResponse,
     UserLogin,
-    UserType
 } from '../model';
+import { UserType } from '../model-client';
 import { IAuthenticationService } from './IAuthenticationService';
 import { IHttpService } from './IHttpService';
 import { Request, Response } from 'express';
@@ -29,7 +29,7 @@ export class AuthenticationService implements IAuthenticationService {
             if (!token) {
                 res.redirect('/auth');
             } else {
-                // TODO: validate token?
+                // TODO: validate token against Backend!
                 next();
             }
         }
@@ -41,7 +41,6 @@ export class AuthenticationService implements IAuthenticationService {
             .then((response: LoginResponse) => {
                 return response.token;
             }).catch((error: HttpError) => {
-                // TODO: LoggingService log error
                 throw error;
             });
     }
@@ -51,7 +50,6 @@ export class AuthenticationService implements IAuthenticationService {
             .then((response) => {
                 return true;
             }).catch((error: HttpError) => {
-                // TODO: LoggingService log error
                 throw error;
             });
     }

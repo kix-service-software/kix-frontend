@@ -16,12 +16,10 @@ import { UserQuery } from './user/UserQuery';
 import { UserResponse } from './api/user/UserResponse';
 import { UserServiceError } from './user/UserServiceError';
 import { UsersResponse } from './api/user/UsersResponse';
-import { UserType } from './authentication/UserType';
 
 export {
     LogLevel,
     LoginResponse,
-    UserType,
     HttpError,
     IServerConfiguration,
     KIXError,

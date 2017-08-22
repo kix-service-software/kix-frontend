@@ -1,6 +1,6 @@
 import { IRouter } from './routes/';
 import { container } from './Container';
-import { Application, Router } from 'express';
+import { Application, Router, Request, Response } from 'express';
 
 export class ServerRouter {
 
@@ -8,6 +8,7 @@ export class ServerRouter {
 
     public constructor(application: Application) {
         this.router = Router();
+
         application.use(this.router);
 
         this.initializeRoutes();

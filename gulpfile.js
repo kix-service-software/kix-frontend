@@ -10,7 +10,7 @@ const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
     target: "es6",
-    lib: ["es6"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -26,7 +26,7 @@ const devTSCConfig = {
 
 const prodTSCConfig = {
     target: "es6",
-    lib: ["es6"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
