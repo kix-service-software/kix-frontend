@@ -29,7 +29,7 @@ export class AuthenticationService implements IAuthenticationService {
             if (!token) {
                 res.redirect('/auth');
             } else {
-                // TODO: validate token?
+                // TODO: validate token against Backend!
                 next();
             }
         }
@@ -37,14 +37,12 @@ export class AuthenticationService implements IAuthenticationService {
 
     public async login(user: string, password: string, type: UserType): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
-        return "ABCDEFG12345";
-        // return await this.httpService.post('sessions', userLogin)
-        //     .then((response: LoginResponse) => {
-        //         return response.token;
-        //     }).catch((error: HttpError) => {
-        //         // TODO: LoggingService log error
-        //         throw error;
-        //     });
+        return await this.httpService.post('sessions', userLogin)
+            .then((response: LoginResponse) => {
+                return response.token;
+            }).catch((error: HttpError) => {
+                throw error;
+            });
     }
 
     public async logout(token: string): Promise<boolean> {
@@ -52,7 +50,6 @@ export class AuthenticationService implements IAuthenticationService {
             .then((response) => {
                 return true;
             }).catch((error: HttpError) => {
-                // TODO: LoggingService log error
                 throw error;
             });
     }
