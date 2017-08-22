@@ -5,13 +5,15 @@ class BaseTemplateComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = {
+            frontendUrl: input.frontendUrl
+        };
     }
 
     public onMount(): void {
         const token = window.localStorage.getItem('token');
         if (!token) {
-            window.location.replace('http://localhost:3000/auth');
+            window.location.replace(this.state.frontendUrl + '/auth');
         }
     }
 }

@@ -19,7 +19,18 @@ class LoginFormComponent {
     }
 
     public onMount(): void {
-        this.socket = io.connect(this.state.frontendSocketUrl + "/authentication", {
+        this.socket = io.connect(this.state.frontendSocketUrl + "/authentication", {});
+
+        this.socket.on('connect', () => {
+            console.log('Connected to socket server.');
+        });
+
+        this.socket.on('connect_error', (error) => {
+            console.log('Connection to socket server failed. ' + JSON.stringify(error));
+        });
+
+        this.socket.on('connect_timeout', () => {
+            console.log('Connection to socket server timeout.');
         });
     }
 

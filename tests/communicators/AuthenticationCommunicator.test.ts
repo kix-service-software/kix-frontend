@@ -42,7 +42,7 @@ describe('Authentication Communicator', () => {
                 UserLogin: 'agent',
                 Password: 'agent',
                 UserType: UserType.AGENT
-            }).reply(200, { token: 'ABCDEFG12345' });
+            }).reply(200, { Token: 'ABCDEFG12345' });
         });
 
         after(() => {

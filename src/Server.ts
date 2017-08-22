@@ -1,5 +1,5 @@
-import { container } from './Container';
-import { IConfigurationService, IPluginService, ISocketCommunicationService, ILoggingService } from './services/';
+import { ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService } from './services/';
+import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
@@ -18,6 +18,7 @@ import compression = require('compression');
 import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
 
+@injectable()
 export class Server {
 
     public application: express.Application;
@@ -34,11 +35,17 @@ export class Server {
 
     private pluginService: IPluginService;
 
-    public constructor() {
-        this.loggingService = container.get<ILoggingService>("ILoggingService");
-        this.configurationService = container.get<IConfigurationService>("IConfigurationService");
-        this.pluginService = container.get<IPluginService>("IPluginService");
-        this.socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
+
+    public constructor(
+        @inject("ILoggingService") loggingService: ILoggingService,
+        @inject("IConfigurationService") configurationService: IConfigurationService,
+        @inject("IPluginService") pluginService: IPluginService,
+        @inject("ISocketCommunicationService") socketService: ISocketCommunicationService
+    ) {
+        this.loggingService = loggingService;
+        this.configurationService = configurationService;
+        this.pluginService = pluginService;
+        this.socketCommunicationService = socketService;
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
@@ -75,5 +82,3 @@ export class Server {
         }
     }
 }
-
-export default new Server();
