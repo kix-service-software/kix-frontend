@@ -48,7 +48,7 @@ describe('Authentication Service', () => {
                     UserLogin: 'agent',
                     Password: 'agent',
                     UserType: UserType.AGENT
-                }).reply(200, { token: 'ABCDEFG12345' });
+                }).reply(200, { Token: 'ABCDEFG12345' });
             });
 
             after(() => {
@@ -67,7 +67,7 @@ describe('Authentication Service', () => {
                     UserLogin: 'customer',
                     Password: 'customer',
                     UserType: UserType.CUSTOMER
-                }).reply(200, { token: 'ABCDEFG12345' });
+                }).reply(200, { Token: 'ABCDEFG12345' });
             });
 
             after(() => {

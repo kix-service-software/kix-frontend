@@ -72,7 +72,7 @@ export class HttpService implements IHttpService {
     }
 
     private createHttpError(err: AxiosError): HttpError {
-        return new HttpError(err.response.status, err.response.data);
+        return new HttpError(err.response.status, err.response.data, err);
     }
 
 }

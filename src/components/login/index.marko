@@ -9,4 +9,9 @@
     <button disabled type="button">Login</button>
     <span>User and password are required!</span>
   </else>
+  <if(state.error)>
+    <p>
+      <span>${JSON.stringify(state.error)}</span>
+    </p>
+  </if>
 </div>
