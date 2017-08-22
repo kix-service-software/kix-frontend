@@ -15,8 +15,7 @@ function validate(target: any, propertyName: string, descriptor: any): MethodDec
                 }
             }
         }
-        const result = method.apply(this, arguments);
-        return result;
+        return method.apply(this, arguments);
     };
     return descriptor;
 }
