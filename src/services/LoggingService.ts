@@ -102,11 +102,13 @@ export class LoggingService implements ILoggingService {
                 level: winstonLevels[LogLevel[this.defaultLevelNumber]],
                 transports: [
                     new winston.transports.Console({
-                        timestamp: true,
                         colorize: true,
                         handleExceptions: true,
                         humanReadableUnhandledException: true,
-                        silent: logDirectory ? false : true
+                        silent: logDirectory ? false : true,
+                        timestamp: () => {
+                            return new Date().toString();
+                        }
                     }),
                     new (require('winston-daily-rotate-file'))({
                         level: winstonLevels[LogLevel[this.defaultLevelNumber]],
@@ -147,8 +149,18 @@ export class LoggingService implements ILoggingService {
     private getStackTrace() {
         const stack = new Error().stack;
 
-        // return but remove first 3 lines (with "Error", this function and log function from this class)
-        return '\n' + stack.substring(stack.indexOf("\n", stack.indexOf("\n", stack.indexOf("\n") + 1) + 1) + 1);
+        // TODO: bessere Möglichkeit finden
+        // return but remove first 4 lines
+        // (with "Error", this function and log function from this class and validate decorator function)
+        return '\n' + stack.substring(
+            stack.indexOf(
+                "\n", stack.indexOf(
+                    "\n", stack.indexOf(
+                        "\n", stack.indexOf("\n") + 1
+                    ) + 1
+                ) + 1
+            ) + 1
+        );
     }
 
     private checkLogLevel(level: LogLevel): boolean {

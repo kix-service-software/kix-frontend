@@ -1,6 +1,3 @@
-import { required } from './required-parameter';
-import { validate } from './validate';
-export {
-    required,
-    validate
-};
+export { required } from './parameters/required';
+export { validate } from './methods/validate';
+export { log as logMethod } from './methods/log';

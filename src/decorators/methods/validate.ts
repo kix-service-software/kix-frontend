@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { RequiredError } from "../model";
+import { RequiredError } from "../../model";
 
 function validate(target: any, propertyName: string, descriptor: any): MethodDecorator {
     const requiredMetadataKey = "required";

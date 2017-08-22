@@ -9,6 +9,7 @@ import { IServerConfiguration } from './model/configuration/IServerConfiguration
 import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
 import { KIXExtensions, IStaticContentExtension } from './extensions';
+import { logMethod } from './decorators';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -66,6 +67,8 @@ export class Server {
         this.application.listen(port);
 
         this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
+        this.loggingService.error("generic error message with data", { foo: 'bar', bla: 'blub' });
+        this.testMethodLogger('bla', 123, { wert1: 'wert1', wert2: 'blub' }, () => { console.log('test'); });
     }
 
     private async registerStaticContent(): Promise<void> {
@@ -77,6 +80,12 @@ export class Server {
         for (const staticContent of extensions) {
             this.application.use(staticContent.getName(), express.static('node_modules/' + staticContent.getPath()));
         }
+    }
+
+    @logMethod
+    private testMethodLogger(bla: string, zahl: number, obj: object, func) {
+        console.log(bla);
+        func();
     }
 }
 
