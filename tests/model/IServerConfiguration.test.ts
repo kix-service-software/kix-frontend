@@ -31,6 +31,18 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');
     });
 
+    it('Should contain FRONTEND_URL as type of string', () => {
+        expect(serverConfiguration.FRONTEND_URL).to.not.be.undefined;
+        expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
+        expect(serverConfiguration.FRONTEND_URL).to.not.be.empty;
+    });
+
+    it('Should contain FRONTEND_SOCKET_URL as type of string', () => {
+        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.not.be.undefined;
+        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.be.an('string');
+        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.not.be.empty;
+    });
+
     it('Should contain BACKEND_API_URL as type of string', () => {
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.undefined;
         expect(serverConfiguration.BACKEND_API_URL).to.be.an('string');

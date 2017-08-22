@@ -13,12 +13,13 @@ class LoginFormComponent {
             userName: "",
             password: "",
             valid: false,
-            error: null
+            error: null,
+            frontendSocketUrl: input.frontendSocketUrl
         };
     }
 
     public onMount(): void {
-        this.socket = io.connect("http://localhost:3001/authentication", {
+        this.socket = io.connect(this.state.frontendSocketUrl + "/authentication", {
         });
     }
 
@@ -32,6 +33,7 @@ class LoginFormComponent {
 
         this.socket.on('unauthorized', (error) => {
             this.state.error = error;
+            console.log(error);
         });
     }
 

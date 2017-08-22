@@ -7,6 +7,10 @@ export interface IServerConfiguration {
 
     PLUGIN_FOLDERS: string[];
 
+    FRONTEND_URL: string;
+
+    FRONTEND_SOCKET_URL: string;
+
     BACKEND_API_URL: string;
 
     LOG_LEVEL: LogLevel;

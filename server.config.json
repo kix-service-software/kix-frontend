@@ -4,6 +4,8 @@
     "PLUGIN_FOLDERS": [
         "node_modules/@kix"
     ],
+    "FRONTEND_URL": "http://localhost:3000",
+    "FRONTEND_SOCKET_URL": "http://localhost:3001",
     "BACKEND_API_URL": "http://docker.vm.devel.cape-it.de:54918/api.pl/webservice/core:v1",
     "LOG_LEVEL": 2,
     "LOG_FILEDIR": "logs",
