@@ -42,7 +42,7 @@ describe('Authentication Service', () => {
 
     describe('Login', () => {
 
-        describe('Create a valid login request.', async () => {
+        describe('Create a valid agent login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'agent',
@@ -61,7 +61,7 @@ describe('Authentication Service', () => {
             });
         });
 
-        describe('Create a valid login request.', async () => {
+        describe('Create a valid customer login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'customer',
@@ -79,7 +79,8 @@ describe('Authentication Service', () => {
                 expect(response).equal('ABCDEFG12345');
             });
         });
-        describe('Create a valid login request.', async () => {
+
+        describe('Create a invalid login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'wrong',

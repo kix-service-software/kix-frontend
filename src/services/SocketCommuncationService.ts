@@ -1,3 +1,4 @@
+import { ILoggingService } from './ILoggingService';
 import { ICommunicator } from './../communicators/ICommunicator';
 import { IConfigurationService } from './IConfigurationService';
 import { inject, injectable, Container } from 'inversify';
@@ -10,7 +11,14 @@ export class SocketCommunicationService implements ISocketCommunicationService {
 
     private socketIO: SocketIO.Server;
 
-    public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
+    private loggingService: ILoggingService;
+
+    public constructor(
+        @inject("ILoggingService") loggingService: ILoggingService,
+        @inject("IConfigurationService") configurationService: IConfigurationService) {
+
+        this.loggingService = loggingService;
+
         const app = express();
         const server = require('http').createServer(app);
         this.socketIO = require('socket.io')(server);
@@ -18,11 +26,14 @@ export class SocketCommunicationService implements ISocketCommunicationService {
         const port = configurationService.getServerConfiguration().SOCKET_COMMUNICATION_PORT;
 
         server.listen(port, () => {
-            // TODO: Use LoggingService
-            console.log('Socket Communication Service listening on *:' + port);
+            this.loggingService.info('Socket Communication Service listening on *:' + port);
         });
 
         this.registerListener();
+    }
+
+    public stopServer(): void {
+        this.socketIO.close();
     }
 
     private registerListener(): void {
