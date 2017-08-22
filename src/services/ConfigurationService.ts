@@ -19,7 +19,7 @@ export class ConfigurationService implements IConfigurationService {
             lassoConfig = '../../lasso.prod.config.json';
         }
 
-        this.serverConfiguration = require(serverConfig);
+        this.serverConfiguration = this.loadServerConfig(serverConfig);
         this.lassoConfiguration = require(lassoConfig);
     }
 
@@ -52,6 +52,17 @@ export class ConfigurationService implements IConfigurationService {
         }
 
         return nodeEnv.toLocaleLowerCase();
+    }
+
+    private loadServerConfig(serverConfig: string): IServerConfiguration {
+        const config: IServerConfiguration = require(serverConfig);
+        // check if config option has been overridden by environment
+        Object.keys(config).forEach((key) => {
+            if (process.env[key]) {
+                config[key] = process.env[key];
+            }
+        });
+        return config;
     }
 
 }
