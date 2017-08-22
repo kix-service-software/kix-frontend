@@ -1,5 +1,5 @@
-function required(target: object, propertyKey: string, parameterIndex: number) {
-    const requiredMetadataKey = "required";
+const requiredMetadataKey = "required";
+function required(target: object, propertyKey: string, parameterIndex: number): void {
     const existingRequiredParameters: number[]
         = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) || [];
     existingRequiredParameters.push(parameterIndex);
