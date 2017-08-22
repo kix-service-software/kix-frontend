@@ -6,7 +6,6 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
-import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
 import { KIXExtensions, IStaticContentExtension } from './extensions';
 
@@ -43,12 +42,6 @@ export class Server {
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
-
-        // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
-        // TODO: Remove Mock HTTP Server
-        if (this.configurationService.isDevelopmentMode()) {
-            const mockServer = new MockHTTPServer();
-        }
     }
 
     private initializeApplication(): void {
