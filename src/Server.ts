@@ -61,7 +61,7 @@ export class Server {
         const port = this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
-        this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
+        this.loggingService.info("KIXng running on *:" + port);
     }
 
     private async registerStaticContent(): Promise<void> {
