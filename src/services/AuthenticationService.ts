@@ -4,7 +4,7 @@ import {
     LoginResponse,
     UserLogin,
 } from '../model';
-import { UserType } from '../model-client';
+import { UserType } from '../model-client/authentication';
 import { IAuthenticationService } from './IAuthenticationService';
 import { IHttpService } from './IHttpService';
 import { Request, Response } from 'express';

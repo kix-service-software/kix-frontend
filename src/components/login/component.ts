@@ -3,9 +3,17 @@ import {
     AuthenticationEvent,
     LoginRequest,
     LoginComponentState,
-    SocketEvent,
+    LoginState,
     UserType
-} from './../../model-client/';
+} from './../../model-client/authentication';
+
+import { SocketEvent } from './../../model-client';
+
+import {
+    LOGIN_USERNAME_CHANGED,
+    LOGIN_PASSWORD_CHANGED,
+    LOGIN_VALIDATE
+} from '../../model-client/store/actions';
 
 declare var io;
 
@@ -13,16 +21,29 @@ class LoginFormComponent {
 
     public state: LoginComponentState;
 
-    public socket: any;
+    public socket: SocketIO.Server;
+
+    public store;
 
     public onCreate(input: any): void {
         this.state = new LoginComponentState(input.frontendSocketUrl);
     }
 
+    public stateChanged(): void {
+        const reduxState: LoginState = this.store.getState().login;
+        this.state.userName = reduxState.userName;
+        this.state.password = reduxState.password;
+        this.state.valid = reduxState.valid;
+    }
+
     public onMount(): void {
+        this.store = require('../../model-client/store');
+        this.store.subscribe(this.stateChanged.bind(this));
+
         this.socket = io.connect(this.state.frontendSocketUrl + "/authentication", {});
 
         this.socket.on(SocketEvent.CONNECT, () => {
+            this.state.error = null;
             console.log("connected to socket server.");
         });
 
@@ -50,19 +71,16 @@ class LoginFormComponent {
     }
 
     public userNameChanged(event: any): void {
-        this.state.userName = event.target.value;
-        this.validate();
+        this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value)).then(() => {
+            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
+        });
     }
 
     public passwordChanged(event: any): void {
-        this.state.password = event.target.value;
-        this.validate();
+        this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value)).then(() => {
+            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
+        });
     }
-
-    private validate(): void {
-        this.state.valid = this.state.userName !== "" && this.state.password !== "";
-    }
-
 }
 
 module.exports = LoginFormComponent;

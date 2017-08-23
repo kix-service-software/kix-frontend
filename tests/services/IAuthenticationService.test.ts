@@ -6,7 +6,7 @@ import {
     IConfigurationService
 } from './../../src/services/';
 import { HttpError } from './../../src/model/';
-import { UserType } from './../../src/model-client/';
+import { UserType } from './../../src/model-client/authentication';
 import { Request, Response } from 'express';
 import chaiAsPromised = require('chai-as-promised');
 import MockAdapter = require('axios-mock-adapter');

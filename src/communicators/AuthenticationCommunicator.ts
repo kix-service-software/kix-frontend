@@ -3,9 +3,11 @@ import {
     AuthenticationResult,
     LoginRequest,
     UserType,
-    AuthenticationEvent,
-    SocketEvent
-} from './../model-client/';
+    AuthenticationEvent
+} from './../model-client/authentication';
+
+import { SocketEvent } from './../model-client/';
+
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
 import { IAuthenticationService, IConfigurationService, ILoggingService } from './../services/';
