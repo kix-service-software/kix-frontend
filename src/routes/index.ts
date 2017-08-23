@@ -1,13 +1,5 @@
-import { IRouter } from './IRouter';
-import { AuthenticationRouter } from './AuthenticationRouter';
-import { IAuthenticationRouter } from './IAuthenticationRouter';
-import { ApplicationRouter } from './ApplicationRouter';
-import { IApplicationRouter } from './IApplicationRouter';
-
-export {
-    IApplicationRouter,
-    ApplicationRouter,
-    IAuthenticationRouter,
-    AuthenticationRouter,
-    IRouter
-};
+export { IRouter } from './IRouter';
+export { AuthenticationRouter } from './AuthenticationRouter';
+export { IAuthenticationRouter } from './IAuthenticationRouter';
+export { ApplicationRouter } from './ApplicationRouter';
+export { IApplicationRouter } from './IApplicationRouter';

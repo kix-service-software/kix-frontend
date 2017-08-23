@@ -5,15 +5,13 @@ import {
     UserLogin,
 } from '../model';
 import { UserType } from '../model-client/authentication';
-import { IAuthenticationService } from './IAuthenticationService';
-import { IHttpService } from './IHttpService';
+import { IAuthenticationService, IHttpService } from './';
 import { Request, Response } from 'express';
 
 @injectable()
 export class AuthenticationService implements IAuthenticationService {
 
     private httpService: IHttpService;
-
     private TOKEN_PREFIX: string = 'Token ';
 
     public constructor( @inject("IHttpService") httpService: IHttpService) {

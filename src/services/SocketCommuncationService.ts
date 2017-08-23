@@ -1,8 +1,6 @@
-import { ILoggingService } from './ILoggingService';
+import { ISocketCommunicationService, IConfigurationService, ILoggingService } from './';
 import { ICommunicator } from './../communicators/ICommunicator';
-import { IConfigurationService } from './IConfigurationService';
 import { inject, injectable } from 'inversify';
-import { ISocketCommunicationService } from './ISocketCommunicationService';
 import { container } from '../Container';
 import * as express from 'express';
 
@@ -10,13 +8,12 @@ import * as express from 'express';
 export class SocketCommunicationService implements ISocketCommunicationService {
 
     private socketIO: SocketIO.Server;
-
     private loggingService: ILoggingService;
 
     public constructor(
         @inject("ILoggingService") loggingService: ILoggingService,
-        @inject("IConfigurationService") configurationService: IConfigurationService) {
-
+        @inject("IConfigurationService") configurationService: IConfigurationService
+    ) {
         this.loggingService = loggingService;
 
         const app = express();
