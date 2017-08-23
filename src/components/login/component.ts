@@ -3,66 +3,60 @@ import {
     AuthenticationEvent,
     LoginRequest,
     LoginComponentState,
-    SocketEvent,
+    LoginState,
     UserType
-} from './../../model-client/';
+} from './../../model-client/authentication';
 
-declare var io;
+import {
+    LOGIN_USERNAME_CHANGED,
+    LOGIN_PASSWORD_CHANGED,
+    LOGIN_VALIDATE,
+    LOGIN_CONNECT,
+    LOGIN_AUTH
+} from '../../model-client/store/actions';
 
 class LoginFormComponent {
 
     public state: LoginComponentState;
 
-    public socket: any;
+    public store;
 
     public onCreate(input: any): void {
         this.state = new LoginComponentState(input.frontendSocketUrl);
     }
 
+    public stateChanged(): void {
+        const reduxState: LoginState = this.store.getState().login;
+        this.state.userName = reduxState.userName;
+        this.state.password = reduxState.password;
+        this.state.valid = reduxState.valid;
+        this.state.error = reduxState.error;
+        this.state.doLogin = reduxState.doLogin;
+    }
+
     public onMount(): void {
-        this.socket = io.connect(this.state.frontendSocketUrl + "/authentication", {});
+        this.store = require('../../model-client/store');
+        this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(LOGIN_CONNECT(this.state.frontendSocketUrl));
+    }
 
-        this.socket.on(SocketEvent.CONNECT, () => {
-            console.log("connected to socket server.");
+    public userNameChanged(event: any): void {
+        this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value)).then(() => {
+            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
         });
+    }
 
-        this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
-            this.state.error = 'Connection to socket server failed. ' + JSON.stringify(error);
-        });
-
-        this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
-            this.state.error = 'Connection to socket server timeout.';
+    public passwordChanged(event: any): void {
+        this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value)).then(() => {
+            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
         });
     }
 
     public login(): void {
-        this.socket.emit(AuthenticationEvent.LOGIN,
-            new LoginRequest(this.state.userName, this.state.password, UserType.AGENT));
-
-        this.socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
-            window.localStorage.setItem('token', result.token);
-            window.location.replace(result.redirectUrl);
-        });
-
-        this.socket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
-            this.state.error = error;
-        });
+        if (this.state.valid) {
+            this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
+        }
     }
-
-    public userNameChanged(event: any): void {
-        this.state.userName = event.target.value;
-        this.validate();
-    }
-
-    public passwordChanged(event: any): void {
-        this.state.password = event.target.value;
-        this.validate();
-    }
-
-    private validate(): void {
-        this.state.valid = this.state.userName !== "" && this.state.password !== "";
-    }
-
 }
 
 module.exports = LoginFormComponent;

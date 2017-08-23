@@ -5,7 +5,7 @@ import { AuthenticationCommunicator } from './../../src/communicators/';
 import { IAuthenticationService, IConfigurationService, ISocketCommunicationService } from './../../src/services/';
 
 import { HttpError } from './../../src/model/http/HttpError';
-import { UserType, AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model-client/';
+import { UserType, AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model-client/authentication';
 import MockAdapter = require('axios-mock-adapter');
 
 import chaiAsPromised = require('chai-as-promised');
