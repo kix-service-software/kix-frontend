@@ -2,7 +2,7 @@ import { IServerConfiguration } from './../model/';
 import { AuthenticationResult, LoginRequest, UserType, AuthenticationEvent } from './../model-client/';
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
-import { IAuthenticationService, IConfigurationService } from './../services/';
+import { IAuthenticationService, IConfigurationService, ILoggingService } from './../services/';
 import { ICommunicator } from './ICommunicator';
 
 @injectable()
@@ -12,12 +12,17 @@ export class AuthenticationCommunicator implements ICommunicator {
 
     private authenticationService: IAuthenticationService;
 
+    private loggingService: ILoggingService;
+
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
+        @inject("IAuthenticationService") authenticationService: IAuthenticationService,
+        @inject("ILoggingService") loggingService: ILoggingService
+    ) {
 
         this.serverConfig = configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
+        this.loggingService = loggingService;
     }
 
     public registerNamespace(socketIO: SocketIO.Server): void {
@@ -36,8 +41,7 @@ export class AuthenticationCommunicator implements ICommunicator {
                     client.emit(AuthenticationEvent.AUTHORIZED,
                         new AuthenticationResult(token, this.serverConfig.FRONTEND_URL));
                 }).catch((error: HttpError) => {
-                    // TODO: Use LogginsService
-                    console.log("Login error.");
+                    this.loggingService.error('Login error: ' + error.errorMessage + ' - ' + error.status);
                     client.emit(AuthenticationEvent.UNAUTHORIZED, error);
                 });
         });
