@@ -18,10 +18,7 @@ const devTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: true,
     declaration: true,
-    strict: true,
-    exclude: [
-        "node_modules"
-    ]
+    strict: true
 };
 
 const prodTSCConfig = {
@@ -34,10 +31,7 @@ const prodTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: false,
     declaration: true,
-    strict: true,
-    exclude: [
-        "node_modules"
-    ]
+    strict: true
 };
 
 gulp.task('default', (cb) => {
