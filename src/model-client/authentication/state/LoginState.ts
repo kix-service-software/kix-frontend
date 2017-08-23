@@ -8,4 +8,6 @@ export class LoginState {
 
     public error: any = null;
 
+    public socket: SocketIO.Server = null;
+
 }
