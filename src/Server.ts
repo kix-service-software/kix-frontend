@@ -22,19 +22,12 @@ import lasso = require('lasso');
 export class Server {
 
     public application: express.Application;
-
     private router: ServerRouter;
-
     private serverConfig: IServerConfiguration;
-
     private loggingService: ILoggingService;
-
     private configurationService: IConfigurationService;
-
     private socketCommunicationService: ISocketCommunicationService;
-
     private pluginService: IPluginService;
-
 
     public constructor(
         @inject("ILoggingService") loggingService: ILoggingService,

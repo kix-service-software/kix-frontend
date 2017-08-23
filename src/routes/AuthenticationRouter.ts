@@ -8,17 +8,14 @@ import { IAuthenticationRouter } from './IAuthenticationRouter';
 export class AuthenticationRouter implements IAuthenticationRouter {
 
     public router: Router;
-
     public baseRoute = "/auth";
-
     private authenticationService: IAuthenticationService;
-
     private serverConfig: IServerConfiguration;
 
     constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("IAuthenticationService") authenticationService: IAuthenticationService) {
-
+        @inject("IAuthenticationService") authenticationService: IAuthenticationService
+    ) {
         this.serverConfig = configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
         this.router = Router();

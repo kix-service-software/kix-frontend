@@ -4,8 +4,8 @@ export class UpdateUserRequest {
 
     public constructor(
         login: string, firstName: string, lastName: string,
-        email: string, password: string, phone: string, title: string, valid: number) {
-
+        email: string, password: string, phone: string, title: string, valid: number
+    ) {
         this.User = {};
 
         this.applyProperty('UserLogin', login);

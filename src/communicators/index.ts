@@ -1,7 +1,2 @@
-import { ICommunicator } from './ICommunicator';
-import { AuthenticationCommunicator } from './AuthenticationCommunicator';
-
-export {
-    ICommunicator,
-    AuthenticationCommunicator
-};
+export { ICommunicator } from './ICommunicator';
+export { AuthenticationCommunicator } from './AuthenticationCommunicator';
