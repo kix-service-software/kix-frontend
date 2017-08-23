@@ -11,5 +11,6 @@
         "dist": true
     },
     "editor.tabSize": 4,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "todohighlight.exclude": "{**/node_modules/**,**/dist/**,**/.vscode/**,**/.history/**}"
 }
