@@ -46,7 +46,7 @@ export class AuthenticationCommunicator implements ICommunicator {
                     client.emit(AuthenticationEvent.AUTHORIZED,
                         new AuthenticationResult(token, this.serverConfig.FRONTEND_URL));
                 }).catch((error: HttpError) => {
-                    this.loggingService.error('Login error: ' + error.errorMessage + ' - ' + error.status);
+                    this.loggingService.error(error.errorMessage + ' - ' + error.status, error);
                     client.emit(AuthenticationEvent.UNAUTHORIZED, error);
                 });
         });
