@@ -35,38 +35,38 @@ export class LoggingService implements ILoggingService {
     @validate
     public error( @required message: string, meta?: any): void {
 
-        // get stack trace
-        if (this.trace) {
-            if (!meta) {
-                meta = {};
-            }
-
-            meta.stackTrace = this.getStackTrace();
-        }
-
         if (this.checkLogLevel(LogLevel.ERROR)) {
-            this.kixLogger.error(message, meta);
+
+            // get stack trace
+            const winstonMeta = { ...meta };
+            if (this.trace) {
+                winstonMeta.stackTrace = this.getStackTrace();
+            }
+            this.kixLogger.error(message, winstonMeta);
         }
     }
 
     @validate
     public warning( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.WARNING)) {
-            this.kixLogger.warn(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.warn(message, winstonMeta);
         }
     }
 
     @validate
     public info( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.INFO)) {
-            this.kixLogger.info(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.info(message, winstonMeta);
         }
     }
 
     @validate
     public debug( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.DEBUG)) {
-            this.kixLogger.debug(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.debug(message, winstonMeta);
         }
     }
 
