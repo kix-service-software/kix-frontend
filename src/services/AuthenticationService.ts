@@ -41,7 +41,7 @@ export class AuthenticationService implements IAuthenticationService {
         if (response.Token) {
             return response.Token;
         } else {
-            throw new HttpError(403, 'Invalid Login');
+            throw new HttpError(403, "", response);
         }
     }
 
