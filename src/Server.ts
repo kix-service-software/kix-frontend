@@ -52,8 +52,6 @@ export class Server {
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
-        this.application.use(markoExpress());
-
         this.registerStaticContent();
 
         this.router = new ServerRouter(this.application);
@@ -65,6 +63,7 @@ export class Server {
     }
 
     private async registerStaticContent(): Promise<void> {
+        this.application.use(markoExpress());
         this.application.use(lassoMiddleware.serveStatic());
         this.application.use(express.static('dist/static/'));
 
