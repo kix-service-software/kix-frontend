@@ -147,20 +147,9 @@ export class LoggingService implements ILoggingService {
     }
 
     private getStackTrace() {
-        const stack = new Error().stack;
-
-        // TODO: bessere Möglichkeit finden
         // return but remove first 4 lines
         // (with "Error", this function and log function from this class and validate decorator function)
-        return '\n' + stack.substring(
-            stack.indexOf(
-                "\n", stack.indexOf(
-                    "\n", stack.indexOf(
-                        "\n", stack.indexOf("\n") + 1
-                    ) + 1
-                ) + 1
-            ) + 1
-        );
+        return '\n' + new Error().stack.split('\n').slice(4).join('\n');
     }
 
     private checkLogLevel(level: LogLevel): boolean {
