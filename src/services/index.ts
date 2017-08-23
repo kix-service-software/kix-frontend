@@ -1,35 +1,16 @@
-import { SocketCommunicationService } from './SocketCommuncationService';
-import { ISocketCommunicationService } from './ISocketCommunicationService';
-import { UserService } from './UserService';
-import { IUserService } from './IUserService';
-import { AuthenticationService } from './AuthenticationService';
-import { ConfigurationService } from './ConfigurationService';
-import { HttpService } from './HttpService';
-import { IAuthenticationService } from './IAuthenticationService';
-import { IConfigurationService } from './IConfigurationService';
-import { IHttpService } from './IHttpService';
-import { IMarkoService } from './IMarkoService';
-import { IPluginService } from './IPluginService';
-import { ILoggingService } from './ILoggingService';
-import { MarkoService } from './MarkoService';
-import { PluginService } from './PluginService';
-import { LoggingService } from './LoggingService';
-
-export {
-    IConfigurationService,
-    ConfigurationService,
-    IAuthenticationService,
-    AuthenticationService,
-    IMarkoService,
-    IPluginService,
-    ILoggingService,
-    MarkoService,
-    PluginService,
-    LoggingService,
-    IHttpService,
-    HttpService,
-    IUserService,
-    UserService,
-    ISocketCommunicationService,
-    SocketCommunicationService
-};
+export { SocketCommunicationService } from './SocketCommuncationService';
+export { ISocketCommunicationService } from './ISocketCommunicationService';
+export { UserService } from './UserService';
+export { IUserService } from './IUserService';
+export { AuthenticationService } from './AuthenticationService';
+export { ConfigurationService } from './ConfigurationService';
+export { HttpService } from './HttpService';
+export { IAuthenticationService } from './IAuthenticationService';
+export { IConfigurationService } from './IConfigurationService';
+export { IHttpService } from './IHttpService';
+export { IMarkoService } from './IMarkoService';
+export { IPluginService } from './IPluginService';
+export { ILoggingService } from './ILoggingService';
+export { MarkoService } from './MarkoService';
+export { PluginService } from './PluginService';
+export { LoggingService } from './LoggingService';

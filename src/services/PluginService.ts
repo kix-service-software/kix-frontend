@@ -1,6 +1,5 @@
-import { IConfigurationService } from './IConfigurationService';
+import { IPluginService, IConfigurationService } from './';
 import { injectable, inject } from 'inversify';
-import { IPluginService } from './IPluginService';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import Plugins = require('js-plugins');
 const host = {

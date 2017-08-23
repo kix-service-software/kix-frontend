@@ -7,9 +7,7 @@ import { HttpError, IServerConfiguration } from './../model/';
 export class HttpService implements IHttpService {
 
     private axios: AxiosInstance;
-
     private apiURL: string;
-
     private loggingService: ILoggingService;
 
     public constructor(
@@ -68,6 +66,7 @@ export class HttpService implements IHttpService {
 
     private createHttpError(err: AxiosError): HttpError {
         if (err.response) {
+            // TODO: intercept whole error-HTML-sites in err.response.data
             this.loggingService.error(err.message + ' - ' + err.response.status, err.response.data);
             return new HttpError(err.response.status, err.response.data, err);
         } else {

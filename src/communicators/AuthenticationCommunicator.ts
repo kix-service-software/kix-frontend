@@ -15,9 +15,7 @@ import { ICommunicator } from './ICommunicator';
 export class AuthenticationCommunicator implements ICommunicator {
 
     private serverConfig: IServerConfiguration;
-
     private authenticationService: IAuthenticationService;
-
     private loggingService: ILoggingService;
 
     public constructor(
@@ -25,7 +23,6 @@ export class AuthenticationCommunicator implements ICommunicator {
         @inject("IAuthenticationService") authenticationService: IAuthenticationService,
         @inject("ILoggingService") loggingService: ILoggingService
     ) {
-
         this.serverConfig = configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
         this.loggingService = loggingService;

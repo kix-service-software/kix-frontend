@@ -14,8 +14,8 @@ export class LoggingService implements ILoggingService {
     private trace: boolean;
 
     public constructor(
-        @inject("IConfigurationService") configurationService: IConfigurationService) {
-
+        @inject("IConfigurationService") configurationService: IConfigurationService
+    ) {
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
 
         this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;
@@ -34,7 +34,6 @@ export class LoggingService implements ILoggingService {
 
     @validate
     public error( @required message: string, meta?: any): void {
-
         if (this.checkLogLevel(LogLevel.ERROR)) {
 
             // get stack trace
@@ -71,7 +70,6 @@ export class LoggingService implements ILoggingService {
     }
 
     private createLogDirectory(serverConfig: IServerConfiguration): string {
-
         let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
         logFileDir = __dirname + '/../' + logFileDir.replace(/\/\w+\.log$/, '');
         if (!fs.existsSync(logFileDir)) {
@@ -81,7 +79,6 @@ export class LoggingService implements ILoggingService {
     }
 
     private createLogger(logDirectory?: string) {
-
         const winstonLevels = {
             ERROR: 'error',
             WARNING: 'warn',

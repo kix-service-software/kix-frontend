@@ -8,9 +8,11 @@ export interface IUserService {
 
     createUser(
         login: string, firstName: string, lastName: string,
-        email: string, password: string, phone: string, title: string): Promise<number>;
+        email: string, password: string, phone: string, title: string
+    ): Promise<number>;
 
     updateUser(
         userId: number, login: string, firstName: string, lastName: string,
-        email: string, password: string, phone: string, title: string, valid: number): Promise<number>;
+        email: string, password: string, phone: string, title: string, valid: number
+    ): Promise<number>;
 }

@@ -3,9 +3,7 @@ import { UserType } from '../../model-client';
 export class UserLogin {
 
     public UserLogin: string;
-
     public Password: string;
-
     public UserType: UserType;
 
     public constructor(userName: string, password: string, userType: UserType) {
