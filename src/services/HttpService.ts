@@ -1,8 +1,7 @@
-import { IConfigurationService, ILoggingService } from './';
+import { IHttpService, IConfigurationService, ILoggingService } from './';
 import { injectable, inject } from 'inversify';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { HttpError, IServerConfiguration } from './../model/';
-import { IHttpService } from './IHttpService';
 
 @injectable()
 export class HttpService implements IHttpService {

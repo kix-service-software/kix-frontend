@@ -1,8 +1,6 @@
 import { IMarkoDependencyExtension, KIXExtensions } from '../extensions/';
-import { IMarkoService } from './IMarkoService';
 import { inject, injectable } from 'inversify';
-import { IPluginService } from './IPluginService';
-import { PluginService } from './PluginService';
+import { IMarkoService, IPluginService, ILoggingService } from './';
 import jsonfile = require('jsonfile');
 
 @injectable()
@@ -10,9 +8,14 @@ export class MarkoService implements IMarkoService {
 
     private browserJsonPath: string = '../components/app/browser.json';
     private pluginService: IPluginService;
+    private loggingService: ILoggingService;
 
-    public constructor( @inject("IPluginService") pluginService: IPluginService) {
+    public constructor(
+        @inject("IPluginService") pluginService: IPluginService,
+        @inject("ILoggingService") loggingService: ILoggingService
+    ) {
         this.pluginService = pluginService;
+        this.loggingService = loggingService;
         this.registerMarkoDependencies();
     }
 
@@ -41,11 +44,9 @@ export class MarkoService implements IMarkoService {
     private async saveBrowserJSON(browserJSON: any): Promise<void> {
         await new Promise<void>((resolve, reject) => {
             jsonfile.writeFile(__dirname + "/" + this.browserJsonPath, browserJSON,
-                (fileError) => {
+                (fileError: Error) => {
                     if (fileError) {
-                        // TODO: Use LogginService
-                        // TODO: Throw an exception
-                        console.error(fileError);
+                        this.loggingService.error(fileError.message);
                         reject(fileError);
                     }
 
