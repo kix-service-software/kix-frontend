@@ -1,7 +1,7 @@
 import { ILoggingService } from './ILoggingService';
 import { ICommunicator } from './../communicators/ICommunicator';
 import { IConfigurationService } from './IConfigurationService';
-import { inject, injectable, Container } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { ISocketCommunicationService } from './ISocketCommunicationService';
 import { container } from '../Container';
 import * as express from 'express';
@@ -37,7 +37,7 @@ export class SocketCommunicationService implements ISocketCommunicationService {
     }
 
     private registerListener(): void {
-        const communicators = container.getAll<ICommunicator>("Communicator");
+        const communicators = container.getAll<ICommunicator>("ICommunicator");
         for (const communicator of communicators) {
             communicator.registerNamespace(this.socketIO);
         }
