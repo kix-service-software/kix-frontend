@@ -4,16 +4,16 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "dist",
-    "lib": [
-      "es6"
-    ],
-    "types": [
-      "node",
-      "reflect-metadata"
-    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
+  "types": [
+    "node",
+    "reflect-metadata"
+  ],
+  "lib": [
+    "es6"
+  ],
   "include": [
     "src/**/*.ts"
   ],
