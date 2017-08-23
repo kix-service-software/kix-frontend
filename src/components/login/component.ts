@@ -33,6 +33,7 @@ class LoginFormComponent {
         this.state.password = reduxState.password;
         this.state.valid = reduxState.valid;
         this.state.error = reduxState.error;
+        this.state.doLogin = reduxState.doLogin;
     }
 
     public onMount(): void {

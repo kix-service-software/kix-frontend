@@ -4,7 +4,8 @@ export class LoginComponentState {
     public password: string = "";
     public valid: boolean = false;
     public error: any = null;
-    public frontendSocketUrl: string;
+    public frontendSocketUrl: string = "";
+    public doLogin: boolean = false;
 
     public constructor(frontendSocketUrl: string) {
         this.frontendSocketUrl = frontendSocketUrl;

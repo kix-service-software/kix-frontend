@@ -10,4 +10,6 @@ export class LoginState {
 
     public socket: SocketIO.Server = null;
 
+    public doLogin: boolean = false;
+
 }
