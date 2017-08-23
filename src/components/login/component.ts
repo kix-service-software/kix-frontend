@@ -7,8 +7,6 @@ import {
     UserType
 } from './../../model-client/authentication';
 
-import { SocketEvent } from './../../model-client';
-
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
