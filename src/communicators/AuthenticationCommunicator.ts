@@ -1,5 +1,11 @@
 import { IServerConfiguration } from './../model/';
-import { AuthenticationResult, LoginRequest, UserType, AuthenticationEvent } from './../model-client/';
+import {
+    AuthenticationResult,
+    LoginRequest,
+    UserType,
+    AuthenticationEvent,
+    SocketEvent
+} from './../model-client/';
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
 import { IAuthenticationService, IConfigurationService, ILoggingService } from './../services/';
@@ -27,17 +33,16 @@ export class AuthenticationCommunicator implements ICommunicator {
 
     public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/authentication');
-        nsp.on('connection', (client: SocketIO.Socket) => {
+        nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
             this.registerLogin(client);
         });
     }
 
     private registerLogin(client: SocketIO.Socket): void {
         client.on(AuthenticationEvent.LOGIN, async (data: LoginRequest) => {
-            console.log("Login via Auth Service ...");
-            await this.authenticationService
+            return await this.authenticationService
                 .login(data.userName, data.password, data.userType)
-                .then((token) => {
+                .then((token: string) => {
                     client.emit(AuthenticationEvent.AUTHORIZED,
                         new AuthenticationResult(token, this.serverConfig.FRONTEND_URL));
                 }).catch((error: HttpError) => {
