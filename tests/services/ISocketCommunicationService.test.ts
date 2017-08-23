@@ -25,9 +25,9 @@ describe('Communication Service', () => {
 
     describe('Socket IO Server', () => {
         it('Should be able to connect to socket server', async () => {
-            const socketPort = configurationService.getServerConfiguration().SOCKET_COMMUNICATION_PORT;
+            const socketUrl = configurationService.getServerConfiguration().FRONTEND_SOCKET_URL;
             const socketIO = require('socket.io-client');
-            const socket = socketIO.connect('http://localhost:' + socketPort);
+            const socket = socketIO.connect(socketUrl);
 
             socket.on('connect', (client) => {
                 expect(true);

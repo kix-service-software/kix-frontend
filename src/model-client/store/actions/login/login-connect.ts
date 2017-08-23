@@ -8,6 +8,8 @@ import {
     AuthenticationResult
 } from './../../../authentication/';
 
+declare var io: any;
+
 export default (frontendSocketUrl: string) => {
     return {
         type: 'LOGIN_CONNECT',
