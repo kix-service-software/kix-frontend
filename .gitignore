@@ -4,3 +4,6 @@ node_modules
 npm-debug.log
 /.project
 /.settings/
+.history
+src/log/**/*
+src/logs/**/*

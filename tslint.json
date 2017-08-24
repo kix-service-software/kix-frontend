@@ -1,6 +1,7 @@
 {
     "extends": "tslint:recommended",
     "rules": {
+        "arrow-parens": true,
         "indent": [
             true,
             "spaces",
@@ -29,6 +30,35 @@
         ],
         "ordered-imports": [
             false
+        ],
+        "max-classes-per-file": [
+            true,
+            1
+        ],
+        "no-string-literal": false,
+        "interface-name": [
+            true,
+            "always-prefix"
+        ],
+        "semicolon": [
+            true,
+            "always"
+        ],
+        "variable-name": [
+            "check-format"
+        ],
+        "triple-equals": [
+            true
+        ],
+        "switch-default": true,
+        "no-var-keyword": true,
+        "no-shadowed-variable": true,
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "always",
+                "asyncArrow": "always"
+            }
         ]
     },
     "jsRules": {

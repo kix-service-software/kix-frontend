@@ -6,29 +6,32 @@ const mocha = require('gulp-mocha');
 const tslint = require("gulp-tslint");
 
 const tslintConfig = require('./tslint.json');
+const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
     target: "es6",
-    lib: ["es6"],
-    types: ["node"],
+    lib: ["es6", "dom"],
+    types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: true,
-    declaration: true
+    declaration: true,
+    strict: true
 };
 
 const prodTSCConfig = {
     target: "es6",
-    lib: ["es6"],
-    types: ["node"],
+    lib: ["es6", "dom"],
+    types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: false,
-    declaration: false
+    declaration: true,
+    strict: true
 };
 
 gulp.task('default', (cb) => {
@@ -42,6 +45,7 @@ gulp.task('tslint', () => {
 });
 
 gulp.task('test', () => {
+    process.env.NODE_ENV = 'test';
     return gulp.src(['tests/**/*.test.ts'])
         .pipe(mocha({
             reporter: 'spec',
@@ -50,6 +54,7 @@ gulp.task('test', () => {
 });
 
 gulp.task('clean', () => {
+    process.env.NODE_ENV = orgEnv;
     return gulp
         .src(['dist', 'components'])
         .pipe(clean());
@@ -58,6 +63,7 @@ gulp.task('clean', () => {
 gulp.task('compile-src', () => {
     let config = prodTSCConfig;
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+        console.log("Use tsconfig for development.")
         config = devTSCConfig;
     }
 

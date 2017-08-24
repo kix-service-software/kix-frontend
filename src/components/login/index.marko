@@ -1,0 +1,22 @@
+<h1>Login</h1>
+<div class="login-form">
+  <if(state.doLogin)>
+    <span>... Login ...</span>
+  </if>
+  <else>
+    <input type="text" placeholder="UserName" value=state.userName on-keyup('userNameChanged')/>
+    <input type="password" placeholder="password" value=state.password on-keyup('passwordChanged')/>
+    <if(state.valid)>
+      <button type="button" on-click('login')>Login</button>
+    </if>
+    <else>
+      <button disabled type="button">Login</button>
+      <span>User and password are required!</span>
+    </else>
+    <if(state.error)>
+      <p>
+        <span>${JSON.stringify(state.error)}</span>
+      </p>
+    </if>
+  </else>
+</div>
