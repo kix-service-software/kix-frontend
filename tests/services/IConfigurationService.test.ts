@@ -1,6 +1,7 @@
 /* tslint:disable no-var-requires no-unused-expression */
+import { ConfigurationService } from './../../src/services/ConfigurationService';
 import { IConfigurationService } from './../../src/services/';
-import { IServerConfiguration, Environment } from './../../src/model/';
+import { IServerConfiguration, Environment, LogLevel } from './../../src/model/';
 import { container } from './../../src/Container';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -69,6 +70,69 @@ describe('Configuration Service', () => {
 
             const isTestMode = configurationService.isTestMode();
             expect(isTestMode).true;
+        });
+    });
+
+    describe('Overwrite configuration from environment', () => {
+        let serverConfig: IServerConfiguration;
+
+        describe('Overwrite string values', () => {
+            before(() => {
+                process.env.BACKEND_API_URL = 'http://test:4321';
+                process.env.LOG_FILEDIR = '/logdir/test';
+
+                const configService = new ConfigurationService();
+                serverConfig = configService.getServerConfiguration();
+
+                delete process.env.BACKEND_API_URL;
+            });
+
+            it('BACKEND_API_URL should have the value of the environment variable', () => {
+                expect(serverConfig.BACKEND_API_URL).equal('http://test:4321');
+            });
+
+            it('LOG_FILEDIR should have the value of the environment variable', () => {
+                expect(serverConfig.LOG_FILEDIR).equal('/logdir/test');
+            });
+        });
+
+        describe('Overwrite number values', () => {
+            before(() => {
+                process.env.SERVER_PORT = '9876';
+                process.env.LOG_LEVEL = LogLevel.DEBUG.toString();
+
+                const configService = new ConfigurationService();
+                serverConfig = configService.getServerConfiguration();
+
+                delete process.env.SERVER_PORT;
+                delete process.env.LOG_LEVEL;
+            });
+
+            it('SERVER_PORT should have the value of the environment variable', () => {
+                expect(serverConfig.SERVER_PORT).equal(9876);
+            });
+
+            it('LOG_LEVEL should have the value of the environment variable', () => {
+                expect(serverConfig.LOG_LEVEL).equal(LogLevel.DEBUG);
+            });
+        });
+
+        describe('Overwrite array values', () => {
+            before(() => {
+                process.env.PLUGIN_FOLDERS = 'A B C D';
+
+                const configService = new ConfigurationService();
+                serverConfig = configService.getServerConfiguration();
+                delete process.env.PLUGIN_FOLDERS;
+            });
+
+            it('PLUGIN_FOLDERS should have the value of the environment variable', () => {
+                expect(serverConfig.PLUGIN_FOLDERS).an('array');
+                expect(serverConfig.PLUGIN_FOLDERS).contain('A');
+                expect(serverConfig.PLUGIN_FOLDERS).contain('B');
+                expect(serverConfig.PLUGIN_FOLDERS).contain('C');
+                expect(serverConfig.PLUGIN_FOLDERS).contain('D');
+            });
         });
     });
 
