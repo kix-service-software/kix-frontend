@@ -10,7 +10,7 @@ const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
     target: "es6",
-    lib: ["es6"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -18,15 +18,12 @@ const devTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: true,
     declaration: true,
-    strict: true,
-    exclude: [
-        "node_modules"
-    ]
+    strict: true
 };
 
 const prodTSCConfig = {
     target: "es6",
-    lib: ["es6"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -34,10 +31,7 @@ const prodTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: false,
     declaration: true,
-    strict: true,
-    exclude: [
-        "node_modules"
-    ]
+    strict: true
 };
 
 gulp.task('default', (cb) => {

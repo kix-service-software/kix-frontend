@@ -7,8 +7,11 @@
   </head>
   <body>
     <if(data.template)>
-      <include(data.template)/>
+      <div id="content">
+        <include(data.template, data.data)/>
+      </div>
     </if>
+    <script src="/static/socket.io.js"/>
     <lasso-body/>
   </body>
 </html>

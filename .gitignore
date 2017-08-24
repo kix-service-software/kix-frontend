@@ -5,3 +5,5 @@ npm-debug.log
 /.project
 /.settings/
 .history
+src/log/**/*
+src/logs/**/*

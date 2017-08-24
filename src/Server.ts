@@ -1,12 +1,11 @@
-import { container } from './Container';
-import { IConfigurationService, IPluginService, ILoggingService } from './services/';
+import { ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService } from './services/';
+import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
-import { MockHTTPServer } from './mock-http/MockHTTPServer';
 import { Environment } from './model';
 import { KIXExtensions, IStaticContentExtension } from './extensions';
 
@@ -19,33 +18,30 @@ import compression = require('compression');
 import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
 
+@injectable()
 export class Server {
 
     public application: express.Application;
-
     private router: ServerRouter;
-
     private serverConfig: IServerConfiguration;
-
     private loggingService: ILoggingService;
-
     private configurationService: IConfigurationService;
-
+    private socketCommunicationService: ISocketCommunicationService;
     private pluginService: IPluginService;
 
-    public constructor() {
-        this.loggingService = container.get<ILoggingService>("ILoggingService");
-        this.configurationService = container.get<IConfigurationService>("IConfigurationService");
-        this.pluginService = container.get<IPluginService>("IPluginService");
+    public constructor(
+        @inject("ILoggingService") loggingService: ILoggingService,
+        @inject("IConfigurationService") configurationService: IConfigurationService,
+        @inject("IPluginService") pluginService: IPluginService,
+        @inject("ISocketCommunicationService") socketService: ISocketCommunicationService
+    ) {
+        this.loggingService = loggingService;
+        this.configurationService = configurationService;
+        this.pluginService = pluginService;
+        this.socketCommunicationService = socketService;
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
-
-        // Start a Mock HTTP-Server for development, TODO: Should be removed if a test instance is available
-        // TODO: Remove Mock HTTP Server
-        if (this.configurationService.isDevelopmentMode()) {
-            const mockServer = new MockHTTPServer();
-        }
     }
 
     private initializeApplication(): void {
@@ -56,8 +52,6 @@ export class Server {
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
-        this.application.use(markoExpress());
-
         this.registerStaticContent();
 
         this.router = new ServerRouter(this.application);
@@ -65,10 +59,11 @@ export class Server {
         const port = this.serverConfig.SERVER_PORT || 3000;
         this.application.listen(port);
 
-        this.loggingService.info("LogService: KIXng running on http://<host>:" + port);
+        this.loggingService.info("KIXng running on *:" + port);
     }
 
     private async registerStaticContent(): Promise<void> {
+        this.application.use(markoExpress());
         this.application.use(lassoMiddleware.serveStatic());
         this.application.use(express.static('dist/static/'));
 
@@ -79,5 +74,3 @@ export class Server {
         }
     }
 }
-
-export default new Server();

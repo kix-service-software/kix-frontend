@@ -3,17 +3,15 @@ import {
     HttpError,
     LoginResponse,
     UserLogin,
-    UserType
 } from '../model';
-import { IAuthenticationService } from './IAuthenticationService';
-import { IHttpService } from './IHttpService';
+import { UserType } from '../model-client/authentication';
+import { IAuthenticationService, IHttpService } from './';
 import { Request, Response } from 'express';
 
 @injectable()
 export class AuthenticationService implements IAuthenticationService {
 
     private httpService: IHttpService;
-
     private TOKEN_PREFIX: string = 'Token ';
 
     public constructor( @inject("IHttpService") httpService: IHttpService) {
@@ -29,7 +27,7 @@ export class AuthenticationService implements IAuthenticationService {
             if (!token) {
                 res.redirect('/auth');
             } else {
-                // TODO: validate token?
+                // TODO: validate token against Backend!
                 next();
             }
         }
@@ -37,23 +35,17 @@ export class AuthenticationService implements IAuthenticationService {
 
     public async login(user: string, password: string, type: UserType): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
-        return await this.httpService.post('sessions', userLogin)
-            .then((response: LoginResponse) => {
-                return response.token;
-            }).catch((error: HttpError) => {
-                // TODO: LoggingService log error
-                throw error;
-            });
+        const response = await this.httpService.post<LoginResponse>('sessions', userLogin);
+        if (response.Token) {
+            return response.Token;
+        } else {
+            throw new HttpError(403, "Login failed.", response);
+        }
     }
 
     public async logout(token: string): Promise<boolean> {
-        return await this.httpService.delete<any>('sessions/' + token)
-            .then((response) => {
-                return true;
-            }).catch((error: HttpError) => {
-                // TODO: LoggingService log error
-                throw error;
-            });
+        const response = await this.httpService.delete<any>('sessions/' + token);
+        return true;
     }
 
     private getToken(authorizationHeader: string): string {

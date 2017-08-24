@@ -5,9 +5,8 @@ import {
     UpdateUserResponse,
     UsersResponse
 } from './../model/';
-import { IHttpService } from './IHttpService';
+import { IUserService, IHttpService } from './';
 import { inject, injectable } from 'inversify';
-import { IUserService } from './IUserService';
 import {
     SortOrder,
     User,
@@ -19,7 +18,6 @@ import {
 export class UserService implements IUserService {
 
     private httpService: IHttpService;
-
     private RESOURCE_URI = "users";
 
     public constructor( @inject("IHttpService") httpService: IHttpService) {

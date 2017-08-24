@@ -6,7 +6,6 @@ import { injectable } from 'inversify';
 export class ConfigurationService implements IConfigurationService {
 
     private serverConfiguration: IServerConfiguration;
-
     private lassoConfiguration: any;
 
     public constructor() {
@@ -56,12 +55,29 @@ export class ConfigurationService implements IConfigurationService {
 
     private loadServerConfig(serverConfig: string): IServerConfiguration {
         const config: IServerConfiguration = require(serverConfig);
+
         // check if config option has been overridden by environment
-        Object.keys(config).forEach((key) => {
+        for (const key in config) {
             if (process.env[key]) {
-                config[key] = process.env[key];
+                switch (typeof config[key]) {
+                    case "number": {
+                        config[key] = Number(process.env[key]);
+                        break;
+                    }
+                    case "boolean": {
+                        config[key] = Boolean(process.env[key]);
+                        break;
+                    }
+                    case "object": {
+                        config[key] = Object(process.env[key].split(/\s+/));
+                        break;
+                    }
+                    default: {
+                        config[key] = process.env[key];
+                    }
+                }
             }
-        });
+        }
         return config;
     }
 

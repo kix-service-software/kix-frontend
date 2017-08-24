@@ -1,6 +1,6 @@
 import { IRouter } from './routes/';
 import { container } from './Container';
-import { Application, Router } from 'express';
+import { Application, Router, Request, Response } from 'express';
 
 export class ServerRouter {
 
@@ -8,16 +8,16 @@ export class ServerRouter {
 
     public constructor(application: Application) {
         this.router = Router();
+
         application.use(this.router);
 
         this.initializeRoutes();
     }
 
     private initializeRoutes(): void {
-        const registeredRouter = container.getAll<IRouter>("Router");
+        const registeredRouter = container.getAll<IRouter>("IRouter");
         for (const router of registeredRouter) {
             this.router.use(router.baseRoute, router.router);
         }
     }
-
 }

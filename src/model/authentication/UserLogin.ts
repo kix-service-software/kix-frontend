@@ -1,11 +1,9 @@
-import { UserType } from './UserType';
+import { UserType } from '../../model-client/authentication';
 
 export class UserLogin {
 
     public UserLogin: string;
-
     public Password: string;
-
     public UserType: UserType;
 
     public constructor(userName: string, password: string, userType: UserType) {

@@ -1,5 +1,5 @@
 export class LoginResponse {
 
-    public token: string;
+    public Token: string;
 
 }

@@ -5,7 +5,8 @@ import {
     IHttpService,
     IConfigurationService
 } from './../../src/services/';
-import { HttpError, UserType } from './../../src/model/';
+import { HttpError } from './../../src/model/';
+import { UserType } from './../../src/model-client/authentication';
 import { Request, Response } from 'express';
 import chaiAsPromised = require('chai-as-promised');
 import MockAdapter = require('axios-mock-adapter');
@@ -41,13 +42,13 @@ describe('Authentication Service', () => {
 
     describe('Login', () => {
 
-        describe('Create a valid login request.', async () => {
+        describe('Create a valid agent login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'agent',
                     Password: 'agent',
                     UserType: UserType.AGENT
-                }).reply(200, { token: 'ABCDEFG12345' });
+                }).reply(200, { Token: 'ABCDEFG12345' });
             });
 
             after(() => {
@@ -60,13 +61,13 @@ describe('Authentication Service', () => {
             });
         });
 
-        describe('Create a valid login request.', async () => {
+        describe('Create a valid customer login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'customer',
                     Password: 'customer',
                     UserType: UserType.CUSTOMER
-                }).reply(200, { token: 'ABCDEFG12345' });
+                }).reply(200, { Token: 'ABCDEFG12345' });
             });
 
             after(() => {
@@ -78,7 +79,8 @@ describe('Authentication Service', () => {
                 expect(response).equal('ABCDEFG12345');
             });
         });
-        describe('Create a valid login request.', async () => {
+
+        describe('Create a invalid login request.', async () => {
             before(() => {
                 mock.onPost(apiURL + '/sessions', {
                     UserLogin: 'wrong',

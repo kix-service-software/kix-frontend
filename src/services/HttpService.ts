@@ -1,70 +1,63 @@
-import { IConfigurationService } from './IConfigurationService';
+import { IHttpService, IConfigurationService, ILoggingService } from './';
 import { injectable, inject } from 'inversify';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { HttpError, IServerConfiguration } from './../model/';
-import { IHttpService } from './IHttpService';
 
 @injectable()
 export class HttpService implements IHttpService {
 
     private axios: AxiosInstance;
-
     private apiURL: string;
+    private loggingService: ILoggingService;
 
-    public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
+    public constructor(
+        @inject("IConfigurationService") configurationService: IConfigurationService,
+        @inject("ILoggingService") loggingService: ILoggingService
+    ) {
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
         this.axios = require('axios');
+        this.loggingService = loggingService;
     }
 
     public async get<T>(resource: string, queryParameters: any = {}): Promise<T> {
-        return await this.axios.get(this.buildRequestUrl(resource), { params: queryParameters })
-            .then((response: AxiosResponse) => {
-                return response.data;
-            }).catch((error: AxiosError) => {
-                // TODO: LoggingService log error
+        const response = await this.axios.get(this.buildRequestUrl(resource), { params: queryParameters })
+            .catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
+        return response.data;
     }
 
     public async post<T>(resource: string, content: any): Promise<T> {
-        return await this.axios.post(this.buildRequestUrl(resource), content)
-            .then((response: AxiosResponse) => {
-                return response.data;
-            }).catch((error: AxiosError) => {
-                // TODO: LoggingService log error
+        const response = await this.axios.post(this.buildRequestUrl(resource), content)
+            .catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
+        return response.data;
     }
 
     public async put<T>(resource: string, content: any): Promise<T> {
-        return await this.axios.put(this.buildRequestUrl(resource), content)
-            .then((response: AxiosResponse) => {
-                return response.data;
-            }).catch((error: AxiosError) => {
-                // TODO: LoggingService log error
+        const response = await this.axios.put(this.buildRequestUrl(resource), content)
+            .catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
+        return response.data;
     }
 
     public async patch<T>(resource: string, content: any): Promise<T> {
-        return await this.axios.patch(this.buildRequestUrl(resource), content)
-            .then((response: AxiosResponse) => {
-                return response.data;
-            }).catch((error: AxiosError) => {
-                // TODO: LoggingService log error
+        const response = await this.axios.patch(this.buildRequestUrl(resource), content)
+            .catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
+        return response.data;
     }
 
     public async delete<T>(resource: string): Promise<T> {
-        return await this.axios.delete(this.buildRequestUrl(resource))
-            .then((response: AxiosResponse) => {
-                return response.data;
-            }).catch((error: AxiosError) => {
-                // TODO: LoggingService log error
+        const response = await this.axios.delete(this.buildRequestUrl(resource))
+            .catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
+        return response.data;
     }
 
     private buildRequestUrl(resource: string): string {
@@ -72,7 +65,14 @@ export class HttpService implements IHttpService {
     }
 
     private createHttpError(err: AxiosError): HttpError {
-        return new HttpError(err.response.status, err.response.data);
+        if (err.response) {
+            // TODO: intercept whole error-HTML-sites in err.response.data
+            this.loggingService.error(err.message + ' - ' + err.response.status, err.response.data);
+            return new HttpError(err.response.status, err.response.data, err);
+        } else {
+            this.loggingService.error(err.message);
+            return new HttpError(500, err.message, err);
+        }
     }
 
 }

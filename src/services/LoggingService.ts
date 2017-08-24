@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { validate, required } from '../decorators';
 import { container } from '../Container';
 import { IConfigurationService, ILoggingService } from './';
@@ -13,9 +13,9 @@ export class LoggingService implements ILoggingService {
     private kixLogger: any;
     private trace: boolean;
 
-    public constructor() {
-
-        const configurationService = container.get<IConfigurationService>("IConfigurationService");
+    public constructor(
+        @inject("IConfigurationService") configurationService: IConfigurationService
+    ) {
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
 
         this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;
@@ -34,44 +34,42 @@ export class LoggingService implements ILoggingService {
 
     @validate
     public error( @required message: string, meta?: any): void {
-
-        // get stack trace
-        if (this.trace) {
-            if (!meta) {
-                meta = {};
-            }
-
-            meta.stackTrace = this.getStackTrace();
-        }
-
         if (this.checkLogLevel(LogLevel.ERROR)) {
-            this.kixLogger.error(message, meta);
+
+            // get stack trace
+            const winstonMeta = { ...meta };
+            if (this.trace) {
+                winstonMeta.stackTrace = this.getStackTrace();
+            }
+            this.kixLogger.error(message, winstonMeta);
         }
     }
 
     @validate
     public warning( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.WARNING)) {
-            this.kixLogger.warn(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.warn(message, winstonMeta);
         }
     }
 
     @validate
     public info( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.INFO)) {
-            this.kixLogger.info(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.info(message, winstonMeta);
         }
     }
 
     @validate
     public debug( @required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.DEBUG)) {
-            this.kixLogger.debug(message, meta);
+            const winstonMeta = { ...meta };
+            this.kixLogger.debug(message, winstonMeta);
         }
     }
 
     private createLogDirectory(serverConfig: IServerConfiguration): string {
-
         let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
         logFileDir = __dirname + '/../' + logFileDir.replace(/\/\w+\.log$/, '');
         if (!fs.existsSync(logFileDir)) {
@@ -81,7 +79,6 @@ export class LoggingService implements ILoggingService {
     }
 
     private createLogger(logDirectory?: string) {
-
         const winstonLevels = {
             ERROR: 'error',
             WARNING: 'warn',
@@ -102,11 +99,13 @@ export class LoggingService implements ILoggingService {
                 level: winstonLevels[LogLevel[this.defaultLevelNumber]],
                 transports: [
                     new winston.transports.Console({
-                        timestamp: true,
                         colorize: true,
                         handleExceptions: true,
                         humanReadableUnhandledException: true,
-                        silent: logDirectory ? false : true
+                        silent: logDirectory ? false : true,
+                        timestamp: () => {
+                            return new Date().toString();
+                        }
                     }),
                     new (require('winston-daily-rotate-file'))({
                         level: winstonLevels[LogLevel[this.defaultLevelNumber]],
@@ -145,10 +144,9 @@ export class LoggingService implements ILoggingService {
     }
 
     private getStackTrace() {
-        const stack = new Error().stack;
-
-        // return but remove first 3 lines (with "Error", this function and log function from this class)
-        return '\n' + stack.substring(stack.indexOf("\n", stack.indexOf("\n", stack.indexOf("\n") + 1) + 1) + 1);
+        // return but remove first 4 lines
+        // (with "Error", this function and log function from this class and validate decorator function)
+        return '\n' + new Error().stack.split('\n').slice(4).join('\n');
     }
 
     private checkLogLevel(level: LogLevel): boolean {
