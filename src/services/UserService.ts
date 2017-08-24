@@ -45,7 +45,7 @@ export class UserService implements IUserService {
     }
 
     public async  getUser(id: number): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id);
+        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id, {});
 
         return response.User;
     }

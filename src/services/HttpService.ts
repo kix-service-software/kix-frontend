@@ -20,9 +20,14 @@ export class HttpService implements IHttpService {
         this.loggingService = loggingService;
     }
 
-    public async get<T>(resource: string, queryParameters: any = {}): Promise<T> {
-        const response = await this.axios.get(this.buildRequestUrl(resource), { params: queryParameters })
-            .catch((error: AxiosError) => {
+    public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
+        const response = await this.axios.get(this.buildRequestUrl(resource),
+            {
+                params: queryParameters,
+                headers: {
+                    Authorization: 'Token ' + token
+                }
+            }).catch((error: AxiosError) => {
                 throw this.createHttpError(error);
             });
         return response.data;

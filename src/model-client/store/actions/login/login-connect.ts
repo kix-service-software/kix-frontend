@@ -9,6 +9,7 @@ declare var io: any;
 export default (frontendSocketUrl: string) => {
     const payload = new Promise((resolve, reject) => {
         const socket = io.connect(frontendSocketUrl + "/authentication", {});
+
         initSocketListener(socket);
         resolve({ socket });
     });
