@@ -25,11 +25,10 @@ export class ApplicationRouter implements IApplicationRouter {
     public getRoot(req: Request, res: Response): void {
         const template = require('../components/app/index.marko');
         res.marko(template, {
-            template: require('../components/base-template/index.marko'),
+            template: require('../components/kix-base-template/index.marko'),
             data: {
                 frontendUrl: this.serverConfig.FRONTEND_URL
             }
         });
     }
-
 }

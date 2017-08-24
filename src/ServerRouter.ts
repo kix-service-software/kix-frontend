@@ -20,5 +20,4 @@ export class ServerRouter {
             this.router.use(router.baseRoute, router.router);
         }
     }
-
 }
