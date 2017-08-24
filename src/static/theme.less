@@ -1,8 +1,37 @@
 @import "./theme-color.less";
 
-.header (@background: @primary0, @color: @white) {
-    background: @background;
-    color: @color;
-    width: 100%;
-    height: 50px;
+.color_theme_0() {
+    background: @primary_0;
+    color: @default_ligth_font_color;
+}
+.color_theme_1() {
+    background: @primary_1;
+    color: @default_ligth_font_color;
+}
+.color_theme_2() {
+    background: @primary_2;
+    color: @default_ligth_font_color;
+}
+.color_theme_3() {
+    background: @secondary_2;
+    color: @secondary_0;
+}
+
+.header() {
+    .color_theme_0();
+}
+.main_menu_active() {
+    .color_theme_0();
+}
+.sidebar_header() {
+    .color_theme_1();
+}
+.main_menu_special() {
+    .color_theme_1();
+}
+.main_menu() {
+    .color_theme_2();
+}
+.widget_header() {
+    .color_theme_3();
 }
