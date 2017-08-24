@@ -1,5 +1,3 @@
-declare var io;
-
 class KIXHeaderComponent {
 
     public state: any;

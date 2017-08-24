@@ -1,5 +1,3 @@
-declare var io;
-
 class KIXContentComponent {
 
     public state: any;

@@ -1,5 +1,3 @@
-declare var io;
-
 class KIXSidebarRightComponent {
 
     public state: any;
