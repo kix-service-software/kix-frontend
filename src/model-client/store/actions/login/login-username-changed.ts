@@ -1,12 +1,10 @@
+import { StateAction } from './../StateAction';
+import { LoginAction } from './LoginAction';
+
 export default (userName: string) => {
-    return {
-        type: 'LOGIN_USERNAME_CHANGED',
-        payload: new Promise((resolve, reject) => {
-            resolve(
-                {
-                    userName
-                }
-            );
-        })
-    };
+    const payload = new Promise((resolve, reject) => {
+        resolve({ userName });
+    });
+
+    return new StateAction(LoginAction.LOGIN_USERNAME_CHANGED, payload);
 };

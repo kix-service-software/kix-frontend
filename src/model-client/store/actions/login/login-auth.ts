@@ -1,18 +1,12 @@
-import {
-    LoginRequest,
-    UserType,
-    LoginState,
-    AuthenticationEvent,
-    AuthenticationResult
-} from './../../../authentication/';
+import { StateAction } from './../StateAction';
+import { LoginAction } from './LoginAction';
+import { LoginRequest, UserType, LoginState, AuthenticationEvent } from './../../../authentication/';
 
 export default (userName: string, password: string) => {
-    return {
-        type: 'LOGIN_AUTH',
-        payload: new Promise((resolve, reject) => {
-            resolve(doLogin(userName, password));
-        })
-    };
+    const payload = new Promise((resolve, reject) => {
+        resolve(doLogin(userName, password));
+    });
+    return new StateAction(LoginAction.LOGIN_AUTH, payload);
 };
 
 function doLogin(userName: string, password: string): any {
@@ -22,9 +16,5 @@ function doLogin(userName: string, password: string): any {
     loginState.socket.emit(AuthenticationEvent.LOGIN,
         new LoginRequest(userName, password, UserType.AGENT));
 
-    return {
-        userName,
-        password,
-        doLogin: true
-    };
+    return { userName, password };
 }

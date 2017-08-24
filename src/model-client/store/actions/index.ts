@@ -6,6 +6,7 @@ import LOGIN_CONNECT from './login/login-connect';
 import LOGIN_ERROR from './login/login-error';
 import LOGIN_AUTH from './login/login-auth';
 
+export { LoginAction } from './login/LoginAction';
 export {
     LOGIN_CONNECT,
     LOGIN_ERROR,

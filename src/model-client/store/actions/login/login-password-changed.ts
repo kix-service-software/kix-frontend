@@ -1,12 +1,9 @@
+import { StateAction } from './../StateAction';
+import { LoginAction } from './LoginAction';
+
 export default (password: string) => {
-    return {
-        type: 'LOGIN_PASSWORD_CHANGED',
-        payload: new Promise((resolve, reject) => {
-            resolve(
-                {
-                    password
-                }
-            );
-        })
-    };
+    const payload = new Promise((resolve, reject) => {
+        resolve({ password });
+    });
+    return new StateAction(LoginAction.LOGIN_PASSWORD_CHANGED, payload);
 };
