@@ -3,6 +3,8 @@ import {
     HttpError,
     LoginResponse,
     UserLogin,
+    Session,
+    SessionResponse
 } from '../model';
 import { UserType } from '../model-client/authentication';
 import { IAuthenticationService, IHttpService } from './';
@@ -18,7 +20,7 @@ export class AuthenticationService implements IAuthenticationService {
         this.httpService = httpService;
     }
 
-    public isAuthenticated(req: Request, res: Response, next: () => void): void {
+    public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const authorizationHeader: string = req.headers['authorization'];
         if (!authorizationHeader) {
             res.redirect('/auth');
@@ -26,11 +28,24 @@ export class AuthenticationService implements IAuthenticationService {
             const token = this.getToken(authorizationHeader);
             if (!token) {
                 res.redirect('/auth');
-            } else {
-                // TODO: validate token against Backend!
+            } else if (await this.validateToken(token)) {
                 next();
+            } else {
+                res.redirect('/auth');
             }
         }
+    }
+
+    public async isSocketAuthenticated(socket: SocketIO.Socket, next: (err?: any) => void): Promise<void> {
+        if (socket.handshake.query) {
+            const token = socket.handshake.query.Token;
+            if (token && await this.validateToken(token)) {
+                next();
+            } else {
+                next(new Error('Authentication error'));
+            }
+        }
+        next(new Error('Authentication error'));
     }
 
     public async login(user: string, password: string, type: UserType): Promise<string> {
@@ -57,4 +72,12 @@ export class AuthenticationService implements IAuthenticationService {
         return null;
     }
 
+    private async validateToken(token): Promise<boolean> {
+        const response = await this.httpService.get<SessionResponse>('sessions/' + token, {}, token);
+        if (response.Session) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 export interface IHttpService {
 
-    get<T>(resource: string, queryParameters?: any): Promise<T>;
+    get<T>(resource: string, queryParameters: any, token?: string): Promise<T>;
 
     post<T>(resource: string, content: any): Promise<T>;
 

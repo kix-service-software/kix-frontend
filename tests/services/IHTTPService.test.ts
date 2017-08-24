@@ -56,13 +56,13 @@ describe('HTTP Service', () => {
         });
 
         it('should return an empty object', async () => {
-            const res = await httpService.get('testGet');
+            const res = await httpService.get('testGet', {});
             expect(res).not.undefined;
             expect(res).deep.equal({});
         });
 
         it('should return a object with properties.', async () => {
-            const res = await httpService.get("testGetObject");
+            const res = await httpService.get("testGetObject", {});
             expect(res).deep.equal(this.testObject);
         });
 
@@ -72,7 +72,7 @@ describe('HTTP Service', () => {
         });
 
         it('should return a correct http error if resource not exists', async () => {
-            const res = await httpService.get('unknownResource')
+            const res = await httpService.get('unknownResource', {})
                 .catch((err: HttpError) => {
                     expect(err).not.undefined;
                     expect(err).instanceof(HttpError);
