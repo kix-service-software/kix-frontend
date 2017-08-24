@@ -1,40 +1,8 @@
-@header: #096392;
-@main_menu_background: #096392; /* TODO: possible unncessary */
-@main_menu_active: #096392;
-@widget_header: #0A7CB3;
-@table_row_active: #0A7CB3;
-@main_menu_special: #0A7CB3;
-@button_symbol: #008DD2;
-@main_menu: #008DD2;
-@tab_header_background: #7CB6D7;
-@article_header: #B6D6E8;
-@default_text: #5B5B5B;
-@special_sidebar: #5B5B5B;
-@bookmark_symbol: #5B5B5B; /* TODO: possible unncessary */
-@gray1: #9E9E9E; /* TODO: where is it used? Text on white? */
-@widget_header: #C6C6C6;
-@left_sidebar_button_background: #C6C6C6; /* TODO: possible unncessary */
-@widget_header_special: blue; /* TODO: ask for color code - article widget */
-@left_sidebar_text_background: #E3E3E3; /* TODO: possible unncessary */
-@ticket_function_background: #E3E3E3;
-@accordion_menu_background: #ECECEC;
-@background: #F5F5F5;
-@default_text_dark: #000;
-@widget_content_background: #FFF;
-@sidebar_content_background: #FFF;
+@import "./theme-color.less";
 
-@kixGreen: #82C826;
-@login_button: #82C826;
-@header_sub_line: #82C826;
-@breadcrumb_symbol: #82C826; /* TODO: possible unncessary */
-@info_popup_header: #EF7F1A;
-@login_error_meesage_border: #EF7F1A; /* TODO: possible unncessary */
-@red:  #E31E24; /* TODO: where is it used? */
-@green: #009846; /* TODO: where is it used? */
-@yellow: #FFED00; /* TODO: where is it used? */
-
-.rounded-corners (@radius: 5px) {
-    border-radius: @radius;
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
+.header (@background: @primary0, @color: @white) {
+    background: @background;
+    color: @color;
+    width: 100%;
+    height: 50px;
 }
