@@ -1,12 +1,10 @@
+import { StateAction } from './../StateAction';
+import { LoginAction } from './LoginAction';
+
 export default (error: string) => {
-    return {
-        type: 'LOGIN_ERROR',
-        payload: new Promise((resolve, reject) => {
-            resolve(
-                {
-                    error
-                }
-            );
-        })
-    };
+    const payload = new Promise((resolve, reject) => {
+        resolve({ error });
+    });
+
+    return new StateAction(LoginAction.LOGIN_ERROR, payload);
 };

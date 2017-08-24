@@ -2,8 +2,14 @@ import { UserType } from './UserType';
 
 export class LoginRequest {
 
-    public constructor(public userName: string, public password: string, public userType: UserType) {
+    public userName: string;
+    public password: string;
+    public userType: UserType;
 
+    public constructor(userName: string, password: string, userType: UserType) {
+        this.userName = userName;
+        this.password = password;
+        this.userType = userType;
     }
 
 }

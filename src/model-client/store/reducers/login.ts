@@ -1,55 +1,34 @@
-import {
-    LoginState
-} from './../../authentication/';
+import { LoginState } from './../../authentication/';
+import { LoginAction } from '../actions';
+
+const PENDING = '_PENDING';
+const FULFILLED = '_FULFILLED';
 
 class LoginActionHandler {
-
-    private socket: SocketIO.Server;
 
     public handleLoginAction(state: LoginState, action): LoginState {
 
         switch (action.type) {
-            case 'LOGIN_ERROR_FULFILLED':
-                return {
-                    ...state,
-                    error: action.payload.error,
-                    doLogin: false
-                };
+            case LoginAction.LOGIN_ERROR + FULFILLED:
+                return { ...state, error: action.payload.error, doLogin: false };
 
-            case 'LOGIN_USERNAME_CHANGED_FULFILLED':
-                return {
-                    ...state,
-                    userName: action.payload.userName
-                };
+            case LoginAction.LOGIN_USERNAME_CHANGED + FULFILLED:
+                return { ...state, userName: action.payload.userName };
 
-            case 'LOGIN_PASSWORD_CHANGED_FULFILLED':
-                return {
-                    ...state,
-                    password: action.payload.password
-                };
+            case LoginAction.LOGIN_PASSWORD_CHANGED + FULFILLED:
+                return { ...state, password: action.payload.password };
 
-            case 'LOGIN_VALIDATE_FULFILLED':
-                return {
-                    ...state,
-                    valid: action.payload.valid
-                };
+            case LoginAction.LOGIN_VALIDATE + FULFILLED:
+                return { ...state, valid: action.payload.valid };
 
-            case 'LOGIN_CONNECT_FULFILLED':
-                return {
-                    ...state,
-                    socket: action.payload.socket
-                };
+            case LoginAction.LOGIN_CONNECT + FULFILLED:
+                return { ...state, socket: action.payload.socket };
 
-            case 'LOGIN_AUTH_FULFILLED':
-                return {
-                    ...state,
-                    doLogin: action.payload.doLogin
-                };
+            case LoginAction.LOGIN_AUTH + FULFILLED:
+                return { ...state, doLogin: true };
 
             default:
-                return {
-                    ...state
-                };
+                return { ...state };
         }
     }
 }

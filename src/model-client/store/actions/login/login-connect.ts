@@ -1,28 +1,18 @@
+import { StateAction } from './../StateAction';
 import { SocketEvent } from '../../../';
 import { LOGIN_ERROR } from '../../actions';
-import {
-    LoginRequest,
-    UserType,
-    LoginState,
-    AuthenticationEvent,
-    AuthenticationResult
-} from './../../../authentication/';
+import { LoginAction } from './LoginAction';
+import { AuthenticationEvent, AuthenticationResult } from './../../../authentication/';
 
 declare var io: any;
 
 export default (frontendSocketUrl: string) => {
-    return {
-        type: 'LOGIN_CONNECT',
-        payload: new Promise((resolve, reject) => {
-            const socket = io.connect(frontendSocketUrl + "/authentication", {});
-            initSocketListener(socket);
-            resolve(
-                {
-                    socket
-                }
-            );
-        })
-    };
+    const payload = new Promise((resolve, reject) => {
+        const socket = io.connect(frontendSocketUrl + "/authentication", {});
+        initSocketListener(socket);
+        resolve({ socket });
+    });
+    return new StateAction(LoginAction.LOGIN_CONNECT, payload);
 };
 
 function initSocketListener(socket: SocketIO.Server): void {

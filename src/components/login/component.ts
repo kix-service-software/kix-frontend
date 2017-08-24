@@ -1,11 +1,4 @@
-import {
-    AuthenticationResult,
-    AuthenticationEvent,
-    LoginRequest,
-    LoginComponentState,
-    LoginState,
-    UserType
-} from './../../model-client/authentication';
+import { LoginComponentState, LoginState } from './../../model-client/authentication';
 
 import {
     LOGIN_USERNAME_CHANGED,
@@ -21,8 +14,11 @@ class LoginFormComponent {
 
     public store;
 
+    public frontendSocketUrl: string;
+
     public onCreate(input: any): void {
-        this.state = new LoginComponentState(input.frontendSocketUrl);
+        this.state = new LoginComponentState();
+        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public stateChanged(): void {
@@ -37,7 +33,7 @@ class LoginFormComponent {
     public onMount(): void {
         this.store = require('../../model-client/store');
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(LOGIN_CONNECT(this.state.frontendSocketUrl));
+        this.store.dispatch(LOGIN_CONNECT(this.frontendSocketUrl));
     }
 
     public userNameChanged(event: any): void {
