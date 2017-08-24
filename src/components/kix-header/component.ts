@@ -1,0 +1,16 @@
+declare var io;
+
+class KIXHeaderComponent {
+
+    public state: any;
+
+    public onCreate(input: any): void {
+        this.state = {};
+    }
+
+    public onMount(): void {
+        console.log("Mount Header");
+    }
+}
+
+module.exports = KIXHeaderComponent;
