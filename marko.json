@@ -1,0 +1,6 @@
+{
+    "tags-dir": [
+        "./dist/components",
+        "./dist/components/mutableContent"
+    ]
+}

@@ -1,6 +1,16 @@
-<div>
+<div#kixapp>
   <kix-header/>
-  <kix-sidebar-left/>
-  <kix-content template=data.contentTemplate/>
-  <kix-sidebar-right/>
+  <kix-menu/>
+  <div#mutable_content>
+    <kix-sidebar/>
+    <div#mutable_content_area>
+      <div#mutable_content_routing>
+        <kix-breadcrumb/>
+        <kix-back/>
+      </div>
+      <kix-widgetbar/>
+      <kix-content template=data.contentTemplate/>
+    </div>
+  </div>
+  <kix-footer/>
 </div>
