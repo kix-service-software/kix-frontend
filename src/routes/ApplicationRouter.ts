@@ -27,8 +27,13 @@ export class ApplicationRouter implements IApplicationRouter {
         res.marko(template, {
             template: require('../components/kix-base-template/index.marko'),
             data: {
-                frontendUrl: this.serverConfig.FRONTEND_URL
+                frontendUrl: this.serverConfig.FRONTEND_URL,
+                frontendSocketUrl: this.getSocketUrl()
             }
         });
+    }
+
+    private getSocketUrl(): string {
+        return this.serverConfig.FRONTEND_SOCKET_URL + ":" + this.serverConfig.SOCKET_COMMUNICATION_PORT;
     }
 }
