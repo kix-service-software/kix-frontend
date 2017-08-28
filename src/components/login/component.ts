@@ -14,10 +14,13 @@ class LoginFormComponent {
 
     public store;
 
+    public frontendUrl: string;
+
     public frontendSocketUrl: string;
 
     public onCreate(input: any): void {
         this.state = new LoginComponentState();
+        this.frontendUrl = input.frontendUrl;
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
