@@ -5,8 +5,7 @@ class KIXFooterComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = FooterComponentState;
-        console.log(this.state);
+        this.state = new FooterComponentState();
     }
 
     public onMount(): void {

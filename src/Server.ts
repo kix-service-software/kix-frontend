@@ -1,7 +1,6 @@
 import { ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService } from './services/';
 import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
-import { IAuthenticationRouter } from './routes/IAuthenticationRouter';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as path from 'path';
