@@ -42,7 +42,7 @@ export abstract class KIXRouter implements IRouter {
             data: {
                 frontendUrl: this.serverConfig.FRONTEND_URL,
                 frontendSocketUrl: this.getSocketUrl(),
-                contentTemplate: require(contentTemplatePath)
+                contentTemplate: contentTemplatePath
             }
         });
     }
