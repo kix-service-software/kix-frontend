@@ -6,8 +6,7 @@ import { IRouter } from './routes/IRouter';
 import {
     ApplicationRouter,
     AuthenticationRouter,
-    IApplicationRouter,
-    IAuthenticationRouter
+    DashboardRouter
 } from './routes/';
 import {
     AuthenticationService,
@@ -56,6 +55,7 @@ class ServiceContainer {
         // TODO: create extension for router from external modules?
         this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
+        this.container.bind<IRouter>("IRouter").to(DashboardRouter);
     }
 
     private bindCommunicators(): void {
