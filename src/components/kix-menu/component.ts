@@ -1,4 +1,4 @@
-class KIXSidebarRightComponent {
+class KIXMenuComponent {
 
     public state: any;
 
@@ -7,8 +7,8 @@ class KIXSidebarRightComponent {
     }
 
     public onMount(): void {
-        console.log("Mount Right Sidebar");
+        console.log("Mount Menu");
     }
 }
 
-module.exports = KIXSidebarRightComponent;
+module.exports = KIXMenuComponent;
