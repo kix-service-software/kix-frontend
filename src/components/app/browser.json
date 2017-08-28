@@ -3,10 +3,6 @@
         "require ../../model-client",
         "require ../login",
         "require ../kix-base-template",
-        "require ../kix-content",
-        "require ../kix-header",
-        "require ../kix-sidebar-left",
-        "require ../kix-sidebar-right",
         "require ../dashboard"
     ]
 }
