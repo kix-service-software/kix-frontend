@@ -1,10 +1,12 @@
+import { FooterComponentState } from './../../model-client/footer';
+
 class KIXFooterComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {};
-        this.state.date = new Date().toDateString();
+        this.state = FooterComponentState;
+        console.log(this.state);
     }
 
     public onMount(): void {
