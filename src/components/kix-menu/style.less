@@ -1,0 +1,24 @@
+@import "./../../static/theme.less";
+#menu {
+    width: 100px;
+    height: 100%;
+    float: left;
+}
+ul#main_menu {
+    margin: 0px;
+    list-style: none;
+}
+#main_menu li {
+    .main_menu;
+    height: 50px;
+    width: 80px;
+    border: 1px solid black;
+}
+#main_menu li:active {
+    .main_menu_active;
+    border-top-right-radius: 50;
+    border-bottom-right-radius: 50;
+}
+#main_menu li.mm_special {
+    .main_menu_special;
+}
