@@ -3,8 +3,10 @@ import { validate, required } from '../decorators';
 import { container } from '../Container';
 import { IConfigurationService, ILoggingService } from './';
 import { LogLevel, IServerConfiguration } from '../model';
-import * as winston from 'winston';
-import * as fs from 'fs';
+import winston = require('winston');
+import path = require('path');
+import fs = require('fs');
+
 
 @injectable()
 export class LoggingService implements ILoggingService {
@@ -71,7 +73,7 @@ export class LoggingService implements ILoggingService {
 
     private createLogDirectory(serverConfig: IServerConfiguration): string {
         let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
-        logFileDir = __dirname + '/../' + logFileDir.replace(/\/\w+\.log$/, '');
+        logFileDir = path.join(__dirname, '..', logFileDir.replace(/\/\w+\.log$/, ''));
         if (!fs.existsSync(logFileDir)) {
             fs.mkdirSync(logFileDir);
         }
