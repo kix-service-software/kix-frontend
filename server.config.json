@@ -1,12 +1,11 @@
 {
-    "SERVER_PORT": 3000,
-    "SOCKET_COMMUNICATION_PORT": 3001,
+    "HTTP_PORT": 3000,
+    "HTTPS_PORT": 3001,
     "PLUGIN_FOLDERS": [
         "node_modules/@kix",
         "extensions"
     ],
-    "FRONTEND_URL": "http://localhost:3000",
-    "FRONTEND_SOCKET_URL": "http://localhost:3001",
+    "FRONTEND_URL": "https://localhost",
     "BACKEND_API_URL": "http://docker.vm.devel.cape-it.de:54918/api.pl/webservice/core:v1",
     "LOG_LEVEL": 2,
     "LOG_FILEDIR": "logs",

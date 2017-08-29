@@ -4,28 +4,27 @@ import { inject, injectable } from 'inversify';
 import { container } from '../Container';
 import * as express from 'express';
 
+import path = require('path');
+import fs = require('fs');
+import https = require('https');
+
 @injectable()
 export class SocketCommunicationService implements ISocketCommunicationService {
 
     private socketIO: SocketIO.Server;
     private loggingService: ILoggingService;
+    private configurationService: IConfigurationService;
 
     public constructor(
         @inject("ILoggingService") loggingService: ILoggingService,
         @inject("IConfigurationService") configurationService: IConfigurationService
     ) {
         this.loggingService = loggingService;
+        this.configurationService = configurationService;
+    }
 
-        const app = express();
-        const server = require('http').createServer(app);
+    public initialize(server: https.Server): void {
         this.socketIO = require('socket.io')(server);
-
-        const port = configurationService.getServerConfiguration().SOCKET_COMMUNICATION_PORT;
-
-        server.listen(port, () => {
-            this.loggingService.info('Socket Communication Service listening on *:' + port);
-        });
-
         this.registerListener();
     }
 

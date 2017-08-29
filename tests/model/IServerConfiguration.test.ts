@@ -21,14 +21,14 @@ describe('Server Configuration', () => {
         expect(serverConfiguration).to.not.be.undefined;
     });
 
-    it('Should contain SERVER_PORT as type of number.', () => {
-        expect(serverConfiguration.SERVER_PORT).to.not.be.undefined;
-        expect(serverConfiguration.SERVER_PORT).to.be.an('number');
+    it('Should contain HTTP_PORT as type of number.', () => {
+        expect(serverConfiguration.HTTP_PORT).to.not.be.undefined;
+        expect(serverConfiguration.HTTP_PORT).to.be.an('number');
     });
 
-    it('Should contain SOCKET_COMMUNICATION_PORT as type of number.', () => {
-        expect(serverConfiguration.SOCKET_COMMUNICATION_PORT).to.not.be.undefined;
-        expect(serverConfiguration.SOCKET_COMMUNICATION_PORT).to.be.an('number');
+    it('Should contain HTTPS_PORT as type of number.', () => {
+        expect(serverConfiguration.HTTPS_PORT).to.not.be.undefined;
+        expect(serverConfiguration.HTTPS_PORT).to.be.an('number');
     });
 
     it('Should contain PLUGIN_FOLDERS as type of array', () => {
@@ -40,12 +40,6 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.FRONTEND_URL).to.not.be.undefined;
         expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
         expect(serverConfiguration.FRONTEND_URL).to.not.be.empty;
-    });
-
-    it('Should contain FRONTEND_SOCKET_URL as type of string', () => {
-        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.not.be.undefined;
-        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.be.an('string');
-        expect(serverConfiguration.FRONTEND_SOCKET_URL).to.not.be.empty;
     });
 
     it('Should contain BACKEND_API_URL as type of string', () => {

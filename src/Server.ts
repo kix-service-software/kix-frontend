@@ -4,7 +4,6 @@ import {
 import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
-import * as express from 'express';
 import * as path from 'path';
 import { IServerConfiguration } from './model/configuration/IServerConfiguration';
 import { Environment } from './model';
@@ -18,6 +17,12 @@ import compression = require('compression');
 
 import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
+
+import express = require('express');
+import fs = require('fs');
+import http = require('http');
+import https = require('https');
+import forceSsl = require('express-force-ssl');
 
 @injectable()
 export class Server {
@@ -44,24 +49,48 @@ export class Server {
 
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
+        this.initHttpServer();
     }
 
     private initializeApplication(): void {
         lasso.configure(this.configurationService.getLassoConfiguration());
 
         this.application = express();
+
         this.application.use(compression());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
 
+        const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
+
+        this.application.set('forceSSLOptions', {
+            httpsPort,
+            sslRequiredMessage: 'SSL Required.'
+        });
+        this.application.use(forceSsl);
+
         this.registerStaticContent();
 
         this.router = new ServerRouter(this.application);
+    }
 
-        const port = this.serverConfig.SERVER_PORT || 3000;
-        this.application.listen(port);
+    private initHttpServer(): void {
+        const httpPort = this.serverConfig.HTTP_PORT || 3000;
+        http.createServer(this.application).listen(httpPort);
 
-        this.loggingService.info("KIXng running on *:" + port);
+        const options = {
+            key: fs.readFileSync(path.join(__dirname, '../cert/key.pem')),
+            cert: fs.readFileSync(path.join(__dirname, '../cert/cert.pem')),
+            passphrase: 'kix2018'
+        };
+        const server = https.createServer(options, this.application);
+        this.socketCommunicationService.initialize(server);
+
+        const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
+
+        server.listen(httpsPort, () => {
+            this.loggingService.info("KIXng running on *:" + httpsPort);
+        });
     }
 
     private async registerStaticContent(): Promise<void> {
@@ -72,7 +101,10 @@ export class Server {
         const extensions = await this.pluginService
             .getExtensions<IStaticContentExtension>(KIXExtensions.STATIC_CONTENT);
         for (const staticContent of extensions) {
-            this.application.use(staticContent.getName(), express.static('node_modules/' + staticContent.getPath()));
+            this.application.use(
+                staticContent.getName(),
+                express.static(path.join('node_modules', staticContent.getPath())
+                ));
         }
     }
 }

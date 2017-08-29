@@ -48,16 +48,16 @@ export abstract class KIXRouter implements IRouter {
         res.marko(template, {
             template: require(baseTemplatePath),
             data: {
-                frontendUrl: this.serverConfig.FRONTEND_URL,
-                frontendSocketUrl: this.getSocketUrl(),
+                frontendUrl: this.getServerUrl(),
+                frontendSocketUrl: this.getServerUrl(),
                 contentTemplate: contentTemplatePath,
                 mainMenuEntries
             }
         });
     }
 
-    private getSocketUrl(): string {
-        return this.serverConfig.FRONTEND_SOCKET_URL + ":" + this.serverConfig.SOCKET_COMMUNICATION_PORT;
+    protected getServerUrl(): string {
+        return this.serverConfig.FRONTEND_URL + ":" + this.serverConfig.HTTPS_PORT;
     }
 
 }
