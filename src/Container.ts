@@ -4,6 +4,7 @@ import { Server } from './Server';
 import { Container } from 'inversify';
 import { ICommunicator, AuthenticationCommunicator } from './communicators/';
 import { IRouter } from './routes/IRouter';
+import { KIXExtensions } from './extensions';
 import {
     ApplicationRouter,
     AuthenticationRouter
@@ -68,7 +69,7 @@ export class ServiceContainer {
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
 
         const pluginService = this.container.get<IPluginService>("IPluginService");
-        const routerExtensions = await pluginService.getExtensions<IRouterExtension>("kix:router");
+        const routerExtensions = await pluginService.getExtensions<IRouterExtension>(KIXExtensions.ROUTER);
 
         for (const routerExt of routerExtensions) {
             this.container.bind<IRouter>("IRouter").to(routerExt.getRouter());
