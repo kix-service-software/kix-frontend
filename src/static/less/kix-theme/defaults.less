@@ -38,40 +38,41 @@
     color: @secondary_2;
     font-family: Arial, Helvetica, sans-serif;
     font-size: @default_font_size;
-    & #mutable_content {
+    #mutable_content {
         height: 100%;
         margin-left: 150px;
         margin-bottom: 20px;
-        & #kix_sidebars {
+        #kix_sidebars {
             float: right;
             margin-left: 50px; 
         }
-        & #mutable_content_area {
+        #mutable_content_area {
             margin-right: 50px;
             min-width: 500px;
-            & #mutable_content_routing {
+            overflow-x: hidden;
+            #mutable_content_routing {
                 margin-bottom: 50px;
-                & #kix_breadcrumb {
+                #kix_breadcrumb {
                     background: @secondary_6;
                     color: @default_dark_font_color;
                     height: 50px;
                     width: 100%;
                     margin-bottom: 10px;
                 }
-                & #kix_back {
+                #kix_back {
                     background: @secondary_6;
                     padding: 5px 10px;
                 }
             }
-            & #kix_widgetbar_container {
+            #kix_widgetbar_container {
                 float: left;
             }
-            & #kix_content {
+            #kix_content {
                 float: left;
             }
         }
     }
-    & #footer {
+    #footer {
         .clear();
         font-size: @default_font_size - 2;
         text-align: center;
