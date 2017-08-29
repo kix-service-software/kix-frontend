@@ -39,4 +39,8 @@ function initSocketListener(socket: SocketIO.Server): void {
     socket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
         store.dispatch(LOGIN_ERROR(error));
     });
+
+    socket.on('error', (error) => {
+        store.dispatch(LOGIN_ERROR(error));
+    });
 }
