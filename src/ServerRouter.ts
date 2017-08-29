@@ -17,7 +17,7 @@ export class ServerRouter {
     private initializeRoutes(): void {
         const registeredRouter = container.getAll<IRouter>("IRouter");
         for (const router of registeredRouter) {
-            this.router.use(router.baseRoute, router.router);
+            this.router.use(router.getBaseRoute(), router.getRouter());
         }
     }
 }
