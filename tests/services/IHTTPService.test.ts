@@ -9,18 +9,22 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const httpService: IHttpService = container.get<IHttpService>("IHttpService");
-const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
-
 const axios = require('axios');
 
-const apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
 
 describe('HTTP Service', () => {
     let mock;
+    let httpService: IHttpService;
+    let configurationService: IConfigurationService;
+    let apiURL: string;
 
-    before(() => {
+    before(async () => {
+        await container.initialize();
         mock = new MockAdapter(axios);
+
+        httpService = container.getDIContainer().get<IHttpService>("IHttpService");
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
     });
 
     after(() => {

@@ -1,4 +1,6 @@
-import { ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService } from './services/';
+import {
+    ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService, IMarkoService
+} from './services/';
 import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
@@ -32,7 +34,8 @@ export class Server {
         @inject("ILoggingService") loggingService: ILoggingService,
         @inject("IConfigurationService") configurationService: IConfigurationService,
         @inject("IPluginService") pluginService: IPluginService,
-        @inject("ISocketCommunicationService") socketService: ISocketCommunicationService
+        @inject("ISocketCommunicationService") socketService: ISocketCommunicationService,
+        @inject("IMarkoService") markoService: IMarkoService
     ) {
         this.loggingService = loggingService;
         this.configurationService = configurationService;

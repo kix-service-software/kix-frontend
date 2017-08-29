@@ -5,13 +5,20 @@ import * as chai from 'chai';
 
 const expect = chai.expect;
 
-const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
-const loggingService: ILoggingService = container.get<ILoggingService>("ILoggingService");
-
 /* tslint:disable:no-unused-expression*/
 describe('Logging Service', () => {
+    let configurationService: IConfigurationService;
+    let loggingService: ILoggingService;
+    let serverConfiguration: IServerConfiguration;
+
+    before(async () => {
+        await container.initialize();
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        loggingService = container.getDIContainer().get<ILoggingService>("ILoggingService");
+        serverConfiguration = configurationService.getServerConfiguration();
+    });
+
     describe('Configuration', () => {
-        const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
         it('Should contain LOG_LEVEL as type of number.', () => {
             expect(serverConfiguration.LOG_LEVEL).not.undefined;
             expect(serverConfiguration.LOG_LEVEL).a('number');

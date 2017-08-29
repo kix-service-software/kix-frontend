@@ -17,19 +17,28 @@ const expect = chai.expect;
 
 import { container } from "./../../src/Container";
 
-const httpService: IHttpService = container.get<IHttpService>("IHttpService");
+
+
 const axios = require('axios');
 
-const authenticationService: IAuthenticationService = container.get<IAuthenticationService>("IAuthenticationService");
-const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
-
-const apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
 
 describe('Authentication Service', () => {
     let mock;
+    let httpService: IHttpService;
+    let authenticationService: IAuthenticationService;
+    let configurationService: IConfigurationService;
+    let apiURL: string;
 
-    before(() => {
+    before(async () => {
+        await container.initialize();
+
         mock = new MockAdapter(axios);
+
+        httpService = container.getDIContainer().get<IHttpService>("IHttpService");
+        authenticationService = container.getDIContainer().get<IAuthenticationService>("IAuthenticationService");
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+
+        apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
     });
 
     after(() => {

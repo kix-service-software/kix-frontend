@@ -31,8 +31,13 @@ export class MarkoService implements IMarkoService {
 
     private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependencyExtension[]): void {
         for (const plugin of markoDependencies) {
+            let prePath = 'require ../';
+            if (plugin.isExternal()) {
+                prePath = 'require: ../../../node_modules/';
+            }
+
             for (const dependencyPath of plugin.getDependencies()) {
-                const dependency = 'require: ../../../node_modules/' + dependencyPath;
+                const dependency = prePath + dependencyPath;
                 const exists = browserJSON.dependencies.find((d) => d === dependency);
                 if (!exists) {
                     browserJSON.dependencies.push(dependency);
