@@ -1,0 +1,13 @@
+{
+    "extensions": {
+        "kix:router": {
+            "dashboard": "../../dist/modules/dashboard/router.extension"
+        },
+        "kix:marko:dependencies": {
+            "dashboard-marko": "../../dist/modules/dashboard/marko-dependencies.extension"
+        },
+        "kix:menu:main": {
+            "dashboard-menu-main": "../../dist/modules/dashboard/menu.main.extension"
+        }
+    }
+}

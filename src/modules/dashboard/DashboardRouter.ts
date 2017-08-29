@@ -1,8 +1,6 @@
-import { KIXRouter } from './KIXRouter';
-import { IConfigurationService, IAuthenticationService } from './../services/';
 import { injectable, inject } from 'inversify';
 import { Router, Request, Response } from 'express';
-import { IRouter } from './IRouter';
+import { KIXRouter } from '../../routes';
 
 export class DashboardRouter extends KIXRouter {
 

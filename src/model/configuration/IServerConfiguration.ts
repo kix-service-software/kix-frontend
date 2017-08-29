@@ -19,4 +19,6 @@ export interface IServerConfiguration {
     LOG_FILEDIR: string;
 
     LOG_TRACE: boolean;
+
+    DEFAULT_ROUTE: string;
 }

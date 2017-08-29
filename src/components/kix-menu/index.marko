@@ -1,13 +1,9 @@
 <div#menu>
   <ul#main_menu>
-    <li>Home/Dashboard</li>
-    <li>Kanban</li>
-    <li>Ticket</li>
-    <li>CMDB</li>
-    <li>Services</li>
-    <li>Kunden</li>
-    <li.mm_special>Admin</li>
-    <li.mm_special>Kalendar</li>
-    <li.mm_special>Zeit</li>
+    <for(menuEntry in state.menuEntries)>
+      <li>
+        <a href=menuEntry.link>${menuEntry.text}</a>
+      </li>
+    </for>
   </ul>
 </div>

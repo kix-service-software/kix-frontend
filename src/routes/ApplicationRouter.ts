@@ -12,7 +12,8 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public getRoot(req: Request, res: Response): void {
-        this.prepareMarkoTemplate(res, null);
+        const defaultRoute = this.configurationService.getServerConfiguration().DEFAULT_ROUTE;
+        res.redirect(defaultRoute);
     }
 
     protected initialize(): void {

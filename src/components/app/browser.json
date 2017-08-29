@@ -2,7 +2,6 @@
     "dependencies": [
         "require ../../model-client",
         "require ../login",
-        "require ../kix-base-template",
-        "require ../dashboard"
+        "require ../kix-base-template"
     ]
 }

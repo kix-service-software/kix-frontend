@@ -1,4 +1,9 @@
 import { container } from './Container';
 import { Server } from './Server';
 
-const server = container.get<Server>("Server");
+export async function initApplication(): Promise<void> {
+    await container.initialize();
+    const server = container.getDIContainer().get<Server>("Server");
+}
+
+initApplication();

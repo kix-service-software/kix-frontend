@@ -5,12 +5,17 @@ import * as chai from 'chai';
 
 const expect = chai.expect;
 
-const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
-
 /* tslint:disable:no-unused-expression*/
 describe('Server Configuration', () => {
 
-    const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
+    let configurationService: IConfigurationService;
+    let serverConfiguration: IServerConfiguration;
+
+    before(async () => {
+        await container.initialize();
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        serverConfiguration = configurationService.getServerConfiguration();
+    });
 
     it('Should exists', () => {
         expect(serverConfiguration).to.not.be.undefined;
@@ -47,5 +52,11 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.undefined;
         expect(serverConfiguration.BACKEND_API_URL).to.be.an('string');
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.empty;
+    });
+
+    it('Should contain DEFAULT_ROUTE as type of string', () => {
+        expect(serverConfiguration.DEFAULT_ROUTE).to.not.be.undefined;
+        expect(serverConfiguration.DEFAULT_ROUTE).to.be.an('string');
+        expect(serverConfiguration.DEFAULT_ROUTE).to.not.be.empty;
     });
 });

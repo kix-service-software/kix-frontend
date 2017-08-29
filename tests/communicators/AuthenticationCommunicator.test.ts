@@ -1,6 +1,5 @@
 // tslint:disable
-import { Container } from 'inversify';
-
+import { container } from "./../../src/Container";
 import { AuthenticationCommunicator } from './../../src/communicators/';
 import { IAuthenticationService, IConfigurationService, ISocketCommunicationService } from './../../src/services/';
 
@@ -22,11 +21,11 @@ describe('Authentication Communicator', () => {
     let socketCommunicationService: ISocketCommunicationService;
     let apiURL: string;
 
-    before(() => {
+    before(async () => {
+        await container.initialize();
         mock = new MockAdapter(axios);
-        const container: Container = require('./../../src/Container').container;
-        configurationService = container.get<IConfigurationService>("IConfigurationService");
-        socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        socketCommunicationService = container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
 
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
     });
