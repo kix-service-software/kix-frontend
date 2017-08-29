@@ -43,8 +43,7 @@ export class AuthenticationCommunicator implements ICommunicator {
                 .login(data.userName, data.password, data.userType)
                 .then((token: string) => {
                     client.emit(AuthenticationEvent.AUTHORIZED,
-                        new AuthenticationResult(token,
-                            this.serverConfig.FRONTEND_URL + ":" + this.serverConfig.HTTPS_PORT));
+                        new AuthenticationResult(token, '/'));
                 }).catch((error: HttpError) => {
                     this.loggingService.error(error.errorMessage + ' - ' + error.status, error);
                     client.emit(AuthenticationEvent.UNAUTHORIZED, error);
