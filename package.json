@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "test": "export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/**/*.test.ts'",
-    "publish": "gulp && npm version patch && npm publish"
+    "pub": "gulp && npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
