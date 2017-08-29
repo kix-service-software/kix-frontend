@@ -4,6 +4,8 @@ export enum KIXExtensions {
 
     STATIC_CONTENT = "kix:static:content",
 
-    ROUTER = "kix:router"
+    ROUTER = "kix:router",
+
+    MAIN_MENU = "kix:menu:main"
 
 }
