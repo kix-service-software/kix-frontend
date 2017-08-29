@@ -33,7 +33,7 @@ function initSocketListener(socket: SocketIO.Server): void {
 
     socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
         window.localStorage.setItem('token', result.token);
-        window.location.replace(result.redirectUrl);
+        window.location.replace('/');
     });
 
     socket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {

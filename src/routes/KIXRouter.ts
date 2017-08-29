@@ -48,7 +48,6 @@ export abstract class KIXRouter implements IRouter {
         res.marko(template, {
             template: require(baseTemplatePath),
             data: {
-                frontendUrl: this.getServerUrl(),
                 frontendSocketUrl: this.getServerUrl(),
                 contentTemplate: contentTemplatePath,
                 mainMenuEntries
