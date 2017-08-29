@@ -21,14 +21,45 @@
     color: @default_dark_font_color;
 }
 
-.app_background {
+#kix_app {
     background: @secondary_5;
     color: @secondary_2;
-}
-.breadcrumb {
-    background: @secondary_6;
-    color: @default_dark_font_color;
-}
-.kix_back {
-    background: @secondary_6;
+    & #mutable_content {
+        height: 100%;
+        margin-left: 150px;
+        margin-bottom: 20px;
+        & #kix_sidebar_container {
+            float: right;
+            margin-left: 50px;
+        }
+        & #mutable_content_area {
+            margin-right: 200px;    
+            & #mutable_content_routing {
+                margin-bottom: 50px;            
+                & #kix_breadcrumb {
+                    background: @secondary_6;
+                    color: @default_dark_font_color;
+                    height: 50px;
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+                & #kix_back {
+                    background: @secondary_6;
+                    padding: 5px 10px;
+                }
+            }
+            & #kix_widgetbar_container {
+                float: left;
+                margin-right: 50px;
+            }
+            & #kix_content {
+                float: left;
+            }
+        }
+    }
+    & #footer {
+        font-size: 12px;
+        text-align: center;
+        clear: both;
+    }
 }

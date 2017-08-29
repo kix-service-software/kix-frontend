@@ -1,10 +1,25 @@
 @import "./defaults.less";
-.main_menu_active() {
-    .color_theme_0;
-}
-.main_menu_special() {
-    .color_theme_1;
-}
-.main_menu() {
+#menu {
     .color_theme_2;
+    width: 100px;
+    height: 100%;
+    float: left;
+    & ul {
+        margin: 0px;
+        list-style: none;
+        & li {
+            .color_theme_2;
+            height: 50px;
+            width: 80px;
+            border: 1px solid black;
+        }
+        & li:active {
+            .color_theme_0;
+            border-top-right-radius: 50;
+            border-bottom-right-radius: 50;
+        }
+        & li.mm_special {
+            .color_theme_1;
+        }
+    }
 }
