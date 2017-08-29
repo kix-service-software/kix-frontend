@@ -15,8 +15,11 @@ describe('Communication Service', () => {
     let socketCommunicationService: ISocketCommunicationService;
 
     before(() => {
-        configurationService = container.get<IConfigurationService>("IConfigurationService");
-        socketCommunicationService = container.get<ISocketCommunicationService>("ISocketCommunicationService");
+        configurationService =
+            container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+
+        socketCommunicationService =
+            container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
     });
 
     after(() => {

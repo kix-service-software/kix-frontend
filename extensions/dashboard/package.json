@@ -1,0 +1,7 @@
+{
+    "extensions": {
+        "kix:router": {
+            "dashboard": "../../dist/modules/dashboard/router.extension"
+        }
+    }
+}

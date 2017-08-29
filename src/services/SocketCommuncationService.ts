@@ -34,7 +34,7 @@ export class SocketCommunicationService implements ISocketCommunicationService {
     }
 
     private registerListener(): void {
-        const communicators = container.getAll<ICommunicator>("ICommunicator");
+        const communicators = container.getDIContainer().getAll<ICommunicator>("ICommunicator");
         for (const communicator of communicators) {
             communicator.registerNamespace(this.socketIO);
         }

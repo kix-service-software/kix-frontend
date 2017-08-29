@@ -10,9 +10,16 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const configurationService: IConfigurationService = container.get<IConfigurationService>("IConfigurationService");
+
 
 describe('Configuration Service', () => {
+
+    let configurationService: IConfigurationService;
+
+    before(async () => {
+        await container.initialize();
+        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+    });
 
     it('service instance is registered in container.', () => {
         expect(configurationService).not.undefined;

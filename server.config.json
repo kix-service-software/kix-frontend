@@ -2,7 +2,8 @@
     "SERVER_PORT": 3000,
     "SOCKET_COMMUNICATION_PORT": 3001,
     "PLUGIN_FOLDERS": [
-        "node_modules/@kix"
+        "node_modules/@kix",
+        "extensions"
     ],
     "FRONTEND_URL": "http://localhost:3000",
     "FRONTEND_SOCKET_URL": "http://localhost:3001",

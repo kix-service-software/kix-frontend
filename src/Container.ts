@@ -1,3 +1,4 @@
+import { IRouterExtension } from './extensions/IRouterExtension';
 import 'reflect-metadata';
 import { Server } from './Server';
 import { Container } from 'inversify';
@@ -5,8 +6,7 @@ import { ICommunicator, AuthenticationCommunicator } from './communicators/';
 import { IRouter } from './routes/IRouter';
 import {
     ApplicationRouter,
-    AuthenticationRouter,
-    DashboardRouter
+    AuthenticationRouter
 } from './routes/';
 import {
     AuthenticationService,
@@ -27,17 +27,29 @@ import {
     SocketCommunicationService
 } from './services/';
 
-class ServiceContainer {
+export class ServiceContainer {
 
-    public container: Container;
+    private container: Container;
+
+    private initialized: boolean = false;
 
     public constructor() {
         this.container = new Container();
-        this.bindServices();
-        this.bindRouters();
-        this.bindCommunicators();
+    }
 
-        this.container.bind<Server>("Server").to(Server);
+    public getDIContainer(): Container {
+        return this.container;
+    }
+
+    public async initialize(): Promise<void> {
+        if (!this.initialized) {
+            await this.bindServices();
+            await this.bindRouters();
+            await this.bindCommunicators();
+
+            this.container.bind<Server>("Server").to(Server);
+            this.initialized = true;
+        }
     }
 
     private bindServices(): void {
@@ -51,11 +63,16 @@ class ServiceContainer {
         this.container.bind<IUserService>("IUserService").to(UserService);
     }
 
-    private bindRouters(): void {
-        // TODO: create extension for router from external modules?
+    private async bindRouters(): Promise<void> {
         this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
-        this.container.bind<IRouter>("IRouter").to(DashboardRouter);
+
+        const pluginService = this.container.get<IPluginService>("IPluginService");
+        const routerExtensions = await pluginService.getExtensions<IRouterExtension>("kix:router");
+
+        for (const routerExt of routerExtensions) {
+            this.container.bind<IRouter>("IRouter").to(routerExt.getRouter());
+        }
     }
 
     private bindCommunicators(): void {
@@ -65,5 +82,5 @@ class ServiceContainer {
 
 }
 
-const container = new ServiceContainer().container;
+const container = new ServiceContainer();
 export { container };
