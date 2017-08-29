@@ -1,6 +1,6 @@
 {
   "name": "@kix/frontend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
     "start": "node dist/index.js",
