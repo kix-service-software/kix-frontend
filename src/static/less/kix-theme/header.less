@@ -1,32 +1,33 @@
 @import "./defaults.less";
-.header() {
+#header {
     .color_theme_0;
     width: 100%;
     margin-bottom: 30px;
-}
-.header_content() {
-    height: 90px;
-}
-.header_line() {
-    background: @tertiary_0;
-    height: 5px;
-}
-
-.kix_logo() {
-    background: @secondary_6;
-    top: 11px;
-    position: relative;
-    padding-left: 20px;
-    width: 1px;
-}
-.kix_logo_div() {
-    background: @secondary_6;
-    padding: 4px;
-    width: 60px;
-    border-top-right-radius: 20%;
-    border-bottom-right-radius: 20%;
-    line-height: 0;
-}
-.kix_logo_div_img() {
-    height: 60px;
+    & div:first-child {
+        height: 90px;
+        & #kix_logo {
+            background: @secondary_6;
+            top: 11px;
+            position: relative;
+            padding-left: 20px;
+            width: 1px;
+            height: 68px;
+            & div {
+                background: @secondary_6;
+                padding: 4px;
+                width: 60px;
+                height: 60px;
+                border-top-right-radius: 20%;
+                border-bottom-right-radius: 20%;
+                line-height: 0;
+                & img {
+                    height: 60px;
+                }
+            }
+        }
+    }
+    & div:last-child {
+        background: @tertiary_0;
+        height: 5px;
+    }
 }
