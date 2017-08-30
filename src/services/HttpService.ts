@@ -1,12 +1,11 @@
 import { IHttpService, IConfigurationService, ILoggingService } from './';
 import { injectable, inject } from 'inversify';
-import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { HttpError, IServerConfiguration } from './../model/';
 
 @injectable()
 export class HttpService implements IHttpService {
 
-    private axios: AxiosInstance;
+    private request: any;
     private apiURL: string;
     private loggingService: ILoggingService;
 
@@ -16,68 +15,96 @@ export class HttpService implements IHttpService {
     ) {
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
-        this.axios = require('axios');
+        this.request = require('request-promise');
         this.loggingService = loggingService;
     }
 
     public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
-        const response = await this.axios.get(this.buildRequestUrl(resource),
-            {
-                params: queryParameters,
-                headers: {
-                    Authorization: 'Token ' + token
-                }
-            }).catch((error: AxiosError) => {
+        const options = {
+            method: 'GET',
+            uri: this.buildRequestUrl(resource),
+            qs: queryParameters,
+            headers: {
+                Authorization: 'Token ' + token
+            },
+            json: true
+        };
+
+        const response = await this.request(options)
+            .catch((error) => {
                 throw this.createHttpError(error);
             });
-        return response.data;
+
+        return response;
     }
 
     public async post<T>(resource: string, content: any): Promise<T> {
-        const response = await this.axios.post(this.buildRequestUrl(resource), content)
-            .catch((error: AxiosError) => {
+        const options = {
+            method: 'POST',
+            uri: this.buildRequestUrl(resource),
+            body: content,
+            json: true
+        };
+
+        const response = await this.request(options)
+            .catch((error) => {
                 throw this.createHttpError(error);
             });
-        return response.data;
+
+        return response;
     }
 
     public async put<T>(resource: string, content: any): Promise<T> {
-        const response = await this.axios.put(this.buildRequestUrl(resource), content)
-            .catch((error: AxiosError) => {
+        const options = {
+            method: 'PUT',
+            uri: this.buildRequestUrl(resource),
+            body: content,
+            json: true
+        };
+
+        const response = await this.request(options)
+            .catch((error) => {
                 throw this.createHttpError(error);
             });
-        return response.data;
+        return response;
     }
 
     public async patch<T>(resource: string, content: any): Promise<T> {
-        const response = await this.axios.patch(this.buildRequestUrl(resource), content)
-            .catch((error: AxiosError) => {
+        const options = {
+            method: 'PATCH',
+            uri: this.buildRequestUrl(resource),
+            body: content,
+            json: true
+        };
+
+        const response = await this.request(options)
+            .catch((error) => {
                 throw this.createHttpError(error);
             });
-        return response.data;
+        return response;
     }
 
     public async delete<T>(resource: string): Promise<T> {
-        const response = await this.axios.delete(this.buildRequestUrl(resource))
-            .catch((error: AxiosError) => {
+        const options = {
+            method: 'DELETE',
+            uri: this.buildRequestUrl(resource),
+            json: true
+        };
+
+        const response = await this.request.delete(options)
+            .catch((error) => {
                 throw this.createHttpError(error);
             });
-        return response.data;
+        return response;
     }
 
     private buildRequestUrl(resource: string): string {
         return `${this.apiURL}/${resource}`;
     }
 
-    private createHttpError(err: AxiosError): HttpError {
-        if (err.response) {
-            // TODO: intercept whole error-HTML-sites in err.response.data
-            this.loggingService.error(err.message + ' - ' + err.response.status, err.response.data);
-            return new HttpError(err.response.status, err.response.data, err);
-        } else {
-            this.loggingService.error(err.message);
-            return new HttpError(500, err.message, err);
-        }
+    private createHttpError(err: any): HttpError {
+        this.loggingService.error(err.statusCode + " - " + err.message);
+        return new HttpError(err.statusCode, err.response);
     }
 
 }

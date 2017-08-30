@@ -5,7 +5,6 @@ import { IAuthenticationService, IConfigurationService, ISocketCommunicationServ
 
 import { HttpError } from './../../src/model/http/HttpError';
 import { UserType, AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model-client/authentication';
-import MockAdapter = require('axios-mock-adapter');
 
 import express = require('express');
 
@@ -19,10 +18,7 @@ import path = require('path');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const axios = require('axios');
-
 describe('Authentication Communicator', () => {
-    let mock;
     let configurationService: IConfigurationService;
     let socketCommunicationService: ISocketCommunicationService;
     let apiURL: string;
@@ -30,7 +26,6 @@ describe('Authentication Communicator', () => {
     before(async () => {
         await container.initialize();
 
-        mock = new MockAdapter(axios);
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         socketCommunicationService = container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
 
@@ -51,7 +46,6 @@ describe('Authentication Communicator', () => {
     });
 
     after(() => {
-        mock.restore();
         socketCommunicationService.stopServer();
     });
 

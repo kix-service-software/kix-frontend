@@ -14,5 +14,5 @@
     "editor.formatOnSave": true,
     "todohighlight.exclude": "{**/node_modules/**,**/dist/**,**/.vscode/**,**/.history/**}",
     "local-history.daysLimit": 30,
-    "less.lint.important": "warning",
+    "less.lint.important": "warning"
 }
