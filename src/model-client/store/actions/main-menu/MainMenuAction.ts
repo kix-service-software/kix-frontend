@@ -1,0 +1,6 @@
+export enum MainMenuAction {
+
+    MAIN_MENU_CONNECT = "MAIN_MENU_CONNECT",
+
+    MAIN_MENU_ENTRIES_LOADED = "MAIN_MENU_ENTRIES_LOADED"
+}

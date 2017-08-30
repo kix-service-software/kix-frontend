@@ -6,6 +6,8 @@ export enum KIXExtensions {
 
     ROUTER = "kix:router",
 
-    MAIN_MENU = "kix:menu:main"
+    MAIN_MENU = "kix:menu:main",
+
+    COMMUNICATOR = "kix:communicator"
 
 }
