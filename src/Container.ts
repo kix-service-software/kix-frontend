@@ -57,8 +57,8 @@ export class ServiceContainer {
     private bindServices(): void {
         this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
-        this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
+        this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
         this.container.bind<IAuthenticationService>("IAuthenticationService").to(AuthenticationService);
