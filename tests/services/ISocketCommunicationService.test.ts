@@ -46,24 +46,31 @@ describe('Communication Service', () => {
         socketCommunicationService.stopServer();
     });
 
-    // describe('Socket IO Server', () => {
-    //     it('Should be able to connect to socket server', async () => {
-    //         const config = configurationService.getServerConfiguration();
-    //         const socketUrl = "https://localhost:" + config.HTTPS_PORT;
-    //         const socketIO = require('socket.io-client');
-    //         const socket = socketIO.connect(socketUrl);
+    describe('Socket IO Server', () => {
+        let socket;
+        before(() => {
+            const config = configurationService.getServerConfiguration();
+            const socketUrl = "https://localhost:" + config.HTTPS_PORT;
+            const socketIO = require('socket.io-client');
+            socket = socketIO.connect(socketUrl);
+        });
 
-    //         socket.on('connect', (client) => {
-    //             expect(true);
-    //         });
+        after(() => {
+            socket.close();
+        })
 
-    //         socket.on('connect_error', (error) => {
-    //             expect(true).false;
-    //         });
+        it('Should be able to connect to socket server', async () => {
+            socket.on('connect', (client) => {
+                expect(true);
+            });
 
-    //         socket.on('connect_timeout', () => {
-    //             expect(true, 'Connection Timeout!').false;
-    //         });
-    //     });
-    // });
+            socket.on('connect_error', (error) => {
+                expect(true).false;
+            });
+
+            socket.on('connect_timeout', () => {
+                expect(true, 'Connection Timeout!').false;
+            });
+        });
+    });
 });
