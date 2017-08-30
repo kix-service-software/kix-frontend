@@ -8,7 +8,7 @@ class KIXMenuComponent {
         this.state.menuEntries = input.mainMenuEntries;
 
         // TODO: just for testing, have to be removed
-        this.state.menuEntries.push({ icon: '', link: '#', text: 'Ticket' });
+        this.state.menuEntries.push({ icon: '', link: '#', text: 'Tickets', active: true });
         this.state.menuEntries.push({ icon: '', link: '#', text: 'CMDB' });
         this.state.menuEntriesExtra = [
             { icon: '', link: '#', text: 'Admin' },

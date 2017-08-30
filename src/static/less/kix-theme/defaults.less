@@ -1,22 +1,39 @@
+// uses colors.less and "exports" colors for background and font
 .color_theme_0() {
-    background: @primary_0;
-    color: @default_light_font_color;
+    @bc_color:   @primary_0;
+    background:  @bc_color;
+    @font_color: @default_light_font_color;
+    color:       @font_color;
 }
 .color_theme_1() {
-    background: @primary_1;
-    color: @default_light_font_color;
+    @bc_color:   @primary_1;
+    background:  @bc_color;
+    @font_color: @default_light_font_color;
+    color:       @font_color;
 }
 .color_theme_2() {
-    background: @primary_2;
-    color: @default_light_font_color;
+    @bc_color:   @primary_2;
+    background:  @bc_color;
+    @font_color: @default_light_font_color;
+    color:       @font_color;
 }
 .color_theme_3() {
-    background: @secondary_2;
-    color: @secondary_0;
+    @bc_color:   @secondary_2;
+    background:  @bc_color;
+    @font_color: @secondary_0;
+    color:       @font_color;
 }
 .color_theme_4() {
-    background: @secondary_6;
-    color: @default_dark_font_color;
+    @bc_color:   @secondary_6;
+    background:  @bc_color;
+    @font_color: @default_dark_font_color;
+    color:       @font_color;
+}
+.color_theme_5() {
+    @bc_color:   @tertiary_5;
+    background:  @bc_color;
+    @font_color: @default_light_font_color;
+    color:       @font_color;
 }
 
 .vertical_align() {
@@ -69,7 +86,7 @@
         }
     }
     #footer {
-        .clear();
+        .clear;
         font-size: @default_font_size - 2;
         text-align: center;
     }
