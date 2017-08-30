@@ -1,24 +1,32 @@
 #menu {
-    .color_theme_2;
     width: 100px;
     height: 100%;
     float: left;
-    & ul {
+    ul {
+        .color_theme_2;
         margin: 0px;
         list-style: none;
-        & li {
+        li {
             .color_theme_2;
             height: 50px;
             width: 80px;
             border: 1px solid black;
+            // TODO: possible removeable
+            a {
+                text-decoration: none;
+            }
         }
-        & li:active {
+        li:active {
             .color_theme_0;
             border-top-right-radius: 50;
             border-bottom-right-radius: 50;
+            width: 85px;
         }
-        & li.mm_special {
-            .color_theme_1;
+        &#main_menu_extra {
+            margin-top: 5px;
+            li {
+                .color_theme_1;
+            }
         }
     }
 }
