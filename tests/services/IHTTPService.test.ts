@@ -3,32 +3,24 @@ import { container } from './../../src/Container';
 import { HttpError } from './../../src/model/http/HttpError';
 import { HttpService, IHttpService, IConfigurationService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
-import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const axios = require('axios');
-
-
 describe('HTTP Service', () => {
-    let mock;
+    let nockScope;
     let httpService: IHttpService;
     let configurationService: IConfigurationService;
     let apiURL: string;
 
     before(async () => {
         await container.initialize();
-        mock = new MockAdapter(axios);
-
+        const nock = require('nock');
         httpService = container.getDIContainer().get<IHttpService>("IHttpService");
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
-    });
-
-    after(() => {
-        mock.restore();
+        nockScope = nock(apiURL);
     });
 
     it('service instance is registered in container.', () => {
@@ -36,8 +28,10 @@ describe('HTTP Service', () => {
     });
 
     describe('GET Requests', () => {
+
         before(() => {
-            mock.onGet(apiURL + '/testGet')
+            nockScope
+                .get('/testGet')
                 .reply(200, {});
 
             this.testObject = {
@@ -45,18 +39,22 @@ describe('HTTP Service', () => {
                 name: 'test-object',
                 description: 'test-object-description'
             };
-            mock.onGet(apiURL + '/testGetObject')
+
+            nockScope
+                .get('/testGetObject')
                 .reply(200, this.testObject);
 
             this.parameterObject = {
                 id: "12345"
             };
-            mock.onGet(apiURL + '/object', { params: { id: '12345' } })
+            nockScope
+                .get('/object')
+                .query({ id: '12345' })
                 .reply(200, this.parameterObject);
-        });
 
-        after(() => {
-            mock.reset();
+            nockScope
+                .get('/unknownResource')
+                .reply(404);
         });
 
         it('should return an empty object', async () => {
@@ -87,12 +85,15 @@ describe('HTTP Service', () => {
 
     describe('POST Requests', () => {
         before(() => {
-            mock.onPost(apiURL + '/post', { name: 'testobject' })
+            nockScope
+                .post('/post', {
+                    name: 'testobject'
+                })
                 .reply(201, 'Object#12345');
-        });
 
-        after(() => {
-            mock.reset();
+            nockScope
+                .post('/unknownResource')
+                .reply(404);
         });
 
         it('should return the id of the new created object', async () => {
@@ -114,12 +115,15 @@ describe('HTTP Service', () => {
 
     describe('PUT Requests', () => {
         before(() => {
-            mock.onPut(apiURL + '/put/12345', { name: 'testobject' })
+            nockScope
+                .put('/put/12345', {
+                    name: 'testobject'
+                })
                 .reply(200, 'Object#12345');
-        });
 
-        after(() => {
-            mock.reset();
+            nockScope
+                .put('/unknownResource')
+                .reply(404);
         });
 
         it('should return the id of the updated object', async () => {
@@ -141,12 +145,17 @@ describe('HTTP Service', () => {
 
     describe('PATCH Requests', () => {
         before(() => {
-            mock.onPatch(apiURL + '/patch/12345')
-                .reply(204, 'Object#12345');
-        });
+            nockScope
+                .patch('/patch/12345', {
+                    name: 'testobject'
+                })
+                .reply(200, 'Object#12345');
 
-        after(() => {
-            mock.reset();
+            nockScope
+                .patch('/unknownResource', {
+                    name: 'testobject'
+                })
+                .reply(404);
         });
 
         it('should return the id of the patched object.', async () => {
@@ -168,12 +177,13 @@ describe('HTTP Service', () => {
 
     describe('DELETE Requests', () => {
         before(() => {
-            mock.onDelete(apiURL + '/delete/12345')
+            nockScope
+                .delete('/delete/12345')
                 .reply(204);
-        });
 
-        after(() => {
-            mock.reset();
+            nockScope
+                .delete('/unknownResource')
+                .reply(404);
         });
 
         it('should return nothing if object is deleted', async () => {
