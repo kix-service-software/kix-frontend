@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8"/>
-    <title>KIX 2018</title>
-    <lasso-head/>
-  </head>
-  <body>
-    <if(data.template)>
-      <div id="content">
-        <include(data.template, data.data)/>
-      </div>
-    </if>
-    <script src="/static/js/socket.io.js"/>
-    <lasso-body/>
-  </body>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>KIX 2018</title>
+        <lasso-head/>
+    </head>
+    <body>
+        <if(data.template)>
+            <div id="content">
+                <include(data.template, data.data)/>
+            </div>
+        </if>
+        <script src="/static/js/socket.io.js"/>
+        <lasso-body/>
+    </body>
 </html>

@@ -1,14 +1,14 @@
 .color_theme_0() {
     background: @primary_0;
-    color: @default_ligth_font_color;
+    color: @default_light_font_color;
 }
 .color_theme_1() {
     background: @primary_1;
-    color: @default_ligth_font_color;
+    color: @default_light_font_color;
 }
 .color_theme_2() {
     background: @primary_2;
-    color: @default_ligth_font_color;
+    color: @default_light_font_color;
 }
 .color_theme_3() {
     background: @secondary_2;
@@ -19,15 +19,12 @@
     color: @default_dark_font_color;
 }
 
-.veritcal_align() {
+.vertical_align() {
     position: relative;
     top: 50%;
     -webkit-transform: perspective(1px) translateY(-50%);
-    -ms-transform: translateY(-50%);
+    -ms-transform: perspective(1px) translateY(-50%);
     transform: perspective(1px) translateY(-50%);
-}
-.clear() {
-    clear: both;
 }
 
 @default_font_size: 12px;
@@ -44,7 +41,6 @@
         margin-bottom: 20px;
         #kix_sidebars {
             float: right;
-            margin-left: 50px; 
         }
         #mutable_content_area {
             margin-right: 50px;
@@ -77,4 +73,11 @@
         font-size: @default_font_size - 2;
         text-align: center;
     }
+}
+
+.hidden {
+    display: none;
+}
+.clear {
+    clear: both;
 }
