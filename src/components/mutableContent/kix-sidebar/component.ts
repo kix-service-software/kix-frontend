@@ -4,6 +4,7 @@ class KIXSidebarComponent {
 
     public onCreate(input: any): void {
         this.state = {
+            // TODO: just as placeholder
             showNodeSidebar: true,
             hasRightsForNodeSidebar: true
         };
