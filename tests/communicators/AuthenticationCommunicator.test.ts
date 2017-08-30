@@ -19,13 +19,17 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe('Authentication Communicator', () => {
+    let nockScope;
+    let client;
     let configurationService: IConfigurationService;
     let socketCommunicationService: ISocketCommunicationService;
     let apiURL: string;
+    let socketIO;
+    let socketUrl;
 
     before(async () => {
         await container.initialize();
-
+        const nock = require('nock');
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         socketCommunicationService = container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
 
@@ -43,94 +47,103 @@ describe('Authentication Communicator', () => {
         server.listen(port);
 
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
+        nockScope = nock(apiURL);
+
+        const config = configurationService.getServerConfiguration();
+        socketUrl = "https://localhost:" + config.HTTPS_PORT;
+        socketIO = require('socket.io-client');
+
     });
 
     after(() => {
         socketCommunicationService.stopServer();
     });
 
-    // describe('Emit a valid login event', () => {
-    //     before(() => {
-    //         mock.onPost(apiURL + '/sessions', {
-    //             UserLogin: 'agent',
-    //             Password: 'agent',
-    //             UserType: UserType.AGENT
-    //         }).reply(200, { Token: 'ABCDEFG12345' });
-    //     });
+    describe('Emit a valid login event', () => {
+        let socket;
 
-    //     after(() => {
-    //         mock.reset();
-    //     });
+        before(() => {
+            nockScope
+                .post('/sessions', {
+                    UserLogin: 'agent',
+                    Password: 'agent',
+                    UserType: UserType.AGENT
+                })
+                .reply(200, { Token: 'ABCDEFG12345' });
+            socket = socketIO.connect(socketUrl);
+        });
 
-    //     it('Should retrieve a authorized event', async () => {
-    //         const config = configurationService.getServerConfiguration();
-    //         const socketUrl = "https://localhost:" + config.HTTPS_PORT;
-    //         const socketIO = require('socket.io-client');
-    //         const socket = socketIO.connect(socketUrl);
+        after(() => {
+            socket.close();
+        });
 
-    //         socket.on('connect', (clientSocket) => {
-    //             clientSocket.emit(AuthenticationEvent.LOGIN, new LoginRequest('agent', 'agent', UserType.AGENT));
+        it('Should retrieve a authorized event', async () => {
 
-    //             clientSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
-    //                 expect(result).not.undefined;
-    //                 expect(result).instanceof(AuthenticationResult);
-    //                 expect(result.token).equals('ABCDEFG12345');
-    //             });
+            socket.on('connect', (clientSocket) => {
+                clientSocket.emit(AuthenticationEvent.LOGIN, new LoginRequest('agent', 'agent', UserType.AGENT));
 
-    //             clientSocket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
-    //                 expect(true, 'Should not throw an unauthorized event!').false;
-    //             });
-    //         });
+                clientSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
+                    expect(result).not.undefined;
+                    expect(result).instanceof(AuthenticationResult);
+                    expect(result.token).equals('ABCDEFG12345');
+                });
 
-    //         socket.on('connect_error', (error) => {
-    //             expect(true, 'Could not connect to Server!').false;
-    //         });
+                clientSocket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
+                    expect(true, 'Should not throw an unauthorized event!').false;
+                });
+            });
 
-    //         socket.on('connect_timeout', () => {
-    //             expect(true, 'Connection Timeout!').false;
-    //         });
-    //     });
-    // });
+            socket.on('connect_error', (error) => {
+                expect(true, 'Could not connect to Server!').false;
+            });
 
-    // describe('Emit an invalid login event', () => {
-    //     before(() => {
-    //         mock.onPost(apiURL + '/sessions', {
-    //             UserLogin: 'agent',
-    //             Password: 'agent',
-    //             UserType: UserType.AGENT
-    //         }).reply(400);
-    //     });
+            socket.on('connect_timeout', () => {
+                expect(true, 'Connection Timeout!').false;
+            });
 
-    //     after(() => {
-    //         mock.reset();
-    //     });
+        });
+    });
 
-    //     it('Should retrieve a unauthorized event', async () => {
-    //         const config = configurationService.getServerConfiguration();
-    //         const socketUrl = "https://localhost:" + config.HTTPS_PORT;
-    //         const socketIO = require('socket.io-client');
-    //         const socket = socketIO.connect(socketUrl);
+    describe('Emit an invalid login event', () => {
+        let socket;
 
-    //         socket.on('connect', (clientSocket) => {
-    //             clientSocket.emit(AuthenticationEvent.LOGIN, new LoginRequest('agent', 'agent', UserType.AGENT));
+        before(() => {
+            nockScope
+                .post('/sessions', {
+                    UserLogin: 'agent',
+                    Password: 'agent',
+                    UserType: UserType.AGENT
+                })
+                .reply(400);
+            socket = socketIO.connect(socketUrl);
+        });
 
-    //             clientSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
-    //                 expect(true, 'Should not throw an authorized event!').false;
-    //             });
+        after(() => {
+            socket.close();
+        });
 
-    //             clientSocket.on(AuthenticationEvent.UNAUTHORIZED, (error: HttpError) => {
-    //                 expect(error).not.undefined;
-    //                 expect(error).instanceof(HttpError);
-    //             });
-    //         });
+        it('Should retrieve a unauthorized event', async () => {
+            socket.on('connect', (clientSocket) => {
+                client.emit(AuthenticationEvent.LOGIN, new LoginRequest('agent', 'agent', UserType.AGENT));
 
-    //         socket.on('connect_error', (error) => {
-    //             expect(true, 'Could not connect to Server!').false;
-    //         });
+                client.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
+                    expect(true, 'Should not throw an authorized event!').false;
+                });
 
-    //         socket.on('connect_timeout', () => {
-    //             expect(true, 'Connection Timeout!').false;
-    //         });
-    //     });
-    // });
+                client.on(AuthenticationEvent.UNAUTHORIZED, (error: HttpError) => {
+                    expect(error).not.undefined;
+                    expect(error).instanceof(HttpError);
+                });
+            });
+
+            socket.on('connect_error', (error) => {
+                expect(true, 'Could not connect to Server!').false;
+            });
+
+            socket.on('connect_timeout', () => {
+                expect(true, 'Connection Timeout!').false;
+            });
+
+        });
+    });
 });
