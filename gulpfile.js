@@ -46,7 +46,11 @@ gulp.task('tslint', () => {
 
 gulp.task('test', () => {
     process.env.NODE_ENV = 'test';
-    return gulp.src(['tests/**/*.test.ts'])
+    return gulp.src([
+        'tests/client/**/*.test.ts',
+        'tests/model/**/*.test.ts',
+        'tests/communicators/**/*.test.ts'
+    ])
         .pipe(mocha({
             reporter: 'spec',
             compilers: 'ts:ts-node/register'
