@@ -1,3 +1,4 @@
+import { IPluginService } from './../../src/services/IPluginService';
 // tslint:disable
 import { container } from "./../../src/Container";
 import { AuthenticationCommunicator } from './../../src/communicators/';
@@ -29,6 +30,7 @@ describe('Authentication Communicator', () => {
 
     before(async () => {
         await container.initialize();
+        const pluginService = container.getDIContainer().get<IPluginService>("IpluginService");
 
         const nock = require('nock');
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");

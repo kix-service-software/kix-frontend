@@ -19,6 +19,10 @@ export class PluginService implements IPluginService {
         for (const dir of serverConfiguration.PLUGIN_FOLDERS) {
             pluginDirs.push(__dirname + '/../../' + dir);
         }
+
+        console.log("Plugin Directories:");
+        console.log(pluginDirs);
+
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
     }
