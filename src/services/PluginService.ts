@@ -16,9 +16,24 @@ export class PluginService implements IPluginService {
         this.pluginManager = new Plugins();
 
         const pluginDirs = [];
+        const fs = require('fs');
         for (const dir of serverConfiguration.PLUGIN_FOLDERS) {
-            pluginDirs.push(__dirname + '/../../' + dir);
+            const path = __dirname + '/../../' + dir;
+            pluginDirs.push(path);
         }
+
+        if (fs.existsSync(__dirname + '/../../extensions/dashboard/package.json')) {
+            console.log("Exists: " + __dirname + '/../../extensions/dashboard/package.json');
+        } else {
+            console.log("Not Exists: " + __dirname + '/../../extensions/dashboard/package.json');
+        }
+
+        if (fs.existsSync(__dirname + '/../../extensions/application/package.json')) {
+            console.log("Exists: " + __dirname + '/../../extensions/application/package.json');
+        } else {
+            console.log("Not Exists: " + __dirname + '/../../extensions/application/package.json');
+        }
+
 
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
