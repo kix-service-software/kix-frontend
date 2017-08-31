@@ -6,7 +6,7 @@ import {
     Session,
     SessionResponse
 } from '../model';
-import { UserType } from '../model-client/authentication';
+import { UserType } from '../model/client/';
 import { IAuthenticationService, IHttpService } from './';
 import { Request, Response } from 'express';
 

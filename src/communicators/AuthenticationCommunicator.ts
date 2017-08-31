@@ -2,11 +2,10 @@ import { IServerConfiguration } from './../model/';
 import {
     AuthenticationResult,
     LoginRequest,
-    UserType,
     AuthenticationEvent
-} from './../model-client/authentication';
-
-import { SocketEvent } from './../model-client/';
+} from './../model/client/socket/login';
+import { UserType } from './../model/client/';
+import { SocketEvent } from './../model/client/socket/SocketEvent';
 
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';

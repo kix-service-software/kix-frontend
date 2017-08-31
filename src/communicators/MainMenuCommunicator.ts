@@ -1,13 +1,12 @@
-import { MenuEntry } from './../model-client/menu/MenuEntry';
+import { SocketEvent } from './../model/client/socket/SocketEvent';
+import { MenuEntry } from './../model/client/components/main-menu/MenuEntry';
 import { IMainMenuExtension, KIXExtensions } from './../extensions/';
-import { MainMenuEntriesResult } from './../model-client/menu/socket/MainMenuEntriesResult';
+import { MainMenuEntriesResult, MainMenuEvent } from './../model/client/socket/main-menu';
 import { IAuthenticationService, ILoggingService, IConfigurationService } from './../services/';
 import { IServerConfiguration } from './../model/';
 import { inject, injectable } from 'inversify';
 import { ICommunicator } from './ICommunicator';
-import { SocketEvent } from "../model-client/index";
 import { KIXCommunicator } from './KIXCommunicator';
-import { MainMenuEvent } from './../model-client/menu';
 
 export class MainMenuCommunicator extends KIXCommunicator {
 
