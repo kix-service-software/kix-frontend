@@ -9,7 +9,7 @@ const host = {
 @injectable()
 export class PluginService implements IPluginService {
 
-    private pluginManager: any;
+    public pluginManager: any;
 
     public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
         const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
@@ -24,9 +24,6 @@ export class PluginService implements IPluginService {
 
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
-
-        console.log("Extensions after Scan:");
-        console.log(this.pluginManager._extensions);
     }
 
     public async getExtensions<T>(extensionId: string): Promise<T[]> {
@@ -34,9 +31,6 @@ export class PluginService implements IPluginService {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (err, extensions: T[], names) => {
-                    console.log("Extensions for " + extensionId + ": ");
-                    console.log(names);
-
                     if (err) {
                         reject(err);
                     }
