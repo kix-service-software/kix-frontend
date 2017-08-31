@@ -49,7 +49,14 @@ gulp.task('test', () => {
     return gulp.src([
         'tests/client/**/*.test.ts',
         'tests/model/**/*.test.ts',
-        'tests/communicators/**/*.test.ts'
+        // 'tests/communicators/**/*.test.ts',
+        'tests/services/IAuthenticationService.test.ts',
+        'tests/services/IConfigurationService.test.ts',
+        'tests/services/IHTTPService.test.ts',
+        'tests/services/ILoggingService.test.ts',
+        'tests/services/IPluginService.test.ts',
+        // 'tests/services/ISocketCommunicationService.test.ts',
+        'tests/services/IUserService.test.ts',
     ])
         .pipe(mocha({
             reporter: 'spec',
