@@ -1,0 +1,8 @@
+{
+    "extensions": {
+        "kix:communicator": {
+            "authentication-communicator": "../../dist/communicators/AuthenticationCommunicator.extension",
+            "main-menu-communicator": "../../dist/communicators/MainMenuCommunicator.extension"
+        }
+    }
+}

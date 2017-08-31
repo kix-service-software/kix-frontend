@@ -29,6 +29,7 @@ describe('Authentication Communicator', () => {
 
     before(async () => {
         await container.initialize();
+
         const nock = require('nock');
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         socketCommunicationService = container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
@@ -40,6 +41,7 @@ describe('Authentication Communicator', () => {
             cert: fs.readFileSync(path.join(__dirname, '../../cert/cert.pem')),
             passphrase: 'kix2018'
         };
+
         const server = https.createServer(options, app);
         socketCommunicationService.initialize(server);
 

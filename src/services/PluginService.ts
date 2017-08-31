@@ -28,6 +28,9 @@ export class PluginService implements IPluginService {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (err, extensions: T[], names) => {
+                    console.log("Extensions: ");
+                    console.log(names);
+
                     if (err) {
                         reject(err);
                     }
