@@ -1,3 +1,4 @@
+import { ICommunicatorExtension } from './extensions/ICommunicatorExtension';
 import { IRouterExtension } from './extensions/IRouterExtension';
 import 'reflect-metadata';
 import { Server } from './Server';
@@ -56,8 +57,8 @@ export class ServiceContainer {
     private bindServices(): void {
         this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
-        this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
+        this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
         this.container.bind<IAuthenticationService>("IAuthenticationService").to(AuthenticationService);
@@ -72,13 +73,18 @@ export class ServiceContainer {
         const routerExtensions = await pluginService.getExtensions<IRouterExtension>(KIXExtensions.ROUTER);
 
         for (const routerExt of routerExtensions) {
-            this.container.bind<IRouter>("IRouter").to(routerExt.getRouter());
+            this.container.bind<IRouter>("IRouter").to(routerExt.getRouterClass());
         }
     }
 
-    private bindCommunicators(): void {
-        // TODO: create extension for communicator from external modules?
-        this.container.bind<ICommunicator>("ICommunicator").to(AuthenticationCommunicator);
+    private async bindCommunicators(): Promise<void> {
+        const pluginService = this.container.get<IPluginService>("IPluginService");
+        const communicatorExtensions = await pluginService
+            .getExtensions<ICommunicatorExtension>(KIXExtensions.COMMUNICATOR);
+
+        for (const communicator of communicatorExtensions) {
+            this.container.bind<ICommunicator>("ICommunicator").to(communicator.getCommunicatorClass());
+        }
     }
 
 }

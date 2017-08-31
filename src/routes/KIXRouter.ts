@@ -42,15 +42,11 @@ export abstract class KIXRouter implements IRouter {
 
         const template = require(appTemplatePath);
 
-        const menuExtensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
-        const mainMenuEntries = menuExtensions.map((me) => new MenuEntry(me.getLink(), me.getIcon(), me.getText()));
-
         res.marko(template, {
             template: require(baseTemplatePath),
             data: {
                 frontendSocketUrl: this.getServerUrl(),
-                contentTemplate: contentTemplatePath,
-                mainMenuEntries
+                contentTemplate: contentTemplatePath
             }
         });
     }

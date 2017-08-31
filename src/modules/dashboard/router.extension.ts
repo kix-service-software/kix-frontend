@@ -3,7 +3,7 @@ import { IRouterExtension } from './../../extensions/';
 
 export class DashboardRouterExtension implements IRouterExtension {
 
-    public getRouter(): any {
+    public getRouterClass(): any {
         return DashboardRouter;
     }
 

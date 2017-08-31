@@ -9,16 +9,19 @@ const host = {
 @injectable()
 export class PluginService implements IPluginService {
 
-    private pluginManager: any;
+    public pluginManager: any;
 
     public constructor( @inject("IConfigurationService") configurationService: IConfigurationService) {
         const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
         this.pluginManager = new Plugins();
 
         const pluginDirs = [];
+        const fs = require('fs');
         for (const dir of serverConfiguration.PLUGIN_FOLDERS) {
-            pluginDirs.push(__dirname + '/../../' + dir);
+            const path = __dirname + '/../../' + dir;
+            pluginDirs.push(path);
         }
+
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
     }

@@ -1,23 +1,27 @@
 import { MenuState } from './../../model-client/menu/state/MenuState';
+import { MenuComponentState } from './../../model-client/menu/state/MenuComponentState';
+import { MAIN_MENU_CONNECT } from '../../model-client/store/actions';
+
 class KIXMenuComponent {
 
-    public state: MenuState;
+    public state: MenuComponentState;
+    public store: any;
+    public frontendSocketUrl: string;
 
     public onCreate(input: any): void {
-        this.state = new MenuState();
-        this.state.menuEntries = input.mainMenuEntries;
-
-        // TODO: just for testing, have to be removed
-        this.state.menuEntries.push({ icon: '', link: '#', text: 'Ticket' });
-        this.state.menuEntries.push({ icon: '', link: '#', text: 'CMDB' });
-        this.state.menuEntriesExtra = [
-            { icon: '', link: '#', text: 'Admin' },
-            { icon: '', link: '#', text: 'Kalendar' }
-        ];
+        this.state = new MenuComponentState();
+        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onMount(): void {
-        console.log("Mount Menu");
+        this.store = require('../../model-client/store');
+        this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(MAIN_MENU_CONNECT(this.frontendSocketUrl));
+    }
+
+    public stateChanged(): void {
+        const reduxState: MenuState = this.store.getState().mainMenu;
+        this.state.menuEntries = reduxState.menuEntries;
     }
 }
 
