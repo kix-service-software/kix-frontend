@@ -4,7 +4,6 @@ class DashboardComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            text: 'Test',
             widgets: [
                 "Widget01",
                 "Widget02",
@@ -28,7 +27,8 @@ class DashboardComponent {
 
     public dragStart(event): void {
         this.state.tempWidgets = Array.from(this.state.widgets);
-        event.dataTransfer.setData("text", event.target.id);
+        // TODO: data possible as object
+        event.dataTransfer.setData("widgetId", event.target.id);
         event.target.classList.add('drag');
     }
 
@@ -39,7 +39,7 @@ class DashboardComponent {
         }
 
         const dropWidgetId = event.target.id;
-        const dragWidgetId = event.dataTransfer.getData("text");
+        const dragWidgetId = event.dataTransfer.getData("widgetId");
 
         if ((dropWidgetId === dragWidgetId) ||
             (dropWidgetId === "" || dragWidgetId === "")) {
