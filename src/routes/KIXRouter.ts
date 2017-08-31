@@ -1,4 +1,3 @@
-import { MenuEntry } from './../model-client/menu/MenuEntry';
 import { IMainMenuExtension, KIXExtensions } from './../extensions/';
 import { injectable, inject } from 'inversify';
 import { IServerConfiguration } from './../model';

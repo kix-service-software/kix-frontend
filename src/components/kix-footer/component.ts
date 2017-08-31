@@ -1,4 +1,4 @@
-import { FooterComponentState } from './../../model-client/footer';
+import { FooterComponentState } from './../../model/client/components';
 
 class KIXFooterComponent {
 
