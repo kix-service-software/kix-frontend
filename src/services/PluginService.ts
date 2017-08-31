@@ -22,21 +22,11 @@ export class PluginService implements IPluginService {
             pluginDirs.push(path);
         }
 
-        if (fs.existsSync(__dirname + '/../../extensions/dashboard/package.json')) {
-            console.log("Exists: " + __dirname + '/../../extensions/dashboard/package.json');
-        } else {
-            console.log("Not Exists: " + __dirname + '/../../extensions/dashboard/package.json');
-        }
-
-        if (fs.existsSync(__dirname + '/../../extensions/application/package.json')) {
-            console.log("Exists: " + __dirname + '/../../extensions/application/package.json');
-        } else {
-            console.log("Not Exists: " + __dirname + '/../../extensions/application/package.json');
-        }
-
-
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
+
+        console.log("Extensions after Scan:");
+        console.log(this.pluginManager._extensions);
     }
 
     public async getExtensions<T>(extensionId: string): Promise<T[]> {

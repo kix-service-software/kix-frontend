@@ -1,4 +1,5 @@
 {
+    "name": "application-extensions",
     "extensions": {
         "kix:communicator": {
             "authentication-communicator": "../../dist/communicators/AuthenticationCommunicator.extension",
