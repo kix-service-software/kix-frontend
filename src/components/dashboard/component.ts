@@ -27,13 +27,10 @@ class DashboardComponent {
 
     public dragStart(event): void {
         this.state.tempWidgets = Array.from(this.state.widgets);
-<<<<<<< HEAD
         event.dataTransfer.setData("text", event.target.id);
         // TODO: Add CSS via state conditions
-=======
         // TODO: data possible as object
         event.dataTransfer.setData("widgetId", event.target.id);
->>>>>>> 722a978182c0f548ee3d2a649aeab2e30c625db8
         event.target.classList.add('drag');
     }
 
