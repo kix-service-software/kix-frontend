@@ -29,6 +29,7 @@ class DashboardComponent {
     public dragStart(event): void {
         this.state.tempWidgets = Array.from(this.state.widgets);
         event.dataTransfer.setData("text", event.target.id);
+        // TODO: Add CSS via state conditions
         event.target.classList.add('drag');
     }
 
@@ -68,12 +69,12 @@ class DashboardComponent {
     }
 
     public dragEnter(event): void {
-        if (event.target.className === "widget-item") {
-            event.target.classList.add('over');
-        }
+        // TODO: Add CSS via state conditions
+        event.target.classList.add('over');
     }
 
     public dragLeave(event): void {
+        // TODO: Add CSS via state conditions
         event.target.classList.remove('over');
     }
 
@@ -83,6 +84,7 @@ class DashboardComponent {
         this.resetCSS();
     }
 
+    // TODO: Add CSS via state conditions
     private resetCSS(): void {
         for (const widgetId of this.state.widgets) {
             const element = document.getElementById(widgetId);
