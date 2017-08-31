@@ -4,7 +4,7 @@
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
     "start": "node dist/index.js",
-    "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/client/**/*.test.ts' 'tests/model/**/*.test.ts' 'tests/communicators/**/*.test.ts' 'tests/services/IAuthenticationService.test.ts' 'tests/services/IAuthenticationService.test.ts' 'tests/services/IConfigurationService.test.ts' 'tests/services/IHTTPService.test.ts' 'tests/services/ILoggingService.test.ts' 'tests/services/ISocketCommunicationService.test.ts' 'tests/services/IUserService.test.ts' 'tests/services/IPluginService.test.ts'",
+    "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/client/**/*.test.ts' 'tests/model/**/*.test.ts' 'tests/services/IAuthenticationService.test.ts' 'tests/services/IAuthenticationService.test.ts' 'tests/services/IConfigurationService.test.ts' 'tests/services/IHTTPService.test.ts' 'tests/services/ILoggingService.test.ts' 'tests/services/IUserService.test.ts' 'tests/services/IPluginService.test.ts'",
     "pub": "gulp && npm version patch && npm publish"
   },
   "repository": {

@@ -22,10 +22,6 @@ describe('Communication Service', () => {
     before(async () => {
         await container.initialize();
 
-        setTimeout(function () {
-            console.log("wait ...");
-        }, 500);
-
         configurationService =
             container.getDIContainer().get<IConfigurationService>("IConfigurationService");
 
