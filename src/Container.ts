@@ -45,6 +45,7 @@ export class ServiceContainer {
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
+            console.log("Initialize Container ...");
             await this.bindServices();
             await this.bindRouters();
             await this.bindCommunicators();
@@ -55,9 +56,13 @@ export class ServiceContainer {
     }
 
     private bindServices(): void {
+        console.log("Bind Services");
         this.container.bind<ILoggingService>("ILoggingService").to(LoggingService);
         this.container.bind<IConfigurationService>("IConfigurationService").to(ConfigurationService);
+
         this.container.bind<IPluginService>("IPluginService").to(PluginService);
+        this.container.get<IPluginService>("IPluginService");
+
         this.container.bind<ISocketCommunicationService>("ISocketCommunicationService").to(SocketCommunicationService);
         this.container.bind<IMarkoService>("IMarkoService").to(MarkoService);
         this.container.bind<IHttpService>("IHttpService").to(HttpService);
@@ -66,6 +71,7 @@ export class ServiceContainer {
     }
 
     private async bindRouters(): Promise<void> {
+        console.log("Bind Routers");
         this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
 
@@ -78,6 +84,7 @@ export class ServiceContainer {
     }
 
     private async bindCommunicators(): Promise<void> {
+        console.log("Bind Communicators");
         const pluginService = this.container.get<IPluginService>("IPluginService");
         const communicatorExtensions = await pluginService
             .getExtensions<ICommunicatorExtension>(KIXExtensions.COMMUNICATOR);
