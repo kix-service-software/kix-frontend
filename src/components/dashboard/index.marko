@@ -1,1 +1,11 @@
-<h1>Dashboard</h1>
+<div>
+    <h1>Dashboard</h1>
+    <span.hint>Widgets sind per Drag and Drop verschiebbar.</span>
+    <div.widget-container>
+        <for(widget in state.widgets)>
+            <div.widget-item id=widget draggable="true" on-dragstart('dragStart') on-dragover('dragOver') on-dragenter('dragEnter') on-dragleave('dragLeave') on-drop('drop')>
+                <h3>${widget}</h3>
+            </div>
+        </for>
+    </div>
+</div>

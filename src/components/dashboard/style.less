@@ -1,0 +1,38 @@
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+}
+
+.widget-container {
+    width: 100%;
+    height: auto;
+}
+
+.widget-item {
+    .widget_content;
+    width: 20vw;
+    height: 20vh;
+    float: left;
+    margin: 5px;
+    padding: 5px;
+    cursor: move;
+    border: 2px solid transparent;
+}
+
+.drag {
+    opacity: 0.6;
+}
+
+.over {
+    border: 2px dotted red;
+}
+
+.hint {
+    font-style: italic;
+    color: lightcoral;
+}
