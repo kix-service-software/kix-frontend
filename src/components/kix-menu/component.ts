@@ -5,9 +5,7 @@ import { MAIN_MENU_CONNECT } from '../../model-client/store/actions';
 class KIXMenuComponent {
 
     public state: MenuComponentState;
-
     public store: any;
-
     public frontendSocketUrl: string;
 
     public onCreate(input: any): void {
