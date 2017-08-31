@@ -20,9 +20,6 @@ export class PluginService implements IPluginService {
             pluginDirs.push(__dirname + '/../../' + dir);
         }
 
-        console.log("Plugin Directories:");
-        console.log(pluginDirs);
-
         this.pluginManager.scanSubdirs(pluginDirs);
         this.pluginManager.scan();
     }
@@ -32,7 +29,7 @@ export class PluginService implements IPluginService {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (err, extensions: T[], names) => {
-                    console.log("Extensions: ");
+                    console.log("Extensions for " + extensionId + ": ");
                     console.log(names);
 
                     if (err) {
