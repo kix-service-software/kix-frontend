@@ -1,7 +1,7 @@
 <div#menu>
     <ul#main_menu>
         <for(menuEntry in state.menuEntries)>
-            <li.bla class=(menuEntry.active && "active")>
+            <li class=(menuEntry.active && "active")>
                 <!-- <a href=menuEntry.link>${menuEntry.text}</a> -->
                 <a href=menuEntry.link>
                     <div>${menuEntry.text}</div>
@@ -11,7 +11,7 @@
     </ul>
     <ul#main_menu_extra>
         <for(menuEntry in state.menuEntriesExtra)>
-            <li.bla class=(menuEntry.active && "active")>
+            <li class=(menuEntry.active && "active")>
                 <!-- <a href=menuEntry.link>${menuEntry.text}</a> -->
                 <a href=menuEntry.link>
                     <div>${menuEntry.text}</div>
