@@ -5,12 +5,12 @@ class DashboardComponent {
     public onCreate(input: any): void {
         this.state = {
             widgets: [
-                "Widget01",
-                "Widget02",
-                "Widget03",
-                "Widget04",
-                "Widget05",
-                "Widget06"
+                new Widget("Widget01", "FAQ"),
+                new Widget("Widget02", "Statistik"),
+                new Widget("Widget03", "Ticketliste"),
+                new Widget("Widget04", "TODOs"),
+                new Widget("Widget05", "Active User"),
+                new Widget("Widget06", "Eskalationen"),
             ],
             tempWidgets: [],
             dragging: false
@@ -27,11 +27,11 @@ class DashboardComponent {
 
     public dragStart(event): void {
         this.state.tempWidgets = Array.from(this.state.widgets);
-        event.dataTransfer.setData("text", event.target.id);
-        // TODO: Add CSS via state conditions
-        // TODO: data possible as object
         event.dataTransfer.setData("widgetId", event.target.id);
-        event.target.classList.add('drag');
+        this.state.dragging = true;
+
+        const widget = this.state.widgets.find((w) => w.id === event.target.id);
+        widget.drag = true;
     }
 
     public dragOver(event): void {
@@ -43,25 +43,31 @@ class DashboardComponent {
         const dropWidgetId = event.target.id;
         const dragWidgetId = event.dataTransfer.getData("widgetId");
 
-        if ((dropWidgetId === dragWidgetId) ||
-            (dropWidgetId === "" || dragWidgetId === "")) {
+        if ((dropWidgetId === dragWidgetId) || (dropWidgetId === "" || dragWidgetId === "")) {
             return;
         }
 
         const array = this.state.widgets;
 
-        const dragIndex = array.indexOf(dragWidgetId);
+        const dragIndex = array.findIndex((element, index, widgets) => {
+            return element.id === dragWidgetId;
+        });
+        const dragWidget = array.find((w) => w.id === dragWidgetId);
+
         array.splice(dragIndex, 1);
 
-        const dropIndex = array.indexOf(dropWidgetId);
+        const dropIndex = array.findIndex((element, index, widgets) => {
+            return element.id === dropWidgetId;
+        });
+        const dropWidget = array.find((w) => w.id === dropWidgetId);
         array.splice(dropIndex, 1);
 
         if (dragIndex > dropIndex) {
-            array.splice(dropIndex, 0, dragWidgetId);
-            array.splice(dragIndex, 0, dropWidgetId);
+            array.splice(dropIndex, 0, dragWidget);
+            array.splice(dragIndex, 0, dropWidget);
         } else {
-            array.splice(dragIndex, 0, dropWidgetId);
-            array.splice(dropIndex + 1, 0, dragWidgetId);
+            array.splice(dragIndex, 0, dropWidget);
+            array.splice(dropIndex + 1, 0, dragWidget);
         }
 
         this.state.widgets = Array.from(array);
@@ -69,30 +75,44 @@ class DashboardComponent {
         event.dataTransfer.dropEffect = 'move';
     }
 
-    public dragEnter(event): void {
-        // TODO: Add CSS via state conditions
-        event.target.classList.add('over');
-    }
-
-    public dragLeave(event): void {
-        // TODO: Add CSS via state conditions
-        event.target.classList.remove('over');
-    }
-
     public drop(event): void {
         event.preventDefault();
         this.state.tempWidgets = [];
-        this.resetCSS();
+        this.state.dragging = false;
+        this.resetDragOver();
     }
 
-    // TODO: Add CSS via state conditions
-    private resetCSS(): void {
-        for (const widgetId of this.state.widgets) {
-            const element = document.getElementById(widgetId);
-            element.classList.remove('over');
-            element.classList.remove('drag');
+    private setDragOver(widgetId: string, over: boolean = true) {
+        const widget = this.state.widgets.find((w) => w.id === widgetId);
+        if (widget) {
+            widget.dragOver = over;
         }
     }
+
+    private resetDragOver(): void {
+        for (const widget of this.state.widgets) {
+            widget.dragOver = false;
+            widget.drag = false;
+        }
+    }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class Widget {
+
+    public id: string;
+
+    public name: string;
+
+    public dragOver: boolean = false;
+
+    public drag: boolean = false;
+
+    public constructor(id: string, name: string) {
+        this.id = id;
+        this.name = name;
+    }
+
 }
 
 module.exports = DashboardComponent;
