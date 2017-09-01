@@ -1,10 +1,12 @@
+import { IPluginService } from './../../src/services/IPluginService';
 // tslint:disable
 import { container } from "./../../src/Container";
 import { AuthenticationCommunicator } from './../../src/communicators/';
 import { IAuthenticationService, IConfigurationService, ISocketCommunicationService } from './../../src/services/';
 
 import { HttpError } from './../../src/model/http/HttpError';
-import { UserType, AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model-client/authentication';
+import { AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model/client/socket/login';
+import { UserType } from './../../src/model/client';
 
 import express = require('express');
 
@@ -29,6 +31,8 @@ describe('Authentication Communicator', () => {
 
     before(async () => {
         await container.initialize();
+        const pluginService = container.getDIContainer().get<IPluginService>("IPluginService");
+
         const nock = require('nock');
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         socketCommunicationService = container.getDIContainer().get<ISocketCommunicationService>("ISocketCommunicationService");
@@ -40,6 +44,7 @@ describe('Authentication Communicator', () => {
             cert: fs.readFileSync(path.join(__dirname, '../../cert/cert.pem')),
             passphrase: 'kix2018'
         };
+
         const server = https.createServer(options, app);
         socketCommunicationService.initialize(server);
 

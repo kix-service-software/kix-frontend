@@ -1,5 +1,5 @@
 // tslint:disable
-import { LoginState } from './../../../src/model-client/authentication/';
+import { LoginState } from './../../../src/model/client/store/login/';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
 
@@ -11,20 +11,20 @@ import {
     LOGIN_PASSWORD_CHANGED,
     LOGIN_ERROR,
     LOGIN_VALIDATE
-} from '../../../src/model-client/store/actions';
+} from '../../../src/model/client/store/login/actions';
 
 describe('Client - Reducer - Login', () => {
     let store;
 
     before(() => {
-        store = require('../../../src/model-client/store');
+        store = require('../../../src/model/client/store/login');
     });
 
     describe('Dispatch LOGIN_USERNAME_CHANGED Action', () => {
         it('Should set the username on the state', async () => {
             await store.dispatch(LOGIN_USERNAME_CHANGED('newUserName'));
 
-            const state: LoginState = store.getState().login;
+            const state: LoginState = store.getState();
             expect(state.userName).equal('newUserName');
         });
     });
@@ -33,7 +33,7 @@ describe('Client - Reducer - Login', () => {
         it('Should set the password on the state', async () => {
             await store.dispatch(LOGIN_PASSWORD_CHANGED('newPassword'));
 
-            const state: LoginState = store.getState().login;
+            const state: LoginState = store.getState();
             expect(state.password).equal('newPassword');
         });
     });
@@ -43,9 +43,10 @@ describe('Client - Reducer - Login', () => {
             it('Should set valid to false on the state', async () => {
                 await store.dispatch(LOGIN_USERNAME_CHANGED(''));
 
-                const state: LoginState = store.getState().login;
+                let state: LoginState = store.getState();
                 await store.dispatch(LOGIN_VALIDATE(state.userName, state.password));
 
+                state = store.getState();
                 expect(state.userName).equal('');
                 expect(state.valid).false;
             });
@@ -55,10 +56,10 @@ describe('Client - Reducer - Login', () => {
             it('Should set valid to false on the state', async () => {
                 await store.dispatch(LOGIN_PASSWORD_CHANGED(''));
 
-                let state: LoginState = store.getState().login;
+                let state: LoginState = store.getState();
                 await store.dispatch(LOGIN_VALIDATE(state.userName, state.password));
 
-                state = store.getState().login;
+                state = store.getState();
                 expect(state.password).equal('');
                 expect(state.valid).false;
             });
@@ -69,13 +70,13 @@ describe('Client - Reducer - Login', () => {
                 await store.dispatch(LOGIN_PASSWORD_CHANGED('validPW'));
                 await store.dispatch(LOGIN_USERNAME_CHANGED('validUser'));
 
-                let state: LoginState = store.getState().login;
+                let state: LoginState = store.getState();
                 expect(state.password).equal('validPW');
                 expect(state.userName).equal('validUser');
 
                 await store.dispatch(LOGIN_VALIDATE(state.userName, state.password));
 
-                state = store.getState().login;
+                state = store.getState();
                 expect(state.valid).true;
             });
         });
@@ -85,7 +86,7 @@ describe('Client - Reducer - Login', () => {
         it('Should set the error on the state', async () => {
             await store.dispatch(LOGIN_ERROR('newError'));
 
-            const state: LoginState = store.getState().login;
+            const state: LoginState = store.getState();
             expect(state.error).equal('newError');
         });
     });

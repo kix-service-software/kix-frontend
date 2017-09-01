@@ -1,12 +1,13 @@
-import { LoginComponentState, LoginState } from './../../model-client/authentication';
-
+import { LoginComponentState } from './../../model/client/components';
+import { LoginState } from "../../model/client/store/login/";
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
     LOGIN_VALIDATE,
-    LOGIN_CONNECT,
+    LOGIN_INITIALIZE,
     LOGIN_AUTH
-} from '../../model-client/store/actions';
+} from '../../model/client/store/login/actions';
+
 
 class LoginFormComponent {
 
@@ -25,7 +26,7 @@ class LoginFormComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: LoginState = this.store.getState().login;
+        const reduxState: LoginState = this.store.getState();
         this.state.userName = reduxState.userName;
         this.state.password = reduxState.password;
         this.state.valid = reduxState.valid;
@@ -34,9 +35,9 @@ class LoginFormComponent {
     }
 
     public onMount(): void {
-        this.store = require('../../model-client/store');
+        this.store = require('../../model/client/store/login');
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(LOGIN_CONNECT(this.frontendSocketUrl));
+        this.store.dispatch(LOGIN_INITIALIZE(this.frontendSocketUrl));
     }
 
     public userNameChanged(event: any): void {
