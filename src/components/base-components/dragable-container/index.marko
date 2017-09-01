@@ -1,0 +1,12 @@
+<div.dragable-container>
+    <for(row in state.containerConfig.rows)>
+        <div.container-row>
+            <for(widget in row.widgets)>
+                <div.dragable-element class="${row.widgets.length === 1 ? 'big' : 'small'}"
+                    draggable="${state.dragEnabled ? 'true' : 'false'}" on-dragstart('dragStart')>
+                    <widget/>
+                </div>
+            </for>
+        </div>
+    </for>
+</div>

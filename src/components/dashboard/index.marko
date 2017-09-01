@@ -1,12 +1,4 @@
 <div>
-    <h1>Dashboard</h1>
-    <span.hint>Widgets sind per Drag and Drop verschiebbar.</span>
-    <div.widget-container>
-        <for(widget in state.widgets)>
-            <div class="widget-item ${state.dragging ? 'drag' : ''} ${widget.drag ? 'drag-widget' : ''}" id=widget.id
-                draggable="true" on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop')>
-                <h3>${widget.name}</h3>
-            </div>
-        </for>
-    </div>
+    <h1>Home</h1>
+    <dragable-container containerConfig=state.containerConfig/>
 </div>

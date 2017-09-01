@@ -20,6 +20,31 @@
             ],
             "console": "integratedTerminal",
             "preLaunchTask": "gulp"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "KIXng Tests",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--no-timeouts",
+                "--reporter",
+                "spec",
+                "--compilers",
+                "ts:ts-node/register",
+                "--require",
+                "source-map-support/register",
+                "${workspaceRoot}/tests/**/*.test.ts"
+            ],
+            "env": {
+                "NODE_ENV": "test",
+                "http_proxy": "",
+                "https_proxy": ""
+            },
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector"
         }
     ]
 }
