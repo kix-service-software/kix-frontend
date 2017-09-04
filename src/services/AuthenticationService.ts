@@ -6,7 +6,7 @@ import {
     Session,
     SessionResponse
 } from '../model';
-import { UserType } from '../model-client/authentication';
+import { UserType } from '../model/client/';
 import { IAuthenticationService, IHttpService } from './';
 import { Request, Response } from 'express';
 
@@ -51,11 +51,7 @@ export class AuthenticationService implements IAuthenticationService {
     public async login(user: string, password: string, type: UserType): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
         const response = await this.httpService.post<LoginResponse>('sessions', userLogin);
-        if (response.Token) {
-            return response.Token;
-        } else {
-            throw new HttpError(403, "Login failed.", response);
-        }
+        return response.Token;
     }
 
     public async logout(token: string): Promise<boolean> {

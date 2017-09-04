@@ -2,48 +2,32 @@ import { IServerConfiguration } from './../model/';
 import {
     AuthenticationResult,
     LoginRequest,
-    UserType,
     AuthenticationEvent
-} from './../model-client/authentication';
-
-import { SocketEvent } from './../model-client/';
+} from './../model/client/socket/login';
+import { UserType } from './../model/client/';
+import { SocketEvent } from './../model/client/socket/SocketEvent';
 
 import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
 import { IAuthenticationService, IConfigurationService, ILoggingService } from './../services/';
-import { ICommunicator } from './ICommunicator';
+import { KIXCommunicator } from './KIXCommunicator';
 
-@injectable()
-export class AuthenticationCommunicator implements ICommunicator {
-
-    private serverConfig: IServerConfiguration;
-    private authenticationService: IAuthenticationService;
-    private loggingService: ILoggingService;
-
-    public constructor(
-        @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("IAuthenticationService") authenticationService: IAuthenticationService,
-        @inject("ILoggingService") loggingService: ILoggingService
-    ) {
-        this.serverConfig = configurationService.getServerConfiguration();
-        this.authenticationService = authenticationService;
-        this.loggingService = loggingService;
-    }
+export class AuthenticationCommunicator extends KIXCommunicator {
 
     public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/authentication');
         nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-            this.registerLogin(client);
+            this.registerLoginEvents(client);
         });
     }
 
-    private registerLogin(client: SocketIO.Socket): void {
+    private registerLoginEvents(client: SocketIO.Socket): void {
         client.on(AuthenticationEvent.LOGIN, async (data: LoginRequest) => {
             return await this.authenticationService
                 .login(data.userName, data.password, data.userType)
                 .then((token: string) => {
                     client.emit(AuthenticationEvent.AUTHORIZED,
-                        new AuthenticationResult(token, this.serverConfig.FRONTEND_URL));
+                        new AuthenticationResult(token, '/'));
                 }).catch((error: HttpError) => {
                     this.loggingService.error(error.errorMessage + ' - ' + error.status, error);
                     client.emit(AuthenticationEvent.UNAUTHORIZED, error);

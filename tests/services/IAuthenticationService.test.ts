@@ -6,10 +6,9 @@ import {
     IConfigurationService
 } from './../../src/services/';
 import { HttpError } from './../../src/model/';
-import { UserType } from './../../src/model-client/authentication';
+import { UserType } from './../../src/model/client/';
 import { Request, Response } from 'express';
 import chaiAsPromised = require('chai-as-promised');
-import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
 
 chai.use(chaiAsPromised);
@@ -17,13 +16,8 @@ const expect = chai.expect;
 
 import { container } from "./../../src/Container";
 
-
-
-const axios = require('axios');
-
-
 describe('Authentication Service', () => {
-    let mock;
+    let nockScope;
     let httpService: IHttpService;
     let authenticationService: IAuthenticationService;
     let configurationService: IConfigurationService;
@@ -31,18 +25,13 @@ describe('Authentication Service', () => {
 
     before(async () => {
         await container.initialize();
-
-        mock = new MockAdapter(axios);
-
+        const nock = require('nock');
         httpService = container.getDIContainer().get<IHttpService>("IHttpService");
         authenticationService = container.getDIContainer().get<IAuthenticationService>("IAuthenticationService");
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
 
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
-    });
-
-    after(() => {
-        mock.restore();
+        nockScope = nock(apiURL);
     });
 
     it('service instance is registered in container.', () => {
@@ -52,16 +41,15 @@ describe('Authentication Service', () => {
     describe('Login', () => {
 
         describe('Create a valid agent login request.', async () => {
-            before(() => {
-                mock.onPost(apiURL + '/sessions', {
-                    UserLogin: 'agent',
-                    Password: 'agent',
-                    UserType: UserType.AGENT
-                }).reply(200, { Token: 'ABCDEFG12345' });
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .post('/sessions', {
+                        UserLogin: 'agent',
+                        Password: 'agent',
+                        UserType: UserType.AGENT
+                    })
+                    .reply(200, { Token: 'ABCDEFG12345' });
             });
 
             it('should return a token if valid agent credentials are given', async () => {
@@ -71,16 +59,15 @@ describe('Authentication Service', () => {
         });
 
         describe('Create a valid customer login request.', async () => {
-            before(() => {
-                mock.onPost(apiURL + '/sessions', {
-                    UserLogin: 'customer',
-                    Password: 'customer',
-                    UserType: UserType.CUSTOMER
-                }).reply(200, { Token: 'ABCDEFG12345' });
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .post('/sessions', {
+                        UserLogin: 'customer',
+                        Password: 'customer',
+                        UserType: UserType.CUSTOMER
+                    })
+                    .reply(200, { Token: 'ABCDEFG12345' });
             });
 
             it('should return a token if valid customer credentials are given', async () => {
@@ -90,16 +77,16 @@ describe('Authentication Service', () => {
         });
 
         describe('Create a invalid login request.', async () => {
-            before(() => {
-                mock.onPost(apiURL + '/sessions', {
-                    UserLogin: 'wrong',
-                    Password: 'wrong',
-                    UserType: UserType.AGENT
-                }).reply(400, { error: 'Wrong credentials.' });
-            });
 
-            after(() => {
-                mock.reset();
+
+            before(() => {
+                nockScope
+                    .post('/sessions', {
+                        UserLogin: 'wrong',
+                        Password: 'wrong',
+                        UserType: UserType.AGENT
+                    })
+                    .reply(400, { error: 'Wrong credentials.' });
             });
 
             it('should return a correct http error if incorrect credentials are provided.', async () => {
@@ -115,13 +102,11 @@ describe('Authentication Service', () => {
 
     describe('Logout', () => {
         describe('Create a valid logout reqeuest.', () => {
-            before(() => {
-                mock.onDelete(apiURL + '/sessions/ABCDEFG123456')
-                    .reply(200);
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .delete('/sessions/ABCDEFG123456')
+                    .reply(200);
             });
 
             it('should do a logout.', async () => {

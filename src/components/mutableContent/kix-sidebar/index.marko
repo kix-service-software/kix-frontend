@@ -1,3 +1,36 @@
-<div#kix_sidebar_container>
-  <span>Sidebar</span>
+<div#kix_sidebars>
+    <div.sidebar_select_container>
+        <div#content_settings_select.sidebar_select>
+            <div style="font-weight:bold">*</div>
+        </div>
+        <div#information_select.sidebar_select>
+            <div style="font-weight:bold">i</div>
+        </div>
+        <!-- TODO: container for the normal sidebars, have to be verticaly middle -->
+        <div#dependend_sidebars_select>
+            <!-- TODO: just as placeholder -->
+            <if(state.hasRightsForNodeSidebar)>
+                <div#node_sidebar_select.sidebar_select class=(state.showNodeSidebar && "select_active") on-click('toggleSidebar', 'NodeSidebar')>
+                    <div style="font-weight:bold">N</div>
+                </div>
+            </if>
+            <!-- TODO: just as placeholder -->
+            <div#checklist_sidebar_select.sidebar_select>
+                <div style="font-weight:bold">CH</div>
+            </div>
+        </div>
+    </div>
+    <div.sidebar_container>
+        <div#default_sidebars/>
+        <div#dependend_sidebars>
+            <!-- TODO: just as placeholder -->
+            <if(state.showNodeSidebar && state.hasRightsForNodeSidebar)>
+                <div#note_sidebar.kix_sidebar>
+                    <div.sidebar_header>Notizen</div>
+                    <div.sidebar_content>Test</div>
+                </div>
+            </if>
+        </div>
+    </div>
+    <div.clear/>
 </div>

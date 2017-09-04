@@ -13,5 +13,9 @@
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
     "todohighlight.exclude": "{**/node_modules/**,**/dist/**,**/.vscode/**,**/.history/**}",
-    "local-history.daysLimit": 30
+    "local-history.daysLimit": 30,
+    "less.lint.important": "warning",
+    "marko.beautify.indent": "    ",
+    "marko.beautify.maxLen": 120,
+    "marko.beautify.syntax": "html"
 }

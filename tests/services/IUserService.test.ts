@@ -15,31 +15,24 @@ import {
 import { container } from './../../src/Container';
 import { IConfigurationService, IUserService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
-import MockAdapter = require('axios-mock-adapter');
 import chai = require('chai');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const axios = require('axios');
-
 describe('User Service', () => {
-    let mock;
+    let nockScope;
     let userService: IUserService;
     let configurationService: IConfigurationService;
     let apiURL: string;
 
     before(async () => {
         await container.initialize();
-        mock = new MockAdapter(axios);
-
+        const nock = require('nock');
         userService = container.getDIContainer().get<IUserService>("IUserService");
         configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
-    });
-
-    after(() => {
-        mock.restore();
+        nockScope = nock(apiURL);
     });
 
     it('service instance is registered in container.', () => {
@@ -47,13 +40,11 @@ describe('User Service', () => {
     });
 
     describe('Create a valid request to retrieve a user.', () => {
-        before(() => {
-            mock.onGet(apiURL + '/users/12345')
-                .reply(200, buildUserResponse());
-        });
 
-        after(() => {
-            mock.reset();
+        before(() => {
+            nockScope
+                .get('/users/12345')
+                .reply(200, buildUserResponse());
         });
 
         it('should return a user object.', async () => {
@@ -64,13 +55,11 @@ describe('User Service', () => {
 
     describe('Get multiple users', () => {
         describe('Create a valid request to retrieve all users.', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users')
-                    .reply(200, buildUsersResponse(4));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .reply(200, buildUsersResponse(4));
             });
 
             it('should return a list of users.', async () => {
@@ -83,13 +72,12 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a list of 5 users', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users', { params: { Limit: 5 } })
-                    .reply(200, buildUsersResponse(5));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .query({ Limit: 5 })
+                    .reply(200, buildUsersResponse(5));
             });
 
             it('should return a limited list of 5 users.', async () => {
@@ -102,13 +90,12 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a sorted list of users.', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users', { params: { Order: 'Down' } })
-                    .reply(200, buildUsersResponse(2));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .query({ Order: 'Down' })
+                    .reply(200, buildUsersResponse(2));
             });
 
             it('should return a sorted list of users.', async () => {
@@ -120,13 +107,12 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a list of users witch where changed after defined date.', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users', { params: { ChangedAfter: '20170815' } })
-                    .reply(200, buildUsersResponse(3));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .query({ ChangedAfter: '20170815' })
+                    .reply(200, buildUsersResponse(3));
             });
 
             it('should return a list of users filtered by changed after.', async () => {
@@ -138,13 +124,12 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a limeted of users witch where changed after defined date.', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users', { params: { Limit: 6, ChangedAfter: '20170815' } })
-                    .reply(200, buildUsersResponse(6));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .query({ Limit: 6, ChangedAfter: '20170815' })
+                    .reply(200, buildUsersResponse(6));
             });
 
             it('should return a limited list of users filtered by changed after.', async () => {
@@ -157,13 +142,12 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a limeted, sorted of users', () => {
-            before(() => {
-                mock.onGet(apiURL + '/users', { params: { Limit: 6, Order: 'Up' } })
-                    .reply(200, buildUsersResponse(6));
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .get('/users')
+                    .query({ Limit: 6, Order: 'Up' })
+                    .reply(200, buildUsersResponse(6));
             });
 
             it('should return a limited, sorted list of users.', async () => {
@@ -176,14 +160,14 @@ describe('User Service', () => {
         });
 
         describe('Create a valid request to retrieve a sorted list of users witch where changed after defined date.', () => {
+
             before(() => {
-                mock.onGet(apiURL + '/users', { params: { Order: 'Up', ChangedAfter: '20170815' } })
+                nockScope
+                    .get('/users')
+                    .query({ Order: 'Up', ChangedAfter: '20170815' })
                     .reply(200, buildUsersResponse(4));
             });
 
-            after(() => {
-                mock.reset();
-            });
             it('should return a sorted list of users filtered by changed after.', async () => {
                 const users: User[] = await userService.getUsers(null, SortOrder.UP, "20170815");
                 expect(users).not.undefined;
@@ -197,12 +181,9 @@ describe('User Service', () => {
         describe('Create a valid request to create a new user.', () => {
 
             before(() => {
-                mock.onPost(apiURL + '/users', new CreateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                nockScope
+                    .post('/users', new CreateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
                     .reply(200, buildCreateUserResponse(123456));
-            });
-
-            after(() => {
-                mock.reset();
             });
 
             it('should return a the id of the new users.', async () => {
@@ -213,13 +194,11 @@ describe('User Service', () => {
         });
 
         describe('Create a invalid create request.', () => {
-            before(() => {
-                mock.onPost(apiURL + '/users', new CreateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
-                    .reply(400, {});
-            });
 
-            after(() => {
-                mock.reset();
+            before(() => {
+                nockScope
+                    .post('/users', new CreateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    .reply(400, {});
             });
 
             it('should throw an error if request is invalid.', async () => {
@@ -239,16 +218,13 @@ describe('User Service', () => {
         describe('Create a valid request to update an existing user.', () => {
 
             before(() => {
-                mock.onPatch(apiURL + '/users/123456',
+                nockScope
+                    .patch('/users/123456',
                     new UpdateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
                     .reply(200, buildUpdateUserResponse(123456));
             });
 
-            after(() => {
-                mock.reset();
-            });
-
-            it('should return a the id of the new users.', async () => {
+            it('should return the id of the user.', async () => {
                 const userId = await userService.updateUser(123456, 'login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1);
                 expect(userId).equal(123456);
             });
@@ -258,7 +234,8 @@ describe('User Service', () => {
         describe('Create a valid request to partial update an existing user.', () => {
 
             before(() => {
-                mock.onPatch(apiURL + '/users/123456',
+                nockScope
+                    .patch('/users/123456',
                     {
                         User: {
                             UserFirstname: 'firstName',
@@ -268,11 +245,7 @@ describe('User Service', () => {
                     .reply(200, buildUpdateUserResponse(123456));
             });
 
-            after(() => {
-                mock.reset();
-            });
-
-            it('should return a the id of the new users.', async () => {
+            it('should return a the id of the user.', async () => {
                 const userId = await userService.updateUser(123456, null, 'firstName', 'lastName', null, null, null, null, null);
                 expect(userId).equal(123456);
             });
@@ -281,16 +254,13 @@ describe('User Service', () => {
 
         describe('Create a invalid request to update an existing user.', () => {
             before(() => {
-                mock.onPatch(apiURL + '/users/123456',
+                nockScope
+                    .patch('/users/123456',
                     new UpdateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
                     .reply(400, {});
             });
 
-            after(() => {
-                mock.reset();
-            });
-
-            it('should return a the id of the new users.', async () => {
+            it('should return a the id of the user.', async () => {
                 const userId = await userService.updateUser(123456, '', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1)
                     .then((result) => {
                         expect(true).false;

@@ -16,7 +16,7 @@ export class AuthenticationRouter extends KIXRouter {
         res.marko(template, {
             template: require('../components/login/index.marko'),
             data: {
-                frontendSocketUrl: this.serverConfig.FRONTEND_SOCKET_URL
+                frontendSocketUrl: this.getServerUrl()
             }
         });
     }

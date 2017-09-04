@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserType } from '../model-client/authentication';
+import { UserType } from '../model/client/';
 
 export interface IAuthenticationService {
 

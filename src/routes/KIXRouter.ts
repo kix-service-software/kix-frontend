@@ -1,4 +1,3 @@
-import { MenuEntry } from './../model-client/menu/MenuEntry';
 import { IMainMenuExtension, KIXExtensions } from './../extensions/';
 import { injectable, inject } from 'inversify';
 import { IServerConfiguration } from './../model';
@@ -42,22 +41,17 @@ export abstract class KIXRouter implements IRouter {
 
         const template = require(appTemplatePath);
 
-        const menuExtensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
-        const mainMenuEntries = menuExtensions.map((me) => new MenuEntry(me.getLink(), me.getIcon(), me.getText()));
-
         res.marko(template, {
             template: require(baseTemplatePath),
             data: {
-                frontendUrl: this.serverConfig.FRONTEND_URL,
-                frontendSocketUrl: this.getSocketUrl(),
-                contentTemplate: contentTemplatePath,
-                mainMenuEntries
+                frontendSocketUrl: this.getServerUrl(),
+                contentTemplate: contentTemplatePath
             }
         });
     }
 
-    private getSocketUrl(): string {
-        return this.serverConfig.FRONTEND_SOCKET_URL + ":" + this.serverConfig.SOCKET_COMMUNICATION_PORT;
+    protected getServerUrl(): string {
+        return this.serverConfig.FRONTEND_URL + ":" + this.serverConfig.HTTPS_PORT;
     }
 
 }

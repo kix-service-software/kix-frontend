@@ -105,7 +105,7 @@ describe('Configuration Service', () => {
 
         describe('Overwrite number values', () => {
             before(() => {
-                process.env.SERVER_PORT = '9876';
+                process.env.HTTP_PORT = '9876';
                 process.env.LOG_LEVEL = LogLevel.DEBUG.toString();
 
                 const configService = new ConfigurationService();
@@ -116,7 +116,7 @@ describe('Configuration Service', () => {
             });
 
             it('SERVER_PORT should have the value of the environment variable', () => {
-                expect(serverConfig.SERVER_PORT).equal(9876);
+                expect(serverConfig.HTTP_PORT).equal(9876);
             });
 
             it('LOG_LEVEL should have the value of the environment variable', () => {

@@ -1,33 +1,25 @@
-@import "./defaults.less";
 #header {
     .color_theme_0;
     width: 100%;
     margin-bottom: 30px;
     & div:first-child {
-        height: 90px;
+        height: 87px;
         & #kix_logo {
             background: @secondary_6;
-            top: 11px;
+            top: 10px;
             position: relative;
-            padding-left: 20px;
-            width: 1px;
-            height: 68px;
-            & div {
-                background: @secondary_6;
-                padding: 4px;
-                width: 60px;
+            padding: 3px 3px 3px 15px;
+            width: 60px;
+            height: 60px;
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px;
+            & img {
                 height: 60px;
-                border-top-right-radius: 20%;
-                border-bottom-right-radius: 20%;
-                line-height: 0;
-                & img {
-                    height: 60px;
-                }
             }
         }
     }
     & div:last-child {
         background: @tertiary_0;
-        height: 5px;
+        height: 6px;
     }
 }

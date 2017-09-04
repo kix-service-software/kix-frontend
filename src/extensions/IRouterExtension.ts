@@ -1,5 +1,5 @@
 export interface IRouterExtension {
 
-    getRouter(): any;
+    getRouterClass(): any;
 
 }
