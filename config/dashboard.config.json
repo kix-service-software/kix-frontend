@@ -1,0 +1,25 @@
+{
+    "rows": [
+        {
+            "widgets": [
+                "",
+                "",
+                ""
+            ],
+            "dragWidgets": true
+        },
+        {
+            "widgets": [
+                ""
+            ],
+            "dragWidgets": true
+        },
+        {
+            "widgets": [
+                ""
+            ],
+            "dragWidgets": true
+        }
+    ],
+    "dragRows": false
+}

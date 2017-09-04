@@ -6,6 +6,8 @@ export interface IConfigurationService {
 
     getLassoConfiguration(): any;
 
+    getComponentConfiguration(configurationName: string): any;
+
     isProductionMode(): boolean;
 
     isDevelopmentMode(): boolean;

@@ -5,28 +5,7 @@ class DashboardComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {
-            containerConfig: null
-        };
-
-        const containerConfig = new ContainerConfig();
-        containerConfig.dragRows = true;
-
-        const rows: ContainerRow[] = [];
-
-        for (let i = 0; i < 3; i++) {
-            const row = new ContainerRow();
-            row.dragWidgets = true;
-            if (i === 1) {
-                row.widgets = [""];
-            } else {
-                row.widgets = ["", "", ""];
-            }
-            rows.push(row);
-        }
-
-        containerConfig.rows = rows;
-        this.state.containerConfig = containerConfig;
+        this.state = {};
     }
 
     public onMount(): void {

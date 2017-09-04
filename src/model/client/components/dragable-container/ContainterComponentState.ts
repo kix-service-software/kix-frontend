@@ -1,8 +1,12 @@
+import { DragAndDropState } from './DragAndDropState';
 import { ContainerConfig } from './ContainerConfig';
 
 export class ContainerComponentState {
 
-    public containerConfig: ContainerConfig = new ContainerConfig();
+    public containerConfiguration: ContainerConfig = new ContainerConfig();
 
-    public dragEnabled: boolean = false;
+    public widgets: any[] = [];
+
+    public dndState: DragAndDropState = new DragAndDropState();
+
 }

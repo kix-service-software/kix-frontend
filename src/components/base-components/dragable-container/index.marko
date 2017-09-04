@@ -1,10 +1,16 @@
 <div.dragable-container>
-    <for(row in state.containerConfig.rows)>
+    <for(row in state.containerConfiguration.rows | status-var=rowLoop)>
         <div.container-row>
-            <for(widget in row.widgets)>
-                <div.dragable-element class="${row.widgets.length === 1 ? 'big' : 'small'}"
-                    draggable="${state.dragEnabled ? 'true' : 'false'}" on-dragstart('dragStart')>
-                    <widget/>
+            <for(widget in row.widgets | status-var=loop)>
+                <div.dragable-element id="drag-${rowLoop.getIndex()}-${loop.getIndex()}"
+                    class="${row.widgets.length === 1 ? 'big' : 'small'}"
+                    draggable="${state.dndState.enabled ? 'true' : 'false'}" on-dragstart('dragStart')
+                    on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
+                    <div.drag-overlay id="overlay-drag-${rowLoop.getIndex()}-${loop.getIndex()}"
+                        class="${state.dndState.dragging ? '' : 'drag-hidden'} ${state.dndState.dropElementId === 'overlay-drag-' + rowLoop.getIndex() + '-' + loop.getIndex() ? 'drop-element' : ''}"/>
+                    <div.drag-widget>
+                        <widget/>
+                    </div>
                 </div>
             </for>
         </div>

@@ -30,6 +30,10 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
+    public getComponentConfiguration(configurationName: string): any {
+        return require('../../config/' + configurationName + '.config.json');
+    }
+
     public isProductionMode(): boolean {
         const environment = this.getEnvironment();
         return environment === Environment.PRODUCTION ||
