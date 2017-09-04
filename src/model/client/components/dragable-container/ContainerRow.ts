@@ -1,6 +1,6 @@
 export class ContainerRow {
 
-    public widgets: any[];
+    public widgets: string[];
 
     public dragWidgets: boolean;
 

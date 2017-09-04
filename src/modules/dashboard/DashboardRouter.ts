@@ -13,7 +13,8 @@ export class DashboardRouter extends KIXRouter {
     }
 
     private getDashboard(req: Request, res: Response): void {
-        this.prepareMarkoTemplate(res, 'dashboard/index.marko');
+        const config = this.configurationService.getComponentConfiguration('dashboard');
+        this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
     }
 
 }

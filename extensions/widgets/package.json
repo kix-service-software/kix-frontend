@@ -1,0 +1,11 @@
+{
+    "name": "widget-extensions",
+    "extensions": {
+        "kix:widget": {
+            "statistics": "../../dist/modules/dashboard/router.extension"
+        },
+        "kix:marko:dependencies": {
+            "statistics-widget-marko": "../../dist/modules/widgets/statistics/marko-dependencies.extension"
+        }
+    }
+}

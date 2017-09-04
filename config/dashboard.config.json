@@ -2,21 +2,46 @@
     "rows": [
         {
             "widgets": [
-                "",
-                "",
-                ""
+                {
+                    "id": "statistics-widget",
+                    "title": "Statistik 01",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                },
+                {
+                    "id": "statistics-widget",
+                    "title": "Statistik 01",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                },
+                {
+                    "id": "statistics-widget",
+                    "title": "Statistik 01",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                }
             ],
             "dragWidgets": true
         },
         {
             "widgets": [
-                ""
+                {
+                    "id": "statistics-widget",
+                    "title": "Statistik 01",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                }
             ],
             "dragWidgets": true
         },
         {
             "widgets": [
-                ""
+                {
+                    "id": "statistics-widget",
+                    "title": "Statistik 01",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                }
             ],
             "dragWidgets": true
         }
