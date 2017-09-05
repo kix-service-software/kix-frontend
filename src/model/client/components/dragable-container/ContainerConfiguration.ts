@@ -1,6 +1,6 @@
 import { ContainerRow } from './ContainerRow';
 
-export class ContainerConfig {
+export class ContainerConfiguration {
 
     public rows: ContainerRow[];
 

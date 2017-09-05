@@ -1,15 +1,29 @@
+import { ContainerConfiguration } from './../../model/client/components/dragable-container/ContainerConfiguration';
+import { DashboardState } from './../../model/client/store/dashboard/DashboardState';
+import { DashboardComponentState } from './../../model/client/components/dashboard/DashboardComponentState';
 import { ContainerRow } from './../../model/client/components/dragable-container/ContainerRow';
-import { ContainerConfig } from './../../model/client/components/dragable-container/ContainerConfig';
+import { DASHBOARD_INITIALIZE } from '../../model/client/store/dashboard/actions';
+
 class DashboardComponent {
 
-    public state: any;
+    public state: DashboardComponentState;
+
+    public frontendSocketUrl: string;
+
+    public store: any;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = new DashboardComponentState();
+        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onMount(): void {
-        console.log("Mount Dashboard");
+        this.store = require('../../model/client/store/dashboard');
+        this.store.subscribe(this.stateChanged.bind(this));
+    }
+
+    public stateChanged(): void {
+        const reduxState: DashboardState = this.store.getState();
     }
 }
 

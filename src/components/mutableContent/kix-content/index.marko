@@ -1,6 +1,7 @@
 <div#kix_content>
     $ let template = require('../../' + data.template);
     <include(template, {
+        frontendSocketUrl: data.frontendSocketUrl,
         templateData: data.templateData
         })/>
 </div>

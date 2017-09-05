@@ -11,6 +11,7 @@ export abstract class KIXCommunicator implements ICommunicator {
     protected authenticationService: IAuthenticationService;
     protected loggingService: ILoggingService;
     protected pluginService: IPluginService;
+    protected configurationService: IConfigurationService;
 
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
@@ -18,7 +19,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ILoggingService") loggingService: ILoggingService,
         @inject("IPluginService") pluginService: IPluginService
     ) {
-        this.serverConfig = configurationService.getServerConfiguration();
+        this.configurationService = configurationService;
+        this.serverConfig = this.configurationService.getServerConfiguration();
         this.authenticationService = authenticationService;
         this.loggingService = loggingService;
         this.pluginService = pluginService;

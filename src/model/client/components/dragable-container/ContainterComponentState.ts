@@ -1,9 +1,11 @@
 import { DragAndDropState } from './DragAndDropState';
-import { ContainerConfig } from './ContainerConfig';
+import { ContainerConfiguration } from './ContainerConfiguration';
 
 export class ContainerComponentState {
 
-    public containerConfiguration: ContainerConfig = new ContainerConfig();
+    public configurationName: string = "";
+
+    public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
 
     public widgets: any[] = [];
 
