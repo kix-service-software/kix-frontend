@@ -35,7 +35,8 @@ export abstract class KIXRouter implements IRouter {
 
     protected abstract initialize(): void;
 
-    protected async prepareMarkoTemplate(res: Response, contentTemplatePath: string): Promise<void> {
+    protected async prepareMarkoTemplate(
+        res: Response, contentTemplatePath: string, templateData?: any): Promise<void> {
         const appTemplatePath = '../components/app/index.marko';
         const baseTemplatePath = '../components/kix-base-template/index.marko';
 
@@ -45,7 +46,8 @@ export abstract class KIXRouter implements IRouter {
             template: require(baseTemplatePath),
             data: {
                 frontendSocketUrl: this.getServerUrl(),
-                contentTemplate: contentTemplatePath
+                contentTemplate: contentTemplatePath,
+                templateData
             }
         });
     }

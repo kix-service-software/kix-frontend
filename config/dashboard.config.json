@@ -1,0 +1,50 @@
+{
+    "rows": [
+        {
+            "widgets": [
+                {
+                    "id": "statistics-widget",
+                    "title": "Neue Tickets",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                },
+                {
+                    "id": "statistics-widget",
+                    "title": "Prioritäten",
+                    "template": "widgets/statistics",
+                    "isExternal": false
+                },
+                {
+                    "id": "search-templates",
+                    "title": "Suchvorlagen",
+                    "template": "widgets/search-templates",
+                    "isExternal": false
+                }
+            ],
+            "dragWidgets": true
+        },
+        {
+            "widgets": [
+                {
+                    "id": "ticket-list-widget",
+                    "title": "Suchvorlage: ToDos",
+                    "template": "widgets/ticket-list",
+                    "isExternal": false
+                }
+            ],
+            "dragWidgets": true
+        },
+        {
+            "widgets": [
+                {
+                    "id": "ticket-list-widget",
+                    "title": "Suchvorlage: Verantwortlich",
+                    "template": "widgets/ticket-list",
+                    "isExternal": false
+                }
+            ],
+            "dragWidgets": true
+        }
+    ],
+    "dragRows": false
+}

@@ -1,0 +1,9 @@
+<div#widget>
+    <div.widget_header>
+        <span>${data.widget.title}</span>
+    </div>
+    <div.widget_content>
+        $ let template = require('../../' + data.widget.template);
+        <include(template)/>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div>
+    <table.ticket-table>
+        <tr>
+            <for(col in state.columns)>
+                <th>column</th>
+            </for>
+        </tr>
+        <tr>
+            <for(row in state.values)>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="all" value=""/>
+                    </td>
+                    <for(value in row)>
+                        <td>${value}</td>
+                    </for>
+                </tr>
+            </for>
+        </tr>
+    </table>
+</div>

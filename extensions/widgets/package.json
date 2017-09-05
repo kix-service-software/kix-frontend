@@ -1,0 +1,15 @@
+{
+    "name": "widget-extensions",
+    "extensions": {
+        "kix:widget": {
+            "statistics": "../../dist/modules/widgets/statistics/statistics-widget.extension",
+            "search-templates": "../../dist/modules/widgets/search-templates/search-templates-widget.extension",
+            "ticket-list": "../../dist/modules/widgets/ticket-list/ticket-list-widget.extension"
+        },
+        "kix:marko:dependencies": {
+            "statistics-widget-marko": "../../dist/modules/widgets/statistics/marko-dependencies.extension",
+            "search-template-widget-marko": "../../dist/modules/widgets/search-templates/marko-dependencies.extension",
+            "ticket-list-widget-marko": "../../dist/modules/widgets/ticket-list/marko-dependencies.extension"
+        }
+    }
+}
