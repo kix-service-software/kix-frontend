@@ -32,7 +32,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
-                Promise.reject(this.createHttpError(error));
+                return Promise.reject(this.createHttpError(error));
             });
 
         return response;
@@ -48,7 +48,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
-                throw this.createHttpError(error);
+                return Promise.reject(this.createHttpError(error));
             });
 
         return response;
@@ -64,7 +64,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
-                throw this.createHttpError(error);
+                return Promise.reject(this.createHttpError(error));
             });
         return response;
     }
@@ -79,7 +79,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
-                throw this.createHttpError(error);
+                return Promise.reject(this.createHttpError(error));
             });
         return response;
     }
@@ -93,7 +93,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request.delete(options)
             .catch((error) => {
-                throw this.createHttpError(error);
+                return Promise.reject(this.createHttpError(error));
             });
         return response;
     }
