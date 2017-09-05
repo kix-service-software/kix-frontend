@@ -1,3 +1,4 @@
+import { ContainerConfiguration } from './../../../model/client/components/dragable-container/ContainerConfiguration';
 import {
     ContainerComponentState
 } from './../../../model/client/components/dragable-container/ContainterComponentState';

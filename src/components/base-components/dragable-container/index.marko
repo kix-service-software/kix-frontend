@@ -9,6 +9,7 @@
                     <div.drag-overlay id="overlay-drag-${rowLoop.getIndex()}-${loop.getIndex()}"
                         class="${state.dndState.dragging ? '' : 'drag-hidden'} ${state.dndState.dropElementId === 'overlay-drag-' + rowLoop.getIndex() + '-' + loop.getIndex() ? 'drop-element' : ''}"/>
                     <div.drag-widget>
+                        <span>${widget.template}</span>
                         <widget widget=widget/>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import {
 export class ConfigurationCommunicatior extends KIXCommunicator {
 
     public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/authentication');
+        const nsp = socketIO.of('/configuration');
         nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
             this.registerComponentConfigurationEvents(client);
         });
