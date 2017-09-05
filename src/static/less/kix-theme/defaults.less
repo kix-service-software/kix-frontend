@@ -15,6 +15,53 @@ body {
     position: relative;
     box-sizing: border-box;
 }
+
+h1 {
+    font-size: 2.125em;
+    font-weight: 400;
+}
+
+button {
+    position: relative;
+    left: -35px;
+    height: 35px;
+    box-sizing: border-box;
+    line-height: 35px;
+    background-color: @tertiary_0;
+    color: @secondary_6;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-weight: 600;
+    border: 0 none;
+    padding: 0 1em;
+    cursor: pointer;
+    &.submit {
+        background-color: @tertiary_0;
+        &:after {
+            content: " ";
+            position: absolute;
+            top: 0;
+            right: -35px;
+            display: block;
+            box-sizing: border-box;
+            border: 3px solid @tertiary_0;
+            width: 35px;
+            height: 35px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            color: @tertiary_0;
+            cursor: pointer;
+        }
+        &.disabled {
+            background-color: @secondary_1;
+            &:after {
+                border: 3px solid @secondary_1;
+                color: @secondary_1;
+            }
+        }
+    }
+}
+
 .color_theme_0() {
     @bc_color: @primary_0;
     background: @bc_color;

@@ -1,25 +1,24 @@
-#header {
+#header,
+.dialog-header {
     .color_theme_0;
-    width: 100%;
-    margin-bottom: 30px;
-    & div:first-child {
-        height: 87px;
-        & #kix_logo {
-            background: @secondary_6;
-            top: 10px;
-            position: relative;
-            padding: 3px 3px 3px 15px;
-            width: 60px;
+    margin-bottom: 2.5em;
+    height: 87px;
+    border-bottom: 6px solid @tertiary_0;
+    & #kix_logo {
+        background: @secondary_6;
+        top: 10px;
+        position: relative;
+        padding: 3px 3px 3px 15px;
+        width: 60px;
+        height: 60px;
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+        & img {
             height: 60px;
-            border-top-right-radius: 14px;
-            border-bottom-right-radius: 14px;
-            & img {
-                height: 60px;
-            }
         }
     }
-    & div:last-child {
-        background: @tertiary_0;
-        height: 6px;
-    }
+}
+
+.dialog-header {
+    margin-bottom: 0;
 }
