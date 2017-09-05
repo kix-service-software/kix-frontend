@@ -32,7 +32,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
-                throw this.createHttpError(error);
+                Promise.reject(this.createHttpError(error));
             });
 
         return response;

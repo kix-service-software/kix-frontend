@@ -20,6 +20,7 @@ class DashboardComponent {
     public onMount(): void {
         this.store = require('../../model/client/store/dashboard');
         this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(DASHBOARD_INITIALIZE(this.frontendSocketUrl));
     }
 
     public stateChanged(): void {

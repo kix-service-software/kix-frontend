@@ -14,7 +14,10 @@ export class DashboardSocketListener {
     private store: any;
 
     public constructor(frontendSocketUrl: string) {
-        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {});
+        const token = window.localStorage.getItem("token");
+        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
+            query: "Token=" + token
+        });
         this.store = require('../../store/dashboard');
         this.initConfigurationSocketListener(this.configurationSocket);
     }
