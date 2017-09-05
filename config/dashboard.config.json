@@ -4,20 +4,20 @@
             "widgets": [
                 {
                     "id": "statistics-widget",
-                    "title": "Statistik 01",
+                    "title": "Neue Tickets",
                     "template": "widgets/statistics",
                     "isExternal": false
                 },
                 {
                     "id": "statistics-widget",
-                    "title": "Statistik 01",
+                    "title": "Prioritäten",
                     "template": "widgets/statistics",
                     "isExternal": false
                 },
                 {
-                    "id": "statistics-widget",
-                    "title": "Statistik 01",
-                    "template": "widgets/statistics",
+                    "id": "search-templates",
+                    "title": "Suchvorlagen",
+                    "template": "widgets/search-templates",
                     "isExternal": false
                 }
             ],
@@ -26,9 +26,9 @@
         {
             "widgets": [
                 {
-                    "id": "statistics-widget",
-                    "title": "Statistik 01",
-                    "template": "widgets/statistics",
+                    "id": "ticket-list-widget",
+                    "title": "Suchvorlage: ToDos",
+                    "template": "widgets/ticket-list",
                     "isExternal": false
                 }
             ],
@@ -37,9 +37,9 @@
         {
             "widgets": [
                 {
-                    "id": "statistics-widget",
-                    "title": "Statistik 01",
-                    "template": "widgets/statistics",
+                    "id": "ticket-list-widget",
+                    "title": "Suchvorlage: Verantwortlich",
+                    "template": "widgets/ticket-list",
                     "isExternal": false
                 }
             ],
