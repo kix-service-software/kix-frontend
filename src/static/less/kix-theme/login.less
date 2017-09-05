@@ -1,0 +1,121 @@
+.login-wrapper {
+    position: relative;
+    background: /*url("dist/static/img/login.png") 0 0 auto repeat-x*/ @secondary_5;
+}
+
+.login-page {
+    position: absolute;
+    width: 746px;
+    min-height: 545px;
+    left: 50%;
+    margin-left: -373px;
+}
+
+.login-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: @secondary_6;
+    opacity: .7;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.login-dialog {
+    position: relative;
+    width: 638px;
+    margin: 184px auto 33px;
+    border: 3px solid @primary_2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 @secondary_1;
+}
+
+.dialog-header h1 {
+    position: absolute;
+    top: 18px;
+    left: 100px;
+}
+
+// TODO: .message sollte vielleicht in die defaults.less oder in eine neue "defaults" gezogen werden!
+.dialog-message-area {
+    margin: 1.5em;
+    border-bottom: 3px solid @primary_2;
+    text-align: center;
+    padding: 2em;
+    box-sizing: border-box;
+    color: @secondary_0;
+    & .message {
+        position: relative;
+        left: -17px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        display: inline-block;
+        height: 35px;
+        line-height: 29px;
+        font-weight: 600;
+        padding: 0 1em;
+        border: 3px solid @tertiary_0;
+        box-sizing: border-box;
+        &:after {
+            content: " ";
+            position: absolute;
+            top: -3px;
+            right: -35px;
+            display: block;
+            box-sizing: border-box;
+            border: 3px solid @tertiary_0;
+            width: 35px;
+            height: 35px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            color: @tertiary_0;
+            cursor: pointer;
+        }
+        &.message-progress {
+            border-color: @tertiary_4;
+            &:after {
+                border-color: @tertiary_4;
+                color: @tertiary_4;
+            }
+        }
+        &.message-error {
+            border-color: @tertiary_1;
+            &:after {
+                border-color: @tertiary_1;
+                color: @tertiary_1;
+            }
+        }
+    }
+}
+
+.dialog-content {
+    padding: 2em 9em 2em 2em;
+    text-align: right;
+    color: @secondary_0;
+    & label {
+        display: block;
+        line-height: 2.5em;
+        & input {
+            box-sizing: border-box;
+            margin-left: 1em;
+            padding: 0 10px;
+            background-color: @secondary_5;
+            border: 1px solid @secondary_4;
+            border-radius: 5px;
+            width: 307px;
+            height: 34px;
+        }
+    }
+    & .dialog-buttons {
+        margin-top: 2em;
+    }
+}
+
+.login-footer {
+    position: relative;
+    font-size: .75em;
+    color: @secondary_2;
+    text-align: center;
+}
