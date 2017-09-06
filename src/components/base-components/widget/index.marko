@@ -4,6 +4,8 @@
     </div>
     <div.widget_content>
         $ let template = require('../../' + data.widget.template);
-        <include(template)/>
+        <include(template, {
+            frontendSocketUrl: data.frontendSocketUrl
+        })/>
     </div>
 </div>
