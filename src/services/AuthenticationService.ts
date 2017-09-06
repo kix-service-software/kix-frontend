@@ -29,7 +29,14 @@ export class AuthenticationService implements IAuthenticationService {
             const token = this.getToken(authorizationHeader);
             if (!token) {
                 res.redirect('/auth');
-            } else if (await this.validateToken(token)) {
+            }
+
+            const valid = await this.validateToken(token)
+                .catch((error) => {
+                    return false;
+                });
+
+            if (valid) {
                 next();
             } else {
                 res.redirect('/auth');

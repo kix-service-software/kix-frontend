@@ -118,13 +118,24 @@ describe('Authentication Service', () => {
 
     describe('isAuthenticated Middleware', () => {
 
+        before(() => {
+            nockScope
+                .get('/session')
+                .reply(200, { Session: {} });
+        });
+
         it('should call the next method if a valid authorization header is given.', async () => {
             const request: Request = {
                 headers: {
                     authorization: 'Token ABCDEFG'
                 }
             };
-            const response: Response = {};
+
+            const response: Response = {
+                redirect: (target) => {
+                    expect(true).false;
+                }
+            };
 
             authenticationService.isAuthenticated(request, response, () => {
                 expect(true);
