@@ -1,6 +1,5 @@
-import { ContainerConfiguration } from './../../../components/dragable-container/ContainerConfiguration';
-import { MenuEntry } from './../../../components/main-menu/MenuEntry';
-import { StateAction } from './../../StateAction';
+import { ContainerConfiguration } from './../../../base-components/dragable-container/model/ContainerConfiguration';
+import { StateAction } from '../../../../model/client/store/StateAction';
 import { DashboardAction } from './';
 
 export default (containerConfiguration: ContainerConfiguration) => {

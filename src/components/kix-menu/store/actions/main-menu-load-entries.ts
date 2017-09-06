@@ -1,6 +1,6 @@
-import { MainMenuEvent } from './../../../socket/main-menu/';
-import { StateAction } from './../../StateAction';
+import { StateAction } from './../../../../model/client/store/StateAction';
 import { MainMenuAction } from './MainMenuAction';
+import { MainMenuEvent } from '../../../../model/client/socket/main-menu';
 
 export default (socket: SocketIO.Server) => {
     const payload = new Promise((resolve, reject) => {

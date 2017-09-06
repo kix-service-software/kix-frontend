@@ -1,6 +1,5 @@
-import { MainMenuEntriesResult, MainMenuEvent, MainMenuSocketListener } from './../../../socket/main-menu/';
-import { StateAction } from './../../StateAction';
-import { SocketEvent } from '../../../socket/SocketEvent';
+import { StateAction } from './../../../../model/client/store/StateAction';
+import { MainMenuSocketListener } from './../../socket/MainMenuSocketListener';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from './';
 import { MainMenuAction } from './MainMenuAction';
 

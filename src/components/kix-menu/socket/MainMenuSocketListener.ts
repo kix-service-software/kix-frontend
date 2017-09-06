@@ -1,6 +1,6 @@
-import { SocketEvent } from '../../socket/SocketEvent';
-import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../../store/main-menu/actions';
-import { MainMenuEvent, MainMenuEntriesResult } from './';
+import { MainMenuEvent, MainMenuEntriesResult } from '../../../model/client/socket/main-menu';
+import { SocketEvent } from '../../../model/client/socket/SocketEvent';
+import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
 
 declare var io: any;
 
@@ -12,7 +12,7 @@ export class MainMenuSocketListener {
 
     public constructor(frontendSocketUrl: string) {
         this.socket = io.connect(frontendSocketUrl + "/main-menu", {});
-        this.store = require('../../store/main-menu/index');
+        this.store = require('../store/');
         this.initSocketListener(this.socket);
     }
 

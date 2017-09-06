@@ -1,7 +1,7 @@
-import { StateAction } from './../../StateAction';
+import { StateAction } from '../../../../model/client/store/StateAction';
 import { LoginAction } from './LoginAction';
 import { LoginState } from '../index';
-import { UserType } from '../../../index';
+import { UserType } from '../../../../model/client/';
 
 export default (userName: string, password: string) => {
     const payload = new Promise((resolve, reject) => {

@@ -1,5 +1,5 @@
-import { MenuEntry } from './../../../components/main-menu/MenuEntry';
-import { StateAction } from './../../StateAction';
+import { MenuEntry } from './../../../../model/client/components/main-menu/MenuEntry';
+import { StateAction } from './../../../../model/client/store/StateAction';
 import { MainMenuAction } from './MainMenuAction';
 
 export default (menuEntries: MenuEntry[]) => {

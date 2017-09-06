@@ -1,8 +1,8 @@
-import { LoginSocketListener } from './../../../socket/login/LoginSocketListener';
-import { StateAction } from './../../StateAction';
-import { SocketEvent } from '../../../socket/SocketEvent';
+import { LoginSocketListener } from './../../socket/LoginSocketListener';
+import { StateAction } from '../../../../model/client/store/StateAction';
+import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { LoginAction } from './LoginAction';
-import { AuthenticationEvent, AuthenticationResult } from './../../../socket/login/';
+import { AuthenticationEvent, AuthenticationResult } from '../../../../model/client/socket/login/';
 import LOGIN_ERROR from './login-error';
 
 export default (frontendSocketUrl: string) => {

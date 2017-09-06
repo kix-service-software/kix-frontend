@@ -1,9 +1,9 @@
-import { ContainerConfiguration } from './../../components/dragable-container/ContainerConfiguration';
-import { SocketEvent } from '../SocketEvent';
-import { ConfigurationEvent, LoadConfigurationResult } from '../configuration';
+import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
+import { SocketEvent } from '../../../model/client/socket/SocketEvent';
+import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
 import {
     DASHBOARD_LOAD_CONTAINER_CONFIG, DASHBOARD_CONTAINER_CONFIGURATION_LOADED
-} from '../../store/dashboard/actions';
+} from '../store/actions';
 
 declare var io: any;
 
@@ -18,7 +18,7 @@ export class DashboardSocketListener {
         this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
             query: "Token=" + token
         });
-        this.store = require('../../store/dashboard');
+        this.store = require('../store/');
         this.initConfigurationSocketListener(this.configurationSocket);
     }
 

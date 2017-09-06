@@ -1,8 +1,7 @@
-import { LoadConfigurationRequest } from './../../../socket/configuration/LoadConfigurationRequest';
-import { MainMenuEvent } from './../../../socket/main-menu/';
-import { StateAction } from './../../StateAction';
+import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
+import { StateAction } from '../../../../model/client/store/StateAction';
 import { DashboardAction } from './';
-import { ConfigurationEvent } from '../../../socket/configuration';
+import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
 
 export default (socket: SocketIO.Server) => {
     const payload = new Promise((resolve, reject) => {

@@ -1,12 +1,12 @@
-import { LoginComponentState } from './../../model/client/components';
-import { LoginState } from "../../model/client/store/login/";
+import { LoginComponentState } from './model/LoginComponentState';
+import { LoginState } from './store/LoginState';
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
     LOGIN_VALIDATE,
     LOGIN_INITIALIZE,
     LOGIN_AUTH
-} from '../../model/client/store/login/actions';
+} from './store/actions';
 
 
 class LoginFormComponent {
@@ -35,7 +35,7 @@ class LoginFormComponent {
     }
 
     public onMount(): void {
-        this.store = require('../../model/client/store/login');
+        this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(LOGIN_INITIALIZE(this.frontendSocketUrl));
     }

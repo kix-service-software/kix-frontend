@@ -1,4 +1,4 @@
-import { StateAction } from './../../StateAction';
+import { StateAction } from '../../../../model/client/store/StateAction';
 import { LoginAction } from './LoginAction';
 
 export default (userName: string) => {

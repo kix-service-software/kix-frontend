@@ -1,7 +1,7 @@
-import { UserType } from '../../';
-import { SocketEvent } from '../../socket/SocketEvent';
-import { LOGIN_ERROR } from '../../store/login/actions';
-import { AuthenticationEvent, AuthenticationResult, LoginRequest } from './';
+import { UserType } from '../../../model/client/';
+import { SocketEvent } from '../../../model/client/socket/SocketEvent';
+import { LOGIN_ERROR } from '../store/actions';
+import { AuthenticationEvent, AuthenticationResult, LoginRequest } from '../../../model/client/socket/login';
 
 declare var io: any;
 
@@ -12,7 +12,7 @@ export class LoginSocketListener {
 
     public constructor(frontendSocketUrl: string) {
         this.socket = io.connect(frontendSocketUrl + "/authentication", {});
-        this.store = require('../../store/login/index');
+        this.store = require('../store');
         this.initSocketListener(this.socket);
     }
 

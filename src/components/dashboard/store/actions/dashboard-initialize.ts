@@ -1,6 +1,6 @@
-import { DashboardSocketListener } from './../../../socket/dashboard/DashboardSocketListener';
-import { StateAction } from './../../StateAction';
-import { SocketEvent } from '../../../socket/SocketEvent';
+import { DashboardSocketListener } from './../../socket/DashboardSocketListener';
+import { StateAction } from '../../../../model/client/store/StateAction';
+import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { DashboardAction } from './';
 
 declare var io: any;

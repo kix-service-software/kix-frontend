@@ -1,4 +1,4 @@
-import { LoginSocketListener } from './../../socket/login/LoginSocketListener';
+import { LoginSocketListener } from './../socket/LoginSocketListener';
 
 export class LoginState {
 
