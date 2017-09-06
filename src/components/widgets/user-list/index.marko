@@ -1,5 +1,5 @@
 <div>
-    <table.ticket-table>
+    <table.user-table>
         <tr>
             <for(column in state.columns)>
                 <th>${column}</th>
@@ -8,9 +8,6 @@
         <tr>
             <for(row in state.values)>
                 <tr>
-                    <td>
-                        <input type="checkbox" name="all" value=""/>
-                    </td>
                     <for(value in row)>
                         <td>${value}</td>
                     </for>

@@ -37,9 +37,9 @@
         {
             "widgets": [
                 {
-                    "id": "ticket-list-widget",
-                    "title": "Suchvorlage: Verantwortlich",
-                    "template": "widgets/ticket-list",
+                    "id": "user-list-widget",
+                    "title": "Agenten",
+                    "template": "widgets/user-list",
                     "isExternal": false
                 }
             ],
