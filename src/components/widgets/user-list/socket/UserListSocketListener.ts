@@ -35,7 +35,7 @@ export class UserListSocketListener {
         });
 
         this.socket.on(UsersEvent.USERS_LOADED, (result: LoadUsersResult) => {
-            this.store.dispatch(USER_LIST_USERS_LOADED(result.user));
+            this.store.dispatch(USER_LIST_USERS_LOADED(result));
         });
     }
 }

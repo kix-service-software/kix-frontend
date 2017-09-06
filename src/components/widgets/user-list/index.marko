@@ -5,15 +5,15 @@
     <else>
         <table.user-table>
             <tr>
-                <for(column in state.columns)>
-                    <th>${column}</th>
+                <for(property in state.properties)>
+                    <th>${property.displayName}</th>
                 </for>
             </tr>
             <for(user in state.users | status-var=userLoop)>
                 <tr>
-                    <td>${user['firstName']}</td>
-                    <td>${user['lastName']}</td>
-                    <td>${user['email']}</td>
+                    <for(property in state.properties)>
+                        <td>${user[property.name]}</td>
+                    </for>
                 </tr>
             </for>
         </table>

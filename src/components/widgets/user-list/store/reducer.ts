@@ -13,7 +13,11 @@ class UserListActionHandler {
                 return { ...state, socketlListener: action.payload.socketListener };
 
             case UserListAction.USER_LIST_USERS_LOADED + FULFILLED:
-                return { ...state, users: action.payload.users };
+                return {
+                    ...state,
+                    users: action.payload.loadResult.users,
+                    properties: action.payload.loadResult.properties
+                };
 
             default:
                 return { ...state };

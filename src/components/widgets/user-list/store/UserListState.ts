@@ -1,8 +1,11 @@
+import { UIProperty } from './../../../../model/client/UIProperty';
 import { UserListSocketListener } from './../socket/UserListSocketListener';
-import { User } from './../../../../model/client/user/User';
+
 export class UserListState {
 
-    public users: User[] = [];
+    public users: any[] = [];
+
+    public properties: UIProperty[] = [];
 
     public socketlListener: UserListSocketListener;
 

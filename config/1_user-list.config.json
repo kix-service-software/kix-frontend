@@ -1,0 +1,25 @@
+{
+    "properties": [
+        {
+            "name": "UserFirstname",
+            "displayName": "Vorname"
+        },
+        {
+            "name": "UserLastname",
+            "displayName": "Nachname"
+        },
+        {
+            "name": "UserEmail",
+            "displayName": "E-Mail"
+        },
+        {
+            "name": "UserFullname",
+            "displayName": "Name"
+        },
+        {
+            "name": "CreateTime",
+            "displayName": "Ertellt am"
+        }
+    ],
+    "limit": 10
+}

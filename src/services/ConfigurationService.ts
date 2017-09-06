@@ -30,7 +30,10 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getComponentConfiguration(configurationName: string): any {
+    public getComponentConfiguration(configurationName: string, userId?: number): any {
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
         return require('../../config/' + configurationName + '.config.json');
     }
 

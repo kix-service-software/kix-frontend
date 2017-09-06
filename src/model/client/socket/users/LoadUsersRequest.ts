@@ -1,11 +1,11 @@
 export class LoadUsersRequest {
 
-    public limit: number;
-
     public token: string;
 
-    public constructor(token: string, limit: number = -1) {
-        this.limit = limit;
+    public configName: string;
+
+    public constructor(token: string, configName: string) {
         this.token = token;
+        this.configName = configName;
     }
 }

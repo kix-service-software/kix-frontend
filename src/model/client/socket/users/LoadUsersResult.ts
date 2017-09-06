@@ -1,10 +1,13 @@
-import { User } from './../../user/User';
+import { UIProperty } from './../../UIProperty';
 export class LoadUsersResult {
 
-    public user: User[];
+    public properties: UIProperty[];
 
-    public constructor(user: User[] = []) {
-        this.user = user;
+    public users: any[];
+
+    public constructor(properties: UIProperty[], users: any[] = []) {
+        this.properties = properties;
+        this.users = users;
     }
 
 }
