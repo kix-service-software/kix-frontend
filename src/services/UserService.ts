@@ -24,7 +24,7 @@ export class UserService implements IUserService {
         this.httpService = httpService;
     }
 
-    public async getUsers(limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]> {
+    public async getUsers(limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]> {
         const queryParameters = {};
 
         if (limit) {
@@ -39,13 +39,13 @@ export class UserService implements IUserService {
             queryParameters[UserQuery.CHANGED_AFTER] = changedAfter;
         }
 
-        const response = await this.httpService.get<UsersResponse>(this.RESOURCE_URI, queryParameters);
+        const response = await this.httpService.get<UsersResponse>(this.RESOURCE_URI, queryParameters, token);
 
         return response.User;
     }
 
-    public async  getUser(id: number): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id, {});
+    public async  getUser(id: number, token?: string): Promise<User> {
+        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id, {}, token);
 
         return response.User;
     }

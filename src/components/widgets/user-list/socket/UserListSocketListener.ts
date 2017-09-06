@@ -1,4 +1,6 @@
+import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
+import { USER_LIST_LOAD_USERS, USER_LIST_USERS_LOADED } from '../store/actions';
 
 export class UserListSocketListener {
     private socket: SocketIO.Server;
@@ -6,26 +8,34 @@ export class UserListSocketListener {
     private store: any;
 
     public constructor(frontendSocketUrl: string) {
-        this.socket = io.connect(frontendSocketUrl + "/users", {});
+        const token = window.localStorage.getItem("token");
+        this.socket = io.connect(frontendSocketUrl + "/users", {
+            query: "Token=" + token
+        });
         this.store = require('../store/');
-        this.initSocketListener(this.socket);
+        this.initSocketListener();
     }
 
-    private initSocketListener(socket: SocketIO.Server): void {
-        socket.on(SocketEvent.CONNECT, () => {
-            console.log("connected to socket server.");
+    private initSocketListener(): void {
+        this.socket.on(SocketEvent.CONNECT, () => {
+            console.log("connected to socket server users.");
+            this.store.dispatch(USER_LIST_LOAD_USERS(this.socket));
         });
 
-        socket.on(SocketEvent.CONNECT_ERROR, (error) => {
+        this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             console.error(error);
         });
 
-        socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
+        this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             console.error("Timeout");
         });
 
-        socket.on('error', (error) => {
+        this.socket.on('error', (error) => {
             console.error(error);
+        });
+
+        this.socket.on(UsersEvent.USERS_LOADED, (result: LoadUsersResult) => {
+            this.store.dispatch(USER_LIST_USERS_LOADED(result.user));
         });
     }
 }

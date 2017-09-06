@@ -1,24 +1,24 @@
+import { UserListComponentState } from './model/UserListComponentState';
 import { UserListState } from './store/UserListState';
 import { USER_LIST_INITIALIZE } from './store/actions';
 
 class UserListWidgetComponent {
 
-    public state: any;
+    public state: UserListComponentState;
 
     private store: any;
 
     private frontendSocketUrl: string;
 
     public onCreate(input: any): void {
-        this.state = {
-            columns: [
-                "alle",
-                "Firstname",
-                "Lastname",
-                "Email"
-            ],
-            values: []
-        };
+        this.state = new UserListComponentState();
+
+        this.state.columns = [
+            "Firstname",
+            "Lastname",
+            "Email"
+        ];
+
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
@@ -30,7 +30,9 @@ class UserListWidgetComponent {
 
     public stateChanged(): void {
         const reduxState: UserListState = this.store.getState();
-        // this.state.menuEntries = reduxState.menuEntries;
+        if (reduxState.users) {
+            this.state.users = reduxState.users;
+        }
     }
 }
 
