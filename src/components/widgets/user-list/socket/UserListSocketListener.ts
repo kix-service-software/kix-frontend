@@ -2,7 +2,10 @@ import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/u
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { USER_LIST_LOAD_USERS, USER_LIST_USERS_LOADED } from '../store/actions';
 
+declare var io;
+
 export class UserListSocketListener {
+
     private socket: SocketIO.Server;
 
     private store: any;

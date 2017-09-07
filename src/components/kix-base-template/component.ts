@@ -1,3 +1,5 @@
+import { SocketEvent } from '../../model/client/socket/SocketEvent';
+
 declare var io;
 
 class BaseTemplateComponent {
@@ -7,7 +9,9 @@ class BaseTemplateComponent {
     public frontendSocketUrl: string;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = {
+            auth: false
+        };
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
@@ -18,6 +22,10 @@ class BaseTemplateComponent {
         } else {
             const configurationSocket = io.connect(this.frontendSocketUrl + "/configuration", {
                 query: "Token=" + token
+            });
+
+            configurationSocket.on(SocketEvent.CONNECT, () => {
+                this.state.auth = true;
             });
 
             configurationSocket.on('error', (error) => {

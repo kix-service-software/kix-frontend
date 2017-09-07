@@ -41,7 +41,7 @@ export class LoginSocketListener {
         });
 
         socket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
-            this.store.dispatch(LOGIN_ERROR(error));
+            this.store.dispatch(LOGIN_ERROR('Invalid Login.'));
         });
 
         socket.on('error', (error) => {

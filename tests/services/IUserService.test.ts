@@ -76,7 +76,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 5 })
+                    .query({ limit: 5 })
                     .reply(200, buildUsersResponse(5));
             });
 
@@ -94,7 +94,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Order: 'Down' })
+                    .query({ order: 'Down' })
                     .reply(200, buildUsersResponse(2));
             });
 
@@ -111,7 +111,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ ChangedAfter: '20170815' })
+                    .query({ changedafter: '20170815' })
                     .reply(200, buildUsersResponse(3));
             });
 
@@ -128,7 +128,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 6, ChangedAfter: '20170815' })
+                    .query({ limit: 6, changedafter: '20170815' })
                     .reply(200, buildUsersResponse(6));
             });
 
@@ -146,7 +146,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 6, Order: 'Up' })
+                    .query({ limit: 6, order: 'Up' })
                     .reply(200, buildUsersResponse(6));
             });
 
@@ -164,7 +164,7 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Order: 'Up', ChangedAfter: '20170815' })
+                    .query({ order: 'Up', changedafter: '20170815' })
                     .reply(200, buildUsersResponse(4));
             });
 
