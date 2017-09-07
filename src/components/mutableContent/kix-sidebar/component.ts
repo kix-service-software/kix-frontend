@@ -21,6 +21,10 @@ class KIXSidebarComponent {
             this.state['show' + sidebar] = true;
         }
     }
+
+    public configurationClicked(): void {
+        (this as any).emit('toggleConfigurationMode');
+    }
 }
 
 module.exports = KIXSidebarComponent;

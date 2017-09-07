@@ -7,8 +7,8 @@
                     draggable="${state.dndState.enabled ? 'true' : 'false'}" on-dragstart('dragStart')
                     on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
                     <div.drag-overlay id="overlay-drag-${rowLoop.getIndex()}-${loop.getIndex()}"
-                        class="${state.dndState.dragging ? '' : 'drag-hidden'} ${state.dndState.dropElementId === 'overlay-drag-' + rowLoop.getIndex() + '-' + loop.getIndex() ? 'drop-element' : ''}"/>
-                    <div.drag-widget>
+                        class="${state.configurationMode ? '' : 'drag-hidden'} ${state.dndState.dropElementId === 'overlay-drag-' + rowLoop.getIndex() + '-' + loop.getIndex() ? 'drop-element' : ''}"/>
+                    <div.drag-widget class="${state.configurationMode ? 'config_mode' : ''}">
                         <widget widget=widget frontendSocketUrl=data.frontendSocketUrl/>
                     </div>
                 </div>

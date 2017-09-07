@@ -12,6 +12,7 @@ class DashboardComponent {
 
     public onCreate(input: any): void {
         this.state = new DashboardComponentState();
+        this.state.configurationMode = input.configurationMode;
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
@@ -19,6 +20,10 @@ class DashboardComponent {
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(DASHBOARD_INITIALIZE(this.frontendSocketUrl));
+    }
+
+    public onInput(input: any) {
+        this.state.configurationMode = input.configurationMode;
     }
 
     public stateChanged(): void {

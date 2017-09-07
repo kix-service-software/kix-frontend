@@ -11,7 +11,8 @@ class BaseTemplateComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            auth: false
+            auth: false,
+            configurationMode: false
         };
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
@@ -30,6 +31,10 @@ class BaseTemplateComponent {
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
+    }
+
+    public toggleConfigurationMode(): void {
+        this.state.configurationMode = !this.state.configurationMode;
     }
 }
 
