@@ -10,10 +10,6 @@ class KIXSidebarComponent {
         };
     }
 
-    public onMount(): void {
-        console.log("Mount Sidebar");
-    }
-
     // function to show/hide given sidebar
     public toggleSidebar(sidebar: string): void {
         if (!sidebar) {

@@ -18,16 +18,8 @@ export class UsersCommunicator extends KIXCommunicator {
 
     private registerUsersEvents(client: SocketIO.Socket): void {
         client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
-
-            const currentUser = await this.userService.getUserByToken(data.token, { fields: 'User.UserID' });
-
-            const userId = currentUser && currentUser.UserID ? currentUser.UserID : 1;
-
-            const config: UserConfig =
-                this.configurationService.getComponentConfiguration(data.configName, userId);
-
             const fields = [];
-            for (const prop of config.properties) {
+            for (const prop of data.properties) {
                 fields.push('User.' + prop.name);
             }
 
@@ -35,17 +27,17 @@ export class UsersCommunicator extends KIXCommunicator {
                 fields: fields.join(',')
             };
 
-            const apiUsers = await this.userService.getUsers(query, config.limit, null, null, data.token);
+            const apiUsers = await this.userService.getUsers(query, data.limit, null, null, data.token);
 
             const users: any[] = apiUsers.map((u) => {
                 const user = {};
-                for (const prop of config.properties) {
+                for (const prop of data.properties) {
                     user[prop.name] = u[prop.name];
                 }
                 return user;
             });
 
-            client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult(config.properties, users));
+            client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult(users));
         });
     }
 }

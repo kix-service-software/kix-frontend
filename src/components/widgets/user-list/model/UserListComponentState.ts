@@ -1,10 +1,11 @@
+import { UserListConfiguration } from './UserListConfiguration';
 import { UIProperty } from './../../../../model/client/UIProperty';
 export class UserListComponentState {
 
-    public columns: string[] = [];
-
     public users: any[] = [];
 
-    public properties: UIProperty[] = [];
+    public configuration: UserListConfiguration = new UserListConfiguration();
+
+    public error: string = null;
 
 }

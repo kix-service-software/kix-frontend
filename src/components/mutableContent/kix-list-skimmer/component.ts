@@ -6,9 +6,6 @@ class KIXListSkimmerComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount List Skimmer");
-    }
 }
 
 module.exports = KIXListSkimmerComponent;

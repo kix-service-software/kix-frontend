@@ -24,7 +24,6 @@ export class LoginSocketListener {
     private initSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(LOGIN_ERROR(null));
-            console.log("connected to socket server.");
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {

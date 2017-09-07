@@ -6,9 +6,6 @@ class KIXBreadcrumbComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Breadcrumb");
-    }
 }
 
 module.exports = KIXBreadcrumbComponent;

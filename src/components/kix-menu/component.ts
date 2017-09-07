@@ -21,7 +21,9 @@ class KIXMenuComponent {
 
     public stateChanged(): void {
         const reduxState: MainMenuState = this.store.getState();
-        this.state.menuEntries = reduxState.menuEntries;
+        if (reduxState.menuEntries) {
+            this.state.menuEntries = reduxState.menuEntries;
+        }
     }
 }
 

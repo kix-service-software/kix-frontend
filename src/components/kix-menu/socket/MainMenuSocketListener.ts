@@ -18,7 +18,6 @@ export class MainMenuSocketListener {
 
     private initSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            console.log("connected to socket server.");
             this.store.dispatch(MAIN_MENU_LOAD_ENTRIES(socket));
         });
 

@@ -6,9 +6,6 @@ class KIXBackComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Back");
-    }
 }
 
 module.exports = KIXBackComponent;

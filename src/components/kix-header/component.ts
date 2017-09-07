@@ -6,9 +6,6 @@ class KIXHeaderComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Header");
-    }
 }
 
 module.exports = KIXHeaderComponent;

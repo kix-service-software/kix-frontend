@@ -15,9 +15,17 @@ class UserListActionHandler {
             case UserListAction.USER_LIST_USERS_LOADED + FULFILLED:
                 return {
                     ...state,
-                    users: action.payload.loadResult.users,
-                    properties: action.payload.loadResult.properties
+                    users: action.payload.loadResult.users
                 };
+
+            case UserListAction.USER_LIST_CONFIGURATION_LOADED + FULFILLED:
+                return {
+                    ...state,
+                    configuration: action.payload.configuration
+                };
+
+            case UserListAction.USER_LIST_ERROR + FULFILLED:
+                return { ...state, error: action.payload.error };
 
             default:
                 return { ...state };

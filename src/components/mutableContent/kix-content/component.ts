@@ -6,9 +6,6 @@ class KIXContentComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Content");
-    }
 }
 
 module.exports = KIXContentComponent;
