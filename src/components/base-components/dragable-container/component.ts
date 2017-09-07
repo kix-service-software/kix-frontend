@@ -9,12 +9,7 @@ class DragableContainerComponent {
         this.state.containerConfiguration = input.containerConfiguration;
     }
 
-    public onMount(): void {
-        console.log("Mount DragableContainerComponent");
-    }
-
     public dragStart(event): void {
-        console.log('drag start');
         this.state.dndState = {
             ...this.state.dndState,
             dragging: true,
@@ -40,7 +35,7 @@ class DragableContainerComponent {
     }
 
     public drop(event): void {
-        console.log('drop');
+        // console.log('drop');
     }
 
     public dragEnd(event): void {

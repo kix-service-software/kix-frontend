@@ -24,7 +24,6 @@ export class DashboardSocketListener {
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            console.log("connected to socket server /communication.");
             this.store.dispatch(DASHBOARD_LOAD_CONTAINER_CONFIG(socket));
         });
 

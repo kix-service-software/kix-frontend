@@ -23,10 +23,6 @@ class TicketListWidgetComponent {
             ]
         };
     }
-
-    public onMount(): void {
-        console.log("Mount Ticket List Widget");
-    }
 }
 
 module.exports = TicketListWidgetComponent;

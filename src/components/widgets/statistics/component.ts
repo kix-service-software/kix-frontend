@@ -6,9 +6,6 @@ class StatisticsWidgetComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Statistics Widget");
-    }
 }
 
 module.exports = StatisticsWidgetComponent;

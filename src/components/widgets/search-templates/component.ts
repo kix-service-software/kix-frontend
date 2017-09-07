@@ -6,10 +6,6 @@ class SearchTemplatesWidgetComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Search Templaes Widget");
-    }
-
     public newClicked(event): void {
         alert('Neue Suchvorlage!');
     }

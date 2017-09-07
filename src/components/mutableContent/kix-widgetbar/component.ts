@@ -6,9 +6,6 @@ class KIXWidgetbarComponent {
         this.state = {};
     }
 
-    public onMount(): void {
-        console.log("Mount Widgetbar");
-    }
 }
 
 module.exports = KIXWidgetbarComponent;

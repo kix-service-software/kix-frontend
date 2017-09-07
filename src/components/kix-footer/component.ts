@@ -8,9 +8,6 @@ class KIXFooterComponent {
         this.state = new FooterComponentState();
     }
 
-    public onMount(): void {
-        console.log("Mount Footer");
-    }
 }
 
 module.exports = KIXFooterComponent;

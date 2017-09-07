@@ -12,6 +12,7 @@ export default (socket: SocketIO.Server) => {
 };
 
 function loadConfiguration(socket: SocketIO.Server): any {
-    socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, new LoadConfigurationRequest('dashboard'));
+    const token = window.localStorage.getItem("token");
+    socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, new LoadConfigurationRequest(token, 'dashboard'));
     return {};
 }

@@ -23,9 +23,16 @@ class UserListWidgetComponent {
 
     public stateChanged(): void {
         const reduxState: UserListState = this.store.getState();
-        if (reduxState.users && reduxState.properties) {
+        if (reduxState.configuration) {
+            this.state.configuration = reduxState.configuration;
+        }
+
+        if (reduxState.users) {
             this.state.users = reduxState.users;
-            this.state.properties = reduxState.properties;
+        }
+
+        if (reduxState.error) {
+            this.state.error = reduxState.error;
         }
     }
 }
