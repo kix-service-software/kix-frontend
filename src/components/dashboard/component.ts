@@ -1,8 +1,6 @@
-import { ContainerConfiguration } from './../../model/client/components/dragable-container/ContainerConfiguration';
-import { DashboardState } from './../../model/client/store/dashboard/DashboardState';
-import { DashboardComponentState } from './../../model/client/components/dashboard/DashboardComponentState';
-import { ContainerRow } from './../../model/client/components/dragable-container/ContainerRow';
-import { DASHBOARD_INITIALIZE } from '../../model/client/store/dashboard/actions';
+import { DashboardComponentState } from './model/DashboardComponentState';
+import { DashboardState } from './store/DashboardState';
+import { DASHBOARD_INITIALIZE } from './store/actions';
 
 class DashboardComponent {
 
@@ -18,8 +16,9 @@ class DashboardComponent {
     }
 
     public onMount(): void {
-        this.store = require('../../model/client/store/dashboard');
+        this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(DASHBOARD_INITIALIZE(this.frontendSocketUrl));
     }
 
     public stateChanged(): void {

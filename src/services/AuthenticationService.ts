@@ -1,3 +1,4 @@
+import { SocketAuthenticationError } from './../model/client/socket/SocketAuthenticationError';
 import { injectable, inject } from 'inversify';
 import {
     HttpError,
@@ -28,7 +29,14 @@ export class AuthenticationService implements IAuthenticationService {
             const token = this.getToken(authorizationHeader);
             if (!token) {
                 res.redirect('/auth');
-            } else if (await this.validateToken(token)) {
+            }
+
+            const valid = await this.validateToken(token)
+                .catch((error) => {
+                    return false;
+                });
+
+            if (valid) {
                 next();
             } else {
                 res.redirect('/auth');
@@ -42,10 +50,11 @@ export class AuthenticationService implements IAuthenticationService {
             if (token && await this.validateToken(token)) {
                 next();
             } else {
-                next(new Error('Authentication error'));
+                next(new SocketAuthenticationError('Invalid Token!'));
             }
+        } else {
+            next(new SocketAuthenticationError('Missing Token!'));
         }
-        next(new Error('Authentication error'));
     }
 
     public async login(user: string, password: string, type: UserType): Promise<string> {
@@ -69,8 +78,12 @@ export class AuthenticationService implements IAuthenticationService {
     }
 
     private async validateToken(token): Promise<boolean> {
-        const response = await this.httpService.get<SessionResponse>('sessions/' + token, {}, token);
-        if (response.Session) {
+        const response = await this.httpService.get<SessionResponse>('session', {}, token)
+            .catch((error) => {
+                return { Session: null };
+            });
+
+        if (response && response.Session) {
             return true;
         } else {
             return false;

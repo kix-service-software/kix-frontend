@@ -1,9 +1,9 @@
 export enum UserQuery {
 
-    LIMIT = "Limit",
+    LIMIT = "limit",
 
-    ORDER = "Order",
+    ORDER = "order",
 
-    CHANGED_AFTER = "ChangedAfter"
+    CHANGED_AFTER = "changedafter"
 
 }

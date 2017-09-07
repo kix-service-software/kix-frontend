@@ -1,6 +1,6 @@
-import { MainMenuState } from './../../model/client/store/main-menu';
-import { MenuComponentState } from './../../model/client/components';
-import { MAIN_MENU_INITIALIZE } from '../../model/client/store/main-menu/actions';
+import { MenuComponentState } from './model/MenuComponentState';
+import { MainMenuState } from './store/';
+import { MAIN_MENU_INITIALIZE } from './store/actions';
 
 class KIXMenuComponent {
 
@@ -14,7 +14,7 @@ class KIXMenuComponent {
     }
 
     public onMount(): void {
-        this.store = require('../../model/client/store/main-menu');
+        this.store = require('./store');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(MAIN_MENU_INITIALIZE(this.frontendSocketUrl));
     }

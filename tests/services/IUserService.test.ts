@@ -76,12 +76,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 5 })
+                    .query({ limit: 5 })
                     .reply(200, buildUsersResponse(5));
             });
 
             it('should return a limited list of 5 users.', async () => {
-                const users: User[] = await userService.getUsers(5);
+                const users: User[] = await userService.getUsers(null, 5);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -94,12 +94,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Order: 'Down' })
+                    .query({ order: 'Down' })
                     .reply(200, buildUsersResponse(2));
             });
 
             it('should return a sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(null, SortOrder.DOWN);
+                const users: User[] = await userService.getUsers(null, null, SortOrder.DOWN);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -111,12 +111,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ ChangedAfter: '20170815' })
+                    .query({ changedafter: '20170815' })
                     .reply(200, buildUsersResponse(3));
             });
 
             it('should return a list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, null, "20170815");
+                const users: User[] = await userService.getUsers(null, null, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -128,12 +128,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 6, ChangedAfter: '20170815' })
+                    .query({ limit: 6, changedafter: '20170815' })
                     .reply(200, buildUsersResponse(6));
             });
 
             it('should return a limited list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(6, null, "20170815");
+                const users: User[] = await userService.getUsers(null, 6, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -146,12 +146,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Limit: 6, Order: 'Up' })
+                    .query({ limit: 6, order: 'Up' })
                     .reply(200, buildUsersResponse(6));
             });
 
             it('should return a limited, sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(6, SortOrder.UP);
+                const users: User[] = await userService.getUsers(null, 6, SortOrder.UP);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -164,12 +164,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .get('/users')
-                    .query({ Order: 'Up', ChangedAfter: '20170815' })
+                    .query({ order: 'Up', changedafter: '20170815' })
                     .reply(200, buildUsersResponse(4));
             });
 
             it('should return a sorted list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, SortOrder.UP, "20170815");
+                const users: User[] = await userService.getUsers(null, null, SortOrder.UP, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -271,6 +271,27 @@ describe('User Service', () => {
             });
 
         });
+    });
+
+    describe('Get user Information based on token', () => {
+
+        before(() => {
+            const userResponse = new UserResponse();
+            const user = new User();
+            user.UserID = 123456;
+            userResponse.User = user;
+
+            nockScope
+                .matchHeader('Authorization', "Token abcdefg12345")
+                .get('/user')
+                .reply(200, userResponse);
+        });
+
+        it('Should return a user with the id 123456 for the given token', async () => {
+            const user: User = await userService.getUserByToken("abcdefg12345");
+            expect(user.UserID).equal(123456);
+        });
+
     });
 });
 

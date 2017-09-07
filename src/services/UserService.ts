@@ -18,34 +18,53 @@ import {
 export class UserService implements IUserService {
 
     private httpService: IHttpService;
-    private RESOURCE_URI = "users";
+    private USERS_RESOURCE_URI = "users";
+    private USER_RESOURCE_URI = "user";
 
     public constructor( @inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
     }
 
-    public async getUsers(limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]> {
-        const queryParameters = {};
+    public async getUsers(
+        query: any = {}, limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]> {
+
+        if (!query) {
+            query = {};
+        }
 
         if (limit) {
-            queryParameters[UserQuery.LIMIT] = limit;
+            query[UserQuery.LIMIT] = limit;
         }
 
         if (order) {
-            queryParameters[UserQuery.ORDER] = order;
+            query[UserQuery.ORDER] = order;
         }
 
         if (changedAfter) {
-            queryParameters[UserQuery.CHANGED_AFTER] = changedAfter;
+            query[UserQuery.CHANGED_AFTER] = changedAfter;
         }
 
-        const response = await this.httpService.get<UsersResponse>(this.RESOURCE_URI, queryParameters);
+        const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, query, token);
 
         return response.User;
     }
 
-    public async  getUser(id: number): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id, {});
+    public async  getUser(id: number, query: any = {}, token?: string): Promise<User> {
+        if (!query) {
+            query = {};
+        }
+
+        const response = await this.httpService.get<UserResponse>(this.USERS_RESOURCE_URI + "/" + id, query, token);
+
+        return response.User;
+    }
+
+    public async getUserByToken(token: string, query: any = {}): Promise<User> {
+        if (!query) {
+            query = {};
+        }
+
+        const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, query, token);
 
         return response.User;
     }
@@ -56,7 +75,7 @@ export class UserService implements IUserService {
 
         const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
-        const response = await this.httpService.post<CreateUserResponse>(this.RESOURCE_URI, createUserRequest);
+        const response = await this.httpService.post<CreateUserResponse>(this.USERS_RESOURCE_URI, createUserRequest);
 
         return response.UserID;
     }
@@ -69,7 +88,7 @@ export class UserService implements IUserService {
             login, firstName, lastName, email, password, phone, title, valid);
 
         const response = await this.httpService
-            .patch<UpdateUserResponse>(this.RESOURCE_URI + "/" + userId, updateUserRequest);
+            .patch<UpdateUserResponse>(this.USERS_RESOURCE_URI + "/" + userId, updateUserRequest);
 
         return response.UserID;
     }

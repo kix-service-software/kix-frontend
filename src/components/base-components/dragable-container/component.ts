@@ -1,8 +1,4 @@
-import { ContainerConfiguration } from './../../../model/client/components/dragable-container/ContainerConfiguration';
-import {
-    ContainerComponentState
-} from './../../../model/client/components/dragable-container/ContainterComponentState';
-
+import { ContainerComponentState } from './model/ContainterComponentState';
 class DragableContainerComponent {
 
     public state: ContainerComponentState;

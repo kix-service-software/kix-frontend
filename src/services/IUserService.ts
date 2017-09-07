@@ -2,9 +2,11 @@ import { User, SortOrder } from './../model/';
 
 export interface IUserService {
 
-    getUsers(limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]>;
+    getUsers(query?: any, limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]>;
 
-    getUser(id: number): Promise<User>;
+    getUser(id: number, query?: any, token?: string): Promise<User>;
+
+    getUserByToken(token: string, query?: any): Promise<User>;
 
     createUser(
         login: string, firstName: string, lastName: string,
