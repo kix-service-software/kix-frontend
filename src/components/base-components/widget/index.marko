@@ -1,11 +1,10 @@
-<div#widget>
-    <div.widget_header>
-        <span>${data.widget.title}</span>
-    </div>
-    <div.widget_content>
-        $ let template = require('../../' + data.widget.template);
-        <include(template, {
-            frontendSocketUrl: data.frontendSocketUrl
-        })/>
-    </div>
+<div.widget_header>
+    <span>${data.widget.title}</span>
+    <button class="${state.configurationMode ? 'action' : 'action_hide'}" on-click('configClicked')>Config</button>
+</div>
+<div.widget_content>
+    $ let template = require('../../' + data.widget.template);
+    <include(template, {
+        frontendSocketUrl: data.frontendSocketUrl
+    })/>
 </div>
