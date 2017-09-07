@@ -81,7 +81,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited list of 5 users.', async () => {
-                const users: User[] = await userService.getUsers(5);
+                const users: User[] = await userService.getUsers(null, 5);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -99,7 +99,7 @@ describe('User Service', () => {
             });
 
             it('should return a sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(null, SortOrder.DOWN);
+                const users: User[] = await userService.getUsers(null, null, SortOrder.DOWN);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -116,7 +116,7 @@ describe('User Service', () => {
             });
 
             it('should return a list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, null, "20170815");
+                const users: User[] = await userService.getUsers(null, null, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -133,7 +133,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(6, null, "20170815");
+                const users: User[] = await userService.getUsers(null, 6, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -151,7 +151,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited, sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(6, SortOrder.UP);
+                const users: User[] = await userService.getUsers(null, 6, SortOrder.UP);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -169,7 +169,7 @@ describe('User Service', () => {
             });
 
             it('should return a sorted list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, SortOrder.UP, "20170815");
+                const users: User[] = await userService.getUsers(null, null, SortOrder.UP, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;

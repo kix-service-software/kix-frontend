@@ -25,34 +25,46 @@ export class UserService implements IUserService {
         this.httpService = httpService;
     }
 
-    public async getUsers(limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]> {
-        const queryParameters = {};
+    public async getUsers(
+        query: any = {}, limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]> {
+
+        if (!query) {
+            query = {};
+        }
 
         if (limit) {
-            queryParameters[UserQuery.LIMIT] = limit;
+            query[UserQuery.LIMIT] = limit;
         }
 
         if (order) {
-            queryParameters[UserQuery.ORDER] = order;
+            query[UserQuery.ORDER] = order;
         }
 
         if (changedAfter) {
-            queryParameters[UserQuery.CHANGED_AFTER] = changedAfter;
+            query[UserQuery.CHANGED_AFTER] = changedAfter;
         }
 
-        const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, queryParameters, token);
+        const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, query, token);
 
         return response.User;
     }
 
-    public async  getUser(id: number, token?: string): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.USERS_RESOURCE_URI + "/" + id, {}, token);
+    public async  getUser(id: number, query: any = {}, token?: string): Promise<User> {
+        if (!query) {
+            query = {};
+        }
+
+        const response = await this.httpService.get<UserResponse>(this.USERS_RESOURCE_URI + "/" + id, query, token);
 
         return response.User;
     }
 
-    public async getUserByToken(token: string): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, {}, token);
+    public async getUserByToken(token: string, query: any = {}): Promise<User> {
+        if (!query) {
+            query = {};
+        }
+
+        const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, query, token);
 
         return response.User;
     }
