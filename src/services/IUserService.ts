@@ -6,6 +6,8 @@ export interface IUserService {
 
     getUser(id: number, token?: string): Promise<User>;
 
+    getUserByToken(token: string): Promise<User>;
+
     createUser(
         login: string, firstName: string, lastName: string,
         email: string, password: string, phone: string, title: string

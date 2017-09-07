@@ -18,7 +18,8 @@ import {
 export class UserService implements IUserService {
 
     private httpService: IHttpService;
-    private RESOURCE_URI = "users";
+    private USERS_RESOURCE_URI = "users";
+    private USER_RESOURCE_URI = "user";
 
     public constructor( @inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
@@ -39,13 +40,19 @@ export class UserService implements IUserService {
             queryParameters[UserQuery.CHANGED_AFTER] = changedAfter;
         }
 
-        const response = await this.httpService.get<UsersResponse>(this.RESOURCE_URI, queryParameters, token);
+        const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, queryParameters, token);
 
         return response.User;
     }
 
     public async  getUser(id: number, token?: string): Promise<User> {
-        const response = await this.httpService.get<UserResponse>(this.RESOURCE_URI + "/" + id, {}, token);
+        const response = await this.httpService.get<UserResponse>(this.USERS_RESOURCE_URI + "/" + id, {}, token);
+
+        return response.User;
+    }
+
+    public async getUserByToken(token: string): Promise<User> {
+        const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, {}, token);
 
         return response.User;
     }
@@ -56,7 +63,7 @@ export class UserService implements IUserService {
 
         const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
-        const response = await this.httpService.post<CreateUserResponse>(this.RESOURCE_URI, createUserRequest);
+        const response = await this.httpService.post<CreateUserResponse>(this.USERS_RESOURCE_URI, createUserRequest);
 
         return response.UserID;
     }
@@ -69,7 +76,7 @@ export class UserService implements IUserService {
             login, firstName, lastName, email, password, phone, title, valid);
 
         const response = await this.httpService
-            .patch<UpdateUserResponse>(this.RESOURCE_URI + "/" + userId, updateUserRequest);
+            .patch<UpdateUserResponse>(this.USERS_RESOURCE_URI + "/" + userId, updateUserRequest);
 
         return response.UserID;
     }

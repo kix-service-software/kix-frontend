@@ -272,6 +272,27 @@ describe('User Service', () => {
 
         });
     });
+
+    describe('Get user Information based on token', () => {
+
+        before(() => {
+            const userResponse = new UserResponse();
+            const user = new User();
+            user.UserID = 123456;
+            userResponse.User = user;
+
+            nockScope
+                .matchHeader('Authorization', "Token abcdefg12345")
+                .get('/user')
+                .reply(200, userResponse);
+        });
+
+        it('Should return a user with the id 123456 for the given token', async () => {
+            const user: User = await userService.getUserByToken("abcdefg12345");
+            expect(user.UserID).equal(123456);
+        });
+
+    });
 });
 
 function buildUserResponse(): UserResponse {
