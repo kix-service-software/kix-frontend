@@ -1,7 +1,7 @@
 <div#kix_sidebars>
     <div.sidebar_select_container>
         <div#content_settings_select.sidebar_select>
-            <div style="font-weight:bold">*</div>
+            <div style="font-weight:bold" on-click('configurationClicked')>*</div>
         </div>
         <div#information_select.sidebar_select>
             <div style="font-weight:bold">i</div>
@@ -10,7 +10,8 @@
         <div#dependend_sidebars_select>
             <!-- TODO: just as placeholder -->
             <if(state.hasRightsForNodeSidebar)>
-                <div#node_sidebar_select.sidebar_select class=(state.showNodeSidebar && "select_active") on-click('toggleSidebar', 'NodeSidebar')>
+                <div#node_sidebar_select.sidebar_select class=(state.showNodeSidebar && "select_active")
+                    on-click('toggleSidebar', 'NodeSidebar')>
                     <div style="font-weight:bold">N</div>
                 </div>
             </if>

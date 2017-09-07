@@ -11,4 +11,6 @@ export class ContainerComponentState {
 
     public dndState: DragAndDropState = new DragAndDropState();
 
+    public configurationMode: boolean = false;
+
 }
