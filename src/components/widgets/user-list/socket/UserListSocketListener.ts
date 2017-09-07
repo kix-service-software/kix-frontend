@@ -5,6 +5,7 @@ import { LoadConfigurationResult } from './../../../../model/client/socket/confi
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
+import { TokenHandler } from '../../../../model/client/TokenHandler';
 import {
     USER_LIST_USERS_LOADED,
     USER_LIST_CONFIGURATION_LOADED,
@@ -22,7 +23,7 @@ export class UserListSocketListener {
     private store: any;
 
     public constructor(frontendSocketUrl: string) {
-        const token = window.localStorage.getItem("token");
+        const token = TokenHandler.getToken();
         this.usersSocket = io.connect(frontendSocketUrl + "/users", {
             query: "Token=" + token
         });
@@ -39,7 +40,7 @@ export class UserListSocketListener {
     private initConfigruationSocketListener(): void {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(USER_LIST_ERROR(null));
-            const token = window.localStorage.getItem("token");
+            const token = TokenHandler.getToken();
             this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(
                     token,
@@ -65,7 +66,7 @@ export class UserListSocketListener {
             (result: LoadConfigurationResult<UserListConfiguration>) => {
                 this.store.dispatch(USER_LIST_CONFIGURATION_LOADED(result.configuration));
 
-                const token = window.localStorage.getItem("token");
+                const token = TokenHandler.getToken();
                 this.usersSocket.emit(UsersEvent.LOAD_USERS,
                     new LoadUsersRequest(
                         token,
