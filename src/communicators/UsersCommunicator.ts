@@ -19,21 +19,23 @@ export class UsersCommunicator extends KIXCommunicator {
     private registerUsersEvents(client: SocketIO.Socket): void {
         client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
 
-            // TODO: Get User ID
-            // const userInfo = this.userService.getUserInformation(data.token);
+            const currentUser = await this.userService.getUserByToken(data.token, { fields: 'User.UserID' });
 
-            const userInfo = {
-                userId: 1
+            const userId = currentUser && currentUser.UserID ? currentUser.UserID : 1;
+
+            const config: UserConfig =
+                this.configurationService.getComponentConfiguration(data.configName, userId);
+
+            const fields = [];
+            for (const prop of config.properties) {
+                fields.push('User.' + prop.name);
+            }
+
+            const query = {
+                fields: fields.join(',')
             };
 
-            // TODO: Load config based on given name and user id
-            const config: UserConfig =
-                this.configurationService.getComponentConfiguration(data.configName, userInfo.userId);
-
-            // TODO: map properties to user result
-            // TODO: User result should be a mix of configuration and a list of users
-
-            const apiUsers = await this.userService.getUsers(config.limit, null, null, data.token);
+            const apiUsers = await this.userService.getUsers(query, config.limit, null, null, data.token);
 
             const users: any[] = apiUsers.map((u) => {
                 const user = {};

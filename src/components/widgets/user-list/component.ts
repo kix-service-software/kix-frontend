@@ -12,13 +12,6 @@ class UserListWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
-
-        this.state.columns = [
-            "Firstname",
-            "Lastname",
-            "Email"
-        ];
-
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 

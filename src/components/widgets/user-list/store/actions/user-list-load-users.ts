@@ -13,6 +13,6 @@ export default (socket: SocketIO.Server) => {
 
 function loadEntries(socket: SocketIO.Server): any {
     const token = window.localStorage.getItem("token");
-    socket.emit(UsersEvent.LOAD_USERS, new LoadUsersRequest(token, 'user-list'));
+    socket.emit(UsersEvent.LOAD_USERS, new LoadUsersRequest(token, 'dashboard_user-list'));
     return {};
 }
