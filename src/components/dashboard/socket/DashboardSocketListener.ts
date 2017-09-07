@@ -1,3 +1,4 @@
+import { TokenHandler } from './../../../model/client/TokenHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
@@ -14,7 +15,7 @@ export class DashboardSocketListener {
     private store: any;
 
     public constructor(frontendSocketUrl: string) {
-        const token = window.localStorage.getItem("token");
+        const token = TokenHandler.getToken();
         this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
             query: "Token=" + token
         });

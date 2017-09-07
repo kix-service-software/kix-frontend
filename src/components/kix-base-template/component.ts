@@ -1,4 +1,5 @@
 import { SocketEvent } from '../../model/client/socket/SocketEvent';
+import { TokenHandler } from '../../model/client/TokenHandler';
 
 declare var io;
 
@@ -16,22 +17,19 @@ class BaseTemplateComponent {
     }
 
     public onMount(): void {
-        const token = window.localStorage.getItem('token');
-        if (!token) {
+        const token = TokenHandler.getToken();
+
+        const configurationSocket = io.connect(this.frontendSocketUrl + "/configuration", {
+            query: "Token=" + token
+        });
+
+        configurationSocket.on(SocketEvent.CONNECT, () => {
+            this.state.auth = true;
+        });
+
+        configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
-        } else {
-            const configurationSocket = io.connect(this.frontendSocketUrl + "/configuration", {
-                query: "Token=" + token
-            });
-
-            configurationSocket.on(SocketEvent.CONNECT, () => {
-                this.state.auth = true;
-            });
-
-            configurationSocket.on('error', (error) => {
-                window.location.replace('/auth');
-            });
-        }
+        });
     }
 }
 
