@@ -1,0 +1,17 @@
+<div.configuration_overlay class="${state.showOverlay ? '' : 'configuration_hide'}">
+    <div.configuration_overlay_transparent/>
+    <div.configuration_container>
+        <h1>Konfiguration: ${data.widget.title}</h1>
+        <div.configuration_content>
+            $ let template = require('../../' + data.widget.configurationTemplate);
+            <include(template, {
+                widget: data.widget,
+                configuration: data.configuration
+            })/>
+        </div>
+        <div.button_bar>
+            <button.configuration_button on-click('saveClicked')>Speichern</button>
+            <button.configuration_button on-click('cancelClicked')>Abbrechen</button>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,8 @@ class WidgetComponent {
     public onCreate(input: any): void {
         this.state = {
             configurationMode: false,
+            showConfiguration: false,
+            configuration: null,
             widget: input.widget
         };
     }
@@ -14,7 +16,19 @@ class WidgetComponent {
     }
 
     public configClicked(): void {
-        alert('Configure Widget ' + this.state.widget.title);
+        this.state.showConfiguration = true;
+    }
+
+    public widgetConfigurationLoaded(configuration: any) {
+        this.state.configuration = configuration;
+    }
+
+    public saveConfigurationOverlay(configuration): void {
+        this.state.showConfiguration = false;
+    }
+
+    public closeConfigurationOverlay(): void {
+        this.state.showConfiguration = false;
     }
 }
 

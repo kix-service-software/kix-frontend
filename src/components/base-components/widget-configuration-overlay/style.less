@@ -1,0 +1,49 @@
+.configuration_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 150;
+}
+
+.configuration_overlay_transparent {
+    background-color: @secondary_6;
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+}
+
+.configuration_container {
+    opacity: 1;
+    background-color: @secondary_6;
+    border: 5px solid @tertiary_5;
+    top: 25vh;
+    left: 15vw;
+    width: 50vw;
+    height: 50vh;
+    position: absolute;
+    padding: 10px;
+}
+
+.configuration_content {
+    border: 2px solid @primary_0;
+    width: 100%;
+    height: 40vh;
+    overflow: auto;
+}
+
+.configuration_hide {
+    display: none;
+}
+
+.button_bar {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+}
+
+.configuration_button {
+    margin: 10px;
+    border-radius: 5px;
+}

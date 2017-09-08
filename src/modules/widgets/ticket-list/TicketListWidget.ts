@@ -6,6 +6,8 @@ export class TicketListWidget implements IWidget {
 
     public template: string = "widgets/ticket-list";
 
+    public configurationTemplate: string = "widgets/ticket-list/configuration";
+
     public title: string = "Ticket Liste";
 
     public isExternal: boolean = false;

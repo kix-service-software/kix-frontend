@@ -4,7 +4,8 @@ export class StatisticsWidgetMarkoDependencyExtension implements IMarkoDependenc
 
     public getDependencies(): string[] {
         return [
-            "widgets/statistics"
+            "widgets/statistics",
+            "widgets/statistics/configuration"
         ];
     }
 

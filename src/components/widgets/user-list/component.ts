@@ -25,6 +25,7 @@ class UserListWidgetComponent {
         const reduxState: UserListState = this.store.getState();
         if (reduxState.configuration) {
             this.state.configuration = reduxState.configuration;
+            (this as any).emit("configurationLoaded", this.state.configuration);
         }
 
         if (reduxState.users) {
