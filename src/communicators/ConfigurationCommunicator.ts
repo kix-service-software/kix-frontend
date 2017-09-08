@@ -22,7 +22,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
 
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
-                const userId = user && user.UserID ? user.UserID : 1;
+                const userId = user && user.UserID;
                 configName = userId + '_' + configName;
             }
             const configuration =

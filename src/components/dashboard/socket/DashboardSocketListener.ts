@@ -1,9 +1,10 @@
+import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
 import { TokenHandler } from './../../../model/client/TokenHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
 import {
-    DASHBOARD_LOAD_CONTAINER_CONFIG, DASHBOARD_CONTAINER_CONFIGURATION_LOADED
+    DASHBOARD_CONTAINER_CONFIGURATION_LOADED
 } from '../store/actions';
 
 declare var io: any;
@@ -25,7 +26,9 @@ export class DashboardSocketListener {
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            this.store.dispatch(DASHBOARD_LOAD_CONTAINER_CONFIG(socket));
+            const token = TokenHandler.getToken();
+            socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
+                new LoadConfigurationRequest(token, 'dashboard', true));
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
