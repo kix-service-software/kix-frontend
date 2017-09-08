@@ -1,14 +1,9 @@
 import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
-import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { UserListConfiguration } from './../model/UserListConfiguration';
-import { LoadConfigurationResult } from './../../../../model/client/socket/configuration/LoadConfigurationResult';
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
 import { TokenHandler } from '../../../../model/client/TokenHandler';
 import {
     USER_LIST_USERS_LOADED,
-    USER_LIST_CONFIGURATION_LOADED,
     USER_LIST_ERROR
 } from '../store/actions';
 
@@ -22,7 +17,7 @@ export class UserListSocketListener {
 
     private store: any;
 
-    public constructor(frontendSocketUrl: string) {
+    public constructor(frontendSocketUrl: string, store: any) {
         const token = TokenHandler.getToken();
         this.usersSocket = io.connect(frontendSocketUrl + "/users", {
             query: "Token=" + token
@@ -32,50 +27,12 @@ export class UserListSocketListener {
             query: "Token=" + token
         });
 
-        this.store = require('../store/');
-        this.initConfigruationSocketListener();
+        this.store = store;
         this.initUsersSocketListener();
     }
 
-    private initConfigruationSocketListener(): void {
-        this.configurationSocket.on(SocketEvent.CONNECT, () => {
-            this.store.dispatch(USER_LIST_ERROR(null));
-            const token = TokenHandler.getToken();
-            this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
-                new LoadConfigurationRequest(
-                    token,
-                    'dashboard_user-list',
-                    true
-                )
-            );
-        });
-
-        this.configurationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {
-            this.store.dispatch(USER_LIST_ERROR(String(error)));
-        });
-
-        this.configurationSocket.on(SocketEvent.CONNECT_TIMEOUT, () => {
-            this.store.dispatch(USER_LIST_ERROR('Timeout!'));
-        });
-
-        this.configurationSocket.on('error', (error) => {
-            this.store.dispatch(USER_LIST_ERROR(String(error)));
-        });
-
-        this.configurationSocket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<UserListConfiguration>) => {
-                this.store.dispatch(USER_LIST_CONFIGURATION_LOADED(result.configuration));
-
-                const token = TokenHandler.getToken();
-                this.usersSocket.emit(UsersEvent.LOAD_USERS,
-                    new LoadUsersRequest(
-                        token,
-                        'dashboard_user-list',
-                        result.configuration.properties,
-                        result.configuration.limit
-                    )
-                );
-            });
+    public loadUsers(loadUsersRequest: LoadUsersRequest): void {
+        this.usersSocket.emit(UsersEvent.LOAD_USERS, loadUsersRequest);
     }
 
     private initUsersSocketListener(): void {

@@ -1,6 +1,9 @@
+import { ILoggingService } from './ILoggingService';
 import { Environment, IServerConfiguration } from './../model/';
 import { IConfigurationService } from './IConfigurationService';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
+
+import jsonfile = require('jsonfile');
 
 @injectable()
 export class ConfigurationService implements IConfigurationService {
@@ -30,11 +33,21 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getComponentConfiguration(configurationName: string, userId?: number): any {
-        if (userId) {
-            configurationName = userId + '_' + configurationName;
-        }
+    public getComponentConfiguration(configurationName: string): any {
         return require('../../config/' + configurationName + '.config.json');
+    }
+
+    public async saveComponentConfiguration(configurationName: string, configuration: any): Promise<void> {
+        await new Promise<void>((resolve, reject) => {
+            jsonfile.writeFile(__dirname + '/../../config/' + configurationName + '.config.json', configuration,
+                (fileError: Error) => {
+                    if (fileError) {
+                        reject(fileError);
+                    }
+
+                    resolve();
+                });
+        });
     }
 
     public isProductionMode(): boolean {

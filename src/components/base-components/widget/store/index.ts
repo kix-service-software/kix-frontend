@@ -3,8 +3,7 @@ import { applyMiddleware, createStore } from 'redux';
 
 import reducer from './reducer';
 
-export { UserListState } from './UserListState';
-
+export { WidgetState } from './WidgetState';
 
 function create(): any {
     return createStore(reducer, {}, applyMiddleware(

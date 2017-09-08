@@ -4,9 +4,9 @@ import { UserListAction } from './';
 
 declare var io: any;
 
-export default (frontendSocketUrl: string) => {
+export default (frontendSocketUrl: string, store: any) => {
     const payload = new Promise((resolve, reject) => {
-        const socketListener = new UserListSocketListener(frontendSocketUrl);
+        const socketListener = new UserListSocketListener(frontendSocketUrl, store);
         resolve({ socketListener });
     });
     return new StateAction(UserListAction.USER_LIST_INITIALIZE, payload);

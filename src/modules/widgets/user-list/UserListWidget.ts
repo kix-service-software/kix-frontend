@@ -6,6 +6,8 @@ export class UserListWidget implements IWidget {
 
     public template: string = "widgets/user-list";
 
+    public configurationTemplate: string = "widgets/user-list/configuration";
+
     public title: string = "User Liste";
 
     public isExternal: boolean = false;

@@ -6,6 +6,8 @@ export interface IWidget {
 
     template: string;
 
+    configurationTemplate: string;
+
     isExternal: boolean;
 
 }

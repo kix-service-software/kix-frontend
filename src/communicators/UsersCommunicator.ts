@@ -18,26 +18,30 @@ export class UsersCommunicator extends KIXCommunicator {
 
     private registerUsersEvents(client: SocketIO.Socket): void {
         client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
-            const fields = [];
-            for (const prop of data.properties) {
-                fields.push('User.' + prop.name);
-            }
-
-            const query = {
-                fields: fields.join(',')
-            };
-
-            const apiUsers = await this.userService.getUsers(query, data.limit, null, null, data.token);
-
-            const users: any[] = apiUsers.map((u) => {
-                const user = {};
+            if (!data.properties) {
+                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult([]));
+            } else {
+                const fields = [];
                 for (const prop of data.properties) {
-                    user[prop.name] = u[prop.name];
+                    fields.push('User.' + prop.name);
                 }
-                return user;
-            });
 
-            client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult(users));
+                const query = {
+                    fields: fields.join(',')
+                };
+
+                const apiUsers = await this.userService.getUsers(query, data.limit, null, null, data.token);
+
+                const users: any[] = apiUsers.map((u) => {
+                    const user = {};
+                    for (const prop of data.properties) {
+                        user[prop.name] = u[prop.name];
+                    }
+                    return user;
+                });
+
+                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult(users));
+            }
         });
     }
 }

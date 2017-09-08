@@ -1,3 +1,5 @@
+import { LoadUsersRequest } from './../../../model/client/socket/users/LoadUsersRequest';
+import { TokenHandler } from '../../../model/client/TokenHandler';
 import { UserListComponentState } from './model/UserListComponentState';
 import { UserListState } from './store/UserListState';
 import { USER_LIST_INITIALIZE } from './store/actions';
@@ -15,17 +17,27 @@ class UserListWidgetComponent {
         this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
+    public onInput(input: any): void {
+        this.state.configuration = input.configuration;
+        if (this.state.configuration) {
+            this.store.dispatch(USER_LIST_INITIALIZE(this.frontendSocketUrl, this.store)).then(() => {
+                const reduxState: UserListState = this.store.getState();
+                reduxState.socketlListener.loadUsers(new LoadUsersRequest(
+                    TokenHandler.getToken(),
+                    this.state.configuration.properties,
+                    this.state.configuration.limit)
+                );
+            });
+        }
+    }
+
     public onMount(): void {
-        this.store = require('./store');
+        this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.frontendSocketUrl));
     }
 
     public stateChanged(): void {
         const reduxState: UserListState = this.store.getState();
-        if (reduxState.configuration) {
-            this.state.configuration = reduxState.configuration;
-        }
 
         if (reduxState.users) {
             this.state.users = reduxState.users;

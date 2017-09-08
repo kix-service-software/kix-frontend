@@ -1,0 +1,15 @@
+<div.configuration_user_list>
+    <if(state.configuration)>
+        <label>
+            Limit<input type="text" tabindex="1" value="${state.configuration.limit}" on-keyup('limitChanged')/>
+        </label>
+        <label>
+            Spalten
+            <select size=10>
+                <for(property in state.configuration.properties)>
+                    <option value="${property.name}">${property.displayName}</option>
+                </for>
+            </select>
+        </label>
+    </if>
+</div>
