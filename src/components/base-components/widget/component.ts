@@ -39,6 +39,9 @@ class WidgetComponent {
 
     public saveConfigurationOverlay(configuration): void {
         this.state.showConfiguration = false;
+        this.state.configuration = configuration;
+        const reduxState: WidgetState = this.store.getState();
+        reduxState.socketlListener.saveConfiguration(configuration);
     }
 
     public closeConfigurationOverlay(): void {

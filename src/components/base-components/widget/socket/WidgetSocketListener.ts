@@ -1,3 +1,4 @@
+import { SaveConfigurationRequest } from './../../../../model/client/socket/configuration/SaveConfigurationRequest';
 import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
 import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
 import { LoadConfigurationResult } from './../../../../model/client/socket/configuration/LoadConfigurationResult';
@@ -35,6 +36,12 @@ export class WidgetSocketListener {
         this.initConfigruationSocketListener();
     }
 
+    public saveConfiguration(configuration: any): void {
+        this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
+            new SaveConfigurationRequest(configuration, TokenHandler.getToken(), this.moduleId + '_' + this.widgetId,
+                true));
+    }
+
     private initConfigruationSocketListener(): void {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
@@ -65,5 +72,9 @@ export class WidgetSocketListener {
                 this.store.dispatch(WIDGET_CONFIGURATION_LOADED(result.configuration));
             }
         );
+
+        this.configurationSocket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED, () => {
+            alert('Configuration saved!');
+        });
     }
 }
