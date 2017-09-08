@@ -5,17 +5,15 @@
                 <th>${column}</th>
             </for>
         </tr>
-        <tr>
-            <for(row in state.values)>
-                <tr>
-                    <td>
-                        <input type="checkbox" name="all" value=""/>
-                    </td>
-                    <for(value in row)>
-                        <td>${value}</td>
-                    </for>
-                </tr>
-            </for>
-        </tr>
+        <for(row in state.values)>
+            <tr>
+                <td>
+                    <input type="checkbox" name="all" value=""/>
+                </td>
+                <for(value in row)>
+                    <td>${value}</td>
+                </for>
+            </tr>
+        </for>
     </table>
 </div>

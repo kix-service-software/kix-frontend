@@ -17,7 +17,7 @@
                     "isExternal": false
                 },
                 {
-                    "id": "search-templates",
+                    "id": "search-templates-widget",
                     "title": "Suchvorlagen",
                     "template": "widgets/search-templates",
                     "configurationTemplate": "widgets/search-templates/configuration",
