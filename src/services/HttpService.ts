@@ -1,6 +1,8 @@
 import { IHttpService, IConfigurationService, ILoggingService } from './';
 import { injectable, inject } from 'inversify';
 import { HttpError, IServerConfiguration } from './../model/';
+import * as path from 'path';
+import fs = require('fs');
 
 @injectable()
 export class HttpService implements IHttpService {
@@ -8,6 +10,7 @@ export class HttpService implements IHttpService {
     private request: any;
     private apiURL: string;
     private loggingService: ILoggingService;
+    private backendCertificate: any;
 
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
@@ -17,6 +20,7 @@ export class HttpService implements IHttpService {
         this.apiURL = serverConfig.BACKEND_API_URL;
         this.request = require('request-promise');
         this.loggingService = loggingService;
+        this.backendCertificate = fs.readFileSync(path.join(__dirname, '../../cert/backend.pem'));
     }
 
     public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
@@ -27,7 +31,8 @@ export class HttpService implements IHttpService {
             headers: {
                 Authorization: 'Token ' + token
             },
-            json: true
+            json: true,
+            ca: this.backendCertificate
         };
 
         const response = await this.request(options)
@@ -43,7 +48,8 @@ export class HttpService implements IHttpService {
             method: 'POST',
             uri: this.buildRequestUrl(resource),
             body: content,
-            json: true
+            json: true,
+            ca: this.backendCertificate
         };
 
         const response = await this.request(options)
@@ -59,7 +65,8 @@ export class HttpService implements IHttpService {
             method: 'PUT',
             uri: this.buildRequestUrl(resource),
             body: content,
-            json: true
+            json: true,
+            ca: this.backendCertificate
         };
 
         const response = await this.request(options)
@@ -74,7 +81,8 @@ export class HttpService implements IHttpService {
             method: 'PATCH',
             uri: this.buildRequestUrl(resource),
             body: content,
-            json: true
+            json: true,
+            ca: this.backendCertificate
         };
 
         const response = await this.request(options)
@@ -88,7 +96,8 @@ export class HttpService implements IHttpService {
         const options = {
             method: 'DELETE',
             uri: this.buildRequestUrl(resource),
-            json: true
+            json: true,
+            ca: this.backendCertificate
         };
 
         const response = await this.request.delete(options)
