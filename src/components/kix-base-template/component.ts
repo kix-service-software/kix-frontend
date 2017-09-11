@@ -1,5 +1,5 @@
 import { SocketEvent } from '../../model/client/socket/SocketEvent';
-import { TokenHandler } from '../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../model/client/TokenHandler';
 
 declare var io;
 
@@ -18,7 +18,7 @@ class BaseTemplateComponent {
     }
 
     public onMount(): void {
-        const token = TokenHandler.getToken();
+        const token = LocalStorageHandler.getToken();
 
         const configurationSocket = io.connect(this.frontendSocketUrl + "/configuration", {
             query: "Token=" + token

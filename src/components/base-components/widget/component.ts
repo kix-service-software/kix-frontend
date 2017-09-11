@@ -8,12 +8,9 @@ class WidgetComponent {
 
     public store: any;
 
-    public frontendSocketUrl: string;
-
     public onCreate(input: any): void {
         this.state = new WidgetComponentState();
         this.state.widget = input.widget;
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onInput(input: any): void {
@@ -23,7 +20,7 @@ class WidgetComponent {
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(WIDGET_INITIALIZE(this.frontendSocketUrl, 'dashboard', this.state.widget.id, this.store));
+        this.store.dispatch(WIDGET_INITIALIZE('dashboard', this.state.widget.id, this.store));
     }
 
     public stateChanged(): void {

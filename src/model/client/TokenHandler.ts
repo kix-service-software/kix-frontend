@@ -1,4 +1,9 @@
-export class ClientTokenHandler {
+export class StorageHandler {
+
+    public getFrontendSocketUrl(): string {
+        const socketUrl = window.localStorage.getItem("frontendSocketUrl");
+        return socketUrl;
+    }
 
     public getToken(): string {
         const token = window.localStorage.getItem("token");
@@ -12,8 +17,8 @@ export class ClientTokenHandler {
 
 }
 
-const TokenHandler = new ClientTokenHandler();
+const LocalStorageHandler = new StorageHandler();
 
 export {
-    TokenHandler
+    LocalStorageHandler
 };

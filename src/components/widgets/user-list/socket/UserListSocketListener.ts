@@ -1,7 +1,7 @@
 import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { TokenHandler } from '../../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../../model/client/TokenHandler';
 import {
     USER_LIST_USERS_LOADED,
     USER_LIST_ERROR
@@ -18,7 +18,7 @@ export class UserListSocketListener {
     private store: any;
 
     public constructor(frontendSocketUrl: string, store: any) {
-        const token = TokenHandler.getToken();
+        const token = LocalStorageHandler.getToken();
         this.usersSocket = io.connect(frontendSocketUrl + "/users", {
             query: "Token=" + token
         });

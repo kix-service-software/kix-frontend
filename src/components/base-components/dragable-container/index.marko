@@ -9,7 +9,7 @@
                     <div.drag-overlay id="overlay-drag-${rowLoop.getIndex()}-${loop.getIndex()}"
                         class="${state.configurationMode ? '' : 'drag-hidden'} ${state.dndState.dropElementId === 'overlay-drag-' + rowLoop.getIndex() + '-' + loop.getIndex() ? 'drop-element' : ''}"/>
                     <div.drag-widget>
-                        <widget widget=widget frontendSocketUrl=data.frontendSocketUrl configurationMode=data.configurationMode/>
+                        <widget widget=widget configurationMode=data.configurationMode/>
                     </div>
                 </div>
             </for>
