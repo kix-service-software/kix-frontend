@@ -2,7 +2,7 @@
 html {
     height: 100%;
     box-sizing: border-box;
-    background-color: @secondary_5;
+    background-color: @secondary-5;
 }
 
 body {
@@ -27,16 +27,16 @@ button {
     height: 35px;
     box-sizing: border-box;
     line-height: 35px;
-    background-color: @tertiary_0;
-    color: @secondary_6;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    background-color: @tertiary-0;
+    color: @secondary-6;
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
     font-weight: 600;
     border: 0 none;
     padding: 0 1em;
     cursor: pointer;
     &.submit {
-        background-color: @tertiary_0;
+        background-color: @tertiary-0;
         &:after {
             content: " ";
             position: absolute;
@@ -44,95 +44,95 @@ button {
             right: -35px;
             display: block;
             box-sizing: border-box;
-            border: 3px solid @tertiary_0;
+            border: 3px solid @tertiary-0;
             width: 35px;
             height: 35px;
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
-            color: @tertiary_0;
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            color: @tertiary-0;
             cursor: pointer;
         }
         &.disabled {
-            background-color: @secondary_1;
+            background-color: @secondary-1;
             &:after {
-                border: 3px solid @secondary_1;
-                color: @secondary_1;
+                border: 3px solid @secondary-1;
+                color: @secondary-1;
             }
         }
     }
 }
 
-.color_theme_0() {
-    @bc_color: @primary_0;
-    background: @bc_color;
-    @font_color: @default_light_font_color;
-    color: @font_color;
+.color-theme-0() {
+    @bc-color: @primary-0;
+    background: @bc-color;
+    @font-color: @default-light-font-color;
+    color: @font-color;
 }
 
-.color_theme_1() {
-    @bc_color: @primary_1;
-    background: @bc_color;
-    @font_color: @default_light_font_color;
-    color: @font_color;
+.color-theme-1() {
+    @bc-color: @primary-1;
+    background: @bc-color;
+    @font-color: @default-light-font-color;
+    color: @font-color;
 }
 
-.color_theme_2() {
-    @bc_color: @primary_2;
-    background: @bc_color;
-    @font_color: @default_light_font_color;
-    color: @font_color;
+.color-theme-2() {
+    @bc-color: @primary-2;
+    background: @bc-color;
+    @font-color: @default-light-font-color;
+    color: @font-color;
 }
 
-.color_theme_3() {
-    @bc_color: @secondary_2;
-    background: @bc_color;
-    @font_color: @secondary_0;
-    color: @font_color;
+.color-theme-3() {
+    @bc-color: @secondary-2;
+    background: @bc-color;
+    @font-color: @secondary-0;
+    color: @font-color;
 }
 
-.color_theme_4() {
-    @bc_color: @secondary_6;
-    background: @bc_color;
-    @font_color: @default_dark_font_color;
-    color: @font_color;
+.color-theme-4() {
+    @bc-color: @secondary-6;
+    background: @bc-color;
+    @font-color: @default-dark-font-color;
+    color: @font-color;
 }
 
-.color_theme_5() {
-    @bc_color: @tertiary_5;
-    background: @bc_color;
-    @font_color: @default_light_font_color;
-    color: @font_color;
+.color-theme-5() {
+    @bc-color: @tertiary-5;
+    background: @bc-color;
+    @font-color: @default-light-font-color;
+    color: @font-color;
 }
 
-.color_theme_6() {
-    @bc_color: @secondary_6;
-    background: @bc_color;
-    @font_color: @secondary_2;
-    color: @font_color;
+.color-theme-6() {
+    @bc-color: @secondary-6;
+    background: @bc-color;
+    @font-color: @secondary-2;
+    color: @font-color;
 }
 
-.color_theme_7() {
-    @bc_color: @secondary_3;
-    background: @bc_color;
-    @font_color: @secondary_0;
-    color: @font_color;
+.color-theme-7() {
+    @bc-color: @secondary-3;
+    background: @bc-color;
+    @font-color: @secondary-0;
+    color: @font-color;
 }
 
-.color_theme_8() {
-    @bc_color: @secondary_0;
-    background: @bc_color;
-    @font_color: @secondary_3;
-    color: @font_color;
+.color-theme-8() {
+    @bc-color: @secondary-0;
+    background: @bc-color;
+    @font-color: @secondary-3;
+    color: @font-color;
 }
 
-.color_theme_9() {
-    @bc_color: @secondary_6;
-    background: @bc_color;
-    @font_color: @secondary_1;
-    color: @font_color;
+.color-theme-9() {
+    @bc-color: @secondary-6;
+    background: @bc-color;
+    @font-color: @secondary-1;
+    color: @font-color;
 }
 
-.vertical_align() {
+.vertical-align() {
     position: relative;
     top: 50%;
     -webkit-transform: perspective(1px) translateY(-50%);
@@ -140,67 +140,62 @@ button {
     transform: perspective(1px) translateY(-50%);
 }
 
-@static_path: '/dist/static/';
-@default_font_size: 14px;
-@border_radius: 5px;
+@static-path: '/dist/static/';
+@default-font-size: 14px;
+@border-radius: 5px;
 // predefine shadows
-@shadow_color: @secondary_3;
-@shadow_color: red;
-@shadow_blur: 5px;
-@shadow: -1px -1px @shadow_blur @shadow_color,
-1px 1px @shadow_blur @shadow_color;
-@shadow_left: -1px 0px @shadow_blur @shadow_color;
-@shadow_top: 0px -1px @shadow_blur @shadow_color;
-@shadow_right: 1px 0px @shadow_blur @shadow_color;
-@shadow_bottom: 0px 1px @shadow_blur @shadow_color;
-.shadow_margin {
-    margin: @shadow_blur;
+@shadow-color: @secondary-3;
+@shadow-color: red;
+@shadow-blur: 5px;
+@shadow: -1px -1px @shadow-blur @shadow-color,
+1px 1px @shadow-blur @shadow-color;
+@shadow-left: -1px 0px @shadow-blur @shadow-color;
+@shadow-top: 0px -1px @shadow-blur @shadow-color;
+@shadow-right: 1px 0px @shadow-blur @shadow-color;
+@shadow-bottom: 0px 1px @shadow-blur @shadow-color;
+.shadow-margin {
+    margin: @shadow-blur;
 }
 
-@height_0: 40px;
-.height_0() {
-    height: @height_0;
+@height-0: 40px;
+.height-0() {
+    height: @height-0;
     box-sizing: border-box;
 }
 
-@height_1: 36px;
-.height_1() {
-    height: @height_1;
+@height-1: 36px;
+.height-1() {
+    height: @height-1;
     box-sizing: border-box;
 }
 
-@height_2: 23px;
-.height_2() {
-    height: @height_2;
+@height-2: 23px;
+.height-2() {
+    height: @height-2;
     box-sizing: border-box;
 }
 
-// default "css"
-// include Calibri font
+// include Carlito font
 @font-face {
     font-family: Carlito;
-    src: url(@{static_path}font/carlito-regular.woff);
+    src: url(@{static-path}font/carlito-regular.woff);
 }
 
 @font-face {
     font-family: Carlito;
-    src: url(@{static_path}font/carlito-bold.woff);
+    src: url(@{static-path}font/carlito-bold.woff);
     font-weight: bold;
 }
 
 @font-face {
     font-family: Carlito;
-    src: url(@{static_path}font/carlito-italic.woff);
+    src: url(@{static-path}font/carlito-italic.woff);
     font-style: italic;
 }
 
 @font-face {
     font-family: Carlito;
-    src: url(@{static_path}font/carlito-bold-italic.woff);
+    src: url(@{static-path}font/carlito-bold-italic.woff);
     font-weight: bold;
     font-style: italic;
-}
-
-.clear {
-    clear: both;
 }

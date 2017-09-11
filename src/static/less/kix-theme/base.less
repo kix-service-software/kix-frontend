@@ -1,54 +1,55 @@
-#kix_app {
-    background: @secondary_5;
-    color: @secondary_2;
-    font-family: Calibri, Carlito, Arial, Helvetica, sans-serif;
-    font-size: @default_font_size;
-    #mutable_content {
+// default "css"
+#kix-app {
+    background: @secondary-5;
+    color: @secondary-2;
+    font-family: Carlito, Arial, Helvetica, sans-serif;
+    font-size: @default-font-size;
+    #mutable-content {
         height: 100%;
         margin-left: 150px;
         margin-bottom: 20px;
-        #kix_sidebars {
+        #kix-sidebars {
             float: right;
         }
-        #mutable_content_area {
+        #mutable-content-area {
             margin-right: 50px;
             min-width: 500px;
             overflow-x: hidden;
-            #mutable_content_routing {
-                .shadow_margin;
+            #mutable-content-routing {
+                .shadow-margin;
                 margin-bottom: 18px;
-                #kix_breadcrumb {
-                    .height_0;
-                    .color_theme_4;
+                #kix-breadcrumb {
+                    .height-0;
+                    .color-theme-4;
                     width: 100%;
                     margin-bottom: 3px;
                     box-shadow: @shadow;
                     padding: 5px;
-                    #kix_list_skimmer {
-                        .color_theme_9;
+                    #kix-list-skimmer {
+                        .color-theme-9;
                         float: right;
                     }
                 }
-                #kix_back {
-                    .color_theme_9;
+                #kix-back {
+                    .color-theme-9;
                     padding: 5px 10px;
                     box-shadow: @shadow;
                 }
             }
-            #kix_widgetbar_container {
+            #kix-widgetbar-container {
                 float: left;
-                .shadow_margin;
+                .shadow-margin;
             }
-            #kix_content {
+            #kix-content {
                 float: left;
-                .shadow_margin;
+                .shadow-margin;
                 width: 100%;
             }
         }
     }
     #footer {
-        .clear;
-        font-size: @default_font_size - 2;
+        .clearfix;
+        font-size: @default-font-size - 2;
         text-align: center;
     }
 }
