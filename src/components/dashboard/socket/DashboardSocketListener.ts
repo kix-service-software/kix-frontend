@@ -1,5 +1,5 @@
 import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { LocalStorageHandler } from './../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';

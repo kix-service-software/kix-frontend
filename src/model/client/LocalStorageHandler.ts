@@ -5,6 +5,10 @@ export class StorageHandler {
         return socketUrl;
     }
 
+    public setFrontendSocketUrl(socketUrl: string) {
+        window.localStorage.setItem("frontendSocketUrl", socketUrl);
+    }
+
     public getToken(): string {
         const token = window.localStorage.getItem("token");
 

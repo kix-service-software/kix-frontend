@@ -5,7 +5,7 @@ import { LoadConfigurationResult } from './../../../../model/client/socket/confi
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
-import { LocalStorageHandler } from '../../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../../model/client/LocalStorageHandler';
 import {
     WIDGET_CONFIGURATION_LOADED,
     WIDGET_ERROR

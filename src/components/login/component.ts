@@ -17,12 +17,9 @@ class LoginFormComponent {
 
     public frontendUrl: string;
 
-    public frontendSocketUrl: string;
-
     public onCreate(input: any): void {
         this.state = new LoginComponentState();
         this.frontendUrl = input.frontendUrl;
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public stateChanged(): void {
@@ -37,7 +34,7 @@ class LoginFormComponent {
     public onMount(): void {
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(LOGIN_INITIALIZE(this.frontendSocketUrl));
+        this.store.dispatch(LOGIN_INITIALIZE());
     }
 
     public userNameChanged(event: any): void {
