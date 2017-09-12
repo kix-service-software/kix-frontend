@@ -1,6 +1,6 @@
 <div#kix-app>
     <kix-header/>
-    <kix-menu frontendSocketUrl=data.frontendSocketUrl/>
+    <kix-menu/>
     <div#mutable-content>
         <kix-sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
         <div#mutable-content-area>
@@ -10,8 +10,7 @@
             </div>
             <div style="background:black;height:1px;width:100%"/>
             <kix-widgetbar/>
-            <kix-content configurationMode=state.configurationMode frontendSocketUrl=data.frontendSocketUrl
-                template=data.contentTemplate templateData=data.templateData/>
+            <kix-content configurationMode=state.configurationMode template=data.contentTemplate templateData=data.templateData/>
         </div>
     </div>
     <kix-footer/>

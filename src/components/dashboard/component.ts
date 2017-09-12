@@ -6,20 +6,17 @@ class DashboardComponent {
 
     public state: DashboardComponentState;
 
-    public frontendSocketUrl: string;
-
     public store: any;
 
     public onCreate(input: any): void {
         this.state = new DashboardComponentState();
         this.state.configurationMode = input.configurationMode;
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onMount(): void {
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(DASHBOARD_INITIALIZE(this.frontendSocketUrl));
+        this.store.dispatch(DASHBOARD_INITIALIZE());
     }
 
     public onInput(input: any) {

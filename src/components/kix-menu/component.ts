@@ -6,17 +6,15 @@ class KIXMenuComponent {
 
     public state: MenuComponentState;
     public store: any;
-    public frontendSocketUrl: string;
 
     public onCreate(input: any): void {
         this.state = new MenuComponentState();
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onMount(): void {
         this.store = require('./store');
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(MAIN_MENU_INITIALIZE(this.frontendSocketUrl));
+        this.store.dispatch(MAIN_MENU_INITIALIZE());
     }
 
     public stateChanged(): void {

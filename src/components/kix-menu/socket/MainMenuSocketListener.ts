@@ -1,17 +1,21 @@
 import { MainMenuEvent, MainMenuEntriesResult } from '../../../model/client/socket/main-menu';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
+import { SocketListener } from '../../../model/client/socket/SocketListener';
 
 declare var io: any;
 
-export class MainMenuSocketListener {
+export class MainMenuSocketListener extends SocketListener {
 
     private socket: SocketIO.Server;
 
     private store: any;
 
-    public constructor(frontendSocketUrl: string) {
-        this.socket = io.connect(frontendSocketUrl + "/main-menu", {});
+    public constructor() {
+        super();
+
+        this.socket = this.createSocket("main-menu");
         this.store = require('../store/');
         this.initSocketListener(this.socket);
     }

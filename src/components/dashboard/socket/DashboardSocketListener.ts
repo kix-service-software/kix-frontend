@@ -1,32 +1,29 @@
 import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { TokenHandler } from './../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
+import { SocketListener } from '../../../model/client/socket/SocketListener';
 import {
     DASHBOARD_CONTAINER_CONFIGURATION_LOADED
 } from '../store/actions';
 
-declare var io: any;
-
-export class DashboardSocketListener {
+export class DashboardSocketListener extends SocketListener {
 
     private configurationSocket: SocketIO.Server;
 
     private store: any;
 
-    public constructor(frontendSocketUrl: string) {
-        const token = TokenHandler.getToken();
-        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
-            query: "Token=" + token
-        });
+    public constructor() {
+        super();
         this.store = require('../store/');
+        this.configurationSocket = this.createSocket("configuration");
         this.initConfigurationSocketListener(this.configurationSocket);
     }
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            const token = TokenHandler.getToken();
+            const token = LocalStorageHandler.getToken();
             socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(token, 'dashboard', true));
         });

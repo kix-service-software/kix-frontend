@@ -5,7 +5,8 @@ import { LoadConfigurationResult } from './../../../../model/client/socket/confi
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
-import { TokenHandler } from '../../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../../model/client/LocalStorageHandler';
+import { SocketListener } from '../../../../model/client/socket/SocketListener';
 import {
     WIDGET_CONFIGURATION_LOADED,
     WIDGET_ERROR
@@ -13,7 +14,7 @@ import {
 
 declare var io;
 
-export class WidgetSocketListener {
+export class WidgetSocketListener extends SocketListener {
 
     private configurationSocket: SocketIO.Server;
 
@@ -23,14 +24,12 @@ export class WidgetSocketListener {
 
     private widgetId: string;
 
-    public constructor(frontendSocketUrl: string, moduleId: string, widgetId: string, store: any) {
+    public constructor(moduleId: string, widgetId: string, store: any) {
+        super();
         this.moduleId = moduleId;
         this.widgetId = widgetId;
-        const token = TokenHandler.getToken();
 
-        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
-            query: "Token=" + token
-        });
+        this.configurationSocket = this.createSocket("configuration");
 
         this.store = store;
         this.initConfigruationSocketListener();
@@ -38,14 +37,14 @@ export class WidgetSocketListener {
 
     public saveConfiguration(configuration: any): void {
         this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
-            new SaveConfigurationRequest(configuration, TokenHandler.getToken(), this.moduleId + '_' + this.widgetId,
-                true));
+            new SaveConfigurationRequest
+                (configuration, LocalStorageHandler.getToken(), this.moduleId + '_' + this.widgetId, true));
     }
 
     private initConfigruationSocketListener(): void {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
-            const token = TokenHandler.getToken();
+            const token = LocalStorageHandler.getToken();
             this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(
                     token,
