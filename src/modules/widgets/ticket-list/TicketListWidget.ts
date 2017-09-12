@@ -12,7 +12,4 @@ export class TicketListWidget implements IWidget {
 
     public isExternal: boolean = false;
 
-    public getDefaultConfiguration(): any {
-        return {};
-    }
 }

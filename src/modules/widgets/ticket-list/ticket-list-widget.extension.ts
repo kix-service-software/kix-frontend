@@ -12,6 +12,10 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
         return "ticket-list-widget";
     }
 
+    public getDefaultConfiguration(): any {
+        return {};
+    }
+
 }
 
 module.exports = (data, host, options) => {

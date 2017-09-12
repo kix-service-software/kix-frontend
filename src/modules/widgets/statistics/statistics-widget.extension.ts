@@ -12,6 +12,10 @@ export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension
         return "statistics-widget";
     }
 
+    public getDefaultConfiguration(): any {
+        return {};
+    }
+
 }
 
 module.exports = (data, host, options) => {

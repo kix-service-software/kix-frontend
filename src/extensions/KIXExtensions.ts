@@ -8,6 +8,8 @@ export enum KIXExtensions {
 
     MAIN_MENU = "kix:menu:main",
 
-    COMMUNICATOR = "kix:communicator"
+    COMMUNICATOR = "kix:communicator",
+
+    WIDGET = "kix:widget"
 
 }

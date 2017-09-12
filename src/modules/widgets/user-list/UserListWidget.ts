@@ -13,8 +13,4 @@ export class UserListWidget implements IWidget {
 
     public isExternal: boolean = false;
 
-    public getDefaultConfiguration(): any {
-        return new UserListConfiguration();
-    }
-
 }

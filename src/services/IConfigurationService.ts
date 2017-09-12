@@ -8,7 +8,8 @@ export interface IConfigurationService {
 
     getComponentConfiguration(contextId: string, componentId: string, userId: number): Promise<any>;
 
-    saveComponentConfiguration(configurationName: string, configuration: any): Promise<void>;
+    saveComponentConfiguration(
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void>;
 
     isProductionMode(): boolean;
 

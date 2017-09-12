@@ -24,8 +24,18 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         client.on(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, async (data: LoadConfigurationRequest) => {
             const user = await this.userService.getUserByToken(data.token);
 
+            const _self = this;
             const configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+                .getComponentConfiguration(data.contextId, data.componentId, user.UserID)
+                .catch(async (error) => {
+                    const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
+                    const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
+
+                    await _self.configurationService.saveComponentConfiguration(
+                        data.contextId, data.componentId, user.UserID, widgetDefaultConfiguration);
+
+                    return widgetDefaultConfiguration;
+                });
 
             this.emitConfigurationLoadedEvent(client, configuration);
         });
@@ -52,19 +62,14 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     private registerSaveComponentConfigurationEvents(client: SocketIO.Socket): void {
         client.on(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, async (data: SaveConfigurationRequest) => {
 
-            let configName = data.contextId;
-
-            if (data.componentId) {
-                configName += '_' + data.componentId;
-            }
-
+            let userId = null;
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
-                const userId = user && user.UserID;
-                configName = userId + '_' + configName;
+                userId = user && user.UserID;
             }
 
-            await this.configurationService.saveComponentConfiguration(configName, data.configuration);
+            await this.configurationService
+                .saveComponentConfiguration(data.contextId, data.componentId, userId, data.configuration);
 
             client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
         });

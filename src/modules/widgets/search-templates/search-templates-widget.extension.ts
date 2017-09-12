@@ -12,6 +12,10 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
         return "search-templates-widget";
     }
 
+    public getDefaultConfiguration(): any {
+        return {};
+    }
+
 }
 
 module.exports = (data, host, options) => {
