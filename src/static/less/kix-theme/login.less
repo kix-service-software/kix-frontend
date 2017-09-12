@@ -1,6 +1,7 @@
 .login-wrapper {
     position: relative;
-    background: /*url("dist/static/img/login.png") 0 0 auto repeat-x*/ @secondary_5;
+    background:/*url("@{static-path}img/login.png") 0 0 auto repeat-x*/
+    @secondary-5;
 }
 
 .login-page {
@@ -17,7 +18,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: @secondary_6;
+    background-color: @secondary-6;
     opacity: .7;
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
@@ -27,9 +28,9 @@
     position: relative;
     width: 638px;
     margin: 184px auto 33px;
-    border: 3px solid @primary_2;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 0 @secondary_1;
+    border: 3px solid @primary-2;
+    border-radius: @border-radius;
+    box-shadow: 0 0 10px 0 @secondary-1;
 }
 
 .dialog-header h1 {
@@ -41,11 +42,11 @@
 // TODO: .message sollte vielleicht in die defaults.less oder in eine neue "defaults" gezogen werden!
 .dialog-message-area {
     margin: 1.5em;
-    border-bottom: 3px solid @primary_2;
+    border-bottom: 3px solid @primary-2;
     text-align: center;
     padding: 2em;
     box-sizing: border-box;
-    color: @secondary_0;
+    color: @secondary-0;
     & .message {
         position: relative;
         left: -17px;
@@ -56,7 +57,7 @@
         line-height: 29px;
         font-weight: 600;
         padding: 0 1em;
-        border: 3px solid @tertiary_0;
+        border: 3px solid @tertiary-0;
         box-sizing: border-box;
         &:after {
             content: " ";
@@ -65,26 +66,26 @@
             right: -35px;
             display: block;
             box-sizing: border-box;
-            border: 3px solid @tertiary_0;
+            border: 3px solid @tertiary-0;
             width: 35px;
             height: 35px;
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
-            color: @tertiary_0;
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            color: @tertiary-0;
             cursor: pointer;
         }
         &.message-progress {
-            border-color: @tertiary_4;
+            border-color: @tertiary-4;
             &:after {
-                border-color: @tertiary_4;
-                color: @tertiary_4;
+                border-color: @tertiary-4;
+                color: @tertiary-4;
             }
         }
         &.message-error {
-            border-color: @tertiary_1;
+            border-color: @tertiary-1;
             &:after {
-                border-color: @tertiary_1;
-                color: @tertiary_1;
+                border-color: @tertiary-1;
+                color: @tertiary-1;
             }
         }
     }
@@ -93,7 +94,7 @@
 .dialog-content {
     padding: 2em 9em 2em 2em;
     text-align: right;
-    color: @secondary_0;
+    color: @secondary-0;
     & label {
         display: block;
         line-height: 2.5em;
@@ -101,9 +102,9 @@
             box-sizing: border-box;
             margin-left: 1em;
             padding: 0 10px;
-            background-color: @secondary_5;
-            border: 1px solid @secondary_4;
-            border-radius: 5px;
+            background-color: @secondary-5;
+            border: 1px solid @secondary-4;
+            border-radius: @border-radius;
             width: 307px;
             height: 34px;
         }
@@ -116,6 +117,6 @@
 .login-footer {
     position: relative;
     font-size: .75em;
-    color: @secondary_2;
+    color: @secondary-2;
     text-align: center;
 }

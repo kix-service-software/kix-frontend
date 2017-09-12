@@ -1,59 +1,62 @@
-.sidebar_select_container {
-    .shadow_margin;
+.sidebar-select-container {
+    .shadow-margin;
     margin-left: 50px;
     margin-right: 0px;
     float: right;
-    width: @height_0;
-    .sidebar_select {
-        .color_theme_6;
-        .height_0;
-        width: @height_0;
+    width: @height-0;
+    .sidebar-select {
+        .color-theme-6;
+        .height-0;
+        width: @height-0;
         text-align: center;
         margin-bottom: 3px;
-        border-top-left-radius: @border_radius;
-        border-bottom-left-radius: @border_radius;
-        font-size: @default_font_size * 2;
+        border-top-left-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
+        font-size: @default-font-size * 2;
         box-shadow: @shadow;
-        &.select_active {
-            .color_theme_7;
+        &.select-active {
+            .color-theme-7;
         }
-        & > div {
-            .vertical_align;
+        &>div {
+            .vertical-align;
         }
     }
-    #content_settings_select, #information_select {
-        .color_theme_8;
+    #content-settings-select,
+    #information-select {
+        .color-theme-8;
     }
-    #dependend_sidebars_select {
+    #dependend-sidebars-select {
         margin-top: 50px;
     }
 }
-.sidebar_container {
-    .shadow_margin;
+
+.sidebar-container {
+    .shadow-margin;
+    .clearfix;
     overflow-x: hidden;
     margin-right: 5px;
-    #default_sidebars {
+    #default-sidebars {
         min-height: 90px;
     }
-    .kix_sidebar {
-        .color_theme_4();
+    .kix-sidebar {
+        .color-theme-4();
         width: 250px;
         margin-bottom: 20px;
         margin-left: 50px;
         box-shadow: @shadow;
-        border-top-left-radius: @border_radius;
-        border-top-right-radius: @border_radius;
-        border-bottom-left-radius: @border_radius;
-        border-bottom-right-radius: @border_radius;
+        border-top-left-radius: @border-radius;
+        border-top-right-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
         overflow: hidden;
-        .sidebar_header {
-            .color_theme_1;
-            .height_0;
+        .sidebar-header {
+            .color-theme-1;
+            .height-0;
             padding: 5px;
-            font-size: @default_font_size * 2;
+            font-size: @default-font-size * 2;
         }
-        .sidebar_content {
-            .shadow_margin;
+        .sidebar-content {
+            .shadow-margin;
             min-height: 200px;
         }
     }

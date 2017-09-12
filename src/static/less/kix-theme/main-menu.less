@@ -1,11 +1,11 @@
 #menu {
-    .shadow_margin;
+    .shadow-margin;
     margin-left: 0px;
     height: 100%;
     float: left;
     font-weight: bold;
     ul {
-        .color_theme_0;
+        .color-theme-0;
         margin: 0px;
         list-style: none;
         padding: 0px;
@@ -13,41 +13,37 @@
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
         li {
-            .color_theme_2;
+            .color-theme-2;
             height: 40px;
             width: 70px;
-            border-top: 1px solid lighten(@bc_color,10%);
-            border-bottom: 1px solid darken(@bc_color,15%);
-            border-left: 3px solid @primary_0;
-            &:first-child {
-            }
-            &:last-child {
-            }
+            border-top: 1px solid lighten(@bc-color, 10%);
+            border-bottom: 1px solid darken(@bc-color, 15%);
+            border-left: 3px solid @primary-0;
+            &:first-child {}
+            &:last-child {}
             &.active {
-                .color_theme_0;
-                // width: 85px;
-                border-top: 1px solid lighten(@bc_color,10%);
-                border-bottom: 1px solid darken(@bc_color,25%);
-                border-left: 3px solid @bc_color;
-            }
-            // TODO: should be removed or replaced with other link solution
+                .color-theme-0; // width: 85px;
+                border-top: 1px solid lighten(@bc-color, 10%);
+                border-bottom: 1px solid darken(@bc-color, 25%);
+                border-left: 3px solid @bc-color;
+            } // TODO: should be removed or replaced with other link solution
             a {
                 text-decoration: none;
                 color: inherit;
                 div {
-                    .vertical_align;
+                    .vertical-align;
                     text-align: center;
                 }
             }
         }
-        &#main_menu_extra {
+        &#main-menu-extra {
             margin-top: 2px;
-            .color_theme_5;
+            .color-theme-5;
             li {
-                .color_theme_1;
-                border-top: 1px solid lighten(@bc_color,10%);
-                border-bottom: 1px solid darken(@bc_color,15%);
-                border-left: 3px solid @tertiary_5;
+                .color-theme-1;
+                border-top: 1px solid lighten(@bc-color, 10%);
+                border-bottom: 1px solid darken(@bc-color, 15%);
+                border-left: 3px solid @tertiary-5;
             }
         }
     }

@@ -1,8 +1,8 @@
-<div.widget_header>
+<div.widget-header>
     <span>${data.widget.title}</span>
-    <button class="${state.configurationMode ? 'action' : 'action_hide'}" on-click('configClicked')>Config</button>
+    <button class="${state.configurationMode ? 'action' : 'action-hide'}" on-click('configClicked')>Config</button>
 </div>
-<div.widget_content>
+<div.widget-content>
     $ let template = require('../../' + data.widget.template);
     <include(template, {
         configuration: state.configuration
