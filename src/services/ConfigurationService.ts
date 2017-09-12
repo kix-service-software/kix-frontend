@@ -12,6 +12,7 @@ export class ConfigurationService implements IConfigurationService {
     private lassoConfiguration: any;
 
     private CONFIG_DIR: string = '../../config/';
+    private CONFIG_COMPONENTS_DIR: string = '../../config/components/';
     private CONFIG_EXTENSION: string = '.config.json';
 
     public constructor() {
@@ -50,7 +51,7 @@ export class ConfigurationService implements IConfigurationService {
             configurationName = userId + '_' + configurationName;
         }
 
-        const configPath = this.getConfigurationFilePath(configurationName);
+        const configPath = this.getComponentConfigurationFilePath(configurationName);
         this.clearRequireCache(configPath);
 
         return require(configPath);
@@ -69,7 +70,7 @@ export class ConfigurationService implements IConfigurationService {
         }
 
         await new Promise<void>((resolve, reject) => {
-            const filePath = __dirname + '/' + this.getConfigurationFilePath(configurationName);
+            const filePath = __dirname + '/' + this.getComponentConfigurationFilePath(configurationName);
 
             jsonfile.writeFile(filePath, configuration,
                 (fileError: Error) => {
@@ -136,6 +137,10 @@ export class ConfigurationService implements IConfigurationService {
 
     private getConfigurationFilePath(fileName: string): string {
         return this.CONFIG_DIR + fileName + this.CONFIG_EXTENSION;
+    }
+
+    private getComponentConfigurationFilePath(fileName: string): string {
+        return this.CONFIG_COMPONENTS_DIR + fileName + this.CONFIG_EXTENSION;
     }
 
     private clearRequireCache(configPath: string): void {

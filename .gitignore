@@ -1,3 +1,4 @@
+config/components/*.json
 .cache
 gulp-*
 dist
