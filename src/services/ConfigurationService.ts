@@ -46,7 +46,7 @@ export class ConfigurationService implements IConfigurationService {
 
     public async saveComponentConfiguration(configurationName: string, configuration: any): Promise<void> {
         await new Promise<void>((resolve, reject) => {
-            const filePath = this.getConfigurationFilePath(configurationName);
+            const filePath = __dirname + '/' + this.getConfigurationFilePath(configurationName);
 
             jsonfile.writeFile(filePath, configuration,
                 (fileError: Error) => {
@@ -116,8 +116,9 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     private clearRequireCache(configPath: string): void {
-        if (require.cache[configPath]) {
-            delete require.cache[configPath];
+        const config = require.resolve(configPath);
+        if (require.cache[config]) {
+            delete require.cache[config];
         }
     }
 
