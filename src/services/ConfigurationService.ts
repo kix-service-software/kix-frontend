@@ -11,17 +11,22 @@ export class ConfigurationService implements IConfigurationService {
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
 
+    private CONFIG_DIR: string = '../../config/';
+    private CONFIG_EXTENSION: string = '.config.json';
+
     public constructor() {
-        let lassoConfig = '../../lasso.dev.config.json';
+        let lassoConfig = this.getConfigurationFilePath('lasso.dev');
 
         // TODO: split server.config to prod and dev?
-        const serverConfig = '../../server.config.json';
+        const serverConfig = this.getConfigurationFilePath('server');
 
         if (this.isProductionMode()) {
-            lassoConfig = '../../lasso.prod.config.json';
+            lassoConfig = this.getConfigurationFilePath('lasso.prod');
         }
 
         this.serverConfiguration = this.loadServerConfig(serverConfig);
+
+        this.clearRequireCache(lassoConfig);
         this.lassoConfiguration = require(lassoConfig);
     }
 
@@ -34,12 +39,16 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     public getComponentConfiguration(configurationName: string): any {
-        return require('../../config/' + configurationName + '.config.json');
+        const configPath = this.getConfigurationFilePath(configurationName);
+        this.clearRequireCache(configPath);
+        return require(configPath);
     }
 
     public async saveComponentConfiguration(configurationName: string, configuration: any): Promise<void> {
         await new Promise<void>((resolve, reject) => {
-            jsonfile.writeFile(__dirname + '/../../config/' + configurationName + '.config.json', configuration,
+            const filePath = this.getConfigurationFilePath(configurationName);
+
+            jsonfile.writeFile(filePath, configuration,
                 (fileError: Error) => {
                     if (fileError) {
                         reject(fileError);
@@ -74,6 +83,7 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     private loadServerConfig(serverConfig: string): IServerConfiguration {
+        this.clearRequireCache(serverConfig);
         const config: IServerConfiguration = require(serverConfig);
 
         // check if config option has been overridden by environment
@@ -99,6 +109,16 @@ export class ConfigurationService implements IConfigurationService {
             }
         }
         return config;
+    }
+
+    private getConfigurationFilePath(fileName: string): string {
+        return this.CONFIG_DIR + fileName + this.CONFIG_EXTENSION;
+    }
+
+    private clearRequireCache(configPath: string): void {
+        if (require.cache[configPath]) {
+            delete require.cache[configPath];
+        }
     }
 
 }
