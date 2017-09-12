@@ -36,9 +36,10 @@ export class WidgetSocketListener extends SocketListener {
     }
 
     public saveConfiguration(configuration: any): void {
-        this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
-            new SaveConfigurationRequest
-                (configuration, ClientStorageHandler.getToken(), this.contextId + '_' + this.widgetId, true));
+        const saveRequest = new SaveConfigurationRequest
+            (configuration, ClientStorageHandler.getToken(), ClientStorageHandler.getContextId(), this.widgetId, true);
+
+        this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, saveRequest);
     }
 
     private initConfigruationSocketListener(): void {

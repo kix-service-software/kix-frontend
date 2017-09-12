@@ -24,6 +24,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         client.on(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, async (data: LoadConfigurationRequest) => {
 
             let configName = data.contextId;
+
             if (data.componentId) {
                 configName += '_' + data.componentId;
             }
@@ -43,7 +44,11 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     private registerSaveComponentConfigurationEvents(client: SocketIO.Socket): void {
         client.on(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, async (data: SaveConfigurationRequest) => {
 
-            let configName = data.configurationName;
+            let configName = data.contextId;
+
+            if (data.componentId) {
+                configName += '_' + data.componentId;
+            }
 
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
