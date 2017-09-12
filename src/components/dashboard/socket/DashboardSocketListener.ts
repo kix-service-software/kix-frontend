@@ -3,26 +3,21 @@ import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
+import { SocketListener } from '../../../model/client/socket/SocketListener';
 import {
     DASHBOARD_CONTAINER_CONFIGURATION_LOADED
 } from '../store/actions';
 
-declare var io: any;
-
-export class DashboardSocketListener {
+export class DashboardSocketListener extends SocketListener {
 
     private configurationSocket: SocketIO.Server;
 
     private store: any;
 
     public constructor() {
-        const token = LocalStorageHandler.getToken();
-        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
-
-        this.configurationSocket = io.connect(socketUrl + "/configuration", {
-            query: "Token=" + token
-        });
+        super();
         this.store = require('../store/');
+        this.configurationSocket = this.createSocket("configuration");
         this.initConfigurationSocketListener(this.configurationSocket);
     }
 
