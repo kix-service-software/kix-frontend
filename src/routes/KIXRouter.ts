@@ -64,4 +64,8 @@ export abstract class KIXRouter implements IRouter {
     protected setContextId(contextId: string, res: Response): void {
         res.cookie('contextId', contextId);
     }
+
+    protected setFrontendSocketUrl(res: Response): void {
+        res.cookie('frontendSocketUrl', this.getServerUrl());
+    }
 }

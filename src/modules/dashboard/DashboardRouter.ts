@@ -33,6 +33,7 @@ export class DashboardRouter extends KIXRouter {
             });
 
         this.setContextId(this.CONTEXT_ID, res);
+        this.setFrontendSocketUrl(res);
         this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
     }
 
