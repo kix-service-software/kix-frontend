@@ -1,55 +1,115 @@
 // default "css"
-#kix-app {
-    background: @secondary-5;
-    color: @secondary-2;
-    font-family: Carlito, Arial, Helvetica, sans-serif;
-    font-size: @default-font-size;
-    #mutable-content {
-        height: 100%;
-        margin-left: 150px;
-        margin-bottom: 20px;
-        #kix-sidebars {
-            float: right;
-        }
-        #mutable-content-area {
-            margin-right: 50px;
-            min-width: 500px;
-            overflow-x: hidden;
-            #mutable-content-routing {
-                .shadow-margin;
-                margin-bottom: 18px;
-                #kix-breadcrumb {
-                    .height-0;
-                    .color-theme-4;
-                    width: 100%;
-                    margin-bottom: 3px;
-                    box-shadow: @shadow;
-                    padding: 5px;
-                    #kix-list-skimmer {
-                        .color-theme-9;
+html {
+    height: 100%;
+    box-sizing: border-box;
+    background-color: @secondary-5;
+    body {
+        min-height: 100%;
+        box-sizing: border-box;
+        position: relative;
+        #content {
+            position: relative;
+            box-sizing: border-box;
+            #kix-app {
+                background: @secondary-5;
+                color: @secondary-2;
+                font-family: Carlito, Arial, Helvetica, sans-serif;
+                font-size: @default-font-size;
+                #mutable-content {
+                    height: 100%;
+                    margin-left: 150px;
+                    margin-bottom: 20px;
+                    #kix-sidebars {
                         float: right;
                     }
+                    #mutable-content-area {
+                        margin-right: 50px;
+                        min-width: 500px;
+                        overflow-x: hidden;
+                        #mutable-content-routing {
+                            .shadow-margin;
+                            margin-bottom: 18px;
+                            #kix-breadcrumb {
+                                .height-0;
+                                .color-theme-4;
+                                width: 100%;
+                                margin-bottom: 3px;
+                                box-shadow: @shadow;
+                                padding: 5px;
+                                #kix-list-skimmer {
+                                    .color-theme-9;
+                                    float: right;
+                                }
+                            }
+                            #kix-back {
+                                .color-theme-9;
+                                padding: 5px 10px;
+                                box-shadow: @shadow;
+                            }
+                        }
+                        #kix-widgetbar-container {
+                            .shadow-margin;
+                            float: left;
+                        }
+                        #kix-content {
+                            .shadow-margin;
+                            float: left;
+                            width: 100%;
+                        }
+                    }
                 }
-                #kix-back {
-                    .color-theme-9;
-                    padding: 5px 10px;
-                    box-shadow: @shadow;
+                #footer {
+                    .clearfix;
+                    font-size: @default-font-size - 2;
+                    text-align: center;
                 }
-            }
-            #kix-widgetbar-container {
-                float: left;
-                .shadow-margin;
-            }
-            #kix-content {
-                float: left;
-                .shadow-margin;
-                width: 100%;
             }
         }
     }
-    #footer {
-        .clearfix;
-        font-size: @default-font-size - 2;
-        text-align: center;
+}
+
+h1 {
+    font-size: 2.125em;
+    font-weight: 400;
+}
+
+button {
+    position: relative;
+    left: -35px;
+    height: 35px;
+    box-sizing: border-box;
+    line-height: 35px;
+    background-color: @tertiary-0;
+    color: @secondary-6;
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
+    font-weight: 600;
+    border: 0 none;
+    padding: 0 1em;
+    cursor: pointer;
+    &.submit {
+        background-color: @tertiary-0;
+        &:after {
+            content: " ";
+            position: absolute;
+            top: 0;
+            right: -35px;
+            display: block;
+            box-sizing: border-box;
+            border: 3px solid @tertiary-0;
+            width: 35px;
+            height: 35px;
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            color: @tertiary-0;
+            cursor: pointer;
+        }
+        &.disabled {
+            background-color: @secondary-1;
+            &:after {
+                border: 3px solid @secondary-1;
+                color: @secondary-1;
+            }
+        }
     }
 }
