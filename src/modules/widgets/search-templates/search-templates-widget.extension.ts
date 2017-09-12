@@ -1,6 +1,6 @@
 import { SearchTemplatesWidget } from './SearchTemplatesWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
 
 export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
 

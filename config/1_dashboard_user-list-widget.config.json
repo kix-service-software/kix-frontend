@@ -1,0 +1,1 @@
+{"properties":[{"name":"UserID","displayName":"ID"},{"name":"UserFirstname","displayName":"Vorname"},{"name":"UserLastname","displayName":"Nachname"},{"name":"UserEmail","displayName":"Email"}],"limit":10}

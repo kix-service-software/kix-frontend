@@ -2,7 +2,7 @@ import { UIProperty } from './../../../model/client/UIProperty';
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
 import { UserListWidget } from './UserListWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 

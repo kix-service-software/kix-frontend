@@ -24,14 +24,13 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         client.on(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, async (data: LoadConfigurationRequest) => {
             const user = await this.userService.getUserByToken(data.token);
 
-            const _self = this;
             const configuration = await this.configurationService
                 .getComponentConfiguration(data.contextId, data.componentId, user.UserID)
                 .catch(async (error) => {
                     const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
                     const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
 
-                    await _self.configurationService.saveComponentConfiguration(
+                    await this.configurationService.saveComponentConfiguration(
                         data.contextId, data.componentId, user.UserID, widgetDefaultConfiguration);
 
                     return widgetDefaultConfiguration;
@@ -40,7 +39,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             this.emitConfigurationLoadedEvent(client, configuration);
         });
 
-        client.on(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+        client.on(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, async (data: LoadConfigurationRequest) => {
 
             let userId = null;
             if (data.userSpecific) {
@@ -49,7 +48,16 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             }
 
             const configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, userId);
+                .getComponentConfiguration(data.contextId, data.componentId, userId)
+                .catch(async (error) => {
+                    const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+                    const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+
+                    await this.configurationService.saveComponentConfiguration(
+                        data.contextId, data.componentId, userId, moduleDefaultConfiguration);
+
+                    return moduleDefaultConfiguration;
+                });
 
             this.emitConfigurationLoadedEvent(client, configuration);
         });

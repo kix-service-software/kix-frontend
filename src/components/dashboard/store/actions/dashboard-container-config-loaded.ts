@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from './../../../base-components/dragable-container/model/ContainerConfiguration';
+import { ContainerConfiguration } from './../../../../model/client/components/';
 import { StateAction } from '../../../../model/client/store/StateAction';
 import { DashboardAction } from './';
 

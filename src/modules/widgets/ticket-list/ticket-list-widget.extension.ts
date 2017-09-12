@@ -1,6 +1,6 @@
 import { TicketListWidget } from './TicketListWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 

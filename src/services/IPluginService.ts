@@ -1,4 +1,5 @@
-import { IWidgetFactoryExtension } from './../extensions/IWidgetExtension';
+import { IModuleFactoryExtension, IWidgetFactoryExtension } from './../extensions/';
+
 export interface IPluginService {
 
     pluginManager: any;
@@ -6,5 +7,7 @@ export interface IPluginService {
     getExtensions<T>(extensionId: string): Promise<T[]>;
 
     getWidgetFactory(widgetId: string): Promise<IWidgetFactoryExtension>;
+
+    getModuleFactory(moduleId: string): Promise<IModuleFactoryExtension>;
 
 }

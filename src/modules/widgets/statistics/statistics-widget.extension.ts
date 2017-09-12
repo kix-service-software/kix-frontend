@@ -1,5 +1,5 @@
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
 import { StatisticWidget } from './StatisticsWidget';
 
 export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension {

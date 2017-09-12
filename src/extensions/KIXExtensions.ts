@@ -10,6 +10,8 @@ export enum KIXExtensions {
 
     COMMUNICATOR = "kix:communicator",
 
-    WIDGET = "kix:widget"
+    WIDGET = "kix:widget",
+
+    MODUL = "kix:module"
 
 }

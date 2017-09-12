@@ -9,6 +9,9 @@
         },
         "kix:menu:main": {
             "dashboard-menu-main": "../../dist/modules/dashboard/menu.main.extension"
+        },
+        "kix:module": {
+            "dashboard-module": "../../dist/modules/dashboard/module.extension"
         }
     }
 }
