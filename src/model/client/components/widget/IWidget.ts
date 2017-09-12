@@ -10,4 +10,6 @@ export interface IWidget {
 
     isExternal: boolean;
 
+    getDefaultConfiguration(): any;
+
 }

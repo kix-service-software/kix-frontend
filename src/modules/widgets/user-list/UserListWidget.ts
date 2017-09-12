@@ -1,3 +1,4 @@
+import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
 
 export class UserListWidget implements IWidget {
@@ -11,5 +12,9 @@ export class UserListWidget implements IWidget {
     public title: string = "User Liste";
 
     public isExternal: boolean = false;
+
+    public getDefaultConfiguration(): any {
+        return new UserListConfiguration();
+    }
 
 }

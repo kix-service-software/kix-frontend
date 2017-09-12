@@ -20,13 +20,13 @@ export class WidgetSocketListener extends SocketListener {
 
     private store: any;
 
-    private moduleId: string;
+    private contextId: string;
 
     private widgetId: string;
 
     public constructor(moduleId: string, widgetId: string, store: any) {
         super();
-        this.moduleId = moduleId;
+        this.contextId = moduleId;
         this.widgetId = widgetId;
 
         this.configurationSocket = this.createSocket("configuration");
@@ -38,20 +38,17 @@ export class WidgetSocketListener extends SocketListener {
     public saveConfiguration(configuration: any): void {
         this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
             new SaveConfigurationRequest
-                (configuration, ClientStorageHandler.getToken(), this.moduleId + '_' + this.widgetId, true));
+                (configuration, ClientStorageHandler.getToken(), this.contextId + '_' + this.widgetId, true));
     }
 
     private initConfigruationSocketListener(): void {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
             const token = ClientStorageHandler.getToken();
-            this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
-                new LoadConfigurationRequest(
-                    token,
-                    this.moduleId + '_' + this.widgetId,
-                    true
-                )
-            );
+
+            const loadRequest = new LoadConfigurationRequest(token, this.contextId, this.widgetId, true);
+
+            this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, loadRequest);
         });
 
         this.configurationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {

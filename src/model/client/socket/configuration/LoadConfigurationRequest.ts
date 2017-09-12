@@ -2,13 +2,16 @@ export class LoadConfigurationRequest {
 
     public token: string;
 
-    public configurationName: string;
+    public contextId: string;
+
+    public componentId: string;
 
     public userSpecific: boolean;
 
-    public constructor(token: string, configurationName: string, userSpecific: boolean = false) {
+    public constructor(token: string, contextId: string, componentId: string, userSpecific: boolean = false) {
         this.token = token;
-        this.configurationName = configurationName;
+        this.contextId = contextId;
+        this.componentId = componentId;
         this.userSpecific = userSpecific;
     }
 

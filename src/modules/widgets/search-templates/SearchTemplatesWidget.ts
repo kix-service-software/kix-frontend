@@ -12,4 +12,8 @@ export class SearchTemplatesWidget implements IWidget {
 
     public isExternal: boolean = false;
 
+    public getDefaultConfiguration(): any {
+        return {};
+    }
+
 }
