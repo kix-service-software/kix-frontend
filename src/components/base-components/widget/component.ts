@@ -20,7 +20,7 @@ class WidgetComponent {
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(WIDGET_INITIALIZE('dashboard', this.state.widget.id, this.store));
+        this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.store));
     }
 
     public stateChanged(): void {

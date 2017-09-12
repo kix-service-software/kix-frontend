@@ -1,3 +1,4 @@
+export { BaseTemplateInput } from './BaseTemplateInput';
 export { LogLevel } from './logging/LogLevel';
 export { CreateUserRequest } from './api/user/CreateUserRequest';
 export { CreateUserResponse } from './api/user/CreateUserResponse';
