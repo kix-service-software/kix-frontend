@@ -5,11 +5,11 @@ declare var io: any;
 export abstract class SocketListener {
 
     protected createSocket(namespace: string, authenticated: boolean = true): SocketIO.Server {
-        const token = LocalStorageHandler.getToken();
         const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
 
         const options = {};
         if (authenticated) {
+            const token = LocalStorageHandler.getToken();
             options['query'] = "Token=" + token;
         }
 
