@@ -1,5 +1,5 @@
 import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
+import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
@@ -23,7 +23,7 @@ export class DashboardSocketListener extends SocketListener {
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            const token = LocalStorageHandler.getToken();
+            const token = ClientStorageHandler.getToken();
             socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(token, 'dashboard', true));
         });

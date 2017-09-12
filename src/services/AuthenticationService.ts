@@ -22,15 +22,10 @@ export class AuthenticationService implements IAuthenticationService {
     }
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
-        const authorizationHeader: string = req.headers['authorization'];
-        if (!authorizationHeader) {
+        const token: string = req.cookies.token;
+        if (!token) {
             res.redirect('/auth');
         } else {
-            const token = this.getToken(authorizationHeader);
-            if (!token) {
-                res.redirect('/auth');
-            }
-
             const valid = await this.validateToken(token)
                 .catch((error) => {
                     return false;

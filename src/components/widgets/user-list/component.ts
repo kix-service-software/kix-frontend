@@ -1,5 +1,5 @@
 import { LoadUsersRequest } from './../../../model/client/socket/users/LoadUsersRequest';
-import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
+import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
 import { UserListComponentState } from './model/UserListComponentState';
 import { UserListState } from './store/UserListState';
 import { USER_LIST_INITIALIZE } from './store/actions';
@@ -20,7 +20,7 @@ class UserListWidgetComponent {
             this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
                 const reduxState: UserListState = this.store.getState();
                 reduxState.socketlListener.loadUsers(new LoadUsersRequest(
-                    LocalStorageHandler.getToken(),
+                    ClientStorageHandler.getToken(),
                     this.state.configuration.properties,
                     this.state.configuration.limit)
                 );

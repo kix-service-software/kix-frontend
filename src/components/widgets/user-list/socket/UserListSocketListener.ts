@@ -1,7 +1,7 @@
 import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { LocalStorageHandler } from '../../../../model/client/LocalStorageHandler';
+import { ClientStorageHandler } from '../../../../model/client/ClientStorageHandler';
 import { SocketListener } from '../../../../model/client/socket/SocketListener';
 import {
     USER_LIST_USERS_LOADED,

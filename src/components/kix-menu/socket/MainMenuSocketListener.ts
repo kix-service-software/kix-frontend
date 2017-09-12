@@ -1,7 +1,7 @@
 import { MainMenuEvent, MainMenuEntriesResult } from '../../../model/client/socket/main-menu';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
-import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
+import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
 import { SocketListener } from '../../../model/client/socket/SocketListener';
 
 declare var io: any;

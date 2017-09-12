@@ -9,7 +9,8 @@ export class DashboardRouter extends KIXRouter {
     }
 
     protected initialize(): void {
-        this.router.get("/", this.getDashboard.bind(this));
+        this.router.get("/", this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            this.getDashboard.bind(this));
     }
 
     private getDashboard(req: Request, res: Response): void {
