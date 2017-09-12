@@ -19,6 +19,11 @@ export class StorageHandler {
         return token;
     }
 
+    public getContextId(): string {
+        const contextId = this.getCookie('contextId');
+        return contextId;
+    }
+
     public getCookie(name: string): string {
         const nameEQ = name + "=";
         const ca = document.cookie.split(';');

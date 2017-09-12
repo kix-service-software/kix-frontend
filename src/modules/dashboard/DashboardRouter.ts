@@ -4,6 +4,8 @@ import { KIXRouter } from '../../routes';
 
 export class DashboardRouter extends KIXRouter {
 
+    private CONTEXT_ID = "dashboard";
+
     public getBaseRoute(): string {
         return "/dashboard";
     }
@@ -13,8 +15,11 @@ export class DashboardRouter extends KIXRouter {
             this.getDashboard.bind(this));
     }
 
-    private getDashboard(req: Request, res: Response): void {
-        const config = this.configurationService.getComponentConfiguration('1_dashboard');
+    private async getDashboard(req: Request, res: Response): Promise<void> {
+        const userId = await this.getUserId(req);
+        const config = this.configurationService.getComponentConfiguration(userId + '_' + this.CONTEXT_ID);
+
+        this.setContextId(this.CONTEXT_ID, res);
         this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
     }
 
