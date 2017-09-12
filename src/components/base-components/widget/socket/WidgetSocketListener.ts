@@ -6,6 +6,7 @@ import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/u
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
 import { LocalStorageHandler } from '../../../../model/client/LocalStorageHandler';
+import { SocketListener } from '../../../../model/client/socket/SocketListener';
 import {
     WIDGET_CONFIGURATION_LOADED,
     WIDGET_ERROR
@@ -13,7 +14,7 @@ import {
 
 declare var io;
 
-export class WidgetSocketListener {
+export class WidgetSocketListener extends SocketListener {
 
     private configurationSocket: SocketIO.Server;
 
@@ -24,14 +25,11 @@ export class WidgetSocketListener {
     private widgetId: string;
 
     public constructor(moduleId: string, widgetId: string, store: any) {
+        super();
         this.moduleId = moduleId;
         this.widgetId = widgetId;
-        const token = LocalStorageHandler.getToken();
-        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
 
-        this.configurationSocket = io.connect(socketUrl + "/configuration", {
-            query: "Token=" + token
-        });
+        this.configurationSocket = this.createSocket("configuration");
 
         this.store = store;
         this.initConfigruationSocketListener();
