@@ -5,7 +5,7 @@ import { LoadConfigurationResult } from './../../../../model/client/socket/confi
 import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
-import { TokenHandler } from '../../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../../model/client/LocalStorageHandler';
 import {
     WIDGET_CONFIGURATION_LOADED,
     WIDGET_ERROR
@@ -23,12 +23,13 @@ export class WidgetSocketListener {
 
     private widgetId: string;
 
-    public constructor(frontendSocketUrl: string, moduleId: string, widgetId: string, store: any) {
+    public constructor(moduleId: string, widgetId: string, store: any) {
         this.moduleId = moduleId;
         this.widgetId = widgetId;
-        const token = TokenHandler.getToken();
+        const token = LocalStorageHandler.getToken();
+        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
 
-        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
+        this.configurationSocket = io.connect(socketUrl + "/configuration", {
             query: "Token=" + token
         });
 
@@ -38,14 +39,14 @@ export class WidgetSocketListener {
 
     public saveConfiguration(configuration: any): void {
         this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
-            new SaveConfigurationRequest(configuration, TokenHandler.getToken(), this.moduleId + '_' + this.widgetId,
-                true));
+            new SaveConfigurationRequest
+                (configuration, LocalStorageHandler.getToken(), this.moduleId + '_' + this.widgetId, true));
     }
 
     private initConfigruationSocketListener(): void {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
-            const token = TokenHandler.getToken();
+            const token = LocalStorageHandler.getToken();
             this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(
                     token,

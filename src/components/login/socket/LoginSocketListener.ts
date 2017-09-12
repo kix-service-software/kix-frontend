@@ -2,6 +2,7 @@ import { UserType } from '../../../model/client/';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { LOGIN_ERROR } from '../store/actions';
 import { AuthenticationEvent, AuthenticationResult, LoginRequest } from '../../../model/client/socket/login';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 
 declare var io: any;
 
@@ -10,8 +11,9 @@ export class LoginSocketListener {
     private socket: SocketIO.Server;
     private store: any;
 
-    public constructor(frontendSocketUrl: string) {
-        this.socket = io.connect(frontendSocketUrl + "/authentication", {});
+    public constructor() {
+        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
+        this.socket = io.connect(socketUrl + "/authentication", {});
         this.store = require('../store');
         this.initSocketListener(this.socket);
     }

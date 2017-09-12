@@ -1,5 +1,5 @@
 import { LoadUsersRequest } from './../../../model/client/socket/users/LoadUsersRequest';
-import { TokenHandler } from '../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 import { UserListComponentState } from './model/UserListComponentState';
 import { UserListState } from './store/UserListState';
 import { USER_LIST_INITIALIZE } from './store/actions';
@@ -10,20 +10,17 @@ class UserListWidgetComponent {
 
     private store: any;
 
-    private frontendSocketUrl: string;
-
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
         if (this.state.configuration) {
-            this.store.dispatch(USER_LIST_INITIALIZE(this.frontendSocketUrl, this.store)).then(() => {
+            this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
                 const reduxState: UserListState = this.store.getState();
                 reduxState.socketlListener.loadUsers(new LoadUsersRequest(
-                    TokenHandler.getToken(),
+                    LocalStorageHandler.getToken(),
                     this.state.configuration.properties,
                     this.state.configuration.limit)
                 );

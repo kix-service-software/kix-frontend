@@ -1,5 +1,5 @@
 import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { TokenHandler } from './../../../model/client/TokenHandler';
+import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
 import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
@@ -15,9 +15,11 @@ export class DashboardSocketListener {
 
     private store: any;
 
-    public constructor(frontendSocketUrl: string) {
-        const token = TokenHandler.getToken();
-        this.configurationSocket = io.connect(frontendSocketUrl + "/configuration", {
+    public constructor() {
+        const token = LocalStorageHandler.getToken();
+        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
+
+        this.configurationSocket = io.connect(socketUrl + "/configuration", {
             query: "Token=" + token
         });
         this.store = require('../store/');
@@ -26,7 +28,7 @@ export class DashboardSocketListener {
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
-            const token = TokenHandler.getToken();
+            const token = LocalStorageHandler.getToken();
             socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
                 new LoadConfigurationRequest(token, 'dashboard', true));
         });

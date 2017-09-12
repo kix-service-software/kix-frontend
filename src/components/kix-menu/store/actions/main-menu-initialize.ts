@@ -5,9 +5,9 @@ import { MainMenuAction } from './MainMenuAction';
 
 declare var io: any;
 
-export default (frontendSocketUrl: string) => {
+export default () => {
     const payload = new Promise((resolve, reject) => {
-        const mainMenuSocketListener = new MainMenuSocketListener(frontendSocketUrl);
+        const mainMenuSocketListener = new MainMenuSocketListener();
         resolve({ mainMenuSocketListener });
     });
     return new StateAction(MainMenuAction.MAIN_MENU_INITIALIZE, payload);
