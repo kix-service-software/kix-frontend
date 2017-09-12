@@ -38,13 +38,36 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getComponentConfiguration(configurationName: string): any {
+    public async getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): Promise<any> {
+
+        let configurationName = contextId;
+        if (componentId) {
+            configurationName += '_' + componentId;
+        }
+
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
+
         const configPath = this.getConfigurationFilePath(configurationName);
         this.clearRequireCache(configPath);
+
         return require(configPath);
     }
 
-    public async saveComponentConfiguration(configurationName: string, configuration: any): Promise<void> {
+    public async saveComponentConfiguration(
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
+
+        let configurationName = contextId;
+        if (componentId) {
+            configurationName += '_' + componentId;
+        }
+
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
+
         await new Promise<void>((resolve, reject) => {
             const filePath = __dirname + '/' + this.getConfigurationFilePath(configurationName);
 
@@ -116,9 +139,13 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     private clearRequireCache(configPath: string): void {
-        const config = require.resolve(configPath);
-        if (require.cache[config]) {
-            delete require.cache[config];
+        try {
+            const config = require.resolve(configPath);
+            if (require.cache[config]) {
+                delete require.cache[config];
+            }
+        } catch (error) {
+            return;
         }
     }
 

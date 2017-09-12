@@ -1,3 +1,5 @@
+import { WidgetState } from './../components/base-components/widget/store/WidgetState';
+import { IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions } from './../extensions/';
 import { IPluginService, IConfigurationService } from './';
 import { injectable, inject } from 'inversify';
 import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
@@ -37,5 +39,17 @@ export class PluginService implements IPluginService {
                     resolve(extensions);
                 });
         });
+    }
+
+    public async getWidgetFactory(widgetId: string): Promise<IWidgetFactoryExtension> {
+        const widgetFactories = await this.getExtensions<IWidgetFactoryExtension>(KIXExtensions.WIDGET);
+        const widgetFactory = widgetFactories.find((wf) => wf.getWidgetId() === widgetId);
+        return widgetFactory;
+    }
+
+    public async getModuleFactory(moduleId: string): Promise<IModuleFactoryExtension> {
+        const moduleFactories = await this.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
+        const moduleFactory = moduleFactories.find((mf) => mf.getModuleId() === moduleId);
+        return moduleFactory;
     }
 }

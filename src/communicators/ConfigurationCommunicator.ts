@@ -21,34 +21,63 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     }
 
     private registerLoadComponentConfigurationEvents(client: SocketIO.Socket): void {
-        client.on(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+        client.on(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+            const user = await this.userService.getUserByToken(data.token);
 
-            let configName = data.configurationName;
+            const configuration = await this.configurationService
+                .getComponentConfiguration(data.contextId, data.componentId, user.UserID)
+                .catch(async (error) => {
+                    const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
+                    const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
 
+                    await this.configurationService.saveComponentConfiguration(
+                        data.contextId, data.componentId, user.UserID, widgetDefaultConfiguration);
+
+                    return widgetDefaultConfiguration;
+                });
+
+            this.emitConfigurationLoadedEvent(client, configuration);
+        });
+
+        client.on(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+
+            let userId = null;
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
-                const userId = user && user.UserID;
-                configName = userId + '_' + configName;
+                userId = user.UserID;
             }
-            const configuration =
-                this.configurationService.getComponentConfiguration(configName);
 
-            client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
+            const configuration = await this.configurationService
+                .getComponentConfiguration(data.contextId, data.componentId, userId)
+                .catch(async (error) => {
+                    const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+                    const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+
+                    await this.configurationService.saveComponentConfiguration(
+                        data.contextId, data.componentId, userId, moduleDefaultConfiguration);
+
+                    return moduleDefaultConfiguration;
+                });
+
+            this.emitConfigurationLoadedEvent(client, configuration);
         });
+    }
+
+    private emitConfigurationLoadedEvent(client: SocketIO.Socket, configuration: any): void {
+        client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
     }
 
     private registerSaveComponentConfigurationEvents(client: SocketIO.Socket): void {
         client.on(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, async (data: SaveConfigurationRequest) => {
 
-            let configName = data.configurationName;
-
+            let userId = null;
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
-                const userId = user && user.UserID;
-                configName = userId + '_' + configName;
+                userId = user && user.UserID;
             }
 
-            await this.configurationService.saveComponentConfiguration(configName, data.configuration);
+            await this.configurationService
+                .saveComponentConfiguration(data.contextId, data.componentId, userId, data.configuration);
 
             client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
         });

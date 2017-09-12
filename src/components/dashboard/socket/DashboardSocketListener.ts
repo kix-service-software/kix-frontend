@@ -1,6 +1,6 @@
+import { ContainerConfiguration } from './../../../model/client/components/';
 import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
 import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
-import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
 import { SocketEvent } from '../../../model/client/socket/SocketEvent';
 import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
 import { SocketListener } from '../../../model/client/socket/SocketListener';
@@ -24,8 +24,9 @@ export class DashboardSocketListener extends SocketListener {
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             const token = ClientStorageHandler.getToken();
-            socket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION,
-                new LoadConfigurationRequest(token, 'dashboard', true));
+            const loadRequest = new LoadConfigurationRequest(token, ClientStorageHandler.getContextId(), null, true);
+
+            socket.emit(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, loadRequest);
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {

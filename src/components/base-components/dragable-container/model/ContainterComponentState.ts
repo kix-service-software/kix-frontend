@@ -1,5 +1,5 @@
+import { ContainerConfiguration } from './../../../../model/client/components/';
 import { DragAndDropState } from './DragAndDropState';
-import { ContainerConfiguration } from './ContainerConfiguration';
 
 export class ContainerComponentState {
 

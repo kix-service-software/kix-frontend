@@ -6,4 +6,6 @@ export interface IWidgetFactoryExtension {
 
     getWidgetId(): string;
 
+    getDefaultConfiguration(): any;
+
 }

@@ -56,10 +56,9 @@ export abstract class KIXRouter implements IRouter {
         return this.serverConfig.FRONTEND_URL + ":" + this.serverConfig.HTTPS_PORT;
     }
 
-    protected async getUserId(req: Request): Promise<number> {
+    protected async getToken(req: Request): Promise<string> {
         const token = req.cookies.token;
-        const user = await this.userService.getUserByToken(token);
-        return user.UserID;
+        return token;
     }
 
     protected setContextId(contextId: string, res: Response): void {

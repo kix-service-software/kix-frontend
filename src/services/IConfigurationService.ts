@@ -6,9 +6,10 @@ export interface IConfigurationService {
 
     getLassoConfiguration(): any;
 
-    getComponentConfiguration(configurationName: string): any;
+    getComponentConfiguration(contextId: string, componentId: string, userId: number): Promise<any>;
 
-    saveComponentConfiguration(configurationName: string, configuration: any): Promise<void>;
+    saveComponentConfiguration(
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void>;
 
     isProductionMode(): boolean;
 
