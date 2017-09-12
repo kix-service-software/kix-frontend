@@ -19,6 +19,7 @@ import lassoMiddleware = require('lasso/middleware');
 import lasso = require('lasso');
 
 import express = require('express');
+import cookieParser = require('cookie-parser');
 import fs = require('fs');
 import http = require('http');
 import https = require('https');
@@ -60,6 +61,7 @@ export class Server {
         this.application.use(compression());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
+        this.application.use(cookieParser());
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 

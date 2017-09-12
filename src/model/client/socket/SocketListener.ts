@@ -1,15 +1,15 @@
-import { LocalStorageHandler } from '../../../model/client/LocalStorageHandler';
+import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
 
 declare var io: any;
 
 export abstract class SocketListener {
 
     protected createSocket(namespace: string, authenticated: boolean = true): SocketIO.Server {
-        const socketUrl = LocalStorageHandler.getFrontendSocketUrl();
+        const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
 
         const options = {};
         if (authenticated) {
-            const token = LocalStorageHandler.getToken();
+            const token = ClientStorageHandler.getToken();
             options['query'] = "Token=" + token;
         }
 
