@@ -20,6 +20,7 @@ export class DashboardRouter extends KIXRouter {
         const config = this.configurationService.getComponentConfiguration(userId + '_' + this.CONTEXT_ID);
 
         this.setContextId(this.CONTEXT_ID, res);
+        this.setFrontendSocketUrl(res);
         this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
     }
 
