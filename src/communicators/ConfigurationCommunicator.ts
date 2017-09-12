@@ -21,24 +21,32 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     }
 
     private registerLoadComponentConfigurationEvents(client: SocketIO.Socket): void {
+        client.on(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+            const user = await this.userService.getUserByToken(data.token);
+
+            const configuration = await this.configurationService
+                .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+
+            this.emitConfigurationLoadedEvent(client, configuration);
+        });
+
         client.on(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, async (data: LoadConfigurationRequest) => {
 
-            let configName = data.contextId;
-
-            if (data.componentId) {
-                configName += '_' + data.componentId;
-            }
-
+            let userId = null;
             if (data.userSpecific) {
                 const user = await this.userService.getUserByToken(data.token);
-                const userId = user && user.UserID;
-                configName = userId + '_' + configName;
+                userId = user.UserID;
             }
-            const configuration =
-                this.configurationService.getComponentConfiguration(configName);
 
-            client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
+            const configuration = await this.configurationService
+                .getComponentConfiguration(data.contextId, data.componentId, userId);
+
+            this.emitConfigurationLoadedEvent(client, configuration);
         });
+    }
+
+    private emitConfigurationLoadedEvent(client: SocketIO.Socket, configuration: any): void {
+        client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
     }
 
     private registerSaveComponentConfigurationEvents(client: SocketIO.Socket): void {

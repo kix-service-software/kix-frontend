@@ -38,7 +38,18 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getComponentConfiguration(configurationName: string): any {
+    public async getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): Promise<any> {
+
+        let configurationName = contextId;
+        if (componentId) {
+            configurationName += '_' + componentId;
+        }
+
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
+
         const configPath = this.getConfigurationFilePath(configurationName);
         this.clearRequireCache(configPath);
         return require(configPath);

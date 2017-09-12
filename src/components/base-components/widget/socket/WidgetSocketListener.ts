@@ -49,7 +49,7 @@ export class WidgetSocketListener extends SocketListener {
 
             const loadRequest = new LoadConfigurationRequest(token, this.contextId, this.widgetId, true);
 
-            this.configurationSocket.emit(ConfigurationEvent.LOAD_COMPONENT_CONFIGURATION, loadRequest);
+            this.configurationSocket.emit(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, loadRequest);
         });
 
         this.configurationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {

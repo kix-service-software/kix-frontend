@@ -16,8 +16,12 @@ export class DashboardRouter extends KIXRouter {
     }
 
     private async getDashboard(req: Request, res: Response): Promise<void> {
-        const userId = await this.getUserId(req);
-        const config = this.configurationService.getComponentConfiguration(userId + '_' + this.CONTEXT_ID);
+        const token = await this.getToken(req);
+
+        const user = await this.userService.getUserByToken(token);
+        const userId = user && user.UserID;
+
+        const config = await this.configurationService.getComponentConfiguration(this.CONTEXT_ID, null, userId);
 
         this.setContextId(this.CONTEXT_ID, res);
         this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
