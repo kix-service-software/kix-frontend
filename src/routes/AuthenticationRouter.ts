@@ -13,6 +13,7 @@ export class AuthenticationRouter extends KIXRouter {
 
     public login(req: Request, res: Response): void {
         const template = require('../components/app/index.marko');
+        this.setFrontendSocketUrl(res);
         res.marko(template, {
             template: require('../components/login/index.marko'),
             data: {

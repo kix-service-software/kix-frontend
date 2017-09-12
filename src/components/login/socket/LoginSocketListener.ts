@@ -40,7 +40,6 @@ export class LoginSocketListener extends SocketListener {
 
         socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
             document.cookie = "token=" + result.token;
-            window.localStorage.setItem('token', result.token);
             window.location.replace('/');
         });
 
