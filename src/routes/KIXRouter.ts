@@ -1,9 +1,9 @@
 import { IMainMenuExtension, KIXExtensions } from './../extensions/';
 import { injectable, inject } from 'inversify';
-import { IServerConfiguration } from './../model';
+import { IServerConfiguration, BaseTemplateInput } from './../model';
 import { IRouter } from './IRouter';
-import { IConfigurationService, IAuthenticationService, IPluginService } from './../services/';
-import { Router, Response } from 'express';
+import { IConfigurationService, IAuthenticationService, IPluginService, IUserService } from './../services/';
+import { Router, Response, Request } from 'express';
 
 @injectable()
 export abstract class KIXRouter implements IRouter {
@@ -12,17 +12,21 @@ export abstract class KIXRouter implements IRouter {
     protected configurationService: IConfigurationService;
     protected authenticationService: IAuthenticationService;
     protected pluginService: IPluginService;
+    protected userService: IUserService;
     protected serverConfig: IServerConfiguration;
 
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
         @inject("IAuthenticationService") authenticationService: IAuthenticationService,
-        @inject("IPluginService") pluginService: IPluginService) {
+        @inject("IPluginService") pluginService: IPluginService,
+        @inject("IUserService") userService: IUserService) {
 
         this.router = Router();
         this.configurationService = configurationService;
         this.authenticationService = authenticationService;
         this.pluginService = pluginService;
+        this.userService = userService;
+
         this.serverConfig = configurationService.getServerConfiguration();
         this.initialize();
     }
@@ -44,11 +48,7 @@ export abstract class KIXRouter implements IRouter {
 
         res.marko(template, {
             template: require(baseTemplatePath),
-            data: {
-                frontendSocketUrl: this.getServerUrl(),
-                contentTemplate: contentTemplatePath,
-                templateData
-            }
+            data: new BaseTemplateInput(this.getServerUrl(), contentTemplatePath, templateData)
         });
     }
 
@@ -56,4 +56,13 @@ export abstract class KIXRouter implements IRouter {
         return this.serverConfig.FRONTEND_URL + ":" + this.serverConfig.HTTPS_PORT;
     }
 
+    protected async getUserId(req: Request): Promise<number> {
+        const token = req.cookies.token;
+        const user = await this.userService.getUserByToken(token);
+        return user.UserID;
+    }
+
+    protected setContextId(contextId: string, res: Response): void {
+        res.cookie('contextId', contextId);
+    }
 }

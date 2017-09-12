@@ -24,9 +24,9 @@ export class WidgetSocketListener extends SocketListener {
 
     private widgetId: string;
 
-    public constructor(moduleId: string, widgetId: string, store: any) {
+    public constructor(widgetId: string, store: any) {
         super();
-        this.contextId = moduleId;
+        this.contextId = ClientStorageHandler.getContextId();
         this.widgetId = widgetId;
 
         this.configurationSocket = this.createSocket("configuration");
