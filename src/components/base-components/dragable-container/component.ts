@@ -11,6 +11,7 @@ class DragableContainerComponent {
     }
 
     public onInput(input: any): void {
+        this.state.containerConfiguration = input.containerConfiguration;
         this.state.configurationMode = input.configurationMode;
         this.state.dndState.enabled = input.configurationMode;
     }
