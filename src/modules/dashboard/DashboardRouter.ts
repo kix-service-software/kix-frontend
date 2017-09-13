@@ -17,7 +17,7 @@ export class DashboardRouter extends KIXRouter {
     private async getDashboard(req: Request, res: Response): Promise<void> {
         this.setContextId(this.CONTEXT_ID, res);
         this.setFrontendSocketUrl(res);
-        this.prepareMarkoTemplate(res, 'dashboard/index.marko', null);
+        this.prepareMarkoTemplate(res, 'dashboard/index.marko');
     }
 
 }
