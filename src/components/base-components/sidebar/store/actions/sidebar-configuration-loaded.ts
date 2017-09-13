@@ -1,5 +1,5 @@
 import { StateAction } from '../../../../../model/client/store/StateAction';
-import { SidebarAction } from './SidebarAction';
+import { SidebarAction } from './';
 
 export default (configuration: any) => {
     const payload = new Promise((resolve, reject) => {
