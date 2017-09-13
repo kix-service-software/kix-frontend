@@ -1,4 +1,4 @@
-import { SidebarState } from './SidebarState';
+import { SidebarState } from './';
 import { SidebarAction } from './actions';
 
 const PENDING = '_PENDING';
