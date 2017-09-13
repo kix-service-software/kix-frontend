@@ -1,6 +1,12 @@
-<div.widget-header>
-    <span>${data.widget.title}</span>
-    <button class="${state.configurationMode ? 'action' : 'action-hide'}" on-click('configClicked')>Config</button>
+<div.widget-header.clearfix>
+    <span.header-left>
+        <h3>${data.widget.title}</h3>
+        <!-- Hier Filter oder ähnliche Elemente rein-->
+    </span>
+    <span.header-right>
+        <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
+        <!-- Hier Buttons, Aktionen oder ähnliche Elemente rein-->
+    </span>
 </div>
 <div.widget-content>
     $ let template = require('../../' + data.widget.template);
