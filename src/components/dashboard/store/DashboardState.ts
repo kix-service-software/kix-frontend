@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from './../../base-components/dragable-container/model/ContainerConfiguration';
+import { ContainerConfiguration } from './../../../model/client/components/';
 import { DashboardSocketListener } from './../socket/DashboardSocketListener';
 
 export class DashboardState {

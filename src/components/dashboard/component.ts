@@ -25,6 +25,9 @@ class DashboardComponent {
 
     public stateChanged(): void {
         const reduxState: DashboardState = this.store.getState();
+        if (reduxState.containerConfiguration) {
+            this.state.containerConfiguration = reduxState.containerConfiguration;
+        }
     }
 }
 

@@ -12,6 +12,7 @@ export class ConfigurationService implements IConfigurationService {
     private lassoConfiguration: any;
 
     private CONFIG_DIR: string = '../../config/';
+    private CONFIG_COMPONENTS_DIR: string = '../../config/components/';
     private CONFIG_EXTENSION: string = '.config.json';
 
     public constructor() {
@@ -38,15 +39,38 @@ export class ConfigurationService implements IConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getComponentConfiguration(configurationName: string): any {
-        const configPath = this.getConfigurationFilePath(configurationName);
+    public async getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): Promise<any> {
+
+        let configurationName = contextId;
+        if (componentId) {
+            configurationName += '_' + componentId;
+        }
+
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
+
+        const configPath = this.getComponentConfigurationFilePath(configurationName);
         this.clearRequireCache(configPath);
+
         return require(configPath);
     }
 
-    public async saveComponentConfiguration(configurationName: string, configuration: any): Promise<void> {
+    public async saveComponentConfiguration(
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
+
+        let configurationName = contextId;
+        if (componentId) {
+            configurationName += '_' + componentId;
+        }
+
+        if (userId) {
+            configurationName = userId + '_' + configurationName;
+        }
+
         await new Promise<void>((resolve, reject) => {
-            const filePath = __dirname + '/' + this.getConfigurationFilePath(configurationName);
+            const filePath = __dirname + '/' + this.getComponentConfigurationFilePath(configurationName);
 
             jsonfile.writeFile(filePath, configuration,
                 (fileError: Error) => {
@@ -115,10 +139,18 @@ export class ConfigurationService implements IConfigurationService {
         return this.CONFIG_DIR + fileName + this.CONFIG_EXTENSION;
     }
 
+    private getComponentConfigurationFilePath(fileName: string): string {
+        return this.CONFIG_COMPONENTS_DIR + fileName + this.CONFIG_EXTENSION;
+    }
+
     private clearRequireCache(configPath: string): void {
-        const config = require.resolve(configPath);
-        if (require.cache[config]) {
-            delete require.cache[config];
+        try {
+            const config = require.resolve(configPath);
+            if (require.cache[config]) {
+                delete require.cache[config];
+            }
+        } catch (error) {
+            return;
         }
     }
 

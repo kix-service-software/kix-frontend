@@ -4,14 +4,17 @@ export class SaveConfigurationRequest {
 
     public token: string;
 
-    public configurationName: string;
+    public contextId: string;
+
+    public componentId: string;
 
     public userSpecific: boolean;
 
-    public constructor(configuration: any, token: string, configurationName: string, userSpecific: boolean) {
+    public constructor(
+        configuration: any, token: string, contextId: string, componentId: string, userSpecific: boolean) {
         this.configuration = configuration;
         this.token = token;
-        this.configurationName = configurationName;
+        this.contextId = contextId;
         this.userSpecific = userSpecific;
     }
 

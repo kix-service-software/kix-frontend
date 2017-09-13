@@ -4,12 +4,8 @@ export class BaseTemplateInput {
 
     public contentTemplate: string;
 
-    public templateData: any;
-
-    public constructor(frontendSocketUrl: string, contentTemplate: string, templateData: any) {
-        this.frontendSocketUrl = frontendSocketUrl;
+    public constructor(frontendSocketUrl: string, contentTemplate: string) {
         this.contentTemplate = contentTemplate;
-        this.templateData = templateData;
     }
 
 }

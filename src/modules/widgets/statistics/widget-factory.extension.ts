@@ -1,15 +1,19 @@
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
 import { StatisticWidget } from './StatisticsWidget';
 
 export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public createWidget(): IWidget {
-        return new StatisticWidget();
+        return new StatisticWidget(this.getWidgetId());
     }
 
     public getWidgetId(): string {
         return "statistics-widget";
+    }
+
+    public getDefaultConfiguration(): any {
+        return {};
     }
 
 }

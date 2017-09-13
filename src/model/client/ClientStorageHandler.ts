@@ -1,12 +1,8 @@
 export class StorageHandler {
 
     public getFrontendSocketUrl(): string {
-        const socketUrl = window.localStorage.getItem("frontendSocketUrl");
+        const socketUrl = this.getCookie("frontendSocketUrl");
         return socketUrl;
-    }
-
-    public setFrontendSocketUrl(socketUrl: string) {
-        window.localStorage.setItem("frontendSocketUrl", socketUrl);
     }
 
     public getToken(): string {
@@ -26,10 +22,10 @@ export class StorageHandler {
 
     public getCookie(name: string): string {
         const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
+        const ca = decodeURIComponent(document.cookie).split(';');
         for (let c of ca) {
             while (c.charAt(0) === ' ') {
-                c = c.substring(1, c.length);
+                c = c.substring(1);
             }
             if (c.indexOf(nameEQ) === 0) {
                 return c.substring(nameEQ.length, c.length);

@@ -1,4 +1,3 @@
-import { injectable, inject } from 'inversify';
 import { Router, Request, Response } from 'express';
 import { KIXRouter } from '../../routes';
 
@@ -16,11 +15,9 @@ export class DashboardRouter extends KIXRouter {
     }
 
     private async getDashboard(req: Request, res: Response): Promise<void> {
-        const userId = await this.getUserId(req);
-        const config = this.configurationService.getComponentConfiguration(userId + '_' + this.CONTEXT_ID);
-
         this.setContextId(this.CONTEXT_ID, res);
-        this.prepareMarkoTemplate(res, 'dashboard/index.marko', config);
+        this.setFrontendSocketUrl(res);
+        this.prepareMarkoTemplate(res, 'dashboard/index.marko');
     }
 
 }

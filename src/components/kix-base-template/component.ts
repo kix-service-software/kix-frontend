@@ -7,20 +7,14 @@ class BaseTemplateComponent {
 
     public state: any;
 
-    private frontendSocketUrl: string;
-
     public onCreate(input: any): void {
         this.state = {
             auth: false,
             configurationMode: false
         };
-
-        this.frontendSocketUrl = input.frontendSocketUrl;
     }
 
     public onMount(): void {
-        ClientStorageHandler.setFrontendSocketUrl(this.frontendSocketUrl);
-
         const token = ClientStorageHandler.getToken();
         const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
 
