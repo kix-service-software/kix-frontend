@@ -2,7 +2,7 @@ import { IWidget } from './../../../model/client/components/widget/IWidget';
 
 export class TicketListWidget implements IWidget {
 
-    public id: string = "ticket-list-widget";
+    public id: string;
 
     public template: string = "widgets/ticket-list";
 
@@ -11,5 +11,9 @@ export class TicketListWidget implements IWidget {
     public title: string = "Ticket Liste";
 
     public isExternal: boolean = false;
+
+    public constructor(id: string) {
+        this.id = id;
+    }
 
 }

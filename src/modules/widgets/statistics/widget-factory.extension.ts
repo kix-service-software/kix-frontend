@@ -1,15 +1,15 @@
-import { SearchTemplatesWidget } from './SearchTemplatesWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
 import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
+import { StatisticWidget } from './StatisticsWidget';
 
-export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
+export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public createWidget(): IWidget {
-        return new SearchTemplatesWidget();
+        return new StatisticWidget(this.getWidgetId());
     }
 
     public getWidgetId(): string {
-        return "search-templates-widget";
+        return "statistics-widget";
     }
 
     public getDefaultConfiguration(): any {
@@ -19,5 +19,5 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
 }
 
 module.exports = (data, host, options) => {
-    return new SearchTemplatesWidgetFactoryExtension();
+    return new StatisticsWidgetFactoryExtension();
 };

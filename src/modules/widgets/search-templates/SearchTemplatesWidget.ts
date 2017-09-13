@@ -2,7 +2,7 @@ import { IWidget } from './../../../model/client/components/widget/IWidget';
 
 export class SearchTemplatesWidget implements IWidget {
 
-    public id: string = "search-templates-widget";
+    public id: string;
 
     public template: string = "widgets/search-templates";
 
@@ -11,5 +11,9 @@ export class SearchTemplatesWidget implements IWidget {
     public title: string = "Statistik";
 
     public isExternal: boolean = false;
+
+    public constructor(id: string) {
+        this.id = id;
+    }
 
 }

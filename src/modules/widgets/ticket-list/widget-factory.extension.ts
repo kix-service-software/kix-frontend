@@ -5,7 +5,7 @@ import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExt
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public createWidget(): IWidget {
-        return new TicketListWidget();
+        return new TicketListWidget(this.getWidgetId());
     }
 
     public getWidgetId(): string {
