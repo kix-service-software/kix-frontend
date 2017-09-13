@@ -4,7 +4,7 @@ class KIXSidebarComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            sidebars: input.templateData.sidebars || [],
+            sidebars: [],
             configurationMode: false
         };
     }

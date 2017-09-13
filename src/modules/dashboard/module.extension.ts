@@ -87,7 +87,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }
             ]
         };
-        return { sidebar, content };
+        // return { sidebar, content };
+        return content;
     }
 
 }
