@@ -1,0 +1,11 @@
+{
+    "name": "sidebar-extensions",
+    "extensions": {
+        "kix:sidebar": {
+            "notes": "../../dist/modules/sidebars/notes/sidebar-factory.extension"
+        },
+        "kix:marko:dependencies": {
+            "notes-sidebar-marko": "../../dist/modules/sidebars/notes/marko-dependencies.extension"
+        }
+    }
+}
