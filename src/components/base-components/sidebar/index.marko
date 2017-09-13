@@ -1,0 +1,19 @@
+<div.sidebar-header>
+    ${data.sidebar.title}
+    <span.sidebar-functions>
+        <if(state.configurationMode)>
+            <button on-click('configClicked')>Config</button>
+        </if>
+    </span>
+</div>
+<div.sidebar-content>
+    $ let template = require('../../' + data.sidebar.template);
+    <include(template, {
+        configuration: state.configuration
+    })/>
+</div>
+<!--
+<sidebar-configuration-overlay sidebar=data.sidebar showOverlay=state.showConfiguration configuration=state.configuration
+on-saveConfigurationOverlay('saveConfigurationOverlay')
+on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+-->

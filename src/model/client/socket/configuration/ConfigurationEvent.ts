@@ -4,6 +4,8 @@ export enum ConfigurationEvent {
 
     LOAD_WIDGET_CONFIGURATION = "load-widget-configuration",
 
+    LOAD_SIDEBAR_CONFIGURATION = "load-sidebar-configuration",
+
     SAVE_COMPONENT_CONFIGURATION = "save-component-configuration",
 
     COMPONENT_CONFIGURATION_LOADED = "component-configuration-loaded",
