@@ -12,6 +12,8 @@ export enum KIXExtensions {
 
     WIDGET = "kix:widget",
 
+    SIDEBAR = "kix:sidebar",
+
     MODUL = "kix:module"
 
 }

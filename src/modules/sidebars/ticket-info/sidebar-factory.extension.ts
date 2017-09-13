@@ -1,15 +1,15 @@
-import { NotesSidebar } from './NotesSidebar';
+import { TicketInfoSidebar } from './TicketInfoSidebar';
 import { ISidebar } from './../../../model/client/components/';
 import { ISidebarFactoryExtension } from './../../../extensions/ISidebarFactoryExtension';
 
 export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
 
     public createSidebar(): ISidebar {
-        return new NotesSidebar(this.getSidebarId());
+        return new TicketInfoSidebar(this.getSidebarId());
     }
 
     public getSidebarId(): string {
-        return "notes-sidebar";
+        return "ticket-info";
     }
 
     public getDefaultConfiguration(): any {
