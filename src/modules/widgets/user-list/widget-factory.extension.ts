@@ -7,7 +7,7 @@ import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExt
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public createWidget(): IWidget {
-        return new UserListWidget();
+        return new UserListWidget(this.getWidgetId());
     }
 
     public getWidgetId(): string {
