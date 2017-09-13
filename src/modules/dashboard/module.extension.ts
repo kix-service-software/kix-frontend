@@ -9,7 +9,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): any {
-        const defaultConfiguration = new ContainerConfiguration();
+        const content = new ContainerConfiguration();
 
         const firstRow = new ContainerRow();
 
@@ -53,10 +53,41 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             isExternal: false
         });
 
-        defaultConfiguration.rows.push(firstRow);
-        defaultConfiguration.rows.push(secondRow);
-        defaultConfiguration.rows.push(thirdRow);
-        return defaultConfiguration;
+        content.rows.push(firstRow);
+        content.rows.push(secondRow);
+        content.rows.push(thirdRow);
+
+        const sidebar = {
+            sidebars: [
+                {
+                    id: "notes-sidebar",
+                    title: "Notes",
+                    template: "sidebars/notes",
+                    configurationTemplate: "sidebars/notes/configuration",
+                    show: true,
+                    symbol: "N",
+                    isExternal: false
+                },
+                {
+                    id: "notes-sidebar",
+                    title: "Notes 2",
+                    template: "sidebars/notes",
+                    configurationTemplate: "sidebars/notes/configuration",
+                    symbol: "N",
+                    isExternal: false
+                },
+                {
+                    id: "ticket-info-sidebar",
+                    title: "Ticket Informationen",
+                    template: "sidebars/ticket-info",
+                    configurationTemplate: "sidebars/ticket-info/configuration",
+                    show: true,
+                    symbol: "TI",
+                    isExternal: false
+                }
+            ]
+        };
+        return { sidebar, content };
     }
 
 }
