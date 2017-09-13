@@ -7,7 +7,6 @@ html {
         min-height: 100%;
         box-sizing: border-box;
         position: relative;
-        font-family: Carlito, Arial, Helvetica, sans-serif;
         font-size: @default-font-size;
         #content {
             position: relative;
@@ -47,19 +46,11 @@ html {
                                 box-shadow: @shadow;
                             }
                         }
-                        #kix-widgetbar-container {
-                            .shadow-margin;
-                            float: left;
-                        }
-                        #kix-content {
-                            float: left;
-                            width: 100%;
-                        }
                     }
                 }
                 #footer {
                     .clearfix;
-                    font-size: @default-font-size - 2;
+                    font-size: .75em;
                     text-align: center;
                 }
             }
@@ -68,8 +59,29 @@ html {
 }
 
 h1 {
-    font-size: 2.125em;
+    font-size: 2.25em;
     font-weight: 400;
+    margin-bottom: 1.2em;
+}
+
+h2 {
+    font-size: 1.75em;
+    margin-bottom: 1em;
+}
+
+h3 {
+    font-size: 1.25em;
+    margin-bottom: .8em;
+}
+
+h4 {
+    font-size: 1em;
+    margin-bottom: .6em;
+}
+
+h5 {
+    font-size: 1em;
+    margin-bottom: .4em;
 }
 
 button {
@@ -111,4 +123,51 @@ button {
             }
         }
     }
+}
+
+.hidden {
+    display: none;
+}
+
+[class^="kix-icon icon-"]:before, [class*=" kix-icon icon-"]:before {
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+   
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    /* opacity: .8; */
+   
+    /* For safety - reset parent styles, that can break glyph codes*/
+    font-variant: normal;
+    text-transform: none;
+   
+    /* fix buttons height, for twitter bootstrap */
+    line-height: 1em;
+   
+    /* Animation center compensation - margins should be symmetric */
+    /* remove if not needed */
+    margin-left: .2em;
+   
+    /* you can be more comfortable with increased icons size */
+    /* font-size: 120%; */
+   
+    /* Font smoothing. That was taken from TWBS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+   
+    /* Uncomment for 3D effect */
+    /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+  }
+   
+  .kix-icon.icon-dummy:before {
+      content: ' ';
+      border: 1px solid #000;
+      border-radius: 10px;
+      background-color: #ccc;
+      height: 1em;
+      vertical-align: middle;
 }
