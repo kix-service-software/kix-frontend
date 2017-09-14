@@ -4,6 +4,8 @@ const runseq = require('run-sequence');
 const clean = require('gulp-clean');
 const mocha = require('gulp-mocha');
 const tslint = require("gulp-tslint");
+const less = require("gulp-less");
+const path = require('path');
 
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
@@ -35,7 +37,7 @@ const prodTSCConfig = {
 };
 
 gulp.task('default', (cb) => {
-    runseq('tslint', 'test', 'clean', 'compile-src', 'copy-component-templates', 'copy-static', cb);
+    runseq('tslint', 'test', 'clean', 'compile-src', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
 });
 
 gulp.task('tslint', () => {
@@ -82,6 +84,21 @@ gulp.task('compile-src', () => {
         .src(['src/**/*.ts'])
         .pipe(tsc(config))
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('compile-themes', () => {
+    let config = prodTSCConfig;
+    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+        console.log("Use tsconfig for development.")
+        config = devTSCConfig;
+    }
+
+    return gulp
+        .src(['src/static/less/themes/*.less'])
+        .pipe(less({
+            paths: [path.join(__dirname, 'less', 'includes')]
+        }))
+        .pipe(gulp.dest('dist/static/themes'));
 });
 
 gulp.task('copy-component-templates', () => {
