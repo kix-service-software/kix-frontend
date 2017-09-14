@@ -1,6 +1,6 @@
 import { NotesSidebar } from './NotesSidebar';
 import { ISidebar } from './../../../model/client/components/';
-import { ISidebarFactoryExtension } from './../../../extensions/ISidebarFactoryExtension';
+import { ISidebarFactoryExtension } from './../../../extensions/';
 
 export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
 

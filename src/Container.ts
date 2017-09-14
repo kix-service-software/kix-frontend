@@ -1,11 +1,16 @@
-import { ICommunicatorExtension } from './extensions/ICommunicatorExtension';
-import { IRouterExtension } from './extensions/IRouterExtension';
 import 'reflect-metadata';
 import { Server } from './Server';
 import { Container } from 'inversify';
-import { ICommunicator, AuthenticationCommunicator } from './communicators/';
+import {
+    ICommunicator,
+    AuthenticationCommunicator
+} from './communicators/';
 import { IRouter } from './routes/IRouter';
-import { KIXExtensions } from './extensions';
+import {
+    KIXExtensions,
+    IRouterExtension,
+    ICommunicatorExtension
+} from './extensions';
 import {
     ApplicationRouter,
     AuthenticationRouter

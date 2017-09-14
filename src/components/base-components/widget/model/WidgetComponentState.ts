@@ -1,3 +1,4 @@
+import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
 import { IWidget } from './../../../../model/client/components/widget/IWidget';
 
 export class WidgetComponentState {
@@ -6,7 +7,9 @@ export class WidgetComponentState {
 
     public showConfiguration: boolean = false;
 
-    public configuration: any = null;
+    public actions: string[] = [];
+
+    public contentConfiguration: any = null;
 
     public widget: IWidget = null;
 

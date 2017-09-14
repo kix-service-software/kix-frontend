@@ -11,11 +11,11 @@
 <div.widget-content>
     $ let template = require('../../' + data.widget.template);
     <include(template, {
-        configuration: state.configuration
+        configuration: state.contentConfiguration
     })/>
 </div>
 <div>
-    <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration configuration=state.configuration
-        on-saveConfigurationOverlay('saveConfigurationOverlay')
+    <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
+        configuration=state.contentConfiguration on-saveConfigurationOverlay('saveConfigurationOverlay')
         on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
 </div>

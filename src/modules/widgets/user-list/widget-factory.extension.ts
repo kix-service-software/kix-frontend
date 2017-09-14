@@ -1,8 +1,9 @@
+import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
 import { UIProperty } from './../../../model/client/UIProperty';
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
 import { UserListWidget } from './UserListWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -15,13 +16,12 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const defaultConfiguration = new UserListConfiguration();
-        defaultConfiguration.properties.push(new UIProperty("UserID", "ID"));
-        defaultConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
-        defaultConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
-        defaultConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
-
-        return defaultConfiguration;
+        const userListConfiguration = new UserListConfiguration();
+        userListConfiguration.properties.push(new UIProperty("UserID", "ID"));
+        userListConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
+        userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
+        userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
+        return new WidgetConfiguration([], userListConfiguration);
     }
 
 }

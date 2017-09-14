@@ -1,8 +1,11 @@
-export { IModuleFactoryExtension } from './IModuleFactoryExtension';
-export { IWidgetFactoryExtension } from './IWidgetFactoryExtension';
-export { IStaticContentExtension } from './IStaticContentExtension';
-export { IMarkoDependencyExtension } from './IMarkoDependencyExtension';
+export { ISidebarFactoryExtension } from './ui/ISidebarFactoryExtension';
+export { IModuleFactoryExtension } from './ui/IModuleFactoryExtension';
+export { IWidgetFactoryExtension } from './ui/IWidgetFactoryExtension';
+export { IMarkoDependencyExtension } from './ui/IMarkoDependencyExtension';
+export { IMainMenuExtension } from './ui/IMainMenuExtension';
+
+export { IStaticContentExtension } from './application/IStaticContentExtension';
+export { IRouterExtension } from './application/IRouterExtension';
+export { ICommunicatorExtension } from './application/ICommunicatorExtension';
+
 export { KIXExtensions } from './KIXExtensions';
-export { IRouterExtension } from './IRouterExtension';
-export { IMainMenuExtension } from './IMainMenuExtension';
-export { ICommunicatorExtension } from './ICommunicatorExtension';
