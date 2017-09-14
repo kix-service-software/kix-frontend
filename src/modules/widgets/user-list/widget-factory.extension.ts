@@ -1,3 +1,5 @@
+import { DeleteAction } from './../../actions/delete/DeleteAction';
+import { IAction } from './../../../model/client/components/action/IAction';
 import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
 import { UIProperty } from './../../../model/client/UIProperty';
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
@@ -21,7 +23,10 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         userListConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
         userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
         userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
-        return new WidgetConfiguration([], userListConfiguration);
+
+        // TODO: Remove the logic of actions from here. On place is only content config relevant.
+        const action = new DeleteAction("delete-action", "Delete", "");
+        return new WidgetConfiguration([action], userListConfiguration);
     }
 
 }

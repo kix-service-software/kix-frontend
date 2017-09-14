@@ -1,10 +1,10 @@
 export interface IAction {
 
-    getId(): string;
+    id: string;
 
-    getName(): string;
+    name: string;
 
-    getIcon(): string;
+    icon: string;
 
     canRun(input: any): boolean;
 

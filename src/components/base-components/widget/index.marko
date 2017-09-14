@@ -4,8 +4,10 @@
         <!-- Hier Filter oder ähnliche Elemente rein-->
     </span>
     <span.header-right>
+        <for(action in state.actions)>
+            <span>${action.name}</span>
+        </for>
         <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
-        <!-- Hier Buttons, Aktionen oder ähnliche Elemente rein-->
     </span>
 </div>
 <div.widget-content>

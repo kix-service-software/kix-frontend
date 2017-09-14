@@ -1,0 +1,7 @@
+{
+    "extensions": {
+        "kix:action": {
+            "delete-action": "../../dist/modules/actions/delete/action-factory.extension"
+        }
+    }
+}
