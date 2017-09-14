@@ -1,0 +1,41 @@
+.widget {
+    position: relative;
+}
+
+.widget-header {
+    .color-theme-3;
+    box-sizing: border-box;
+    padding: .5em 1em;
+    height: 40px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    box-shadow: 0 0 5px 0 @secondary-1;
+    & .header-left {
+        display: inline-block;
+        float: left;
+        & h3 {
+            margin-bottom: 0;
+        }
+    }
+    & .header-right {
+        display: inline-block;
+        float: right;
+    }
+
+    .configuration {
+        cursor: pointer;
+        z-index: 2;
+        position: relative;
+    }
+}
+
+.widget-content {
+    .color-theme-4;
+    padding: .5em 1em;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 0 5px 0 @secondary-1;
+    min-height: 9em;
+    max-height: 20em;
+    overflow: hidden;
+}
