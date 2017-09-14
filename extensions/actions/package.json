@@ -2,6 +2,9 @@
     "extensions": {
         "kix:action": {
             "delete-action": "../../dist/modules/actions/delete/action-factory.extension"
+        },
+        "kix:marko:dependencies": {
+            "delete-action-marko": "../../dist/modules/actions/delete/marko-dependencies.extension"
         }
     }
 }

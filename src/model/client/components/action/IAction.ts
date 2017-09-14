@@ -6,6 +6,8 @@ export interface IAction {
 
     icon: string;
 
+    template: string;
+
     canRun(input: any): boolean;
 
     run(input: any): Promise<void>;

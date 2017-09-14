@@ -16,7 +16,7 @@ class UserListWidgetComponent {
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
-        if (this.state.configuration) {
+        if (this.store && this.state.configuration) {
             this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
                 const reduxState: UserListState = this.store.getState();
                 reduxState.socketlListener.loadUsers(new LoadUsersRequest(
