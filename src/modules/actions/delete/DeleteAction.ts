@@ -21,7 +21,11 @@ export class DeleteAction implements IAction {
     }
 
     public run(input: any): Promise<void> {
-        return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, 2500);
+        });
     }
 
 }

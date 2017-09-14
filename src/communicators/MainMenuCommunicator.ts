@@ -12,9 +12,11 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
     public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/main-menu');
-        nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-            this.registerMainMenuEvents(client);
-        });
+        nsp
+            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
+            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
+                this.registerMainMenuEvents(client);
+            });
     }
 
     private registerMainMenuEvents(client: SocketIO.Socket): void {
