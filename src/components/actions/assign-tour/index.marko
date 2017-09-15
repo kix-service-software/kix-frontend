@@ -1,12 +1,14 @@
-<span>${data.action.name}</span>
-<h2>Select a Tour:</h2>
-<select>
-    <option>Tour 1</option>
-    <option>Tour 2</option>
-    <option>Tour 3</option>
-    <option>Tour 4</option>
-    <option>Tour 5</option>
-</select>
-<if(state.contentData)>
-    <h3>Assign selected tour to ${state.contentData.length} User</h3>
-</if>
+<div>
+    <span>${data.action.name}</span>
+    <h2>Select a Tour:</h2>
+    <select>
+        <option>Tour 1</option>
+        <option>Tour 2</option>
+        <option>Tour 3</option>
+        <option>Tour 4</option>
+        <option>Tour 5</option>
+    </select>
+    <if(state.contentData)>
+        <h3>Assign selected tour to ${state.contentData.length} User</h3>
+    </if>
+</div>

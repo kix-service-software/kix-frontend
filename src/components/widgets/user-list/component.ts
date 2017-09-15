@@ -10,27 +10,29 @@ class UserListWidgetComponent {
 
     private store: any;
 
+    private initialized: boolean = false;
+
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
     }
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
-        if (this.store && this.state.configuration) {
-            this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
-                const reduxState: UserListState = this.store.getState();
-                reduxState.socketListener.loadUsers(new LoadUsersRequest(
-                    ClientStorageHandler.getToken(),
-                    this.state.configuration.properties,
-                    this.state.configuration.limit)
-                );
-            });
+        if (this.store && this.state.configuration && !this.initialized) {
+            this.initialized = true;
+            const reduxState: UserListState = this.store.getState();
+            reduxState.socketListener.loadUsers(new LoadUsersRequest(
+                ClientStorageHandler.getToken(),
+                this.state.configuration.properties,
+                this.state.configuration.limit)
+            );
         }
     }
 
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(USER_LIST_INITIALIZE(this.store));
     }
 
     public stateChanged(): void {
