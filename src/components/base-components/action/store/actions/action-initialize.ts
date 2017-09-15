@@ -2,8 +2,6 @@ import { Action } from './Action';
 import { ActionSocketListener } from './../../socket/ActionSocketListener';
 import { StateAction } from '../../../../../model/client/store/StateAction';
 
-declare var io: any;
-
 export default (store: any) => {
     const payload = new Promise((resolve, reject) => {
         const socketListener = new ActionSocketListener(store);
