@@ -1,3 +1,4 @@
+import { UserListConfiguration } from './model/UserListConfiguration';
 import { LoadUsersRequest } from './../../../model/client/socket/users/LoadUsersRequest';
 import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
 import { UserListComponentState } from './model/UserListComponentState';
@@ -20,12 +21,8 @@ class UserListWidgetComponent {
         this.state.configuration = input.configuration;
         if (this.store && this.state.configuration && !this.initialized) {
             this.initialized = true;
-            const reduxState: UserListState = this.store.getState();
-            reduxState.socketListener.loadUsers(new LoadUsersRequest(
-                ClientStorageHandler.getToken(),
-                this.state.configuration.properties,
-                this.state.configuration.limit)
-            );
+            this.loadUser();
+            (this as any).emit('updateContentConfigurationHandler', this.updateContentConfigurationHandler.bind(this));
         }
     }
 
@@ -46,6 +43,20 @@ class UserListWidgetComponent {
         if (reduxState.error) {
             this.state.error = reduxState.error;
         }
+    }
+
+    private updateContentConfigurationHandler(configuration: UserListConfiguration) {
+        this.state.configuration = configuration;
+        this.loadUser();
+    }
+
+    private loadUser(): void {
+        const reduxState: UserListState = this.store.getState();
+        reduxState.socketListener.loadUsers(new LoadUsersRequest(
+            ClientStorageHandler.getToken(),
+            this.state.configuration.properties,
+            this.state.configuration.limit)
+        );
     }
 }
 

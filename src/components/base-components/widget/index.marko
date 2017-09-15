@@ -14,7 +14,8 @@
     $ let template = require('../../' + data.widget.template);
     <include(template, {
         configuration: state.contentConfiguration
-    }) on-contentDataLoaded('contentDataLoaded')/>
+    }) on-contentDataLoaded('contentDataLoaded')
+        on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
 </div>
 <div>
     <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
