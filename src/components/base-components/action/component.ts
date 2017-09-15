@@ -11,7 +11,8 @@ export class ActionComponent {
     public onCreate(input: any): void {
         this.state = {
             action: input.action,
-            running: false
+            running: false,
+            showActionOverlay: false
         };
     }
 
@@ -26,7 +27,24 @@ export class ActionComponent {
         this.state.running = reduxState.running;
     }
 
-    public doAction(): void {
+    public handleAction(): void {
+        if (this.state.action.useOverlay) {
+            this.state.showActionOverlay = true;
+        } else {
+            this.executeAction();
+        }
+    }
+
+    public runActionClicked(): void {
+        this.state.showActionOverlay = false;
+        this.executeAction();
+    }
+
+    public cancelActionClicked(): void {
+        this.state.showActionOverlay = false;
+    }
+
+    private executeAction(): void {
         // TODO: Dispatch Action to invoke action
         this.state.running = true;
         const socketListener: ActionSocketListener = this.store.getState().socketListener;

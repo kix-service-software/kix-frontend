@@ -8,6 +8,8 @@ export interface IAction {
 
     template: string;
 
+    useOverlay: boolean;
+
     canRun(input: any): boolean;
 
     run(input: any): Promise<void>;

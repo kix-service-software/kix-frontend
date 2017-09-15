@@ -10,6 +10,8 @@ export class AssignTourAction implements IAction {
 
     public template: string = 'actions/assign-tour';
 
+    public useOverlay: boolean = true;
+
     public constructor(id: string, name: string, icon: string) {
         this.id = id;
         this.name = name;

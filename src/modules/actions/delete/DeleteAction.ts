@@ -8,7 +8,9 @@ export class DeleteAction implements IAction {
 
     public icon: string;
 
-    public template: string = 'actions/delete';
+    public template: string = null;
+
+    public useOverlay: boolean = false;
 
     public constructor(id: string, name: string, icon: string) {
         this.id = id;

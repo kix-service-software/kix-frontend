@@ -3,9 +3,13 @@
         <span>~~~</span>
     </if>
     <else>
-        <div on-click('doAction')>
+        <div on-click('handleAction')>
             <span class="kix-icon icon-dummy"/>
             <span>${state.action.name}</span>
         </div>
+        <if(state.action.useOverlay)>
+            <action-overlay action=state.action showOverlay=state.showActionOverlay on-runAction('runActionClicked')
+                on-cancelAction('cancelActionClicked')/>
+        </if>
     </else>
 </div>
