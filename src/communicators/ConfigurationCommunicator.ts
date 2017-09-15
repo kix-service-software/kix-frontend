@@ -61,6 +61,24 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
 
             this.emitConfigurationLoadedEvent(client, configuration);
         });
+
+        client.on(ConfigurationEvent.LOAD_KIX_SIDEBAR_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+            const user = await this.userService.getUserByToken(data.token);
+
+            const configuration = await this.configurationService
+                .getComponentConfiguration(data.contextId, data.componentId, user.UserID)
+                .catch(async (error) => {
+                    const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
+                    const kixSidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+
+                    await this.configurationService.saveComponentConfiguration(
+                        data.contextId, data.componentId, user.UserID, kixSidebarDefaultConfiguration);
+
+                    return kixSidebarDefaultConfiguration;
+                });
+
+            this.emitConfigurationLoadedEvent(client, configuration);
+        });
     }
 
     private emitConfigurationLoadedEvent(client: SocketIO.Socket, configuration: any): void {
