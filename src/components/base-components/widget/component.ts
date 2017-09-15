@@ -1,10 +1,11 @@
+import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
 import { WidgetComponentState } from './model/WidgetComponentState';
 import { WidgetState } from './store/WidgetState';
 import { WIDGET_INITIALIZE } from './store/actions';
 
 class WidgetComponent {
 
-    public state: any;
+    public state: WidgetComponentState;
 
     public store: any;
 
@@ -26,8 +27,13 @@ class WidgetComponent {
     public stateChanged(): void {
         const reduxState: WidgetState = this.store.getState();
         if (reduxState.configuration) {
-            this.state.configuration = reduxState.configuration;
+            this.state.actions = reduxState.configuration.actions;
+            this.state.contentConfiguration = reduxState.configuration.contentConfiguation;
         }
+    }
+
+    public contentDataLoaded(contentData: any): void {
+        this.state.contentData = contentData;
     }
 
     public configClicked(): void {
@@ -36,9 +42,10 @@ class WidgetComponent {
 
     public saveConfigurationOverlay(configuration): void {
         this.state.showConfiguration = false;
-        this.state.configuration = configuration;
+        this.state.contentConfiguration = configuration;
         const reduxState: WidgetState = this.store.getState();
-        reduxState.socketlListener.saveConfiguration(configuration);
+        reduxState.socketlListener
+            .saveConfiguration(new WidgetConfiguration(this.state.actions, this.state.contentConfiguration));
     }
 
     public closeConfigurationOverlay(): void {

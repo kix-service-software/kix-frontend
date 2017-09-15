@@ -1,4 +1,4 @@
-import { IMarkoDependencyExtension } from './../../../extensions/IMarkoDependencyExtension';
+import { IMarkoDependencyExtension } from './../../../extensions/';
 
 export class UserListWidgetMarkoDependencyExtension implements IMarkoDependencyExtension {
 

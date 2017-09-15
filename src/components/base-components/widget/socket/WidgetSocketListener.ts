@@ -1,3 +1,4 @@
+import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
 import { SaveConfigurationRequest } from './../../../../model/client/socket/configuration/SaveConfigurationRequest';
 import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
 import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
@@ -35,7 +36,7 @@ export class WidgetSocketListener extends SocketListener {
         this.initConfigruationSocketListener();
     }
 
-    public saveConfiguration(configuration: any): void {
+    public saveConfiguration(configuration: WidgetConfiguration): void {
         const saveRequest = new SaveConfigurationRequest
             (configuration, ClientStorageHandler.getToken(), ClientStorageHandler.getContextId(), this.widgetId, true);
 
@@ -65,7 +66,7 @@ export class WidgetSocketListener extends SocketListener {
         });
 
         this.configurationSocket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<any>) => {
+            (result: LoadConfigurationResult<WidgetConfiguration>) => {
                 this.store.dispatch(WIDGET_CONFIGURATION_LOADED(result.configuration));
             }
         );

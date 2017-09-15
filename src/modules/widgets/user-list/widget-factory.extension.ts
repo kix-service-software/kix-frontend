@@ -1,8 +1,12 @@
+import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
+import { DeleteAction } from './../../actions/delete/DeleteAction';
+import { IAction } from './../../../model/client/components/action/IAction';
+import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
 import { UIProperty } from './../../../model/client/UIProperty';
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
 import { UserListWidget } from './UserListWidget';
 import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/IWidgetFactoryExtension';
+import { IWidgetFactoryExtension } from './../../../extensions/';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -15,13 +19,16 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const defaultConfiguration = new UserListConfiguration();
-        defaultConfiguration.properties.push(new UIProperty("UserID", "ID"));
-        defaultConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
-        defaultConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
-        defaultConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
+        const userListConfiguration = new UserListConfiguration();
+        userListConfiguration.properties.push(new UIProperty("UserID", "ID"));
+        userListConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
+        userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
+        userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
 
-        return defaultConfiguration;
+        // TODO: Remove the logic of actions from here. On place is only content config relevant.
+        const deleteAction = new DeleteAction("delete-action", "Delete", "");
+        const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
+        return new WidgetConfiguration([deleteAction, tourAction], userListConfiguration);
     }
 
 }

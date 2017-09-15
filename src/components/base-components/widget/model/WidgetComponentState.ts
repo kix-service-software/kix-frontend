@@ -1,3 +1,5 @@
+import { IAction } from './../../../../model/client/components/action/IAction';
+import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
 import { IWidget } from './../../../../model/client/components/widget/IWidget';
 
 export class WidgetComponentState {
@@ -6,8 +8,12 @@ export class WidgetComponentState {
 
     public showConfiguration: boolean = false;
 
-    public configuration: any = null;
+    public actions: IAction[] = [];
+
+    public contentConfiguration: any = null;
 
     public widget: IWidget = null;
+
+    public contentData: any = null;
 
 }

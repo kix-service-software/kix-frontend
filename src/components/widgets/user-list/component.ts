@@ -16,10 +16,10 @@ class UserListWidgetComponent {
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
-        if (this.state.configuration) {
+        if (this.store && this.state.configuration) {
             this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
                 const reduxState: UserListState = this.store.getState();
-                reduxState.socketlListener.loadUsers(new LoadUsersRequest(
+                reduxState.socketListener.loadUsers(new LoadUsersRequest(
                     ClientStorageHandler.getToken(),
                     this.state.configuration.properties,
                     this.state.configuration.limit)
@@ -38,6 +38,7 @@ class UserListWidgetComponent {
 
         if (reduxState.users) {
             this.state.users = reduxState.users;
+            (this as any).emit('contentDataLoaded', this.state.users);
         }
 
         if (reduxState.error) {
