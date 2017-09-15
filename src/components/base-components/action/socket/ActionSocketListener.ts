@@ -1,5 +1,9 @@
-import { ActionFinishedResponse } from './../../../../model/client/socket/action/ActionFinishedResponse';
-import { RunActionRequest } from './../../../../model/client/socket/action/RunActionRequest';
+import {
+    ActionFailedResponse,
+    ActionCannotRunResponse,
+    ActionFinishedResponse,
+    RunActionRequest
+} from './../../../../model/client/socket/action/';
 import { SocketListener } from '../../../../model/client/socket/SocketListener';
 import { ActionEvent } from './../../../../model/client/socket/action/';
 import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
@@ -41,6 +45,14 @@ export class ActionSocketListener extends SocketListener {
 
         this.actionSocket.on('error', (error) => {
             this.store.dispatch(ACTION_ERROR(String(error)));
+        });
+
+        this.actionSocket.on(ActionEvent.ACTION_CANNOT_RUN, (data: ActionCannotRunResponse) => {
+            this.store.dispatch(ACTION_ERROR(data.message));
+        });
+
+        this.actionSocket.on(ActionEvent.ACTION_FAILED, (data: ActionFailedResponse) => {
+            this.store.dispatch(ACTION_ERROR(data.message));
         });
 
         this.actionSocket.on(ActionEvent.ACTION_FINISHED, (data: ActionFinishedResponse) => {
