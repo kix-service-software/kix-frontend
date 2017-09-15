@@ -1,11 +1,11 @@
 import { StateAction } from '../../../../../model/client/store/StateAction';
-import { DeleteAction } from './';
+import { Action } from './';
 
 declare var io: any;
 
-export default () => {
+export default (error: string) => {
     const payload = new Promise((resolve, reject) => {
-        resolve({});
+        resolve({ error });
     });
-    return new StateAction(DeleteAction.DELETE_ACTION_FINISHED, payload);
+    return new StateAction(Action.ACTION_ERROR, payload);
 };

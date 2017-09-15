@@ -1,10 +1,10 @@
-import { DeleteActionSocketListener } from './../socket/DeleteActionSocketListener';
+import { ActionSocketListener } from './../socket/ActionSocketListener';
 import { UIProperty } from './../../../../model/client/UIProperty';
 
 export class DeleteActionState {
 
     public running: boolean = false;
 
-    public socketListener: DeleteActionSocketListener;
+    public socketListener: ActionSocketListener;
 
 }

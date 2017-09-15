@@ -1,10 +1,11 @@
 {
     "extensions": {
         "kix:action": {
-            "delete-action": "../../dist/modules/actions/delete/action-factory.extension"
+            "delete-action": "../../dist/modules/actions/delete/action-factory.extension",
+            "assign-tour-action": "../../dist/modules/actions/assign-tour/action-factory.extension"
         },
         "kix:marko:dependencies": {
-            "delete-action-marko": "../../dist/modules/actions/delete/marko-dependencies.extension"
+            "assign-tour-action-marko": "../../dist/modules/actions/assign-tour/marko-dependencies.extension"
         }
     }
 }

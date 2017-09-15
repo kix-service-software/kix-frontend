@@ -5,8 +5,7 @@
     </span>
     <span.header-right>
         <for(action in state.actions)>
-            $ let template = require('../../' + action.template);
-            <include(template, { action: action })/>
+            <action action=action/>
         </for>
         <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
     </span>

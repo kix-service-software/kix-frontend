@@ -1,5 +1,5 @@
 import { DeleteActionState } from './DeleteActionState';
-import { DeleteAction } from './actions';
+import { Action } from './actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
@@ -9,10 +9,10 @@ class DeleteActionHandler {
     public handleLoginAction(state: DeleteActionState, action): DeleteActionState {
         switch (action.type) {
 
-            case DeleteAction.DELETE_ACTION_INITIALIZE + FULFILLED:
+            case Action.ACTION_INITIALIZE + FULFILLED:
                 return { ...state, socketListener: action.payload.socketListener };
 
-            case DeleteAction.DELETE_ACTION_FINISHED + FULFILLED:
+            case Action.ACTION_FINISHED + FULFILLED:
                 return { ...state, running: false };
 
             default:

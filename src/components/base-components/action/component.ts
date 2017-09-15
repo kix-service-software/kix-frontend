@@ -1,12 +1,12 @@
 import { RunActionRequest } from './../../../model/client/socket/action/RunActionRequest';
-import { DeleteActionSocketListener } from './socket/DeleteActionSocketListener';
+import { ActionSocketListener } from './socket/ActionSocketListener';
 import { DELETE_ACTION_INITIALIZE } from './store/actions';
 
-class DeleteActionComponent {
-
-    public state: any;
+export class ActionComponent {
 
     private store: any;
+
+    private state: any;
 
     public onCreate(input: any): void {
         this.state = {
@@ -27,11 +27,12 @@ class DeleteActionComponent {
     }
 
     public doAction(): void {
+        // TODO: Dispatch Action to invoke action
         this.state.running = true;
-        const socketListener: DeleteActionSocketListener = this.store.getState().socketListener;
+        const socketListener: ActionSocketListener = this.store.getState().socketListener;
         socketListener.runAction(new RunActionRequest(this.state.action.id, {}));
     }
 
 }
 
-module.exports = DeleteActionComponent;
+module.exports = ActionComponent;

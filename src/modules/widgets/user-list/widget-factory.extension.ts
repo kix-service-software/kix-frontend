@@ -1,3 +1,4 @@
+import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
 import { DeleteAction } from './../../actions/delete/DeleteAction';
 import { IAction } from './../../../model/client/components/action/IAction';
 import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
@@ -25,8 +26,9 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
 
         // TODO: Remove the logic of actions from here. On place is only content config relevant.
-        const action = new DeleteAction("delete-action", "Delete", "");
-        return new WidgetConfiguration([action], userListConfiguration);
+        const deleteAction = new DeleteAction("delete-action", "Delete", "");
+        const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
+        return new WidgetConfiguration([deleteAction, tourAction], userListConfiguration);
     }
 
 }

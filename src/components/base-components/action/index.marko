@@ -1,0 +1,11 @@
+<div>
+    <if(state.running)>
+        <span>~~~</span>
+    </if>
+    <else>
+        <div on-click('doAction')>
+            <span class="kix-icon icon-dummy"/>
+            <span>${state.action.name}</span>
+        </div>
+    </else>
+</div>
