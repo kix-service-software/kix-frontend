@@ -1,22 +1,41 @@
+import { KixSidebarConfiguration } from './../../../model/client/components/';
+import { KixSidebarComponentState } from './model/KixSidebarComponentState';
+import { KixSidebarState } from './store/';
+import { KIX_SIDEBAR_INITIALIZE } from './store/actions';
+
 class KIXSidebarComponent {
 
-    public state: any;
+    public state: KixSidebarComponentState;
+    private store: any;
 
     public onCreate(input: any): void {
-        this.state = {
-            sidebars: [],
-            configurationMode: false
-        };
+        this.state = new KixSidebarComponentState();
+        this.state.configurationMode = false;
+    }
+
+    public onMount(): void {
+        this.store = require('./store/').create();
+        this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(KIX_SIDEBAR_INITIALIZE(this.store));
+    }
+
+    public stateChanged(): void {
+        const reduxState: KixSidebarState = this.store.getState();
+        if (reduxState.configuration) {
+            this.state.configuration = reduxState.configuration;
+        }
     }
 
     // function to show/hide given sidebar
     public toggleSidebar(sidebarIndex: number): void {
-        console.log(sidebarIndex);
         if (sidebarIndex === null) {
             return;
         }
-        this.state.sidebars[sidebarIndex].show = !this.state.sidebars[sidebarIndex].show;
-        this.state.sidebars = [...this.state.sidebars];
+        if (this.state.configuration) {
+            this.state.configuration.sidebars[sidebarIndex].show =
+                !this.state.configuration.sidebars[sidebarIndex].show;
+            this.state.configuration = { ...this.state.configuration };
+        }
     }
 
     public configurationClicked(): void {

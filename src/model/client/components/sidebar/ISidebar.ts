@@ -8,6 +8,8 @@ export interface ISidebar {
 
     configurationTemplate: string;
 
+    icon: string;
+
     isExternal: boolean;
 
 }
