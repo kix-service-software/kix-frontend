@@ -11,8 +11,6 @@ import {
     KIX_SIDEBAR_ERROR
 } from '../store/actions';
 
-declare var io;
-
 export class KixSidebarSocketListener extends SocketListener {
 
     private configurationSocket: SocketIO.Server;
