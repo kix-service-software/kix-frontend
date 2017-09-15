@@ -31,7 +31,7 @@ class KIXSidebarComponent {
         if (sidebarIndex === null) {
             return;
         }
-        if (this.state.configuration) {
+        if (this.state.configuration && this.state.configuration.sidebars) {
             this.state.configuration.sidebars[sidebarIndex].show =
                 !this.state.configuration.sidebars[sidebarIndex].show;
             this.state.configuration = { ...this.state.configuration };
