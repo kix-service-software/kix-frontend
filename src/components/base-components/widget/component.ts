@@ -32,6 +32,10 @@ class WidgetComponent {
         }
     }
 
+    public contentDataLoaded(contentData: any): void {
+        this.state.contentData = contentData;
+    }
+
     public configClicked(): void {
         this.state.showConfiguration = true;
     }

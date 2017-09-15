@@ -5,8 +5,13 @@ class DeleteActionComponent {
     public onCreate(input: any): void {
         this.state = {
             action: input.action,
-            running: false
+            running: false,
+            contentData: []
         };
+    }
+
+    public onInput(input: any): void {
+        this.state.contentData = input.contentData;
     }
 
 

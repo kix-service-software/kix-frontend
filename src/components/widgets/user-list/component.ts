@@ -38,6 +38,7 @@ class UserListWidgetComponent {
 
         if (reduxState.users) {
             this.state.users = reduxState.users;
+            (this as any).emit('contentDataLoaded', this.state.users);
         }
 
         if (reduxState.error) {

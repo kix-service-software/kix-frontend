@@ -14,4 +14,6 @@ export class WidgetComponentState {
 
     public widget: IWidget = null;
 
+    public contentData: any = null;
+
 }

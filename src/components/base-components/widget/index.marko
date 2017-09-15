@@ -5,7 +5,7 @@
     </span>
     <span.header-right>
         <for(action in state.actions)>
-            <action action=action/>
+            <action action=action contentData=state.contentData/>
         </for>
         <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
     </span>
@@ -14,7 +14,7 @@
     $ let template = require('../../' + data.widget.template);
     <include(template, {
         configuration: state.contentConfiguration
-    })/>
+    }) on-contentDataLoaded('contentDataLoaded')/>
 </div>
 <div>
     <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration

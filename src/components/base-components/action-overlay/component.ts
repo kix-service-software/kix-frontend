@@ -5,12 +5,14 @@ class ActionOverlayComponent {
     public onCreate(input: any): void {
         this.state = {
             showOverlay: false,
-            action: input.action
+            action: input.action,
+            contentData: null
         };
     }
 
     public onInput(input: any): void {
         this.state.showOverlay = input.showOverlay;
+        this.state.contentData = input.contentData;
     }
 
     public runClicked(): void {

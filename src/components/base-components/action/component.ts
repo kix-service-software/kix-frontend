@@ -12,8 +12,13 @@ export class ActionComponent {
         this.state = {
             action: input.action,
             running: false,
-            showActionOverlay: false
+            showActionOverlay: false,
+            contentData: null
         };
+    }
+
+    public onInput(input: any): void {
+        this.state.contentData = input.contentData;
     }
 
     public onMount(): void {

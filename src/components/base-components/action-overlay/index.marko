@@ -5,7 +5,8 @@
         <div.action-content>
             $ let template = require('../../' + data.action.template);
             <include(template, {
-                action: data.action
+                action: data.action,
+                contentData: state.contentData
             })/>
         </div>
         <div.button-bar>
