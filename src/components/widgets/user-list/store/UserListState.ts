@@ -8,7 +8,7 @@ export class UserListState {
 
     public configuration: UserListConfiguration;
 
-    public socketlListener: UserListSocketListener;
+    public socketListener: UserListSocketListener;
 
     public error: string;
 

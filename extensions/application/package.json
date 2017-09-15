@@ -5,7 +5,8 @@
             "authentication-communicator": "../../dist/communicators/AuthenticationCommunicator.extension",
             "main-menu-communicator": "../../dist/communicators/MainMenuCommunicator.extension",
             "configuration-communicator": "../../dist/communicators/ConfigurationCommunicator.extension",
-            "users-communicator": "../../dist/communicators/UsersCommunicator.extension"
+            "users-communicator": "../../dist/communicators/UsersCommunicator.extension",
+            "action-communicator": "../../dist/communicators/ActionCommunicator.extension"
         }
     }
 }

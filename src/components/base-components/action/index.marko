@@ -1,0 +1,15 @@
+<div>
+    <if(state.running)>
+        <span>~~~</span>
+    </if>
+    <else>
+        <div on-click('handleAction')>
+            <span class="kix-icon icon-dummy"/>
+            <span>${state.action.name}</span>
+        </div>
+        <if(state.action.useOverlay)>
+            <action-overlay action=state.action contentData=state.contentData showOverlay=state.showActionOverlay
+                on-runAction('runActionClicked') on-cancelAction('cancelActionClicked')/>
+        </if>
+    </else>
+</div>

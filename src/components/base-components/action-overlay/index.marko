@@ -1,0 +1,17 @@
+<div.action-overlay class="${state.showOverlay ? '' : 'action-hide'}">
+    <div.action-overlay-transparent/>
+    <div.action-container>
+        <h1>Aktion: ${data.action.name}</h1>
+        <div.action-content>
+            $ let template = require('../../' + data.action.template);
+            <include(template, {
+                action: data.action,
+                contentData: state.contentData
+            })/>
+        </div>
+        <div.button-bar>
+            <button.action-button on-click('runClicked')>Ausführen</button>
+            <button.action-button on-click('cancelClicked')>Abbrechen</button>
+        </div>
+    </div>
+</div>

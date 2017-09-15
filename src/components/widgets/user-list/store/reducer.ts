@@ -10,7 +10,7 @@ class UserListActionHandler {
         switch (action.type) {
 
             case UserListAction.USER_LIST_INITIALIZE + FULFILLED:
-                return { ...state, socketlListener: action.payload.socketListener };
+                return { ...state, socketListener: action.payload.socketListener };
 
             case UserListAction.USER_LIST_USERS_LOADED + FULFILLED:
                 return {
