@@ -9,6 +9,8 @@ class WidgetComponent {
 
     public store: any;
 
+    private updateContentConfigurationHandler: any;
+
     public onCreate(input: any): void {
         this.state = new WidgetComponentState();
         this.state.widget = input.widget;
@@ -36,6 +38,10 @@ class WidgetComponent {
         this.state.contentData = contentData;
     }
 
+    public onUpdateContentConfigurationHandler(handler: any): void {
+        this.updateContentConfigurationHandler = handler;
+    }
+
     public configClicked(): void {
         this.state.showConfiguration = true;
     }
@@ -46,6 +52,10 @@ class WidgetComponent {
         const reduxState: WidgetState = this.store.getState();
         reduxState.socketlListener
             .saveConfiguration(new WidgetConfiguration(this.state.actions, this.state.contentConfiguration));
+
+        if (this.updateContentConfigurationHandler) {
+            this.updateContentConfigurationHandler(this.state.contentConfiguration);
+        }
     }
 
     public closeConfigurationOverlay(): void {
