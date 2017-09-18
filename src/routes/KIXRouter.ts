@@ -7,12 +7,11 @@ import { Router, Response, Request } from 'express';
 
 @injectable()
 export abstract class KIXRouter implements IRouter {
-
-    protected router: Router;
-    protected configurationService: IConfigurationService;
-    protected authenticationService: IAuthenticationService;
-    protected pluginService: IPluginService;
-    protected userService: IUserService;
+    public router: Router;
+    public configurationService: IConfigurationService;
+    public authenticationService: IAuthenticationService;
+    public pluginService: IPluginService;
+    public userService: IUserService;
     protected serverConfig: IServerConfiguration;
 
     public constructor(
