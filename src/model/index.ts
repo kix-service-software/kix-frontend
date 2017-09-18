@@ -19,3 +19,4 @@ export { UserServiceError } from './user/UserServiceError';
 export { UsersResponse } from './api/user/UsersResponse';
 export { Session } from './user/Session';
 export { SessionResponse } from './api/authentication/SessionResponse';
+export * from './client';
