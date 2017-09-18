@@ -6,16 +6,6 @@ import { Router } from 'express';
 
 export interface IRouter {
 
-    router: Router;
-
-    configurationService: IConfigurationService;
-
-    authenticationService: IAuthenticationService;
-
-    pluginService: IPluginService;
-
-    userService: IUserService;
-
     getRouter(): Router;
 
     getBaseRoute(): string;
