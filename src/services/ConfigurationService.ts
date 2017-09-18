@@ -4,6 +4,7 @@ import { IConfigurationService } from './IConfigurationService';
 import { injectable, inject } from 'inversify';
 
 import jsonfile = require('jsonfile');
+import fs = require('fs');
 
 @injectable()
 export class ConfigurationService implements IConfigurationService {
@@ -42,37 +43,33 @@ export class ConfigurationService implements IConfigurationService {
     public async getComponentConfiguration(
         contextId: string, componentId: string, userId: number): Promise<any> {
 
-        let configurationName = contextId;
-        if (componentId) {
-            configurationName += '_' + componentId;
+        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
+        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
+        const configurationFile = this.getConfigurationFile(filePath);
+
+        if (componentId === null) {
+            componentId = contextId;
         }
 
-        if (userId) {
-            configurationName = userId + '_' + configurationName;
-        }
-
-        const configPath = this.getComponentConfigurationFilePath(configurationName);
-        this.clearRequireCache(configPath);
-
-        return require(configPath);
+        return configurationFile[componentId];
     }
 
     public async saveComponentConfiguration(
         contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
 
-        let configurationName = contextId;
-        if (componentId) {
-            configurationName += '_' + componentId;
+        if (componentId === null) {
+            componentId = contextId;
         }
 
-        if (userId) {
-            configurationName = userId + '_' + configurationName;
-        }
+        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
 
         await new Promise<void>((resolve, reject) => {
-            const filePath = __dirname + '/' + this.getComponentConfigurationFilePath(configurationName);
+            const filePath = __dirname + '/' + this.getComponentConfigurationFilePath(configurationFileName);
 
-            jsonfile.writeFile(filePath, configuration,
+            const configurationFile = this.getConfigurationFile(filePath);
+            configurationFile[componentId] = configuration;
+
+            jsonfile.writeFile(filePath, configurationFile,
                 (fileError: Error) => {
                     if (fileError) {
                         reject(fileError);
@@ -141,6 +138,27 @@ export class ConfigurationService implements IConfigurationService {
 
     private getComponentConfigurationFilePath(fileName: string): string {
         return this.CONFIG_COMPONENTS_DIR + fileName + this.CONFIG_EXTENSION;
+    }
+
+    private buildConfigurationFileName(contextId: string, userId: number): string {
+        let configurationFileName = contextId;
+
+        if (userId) {
+            configurationFileName = userId + '_' + configurationFileName;
+        }
+
+        return configurationFileName;
+    }
+
+    private getConfigurationFile(filePath: string): any {
+        let configurationFile = null;
+        if (fs.existsSync(filePath)) {
+            this.clearRequireCache(filePath);
+            configurationFile = require(filePath);
+        } else {
+            configurationFile = {};
+        }
+        return configurationFile;
     }
 
     private clearRequireCache(configPath: string): void {
