@@ -1,6 +1,9 @@
 .cache
 .gitignore
 .npmignore
+.vscode
+.gitlab-ci.yml
+marko.json
 gulpfile.js
 node_modules
 src

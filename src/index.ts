@@ -11,4 +11,4 @@ export {
 } from './services';
 export * from './model';
 export * from './decorators';
-export { IRouter, KIXRouter } from './routes';
+export { KIXRouter } from './routes/KIXRouter';
