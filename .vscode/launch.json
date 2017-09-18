@@ -11,7 +11,7 @@
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0"
             },
             "name": "KIXng",
-            "program": "${workspaceRoot}/src/index.ts",
+            "program": "${workspaceRoot}/src/StartServer.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,

@@ -1,9 +1,10 @@
 {
   "name": "@kix/frontend",
   "version": "0.0.10",
+  "main": "dist/index.js",
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/StartServer.js",
     "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/**/*.test.ts'",
     "pub": "gulp && npm version patch && npm publish"
   },
