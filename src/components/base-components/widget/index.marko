@@ -9,14 +9,16 @@
             <!-- Hier Filter oder ähnliche Elemente rein-->
         </span>
         <span.header-right>
+            <for(action in state.actions)>
+                <action action=action contentData=state.contentData/>
+            </for>
             <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
-            <!-- Hier Buttons, Aktionen oder ähnliche Elemente rein-->
         </span>
     </div>
     <div.widget-content>
         $ let template = require('../../' + data.widget.template);
         <include(template, {
-            configuration: state.configuration
+            configuration: state.contentConfiguration
         }) on-contentDataLoaded('contentDataLoaded')
             on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
     </div>
