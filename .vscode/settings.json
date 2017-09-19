@@ -6,9 +6,9 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "node_modules": false,
+        "node_modules": true,
         ".cache": true,
-        "dist": false
+        "dist": true
     },
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
