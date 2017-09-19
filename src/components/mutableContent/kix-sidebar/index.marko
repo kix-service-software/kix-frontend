@@ -1,33 +1,40 @@
 <div#kix-sidebars>
     <div.sidebar-select-container>
         <div#content-settings-select.sidebar-select>
-            <div style="font-weight:bold" on-click('configurationClicked')>*</div>
+            <!-- TODO: replace dummy if icon is specified and remove * -->
+            <span.kix-icon.icon-dummy on-click('configurationClicked')>*</span>
         </div>
         <div#information-select.sidebar-select>
-            <div style="font-weight:bold">i</div>
+            <!-- TODO: replace dummy if icon is specified and remove i -->
+            <span.kix-icon.icon-dummy>i</span>
         </div>
-        <!-- TODO: container for the normal sidebars, should be verticaly middle -->
-        <div#dependend-sidebars-select>
-            <for(sidebar in state.sidebars | status-var=loop)>
-                <div.sidebar-select id="${sidebar.id}-${loop.getIndex()}-select"
-                    class="${state.sidebars[loop.getIndex()].show ? 'select-active' : ''}"
-                    on-click('toggleSidebar', loop.getIndex())>
-                    <!-- TODO: replace with font-image -->
-                    <div style="font-weight:bold">${sidebar.symbol}</div>
-                </div>
-            </for>
-        </div>
+        <if(state.configuration)>
+            <!-- TODO: container for the normal sidebars, should be verticaly middle -->
+            <div#dependend-sidebars-select>
+                <for(sidebar in state.configuration.sidebars | status-var=loop)>
+                    <div.sidebar-select id="${sidebar.id}-${loop.getIndex()}-select"
+                        class="${state.configuration.sidebars[loop.getIndex()].show ? 'select-active' : ''}"
+                        on-click('toggleSidebar', loop.getIndex())>
+                        <span.kix-icon class="${ sidebar.icon ? 'icon-' + sidebar.icon : ''}">
+                            <!-- TODO: remove if icon is specified in sidebar (not dummy anymore) -->${sidebar.title.substring(0,1)}
+                        </span>
+                    </div>
+                </for>
+            </div>
+        </if>
     </div>
     <div.sidebar-container>
         <div#default-sidebars/>
-        <div#dependend-sidebars>
-            <for(sidebar in state.sidebars | status-var=loop)>
-                <if(sidebar.show)>
-                    <div.kix-sidebar id="${sidebar.id}-${loop.getIndex()}" title="${sidebar.title}">
-                        <sidebar sidebar=sidebar configurationMode=state.configurationMode/>
-                    </div>
-                </if>
-            </for>
-        </div>
+        <if(state.configuration)>
+            <div#dependend-sidebars>
+                <for(sidebar in state.configuration.sidebars | status-var=loop)>
+                    <if(sidebar.show)>
+                        <div.kix-sidebar id="${sidebar.id}-${loop.getIndex()}" title="${sidebar.title}">
+                            <sidebar sidebar=sidebar configurationMode=state.configurationMode/>
+                        </div>
+                    </if>
+                </for>
+            </div>
+        </if>
     </div>
 </div>

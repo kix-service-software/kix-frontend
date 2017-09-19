@@ -16,6 +16,7 @@ export class SaveConfigurationRequest {
         this.token = token;
         this.contextId = contextId;
         this.userSpecific = userSpecific;
+        this.componentId = componentId;
     }
 
 }

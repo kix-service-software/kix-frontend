@@ -5,6 +5,7 @@ import reducer from './reducer';
 
 export { DashboardState } from './DashboardState';
 
+// TODO: create einbauen
 module.exports = createStore(reducer, {}, applyMiddleware(
     promiseMiddleware()
 ));

@@ -1,4 +1,4 @@
-import { IWidget } from './../model/client/components/widget/IWidget';
+import { IWidget } from './../../model/client/components/widget/IWidget';
 
 export interface IWidgetFactoryExtension {
 
