@@ -25,26 +25,9 @@ html {
                         margin-right: 50px;
                         min-width: 500px;
                         overflow-x: hidden;
-                        #mutable-content-routing {
-                            .shadow-margin;
-                            margin-bottom: 18px;
-                            #kix-breadcrumb {
-                                .height-0;
-                                .color-theme-4;
-                                width: 100%;
-                                margin-bottom: 3px;
-                                box-shadow: @shadow;
-                                padding: 5px;
-                                #kix-list-skimmer {
-                                    .color-theme-9;
-                                    float: right;
-                                }
-                            }
-                            #kix-back {
-                                .color-theme-9;
-                                padding: 5px 10px;
-                                box-shadow: @shadow;
-                            }
+                        .content-header {
+                            padding: 5px;
+                            margin-bottom: .75em;
                         }
                     }
                 }
@@ -155,6 +138,7 @@ button {
 }
 
 [class^="kix-icon icon-"]:before, [class*=" kix-icon icon-"]:before {
+    color: #000;
     font-style: normal;
     font-weight: normal;
     speak: none;
@@ -195,4 +179,29 @@ button {
       background-color: #ccc;
       height: 1em;
       vertical-align: middle;
+      line-height: 1.25em;
+}
+
+.kix-icon.icon-dummy.icon-h:before {
+    content: 'H';
+}
+
+.kix-icon.icon-dummy.icon-z:before {
+    content: 'Z';
+}
+
+.kix-icon.icon-dummy.icon-n:before {
+    content: 'N';
+}
+
+.kix-icon.icon-dummy.icon-i:before {
+    content: 'i';
+}
+
+.kix-icon.icon-dummy.icon-t:before {
+    content: 'T';
+}
+
+.kix-icon.icon-dummy.icon-asterisk:before {
+    content: '*';
 }
