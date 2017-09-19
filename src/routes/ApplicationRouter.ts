@@ -44,7 +44,7 @@ export class ApplicationRouter extends KIXRouter {
         const moduleFactory: IModuleFactoryExtension = await this.pluginService.getModuleFactory(moduleId);
         const template = moduleFactory.getTemplate();
 
-        this.prepareMarkoTemplate(res, template, moduleFactory.isExternal(), moduleFactory.getModuleId());
+        this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId());
     }
 
 }

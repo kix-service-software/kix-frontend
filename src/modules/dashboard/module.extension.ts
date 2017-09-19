@@ -8,10 +8,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         return '/@kix/frontend$' + version + '/dist/components/dashboard/';
     }
 
-    public isExternal(): boolean {
-        return false;
-    }
-
     public getModuleId(): string {
         return "dashboard";
     }

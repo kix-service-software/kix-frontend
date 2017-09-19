@@ -13,8 +13,8 @@
   },
   "author": "c.a.p.e. IT GmbH",
   "dependencies": {
-    "@kix/core": "^1.0.30",
-    "@kix/ticket-dashboard": "^1.0.19",
+    "@kix/core": "^1.0.33",
+    "@kix/ticket-dashboard": "^1.0.20",
     "body-parser": "1.18.1",
     "compression": "1.7.0",
     "cookie-parser": "^1.4.3",
