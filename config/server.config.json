@@ -10,5 +10,5 @@
     "LOG_LEVEL": 2,
     "LOG_FILEDIR": "logs",
     "LOG_TRACE": true,
-    "DEFAULT_ROUTE": "/dashboard"
+    "DEFAULT_ROUTE": "dashboard"
 }

@@ -2,6 +2,16 @@ import { ContainerRow, ContainerConfiguration, IModuleFactoryExtension } from '@
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
+    public getTemplate(): string {
+        const packageJson = require('../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/dashboard/';
+    }
+
+    public isExternal(): boolean {
+        return false;
+    }
+
     public getModuleId(): string {
         return "dashboard";
     }

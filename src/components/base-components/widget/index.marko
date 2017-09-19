@@ -23,8 +23,8 @@
             on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
     </div>
     <div>
-        <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration configuration=state.configuration
-            on-saveConfigurationOverlay('saveConfigurationOverlay')
+        <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
+            configuration=state.contentConfiguration on-saveConfigurationOverlay('saveConfigurationOverlay')
             on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
     </div>
 </div>
