@@ -1,21 +1,27 @@
-<div.widget-header.clearfix>
-    <span.header-left>
-        <h3>${data.widget.title}</h3>
-        <!-- Hier Filter oder ähnliche Elemente rein-->
-    </span>
-    <span.header-right>
-        <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
-        <!-- Hier Buttons, Aktionen oder ähnliche Elemente rein-->
-    </span>
-</div>
-<div.widget-content>
-    $ let template = require('../../' + data.widget.template);
-    <include(template, {
-        configuration: state.configuration
-    })/>
-</div>
-<div>
-    <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration configuration=state.configuration
-        on-saveConfigurationOverlay('saveConfigurationOverlay')
-        on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+<div.widget>
+    <if(data.draggable)>
+        <div.drag-overlay class="${state.configurationMode ? '' : 'hidden'} ${data.drop ? 'drop-element' : ''}"
+            data-id="${data.data_id ? data.data_id : ''}"/>
+    </if>
+    <div.widget-header.clearfix>
+        <span.header-left>
+            <h3>${data.widget.title}</h3>
+            <!-- Hier Filter oder ähnliche Elemente rein-->
+        </span>
+        <span.header-right>
+            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
+            <!-- Hier Buttons, Aktionen oder ähnliche Elemente rein-->
+        </span>
+    </div>
+    <div.widget-content>
+        $ let template = require('../../' + data.widget.template);
+        <include(template, {
+            configuration: state.configuration
+        })/>
+    </div>
+    <div>
+        <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration configuration=state.configuration
+            on-saveConfigurationOverlay('saveConfigurationOverlay')
+            on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+    </div>
 </div>
