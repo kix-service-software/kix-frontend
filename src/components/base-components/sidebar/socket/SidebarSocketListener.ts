@@ -5,7 +5,7 @@ import {
     LoadConfigurationResult,
     LoadConfigurationRequest,
     SaveConfigurationRequest
-} from '@kix/core';
+} from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     SIDEBAR_CONFIGURATION_LOADED,

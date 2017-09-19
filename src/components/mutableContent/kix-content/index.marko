@@ -1,4 +1,12 @@
-$ let template = require('../../' + data.template);
+$ {
+    let templatePathPrefix = '../../';
+    if(data.isExternal) {
+        templatePathPrefix ='../../../../node_modules/';
+    }
+
+    let template = require(templatePathPrefix + data.template);
+
+}
 <include(template, {
     configurationMode: data.configurationMode
     })/>

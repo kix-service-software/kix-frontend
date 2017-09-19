@@ -4,12 +4,12 @@ import { Application, Router, Request, Response } from 'express';
 
 export class ServerRouter {
 
-    private router: Router;
+    private expressRouter: Router;
 
     public constructor(application: Application) {
-        this.router = Router();
+        this.expressRouter = Router();
 
-        application.use(this.router);
+        application.use(this.expressRouter);
 
         this.initializeRoutes();
     }
@@ -17,7 +17,11 @@ export class ServerRouter {
     private initializeRoutes(): void {
         const registeredRouter = container.getDIContainer().getAll<IRouter>("IRouter");
         for (const router of registeredRouter) {
-            this.router.use(router.getBaseRoute(), router.getRouter());
+            // TODO: require app and base template and provide it to the registered router
+            this.expressRouter.use(router.getBaseRoute(), router.getRouter());
+
+            router.setAppTemplate(require('./components/app/index.marko'));
+            router.setBaseTemplate(require('./components/kix-base-template/index.marko'));
         }
     }
 }

@@ -1,4 +1,4 @@
-import { UsersEvent, StateAction, LoadUsersResult } from '@kix/core';
+import { UsersEvent, StateAction, LoadUsersResult } from '@kix/core/dist/model/client';
 import { UserListAction } from './UserListAction';
 
 export default (loadResult: LoadUsersResult) => {

@@ -1,4 +1,4 @@
-import { StateAction, MenuEntry } from '@kix/core';
+import { StateAction, MenuEntry } from '@kix/core/dist/model/client';
 import { MainMenuAction } from './MainMenuAction';
 
 export default (menuEntries: MenuEntry[]) => {

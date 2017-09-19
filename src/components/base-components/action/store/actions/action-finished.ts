@@ -1,4 +1,4 @@
-import { StateAction } from '@kix/core';
+import { StateAction } from '@kix/core/dist/model/client';
 import { Action } from './';
 
 export default () => {

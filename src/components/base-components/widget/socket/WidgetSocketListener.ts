@@ -6,7 +6,7 @@ import {
     ClientStorageHandler,
     ConfigurationEvent,
     SocketEvent
-} from '@kix/core';
+} from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
 import {

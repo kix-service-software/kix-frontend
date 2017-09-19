@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { KIXRouter } from '../../routes';
+import { KIXRouter } from '@kix/core/dist/routes';
 
 export class DashboardRouter extends KIXRouter {
 
-    private CONTEXT_ID = "dashboard";
+    public getContextId(): string {
+        return "dashboard";
+    }
 
     public getBaseRoute(): string {
         return "/dashboard";
@@ -15,9 +17,7 @@ export class DashboardRouter extends KIXRouter {
     }
 
     private async getDashboard(req: Request, res: Response): Promise<void> {
-        this.setContextId(this.CONTEXT_ID, res);
-        this.setFrontendSocketUrl(res);
-        this.prepareMarkoTemplate(res, 'dashboard/index.marko');
+        this.prepareMarkoTemplate(res, 'dashboard/index.marko', false);
     }
 
 }

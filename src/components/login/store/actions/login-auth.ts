@@ -1,4 +1,4 @@
-import { StateAction, UserType } from '@kix/core';
+import { StateAction, UserType } from '@kix/core/dist/model/client';
 import { LoginAction } from './LoginAction';
 import { LoginState } from '../index';
 

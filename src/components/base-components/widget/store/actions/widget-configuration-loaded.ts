@@ -3,7 +3,7 @@ import {
     StateAction,
     LoadUsersResult,
     WidgetConfiguration
-} from '@kix/core';
+} from '@kix/core/dist/model/client';
 import { WidgetAction } from './WidgetAction';
 
 export default (configuration: WidgetConfiguration) => {

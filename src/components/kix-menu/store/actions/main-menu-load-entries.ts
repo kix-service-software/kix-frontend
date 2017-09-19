@@ -1,4 +1,4 @@
-import { MainMenuEvent, StateAction } from '@kix/core';
+import { MainMenuEvent, StateAction } from '@kix/core/dist/model/client';
 import { MainMenuAction } from './MainMenuAction';
 
 export default (socket: SocketIO.Server) => {

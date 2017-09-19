@@ -1,4 +1,4 @@
-import { StateAction } from '@kix/core';
+import { StateAction } from '@kix/core/dist/model/client';
 import { UserListSocketListener } from '../../socket/UserListSocketListener';
 import { UserListAction } from './';
 

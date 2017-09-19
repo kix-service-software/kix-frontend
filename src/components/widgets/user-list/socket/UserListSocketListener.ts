@@ -4,7 +4,7 @@ import {
     LoadUsersResult,
     UsersEvent,
     LoadUsersRequest
-} from '@kix/core';
+} from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     USER_LIST_USERS_LOADED,

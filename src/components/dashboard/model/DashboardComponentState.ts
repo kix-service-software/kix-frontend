@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from '@kix/core';
+import { ContainerConfiguration } from '@kix/core/dist/model/client';
 
 export class DashboardComponentState {
 

@@ -1,34 +1,38 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import { Server } from './Server';
+
 import { AuthenticationCommunicator } from './communicators/';
+
 import {
     ApplicationRouter,
     AuthenticationRouter
 } from './routes/';
+
 import {
     ICommunicator,
     IRouter,
     KIXExtensions,
     IRouterExtension,
     ICommunicatorExtension,
-    AuthenticationService,
-    ConfigurationService,
     IConfigurationService,
-    HttpService,
     IAuthenticationService,
     IHttpService,
     IMarkoService,
     IPluginService,
-    MarkoService,
-    PluginService,
     ILoggingService,
-    LoggingService,
-    UserService,
     IUserService,
-    ISocketCommunicationService,
-    SocketCommunicationService
+    ISocketCommunicationService
 } from '@kix/core';
+
+import { LoggingService } from './services/LoggingService';
+import { ConfigurationService } from './services/ConfigurationService';
+import { PluginService } from './services/PluginService';
+import { SocketCommunicationService } from './services/SocketCommuncationService';
+import { MarkoService } from './services/MarkoService';
+import { AuthenticationService } from './services/AuthenticationService';
+import { HttpService } from './services/HttpService';
+import { UserService } from './services/UserService';
 
 export class ServiceContainer {
 

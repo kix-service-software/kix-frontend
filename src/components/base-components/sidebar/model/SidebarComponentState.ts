@@ -1,4 +1,4 @@
-import { ISidebar } from '@kix/core';
+import { ISidebar } from '@kix/core/dist/model/client';
 
 export class SidebarComponentState {
 

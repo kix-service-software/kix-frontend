@@ -1,5 +1,5 @@
 import { LoginSocketListener } from './../../socket/LoginSocketListener';
-import { AuthenticationEvent, AuthenticationResult, SocketEvent, StateAction } from '@kix/core';
+import { AuthenticationEvent, AuthenticationResult, SocketEvent, StateAction } from '@kix/core/dist/model/client';
 import { LoginAction } from './LoginAction';
 import LOGIN_ERROR from './login-error';
 

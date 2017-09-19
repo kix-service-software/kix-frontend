@@ -1,4 +1,4 @@
-import { StateAction, ContainerConfiguration } from '@kix/core';
+import { StateAction, ContainerConfiguration } from '@kix/core/dist/model/client';
 import { DashboardAction } from './';
 
 export default (containerConfiguration: ContainerConfiguration) => {

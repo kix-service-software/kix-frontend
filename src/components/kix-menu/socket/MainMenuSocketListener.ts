@@ -3,7 +3,7 @@ import {
     SocketEvent,
     MainMenuEvent,
     MainMenuEntriesResult
-} from '@kix/core';
+} from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
 

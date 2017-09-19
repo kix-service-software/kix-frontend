@@ -1,9 +1,13 @@
-import { KIXRouter } from './KIXRouter';
+import { KIXRouter } from '@kix/core/dist/routes/';
 import { IAuthenticationService, IConfigurationService, IServerConfiguration, IRouter } from '@kix/core';
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 
 export class ApplicationRouter extends KIXRouter {
+
+    public getContextId(): string {
+        return "application";
+    }
 
     public getBaseRoute(): string {
         return "/";

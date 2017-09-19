@@ -1,4 +1,4 @@
-import { StateAction, KixSidebarConfiguration } from '@kix/core';
+import { StateAction, KixSidebarConfiguration } from '@kix/core/dist/model/client';
 import { KixSidebarAction } from './';
 
 export default (configuration: KixSidebarConfiguration) => {

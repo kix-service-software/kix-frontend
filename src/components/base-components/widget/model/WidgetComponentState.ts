@@ -1,4 +1,4 @@
-import { IWidget, WidgetConfiguration, IAction } from '@kix/core';
+import { IWidget, WidgetConfiguration, IAction } from '@kix/core/dist/model/client';
 
 export class WidgetComponentState {
 
