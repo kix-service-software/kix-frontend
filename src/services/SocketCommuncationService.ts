@@ -1,5 +1,4 @@
-import { ISocketCommunicationService, IConfigurationService, ILoggingService } from './';
-import { ICommunicator } from './../communicators/ICommunicator';
+import { ICommunicator, ISocketCommunicationService, IConfigurationService, ILoggingService } from '@kix/core';
 import { inject, injectable } from 'inversify';
 import { container } from '../Container';
 import * as express from 'express';

@@ -1,9 +1,12 @@
-import { ContainerConfiguration } from './../../../model/client/components/';
-import { LoadConfigurationRequest } from './../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
-import { SocketEvent } from '../../../model/client/socket/SocketEvent';
-import { ConfigurationEvent, LoadConfigurationResult } from '../../../model/client/socket/configuration';
-import { SocketListener } from '../../../model/client/socket/SocketListener';
+import {
+    ConfigurationEvent,
+    LoadConfigurationResult,
+    SocketEvent,
+    ClientStorageHandler,
+    LoadConfigurationRequest,
+    ContainerConfiguration
+} from '@kix/core';
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     DASHBOARD_CONTAINER_CONFIGURATION_LOADED
 } from '../store/actions';

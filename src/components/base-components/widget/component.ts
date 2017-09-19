@@ -1,4 +1,4 @@
-import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
+import { WidgetConfiguration } from '@kix/core';
 import { WidgetComponentState } from './model/WidgetComponentState';
 import { WidgetState } from './store/WidgetState';
 import { WIDGET_INITIALIZE } from './store/actions';

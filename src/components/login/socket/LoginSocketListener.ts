@@ -1,9 +1,14 @@
-import { UserType } from '../../../model/client/';
-import { SocketEvent } from '../../../model/client/socket/SocketEvent';
+import {
+    ClientStorageHandler,
+    AuthenticationEvent,
+    AuthenticationResult,
+    LoginRequest,
+    SocketEvent,
+    UserType
+} from '@kix/core';
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+
 import { LOGIN_ERROR } from '../store/actions';
-import { AuthenticationEvent, AuthenticationResult, LoginRequest } from '../../../model/client/socket/login';
-import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
-import { SocketListener } from '../../../model/client/socket/SocketListener';
 
 declare var io: any;
 

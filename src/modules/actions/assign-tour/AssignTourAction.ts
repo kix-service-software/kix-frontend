@@ -1,4 +1,4 @@
-import { IAction } from './../../../model/client/components/';
+import { IAction } from '@kix/core';
 
 export class AssignTourAction implements IAction {
 

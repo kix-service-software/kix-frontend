@@ -1,6 +1,5 @@
 import { TicketListWidget } from './TicketListWidget';
-import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/';
+import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 

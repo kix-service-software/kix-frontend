@@ -1,4 +1,4 @@
-import { MenuEntry } from './../../../model/client/components/main-menu/MenuEntry';
+import { MenuEntry } from '@kix/core';
 
 export class MenuComponentState {
 

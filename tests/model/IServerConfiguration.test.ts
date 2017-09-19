@@ -1,6 +1,5 @@
 import { container } from './../../src/Container';
-import { IConfigurationService } from './../../src/services/';
-import { IServerConfiguration } from './../../src/model/';
+import { IServerConfiguration, IConfigurationService } from '@kix/core/';
 import * as chai from 'chai';
 
 const expect = chai.expect;

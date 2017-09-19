@@ -1,6 +1,5 @@
 import { TicketInfoSidebar } from './TicketInfoSidebar';
-import { ISidebar } from './../../../model/client/components/';
-import { ISidebarFactoryExtension } from './../../../extensions/';
+import { ISidebarFactoryExtension, ISidebar } from '@kix/core';
 
 export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
 

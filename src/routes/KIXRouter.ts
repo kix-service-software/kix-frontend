@@ -1,8 +1,15 @@
-import { IMainMenuExtension, KIXExtensions } from './../extensions/';
 import { injectable, inject } from 'inversify';
-import { IServerConfiguration, BaseTemplateInput } from './../model';
-import { IRouter } from './IRouter';
-import { IConfigurationService, IAuthenticationService, IPluginService, IUserService } from './../services/';
+import {
+    IConfigurationService,
+    IAuthenticationService,
+    IPluginService,
+    IUserService,
+    IMainMenuExtension,
+    KIXExtensions,
+    IServerConfiguration,
+    BaseTemplateInput,
+    IRouter
+} from '@kix/core';
 import { Router, Response, Request } from 'express';
 
 @injectable()

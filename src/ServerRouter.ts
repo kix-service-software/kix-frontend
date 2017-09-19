@@ -1,4 +1,4 @@
-import { IRouter } from './routes/';
+import { IRouter } from '@kix/core';
 import { container } from './Container';
 import { Application, Router, Request, Response } from 'express';
 

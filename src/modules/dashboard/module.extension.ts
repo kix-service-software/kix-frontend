@@ -1,6 +1,4 @@
-import { ContainerRow } from './../../model/client/components/draggable-container/ContainerRow';
-import { ContainerConfiguration } from './../../model/client/components/';
-import { IModuleFactoryExtension } from './../../extensions/';
+import { ContainerRow, ContainerConfiguration, IModuleFactoryExtension } from '@kix/core';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 

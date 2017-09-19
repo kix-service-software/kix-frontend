@@ -1,6 +1,5 @@
 import { DeleteAction } from './DeleteAction';
-import { IAction } from './../../../model/client/components/action/IAction';
-import { IActionFactoryExtension } from './../../../extensions/';
+import { IAction, IActionFactoryExtension } from '@kix/core';
 
 export class DeleteActionFactoryExtension implements IActionFactoryExtension {
 

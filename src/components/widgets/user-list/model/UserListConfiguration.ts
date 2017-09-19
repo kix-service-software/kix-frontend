@@ -1,4 +1,4 @@
-import { UIProperty } from './../../../../model/client/UIProperty';
+import { UIProperty } from '@kix/core';
 
 export class UserListConfiguration {
 

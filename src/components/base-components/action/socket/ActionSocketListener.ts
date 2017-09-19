@@ -2,11 +2,12 @@ import {
     ActionFailedResponse,
     ActionCannotRunResponse,
     ActionFinishedResponse,
-    RunActionRequest
-} from './../../../../model/client/socket/action/';
-import { SocketListener } from '../../../../model/client/socket/SocketListener';
-import { ActionEvent } from './../../../../model/client/socket/action/';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
+    RunActionRequest,
+    ActionEvent,
+    SocketEvent
+} from '@kix/core';
+
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     ACTION_ERROR,
     ACTION_FINISHED
@@ -20,7 +21,6 @@ export class ActionSocketListener extends SocketListener {
 
     public constructor(store: any) {
         super();
-
         this.actionSocket = this.createSocket("action");
         this.store = store;
         this.initActionSocketListener();

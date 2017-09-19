@@ -1,6 +1,5 @@
-import { StateAction } from './../../../../model/client/store/StateAction';
+import { MainMenuEvent, StateAction } from '@kix/core';
 import { MainMenuAction } from './MainMenuAction';
-import { MainMenuEvent } from '../../../../model/client/socket/main-menu';
 
 export default (socket: SocketIO.Server) => {
     const payload = new Promise((resolve, reject) => {

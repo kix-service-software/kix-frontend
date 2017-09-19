@@ -1,14 +1,11 @@
-export * from './extensions';
-export {
-    IPluginService,
-    IMarkoService,
-    IAuthenticationService,
-    IConfigurationService,
-    IHttpService,
-    ILoggingService,
-    ISocketCommunicationService,
-    IUserService
-} from './services';
-export * from './model';
-export * from './decorators';
-export { KIXRouter } from './routes/KIXRouter';
+import { container } from './Container';
+import { Server } from './Server';
+
+process.setMaxListeners(0);
+
+export async function initApplication(): Promise<void> {
+    await container.initialize();
+    const server = container.getDIContainer().get<Server>("Server");
+}
+
+initApplication();

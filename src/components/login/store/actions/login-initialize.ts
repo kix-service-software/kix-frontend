@@ -1,8 +1,6 @@
 import { LoginSocketListener } from './../../socket/LoginSocketListener';
-import { StateAction } from '../../../../model/client/store/StateAction';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
+import { AuthenticationEvent, AuthenticationResult, SocketEvent, StateAction } from '@kix/core';
 import { LoginAction } from './LoginAction';
-import { AuthenticationEvent, AuthenticationResult } from '../../../../model/client/socket/login/';
 import LOGIN_ERROR from './login-error';
 
 export default () => {

@@ -1,12 +1,22 @@
-import { IPluginService } from './../../src/services/IPluginService';
 // tslint:disable
+import {
+    UserType,
+    HttpError,
+    AuthenticationEvent,
+    AuthenticationResult,
+    LoginRequest,
+    IAuthenticationService,
+    IConfigurationService,
+    ISocketCommunicationService,
+    IPluginService
+} from '@kix/core/';
 import { container } from "./../../src/Container";
 import { AuthenticationCommunicator } from './../../src/communicators/';
-import { IAuthenticationService, IConfigurationService, ISocketCommunicationService } from './../../src/services/';
+import { } from './../../src/services/';
 
-import { HttpError } from './../../src/model/http/HttpError';
-import { AuthenticationEvent, LoginRequest, AuthenticationResult } from './../../src/model/client/socket/login';
-import { UserType } from './../../src/model/client';
+import { } from './../../src/model/http/HttpError';
+import { } from './../../src/model/client/socket/login';
+import { } from './../../src/model/client';
 
 import express = require('express');
 

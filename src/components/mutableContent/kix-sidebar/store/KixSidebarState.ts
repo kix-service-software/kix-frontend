@@ -1,4 +1,4 @@
-import { KixSidebarConfiguration } from './../../../../model/client/components/';
+import { KixSidebarConfiguration } from '@kix/core';
 import { KixSidebarSocketListener } from './../socket/KixSidebarSocketListener';
 
 export class KixSidebarState {

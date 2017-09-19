@@ -1,13 +1,20 @@
-import {
-    ILoggingService, IConfigurationService, ISocketCommunicationService, IPluginService, IMarkoService
-} from './services/';
 import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
-import { IServerConfiguration } from './model/configuration/IServerConfiguration';
-import { Environment } from './model';
-import { KIXExtensions, IStaticContentExtension } from './extensions';
+
+import {
+    KIXExtensions,
+    IStaticContentExtension,
+    ILoggingService,
+    IConfigurationService,
+    ISocketCommunicationService,
+    IPluginService,
+    IMarkoServiceIServerConfiguration,
+    Environment,
+    IServerConfiguration,
+    IMarkoService
+} from '@kix/core';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files

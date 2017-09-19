@@ -1,6 +1,11 @@
-import { IMarkoDependencyExtension, KIXExtensions } from '../extensions/';
 import { inject, injectable } from 'inversify';
-import { IMarkoService, IPluginService, ILoggingService } from './';
+import {
+    IMarkoDependencyExtension,
+    KIXExtensions,
+    IMarkoService,
+    IPluginService,
+    ILoggingService
+} from '@kix/core';
 import jsonfile = require('jsonfile');
 
 @injectable()

@@ -1,12 +1,8 @@
 import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
 import { DeleteAction } from './../../actions/delete/DeleteAction';
-import { IAction } from './../../../model/client/components/action/IAction';
-import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
-import { UIProperty } from './../../../model/client/UIProperty';
+import { IWidgetFactoryExtension, IWidget, UIProperty, WidgetConfiguration, IAction } from '@kix/core';
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
 import { UserListWidget } from './UserListWidget';
-import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 

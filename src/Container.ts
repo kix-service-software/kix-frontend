@@ -1,21 +1,17 @@
 import 'reflect-metadata';
-import { Server } from './Server';
 import { Container } from 'inversify';
-import {
-    ICommunicator,
-    AuthenticationCommunicator
-} from './communicators/';
-import { IRouter } from './routes/IRouter';
-import {
-    KIXExtensions,
-    IRouterExtension,
-    ICommunicatorExtension
-} from './extensions';
+import { Server } from './Server';
+import { AuthenticationCommunicator } from './communicators/';
 import {
     ApplicationRouter,
     AuthenticationRouter
 } from './routes/';
 import {
+    ICommunicator,
+    IRouter,
+    KIXExtensions,
+    IRouterExtension,
+    ICommunicatorExtension,
     AuthenticationService,
     ConfigurationService,
     IConfigurationService,
@@ -32,7 +28,7 @@ import {
     IUserService,
     ISocketCommunicationService,
     SocketCommunicationService
-} from './services/';
+} from '@kix/core';
 
 export class ServiceContainer {
 

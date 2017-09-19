@@ -1,6 +1,4 @@
-import { IAction } from './../../../../model/client/components/action/IAction';
-import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
-import { IWidget } from './../../../../model/client/components/widget/IWidget';
+import { IWidget, WidgetConfiguration, IAction } from '@kix/core';
 
 export class WidgetComponentState {
 

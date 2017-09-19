@@ -1,5 +1,4 @@
-import { ContainerConfiguration } from './../../../../model/client/components/';
-import { StateAction } from '../../../../model/client/store/StateAction';
+import { StateAction, ContainerConfiguration } from '@kix/core';
 import { DashboardAction } from './';
 
 export default (containerConfiguration: ContainerConfiguration) => {

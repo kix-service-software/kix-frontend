@@ -1,5 +1,5 @@
 import { DashboardRouter } from './DashboardRouter';
-import { IRouterExtension } from './../../extensions/';
+import { IRouterExtension } from '@kix/core';
 
 export class DashboardRouterExtension implements IRouterExtension {
 

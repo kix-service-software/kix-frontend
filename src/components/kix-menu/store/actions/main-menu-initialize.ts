@@ -1,4 +1,4 @@
-import { StateAction } from './../../../../model/client/store/StateAction';
+import { StateAction } from '@kix/core';
 import { MainMenuSocketListener } from './../../socket/MainMenuSocketListener';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from './';
 import { MainMenuAction } from './MainMenuAction';

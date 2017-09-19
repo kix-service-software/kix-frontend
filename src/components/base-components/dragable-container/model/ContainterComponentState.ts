@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from './../../../../model/client/components/';
+import { ContainerConfiguration } from '@kix/core';
 import { DragAndDropState } from './DragAndDropState';
 
 export class ContainerComponentState {

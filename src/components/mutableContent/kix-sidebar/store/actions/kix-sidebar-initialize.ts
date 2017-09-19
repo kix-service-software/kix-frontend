@@ -1,5 +1,5 @@
 import { KixSidebarSocketListener } from '../../socket/KixSidebarSocketListener';
-import { StateAction } from '../../../../../model/client/store/StateAction';
+import { StateAction } from '@kix/core';
 import { KixSidebarAction } from './';
 
 export default (store: any) => {

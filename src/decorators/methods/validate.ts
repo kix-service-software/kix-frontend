@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { RequiredError } from "../../model";
+import { RequiredError } from "@kix/core";
 
 const requiredMetadataKey = "required";
 function validate(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>): any {

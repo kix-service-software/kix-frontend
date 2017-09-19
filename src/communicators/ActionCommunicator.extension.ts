@@ -1,5 +1,5 @@
 import { ActionCommunicator } from './ActionCommunicator';
-import { ICommunicatorExtension } from './../extensions/';
+import { ICommunicatorExtension } from '@kix/core';
 
 export class ActionCommunicatorExtension implements ICommunicatorExtension {
 

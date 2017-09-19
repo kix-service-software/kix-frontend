@@ -1,6 +1,5 @@
 import { DashboardSocketListener } from './../../socket/DashboardSocketListener';
-import { StateAction } from '../../../../model/client/store/StateAction';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
+import { StateAction, SocketEvent } from '@kix/core';
 import { DashboardAction } from './';
 
 declare var io: any;

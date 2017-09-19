@@ -1,5 +1,4 @@
-import { IModuleFactoryExtension } from './../../extensions/';
-import { KixSidebarConfiguration } from './../../model/client/components/';
+import { IModuleFactoryExtension, KixSidebarConfiguration } from '@kix/core';
 
 export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
 

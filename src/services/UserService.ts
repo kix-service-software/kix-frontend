@@ -3,16 +3,15 @@ import {
     CreateUserResponse,
     UpdateUserRequest,
     UpdateUserResponse,
-    UsersResponse
-} from './../model/';
-import { IUserService, IHttpService } from './';
-import { inject, injectable } from 'inversify';
-import {
+    UsersResponse,
     SortOrder,
     User,
     UserQuery,
-    UserResponse
-} from './../model/';
+    UserResponse,
+    IUserService,
+    IHttpService
+} from '@kix/core';
+import { inject, injectable } from 'inversify';
 
 @injectable()
 export class UserService implements IUserService {

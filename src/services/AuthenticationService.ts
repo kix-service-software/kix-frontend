@@ -1,14 +1,15 @@
-import { SocketAuthenticationError } from './../model/client/socket/SocketAuthenticationError';
 import { injectable, inject } from 'inversify';
 import {
     HttpError,
     LoginResponse,
     UserLogin,
     Session,
-    SessionResponse
-} from '../model';
-import { UserType } from '../model/client/';
-import { IAuthenticationService, IHttpService } from './';
+    SessionResponse,
+    UserType,
+    IAuthenticationService,
+    SocketAuthenticationError,
+    IHttpService
+} from '@kix/core';
 import { Request, Response } from 'express';
 
 @injectable()

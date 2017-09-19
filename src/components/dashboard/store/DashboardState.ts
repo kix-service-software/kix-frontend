@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from './../../../model/client/components/';
+import { ContainerConfiguration } from '@kix/core';
 import { DashboardSocketListener } from './../socket/DashboardSocketListener';
 
 export class DashboardState {

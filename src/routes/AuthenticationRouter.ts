@@ -1,9 +1,8 @@
 import { KIXRouter } from './KIXRouter';
-import { IRouter } from './IRouter';
-import { IServerConfiguration } from './../model/';
+import { IRouter, IServerConfiguration } from '@kix/core';
 import { Router, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { IAuthenticationService, IConfigurationService } from './../services/';
+import { IAuthenticationService, IConfigurationService } from '@kix/core';
 
 export class AuthenticationRouter extends KIXRouter {
 

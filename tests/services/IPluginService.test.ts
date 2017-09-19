@@ -1,8 +1,7 @@
 // tslint:disable
 import { container } from './../../src/Container';
 
-import { IPluginService } from './../../src/services/';
-import { IServerConfiguration, Environment } from './../../src/model/';
+import { IServerConfiguration, Environment, IPluginService } from '@kix/core/';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
