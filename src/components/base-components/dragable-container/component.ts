@@ -37,7 +37,7 @@ class DragableContainerComponent {
 
         this.state.dndState = {
             ...this.state.dndState,
-            dropElementId: event.target.id
+            dropElementId: event.target.dataset.id
         };
     }
 
@@ -55,9 +55,9 @@ class DragableContainerComponent {
     }
 
     private isValidDnDEvent(event): boolean {
-        return (event.target.id !== "") &&
-            (event.target.id.startsWith('overlay-')) &&
-            (event.target.id !== 'overlay-' + event.dataTransfer.getData("dragId"));
+        return (event.target.dataset.hasOwnProperty('id')) &&
+            (event.target.dataset.id !== "") &&
+            (event.target.dataset.id.startsWith('drag-'));
     }
 }
 
