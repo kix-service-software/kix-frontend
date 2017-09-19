@@ -1,11 +1,9 @@
 <div#kix-sidebars>
     <div.sidebar-select-container>
         <div#content-settings-select.sidebar-select>
-            <!-- TODO: replace dummy if icon is specified and remove * -->
             <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
         </div>
         <div#information-select.sidebar-select>
-            <!-- TODO: replace dummy if icon is specified and remove i -->
             <span.kix-icon.icon-dummy.icon-i/>
         </div>
         <if(state.configuration)>
@@ -16,7 +14,6 @@
                         class="${state.configuration.sidebars[loop.getIndex()].show ? 'select-active' : ''}"
                         on-click('toggleSidebar', loop.getIndex())>
                         <span.kix-icon class="${ sidebar.icon ? 'icon-' + sidebar.icon : ''} icon-${sidebar.title.substring(0,1).toLowerCase()}">
-                            <!-- TODO: remove if icon is specified in sidebar (not dummy anymore) -->
                         </span>
                     </div>
                 </for>
