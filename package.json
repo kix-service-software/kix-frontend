@@ -38,6 +38,7 @@
   "devDependencies": {
     "@types/chai": "4.0.4",
     "@types/chai-as-promised": "0.0.31",
+    "@types/d3": "4.10.0",
     "@types/mocha": "2.2.42",
     "@types/node": "8.0.26",
     "@types/request-promise": "4.1.37",
