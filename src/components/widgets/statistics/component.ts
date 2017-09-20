@@ -3,7 +3,7 @@ class StatisticsWidgetComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        let chartType = 'pie';
+        let chartType = 'bar';
         if (input.configuration && input.configuration.chartType) {
             chartType = input.configuration.chartType;
         }

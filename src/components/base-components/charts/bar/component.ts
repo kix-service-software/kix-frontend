@@ -1,7 +1,7 @@
-import { PieChart } from './../../../../model/client/charts/';
+import { BarChart } from './../../../../model/client/charts/';
 declare var d3: any;
 
-class PieChartComponent {
+class BarChartComponent {
 
     public state: any;
 
@@ -19,8 +19,8 @@ class PieChartComponent {
         }
     }
     public onMount(): void {
-        PieChart.createChart(this.state.id, this.state.chartData);
+        BarChart.createChart(this.state.id, this.state.chartData);
     }
 }
 
-module.exports = PieChartComponent;
+module.exports = BarChartComponent;

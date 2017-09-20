@@ -10,13 +10,6 @@ export class PieChartWithD3 implements IChart {
         const radius = width / 2;
         const color = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
 
-        const values = [];
-        const labels = [];
-        for (const dataEl of data.data) {
-            labels.push(dataEl.label);
-            values.push(dataEl.value);
-        }
-
         const arc = d3.arc()
             .innerRadius(0)
             .outerRadius(radius - 10);
@@ -27,8 +20,8 @@ export class PieChartWithD3 implements IChart {
 
         const pie = d3.pie()
             .sort(null)
-            .value((d: any) => {
-                return d;
+            .value((d) => {
+                return d.value;
             });
 
         const svg = d3.select('#' + element)
@@ -40,28 +33,25 @@ export class PieChartWithD3 implements IChart {
 
 
         const arcs = svg.selectAll(".arc")
-            .data(pie(values))
+            .data(pie(data.data))
             .enter().append("g")
             .attr("class", "arc");
 
         arcs.append("path")
             .attr("d", arc)
-            .style("fill", (d: any) => {
-                return color(d.data);
+            .style("fill", (d, i) => {
+                return color(i);
             });
 
         arcs.append("text")
-            .attr("transform", (d: any) => {
+            .attr("transform", (d) => {
                 return "translate(" + labelArc.centroid(d) + ")";
             })
             .attr("dy", ".35em")
-            .text((d: any) => {
-                return d.data;
+            .text((d) => {
+                console.log(d);
+                return d.data.label;
             });
-        // .text(function (d, i) { return data[i].label; });
-
-        // return svg;
-
     }
 }
 
