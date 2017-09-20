@@ -3,9 +3,13 @@ class StatisticsWidgetComponent {
     public state: any;
 
     public onCreate(input: any): void {
+        let chartType = 'pie';
+        if (input.configuration && input.configuration.chartType) {
+            chartType = input.configuration.chartType;
+        }
         this.state = {
-            type: input.type || 'pie',
-            id: '#chart' + Math.floor((Math.random() * 10) + 1),
+            chartType,
+            chartId: 'chart' + Math.floor((Math.random() * 100000) + 1),
             chartData: {
                 width: 300,
                 heigth: 300,
@@ -17,6 +21,14 @@ class StatisticsWidgetComponent {
                 ]
             }
         };
+    }
+
+    public contentDataLoaded(contentData: any): void {
+        // this.state.contentData = contentData;
+    }
+
+    public onUpdateContentConfigurationHandler(handler: any): void {
+        // this.updateContentConfigurationHandler = handler;
     }
 
 }

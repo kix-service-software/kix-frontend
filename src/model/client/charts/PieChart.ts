@@ -1,10 +1,9 @@
 import { IChart } from './IChart';
-declare var d3: any;
-// import * as d3 from 'd3';
+declare var d3;
 
-export class PieChartD3 implements IChart {
+export class PieChartWithD3 implements IChart {
 
-    public createChart(element: string, data: any): any {
+    public createChart(element: string, data: any): void {
 
         const width = data.width || 300;
         const height = data.height || 300;
@@ -32,7 +31,7 @@ export class PieChartD3 implements IChart {
                 return d;
             });
 
-        const svg = d3.select(element)
+        const svg = d3.select('#' + element)
             .append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -61,12 +60,12 @@ export class PieChartD3 implements IChart {
             });
         // .text(function (d, i) { return data[i].label; });
 
-        return svg;
+        // return svg;
 
     }
 }
 
-const PieChart = new PieChartD3();
+const PieChart = new PieChartWithD3();
 
 export {
     PieChart
