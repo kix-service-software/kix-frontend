@@ -4,7 +4,8 @@ import {
     LoadConfigurationRequest,
     LoadConfigurationResult,
     SaveConfigurationRequest,
-    SocketEvent
+    SocketEvent,
+    User
 } from '@kix/core';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {

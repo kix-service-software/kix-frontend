@@ -10,4 +10,6 @@ export class SidebarComponentState {
 
     public sidebar: ISidebar = null;
 
+    public template: any = null;
+
 }

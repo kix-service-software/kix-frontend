@@ -11,6 +11,12 @@ export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension
         return "statistics-widget";
     }
 
+    public getTemplate(): string {
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/widgets/statistics';
+    }
+
     public getDefaultConfiguration(): any {
         return {};
     }

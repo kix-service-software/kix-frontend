@@ -11,6 +11,12 @@ export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
         return "notes-sidebar";
     }
 
+    public getTemplate(): string {
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/sidebars/notes/';
+    }
+
     public getDefaultConfiguration(): any {
         return {};
     }

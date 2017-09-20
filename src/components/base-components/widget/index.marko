@@ -16,11 +16,12 @@
         </span>
     </div>
     <div.widget-content>
-        $ let template = require('../../' + data.widget.template);
-        <include(template, {
-            configuration: state.contentConfiguration
-        }) on-contentDataLoaded('contentDataLoaded')
-            on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
+        <if(state.template)>
+            <include(state.template, {
+                    configuration: state.contentConfiguration
+                }) on-contentDataLoaded('contentDataLoaded')
+                on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
+        </if>
     </div>
     <div>
         <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration

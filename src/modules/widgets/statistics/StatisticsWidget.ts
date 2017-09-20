@@ -4,7 +4,7 @@ export class StatisticWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/statistics";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/statistics/configuration";
 

@@ -5,12 +5,17 @@ class ActionOverlayComponent {
     public onCreate(input: any): void {
         this.state = {
             showOverlay: false,
-            action: input.action
+            action: input.action,
+            template: null
         };
     }
 
     public onInput(input: any): void {
         this.state.showOverlay = input.showOverlay;
+    }
+
+    public onMount(): void {
+        this.state.template = require(this.state.action.template);
     }
 
     public runClicked(): void {

@@ -5,7 +5,7 @@ export class UserListWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/user-list";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/user-list/configuration";
 

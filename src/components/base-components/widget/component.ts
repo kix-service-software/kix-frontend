@@ -24,6 +24,8 @@ class WidgetComponent {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.store));
+
+        this.state.template = require(this.state.widget.template);
     }
 
     public stateChanged(): void {

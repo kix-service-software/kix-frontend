@@ -12,8 +12,8 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
                 {
                     id: "notes-sidebar",
                     title: "Notes",
-                    template: "sidebars/notes",
-                    configurationTemplate: "sidebars/notes/configuration",
+                    template: "/@kix/frontend$0.0.15/dist/components/sidebars/notes",
+                    configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/notes/configuration",
                     show: true,
                     icon: "dummy",
                     isExternal: false
@@ -21,16 +21,16 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
                 {
                     id: "notes-sidebar",
                     title: "Notes 2",
-                    template: "sidebars/notes",
-                    configurationTemplate: "sidebars/notes/configuration",
+                    template: "/@kix/frontend$0.0.15/dist/components/sidebars/notes",
+                    configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/notes/configuration",
                     icon: "dummy",
                     isExternal: false
                 },
                 {
                     id: "ticket-info-sidebar",
                     title: "Ticket Informationen",
-                    template: "sidebars/ticket-info",
-                    configurationTemplate: "sidebars/ticket-info/configuration",
+                    template: "/@kix/frontend$0.0.15/dist/components/sidebars/ticket-info",
+                    configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/ticket-info/configuration",
                     show: true,
                     icon: "dummy",
                     isExternal: false

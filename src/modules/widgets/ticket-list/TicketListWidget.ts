@@ -4,7 +4,7 @@ export class TicketListWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/ticket-list";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/ticket-list/configuration";
 

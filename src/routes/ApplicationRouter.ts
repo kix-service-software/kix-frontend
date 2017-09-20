@@ -11,10 +11,6 @@ import { Request, Response, Router } from 'express';
 
 export class ApplicationRouter extends KIXRouter {
 
-    public getContextId(): string {
-        return "application";
-    }
-
     public getBaseRoute(): string {
         return "/";
     }

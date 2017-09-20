@@ -14,4 +14,8 @@ export class WidgetComponentState {
 
     public contentData: any = null;
 
+    public templatePath: string = null;
+
+    public template: any = null;
+
 }

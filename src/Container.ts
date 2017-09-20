@@ -71,8 +71,8 @@ export class ServiceContainer {
     }
 
     private async bindRouters(): Promise<void> {
-        this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
+        this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
 
         const pluginService = this.container.get<IPluginService>("IPluginService");
         const routerExtensions = await pluginService.getExtensions<IRouterExtension>(KIXExtensions.ROUTER);
