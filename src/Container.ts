@@ -25,14 +25,16 @@ import {
     ISocketCommunicationService
 } from '@kix/core';
 
-import { LoggingService } from './services/LoggingService';
-import { ConfigurationService } from './services/ConfigurationService';
-import { PluginService } from './services/PluginService';
-import { SocketCommunicationService } from './services/SocketCommuncationService';
-import { MarkoService } from './services/MarkoService';
-import { AuthenticationService } from './services/AuthenticationService';
-import { HttpService } from './services/HttpService';
-import { UserService } from './services/UserService';
+import {
+    UserService,
+    HttpService,
+    AuthenticationService,
+    MarkoService,
+    LoggingService,
+    SocketCommunicationService,
+    PluginService,
+    ConfigurationService
+} from './services/';
 
 export class ServiceContainer {
 
