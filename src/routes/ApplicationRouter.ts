@@ -16,7 +16,7 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
-        const moduleId = this.configurationService.getServerConfiguration().DEFAULT_ROUTE;
+        const moduleId = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
         await this.handleModuleRequest(moduleId, res);
     }
 
@@ -29,6 +29,12 @@ export class ApplicationRouter extends KIXRouter {
         }
 
         await this.handleModuleRequest(moduleId, res);
+    }
+
+
+    public getRoot(req: Request, res: Response): void {
+        const defaultRoute = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
+        res.redirect(defaultRoute);
     }
 
     protected initialize(): void {
