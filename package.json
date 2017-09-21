@@ -1,6 +1,6 @@
 {
   "name": "@kix/frontend",
-  "version": "0.0.8",
+  "version": "0.0.15",
   "description": "KIXng Frontend Webapplication.",
   "scripts": {
     "start": "node dist/index.js",
@@ -13,6 +13,8 @@
   },
   "author": "c.a.p.e. IT GmbH",
   "dependencies": {
+    "@kix/core": "^1.0.38",
+    "@kix/ticket-dashboard": "^1.0.20",
     "body-parser": "1.18.1",
     "compression": "1.7.0",
     "cookie-parser": "^1.4.3",

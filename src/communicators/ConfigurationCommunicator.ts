@@ -1,12 +1,12 @@
-import { } from './../model/client/socket/configuration/SaveConfigurationRequest';
 import { KIXCommunicator } from './KIXCommunicator';
-import { SocketEvent } from './../model/client/socket/SocketEvent';
 import {
     ConfigurationEvent,
     LoadConfigurationRequest,
     LoadConfigurationResult,
-    SaveConfigurationRequest
-} from './../model/client/socket/configuration';
+    SaveConfigurationRequest,
+    SocketEvent,
+    User
+} from '@kix/core';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {
 

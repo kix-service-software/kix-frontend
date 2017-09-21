@@ -1,5 +1,5 @@
 import { container } from '../../Container';
-import { ILoggingService } from '../../services/';
+import { ILoggingService } from '@kix/core';
 
 function log(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>): any {
     const orgMethod = descriptor.value;

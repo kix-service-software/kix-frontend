@@ -1,4 +1,4 @@
-import { IAction } from './../../../model/client/components/';
+import { IAction } from '@kix/core';
 
 export class AssignTourAction implements IAction {
 
@@ -8,7 +8,7 @@ export class AssignTourAction implements IAction {
 
     public icon: string;
 
-    public template: string = 'actions/assign-tour';
+    public template: string = null;
 
     public useOverlay: boolean = true;
 
@@ -16,6 +16,10 @@ export class AssignTourAction implements IAction {
         this.id = id;
         this.name = name;
         this.icon = icon;
+
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        this.template = '/@kix/frontend$' + version + '/dist/components/actions/assign-tour';
     }
 
     public canRun(input: any): boolean {

@@ -1,11 +1,11 @@
 import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
-import { IWidget } from './../../../model/client/components/widget/IWidget';
+import { IWidget } from '@kix/core';
 
 export class UserListWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/user-list";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/user-list/configuration";
 

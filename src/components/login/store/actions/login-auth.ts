@@ -1,7 +1,6 @@
-import { StateAction } from '../../../../model/client/store/StateAction';
+import { StateAction, UserType } from '@kix/core/dist/model/client';
 import { LoginAction } from './LoginAction';
 import { LoginState } from '../index';
-import { UserType } from '../../../../model/client/';
 
 export default (userName: string, password: string) => {
     const payload = new Promise((resolve, reject) => {

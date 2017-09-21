@@ -1,10 +1,14 @@
-import { ActionFailedResponse } from './../model/client/socket/action/ActionFailedResponse';
-import { ActionCannotRunResponse } from './../model/client/socket/action/ActionCannotRunResponse';
-import { IActionFactoryExtension } from './../extensions/ui/IActionFactoryExtension';
-import { SocketEvent } from './../model/client/socket/SocketEvent';
-import { IMainMenuExtension, KIXExtensions } from './../extensions/';
-import { ActionEvent, RunActionRequest } from './../model/client/socket/action';
 import { KIXCommunicator } from './KIXCommunicator';
+import {
+    RunActionRequest,
+    KIXExtensions,
+    ActionEvent,
+    IMainMenuExtension,
+    SocketEvent,
+    IActionFactoryExtension,
+    ActionCannotRunResponse,
+    ActionFailedResponse
+} from '@kix/core';
 
 export class ActionCommunicator extends KIXCommunicator {
 

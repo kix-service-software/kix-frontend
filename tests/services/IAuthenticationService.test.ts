@@ -1,12 +1,11 @@
 /* tslint:disable no-var-requires no-unused-expression */
 import {
-    HttpService,
     IAuthenticationService,
     IHttpService,
-    IConfigurationService
-} from './../../src/services/';
-import { HttpError } from './../../src/model/';
-import { UserType } from './../../src/model/client/';
+    IConfigurationService,
+    HttpError,
+    UserType
+} from '@kix/core/';
 import { Request, Response } from 'express';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

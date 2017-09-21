@@ -1,8 +1,12 @@
-import { ContainerRow } from './../../model/client/components/draggable-container/ContainerRow';
-import { ContainerConfiguration } from './../../model/client/components/';
-import { IModuleFactoryExtension } from './../../extensions/';
+import { ContainerRow, ContainerConfiguration, IModuleFactoryExtension } from '@kix/core';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
+
+    public getTemplate(): string {
+        const packageJson = require('../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/dashboard/';
+    }
 
     public getModuleId(): string {
         return "dashboard";
@@ -16,22 +20,22 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         firstRow.widgets.push({
             id: "statistics-widget",
             title: "Neue Tickets",
-            template: "widgets/statistics",
-            configurationTemplate: "widgets/statistics/configuration",
+            template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
+            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
             isExternal: false
         });
         firstRow.widgets.push({
             id: "statistics-widget",
             title: "Prioritäten",
-            template: "widgets/statistics",
-            configurationTemplate: "widgets/statistics/configuration",
+            template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
+            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
             isExternal: false
         });
         firstRow.widgets.push({
             id: "search-templates-widget",
             title: "Suchvorlagen",
-            template: "widgets/search-templates",
-            configurationTemplate: "widgets/search-templates/configuration",
+            template: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates",
+            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates/configuration",
             isExternal: false
         });
 
@@ -39,8 +43,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         secondRow.widgets.push({
             id: "ticket-list-widget",
             title: "Suchvorlage: ToDos",
-            template: "widgets/ticket-list",
-            configurationTemplate: "widgets/ticket-list/configuration",
+            template: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list",
+            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list/configuration",
             isExternal: false
         });
 
@@ -48,8 +52,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         thirdRow.widgets.push({
             id: "user-list-widget",
             title: "Agenten",
-            template: "widgets/user-list",
-            configurationTemplate: "widgets/user-list/configuration",
+            template: "/@kix/frontend$0.0.15/dist/components/widgets/user-list",
+            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/user-list/configuration",
             isExternal: false
         });
 

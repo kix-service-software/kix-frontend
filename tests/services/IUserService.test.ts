@@ -1,4 +1,4 @@
-import { HttpError } from './../../src/model/http/HttpError';
+/* tslint:disable no-var-requires no-unused-expression max-line-length */
 import {
     User,
     SortOrder,
@@ -9,11 +9,12 @@ import {
     UserLogin,
     UserServiceError,
     UpdateUserRequest,
-    UpdateUserResponse
-} from './../../src/model/';
-/* tslint:disable no-var-requires no-unused-expression max-line-length */
+    UpdateUserResponse,
+    HttpError,
+    IConfigurationService,
+    IUserService
+} from '@kix/core/';
 import { container } from './../../src/Container';
-import { IConfigurationService, IUserService } from './../../src/services/';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
 

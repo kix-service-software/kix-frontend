@@ -6,13 +6,18 @@ class ConfigurationOverlayComponent {
         this.state = {
             showOverlay: false,
             widget: input.widget,
-            configuration: null
+            configuration: null,
+            template: null
         };
     }
 
     public onInput(input: any): void {
         this.state.showOverlay = input.showOverlay;
         this.state.configuration = input.configuration;
+    }
+
+    public onMount(): void {
+        this.state.template = require(this.state.widget.configurationTemplate);
     }
 
     public saveClicked(): void {

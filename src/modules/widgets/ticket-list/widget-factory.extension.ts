@@ -1,6 +1,5 @@
 import { TicketListWidget } from './TicketListWidget';
-import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/';
+import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -10,6 +9,12 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public getWidgetId(): string {
         return "ticket-list-widget";
+    }
+
+    public getTemplate(): string {
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/widgets/ticket-list';
     }
 
     public getDefaultConfiguration(): any {

@@ -1,16 +1,8 @@
 export { SocketCommunicationService } from './SocketCommuncationService';
-export { ISocketCommunicationService } from './ISocketCommunicationService';
 export { UserService } from './UserService';
-export { IUserService } from './IUserService';
 export { AuthenticationService } from './AuthenticationService';
 export { ConfigurationService } from './ConfigurationService';
 export { HttpService } from './HttpService';
-export { IAuthenticationService } from './IAuthenticationService';
-export { IConfigurationService } from './IConfigurationService';
-export { IHttpService } from './IHttpService';
-export { IMarkoService } from './IMarkoService';
-export { IPluginService } from './IPluginService';
-export { ILoggingService } from './ILoggingService';
 export { MarkoService } from './MarkoService';
 export { PluginService } from './PluginService';
 export { LoggingService } from './LoggingService';

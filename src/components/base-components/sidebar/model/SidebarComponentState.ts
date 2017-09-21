@@ -1,4 +1,4 @@
-import { ISidebar } from './../../../../model/client/components/';
+import { ISidebar } from '@kix/core/dist/model/client';
 
 export class SidebarComponentState {
 
@@ -9,5 +9,7 @@ export class SidebarComponentState {
     public configuration: any = null;
 
     public sidebar: ISidebar = null;
+
+    public template: any = null;
 
 }

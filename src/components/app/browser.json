@@ -1,6 +1,6 @@
 {
     "dependencies": [
-        "require ../../model/client",
+        "require @kix/core/dist/model/client",
         "require ../login",
         "require ../kix-base-template"
     ]

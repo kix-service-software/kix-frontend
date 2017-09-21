@@ -20,6 +20,8 @@ class SidebarComponent {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(SIDEBAR_INITIALIZE(this.state.sidebar.id, this.store));
+
+        this.state.template = require(this.state.sidebar.template);
     }
 
     public stateChanged(): void {

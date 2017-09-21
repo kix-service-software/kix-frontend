@@ -1,4 +1,4 @@
-import { WidgetConfiguration } from './../../../model/client/components/widget/WidgetConfiguration';
+import { WidgetConfiguration } from '@kix/core/dist/model/client';
 import { WidgetComponentState } from './model/WidgetComponentState';
 import { WidgetState } from './store/WidgetState';
 import { WIDGET_INITIALIZE } from './store/actions';
@@ -24,6 +24,8 @@ class WidgetComponent {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.store));
+
+        this.state.template = require(this.state.widget.template);
     }
 
     public stateChanged(): void {

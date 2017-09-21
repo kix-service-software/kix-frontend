@@ -1,15 +1,17 @@
-import { IServerConfiguration } from './../model/';
 import {
     AuthenticationResult,
     LoginRequest,
-    AuthenticationEvent
-} from './../model/client/socket/login';
-import { UserType } from './../model/client/';
-import { SocketEvent } from './../model/client/socket/SocketEvent';
+    AuthenticationEvent,
+    IAuthenticationService,
+    IConfigurationService,
+    ILoggingService,
+    UserType,
+    SocketEvent,
+    IServerConfiguration,
+    HttpError
+} from '@kix/core';
 
-import { HttpError } from './../model/http/HttpError';
 import { injectable, inject } from 'inversify';
-import { IAuthenticationService, IConfigurationService, ILoggingService } from './../services/';
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class AuthenticationCommunicator extends KIXCommunicator {

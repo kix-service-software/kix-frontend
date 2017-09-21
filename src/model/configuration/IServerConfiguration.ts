@@ -1,4 +1,4 @@
-import { LogLevel } from '../logging/LogLevel';
+import { LogLevel } from '@kix/core';
 
 export interface IServerConfiguration {
 

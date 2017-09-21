@@ -1,4 +1,4 @@
-import { StateAction } from '../../../../../model/client/store/StateAction';
+import { StateAction } from '@kix/core/dist/model/client';
 import { WidgetSocketListener } from '../../socket/WidgetSocketListener';
 import { WidgetAction } from './';
 

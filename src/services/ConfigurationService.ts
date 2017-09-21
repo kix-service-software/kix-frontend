@@ -1,6 +1,9 @@
-import { ILoggingService } from './ILoggingService';
-import { Environment, IServerConfiguration } from './../model/';
-import { IConfigurationService } from './IConfigurationService';
+import {
+    Environment,
+    IServerConfiguration,
+    IConfigurationService,
+    ILoggingService
+} from '@kix/core';
 import { injectable, inject } from 'inversify';
 
 import jsonfile = require('jsonfile');

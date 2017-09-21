@@ -1,5 +1,4 @@
-import { IWidget } from './../../../model/client/components/widget/IWidget';
-import { IWidgetFactoryExtension } from './../../../extensions/';
+import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 import { StatisticWidget } from './StatisticsWidget';
 
 export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension {
@@ -10,6 +9,12 @@ export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public getWidgetId(): string {
         return "statistics-widget";
+    }
+
+    public getTemplate(): string {
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/widgets/statistics';
     }
 
     public getDefaultConfiguration(): any {

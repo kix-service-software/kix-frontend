@@ -1,7 +1,6 @@
 /* tslint:disable no-var-requires no-unused-expression */
 import { container } from './../../src/Container';
-import { HttpError } from './../../src/model/http/HttpError';
-import { HttpService, IHttpService, IConfigurationService } from './../../src/services/';
+import { HttpError, IHttpService, IConfigurationService } from '@kix/core/';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
 

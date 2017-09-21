@@ -1,4 +1,4 @@
-import { KixSidebarConfiguration } from './../../../../model/client/components/';
+import { KixSidebarConfiguration } from '@kix/core/dist/model/client';
 export class KixSidebarComponentState {
 
     public configuration: KixSidebarConfiguration = null;

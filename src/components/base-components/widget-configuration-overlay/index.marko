@@ -3,11 +3,12 @@
     <div.configuration-container>
         <h1>Konfiguration: ${data.widget.title}</h1>
         <div.configuration-content>
-            $ let template = require('../../' + data.widget.configurationTemplate);
-            <include(template, {
-                widget: data.widget,
-                configuration: data.configuration
-            })/>
+            <if(state.template)>
+                <include(state.template, {
+                    widget: data.widget,
+                    configuration: data.configuration
+                })/>
+            </if>
         </div>
         <div.button-bar>
             <button.configuration-button on-click('saveClicked')>Speichern</button>

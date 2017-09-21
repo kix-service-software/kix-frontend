@@ -1,5 +1,5 @@
 import { AuthenticationCommunicator } from './AuthenticationCommunicator';
-import { ICommunicatorExtension } from './../extensions/';
+import { ICommunicatorExtension } from '@kix/core';
 
 export class AuthenticationCommunicatorExtension implements ICommunicatorExtension {
 

@@ -1,8 +1,7 @@
 // tslint:disable
 import { container } from './../../src/Container';
 
-import { IConfigurationService, ISocketCommunicationService } from './../../src/services/';
-import { IServerConfiguration, Environment } from './../../src/model/';
+import { IServerConfiguration, Environment, IConfigurationService, ISocketCommunicationService } from '@kix/core/';
 
 import https = require('https');
 import express = require('express');

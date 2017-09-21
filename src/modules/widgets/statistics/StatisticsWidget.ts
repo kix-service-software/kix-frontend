@@ -1,10 +1,10 @@
-import { IWidget } from './../../../model/client/components/widget/IWidget';
+import { IWidget } from '@kix/core';
 
 export class StatisticWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/statistics";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/statistics/configuration";
 
