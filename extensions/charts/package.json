@@ -1,0 +1,10 @@
+{
+    "name": "chart-extensions",
+    "extensions": {
+        "kix:marko:dependencies": {
+            "pie-chart-marko": "../../dist/modules/charts/pie/marko-dependencies.extension",
+            "bar-chart-marko": "../../dist/modules/charts/bar/marko-dependencies.extension",
+            "stacked-bar-chart-marko": "../../dist/modules/charts/stacked-bar/marko-dependencies.extension"
+        }
+    }
+}

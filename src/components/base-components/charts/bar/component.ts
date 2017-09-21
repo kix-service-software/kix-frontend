@@ -1,4 +1,5 @@
 import { BarChart } from './../../../../model/client/charts/';
+
 declare var d3: any;
 
 class BarChartComponent {
@@ -7,19 +8,22 @@ class BarChartComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            id: 'default',
+            id: 'bar-chart-' + Date.now(),
             chartData: {}
         };
     }
 
     public onInput(input: any): void {
         if (input && input.chartData) {
-            this.state.id = input.chartId || this.state.id;
+            this.state.id = input.chartData.id || this.state.id;
             this.state.chartData = input.chartData;
         }
     }
     public onMount(): void {
-        BarChart.createChart(this.state.id, this.state.chartData);
+        if (this.state.chartData) {
+            BarChart.createChart(this.state.id, this.state.chartData);
+        }
+        // (this as any).emit('contentDataLoaded', this.state);
     }
 }
 

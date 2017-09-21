@@ -2,8 +2,6 @@
     "dependencies": [
         "require ../../model/client",
         "require ../login",
-        "require ../kix-base-template",
-        "require ../base-components/charts/pie",
-        "require ../base-components/charts/bar"
+        "require ../kix-base-template"
     ]
 }

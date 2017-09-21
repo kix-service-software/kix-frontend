@@ -1,14 +1,14 @@
-import { PieChart } from './../../../../model/client/charts/';
+import { StackedBarChart } from './../../../../model/client/charts/';
 
 declare var d3: any;
 
-class PieChartComponent {
+class StackedBarChartComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
         this.state = {
-            id: 'pie-chart-' + Date.now(),
+            id: 'stacked-bar-chart-' + Date.now(),
             chartData: {}
         };
     }
@@ -20,9 +20,11 @@ class PieChartComponent {
         }
     }
     public onMount(): void {
-        PieChart.createChart(this.state.id, this.state.chartData);
+        if (this.state.chartData) {
+            StackedBarChart.createChart(this.state.id, this.state.chartData);
+        }
         // (this as any).emit('contentDataLoaded', this.state);
     }
 }
 
-module.exports = PieChartComponent;
+module.exports = StackedBarChartComponent;

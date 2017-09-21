@@ -17,5 +17,4 @@ export enum KIXExtensions {
     MODUL = "kix:module",
 
     ACTION = "kix:action"
-
 }
