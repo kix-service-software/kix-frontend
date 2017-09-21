@@ -12,7 +12,7 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public getRoot(req: Request, res: Response): void {
-        const defaultRoute = this.configurationService.getServerConfiguration().DEFAULT_ROUTE;
+        const defaultRoute = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
         res.redirect(defaultRoute);
     }
 

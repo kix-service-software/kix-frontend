@@ -18,5 +18,5 @@ export interface IServerConfiguration {
 
     LOG_TRACE: boolean;
 
-    DEFAULT_ROUTE: string;
+    DEFAULT_MODULE_ID: string;
 }
