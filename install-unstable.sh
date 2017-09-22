@@ -1,1 +1,1 @@
-npm install && npm install @kix/core@unstable
+npm install @kix/core@unstable

@@ -24,10 +24,13 @@ export class SidebarSocketListener extends SocketListener {
 
     private sidebarId: string;
 
-    public constructor(sidebarId: string, store: any) {
+    private instanceId: string;
+
+    public constructor(sidebarId: string, instanceId: string, store: any) {
         super();
         this.contextId = ClientStorageHandler.getContextId();
         this.sidebarId = sidebarId;
+        this.instanceId = instanceId;
 
         this.configurationSocket = this.createSocket("configuration");
 
@@ -37,7 +40,8 @@ export class SidebarSocketListener extends SocketListener {
 
     public saveConfiguration(configuration: any): void {
         const saveRequest = new SaveConfigurationRequest
-            (configuration, ClientStorageHandler.getToken(), ClientStorageHandler.getContextId(), this.sidebarId, true);
+            (configuration, ClientStorageHandler.getToken(),
+            ClientStorageHandler.getContextId(), this.sidebarId, this.instanceId, true);
 
         this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, saveRequest);
     }
@@ -47,7 +51,8 @@ export class SidebarSocketListener extends SocketListener {
             this.store.dispatch(SIDEBAR_ERROR(null));
             const token = ClientStorageHandler.getToken();
 
-            const loadRequest = new LoadConfigurationRequest(token, this.contextId, this.sidebarId, true);
+            const loadRequest = new LoadConfigurationRequest(
+                token, this.contextId, this.sidebarId, this.instanceId, true);
 
             this.configurationSocket.emit(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION, loadRequest);
         });

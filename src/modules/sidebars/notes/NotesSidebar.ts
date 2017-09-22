@@ -3,6 +3,7 @@ import { ISidebar } from '@kix/core';
 export class NotesSidebar implements ISidebar {
 
     public id: string;
+    public instanceId: string = Date.now().toString();
     public template: string = "sidebars/notes";
     public configurationTemplate: string = "sidebars/notes/configuration";
     public title: string = "Notes (Notizen)";

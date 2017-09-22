@@ -19,6 +19,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         firstRow.widgets.push({
             id: "statistics-widget",
+            instanceId: "20170920072542",
             title: "Neue Tickets",
             template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
             configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
@@ -26,6 +27,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         });
         firstRow.widgets.push({
             id: "statistics-widget",
+            instanceId: "20170920084512",
             title: "Prioritäten",
             template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
             configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
@@ -33,6 +35,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         });
         firstRow.widgets.push({
             id: "search-templates-widget",
+            instanceId: "20170920113214",
             title: "Suchvorlagen",
             template: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates",
             configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates/configuration",
@@ -42,6 +45,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const secondRow = new ContainerRow();
         secondRow.widgets.push({
             id: "ticket-list-widget",
+            instanceId: "20170920101621",
             title: "Suchvorlage: ToDos",
             template: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list",
             configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list/configuration",
@@ -51,6 +55,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const thirdRow = new ContainerRow();
         thirdRow.widgets.push({
             id: "user-list-widget",
+            instanceId: "20170920093015",
             title: "Agenten",
             template: "/@kix/frontend$0.0.15/dist/components/widgets/user-list",
             configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/user-list/configuration",
