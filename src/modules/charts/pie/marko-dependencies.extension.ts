@@ -1,4 +1,4 @@
-import { IMarkoDependencyExtension } from './../../../extensions/';
+import { IMarkoDependencyExtension } from '@kix/core';
 
 export class PieChartMarkoDependencyExtension implements IMarkoDependencyExtension {
 
