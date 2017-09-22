@@ -6,6 +6,10 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
         return "kix-sidebar";
     }
 
+    public getTemplate(): string {
+        return "";
+    }
+
     public getDefaultConfiguration(): any {
         const kixSidebarDefaultConfiguration: KixSidebarConfiguration = {
             sidebars: [

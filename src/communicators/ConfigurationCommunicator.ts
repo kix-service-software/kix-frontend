@@ -68,7 +68,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             const user = await this.userService.getUserByToken(data.token);
 
             let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+                .getComponentConfiguration(data.contextId, data.componentId, data.instanceId, user.UserID);
 
             if (!configuration) {
                 const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
