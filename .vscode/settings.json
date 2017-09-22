@@ -6,13 +6,18 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "node_modules": false,
+        "node_modules": true,
         ".cache": true,
         "dist": true
     },
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
-    "todohighlight.exclude": "{**/node_modules/**,**/dist/**,**/.vscode/**,**/.history/**}",
+    "todohighlight.exclude": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/.vscode/**",
+        "**/.history/**"
+    ],
     "local-history.daysLimit": 30,
     "less.lint.important": "warning",
     "marko.beautify.indent": "    ",
