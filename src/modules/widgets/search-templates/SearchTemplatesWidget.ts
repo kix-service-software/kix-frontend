@@ -4,6 +4,8 @@ export class SearchTemplatesWidget implements IWidget {
 
     public id: string;
 
+    public instanceId: string = Date.now().toString();
+
     public template: string = null;
 
     public configurationTemplate: string = "widgets/search-templates/configuration";

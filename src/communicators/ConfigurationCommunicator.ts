@@ -25,14 +25,14 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             const user = await this.userService.getUserByToken(data.token);
 
             let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+                .getComponentConfiguration(data.contextId, data.componentId, data.instanceId, user.UserID);
 
             if (!configuration) {
                 const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
                 const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, user.UserID, widgetDefaultConfiguration);
+                    data.contextId, data.componentId, data.instanceId, user.UserID, widgetDefaultConfiguration);
 
                 configuration = widgetDefaultConfiguration;
             }
@@ -49,14 +49,14 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             }
 
             let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, userId);
+                .getComponentConfiguration(data.contextId, data.componentId, data.instanceId, userId);
 
             if (!configuration) {
                 const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
                 const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, userId, moduleDefaultConfiguration);
+                    data.contextId, data.componentId, data.instanceId, userId, moduleDefaultConfiguration);
 
                 configuration = moduleDefaultConfiguration;
             }
@@ -75,7 +75,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
                 const kixSidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, user.UserID, kixSidebarDefaultConfiguration);
+                    data.contextId, data.componentId, data.instanceId, user.UserID, kixSidebarDefaultConfiguration);
 
                 configuration = kixSidebarDefaultConfiguration;
             }
@@ -98,7 +98,9 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             }
 
             await this.configurationService
-                .saveComponentConfiguration(data.contextId, data.componentId, userId, data.configuration);
+                .saveComponentConfiguration(data.contextId, data.componentId,
+                data.instanceId, userId, data.configuration
+                );
 
             client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
         });
