@@ -12,6 +12,8 @@ export class StackedBarChartWithD3 implements IChart {
         const height = (chartData.height || 300) - margin.top - margin.bottom;
         const defaultColor = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
 
+        const data = this.prepareData(chartData.data);
+
         const y = d3.scale.ordinal()
             .rangeRoundBands([0, height], .3);
 
@@ -26,10 +28,9 @@ export class StackedBarChartWithD3 implements IChart {
             .scale(y)
             .orient("left");
 
-        const svg = d3.select("#figure").append("svg")
+        const svg = d3.select("#" + elementId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .attr("id", "d3-plot")
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -63,11 +64,9 @@ export class StackedBarChartWithD3 implements IChart {
         }));
 
         svg.append("g")
-            .attr("class", "x axis")
             .call(xAxis);
 
         svg.append("g")
-            .attr("class", "y axis")
             .call(yAxis);
 
         const vakken = svg.selectAll(".question")
@@ -166,6 +165,11 @@ export class StackedBarChartWithD3 implements IChart {
         const movesize = width / 2 - startp.node().getBBox().width / 2;
         d3.selectAll(".legendbox").attr("transform", "translate(" + movesize + ",0)");
 
+    }
+
+    private prepareData(data: any): any {
+        const preparedData = {};
+        return preparedData;
     }
 }
 
