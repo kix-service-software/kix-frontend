@@ -1,10 +1,12 @@
-import { SaveConfigurationRequest } from './../../../../model/client/socket/configuration/SaveConfigurationRequest';
-import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { LoadConfigurationResult } from './../../../../model/client/socket/configuration/LoadConfigurationResult';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
-import { ClientStorageHandler } from '../../../../model/client/ClientStorageHandler';
-import { SocketListener } from '../../../../model/client/socket/SocketListener';
+import {
+    ClientStorageHandler,
+    ConfigurationEvent,
+    SocketEvent,
+    LoadConfigurationResult,
+    LoadConfigurationRequest,
+    SaveConfigurationRequest
+} from '@kix/core/dist/model/client';
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     SIDEBAR_CONFIGURATION_LOADED,
     SIDEBAR_ERROR

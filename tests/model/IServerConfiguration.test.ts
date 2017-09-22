@@ -1,6 +1,5 @@
 import { container } from './../../src/Container';
-import { IConfigurationService } from './../../src/services/';
-import { IServerConfiguration } from './../../src/model/';
+import { IServerConfiguration, IConfigurationService } from '@kix/core/';
 import * as chai from 'chai';
 
 const expect = chai.expect;
@@ -48,9 +47,9 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.empty;
     });
 
-    it('Should contain DEFAULT_ROUTE as type of string', () => {
-        expect(serverConfiguration.DEFAULT_ROUTE).to.not.be.undefined;
-        expect(serverConfiguration.DEFAULT_ROUTE).to.be.an('string');
-        expect(serverConfiguration.DEFAULT_ROUTE).to.not.be.empty;
+    it('Should contain DEFAULT_MODULE_ID as type of string', () => {
+        expect(serverConfiguration.DEFAULT_MODULE_ID).to.not.be.undefined;
+        expect(serverConfiguration.DEFAULT_MODULE_ID).to.be.an('string');
+        expect(serverConfiguration.DEFAULT_MODULE_ID).to.not.be.empty;
     });
 });

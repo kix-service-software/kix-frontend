@@ -3,11 +3,12 @@
     <div.action-container>
         <h1>Aktion: ${data.action.name}</h1>
         <div.action-content>
-            $ let template = require('../../' + data.action.template);
-            <include(template, {
-                action: data.action,
-                contentData: data.contentData
-            })/>
+            <if(state.template)>
+                <include(state.template, {
+                    action: data.action,
+                    contentData: data.contentData
+                })/>
+            </if>
         </div>
         <div.button-bar>
             <button.action-button on-click('runClicked')>Ausführen</button>

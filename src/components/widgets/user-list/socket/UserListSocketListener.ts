@@ -1,8 +1,11 @@
-import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
-import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { ClientStorageHandler } from '../../../../model/client/ClientStorageHandler';
-import { SocketListener } from '../../../../model/client/socket/SocketListener';
+import {
+    ClientStorageHandler,
+    SocketEvent,
+    LoadUsersResult,
+    UsersEvent,
+    LoadUsersRequest
+} from '@kix/core/dist/model/client';
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import {
     USER_LIST_USERS_LOADED,
     USER_LIST_ERROR

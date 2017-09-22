@@ -1,6 +1,5 @@
 import { UserListConfiguration } from './model/UserListConfiguration';
-import { LoadUsersRequest } from './../../../model/client/socket/users/LoadUsersRequest';
-import { ClientStorageHandler } from '../../../model/client/ClientStorageHandler';
+import { ClientStorageHandler, LoadUsersRequest } from '@kix/core/dist/model/client';
 import { UserListComponentState } from './model/UserListComponentState';
 import { UserListState } from './store/UserListState';
 import { USER_LIST_INITIALIZE } from './store/actions';

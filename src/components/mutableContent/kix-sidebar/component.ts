@@ -1,4 +1,4 @@
-import { KixSidebarConfiguration } from './../../../model/client/components/';
+import { KixSidebarConfiguration } from '@kix/core/dist/model/client';
 import { KixSidebarComponentState } from './model/KixSidebarComponentState';
 import { KixSidebarState } from './store/';
 import { KIX_SIDEBAR_INITIALIZE } from './store/actions';

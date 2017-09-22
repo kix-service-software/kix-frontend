@@ -1,6 +1,4 @@
-import { IAction } from './../../../../model/client/components/action/IAction';
-import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
-import { IWidget } from './../../../../model/client/components/widget/IWidget';
+import { IWidget, WidgetConfiguration, IAction } from '@kix/core/dist/model/client';
 
 export class WidgetComponentState {
 
@@ -15,5 +13,9 @@ export class WidgetComponentState {
     public widget: IWidget = null;
 
     public contentData: any = null;
+
+    public templatePath: string = null;
+
+    public template: any = null;
 
 }

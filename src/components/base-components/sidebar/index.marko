@@ -7,10 +7,11 @@
     </span>
 </div>
 <div.sidebar-content>
-    $ let template = require('../../' + data.sidebar.template);
-    <include(template, {
-        configuration: state.configuration
-    })/>
+    <if(state.template)>
+        <include(state.template, {
+            configuration: state.configuration
+        })/>
+    </if>
 </div>
 <!--
 <sidebar-configuration-overlay sidebar=data.sidebar showOverlay=state.showConfiguration configuration=state.configuration

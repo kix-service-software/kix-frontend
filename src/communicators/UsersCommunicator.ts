@@ -1,9 +1,13 @@
-import { UIProperty } from './../model/client/';
-import { UserType } from './../model/client/';
-import { SocketEvent } from './../model/client/socket/SocketEvent';
 import { injectable, inject } from 'inversify';
 import { KIXCommunicator } from './KIXCommunicator';
-import { UsersEvent, LoadUsersRequest, LoadUsersResult } from '../model/client/socket/users';
+import {
+    UserType,
+    SocketEvent,
+    UIProperty,
+    UsersEvent,
+    LoadUsersRequest,
+    LoadUsersResult
+} from '@kix/core';
 
 export class UsersCommunicator extends KIXCommunicator {
 

@@ -1,6 +1,5 @@
 import { NotesSidebar } from './NotesSidebar';
-import { ISidebar } from './../../../model/client/components/';
-import { ISidebarFactoryExtension } from './../../../extensions/';
+import { ISidebarFactoryExtension, ISidebar } from '@kix/core';
 
 export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
 
@@ -10,6 +9,12 @@ export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
 
     public getSidebarId(): string {
         return "notes-sidebar";
+    }
+
+    public getTemplate(): string {
+        const packageJson = require('../../../../package.json');
+        const version = packageJson.version;
+        return '/@kix/frontend$' + version + '/dist/components/sidebars/notes/';
     }
 
     public getDefaultConfiguration(): any {

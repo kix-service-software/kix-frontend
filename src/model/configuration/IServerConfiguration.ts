@@ -1,4 +1,4 @@
-import { LogLevel } from '../logging/LogLevel';
+import { LogLevel } from '@kix/core';
 
 export interface IServerConfiguration {
 
@@ -18,5 +18,5 @@ export interface IServerConfiguration {
 
     LOG_TRACE: boolean;
 
-    DEFAULT_ROUTE: string;
+    DEFAULT_MODULE_ID: string;
 }

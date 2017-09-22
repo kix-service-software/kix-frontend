@@ -1,10 +1,10 @@
-import { IWidget } from './../../../model/client/components/widget/IWidget';
+import { IWidget } from '@kix/core';
 
 export class SearchTemplatesWidget implements IWidget {
 
     public id: string;
 
-    public template: string = "widgets/search-templates";
+    public template: string = null;
 
     public configurationTemplate: string = "widgets/search-templates/configuration";
 

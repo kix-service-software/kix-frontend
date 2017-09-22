@@ -1,4 +1,4 @@
-import { ISidebar } from './../../../model/client/components/';
+import { ISidebar } from '@kix/core';
 
 export class NotesSidebar implements ISidebar {
 

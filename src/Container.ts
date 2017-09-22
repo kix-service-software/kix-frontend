@@ -1,37 +1,39 @@
 import 'reflect-metadata';
-import { Server } from './Server';
 import { Container } from 'inversify';
-import {
-    ICommunicator,
-    AuthenticationCommunicator
-} from './communicators/';
-import { IRouter } from './routes/IRouter';
-import {
-    KIXExtensions,
-    IRouterExtension,
-    ICommunicatorExtension
-} from './extensions';
+import { Server } from './Server';
+
+import { AuthenticationCommunicator } from './communicators/';
+
 import {
     ApplicationRouter,
     AuthenticationRouter
 } from './routes/';
+
 import {
-    AuthenticationService,
-    ConfigurationService,
+    ICommunicator,
+    IRouter,
+    KIXExtensions,
+    IRouterExtension,
+    ICommunicatorExtension,
     IConfigurationService,
-    HttpService,
     IAuthenticationService,
     IHttpService,
     IMarkoService,
     IPluginService,
-    MarkoService,
-    PluginService,
     ILoggingService,
-    LoggingService,
-    UserService,
     IUserService,
-    ISocketCommunicationService,
-    SocketCommunicationService
+    ISocketCommunicationService
+} from '@kix/core';
+
+import {
+    UserService,
+    HttpService,
+    AuthenticationService,
+    MarkoService,
+    LoggingService,
+    SocketCommunicationService,
+    PluginService,
+    ConfigurationService
 } from './services/';
 
 export class ServiceContainer {
@@ -71,8 +73,8 @@ export class ServiceContainer {
     }
 
     private async bindRouters(): Promise<void> {
-        this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
         this.container.bind<IRouter>("IRouter").to(AuthenticationRouter);
+        this.container.bind<IRouter>("IRouter").to(ApplicationRouter);
 
         const pluginService = this.container.get<IPluginService>("IPluginService");
         const routerExtensions = await pluginService.getExtensions<IRouterExtension>(KIXExtensions.ROUTER);

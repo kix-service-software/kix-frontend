@@ -1,5 +1,5 @@
 import { UsersCommunicator } from './UsersCommunicator';
-import { ICommunicatorExtension } from './../extensions/';
+import { ICommunicatorExtension } from '@kix/core';
 
 export class UsersCommunicatorExtension implements ICommunicatorExtension {
 

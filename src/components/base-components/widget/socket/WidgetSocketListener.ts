@@ -1,13 +1,14 @@
-import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
-import { SaveConfigurationRequest } from './../../../../model/client/socket/configuration/SaveConfigurationRequest';
-import { LoadUsersRequest } from './../../../../model/client/socket/users/LoadUsersRequest';
-import { LoadConfigurationRequest } from './../../../../model/client/socket/configuration/LoadConfigurationRequest';
-import { LoadConfigurationResult } from './../../../../model/client/socket/configuration/LoadConfigurationResult';
-import { LoadUsersResult, UsersEvent } from './../../../../model/client/socket/users/';
-import { SocketEvent } from '../../../../model/client/socket/SocketEvent';
-import { ConfigurationEvent } from '../../../../model/client/socket/configuration';
-import { ClientStorageHandler } from '../../../../model/client/ClientStorageHandler';
-import { SocketListener } from '../../../../model/client/socket/SocketListener';
+import {
+    LoadConfigurationResult,
+    WidgetConfiguration,
+    SaveConfigurationRequest,
+    LoadConfigurationRequest,
+    ClientStorageHandler,
+    ConfigurationEvent,
+    SocketEvent
+} from '@kix/core/dist/model/client';
+import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+
 import {
     WIDGET_CONFIGURATION_LOADED,
     WIDGET_ERROR

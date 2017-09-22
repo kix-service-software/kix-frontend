@@ -1,4 +1,7 @@
-$ let template = require('../../' + data.template);
-<include(template, {
+<div>
+    <if(state.template)>
+        <include(state.template, {
     configurationMode: data.configurationMode
     })/>
+    </if>
+</div>

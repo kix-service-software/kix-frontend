@@ -1,7 +1,9 @@
-import { WidgetConfiguration } from './../../../../../model/client/components/widget/WidgetConfiguration';
-import { LoadUsersResult } from './../../../../../model/client/socket/users/LoadUsersResult';
-import { StateAction } from '../../../../../model/client/store/StateAction';
-import { UsersEvent } from '../../../../../model/client/socket/users/';
+import {
+    UsersEvent,
+    StateAction,
+    LoadUsersResult,
+    WidgetConfiguration
+} from '@kix/core/dist/model/client';
 import { WidgetAction } from './WidgetAction';
 
 export default (configuration: WidgetConfiguration) => {

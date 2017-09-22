@@ -1,4 +1,4 @@
-import { IMainMenuExtension } from './../../extensions';
+import { IMainMenuExtension } from '@kix/core';
 
 export class DashboardMainMenuExtension implements IMainMenuExtension {
 

@@ -1,9 +1,16 @@
-import { WidgetState } from './../components/base-components/widget/store/WidgetState';
-import { IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions } from './../extensions/';
-import { IPluginService, IConfigurationService } from './';
 import { injectable, inject } from 'inversify';
-import { IServerConfiguration } from './../model/configuration/IServerConfiguration';
 import Plugins = require('js-plugins');
+
+import { WidgetState } from './../components/base-components/widget/store/WidgetState';
+import {
+    IPluginService,
+    IServerConfiguration,
+    IConfigurationService,
+    IWidgetFactoryExtension,
+    IModuleFactoryExtension,
+    KIXExtensions
+} from '@kix/core';
+
 const host = {
     debug: true
 };

@@ -1,4 +1,4 @@
-import { WidgetConfiguration } from './../../../../model/client/components/widget/WidgetConfiguration';
+import { WidgetConfiguration } from '@kix/core/dist/model/client';
 import { WidgetSocketListener } from './../socket/WidgetSocketListener';
 
 export class WidgetState {

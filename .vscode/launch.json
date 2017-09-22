@@ -45,7 +45,8 @@
             "sourceMaps": true,
             "stopOnEntry": false,
             "cwd": "${workspaceRoot}",
-            "protocol": "inspector"
+            "protocol": "inspector",
+            "console": "integratedTerminal"
         }
     ]
 }

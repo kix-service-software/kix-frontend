@@ -1,5 +1,4 @@
-import { SocketEvent } from '../../model/client/socket/SocketEvent';
-import { ClientStorageHandler } from '../../model/client/ClientStorageHandler';
+import { ClientStorageHandler, SocketEvent } from '@kix/core/dist/model/client';
 
 declare var io;
 

@@ -1,8 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { validate, required } from '../decorators';
 import { container } from '../Container';
-import { IConfigurationService, ILoggingService } from './';
-import { LogLevel, IServerConfiguration } from '../model';
+import { LogLevel, IServerConfiguration, IConfigurationService, ILoggingService } from '@kix/core';
 import winston = require('winston');
 import path = require('path');
 import fs = require('fs');
