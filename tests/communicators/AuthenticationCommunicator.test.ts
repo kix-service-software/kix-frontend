@@ -1,4 +1,6 @@
 // tslint:disable
+import { container } from "./../../src/Container";
+
 import {
     UserType,
     HttpError,
@@ -10,7 +12,7 @@ import {
     ISocketCommunicationService,
     IPluginService
 } from '@kix/core/';
-import { container } from "./../../src/Container";
+
 import { AuthenticationCommunicator } from './../../src/communicators/';
 import { } from './../../src/services/';
 
