@@ -4,167 +4,192 @@ declare const d3;
 
 export class StackedBarChartWithD3 implements IChart {
 
-    // TODO: not functionable
+
     public createChart(elementId: string, chartData: any): void {
+        this.createChart2(elementId, chartData);
+    }
 
-        const margin = { top: 50, right: 20, bottom: 10, left: 65 };
-        const width = (chartData.width || 300) - margin.left - margin.right;
-        const height = (chartData.height || 300) - margin.top - margin.bottom;
-        const defaultColor = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
+    public createChart1(elementId: string, chartData: any): void {
+        const data = [
+            { month: 'Jan', A: 20, B: 5, C: 10 },
+            { month: 'Feb', A: 30, B: 10, C: 20 }
+        ];
 
-        const data = this.prepareData(chartData.data);
+        const xData = ["A", "B", "C"];
 
-        const y = d3.scale.ordinal()
-            .rangeRoundBands([0, height], .3);
+        const margin = { top: 20, right: 50, bottom: 30, left: 50 };
+        const width = 400 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
 
-        const x = d3.scale.linear()
+        const x = d3.scaleBand()
             .rangeRound([0, width]);
 
-        const xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("top");
+        const y = d3.scaleLinear()
+            .rangeRound([height, 0]);
 
-        const yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+        const defaultColor = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
 
-        const svg = d3.select("#" + elementId).append("svg")
+        const svg = d3.select('#' + elementId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        defaultColor.domain(["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]);
-
-        chartData.data.forEach((d) => {
-            // calc percentages
-            d["Strongly disagree"] = +d[1] * 100 / d.N;
-            d["Disagree"] = +d[2] * 100 / d.N;
-            d["Neither agree nor disagree"] = +d[3] * 100 / d.N;
-            d["Agree"] = +d[4] * 100 / d.N;
-            d["Strongly agree"] = +d[5] * 100 / d.N;
-            let x0 = -1 * (d["Neither agree nor disagree"] / 2 + d["Disagree"] + d["Strongly disagree"]);
-            let idx = 0;
-            d.boxes = defaultColor.domain().map((name) => {
-                return { name, x0, x1: x0 += +d[name], N: +d.N, n: +d[idx += 1] };
+        const dataIntermediate = xData.map((c) => {
+            return data.map((d) => {
+                return { x: d.month, y: d[c] };
             });
         });
+        const dataStackLayout = [
+            [
+                { x: 'Jan', y0: 0, y: 20 },
+                { x: 'Feb', y0: 0, y: 25 }
+            ],
+            [
+                { x: 'Jan', y0: 20, y: 5 },
+                { x: 'Feb', y0: 25, y: 10 }
+            ]
+            ,
+            [
+                { x: 'Jan', y0: 25, y: 10 },
+                { x: 'Feb', y0: 35, y: 20 }
+            ]
+        ];
+        // const dataStackLayout = d3.layout.stack()(dataIntermediate);
 
-        const min_val = d3.min(chartData.data, (d) => {
-            return d.boxes["0"].x0;
-        });
-
-        const max_val = d3.max(chartData.data, (d) => {
-            return d.boxes["4"].x1;
-        });
-
-        x.domain([min_val, max_val]).nice();
-        y.domain(chartData.data.map((d) => {
-            return d.Question;
+        x.domain(dataStackLayout[0].map((d) => {
+            return d.x;
         }));
 
-        svg.append("g")
-            .call(xAxis);
+        y.domain([0, d3.max(dataStackLayout[dataStackLayout.length - 1], (d) => {
+            return d.y0 + d.y;
+        })])
+            .nice();
 
-        svg.append("g")
-            .call(yAxis);
-
-        const vakken = svg.selectAll(".question")
-            .data(chartData.data)
+        const layer = svg.selectAll(".stack")
+            .data(dataStackLayout)
             .enter().append("g")
-            .attr("class", "bar")
-            .attr("transform", (d) => {
-                return "translate(0," + y(d.Question) + ")";
+            .attr("class", "stack")
+            .style("fill", (d, i) => {
+                return defaultColor(i);
             });
 
-        const bars = vakken.selectAll("rect")
+        layer.selectAll("rect")
             .data((d) => {
-                return d.boxes;
+                return d;
             })
-            .enter().append("g").attr("class", "subbar");
-
-        bars.append("rect")
-            .attr("height", y.rangeBand())
+            .enter().append("rect")
             .attr("x", (d) => {
-                return x(d.x0);
+                return x(d.x);
             })
-            .attr("width", (d) => {
-                return x(d.x1) - x(d.x0);
+            .attr("y", (d) => {
+                return y(d.y + d.y0);
             })
-            .style("fill", (d) => {
-                return defaultColor(d.name);
-            });
-
-        bars.append("text")
-            .attr("x", (d) => {
-                return x(d.x0);
+            .attr("height", (d) => {
+                return y(d.y0) - y(d.y + d.y0);
             })
-            .attr("y", y.rangeBand() / 2)
-            .attr("dy", "0.5em")
-            .attr("dx", "0.5em")
-            .style("font", "10px sans-serif")
-            .style("text-anchor", "begin")
-            .text((d) => {
-                return d.n !== 0 && (d.x1 - d.x0) > 3 ? d.n : "";
-            });
-
-        vakken.insert("rect", ":first-child")
-            .attr("height", y.rangeBand())
-            .attr("x", "1")
-            .attr("width", width)
-            .attr("fill-opacity", "0.5")
-            .style("fill", "#F5F5F5")
-            .attr("class", (d, i) => {
-                return i % 2 === 0 ? "even" : "uneven";
-            });
+            .attr("width", x.bandwidth());
 
         svg.append("g")
-            .attr("class", "y axis")
-            .append("line")
-            .attr("x1", x(0))
-            .attr("x2", x(0))
-            .attr("y2", height);
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+    }
 
-        const startp = svg.append("g").attr("class", "legendbox").attr("id", "mylegendbox");
-        // this is not nice, we should calculate the bounding box and use that
-        const legend_tabs = [0, 120, 200, 375, 450];
-        const legend = startp.selectAll(".legend")
-            .data(defaultColor.domain().slice())
+    // TODO: not functionable
+    public createChart2(elementId: string, chartData: any): void {
+
+        const margin = { top: 20, right: 60, bottom: 30, left: 40 };
+        const width = (chartData.width || 300) - margin.left - margin.right;
+        const height = (chartData.height || 300) - margin.top - margin.bottom;
+        const defaultColor = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
+
+        const svg = d3.select("#" + elementId).append('svg')
+            .attr('height', (chartData.heigth || 300))
+            .attr('width', (chartData.width || 300));
+        const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        const x = d3.scaleBand()
+            .rangeRound([0, width])
+            .padding(0.1)
+            .align(0.1);
+
+        const y = d3.scaleLinear()
+            .rangeRound([height, 0]);
+
+        const color = defaultColor;
+
+        const stack = d3.stack()
+            .offset(d3.stackOffsetExpand);
+
+        const columns = ['label', 'hoch', 'mittel', 'gering'];
+        const data = [
+            { label: 'Allgemein', hoch: 15, mittel: 65, niedrig: 20, total: 100 },
+            { label: 'Beobachten', hoch: 25, mittel: 45, niedrig: 30, total: 100 },
+            { label: 'Verantwortlich', hoch: 15, mittel: 30, niedrig: 55, total: 40 }
+        ];
+        data.sort((a, b) => {
+            return b[columns[1]] / b.total - a[columns[1]] / a.total;
+        });
+
+        x.domain(data.map((d) => {
+            return d.label;
+        }));
+        color.domain(columns.slice(1));
+
+        const serie = g.selectAll(".serie")
+            .data(stack.keys(columns.slice(1))(data))
             .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", (d, i) => {
-                return "translate(" + legend_tabs[i] + ",-45)";
+            .attr("class", "serie")
+            .attr("fill", (d) => {
+                return color(d.key);
             });
 
-        legend.append("rect")
-            .attr("x", 0)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", defaultColor);
+        serie.selectAll("rect")
+            .data((d) => {
+                return d;
+            })
+            .enter().append("rect")
+            .attr("x", (d) => {
+                return x(d.data.label);
+            })
+            .attr("y", (d) => {
+                return y(d[1]);
+            })
+            .attr("height", (d) => {
+                return y(d[0]) - y(d[1]);
+            })
+            .attr("width", x.bandwidth());
+
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y).ticks(10, "%"));
+
+        const legend = serie.append("g")
+            .attr("class", "legend")
+            .attr("transform", (d) => {
+                d = d[d.length - 1];
+                return "translate(" + (x(d.data.State) + x.bandwidth()) + "," + ((y(d[0]) + y(d[1])) / 2) + ")";
+            });
+
+        legend.append("line")
+            .attr("x1", -6)
+            .attr("x2", 6)
+            .attr("stroke", "#000");
 
         legend.append("text")
-            .attr("x", 22)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "begin")
+            .attr("x", 9)
+            .attr("dy", "0.35em")
+            .attr("fill", "#000")
             .style("font", "10px sans-serif")
             .text((d) => {
-                return d;
+                return d.key;
             });
-
-        d3.selectAll(".axis path")
-            .style("fill", "none")
-            .style("stroke", "#000")
-            .style("shape-rendering", "crispEdges");
-
-        d3.selectAll(".axis line")
-            .style("fill", "none")
-            .style("stroke", "#000")
-            .style("shape-rendering", "crispEdges");
-
-        const movesize = width / 2 - startp.node().getBBox().width / 2;
-        d3.selectAll(".legendbox").attr("transform", "translate(" + movesize + ",0)");
-
     }
 
     private prepareData(data: any): any {

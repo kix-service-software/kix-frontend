@@ -1,7 +1,7 @@
 class StatisticsWidgetComponent {
     public state: any;
     public onCreate(input: any): void {
-        let chartType = 'bar';
+        let chartType = 'stacked-bar';
         if (input.configuration && input.configuration.chartType) {
             chartType = input.configuration.chartType;
         }
