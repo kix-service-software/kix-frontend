@@ -218,6 +218,44 @@ describe('Ticket Type Service', () => {
         });
     });
 
+    describe('Update Ticket Type', () => {
+        describe('Create a valid request to update an existing ticket type.', () => {
+
+            before(() => {
+                nockScope
+                    .patch(resourcePath + '/123456',
+                    new UpdateTicketTypeRequest('ticket-type', 1))
+                    .reply(200, buildUpdateUserResponse(123456));
+            });
+
+            it('should return the id of the ticket type.', async () => {
+                const userId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1);
+                expect(userId).equal(123456);
+            });
+
+        });
+
+        describe('Create a invalid request to update an existing ticket type.', () => {
+            before(() => {
+                nockScope
+                    .patch(resourcePath + '/123456',
+                    new UpdateTicketTypeRequest('ticket-type', 1))
+                    .reply(400, {});
+            });
+
+            it('should return a the id of the ticket type.', async () => {
+                const userId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1)
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+    });
+
 });
 
 function buildTicketTypeResponse(id: number): TicketTypeResponse {

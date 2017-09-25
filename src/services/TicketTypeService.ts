@@ -69,8 +69,12 @@ export class TicketTypeService implements ITicketTypeService {
         return response.TypeID;
     }
 
-    public updateTicketType(token: string, ticketTypeId: number, name: string, validId: any): Promise<number> {
-        throw new Error("Method not implemented.");
+    public async updateTicketType(token: string, ticketTypeId: number, name: string, validId: any): Promise<number> {
+        const response = await this.httpService.patch<UpdateTicketTypeResponse>(
+            this.TICKETTYPES_RESOURCE_URI + '/' + ticketTypeId, new UpdateTicketTypeRequest(name, validId)
+        );
+
+        return response.TypeID;
     }
 
     public deleteTicketType(token: string, ticketTypeId: number): Promise<void> {
