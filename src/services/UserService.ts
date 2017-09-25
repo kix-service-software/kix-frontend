@@ -6,7 +6,7 @@ import {
     UsersResponse,
     SortOrder,
     User,
-    UserQuery,
+    Query,
     UserResponse,
     IUserService,
     IHttpService
@@ -32,15 +32,15 @@ export class UserService implements IUserService {
         }
 
         if (limit) {
-            query[UserQuery.LIMIT] = limit;
+            query[Query.LIMIT] = limit;
         }
 
         if (order) {
-            query[UserQuery.ORDER] = order;
+            query[Query.ORDER] = order;
         }
 
         if (changedAfter) {
-            query[UserQuery.CHANGED_AFTER] = changedAfter;
+            query[Query.CHANGED_AFTER] = changedAfter;
         }
 
         const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, query, token);

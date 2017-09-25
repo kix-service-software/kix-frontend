@@ -1,3 +1,4 @@
+export { TicketTypeService } from './TicketTypeService';
 export { SocketCommunicationService } from './SocketCommuncationService';
 export { UserService } from './UserService';
 export { AuthenticationService } from './AuthenticationService';
