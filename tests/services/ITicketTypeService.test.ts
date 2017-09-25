@@ -243,7 +243,7 @@ describe('Ticket Type Service', () => {
                     .reply(400, {});
             });
 
-            it('should return a the id of the ticket type.', async () => {
+            it('should throw a error.', async () => {
                 const userId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1)
                     .then((result) => {
                         expect(true).false;
@@ -254,6 +254,48 @@ describe('Ticket Type Service', () => {
             });
 
         });
+    });
+
+    describe('Delete Ticket Type', () => {
+
+        describe('Create a valid request to delete a ticket type', () => {
+
+            before(() => {
+                nockScope
+                    .delete(resourcePath + '/123456')
+                    .reply(200, {});
+            });
+
+            it('Should resolve without any error', async () => {
+                await ticketTypeService.deleteTicketType('', 123456).then(() => {
+                    expect(true).true;
+                }).catch((error) => {
+                    expect(true).false;
+                })
+            });
+
+        });
+
+        describe('Create a invalid reqeust to delete a ticket type.', () => {
+
+            before(() => {
+                nockScope
+                    .delete(resourcePath + '/123456')
+                    .reply(400, {});
+            });
+
+            it('should throw a error.', async () => {
+                const userId = await ticketTypeService.deleteTicketType('', 123456)
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+
     });
 
 });

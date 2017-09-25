@@ -77,8 +77,8 @@ export class TicketTypeService implements ITicketTypeService {
         return response.TypeID;
     }
 
-    public deleteTicketType(token: string, ticketTypeId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async deleteTicketType(token: string, ticketTypeId: number): Promise<void> {
+        await this.httpService.delete(this.TICKETTYPES_RESOURCE_URI + '/' + ticketTypeId);
     }
 
 }
