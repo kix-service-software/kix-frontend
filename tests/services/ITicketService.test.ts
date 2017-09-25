@@ -15,7 +15,9 @@ import {
     UpdateTicketRequest,
     UpdateTicketResponse,
     Article,
-    CreateArticleRequest
+    CreateArticleRequest,
+    CreateArticleAttachmentRequest,
+    CreateAttachment
 } from '@kix/core';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -237,6 +239,59 @@ describe('Ticket Service', () => {
 
                 expect(response).not.undefined;
                 expect(response).equal(1234);
+            });
+        });
+
+        describe('Create a valid request to recieve attachments from article', () => {
+            before(() => {
+                nockScope
+                    .get(resourcePath + '/12345/articles/1234/attachments')
+                    .reply(200, {
+                        Attachment: [{ AttachmentID: 0 }, { AttachmentID: 0 }, { AttachmentID: 0 }]
+                    });
+            });
+
+            it('should return a list with attachments', async () => {
+                const response = await ticketService.getArticleAttachments('', 12345, 1234);
+
+                expect(response).not.undefined;
+                expect(response).an('array');
+                expect(response).not.empty;
+            });
+        });
+
+        describe('Create a valid request to recieve a specific attachment from article', () => {
+            before(() => {
+                nockScope
+                    .get(resourcePath + '/12345/articles/1234/attachments/9876')
+                    .reply(200, {
+                        Attachment: { AttachmentID: 9876 }
+                    });
+            });
+
+            it('should return a list with attachments', async () => {
+                const response = await ticketService.getArticleAttachment('', 12345, 1234, 9876);
+
+                expect(response).not.undefined;
+                expect(response.AttachmentID).equals(9876);
+            });
+        });
+
+        describe('Create a attachment on article', () => {
+            before(() => {
+                nockScope.post(
+                    resourcePath + '/12345/articles/1234/attachments',
+                    new CreateArticleAttachmentRequest(new CreateAttachment('', '', ''))
+                ).reply(200, {
+                    AttachmentID: 9876
+                });
+            });
+
+            it('should return the id of the new attachment', async () => {
+                const response = await ticketService.createArticleAttachment('', 12345, 1234, '', '', '');
+
+                expect(response).not.undefined;
+                expect(response).equals(9876);
             });
         });
 

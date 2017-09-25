@@ -1,3 +1,5 @@
+import { Response } from 'express';
+import { HttpService } from './HttpService';
 import { IHttpService } from '@kix/core/';
 import { injectable, inject } from 'inversify';
 import {
@@ -17,7 +19,12 @@ import {
     UpdateTicketRequest,
     UpdateTicketResponse,
     ArticlesResponse,
-    ArticleResponse
+    ArticleResponse,
+    ArticleAttachmentResponse,
+    ArticleAttachmentsResponse,
+    CreateArticleAttachmentRequest,
+    CreateArticleAttachementResponse,
+    CreateAttachment
 } from '@kix/core';
 
 @injectable()
@@ -93,20 +100,41 @@ export class TicketService implements ITicketService {
         return response.Article;
     }
 
-    public getArticleAttachments(token: string, ticketId: number, articleId: number): Promise<Attachment[]> {
-        throw new Error("Method not implemented.");
+    public async getArticleAttachments(token: string, ticketId: number, articleId: number): Promise<Attachment[]> {
+        const response = await this.httpService.get<ArticleAttachmentsResponse>(
+            this.TICKETS_RESOURCE_URI + '/' + ticketId + '/articles/' + articleId + '/attachments', null, token
+        );
+
+        return response.Attachment;
     }
 
-    public getArticleAttachment(
+    public async getArticleAttachment(
         token: string, ticketId: number, articleId: number, attachmentId: number
     ): Promise<Attachment> {
-        throw new Error("Method not implemented.");
+        const uri =
+            this.TICKETS_RESOURCE_URI + '/' + ticketId +
+            '/articles/' + articleId +
+            '/attachments/' + attachmentId;
+
+        const response = await this.httpService.get<ArticleAttachmentResponse>(uri, null, token);
+
+        return response.Attachment;
     }
 
-    public createArticleAttachment(
+    public async createArticleAttachment(
         token: string, ticketId: number, articleId: number, content: string, contentType: string, filename: string
     ): Promise<number> {
-        throw new Error("Method not implemented.");
+
+        const createAttachmentRequest = new CreateArticleAttachmentRequest(
+            new CreateAttachment(content, contentType, filename)
+        );
+
+        const uri = this.TICKETS_RESOURCE_URI + '/' + ticketId +
+            '/articles/' + articleId + '/attachments';
+
+        const response = await this.httpService.post<CreateArticleAttachementResponse>(uri, createAttachmentRequest);
+
+        return response.AttachmentID;
     }
 
     public getTicketHistory(token: string, ticketId: number): Promise<History[]> {
