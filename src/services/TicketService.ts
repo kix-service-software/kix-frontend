@@ -81,8 +81,12 @@ export class TicketService implements ITicketService {
         return response.Article;
     }
 
-    public getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
-        throw new Error("Method not implemented.");
+    public async getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
+        const response = await this.httpService.get<ArticleResponse>(
+            this.TICKETS_RESOURCE_URI + '/' + ticketId + '/articles/' + articleId, null, token
+        );
+
+        return response.Article;
     }
 
     public getArticleAttachments(token: string, ticketId: number, articleId: number): Promise<Attachment[]> {

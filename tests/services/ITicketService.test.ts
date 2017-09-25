@@ -193,6 +193,22 @@ describe('Ticket Service', () => {
             });
         });
 
+        describe("Create a valid request to recieve a specific article.", () => {
+            before(() => {
+                nockScope
+                    .get(resourcePath + '/12345/articles/54321')
+                    .reply(200, {
+                        Article: { ArticleID: 54321 }
+                    });
+            });
+
+            it('should return articles from ticket.', async () => {
+                const article: Article = await ticketService.getArticle('', 12345, 54321)
+                expect(article).not.undefined;
+                expect(article.ArticleID).equals(54321);
+            });
+        });
+
     });
 });
 
