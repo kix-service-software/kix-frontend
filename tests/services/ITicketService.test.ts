@@ -11,7 +11,8 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     UpdateTicketRequest,
-    UpdateTicketResponse
+    UpdateTicketResponse,
+    Article
 } from '@kix/core';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -129,6 +130,69 @@ describe('Ticket Service', () => {
             });
 
         });
+    });
+
+    describe('Delete Ticket', () => {
+
+        describe('Create a valid request to delete a ticket', () => {
+
+            before(() => {
+                nockScope
+                    .delete(resourcePath + '/123456')
+                    .reply(200, {});
+            });
+
+            it('Should resolve without any error', async () => {
+                await ticketService.deleteTicket('', 123456).then(() => {
+                    expect(true).true;
+                }).catch((error) => {
+                    expect(true).false;
+                })
+            });
+
+        });
+
+        describe('Create a invalid reqeust to delete a ticket.', () => {
+
+            before(() => {
+                nockScope
+                    .delete(resourcePath + '/123456')
+                    .reply(400, {});
+            });
+
+            it('should throw a error.', async () => {
+                await ticketService.deleteTicket('', 123456)
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+
+    });
+
+    describe("Ticket Articles", () => {
+
+        describe("Create a valid request to recieve articles.", () => {
+            before(() => {
+                nockScope
+                    .get(resourcePath + '/12345/articles')
+                    .reply(200, {
+                        Article: [{ ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }]
+                    });
+            });
+
+            it('should return articles from ticket.', async () => {
+                const articles: Article[] = await ticketService.getArticles('', 12345)
+                expect(articles).not.undefined;
+                expect(articles).an('array');
+                expect(articles).not.empty;
+            });
+        });
+
     });
 });
 

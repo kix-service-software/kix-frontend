@@ -12,7 +12,9 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     UpdateTicketRequest,
-    UpdateTicketResponse
+    UpdateTicketResponse,
+    ArticlesResponse,
+    ArticleResponse
 } from '@kix/core';
 
 @injectable()
@@ -67,12 +69,16 @@ export class TicketService implements ITicketService {
         return response.TicketID;
     }
 
-    public deleteTicket(token: string, ticketId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async deleteTicket(token: string, ticketId: number): Promise<void> {
+        await this.httpService.delete(this.TICKETS_RESOURCE_URI + '/' + ticketId, token);
     }
 
-    public getArticles(token: string, ticketId: number): Promise<Article[]> {
-        throw new Error("Method not implemented.");
+    public async getArticles(token: string, ticketId: number): Promise<Article[]> {
+        const response = await this.httpService.get<ArticlesResponse>(
+            this.TICKETS_RESOURCE_URI + '/' + ticketId + '/articles', null, token
+        );
+
+        return response.Article;
     }
 
     public getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
