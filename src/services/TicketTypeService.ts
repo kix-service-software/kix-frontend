@@ -3,6 +3,10 @@ import {
     IHttpService,
     ITicketTypeService,
     TicketType,
+    CreateTicketTypeRequest,
+    CreateTicketTypeResponse,
+    UpdateTicketTypeRequest,
+    UpdateTicketTypeResponse,
     TicketTypeResponse,
     TicketTypesResponse,
     SortOrder,
@@ -57,8 +61,12 @@ export class TicketTypeService implements ITicketTypeService {
         return response.TicketType;
     }
 
-    public createTicketType(token: string, name: string, validId: number): Promise<number> {
-        throw new Error("Method not implemented.");
+    public async createTicketType(token: string, name: string, validId: number): Promise<number> {
+        const response = await this.httpService.post<CreateTicketTypeResponse>(
+            this.TICKETTYPES_RESOURCE_URI, new CreateTicketTypeRequest(name, validId)
+        );
+
+        return response.TypeID;
     }
 
     public updateTicketType(token: string, ticketTypeId: number, name: string, validId: any): Promise<number> {

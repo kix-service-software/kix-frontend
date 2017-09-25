@@ -4,9 +4,14 @@ import { container } from './../../src/Container';
 import {
     ITicketTypeService,
     IConfigurationService,
+    HttpError,
     TicketType,
     TicketTypeResponse,
     TicketTypesResponse,
+    CreateTicketTypeRequest,
+    CreateTicketTypeResponse,
+    UpdateTicketTypeRequest,
+    UpdateTicketTypeResponse,
     SortOrder
 } from '@kix/core';
 
@@ -176,6 +181,43 @@ describe('Ticket Type Service', () => {
         });
     });
 
+    describe('Create Ticket Type', () => {
+        describe('Create a valid request to create a new ticket type.', () => {
+
+            before(() => {
+                nockScope
+                    .post(resourcePath, new CreateTicketTypeRequest('ticket-type', 1))
+                    .reply(200, buildCreateTicketTypeResponse(123456));
+            });
+
+            it('should return a the id of the new users.', async () => {
+                const userId = await ticketTypeService.createTicketType('', 'ticket-type', 1);
+                expect(userId).equal(123456);
+            });
+
+        });
+
+        describe('Create a invalid create request.', () => {
+
+            before(() => {
+                nockScope
+                    .post(resourcePath, new CreateTicketTypeRequest('ticket-type', 1))
+                    .reply(400, {});
+            });
+
+            it('should throw an error if request is invalid.', async () => {
+                const userId = await ticketTypeService.createTicketType('', 'ticket-type', 1)
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+    });
+
 });
 
 function buildTicketTypeResponse(id: number): TicketTypeResponse {
@@ -190,5 +232,17 @@ function buildTicketTypesResponse(ticketTypeCount: number): TicketTypesResponse 
     for (let i = 0; i < ticketTypeCount; i++) {
         response.TicketType.push(new TicketType());
     }
+    return response;
+}
+
+function buildCreateTicketTypeResponse(id: number): CreateTicketTypeResponse {
+    const response = new CreateTicketTypeResponse();
+    response.TypeID = id;
+    return response;
+}
+
+function buildUpdateUserResponse(id: number): UpdateTicketTypeResponse {
+    const response = new UpdateTicketTypeResponse();
+    response.TypeID = id;
     return response;
 }
