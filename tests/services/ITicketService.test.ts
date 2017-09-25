@@ -9,7 +9,9 @@ import {
     Ticket,
     TicketResponse,
     CreateTicketRequest,
-    CreateTicketResponse
+    CreateTicketResponse,
+    UpdateTicketRequest,
+    UpdateTicketResponse
 } from '@kix/core';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -90,6 +92,44 @@ describe('Ticket Service', () => {
 
         });
     });
+
+    describe('Update Ticket', () => {
+        describe('Create a valid request to update an existing ticket.', () => {
+
+            before(() => {
+                nockScope
+                    .patch(resourcePath + '/123456',
+                    new UpdateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
+                    .reply(200, buildUpdateTicketResponse(123456));
+            });
+
+            it('should return the id of the ticket type.', async () => {
+                const ticketId = await ticketService.updateTicket('', 123456, '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []);
+                expect(ticketId).equal(123456);
+            });
+
+        });
+
+        describe('Create a invalid request to update an existing ticket type.', () => {
+            before(() => {
+                nockScope
+                    .patch(resourcePath + '/123456',
+                    new UpdateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
+                    .reply(400, {});
+            });
+
+            it('should throw a error.', async () => {
+                const ticketId = await ticketService.updateTicket('', 123456, '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [])
+                    .then((result) => {
+                        expect(true).false;
+                    }).catch((error: HttpError) => {
+                        expect(error).instanceof(HttpError);
+                        expect(error.status).equals(400);
+                    });
+            });
+
+        });
+    });
 });
 
 function buildTicketResponse(id: number): TicketResponse {
@@ -101,6 +141,12 @@ function buildTicketResponse(id: number): TicketResponse {
 
 function buildCreateTicketResponse(id: number): CreateTicketResponse {
     const response = new CreateTicketResponse();
+    response.TicketID = id;
+    return response;
+}
+
+function buildUpdateTicketResponse(id: number): UpdateTicketResponse {
+    const response = new UpdateTicketResponse();
     response.TicketID = id;
     return response;
 }

@@ -10,7 +10,9 @@ import {
     Attachment,
     TicketResponse,
     CreateTicketRequest,
-    CreateTicketResponse
+    CreateTicketResponse,
+    UpdateTicketRequest,
+    UpdateTicketResponse
 } from '@kix/core';
 
 @injectable()
@@ -48,12 +50,21 @@ export class TicketService implements ITicketService {
         return response.TicketID;
     }
 
-    public updateTicket(
+    public async updateTicket(
         token: string, ticketId: number, title: string, customerUser: string, stateId: number,
         priorityId: number, queueId: number, lockId: number, typeId: number, serviceId: number,
         slaId: number, ownerId: number, responsibleId: number, pendingTime: number, dynamicFields: DynamicField[]
     ): Promise<number> {
-        throw new Error("Method not implemented.");
+
+        const updateRequest = new UpdateTicketRequest(
+            title, customerUser, stateId, priorityId, queueId, lockId, typeId, serviceId,
+            slaId, ownerId, responsibleId, pendingTime, dynamicFields);
+
+        const response = await this.httpService.patch<UpdateTicketResponse>(
+            this.TICKETS_RESOURCE_URI + '/' + ticketId, updateRequest, token
+        );
+
+        return response.TicketID;
     }
 
     public deleteTicket(token: string, ticketId: number): Promise<void> {
