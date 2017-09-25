@@ -2,14 +2,14 @@ import { IChart } from './IChart';
 
 declare const d3;
 
-export class StackedBarChartWithD3 implements IChart {
+export class StackedBarChartHorizontalWithD3 implements IChart {
 
     public createChart(elementId: string, chartData: any): void {
 
-        const margin = { top: 20, right: 60, bottom: 30, left: 40 };
+        const margin = { top: 20, right: 40, bottom: 30, left: 60 };
         const width = (chartData.width || 300) - margin.left - margin.right;
         const height = (chartData.height || 300) - margin.top - margin.bottom;
-        const defaultColor = d3.scaleOrdinal().range(["red", "blue", "green", "yellow"]);
+        const defaultColor = d3.scaleOrdinal().range(["red", "yellow", "green"]);
 
         // add svg element and a group
         const svg = d3.select("#" + elementId).append('svg')
@@ -17,15 +17,15 @@ export class StackedBarChartWithD3 implements IChart {
             .attr('width', (chartData.width || 300));
         const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // add x-axis
-        const x = d3.scaleBand()
-            .rangeRound([0, width])
+        // add y-axis
+        const y = d3.scaleBand()
+            .rangeRound([0, height])
             .padding(0.1)
             .align(0.1);
 
-        // add y-axis
-        const y = d3.scaleLinear()
-            .rangeRound([height, 0]);
+        // add x-axis
+        const x = d3.scaleLinear()
+            .rangeRound([0, width]);
 
         const color = defaultColor;
 
@@ -35,13 +35,13 @@ export class StackedBarChartWithD3 implements IChart {
         // TODO: prepare given data, this is just an example
         const columns = ['label', 'hoch', 'mittel', 'niedrig'];
         const data = [
-            { label: 'Allgemein', hoch: 15, mittel: 65, niedrig: 20 },
-            { label: 'Beobachten', hoch: 25, mittel: 45, niedrig: 30 },
-            { label: 'Verantwortlich', hoch: 15, mittel: 30, niedrig: 55 }
+            { label: 'Allgemein', hoch: 15, mittel: 65, niedrig: 20, total: 100 },
+            { label: 'Beobachten', hoch: 25, mittel: 45, niedrig: 30, total: 100 },
+            { label: 'Verantwortlich', hoch: 15, mittel: 30, niedrig: 55, total: 100 }
         ];
 
-        // add labels to x-axis
-        x.domain(data.map((d) => {
+        // add labels to y-axis
+        y.domain(data.map((d) => {
             return d.label;
         }));
         // get color for each column (without label)
@@ -62,27 +62,47 @@ export class StackedBarChartWithD3 implements IChart {
                 return d;
             })
             .enter().append("rect")
-            .attr("x", (d) => {
-                return x(d.data.label);
-            })
             .attr("y", (d) => {
-                return y(d[1]);
+                return y(d.data.label);
             })
-            .attr("height", (d) => {
-                return y(d[0]) - y(d[1]);
+            .attr("x", (d) => {
+                return x(d[0]);
             })
-            .attr("width", x.bandwidth());
+            .attr("width", (d) => {
+                return x(d[1]) - x(d[0]);
+            })
+            .attr("height", y.bandwidth());
+
+        // add rect labels
+        serie.selectAll('text')
+            .data((d) => {
+                return d;
+            })
+            .enter().append('text')
+            .attr("y", (d) => {
+                return y(d.data.label) + y.bandwidth() / 2 + 10;
+            })
+            .attr("dx", (d) => {
+                return x(d[0]) + (x(d[1]) - x(d[0])) / 2 - 10;
+            })
+            .attr("fill", "#fff")
+            .style("font", "10px sans-serif")
+            .text((d) => {
+                // TODO: use real value
+                return '00%';
+            });
+
+        // define position of y-axis
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .attr("transform", "translate(0,0)")
+            .call(d3.axisLeft(y));
 
         // define position of x-axis
         g.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-        // define position of y-axis
-        g.append("g")
-            .attr("class", "axis axis--y")
-            .call(d3.axisLeft(y).ticks(10, "%"));
+            .call(d3.axisBottom(x).ticks(10, "%"));
 
         // TODO: style "legend" like in the mockups
         // add "legend" for columns (position)
@@ -90,16 +110,16 @@ export class StackedBarChartWithD3 implements IChart {
             .attr("class", "legend")
             .attr("transform", (d) => {
                 d = d[d.length - 1];
-                return "translate(" + (x(d.data.label) + x.bandwidth()) + "," + ((y(d[0]) + y(d[1])) / 2) + ")";
+                return "translate(" + (y(d.data.label) + y.bandwidth() - 30) + "," + ((x(d[0]) + x(d[1])) / 2) + ")";
             });
         // add a line and the text for "legend"
         legend.append("line")
-            .attr("x1", -6)
-            .attr("x2", 6)
+            .attr("y1", -6)
+            .attr("y2", 6)
             .attr("stroke", "#000");
         legend.append("text")
-            .attr("x", 9)
-            .attr("dy", "0.35em")
+            .attr("y", 9)
+            .attr("dx", "0.35em")
             .attr("fill", "#000")
             .style("font", "10px sans-serif")
             .text((d) => {
@@ -113,8 +133,8 @@ export class StackedBarChartWithD3 implements IChart {
     }
 }
 
-const StackedBarChart = new StackedBarChartWithD3();
+const StackedBarChartHorizontal = new StackedBarChartHorizontalWithD3();
 
 export {
-    StackedBarChart
+    StackedBarChartHorizontal
 };

@@ -21,10 +21,10 @@ export class BarChartWithD3 implements IChart {
             .append("g")
             .attr("transform", "translate(0,0)");
 
-        // // format the data
-        // for (const dataEl in data.data) {
-        //     dataEl.value = +dataEl.value;
-        // });
+        // format the data
+        for (const dataEl of chartData.data) {
+            dataEl.value = +dataEl.value;
+        }
 
         // set the ranges/ define the axis
         const xAxis = d3.scaleBand()

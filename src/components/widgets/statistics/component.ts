@@ -1,11 +1,10 @@
 class StatisticsWidgetComponent {
     public state: any;
     public onCreate(input: any): void {
-        let chartType = 'stacked-bar';
+        let chartType = 'stacked-bar-horizontal';
         if (input.configuration && input.configuration.chartType) {
             chartType = input.configuration.chartType;
         }
-        console.log(Date.now());
         this.state = {
             chartType,
             chartData: {
