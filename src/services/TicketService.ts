@@ -2,6 +2,9 @@ import { IHttpService } from '@kix/core/';
 import { injectable, inject } from 'inversify';
 import {
     CreateArticle,
+    CreateArticleRequest,
+    CreateArticleResponse,
+    CreateTicket,
     DynamicField,
     ITicketService,
     History,
@@ -33,23 +36,24 @@ export class TicketService implements ITicketService {
         return response.Ticket;
     }
 
-    public async createTicket(
-        token: string, title: string, customerUser: string, stateId: number,
-        priorityId: number, queueId: number, lockId: number, typeId: number,
-        ServiceId: number, slaId: number, ownerId: number, responsibleId: number,
-        pendingTime: number, dynamicFields: DynamicField[], articles: CreateArticle[]
-    ): Promise<number> {
-
-        const createTicketRequest = new CreateTicketRequest(
-            title, customerUser, stateId, priorityId, queueId, lockId, typeId, ServiceId,
-            slaId, ownerId, responsibleId, pendingTime, dynamicFields, articles
-        );
+    public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {
+        const createTicketRequest = new CreateTicketRequest(createTicket);
 
         const response = await this.httpService.post<CreateTicketResponse>(
             this.TICKETS_RESOURCE_URI, createTicketRequest, token
         );
 
         return response.TicketID;
+    }
+
+    public async createArticle(token: string, ticketId: number, createArticle: CreateArticle): Promise<number> {
+        const createArticleRequest = new CreateArticleRequest(createArticle);
+
+        const response = await this.httpService.post<CreateArticleResponse>(
+            this.TICKETS_RESOURCE_URI + '/' + ticketId + '/articles', createArticleRequest, token
+        );
+
+        return response.ArticleID;
     }
 
     public async updateTicket(

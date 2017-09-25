@@ -9,10 +9,13 @@ import {
     Ticket,
     TicketResponse,
     CreateTicketRequest,
+    CreateTicket,
+    CreateArticle,
     CreateTicketResponse,
     UpdateTicketRequest,
     UpdateTicketResponse,
-    Article
+    Article,
+    CreateArticleRequest
 } from '@kix/core';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -62,12 +65,12 @@ describe('Ticket Service', () => {
 
             before(() => {
                 nockScope
-                    .post(resourcePath, new CreateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
+                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
                     .reply(200, buildCreateTicketResponse(123456));
             });
 
             it('should return a the id of the new users.', async () => {
-                const userId = await ticketService.createTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []);
+                const userId = await ticketService.createTicket('', new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []));
                 expect(userId).equal(123456);
             });
 
@@ -77,12 +80,12 @@ describe('Ticket Service', () => {
 
             before(() => {
                 nockScope
-                    .post(resourcePath, new CreateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
+                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
                     .reply(400, {});
             });
 
             it('should throw an error if request is invalid.', async () => {
-                const userId = await ticketService.createTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])
+                const userId = await ticketService.createTicket('', new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {
@@ -176,36 +179,64 @@ describe('Ticket Service', () => {
 
     describe("Ticket Articles", () => {
 
-        describe("Create a valid request to recieve articles.", () => {
-            before(() => {
-                nockScope
-                    .get(resourcePath + '/12345/articles')
-                    .reply(200, {
-                        Article: [{ ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }]
-                    });
+        describe("Get Articles", () => {
+
+            describe("Create a valid request to recieve articles.", () => {
+
+                before(() => {
+                    nockScope
+                        .get(resourcePath + '/12345/articles')
+                        .reply(200, {
+                            Article: [{ ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }]
+                        });
+                });
+
+                it('should return articles from ticket.', async () => {
+                    const articles: Article[] = await ticketService.getArticles('', 12345)
+                    expect(articles).not.undefined;
+                    expect(articles).an('array');
+                    expect(articles).not.empty;
+                });
             });
 
-            it('should return articles from ticket.', async () => {
-                const articles: Article[] = await ticketService.getArticles('', 12345)
-                expect(articles).not.undefined;
-                expect(articles).an('array');
-                expect(articles).not.empty;
+            describe("Create a valid request to recieve a specific article.", () => {
+                before(() => {
+                    nockScope
+                        .get(resourcePath + '/12345/articles/54321')
+                        .reply(200, {
+                            Article: { ArticleID: 54321 }
+                        });
+                });
+
+                it('should return articles from ticket.', async () => {
+                    const article = await ticketService.getArticle('', 12345, 54321)
+                    expect(article).not.undefined;
+                    expect(article.ArticleID).equals(54321);
+                });
             });
         });
 
-        describe("Create a valid request to recieve a specific article.", () => {
+        describe("Create a valid request to create a new article.", () => {
             before(() => {
                 nockScope
-                    .get(resourcePath + '/12345/articles/54321')
+                    .post(resourcePath + '/12345/articles', new CreateArticleRequest(
+                        new CreateArticle(
+                            '', '', '', '', '', 0, 0, '', '', '', '', '', true, [], [], [], [], []
+                        ))
+                    )
                     .reply(200, {
-                        Article: { ArticleID: 54321 }
+                        ArticleID: 1234
                     });
             });
 
-            it('should return articles from ticket.', async () => {
-                const article: Article = await ticketService.getArticle('', 12345, 54321)
-                expect(article).not.undefined;
-                expect(article.ArticleID).equals(54321);
+            it('should return the id of the new article.', async () => {
+                const response = await ticketService.createArticle('', 12345,
+                    new CreateArticle(
+                        '', '', '', '', '', 0, 0, '', '', '', '', '', true, [], [], [], [], []
+                    ));
+
+                expect(response).not.undefined;
+                expect(response).equal(1234);
             });
         });
 
