@@ -48,11 +48,14 @@ export class HttpService implements IHttpService {
         return response;
     }
 
-    public async post<T>(resource: string, content: any): Promise<T> {
+    public async post<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'POST',
             uri: this.buildRequestUrl(resource),
             body: content,
+            headers: {
+                Authorization: 'Token ' + token
+            },
             json: true,
             ca: this.backendCertificate
         };
@@ -65,11 +68,14 @@ export class HttpService implements IHttpService {
         return response;
     }
 
-    public async put<T>(resource: string, content: any): Promise<T> {
+    public async put<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'PUT',
             uri: this.buildRequestUrl(resource),
             body: content,
+            headers: {
+                Authorization: 'Token ' + token
+            },
             json: true,
             ca: this.backendCertificate
         };
@@ -81,11 +87,14 @@ export class HttpService implements IHttpService {
         return response;
     }
 
-    public async patch<T>(resource: string, content: any): Promise<T> {
+    public async patch<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'PATCH',
             uri: this.buildRequestUrl(resource),
             body: content,
+            headers: {
+                Authorization: 'Token ' + token
+            },
             json: true,
             ca: this.backendCertificate
         };
@@ -97,10 +106,13 @@ export class HttpService implements IHttpService {
         return response;
     }
 
-    public async delete<T>(resource: string): Promise<T> {
+    public async delete<T>(resource: string, token?: any): Promise<T> {
         const options = {
             method: 'DELETE',
             uri: this.buildRequestUrl(resource),
+            headers: {
+                Authorization: 'Token ' + token
+            },
             json: true,
             ca: this.backendCertificate
         };

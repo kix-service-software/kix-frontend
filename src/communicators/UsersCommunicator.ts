@@ -34,7 +34,7 @@ export class UsersCommunicator extends KIXCommunicator {
                     fields: fields.join(',')
                 };
 
-                const apiUsers = await this.userService.getUsers(query, data.limit, null, null, data.token);
+                const apiUsers = await this.userService.getUsers(data.token, query, data.limit, null, null);
 
                 const users: any[] = apiUsers.map((u) => {
                     const user = {};
