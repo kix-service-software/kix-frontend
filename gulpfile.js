@@ -58,6 +58,7 @@ gulp.task('test', () => {
         'tests/services/ILoggingService.test.ts',
         'tests/services/IPluginService.test.ts',
         // 'tests/services/ISocketCommunicationService.test.ts',
+        'tests/services/ITicketTypeService.test.ts',
         'tests/services/IUserService.test.ts',
     ])
         .pipe(mocha({

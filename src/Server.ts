@@ -10,7 +10,6 @@ import {
     IConfigurationService,
     ISocketCommunicationService,
     IPluginService,
-    IMarkoServiceIServerConfiguration,
     Environment,
     IServerConfiguration,
     IMarkoService

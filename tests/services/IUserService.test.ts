@@ -49,7 +49,7 @@ describe('User Service', () => {
         });
 
         it('should return a user object.', async () => {
-            const user: User = await userService.getUser(12345);
+            const user: User = await userService.getUser('', 12345);
             expect(user).not.undefined;
         });
     });
@@ -64,7 +64,7 @@ describe('User Service', () => {
             });
 
             it('should return a list of users.', async () => {
-                const users: User[] = await userService.getUsers();
+                const users: User[] = await userService.getUsers('');
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -82,7 +82,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited list of 5 users.', async () => {
-                const users: User[] = await userService.getUsers(null, 5);
+                const users: User[] = await userService.getUsers('', null, 5);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -100,7 +100,7 @@ describe('User Service', () => {
             });
 
             it('should return a sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(null, null, SortOrder.DOWN);
+                const users: User[] = await userService.getUsers('', null, null, SortOrder.DOWN);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -117,7 +117,7 @@ describe('User Service', () => {
             });
 
             it('should return a list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, null, null, "20170815");
+                const users: User[] = await userService.getUsers('', null, null, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -134,7 +134,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, 6, null, "20170815");
+                const users: User[] = await userService.getUsers('', null, 6, null, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -152,7 +152,7 @@ describe('User Service', () => {
             });
 
             it('should return a limited, sorted list of users.', async () => {
-                const users: User[] = await userService.getUsers(null, 6, SortOrder.UP);
+                const users: User[] = await userService.getUsers('', null, 6, SortOrder.UP);
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users.length).equal(6);
@@ -170,7 +170,7 @@ describe('User Service', () => {
             });
 
             it('should return a sorted list of users filtered by changed after.', async () => {
-                const users: User[] = await userService.getUsers(null, null, SortOrder.UP, "20170815");
+                const users: User[] = await userService.getUsers('', null, null, SortOrder.UP, "20170815");
                 expect(users).not.undefined;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -188,7 +188,7 @@ describe('User Service', () => {
             });
 
             it('should return a the id of the new users.', async () => {
-                const userId = await userService.createUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title');
+                const userId = await userService.createUser('', 'login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title');
                 expect(userId).equal(123456);
             });
 
@@ -203,7 +203,7 @@ describe('User Service', () => {
             });
 
             it('should throw an error if request is invalid.', async () => {
-                const userId = await userService.createUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title')
+                const userId = await userService.createUser('', '', 'firstName', 'lastName', 'email', 'password', 'phone', 'title')
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {
@@ -226,7 +226,7 @@ describe('User Service', () => {
             });
 
             it('should return the id of the user.', async () => {
-                const userId = await userService.updateUser(123456, 'login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1);
+                const userId = await userService.updateUser('', 123456, 'login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1);
                 expect(userId).equal(123456);
             });
 
@@ -247,7 +247,7 @@ describe('User Service', () => {
             });
 
             it('should return a the id of the user.', async () => {
-                const userId = await userService.updateUser(123456, null, 'firstName', 'lastName', null, null, null, null, null);
+                const userId = await userService.updateUser('', 123456, null, 'firstName', 'lastName', null, null, null, null, null);
                 expect(userId).equal(123456);
             });
 
@@ -262,7 +262,7 @@ describe('User Service', () => {
             });
 
             it('should return a the id of the user.', async () => {
-                const userId = await userService.updateUser(123456, '', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1)
+                const userId = await userService.updateUser('', 123456, '', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1)
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {

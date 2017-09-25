@@ -1,21 +1,26 @@
-// Platzieren Sie Ihre Einstellungen in dieser Datei, um Standard- und Benutzereinstellungen zu überschreiben.
 {
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "node_modules": false,
-        ".cache": true,
-        "dist": false
-    },
-    "editor.tabSize": 4,
-    "editor.formatOnSave": true,
-    "todohighlight.exclude": "{**/node_modules/**,**/dist/**,**/.vscode/**,**/.history/**}",
-    "local-history.daysLimit": 30,
-    "less.lint.important": "warning",
-    "marko.beautify.indent": "    ",
-    "marko.beautify.maxLen": 120,
-    "marko.beautify.syntax": "html"
+  // Platzieren Sie Ihre Einstellungen in dieser Datei, um Standard- und Benutzereinstellungen zu überschreiben.
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "node_modules": true,
+    ".cache": true,
+    "dist": true
+  },
+  "editor.tabSize": 4,
+  "editor.formatOnSave": true,
+  "todohighlight.exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.vscode/**",
+    "**/.history/**"
+  ],
+  "local-history.daysLimit": 30,
+  "less.lint.important": "warning",
+  "marko.beautify.indent": "    ",
+  "marko.beautify.maxLen": 120,
+  "marko.beautify.syntax": "html"
 }

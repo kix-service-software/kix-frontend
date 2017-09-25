@@ -23,7 +23,7 @@ class WidgetComponent {
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.store));
+        this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.state.widget.instanceId, this.store));
 
         this.state.template = require(this.state.widget.template);
     }

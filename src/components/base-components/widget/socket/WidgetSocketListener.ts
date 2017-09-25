@@ -26,10 +26,13 @@ export class WidgetSocketListener extends SocketListener {
 
     private widgetId: string;
 
-    public constructor(widgetId: string, store: any) {
+    private instanceId: string;
+
+    public constructor(widgetId: string, instanceId: string, store: any) {
         super();
         this.contextId = ClientStorageHandler.getContextId();
         this.widgetId = widgetId;
+        this.instanceId = instanceId;
 
         this.configurationSocket = this.createSocket("configuration");
 
@@ -39,7 +42,8 @@ export class WidgetSocketListener extends SocketListener {
 
     public saveConfiguration(configuration: WidgetConfiguration): void {
         const saveRequest = new SaveConfigurationRequest
-            (configuration, ClientStorageHandler.getToken(), ClientStorageHandler.getContextId(), this.widgetId, true);
+            (configuration, ClientStorageHandler.getToken(),
+            ClientStorageHandler.getContextId(), this.widgetId, this.instanceId, true);
 
         this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, saveRequest);
     }
@@ -49,7 +53,8 @@ export class WidgetSocketListener extends SocketListener {
             this.store.dispatch(WIDGET_ERROR(null));
             const token = ClientStorageHandler.getToken();
 
-            const loadRequest = new LoadConfigurationRequest(token, this.contextId, this.widgetId, true);
+            const loadRequest = new LoadConfigurationRequest(
+                token, this.contextId, this.widgetId, this.instanceId, true);
 
             this.configurationSocket.emit(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, loadRequest);
         });

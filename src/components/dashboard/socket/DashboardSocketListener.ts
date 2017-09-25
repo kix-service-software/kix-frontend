@@ -27,7 +27,8 @@ export class DashboardSocketListener extends SocketListener {
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             const token = ClientStorageHandler.getToken();
-            const loadRequest = new LoadConfigurationRequest(token, ClientStorageHandler.getContextId(), null, true);
+            const loadRequest = new LoadConfigurationRequest(
+                token, ClientStorageHandler.getContextId(), null, null, true);
 
             socket.emit(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, loadRequest);
         });
