@@ -31,7 +31,7 @@ export class KixSidebarSocketListener extends SocketListener {
             this.store.dispatch(KIX_SIDEBAR_ERROR(null));
             const token = ClientStorageHandler.getToken();
             const loadRequest =
-                new LoadConfigurationRequest(token, ClientStorageHandler.getContextId(), 'kix-sidebar', true);
+                new LoadConfigurationRequest(token, ClientStorageHandler.getContextId(), 'kix-sidebar', null, true);
 
             socket.emit(ConfigurationEvent.LOAD_KIX_SIDEBAR_CONFIGURATION, loadRequest);
         });

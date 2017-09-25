@@ -3,6 +3,7 @@ import { ISidebar } from '@kix/core';
 export class TicketInfoSidebar implements ISidebar {
 
     public id: string;
+    public instanceId: string = Date.now().toString();
     public template: string = "sidebars/ticket-info";
     public configurationTemplate: string = "sidebars/ticket-info/configuration";
     public title: string = "Ticket Info";

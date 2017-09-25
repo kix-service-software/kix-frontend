@@ -44,7 +44,7 @@ export class ConfigurationService implements IConfigurationService {
     }
 
     public async getComponentConfiguration(
-        contextId: string, componentId: string, userId: number): Promise<any> {
+        contextId: string, componentId: string, instanceId: string, userId: number): Promise<any> {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
@@ -54,14 +54,22 @@ export class ConfigurationService implements IConfigurationService {
             componentId = contextId;
         }
 
+        if (instanceId) {
+            componentId = componentId + "-" + instanceId;
+        }
+
         return configurationFile[componentId];
     }
 
     public async saveComponentConfiguration(
-        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
+        contextId: string, componentId: string, instanceId: string, userId: number, configuration: any): Promise<void> {
 
         if (componentId === null) {
             componentId = contextId;
+        }
+
+        if (instanceId) {
+            componentId = componentId + "-" + instanceId;
         }
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);

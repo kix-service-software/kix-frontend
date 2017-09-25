@@ -5,6 +5,8 @@ export class UserListWidget implements IWidget {
 
     public id: string;
 
+    public instanceId: string = Date.now().toString();
+
     public template: string = null;
 
     public configurationTemplate: string = "widgets/user-list/configuration";
