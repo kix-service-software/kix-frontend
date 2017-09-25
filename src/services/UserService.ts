@@ -25,7 +25,7 @@ export class UserService implements IUserService {
     }
 
     public async getUsers(
-        query: any = {}, limit?: number, order?: SortOrder, changedAfter?: string, token?: string): Promise<User[]> {
+        token: string, query: any = {}, limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]> {
 
         if (!query) {
             query = {};
@@ -48,7 +48,7 @@ export class UserService implements IUserService {
         return response.User;
     }
 
-    public async  getUser(id: number, query: any = {}, token?: string): Promise<User> {
+    public async  getUser(token: string, id: number, query: any = {}): Promise<User> {
         if (!query) {
             query = {};
         }
@@ -69,25 +69,28 @@ export class UserService implements IUserService {
     }
 
     public async createUser(
-        login: string, firstName: string, lastName: string,
+        token: string, login: string, firstName: string, lastName: string,
         email: string, password: string, phone: string, title: string): Promise<number> {
 
         const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
-        const response = await this.httpService.post<CreateUserResponse>(this.USERS_RESOURCE_URI, createUserRequest);
+        const response = await this.httpService.post<CreateUserResponse>(
+            this.USERS_RESOURCE_URI, createUserRequest, token
+        );
 
         return response.UserID;
     }
 
     public async updateUser(
-        userId: number, login: string, firstName: string, lastName: string,
+        token: string, userId: number, login: string, firstName: string, lastName: string,
         email: string, password: string, phone: string, title: string, valid: number): Promise<number> {
 
         const updateUserRequest = new UpdateUserRequest(
             login, firstName, lastName, email, password, phone, title, valid);
 
-        const response = await this.httpService
-            .patch<UpdateUserResponse>(this.USERS_RESOURCE_URI + "/" + userId, updateUserRequest);
+        const response = await this.httpService.patch<UpdateUserResponse>(
+            this.USERS_RESOURCE_URI + "/" + userId, updateUserRequest, token
+        );
 
         return response.UserID;
     }
