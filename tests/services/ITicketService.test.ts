@@ -1,24 +1,24 @@
 /* tslint:disable*/
-import { container } from './../../src/Container';
-
 import {
-    ITicketService,
-    IConfigurationService,
+    Article,
+    CreateArticle,
+    CreateArticleAttachmentRequest,
+    CreateArticleRequest,
+    CreateAttachment,
+    CreateTicket,
+    CreateTicketRequest,
+    CreateTicketResponse,
     HttpError,
+    IConfigurationService,
+    ITicketService,
     SortOrder,
     Ticket,
     TicketResponse,
-    CreateTicketRequest,
-    CreateTicket,
-    CreateArticle,
-    CreateTicketResponse,
     UpdateTicketRequest,
-    UpdateTicketResponse,
-    Article,
-    CreateArticleRequest,
-    CreateArticleAttachmentRequest,
-    CreateAttachment
+    UpdateTicketResponse
 } from '@kix/core';
+
+import { container } from './../../src/Container';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
@@ -295,6 +295,47 @@ describe('Ticket Service', () => {
             });
         });
 
+    });
+
+    describe("Ticket History", () => {
+
+        describe("Create a valid request to retrieve the ticket history", () => {
+
+            before(() => {
+                nockScope.get(
+                    resourcePath + '/12345/history'
+                ).reply(200, {
+                    History: [{ HistoryID: 0 }]
+                });
+            });
+
+            it("should return a list of history entries for the ticket.", async () => {
+                const response = await ticketService.getTicketHistory('', 12345);
+
+                expect(response).not.undefined;
+                expect(response).an('array');
+            });
+
+        });
+
+        describe("Create a valid request to retrieve a history entry from the ticket history", () => {
+
+            before(() => {
+                nockScope.get(
+                    resourcePath + '/12345/history/8765'
+                ).reply(200, {
+                    History: { HistoryID: 0 }
+                });
+            });
+
+            it("should return a list of history entries for the ticket.", async () => {
+                const response = await ticketService.getTicketHistoryEntry('', 12345, 8765);
+
+                expect(response).not.undefined;
+                expect(response.HistoryID).equals(0);
+            });
+
+        });
     });
 });
 
