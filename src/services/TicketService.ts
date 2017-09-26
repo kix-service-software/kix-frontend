@@ -22,6 +22,7 @@ import {
     TicketHistoryItemResponse,
     TicketHistoryResponse,
     TicketResponse,
+    UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core';
@@ -67,16 +68,8 @@ export class TicketService implements ITicketService {
         return response.ArticleID;
     }
 
-    public async updateTicket(
-        token: string, ticketId: number, title: string, customerUser: string, stateId: number,
-        priorityId: number, queueId: number, lockId: number, typeId: number, serviceId: number,
-        slaId: number, ownerId: number, responsibleId: number, pendingTime: number, dynamicFields: DynamicField[]
-    ): Promise<number> {
-
-        const updateRequest = new UpdateTicketRequest(
-            title, customerUser, stateId, priorityId, queueId, lockId, typeId, serviceId,
-            slaId, ownerId, responsibleId, pendingTime, dynamicFields);
-
+    public async updateTicket(token: string, ticketId: number, updateTicket: UpdateTicket): Promise<number> {
+        const updateRequest = new UpdateTicketRequest(updateTicket);
         const uri = this.buildUri(RESOURCE_TICKETS, ticketId);
         const response = await this.httpService.patch<UpdateTicketResponse>(uri, updateRequest, token);
         return response.TicketID;

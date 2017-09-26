@@ -14,6 +14,7 @@ import {
     SortOrder,
     Ticket,
     TicketResponse,
+    UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core';
@@ -105,12 +106,16 @@ describe('Ticket Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
+                    new UpdateTicketRequest(
+                        new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
+                    )
                     .reply(200, buildUpdateTicketResponse(123456));
             });
 
             it('should return the id of the ticket type.', async () => {
-                const ticketId = await ticketService.updateTicket('', 123456, '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []);
+                const ticketId = await ticketService.updateTicket('', 123456,
+                    new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [])
+                );
                 expect(ticketId).equal(123456);
             });
 
@@ -118,20 +123,22 @@ describe('Ticket Service', () => {
 
         describe('Create a invalid request to update an existing ticket type.', () => {
             before(() => {
-                nockScope
-                    .patch(resourcePath + '/123456',
-                    new UpdateTicketRequest('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
-                    .reply(400, {});
+                nockScope.patch(resourcePath + '/123456',
+                    new UpdateTicketRequest(
+                        new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [])
+                    )
+                ).reply(400, {});
             });
 
             it('should throw a error.', async () => {
-                const ticketId = await ticketService.updateTicket('', 123456, '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [])
-                    .then((result) => {
-                        expect(true).false;
-                    }).catch((error: HttpError) => {
-                        expect(error).instanceof(HttpError);
-                        expect(error.status).equals(400);
-                    });
+                const ticketId = await ticketService.updateTicket('', 123456,
+                    new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [])
+                ).then((result) => {
+                    expect(true).false;
+                }).catch((error: HttpError) => {
+                    expect(error).instanceof(HttpError);
+                    expect(error.status).equals(400);
+                });
             });
 
         });
