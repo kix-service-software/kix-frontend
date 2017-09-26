@@ -61,6 +61,9 @@ export class TicketService implements ITicketService {
 
             const response = await this.httpService.get<ExpandedTicketResponse>(uri, query, token);
             return response.Ticket;
+        } else {
+            const response = await this.httpService.get<TicketResponse>(uri, query, token);
+            return response.Ticket;
         }
     }
 
