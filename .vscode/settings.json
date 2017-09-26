@@ -22,5 +22,6 @@
   "less.lint.important": "warning",
   "marko.beautify.indent": "    ",
   "marko.beautify.maxLen": 120,
-  "marko.beautify.syntax": "html"
+  "marko.beautify.syntax": "html",
+  "sortImports.onSave": false
 }

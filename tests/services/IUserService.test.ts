@@ -316,7 +316,7 @@ function buildCreateUserResponse(id: number): CreateUserResponse {
     return response;
 }
 
-function buildUpdateUserResponse(id: number): CreateUserResponse {
+function buildUpdateUserResponse(id: number): UpdateUserResponse {
     const response = new UpdateUserResponse();
     response.UserID = id;
     return response;
