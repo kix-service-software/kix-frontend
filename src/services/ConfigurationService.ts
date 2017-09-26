@@ -165,7 +165,11 @@ export class ConfigurationService implements IConfigurationService {
         let configurationFile = null;
         if (fs.existsSync(filePath)) {
             this.clearRequireCache(filePath);
-            configurationFile = require(filePath);
+            try {
+                configurationFile = require(filePath);
+            } catch (error) {
+                configurationFile = {};
+            }
         } else {
             configurationFile = {};
         }
