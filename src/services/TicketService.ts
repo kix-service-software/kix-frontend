@@ -1,4 +1,5 @@
 import {
+    AbstractTicket,
     Article,
     ArticleAttachmentResponse,
     ArticleAttachmentsResponse,
@@ -15,6 +16,7 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     DynamicField,
+    ExpandedTicketResponse,
     IHttpService,
     ITicketService,
     Ticket,
@@ -45,10 +47,24 @@ export class TicketService implements ITicketService {
         this.httpService = httpService;
     }
 
-    public async getTicket(token: string, id: number): Promise<Ticket> {
-        const uri = this.buildUri(RESOURCE_TICKETS, id);
-        const response = await this.httpService.get<TicketResponse>(uri, null, token);
-        return response.Ticket;
+    public async getTicket(token: string, ticketId: number, expandArticles: boolean = true): Promise<AbstractTicket> {
+        const uri = this.buildUri(RESOURCE_TICKETS, ticketId);
+
+        let query = {};
+
+        if (expandArticles) {
+            query = {
+                fields: 'Ticket.*',
+                include: 'Articles',
+                expand: 'Ticket.Articles'
+            };
+
+            const response = await this.httpService.get<ExpandedTicketResponse>(uri, query, token);
+            return response.Ticket;
+        } else {
+            const response = await this.httpService.get<TicketResponse>(uri, query, token);
+            return response.Ticket;
+        }
     }
 
     public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {

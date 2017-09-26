@@ -53,11 +53,16 @@ describe('Ticket Service', () => {
         before(() => {
             nockScope
                 .get(resourcePath + '/12345')
+                .query({
+                    fields: 'Ticket.*',
+                    include: 'Articles',
+                    expand: 'Ticket.Articles'
+                })
                 .reply(200, buildTicketResponse(12345));
         });
 
         it('should return a ticket type object.', async () => {
-            const ticketType: Ticket = await ticketService.getTicket('', 12345)
+            const ticketType = await ticketService.getTicket('', 12345)
             expect(ticketType).not.undefined;
             expect(ticketType.TicketID).equal(12345);
         });
