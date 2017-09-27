@@ -1,9 +1,9 @@
 <div>
-    <!-- TODO: more flexible approach to set relevant template (external modules with new chart types) -->
-    $ let template = require('./../../base-components/charts/' + state.chartType);
-    <include(template, {
-            configuration: state.configuration,
-            chartData: state.chartData
-        }) on-contentDataLoaded('contentDataLoaded')
-        on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
+    <if(state.template)>
+        <include(state.template, {
+                configuration: state.configuration,
+                chartData: state.chartData
+            }) on-contentDataLoaded('contentDataLoaded')
+            on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
+    </if>
 </div>
