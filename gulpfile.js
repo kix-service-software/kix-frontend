@@ -59,6 +59,7 @@ gulp.task('test', () => {
         'tests/services/IPluginService.test.ts',
         // 'tests/services/ISocketCommunicationService.test.ts',
         'tests/services/ITicketService.test.ts',
+        'tests/services/ITicketPriorityService.test.ts',
         'tests/services/ITicketTypeService.test.ts',
         'tests/services/IUserService.test.ts',
     ])

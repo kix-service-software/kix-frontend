@@ -1,3 +1,4 @@
+export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
 export { TicketTypeService } from './TicketTypeService';
 export { SocketCommunicationService } from './SocketCommuncationService';

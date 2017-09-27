@@ -23,6 +23,7 @@ import {
     ILoggingService,
     IUserService,
     ISocketCommunicationService,
+    ITicketPriorityService,
     ITicketTypeService,
     ITicketService
 } from '@kix/core';
@@ -36,6 +37,7 @@ import {
     SocketCommunicationService,
     PluginService,
     ConfigurationService,
+    TicketPriorityService,
     TicketTypeService,
     TicketService
 } from './services/';
@@ -76,6 +78,7 @@ export class ServiceContainer {
         this.container.bind<IUserService>("IUserService").to(UserService);
         this.container.bind<ITicketTypeService>("ITicketTypeService").to(TicketTypeService);
         this.container.bind<ITicketService>("ITicketService").to(TicketService);
+        this.container.bind<ITicketPriorityService>("ITicketPriorityService").to(TicketPriorityService);
     }
 
     private async bindRouters(): Promise<void> {
