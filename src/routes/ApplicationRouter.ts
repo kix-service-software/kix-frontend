@@ -38,8 +38,17 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     protected initialize(): void {
-        this.router.get("/", this.getDefaultModule.bind(this));
-        this.router.get("/:moduleId", this.getModule.bind(this));
+        this.router.get(
+            "/",
+            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            this.getDefaultModule.bind(this)
+        );
+
+        this.router.get(
+            "/:moduleId",
+            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            this.getModule.bind(this)
+        );
     }
 
     private async handleModuleRequest(moduleId: string, res: Response, next: () => void): Promise<void> {
