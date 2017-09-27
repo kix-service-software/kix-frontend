@@ -7,7 +7,6 @@ import {
     CreateUserResponse,
     CreateUserRequest,
     UserLogin,
-    UserServiceError,
     UpdateUserRequest,
     UpdateUserResponse,
     HttpError,
