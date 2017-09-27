@@ -54,7 +54,7 @@ describe('Ticket State Service', () => {
     });
 
     describe('Get multiple ticket states', () => {
-        describe('Create a valid request to retrieve all users.', () => {
+        describe('Create a valid request to retrieve all ticket states.', () => {
 
             before(() => {
                 nockScope
