@@ -106,7 +106,7 @@ gulp.task('compile-themes', () => {
 
 gulp.task('copy-component-templates', () => {
     return gulp
-        .src(['src/components/**/*.marko', 'src/components/**/*.less', 'src/components/**/*.json'])
+        .src(['src/components/**/*.marko', 'src/components/**/*.less', 'src/components/**/*.json', , 'src/components/**/static/**/*'])
         .pipe(gulp.dest('dist/components'));
 });
 

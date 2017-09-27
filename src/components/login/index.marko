@@ -8,14 +8,14 @@
                 </div>
                 <h1>Willkommen bei KIX Professional</h1>
             </div>
-            <if(state.error)>
+            <if(state.error || state.doLogin)>
                 <div class="dialog-message-area">
-                    <div class="message message-error">${JSON.stringify(state.error)}</div>
-                </div>
-            </if>
-            <if(state.doLogin)>
-                <div class="dialog-message-area">
-                    <div class="message message-progress">... Login ...</div>
+                    <if(state.doLogin)>
+                        <div class="message message-progress">... Login ...</div>
+                    </if>
+                    <else-if(state.error)>
+                        <div class="message message-error">${JSON.stringify(state.error)}</div>
+                    </else-if>
                 </div>
             </if>
             <div class="dialog-content">
@@ -26,12 +26,7 @@
                     Passwort<input type="password" value=state.password on-blur('passwordChanged') tabindex="2"/>
                 </label>
                 <div class="dialog-buttons">
-                    <if(state.valid)>
-                        <button class="submit" type="button" on-click('login') tabindex="3">Anmelden</button>
-                    </if>
-                    <else>
-                        <button class="submit disabled" disabled type="button" tabindex="3">Anmelden</button>
-                    </else>
+                    <button class="submit" type="button" on-click('login') tabindex="3">Anmelden</button>
                 </div>
             </div>
         </div>
