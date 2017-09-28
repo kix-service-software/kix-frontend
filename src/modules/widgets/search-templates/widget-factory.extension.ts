@@ -17,6 +17,10 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
         return '/@kix/frontend$' + version + '/dist/components/widgets/search-templates';
     }
 
+    public getConfigurationTemplate(): string {
+        return this.getTemplate() + '/configuration';
+    }
+
     public getDefaultConfiguration(): any {
         return {};
     }

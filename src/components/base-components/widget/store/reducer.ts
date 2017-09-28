@@ -12,9 +12,11 @@ class WidgetActionHandler {
             case WidgetAction.WIDGET_INITIALIZE + FULFILLED:
                 return { ...state, socketlListener: action.payload.socketListener };
 
-            case WidgetAction.WIDGET_CONFIGURATION_LOADED + FULFILLED:
+            case WidgetAction.WIDGET_LOADED + FULFILLED:
                 return {
                     ...state,
+                    template: action.payload.template,
+                    configurationTemplate: action.payload.configurationTemplate,
                     configuration: action.payload.configuration
                 };
 

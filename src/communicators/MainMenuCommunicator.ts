@@ -12,7 +12,6 @@ import {
     IConfigurationService
 } from '@kix/core';
 
-import { inject, injectable } from 'inversify';
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class MainMenuCommunicator extends KIXCommunicator {
