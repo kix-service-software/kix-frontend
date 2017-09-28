@@ -24,6 +24,7 @@ import {
     IUserService,
     ISocketCommunicationService,
     ITicketPriorityService,
+    ITicketStateService,
     ITicketTypeService,
     ITicketService,
     IValidService
@@ -39,6 +40,7 @@ import {
     PluginService,
     ConfigurationService,
     TicketPriorityService,
+    TicketStateService,
     TicketTypeService,
     TicketService,
     ValidService
@@ -82,6 +84,7 @@ export class ServiceContainer {
         this.container.bind<ITicketService>("ITicketService").to(TicketService);
         this.container.bind<ITicketPriorityService>("ITicketPriorityService").to(TicketPriorityService);
         this.container.bind<IValidService>("IValidService").to(ValidService);
+        this.container.bind<ITicketStateService>("ITicketStateService").to(TicketStateService);
     }
 
     private async bindRouters(): Promise<void> {
