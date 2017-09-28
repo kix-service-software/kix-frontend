@@ -1,4 +1,3 @@
-import { injectable, inject } from 'inversify';
 import {
     IHttpService,
     ITicketStateService,
@@ -9,59 +8,29 @@ import {
     Query
 } from '@kix/core';
 
-const RESOURCE_TICKET_STATES = "statetypes";
+import { ObjectService } from './ObjectService';
 
-@injectable()
-export class TicketStateService implements ITicketStateService {
+export class TicketStateService extends ObjectService<TicketState> implements ITicketStateService {
 
-    private httpService: IHttpService;
-
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
-        this.httpService = httpService;
-    }
+    protected RESOURCE_URI: string = "statetypes";
 
     public async getTicketStates(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
     ): Promise<TicketState[]> {
-        if (!query) {
-            query = {};
-        }
 
-        if (limit) {
-            query[Query.LIMIT] = limit;
-        }
-
-        if (order) {
-            query[Query.ORDER] = order;
-        }
-
-        if (changedAfter) {
-            query[Query.CHANGED_AFTER] = changedAfter;
-        }
-
-        const response = await this.httpService.get<TicketStatesResponse>(
-            RESOURCE_TICKET_STATES, query, token
+        const response = await this.getObjects<TicketStatesResponse>(
+            token, limit, order, changedAfter, query
         );
 
         return response.StateType;
     }
 
     public async getTicketState(token: string, ticketStateId: number, query?: any): Promise<TicketState> {
-        if (!query) {
-            query = {};
-        }
-
-        const uri = this.buildUrl(RESOURCE_TICKET_STATES, ticketStateId);
-
-        const response = await this.httpService.get<TicketStateResponse>(
-            uri, query, token
+        const response = await this.getObject<TicketStateResponse>(
+            token, ticketStateId, query
         );
 
         return response.StateType;
-    }
-
-    private buildUrl(...args): string {
-        return args.join("/");
     }
 
 }

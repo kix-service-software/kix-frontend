@@ -11,49 +11,28 @@ import {
     IUserService,
     IHttpService
 } from '@kix/core';
-import { inject, injectable } from 'inversify';
 
-@injectable()
-export class UserService implements IUserService {
+import { ObjectService } from './ObjectService';
 
-    private httpService: IHttpService;
-    private USERS_RESOURCE_URI = "users";
+export class UserService extends ObjectService<User> implements IUserService {
+
+    protected RESOURCE_URI: string = "users";
     private USER_RESOURCE_URI = "user";
-
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
-        this.httpService = httpService;
-    }
 
     public async getUsers(
         token: string, query: any = {}, limit?: number, order?: SortOrder, changedAfter?: string): Promise<User[]> {
 
-        if (!query) {
-            query = {};
-        }
-
-        if (limit) {
-            query[Query.LIMIT] = limit;
-        }
-
-        if (order) {
-            query[Query.ORDER] = order;
-        }
-
-        if (changedAfter) {
-            query[Query.CHANGED_AFTER] = changedAfter;
-        }
-
-        const response = await this.httpService.get<UsersResponse>(this.USERS_RESOURCE_URI, query, token);
+        const response = await this.getObjects<UsersResponse>(
+            token, limit, order, changedAfter, query
+        );
 
         return response.User;
     }
 
-    public async  getUser(token: string, id: number, query: any = {}): Promise<User> {
-        if (!query) {
-            query = {};
-        }
-
-        const response = await this.httpService.get<UserResponse>(this.USERS_RESOURCE_URI + "/" + id, query, token);
+    public async  getUser(token: string, userId: number, query: any = {}): Promise<User> {
+        const response = await this.getObject<UserResponse>(
+            token, userId
+        );
 
         return response.User;
     }
@@ -74,8 +53,8 @@ export class UserService implements IUserService {
 
         const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
 
-        const response = await this.httpService.post<CreateUserResponse>(
-            this.USERS_RESOURCE_URI, createUserRequest, token
+        const response = await this.createObject<CreateUserResponse, CreateUserRequest>(
+            token, this.RESOURCE_URI, createUserRequest
         );
 
         return response.UserID;
@@ -88,8 +67,9 @@ export class UserService implements IUserService {
         const updateUserRequest = new UpdateUserRequest(
             login, firstName, lastName, email, password, phone, title, valid);
 
-        const response = await this.httpService.patch<UpdateUserResponse>(
-            this.USERS_RESOURCE_URI + "/" + userId, updateUserRequest, token
+        const uri = this.buildUri(this.RESOURCE_URI, userId);
+        const response = await this.updateObject<UpdateUserResponse, UpdateUserRequest>(
+            token, uri, updateUserRequest
         );
 
         return response.UserID;
