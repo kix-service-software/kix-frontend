@@ -1,10 +1,10 @@
 import { injectable, inject } from 'inversify';
 import {
     IHttpService,
-    IValidService,
-    Valid,
-    ValidResponse,
-    ValidsResponse,
+    IValidObjectService,
+    ValidObject,
+    ValidObjectResponse,
+    ValidObjectsResponse,
     SortOrder,
     Query
 } from '@kix/core';
@@ -12,7 +12,7 @@ import {
 const RESOURCE_TICKET_STATES = "valid";
 
 @injectable()
-export class ValidService implements IValidService {
+export class ValidObjectService implements IValidObjectService {
 
     private httpService: IHttpService;
 
@@ -20,9 +20,9 @@ export class ValidService implements IValidService {
         this.httpService = httpService;
     }
 
-    public async getValids(
+    public async getValidObjects(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
-    ): Promise<Valid[]> {
+    ): Promise<ValidObject[]> {
         if (!query) {
             query = {};
         }
@@ -39,21 +39,21 @@ export class ValidService implements IValidService {
             query[Query.CHANGED_AFTER] = changedAfter;
         }
 
-        const response = await this.httpService.get<ValidsResponse>(
+        const response = await this.httpService.get<ValidObjectsResponse>(
             RESOURCE_TICKET_STATES, query, token
         );
 
         return response.Valid;
     }
 
-    public async getValid(token: string, ticketStateId: number, query?: any): Promise<Valid> {
+    public async getValidObject(token: string, ticketStateId: number, query?: any): Promise<ValidObject> {
         if (!query) {
             query = {};
         }
 
         const uri = this.buildUrl(RESOURCE_TICKET_STATES, ticketStateId);
 
-        const response = await this.httpService.get<ValidResponse>(
+        const response = await this.httpService.get<ValidObjectResponse>(
             uri, query, token
         );
 

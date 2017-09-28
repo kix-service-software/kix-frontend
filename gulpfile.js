@@ -83,6 +83,7 @@ gulp.task('test', () => {
         'tests/services/ITicketStateService.test.ts',
         'tests/services/ITicketTypeService.test.ts',
         'tests/services/IUserService.test.ts',
+        'tests/services/IValidObjectService.test.ts'
     ])
         .pipe(mocha({
             reporter: 'spec',

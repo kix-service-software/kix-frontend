@@ -10,4 +10,4 @@ export { HttpService } from './HttpService';
 export { MarkoService } from './MarkoService';
 export { PluginService } from './PluginService';
 export { LoggingService } from './LoggingService';
-export { ValidService } from './ValidService';
+export { ValidObjectService } from './ValidObjectService';
