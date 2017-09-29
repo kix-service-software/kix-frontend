@@ -38,21 +38,19 @@ class LoginFormComponent {
     }
 
     public userNameChanged(event: any): void {
-        this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value)).then(() => {
-            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
-        });
+        this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value));
     }
 
     public passwordChanged(event: any): void {
-        this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value)).then(() => {
-            this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password));
-        });
+        this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value));
     }
 
-    public login(): void {
-        if (this.state.valid) {
-            this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
-        }
+    public login(event: any): void {
+        this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password)).then(() => {
+            if (this.state.valid) {
+                this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
+            }
+        });
     }
 }
 

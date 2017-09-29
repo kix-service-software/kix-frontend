@@ -22,7 +22,7 @@ class LoginActionHandler {
                 return { ...state, password: action.payload.password };
 
             case LoginAction.LOGIN_VALIDATE + FULFILLED:
-                return { ...state, valid: action.payload.valid };
+                return { ...state, valid: action.payload.valid, error: action.payload.error };
 
             case LoginAction.LOGIN_AUTH + FULFILLED:
                 return { ...state, doLogin: true };
