@@ -4,7 +4,11 @@ import { LoginAction } from './LoginAction';
 export default (userName: string, password: string) => {
     const payload = new Promise((resolve, reject) => {
         const valid = isDefined(userName) && isDefined(password);
-        resolve({ valid });
+        let error = null;
+        if (!valid) {
+            error = "Kein Benutzername oder Passwort eingegeben.";
+        }
+        resolve({ valid, error });
     });
 
     return new StateAction(LoginAction.LOGIN_VALIDATE, payload);

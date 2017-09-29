@@ -46,7 +46,11 @@ class LoginFormComponent {
     }
 
     public login(event: any): void {
-        this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
+        this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password)).then(() => {
+            if (this.state.valid) {
+                this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
+            }
+        });
     }
 }
 
