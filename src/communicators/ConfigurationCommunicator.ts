@@ -21,25 +21,6 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     }
 
     private registerLoadComponentConfigurationEvents(client: SocketIO.Socket): void {
-        client.on(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, async (data: LoadConfigurationRequest) => {
-            const user = await this.userService.getUserByToken(data.token);
-
-            let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, data.instanceId, user.UserID);
-
-            if (!configuration) {
-                const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
-                const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
-
-                await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, data.instanceId, user.UserID, widgetDefaultConfiguration);
-
-                configuration = widgetDefaultConfiguration;
-            }
-
-            this.emitConfigurationLoadedEvent(client, configuration);
-        });
-
         client.on(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, async (data: LoadConfigurationRequest) => {
 
             let userId = null;

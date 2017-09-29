@@ -1,3 +1,4 @@
+export { TicketStateService } from './TicketStateService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
 export { TicketTypeService } from './TicketTypeService';
@@ -9,3 +10,4 @@ export { HttpService } from './HttpService';
 export { MarkoService } from './MarkoService';
 export { PluginService } from './PluginService';
 export { LoggingService } from './LoggingService';
+export { ValidObjectService } from './ValidObjectService';

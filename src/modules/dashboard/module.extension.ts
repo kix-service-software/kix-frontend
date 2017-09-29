@@ -21,25 +21,16 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             id: "statistics-widget",
             instanceId: "20170920072542",
             title: "Neue Tickets",
-            template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
-            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
-            isExternal: false
         });
         firstRow.widgets.push({
             id: "statistics-widget",
             instanceId: "20170920084512",
             title: "Prioritäten",
-            template: "/@kix/frontend$0.0.15/dist/components/widgets/statistics",
-            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/statistics/configuration",
-            isExternal: false
         });
         firstRow.widgets.push({
             id: "search-templates-widget",
             instanceId: "20170920113214",
             title: "Suchvorlagen",
-            template: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates",
-            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/search-templates/configuration",
-            isExternal: false
         });
 
         const secondRow = new ContainerRow();
@@ -47,9 +38,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             id: "ticket-list-widget",
             instanceId: "20170920101621",
             title: "Suchvorlage: ToDos",
-            template: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list",
-            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/ticket-list/configuration",
-            isExternal: false
         });
 
         const thirdRow = new ContainerRow();
@@ -57,9 +45,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             id: "user-list-widget",
             instanceId: "20170920093015",
             title: "Agenten",
-            template: "/@kix/frontend$0.0.15/dist/components/widgets/user-list",
-            configurationTemplate: "/@kix/frontend$0.0.15/dist/components/widgets/user-list/configuration",
-            isExternal: false
         });
 
         content.rows.push(firstRow);

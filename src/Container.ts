@@ -24,8 +24,10 @@ import {
     IUserService,
     ISocketCommunicationService,
     ITicketPriorityService,
+    ITicketStateService,
     ITicketTypeService,
-    ITicketService
+    ITicketService,
+    IValidObjectService
 } from '@kix/core';
 
 import {
@@ -38,8 +40,10 @@ import {
     PluginService,
     ConfigurationService,
     TicketPriorityService,
+    TicketStateService,
     TicketTypeService,
-    TicketService
+    TicketService,
+    ValidObjectService
 } from './services/';
 
 export class ServiceContainer {
@@ -79,6 +83,8 @@ export class ServiceContainer {
         this.container.bind<ITicketTypeService>("ITicketTypeService").to(TicketTypeService);
         this.container.bind<ITicketService>("ITicketService").to(TicketService);
         this.container.bind<ITicketPriorityService>("ITicketPriorityService").to(TicketPriorityService);
+        this.container.bind<IValidObjectService>("IValidObjectService").to(ValidObjectService);
+        this.container.bind<ITicketStateService>("ITicketStateService").to(TicketStateService);
     }
 
     private async bindRouters(): Promise<void> {

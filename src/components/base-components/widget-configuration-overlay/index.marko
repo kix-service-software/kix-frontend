@@ -3,8 +3,8 @@
     <div.configuration-container>
         <h1>Konfiguration: ${data.widget.title}</h1>
         <div.configuration-content>
-            <if(state.template)>
-                <include(state.template, {
+            <if(data.template)>
+                <include(data.template, {
                     widget: data.widget,
                     configuration: data.configuration
                 })/>

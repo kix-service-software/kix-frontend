@@ -1,4 +1,3 @@
-import { injectable, inject } from 'inversify';
 import {
     IHttpService,
     ITicketTypeService,
@@ -12,73 +11,51 @@ import {
     SortOrder,
     Query
 } from '@kix/core';
+import { ObjectService } from './ObjectService';
 
-@injectable()
-export class TicketTypeService implements ITicketTypeService {
+export class TicketTypeService extends ObjectService<TicketType> implements ITicketTypeService {
 
-    private TICKETTYPES_RESOURCE_URI: string = "tickettypes";
-
-    private httpService: IHttpService;
-
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
-        this.httpService = httpService;
-    }
+    protected RESOURCE_URI: string = "tickettypes";
 
     public async getTicketTypes(
-        token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any): Promise<TicketType[]> {
-        if (!query) {
-            query = {};
-        }
+        token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
+    ): Promise<TicketType[]> {
 
-        if (limit) {
-            query[Query.LIMIT] = limit;
-        }
-
-        if (order) {
-            query[Query.ORDER] = order;
-        }
-
-        if (changedAfter) {
-            query[Query.CHANGED_AFTER] = changedAfter;
-        }
-
-        const response = await this.httpService.get<TicketTypesResponse>(
-            this.TICKETTYPES_RESOURCE_URI, query, token
+        const response = await this.getObjects<TicketTypesResponse>(
+            token, limit, order, changedAfter, query
         );
 
         return response.TicketType;
     }
 
     public async getTicketType(token: string, ticketTypeId: number, query?: any): Promise<TicketType> {
-        if (!query) {
-            query = {};
-        }
-
-        const response = await this.httpService.get<TicketTypeResponse>(
-            this.TICKETTYPES_RESOURCE_URI + '/' + ticketTypeId, query, token
+        const response = await this.getObject<TicketTypeResponse>(
+            token, ticketTypeId
         );
 
         return response.TicketType;
     }
 
     public async createTicketType(token: string, name: string, validId: number): Promise<number> {
-        const response = await this.httpService.post<CreateTicketTypeResponse>(
-            this.TICKETTYPES_RESOURCE_URI, new CreateTicketTypeRequest(name, validId)
+        const response = await this.createObject<CreateTicketTypeResponse, CreateTicketTypeRequest>(
+            token, this.RESOURCE_URI, new CreateTicketTypeRequest(name, validId)
         );
 
         return response.TypeID;
     }
 
     public async updateTicketType(token: string, ticketTypeId: number, name: string, validId: any): Promise<number> {
-        const response = await this.httpService.patch<UpdateTicketTypeResponse>(
-            this.TICKETTYPES_RESOURCE_URI + '/' + ticketTypeId, new UpdateTicketTypeRequest(name, validId)
+        const uri = this.buildUri(this.RESOURCE_URI, ticketTypeId);
+        const response = await this.updateObject<UpdateTicketTypeResponse, UpdateTicketTypeRequest>(
+            token, uri, new UpdateTicketTypeRequest(name, validId)
         );
 
         return response.TypeID;
     }
 
     public async deleteTicketType(token: string, ticketTypeId: number): Promise<void> {
-        await this.httpService.delete(this.TICKETTYPES_RESOURCE_URI + '/' + ticketTypeId);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketTypeId);
+        await this.deleteObject<void>(token, uri);
     }
 
 }

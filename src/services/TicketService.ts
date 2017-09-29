@@ -33,23 +33,18 @@ import { inject, injectable } from 'inversify';
 import { HttpService } from './HttpService';
 import { Response } from 'express';
 
-const RESOURCE_TICKETS: string = "tickets";
+import { ObjectService } from './ObjectService';
+
 const RESOURCE_ARTICLES: string = "articles";
 const RESOURCE_ATTACHMENTS: string = "attachments";
 const RESOURCE_HISTORY: string = "history";
 
 @injectable()
-export class TicketService implements ITicketService {
+export class TicketService extends ObjectService<Ticket> implements ITicketService {
 
-    private httpService: IHttpService;
-
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
-        this.httpService = httpService;
-    }
+    protected RESOURCE_URI: string = "tickets";
 
     public async getTicket(token: string, ticketId: number, expandArticles: boolean = true): Promise<AbstractTicket> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId);
-
         let query = {};
 
         if (expandArticles) {
@@ -59,10 +54,12 @@ export class TicketService implements ITicketService {
                 expand: 'Ticket.Articles'
             };
 
-            const response = await this.httpService.get<ExpandedTicketResponse>(uri, query, token);
+            const response = await this.getObject<ExpandedTicketResponse>(
+                token, ticketId, query
+            );
             return response.Ticket;
         } else {
-            const response = await this.httpService.get<TicketResponse>(uri, query, token);
+            const response = await this.getObject<TicketResponse>(token, ticketId);
             return response.Ticket;
         }
     }
@@ -70,8 +67,8 @@ export class TicketService implements ITicketService {
     public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {
         const createTicketRequest = new CreateTicketRequest(createTicket);
 
-        const response = await this.httpService.post<CreateTicketResponse>(
-            RESOURCE_TICKETS, createTicketRequest, token
+        const response = await this.createObject<CreateTicketResponse, CreateTicketRequest>(
+            token, this.RESOURCE_URI, createTicketRequest
         );
 
         return response.TicketID;
@@ -79,38 +76,44 @@ export class TicketService implements ITicketService {
 
     public async createArticle(token: string, ticketId: number, createArticle: CreateArticle): Promise<number> {
         const createArticleRequest = new CreateArticleRequest(createArticle);
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES);
-        const response = await this.httpService.post<CreateArticleResponse>(uri, createArticleRequest, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES);
+
+        const response = await this.createObject<CreateArticleResponse, CreateArticleRequest>(
+            token, uri, createArticleRequest
+        );
+
         return response.ArticleID;
     }
 
     public async updateTicket(token: string, ticketId: number, updateTicket: UpdateTicket): Promise<number> {
         const updateRequest = new UpdateTicketRequest(updateTicket);
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId);
-        const response = await this.httpService.patch<UpdateTicketResponse>(uri, updateRequest, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId);
+
+        const response = await this.updateObject<UpdateTicketResponse, UpdateTicketRequest>(token, uri, updateRequest);
+
         return response.TicketID;
     }
 
     public async deleteTicket(token: string, ticketId: number): Promise<void> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId);
-        await this.httpService.delete(uri, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId);
+        await this.deleteObject(token, uri);
     }
 
     public async getArticles(token: string, ticketId: number): Promise<Article[]> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES);
-        const response = await this.httpService.get<ArticlesResponse>(uri, null, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES);
+        const response = await this.getObjectByUri<ArticlesResponse>(token, uri);
         return response.Article;
     }
 
     public async getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES, articleId);
-        const response = await this.httpService.get<ArticleResponse>(uri, null, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId);
+        const response = await this.getObjectByUri<ArticleResponse>(token, uri);
         return response.Article;
     }
 
     public async getArticleAttachments(token: string, ticketId: number, articleId: number): Promise<Attachment[]> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS);
-        const response = await this.httpService.get<ArticleAttachmentsResponse>(uri, null, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS);
+        const response = await this.getObjectByUri<ArticleAttachmentsResponse>(token, uri);
         return response.Attachment;
     }
 
@@ -119,10 +122,10 @@ export class TicketService implements ITicketService {
     ): Promise<Attachment> {
 
         const uri = this.buildUri(
-            RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, attachmentId
+            this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, attachmentId
         );
 
-        const response = await this.httpService.get<ArticleAttachmentResponse>(uri, null, token);
+        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri);
         return response.Attachment;
     }
 
@@ -134,25 +137,25 @@ export class TicketService implements ITicketService {
             new CreateAttachment(content, contentType, filename)
         );
 
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS);
-        const response = await this.httpService.post<CreateArticleAttachementResponse>(uri, createAttachmentRequest);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS);
+
+        const response = await this.createObject<CreateArticleAttachementResponse, CreateArticleAttachmentRequest>(
+            token, uri, createAttachmentRequest
+        );
+
         return response.AttachmentID;
     }
 
     public async getTicketHistory(token: string, ticketId: number): Promise<TicketHistory[]> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_HISTORY);
-        const response = await this.httpService.get<TicketHistoryResponse>(uri, null, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_HISTORY);
+        const response = await this.getObjectByUri<TicketHistoryResponse>(token, uri);
         return response.History;
     }
 
     public async getTicketHistoryEntry(token: string, ticketId: number, historyId: number): Promise<TicketHistory> {
-        const uri = this.buildUri(RESOURCE_TICKETS, ticketId, RESOURCE_HISTORY, historyId);
-        const response = await this.httpService.get<TicketHistoryItemResponse>(uri, null, token);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_HISTORY, historyId);
+        const response = await this.getObjectByUri<TicketHistoryItemResponse>(token, uri);
         return response.History;
-    }
-
-    private buildUri(...args): string {
-        return args.join('/');
     }
 
 }

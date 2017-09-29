@@ -24,8 +24,6 @@ class WidgetComponent {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.state.widget.instanceId, this.store));
-
-        this.state.template = require(this.state.widget.template);
     }
 
     public stateChanged(): void {
@@ -33,6 +31,14 @@ class WidgetComponent {
         if (reduxState.configuration) {
             this.state.actions = reduxState.configuration.actions;
             this.state.contentConfiguration = reduxState.configuration.contentConfiguation;
+        }
+
+        if (reduxState.template) {
+            this.state.template = require(reduxState.template);
+        }
+
+        if (reduxState.configurationTemplate) {
+            this.state.configurationTemplate = require(reduxState.configurationTemplate);
         }
     }
 
@@ -53,7 +59,7 @@ class WidgetComponent {
         this.state.contentConfiguration = configuration;
         const reduxState: WidgetState = this.store.getState();
         reduxState.socketlListener
-            .saveConfiguration(new WidgetConfiguration(this.state.actions, this.state.contentConfiguration));
+            .saveConfiguration(new WidgetConfiguration("", this.state.actions, this.state.contentConfiguration));
 
         if (this.updateContentConfigurationHandler) {
             this.updateContentConfigurationHandler(this.state.contentConfiguration);
