@@ -1,13 +1,16 @@
+import { ChartDataRow } from './data/ChartDataRow';
 import { IChart } from './IChart';
 
 declare var d3;
 
 export class PieChartWithD3 implements IChart {
 
-    public createChart(elementId: string, chartData: any): void {
+    public createChart(elementId: string, chartData: ChartDataRow[]): void {
 
-        const width = chartData.width || 300;
-        const height = chartData.height || 300;
+        // get svg
+        const svg = d3.select('#' + elementId);
+        const width = +svg.attr("width") || 600;
+        const height = +svg.attr("height") || 600;
         const radius = width / 2;
         const defaultColor = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "red", "blue"]);
 
@@ -21,25 +24,29 @@ export class PieChartWithD3 implements IChart {
             .innerRadius(radius - 40)
             .outerRadius(radius - 40);
 
+        const data = [];
+        chartData.forEach((row) => {
+            data.push({
+                label: row.label,
+                value: row.value[0].value
+            });
+        });
+
         // create pie with values
         const pie = d3.pie()
             .sort(null)
             .value((d) => {
-                return d.value;
+                console.log(d);
+                return d.value[0];
             });
 
-        // create svg with one group in the middle
-        const svg = d3.select('#' + elementId)
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
+        // add one group in the middle to svg
+        const group = svg.append("g")
             .attr("transform", "translate(" + radius + "," + radius + ")");
 
-
         // add groups for each data element, eventual arcs
-        const arcs = svg.selectAll(".arc")
-            .data(pie(chartData.data))
+        const arcs = group.selectAll(".arc")
+            .data(pie(data))
             .enter().append("g")
             .attr("class", "arc");
 

@@ -1,30 +1,33 @@
+import { ChartFactory } from './../../../model/client/charts/ChartFactory';
+import { ChartDataPreparer } from './../../../model/client/charts/data/ChartDataPreparer';
+
 class StatisticsWidgetComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
-        let chartType = 'stacked-bar-horizontal';
+        let chartType = 'pie';
         if (input.configuration && input.configuration.chartType) {
             chartType = input.configuration.chartType;
         }
+
+        // TODO: just for testing!
+        // chartType = 'stacked-bar-horizontal';
+
+        const data = ChartDataPreparer.getData(input);
+
         this.state = {
+            id: input.chartId || chartType + '-chart-' + Date.now(),
             chartType,
-            chartData: {
-                id: 'chart-' + Date.now(),
-                data: [
-                    { label: 'A', value: '15', color: 'red' },
-                    { label: 'B', value: '75', color: 'green' },
-                    { label: 'C', value: '5', color: 'yellow' },
-                    { label: 'D', value: '35', color: 'blue' }
-                ]
-            },
-            template: ''
+            chartData: data
         };
     }
 
     public onMount(): void {
-        // this.state.template = require(this.state.chart.template);
-        this.state.template = require('./../../base-components/charts/' + this.state.chartType);
+        if (this.state.chartData) {
+            ChartFactory.createChart(this.state.id, this.state.chartType, this.state.chartData);
+        }
+        // (this as any).emit('contentDataLoaded', this.state);
     }
 
     public contentDataLoaded(contentData: any): void {

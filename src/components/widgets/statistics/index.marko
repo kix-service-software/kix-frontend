@@ -1,9 +1,3 @@
-<div>
-    <if(state.template)>
-        <include(state.template, {
-                configuration: state.configuration,
-                chartData: state.chartData
-            }) on-contentDataLoaded('contentDataLoaded')
-            on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
-    </if>
+<div.chart>
+    <svg id="${state.id}" height="300" width="300"/>
 </div>
