@@ -17,6 +17,10 @@ export class StatisticsWidgetFactoryExtension implements IWidgetFactoryExtension
         return '/@kix/frontend$' + version + '/dist/components/widgets/statistics';
     }
 
+    public getConfigurationTemplate(): string {
+        return this.getTemplate() + '/configuration';
+    }
+
     public getDefaultConfiguration(): any {
         return {};
     }

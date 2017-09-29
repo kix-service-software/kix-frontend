@@ -2,15 +2,16 @@ import {
     LoadConfigurationResult,
     WidgetConfiguration,
     SaveConfigurationRequest,
-    LoadConfigurationRequest,
+    LoadWidgetRequest,
+    LoadWidgetResponse,
     ClientStorageHandler,
-    ConfigurationEvent,
+    WidgetEvent,
     SocketEvent
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
 import {
-    WIDGET_CONFIGURATION_LOADED,
+    WIDGET_LOADED,
     WIDGET_ERROR
 } from '../store/actions';
 
@@ -34,7 +35,7 @@ export class WidgetSocketListener extends SocketListener {
         this.widgetId = widgetId;
         this.instanceId = instanceId;
 
-        this.configurationSocket = this.createSocket("configuration");
+        this.configurationSocket = this.createSocket("widget");
 
         this.store = store;
         this.initConfigruationSocketListener();
@@ -45,7 +46,7 @@ export class WidgetSocketListener extends SocketListener {
             (configuration, ClientStorageHandler.getToken(),
             ClientStorageHandler.getContextId(), this.widgetId, this.instanceId, true);
 
-        this.configurationSocket.emit(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, saveRequest);
+        this.configurationSocket.emit(WidgetEvent.SAVE_WIDGET_CONFIGURATION, saveRequest);
     }
 
     private initConfigruationSocketListener(): void {
@@ -53,10 +54,10 @@ export class WidgetSocketListener extends SocketListener {
             this.store.dispatch(WIDGET_ERROR(null));
             const token = ClientStorageHandler.getToken();
 
-            const loadRequest = new LoadConfigurationRequest(
+            const loadRequest = new LoadWidgetRequest(
                 token, this.contextId, this.widgetId, this.instanceId, true);
 
-            this.configurationSocket.emit(ConfigurationEvent.LOAD_WIDGET_CONFIGURATION, loadRequest);
+            this.configurationSocket.emit(WidgetEvent.LOAD_WIDGET, loadRequest);
         });
 
         this.configurationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -71,13 +72,13 @@ export class WidgetSocketListener extends SocketListener {
             this.store.dispatch(WIDGET_ERROR(String(error)));
         });
 
-        this.configurationSocket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<WidgetConfiguration>) => {
-                this.store.dispatch(WIDGET_CONFIGURATION_LOADED(result.configuration));
+        this.configurationSocket.on(WidgetEvent.WIDGET_LOADED,
+            (result: LoadWidgetResponse) => {
+                this.store.dispatch(WIDGET_LOADED(result));
             }
         );
 
-        this.configurationSocket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED, () => {
+        this.configurationSocket.on(WidgetEvent.WIDGET_CONFIGURATION_SAVED, () => {
             alert('Configuration saved!');
         });
     }

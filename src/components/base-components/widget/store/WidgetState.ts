@@ -3,6 +3,10 @@ import { WidgetSocketListener } from './../socket/WidgetSocketListener';
 
 export class WidgetState {
 
+    public template: string;
+
+    public configurationTemplate: string;
+
     public configuration: WidgetConfiguration;
 
     public socketlListener: WidgetSocketListener;
