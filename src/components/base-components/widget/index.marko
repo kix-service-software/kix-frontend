@@ -12,7 +12,8 @@
             <for(action in state.actions)>
                 <action action=action contentData=state.contentData/>
             </for>
-            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'hidden'}" on-click('configClicked')/>
+            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
+                on-click('configClicked')/>
         </span>
     </div>
     <div.widget-content>
