@@ -12,7 +12,9 @@ class StatisticsWidgetComponent {
         }
 
         // TODO: just for testing!
-        // chartType = 'stacked-bar-horizontal';
+        // chartType = 'bar';
+        // chartType = 'stacked-bar';
+        chartType = 'stacked-bar-horizontal';
 
         const data = ChartDataPreparer.getData(input);
 

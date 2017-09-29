@@ -13,22 +13,22 @@ export class ChartDataPreparer {
 
         const ChartData2: ChartDataRow[] = [
             new ChartDataRow('Allgemein', [
-                new ChartComplexValue('hoch', new ChartSingleValue('15')),
-                new ChartComplexValue('mittel', new ChartSingleValue('65')),
-                new ChartComplexValue('niedrig', new ChartSingleValue('20'))
+                new ChartComplexValue('hoch', [new ChartSingleValue('15')]),
+                new ChartComplexValue('mittel', [new ChartSingleValue('65')]),
+                new ChartComplexValue('niedrig', [new ChartSingleValue('20')])
             ]),
             new ChartDataRow('Beobachten', [
-                new ChartComplexValue('hoch', new ChartSingleValue('25')),
-                new ChartComplexValue('mittel', new ChartSingleValue('45')),
-                new ChartComplexValue('niedrig', new ChartSingleValue('30'))
+                new ChartComplexValue('hoch', [new ChartSingleValue('25')]),
+                new ChartComplexValue('mittel', [new ChartSingleValue('45')]),
+                new ChartComplexValue('niedrig', [new ChartSingleValue('30')])
             ]),
             new ChartDataRow('Verantwortlich', [
-                new ChartComplexValue('hoch', new ChartSingleValue('15')),
-                new ChartComplexValue('mittel', new ChartSingleValue('30')),
-                new ChartComplexValue('niedrig', new ChartSingleValue('55'))
+                new ChartComplexValue('hoch', [new ChartSingleValue('15')]),
+                new ChartComplexValue('mittel', [new ChartSingleValue('30')]),
+                new ChartComplexValue('niedrig', [new ChartSingleValue('55')])
             ]),
         ];
 
-        return ChartData;
+        return ChartData2;
     }
 }

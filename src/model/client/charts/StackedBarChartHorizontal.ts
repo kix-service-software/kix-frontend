@@ -1,21 +1,27 @@
+import { ChartDataRow } from './data/ChartDataRow';
 import { IChart } from './IChart';
 
 declare const d3;
 
+// execlude?
+export interface IPreparedData {
+    columns: any[];
+    data: any[];
+}
+
 export class StackedBarChartHorizontalWithD3 implements IChart {
 
-    public createChart(elementId: string, chartData: any): void {
+    public createChart(elementId: string, chartData: ChartDataRow[]): void {
 
+        const svg = d3.select("#" + elementId);
         const margin = { top: 20, right: 40, bottom: 30, left: 60 };
-        const width = (chartData.width || 300) - margin.left - margin.right;
-        const height = (chartData.height || 300) - margin.top - margin.bottom;
-        const defaultColor = d3.scaleOrdinal().range(["red", "yellow", "green"]);
-
-        // add svg element and a group
-        const svg = d3.select("#" + elementId).append('svg')
-            .attr('height', (chartData.heigth || 300))
-            .attr('width', (chartData.width || 300));
-        const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        const width = (+svg.attr("width") || 300) - margin.left - margin.right;
+        const height = (+svg.attr("height") || 300) - margin.top - margin.bottom;
+        const defaultColor =
+            d3.scaleOrdinal().range(["#a52f86", "#6d86cc", "#fbc80c", "#fb990c", "#fb2e0c", "#c0fb0c"]);
+        const preparedData: IPreparedData = this.prepareData(chartData);
+        console.log(preparedData);
+        const group = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // add y-axis
         const y = d3.scaleBand()
@@ -32,24 +38,16 @@ export class StackedBarChartHorizontalWithD3 implements IChart {
         const stack = d3.stack()
             .offset(d3.stackOffsetExpand);
 
-        // TODO: prepare given data, this is just an example
-        const columns = ['label', 'hoch', 'mittel', 'niedrig'];
-        const data = [
-            { label: 'Allgemein', hoch: 15, mittel: 65, niedrig: 20, total: 100 },
-            { label: 'Beobachten', hoch: 25, mittel: 45, niedrig: 30, total: 100 },
-            { label: 'Verantwortlich', hoch: 15, mittel: 30, niedrig: 55, total: 100 }
-        ];
-
         // add labels to y-axis
-        y.domain(data.map((d) => {
+        y.domain(preparedData.data.map((d) => {
             return d.label;
         }));
         // get color for each column (without label)
-        color.domain(columns.slice(1));
+        color.domain(preparedData.columns);
 
         // add serie (for each color) - container
-        const serie = g.selectAll(".serie")
-            .data(stack.keys(columns.slice(1))(data))
+        const serie = group.selectAll(".serie")
+            .data(stack.keys(preparedData.columns)(preparedData.data))
             .enter().append("g")
             .attr("class", "serie")
             .attr("fill", (d) => {
@@ -93,13 +91,13 @@ export class StackedBarChartHorizontalWithD3 implements IChart {
             });
 
         // define position of y-axis
-        g.append("g")
+        group.append("g")
             .attr("class", "axis axis--y")
             .attr("transform", "translate(0,0)")
             .call(d3.axisLeft(y));
 
         // define position of x-axis
-        g.append("g")
+        group.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x).ticks(10, "%"));
@@ -127,9 +125,21 @@ export class StackedBarChartHorizontalWithD3 implements IChart {
             });
     }
 
-    private prepareData(data: any): any {
-        const preparedData = {};
-        return preparedData;
+    // TODO: execlude?
+    private prepareData(chartData: ChartDataRow[]): IPreparedData {
+        const data = [];
+        const columns = [];
+        chartData.forEach((dataEl) => {
+            const subData = {};
+            dataEl.rowValue.forEach((row) => {
+                if (columns.indexOf(row.label) === -1) {
+                    columns.push(row.label);
+                }
+                subData[row.label] = row.value[0].value;
+            });
+            data.push({ label: dataEl.label, ...subData });
+        });
+        return { data, columns };
     }
 }
 
