@@ -6,6 +6,7 @@ export default (userName: string, password: string) => {
         const valid = isDefined(userName) && isDefined(password);
         let error = null;
         if (!valid) {
+            // TODO: use translation service
             error = "Kein Benutzername oder Passwort eingegeben.";
         }
         resolve({ valid, error });
