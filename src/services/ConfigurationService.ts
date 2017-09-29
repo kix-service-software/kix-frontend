@@ -163,7 +163,7 @@ export class ConfigurationService implements IConfigurationService {
 
     private getConfigurationFile(filePath: string): any {
         let configurationFile = null;
-        if (fs.existsSync(filePath)) {
+        if (fs.existsSync(__dirname + "/" + filePath)) {
             this.clearRequireCache(filePath);
             try {
                 configurationFile = require(filePath);

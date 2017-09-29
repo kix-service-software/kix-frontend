@@ -17,7 +17,6 @@ export class ServerRouter {
     private initializeRoutes(): void {
         const registeredRouter = container.getDIContainer().getAll<IRouter>("IRouter");
         for (const router of registeredRouter) {
-            // TODO: require app and base template and provide it to the registered router
             this.expressRouter.use(router.getBaseRoute(), router.getRouter());
 
             router.setAppTemplate(require('./components/app/index.marko'));
