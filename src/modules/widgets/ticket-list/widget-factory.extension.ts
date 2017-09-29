@@ -17,6 +17,10 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
         return '/@kix/frontend$' + version + '/dist/components/widgets/ticket-list';
     }
 
+    public getConfigurationTemplate(): string {
+        return this.getTemplate() + '/configuration';
+    }
+
     public getDefaultConfiguration(): any {
         return {};
     }

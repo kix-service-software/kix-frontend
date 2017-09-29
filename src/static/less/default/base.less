@@ -5,10 +5,13 @@ html {
     background-color: @secondary-5;
     body {
         min-height: 100%;
+        height: 100%;
         box-sizing: border-box;
         position: relative;
         font-size: @default-font-size;
         #content {
+            min-height: 100%;
+            height: 100%;
             position: relative;
             box-sizing: border-box;
             #kix-app {
@@ -129,6 +132,20 @@ button {
                 border: 3px solid @secondary-1;
                 color: @secondary-1;
             }
+        }
+        &:hover {
+            background-color: @tertiary-6;
+        }
+        &:hover:after {
+            border-color: @tertiary-6;
+            color: @tertiary-6;
+        }
+        &:active {
+            background-color: @tertiary-3;
+        }
+        &:active:after {
+            border-color: @tertiary-3;
+            color: @tertiary-3;
         }
     }
 }

@@ -1,7 +1,7 @@
 .login-wrapper {
     position: relative;
-    background:/*url("@{static-path}img/login.png") 0 0 auto repeat-x*/
-    @secondary-5;
+    background: url("static/img/background.png") @secondary-5 repeat-x 0 0;
+    height: 100%;
 }
 
 .login-page {
@@ -109,6 +109,10 @@
             border-radius: @border-radius;
             width: 307px;
             height: 34px;
+            color: @default-dark-font-color;
+        }
+        & input:hover {
+            border-color: @secondary-7;
         }
     }
     & .dialog-buttons {

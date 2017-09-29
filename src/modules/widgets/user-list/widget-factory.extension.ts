@@ -20,6 +20,10 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         return '/@kix/frontend$' + version + '/dist/components/widgets/user-list';
     }
 
+    public getConfigurationTemplate(): string {
+        return this.getTemplate() + '/configuration';
+    }
+
     public getDefaultConfiguration(): any {
         const userListConfiguration = new UserListConfiguration();
         userListConfiguration.properties.push(new UIProperty("UserID", "ID"));
@@ -30,7 +34,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         // TODO: Remove the logic of actions from here. On place is only content config relevant.
         const deleteAction = new DeleteAction("delete-action", "Delete", "");
         const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
-        return new WidgetConfiguration([deleteAction, tourAction], userListConfiguration);
+        return new WidgetConfiguration("User-List", [deleteAction, tourAction], userListConfiguration);
     }
 
 }
