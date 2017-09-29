@@ -1,4 +1,3 @@
-import { injectable, inject } from 'inversify';
 import {
     IHttpService,
     IValidObjectService,
@@ -9,59 +8,30 @@ import {
     Query
 } from '@kix/core';
 
-const RESOURCE_TICKET_STATES = "valid";
+import { ObjectService } from './ObjectService';
 
-@injectable()
-export class ValidObjectService implements IValidObjectService {
+export class ValidObjectService extends ObjectService<ValidObject> implements IValidObjectService {
 
-    private httpService: IHttpService;
-
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
-        this.httpService = httpService;
-    }
+    protected RESOURCE_URI: string = "valid";
 
     public async getValidObjects(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
     ): Promise<ValidObject[]> {
-        if (!query) {
-            query = {};
-        }
-
-        if (limit) {
-            query[Query.LIMIT] = limit;
-        }
-
-        if (order) {
-            query[Query.ORDER] = order;
-        }
-
-        if (changedAfter) {
-            query[Query.CHANGED_AFTER] = changedAfter;
-        }
-
-        const response = await this.httpService.get<ValidObjectsResponse>(
-            RESOURCE_TICKET_STATES, query, token
+        const response = await this.getObjects<ValidObjectsResponse>(
+            token, limit, order, changedAfter, query
         );
 
         return response.Valid;
     }
 
-    public async getValidObject(token: string, ticketStateId: number, query?: any): Promise<ValidObject> {
-        if (!query) {
-            query = {};
-        }
-
-        const uri = this.buildUrl(RESOURCE_TICKET_STATES, ticketStateId);
-
-        const response = await this.httpService.get<ValidObjectResponse>(
-            uri, query, token
+    public async getValidObject(token: string, validObjectId: number, query?: any): Promise<ValidObject> {
+        const response = await this.getObject<ValidObjectResponse>(
+            token, validObjectId
         );
 
         return response.Valid;
     }
 
-    private buildUrl(...args): string {
-        return args.join("/");
-    }
+
 
 }
