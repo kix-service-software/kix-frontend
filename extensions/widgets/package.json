@@ -2,13 +2,13 @@
     "name": "widget-extensions",
     "extensions": {
         "kix:widget": {
-            "statistics": "../../dist/modules/widgets/statistics/widget-factory.extension",
+            "chart": "../../dist/modules/widgets/chart/widget-factory.extension",
             "search-templates": "../../dist/modules/widgets/search-templates/widget-factory.extension",
             "ticket-list": "../../dist/modules/widgets/ticket-list/widget-factory.extension",
             "user-list": "../../dist/modules/widgets/user-list/widget-factory.extension"
         },
         "kix:marko:dependencies": {
-            "statistics-widget-marko": "../../dist/modules/widgets/statistics/marko-dependencies.extension",
+            "chart-widget-marko": "../../dist/modules/widgets/chart/marko-dependencies.extension",
             "search-template-widget-marko": "../../dist/modules/widgets/search-templates/marko-dependencies.extension",
             "ticket-list-widget-marko": "../../dist/modules/widgets/ticket-list/marko-dependencies.extension",
             "user-list-widget-marko": "../../dist/modules/widgets/user-list/marko-dependencies.extension"

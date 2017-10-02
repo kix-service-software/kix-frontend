@@ -1,7 +1,7 @@
 import { ChartFactory } from './../../../model/client/charts/ChartFactory';
 import { ChartDataPreparer } from './../../../model/client/charts/data/ChartDataPreparer';
 
-class StatisticsWidgetComponent {
+class ChartWidgetComponent {
 
     public state: any;
 
@@ -41,4 +41,4 @@ class StatisticsWidgetComponent {
     }
 }
 
-module.exports = StatisticsWidgetComponent;
+module.exports = ChartWidgetComponent;

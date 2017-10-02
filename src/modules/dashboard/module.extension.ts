@@ -1,4 +1,4 @@
-import { ContainerRow, ContainerConfiguration, IModuleFactoryExtension } from '@kix/core';
+import { ContainerConfiguration, ContainerRow, IModuleFactoryExtension } from '@kix/core';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -18,12 +18,12 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const firstRow = new ContainerRow();
 
         firstRow.widgets.push({
-            id: "statistics-widget",
+            id: "chart-widget",
             instanceId: "20170920072542",
             title: "Neue Tickets",
         });
         firstRow.widgets.push({
-            id: "statistics-widget",
+            id: "chart-widget",
             instanceId: "20170920084512",
             title: "Prioritäten",
         });
