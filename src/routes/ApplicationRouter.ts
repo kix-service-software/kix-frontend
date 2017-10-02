@@ -17,7 +17,7 @@ export class ApplicationRouter extends KIXRouter {
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
-        await this.handleModuleRequest(moduleId, res, next);
+        await this.handleModuleRequest(moduleId, req, res, next);
     }
 
     public async getModule(req: Request, res: Response, next: () => void): Promise<void> {
@@ -28,7 +28,7 @@ export class ApplicationRouter extends KIXRouter {
             return;
         }
 
-        await this.handleModuleRequest(moduleId, res, next);
+        await this.handleModuleRequest(moduleId, req, res, next);
     }
 
 
@@ -51,14 +51,36 @@ export class ApplicationRouter extends KIXRouter {
         );
     }
 
-    private async handleModuleRequest(moduleId: string, res: Response, next: () => void): Promise<void> {
+    private async handleModuleRequest(moduleId: string, req: Request, res: Response, next: () => void): Promise<void> {
         const moduleFactory: IModuleFactoryExtension = await this.pluginService.getModuleFactory(moduleId);
         if (moduleFactory) {
+
+            const token: string = req.cookies.token;
+            const user = await this.userService.getUserByToken(token);
+
             const template = moduleFactory.getTemplate();
-            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId());
+            const themeCSS = await this.getUserThemeCSS(user.UserID);
+            const specificCSS = this.getSpecificCSS();
+            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS);
         } else {
             next();
         }
+    }
+
+    private async getUserThemeCSS(userId: number): Promise<string> {
+        // TODO: define context id for personal settings.
+        const configuration =
+            await this.configurationService.getComponentConfiguration("personal-settings", null, null, userId);
+
+        if (configuration) {
+            return configuration.theme;
+        }
+
+        return null;
+    }
+
+    private getSpecificCSS(): string[] {
+        return [];
     }
 
 }
