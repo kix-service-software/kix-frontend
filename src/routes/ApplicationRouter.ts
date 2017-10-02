@@ -4,7 +4,9 @@ import {
     IConfigurationService,
     IServerConfiguration,
     IRouter,
-    IModuleFactoryExtension
+    IModuleFactoryExtension,
+    ISpecificCSSExtension,
+    KIXExtensions
 } from '@kix/core';
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
@@ -60,7 +62,7 @@ export class ApplicationRouter extends KIXRouter {
 
             const template = moduleFactory.getTemplate();
             const themeCSS = await this.getUserThemeCSS(user.UserID);
-            const specificCSS = this.getSpecificCSS();
+            const specificCSS = await this.getSpecificCSS();
             this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS);
         } else {
             next();
@@ -79,8 +81,15 @@ export class ApplicationRouter extends KIXRouter {
         return null;
     }
 
-    private getSpecificCSS(): string[] {
-        return [];
+    private async getSpecificCSS(): Promise<string[]> {
+        const cssExtensions = await this.pluginService.getExtensions<ISpecificCSSExtension>(KIXExtensions.SPECIFIC_CSS);
+        let specificCSS = [];
+
+        for (const extension of cssExtensions) {
+            specificCSS = specificCSS.concat(extension.getSpecificCSSPaths());
+        }
+
+        return specificCSS;
     }
 
 }
