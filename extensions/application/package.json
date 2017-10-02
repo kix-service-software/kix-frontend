@@ -7,7 +7,8 @@
             "configuration-communicator": "../../dist/communicators/ConfigurationCommunicator.extension",
             "main-menu-communicator": "../../dist/communicators/MainMenuCommunicator.extension",
             "users-communicator": "../../dist/communicators/UsersCommunicator.extension",
-            "widget-communicator": "../../dist/communicators/WidgetCommunicator.extension"
+            "widget-communicator": "../../dist/communicators/WidgetCommunicator.extension",
+            "translation-communicator": "../../dist/communicators/TranslationCommunicator.extension"
         }
     }
 }

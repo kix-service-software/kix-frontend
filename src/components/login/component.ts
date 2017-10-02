@@ -1,4 +1,5 @@
 import { LoginComponentState } from './model/LoginComponentState';
+import { LoginTranslationId } from './model/LoginTranslationId';
 import { LoginState } from './store/LoginState';
 import {
     LOGIN_USERNAME_CHANGED,
@@ -17,9 +18,12 @@ class LoginFormComponent {
 
     public frontendUrl: string;
 
+    public translationIds: any;
+
     public onCreate(input: any): void {
         this.state = new LoginComponentState();
         this.frontendUrl = input.frontendUrl;
+        this.translationIds = LoginTranslationId;
     }
 
     public stateChanged(): void {
@@ -29,6 +33,9 @@ class LoginFormComponent {
         this.state.valid = reduxState.valid;
         this.state.error = reduxState.error;
         this.state.doLogin = reduxState.doLogin;
+        if (reduxState.translations) {
+            this.state.translations = reduxState.translations;
+        }
     }
 
     public onMount(): void {
@@ -51,6 +58,14 @@ class LoginFormComponent {
                 this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
             }
         });
+    }
+
+    public getTranslation(id: LoginTranslationId): string {
+        if (this.state.translations[id]) {
+            return this.state.translations[id];
+        }
+
+        return id;
     }
 }
 

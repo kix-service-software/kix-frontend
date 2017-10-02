@@ -4,55 +4,80 @@ import {
     AuthenticationResult,
     LoginRequest,
     SocketEvent,
-    UserType
+    UserType,
+    TranslationEvent,
+    LoadTranslationRequest,
+    LoadTranslationResponse
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
-import { LOGIN_ERROR } from '../store/actions';
+import { LOGIN_ERROR, TRANSLATIONS_LOADED } from '../store/actions';
+
+import { LoginTranslationId } from '../model/LoginTranslationId';
 
 declare var io: any;
 
 export class LoginSocketListener extends SocketListener {
 
-    private socket: SocketIO.Server;
+    private authenticationSocket: SocketIO.Server;
+    private translationSocket: SocketIO.Server;
     private store: any;
 
     public constructor() {
         super();
 
-        this.socket = this.createSocket("authentication", false);
+        this.authenticationSocket = this.createSocket("authentication", false);
+        this.translationSocket = this.createSocket("translation", false);
         this.store = require('../store');
-        this.initSocketListener(this.socket);
+        this.initTranslationSocketListener();
+        this.initAuthenticationSocketListener();
     }
 
     public login(userName: string, password: string, userType: UserType): void {
-        this.socket.emit(AuthenticationEvent.LOGIN,
+        this.authenticationSocket.emit(AuthenticationEvent.LOGIN,
             new LoginRequest(userName, password, UserType.AGENT));
     }
 
-    private initSocketListener(socket: SocketIO.Server): void {
-        socket.on(SocketEvent.CONNECT, () => {
+    private initTranslationSocketListener(): void {
+        this.translationSocket.on(SocketEvent.CONNECT, () => {
+            this.translationSocket.emit(TranslationEvent.LOAD_TRANSLATIONS,
+                new LoadTranslationRequest(null, [
+                    LoginTranslationId.TITLE,
+                    LoginTranslationId.BUTTON_LABEL,
+                    LoginTranslationId.USERNAME,
+                    LoginTranslationId.PASSWORD
+                ])
+            );
+        });
+
+        this.translationSocket.on(TranslationEvent.TRANSLATIONS_LOADED, (data: LoadTranslationResponse) => {
+            this.store.dispatch(TRANSLATIONS_LOADED(data.translations));
+        });
+    }
+
+    private initAuthenticationSocketListener(): void {
+        this.authenticationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(LOGIN_ERROR(null));
         });
 
-        socket.on(SocketEvent.CONNECT_ERROR, (error) => {
+        this.authenticationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {
             this.store.dispatch(LOGIN_ERROR('Connection to socket server failed. ' + JSON.stringify(error)));
         });
 
-        socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
+        this.authenticationSocket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             this.store.dispatch(LOGIN_ERROR('Connection to socket server timeout.'));
         });
 
-        socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
+        this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
             document.cookie = "token=" + result.token;
             window.location.replace('/');
         });
 
-        socket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
+        this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (error) => {
             this.store.dispatch(LOGIN_ERROR('Invalid Login.'));
         });
 
-        socket.on('error', (error) => {
+        this.authenticationSocket.on('error', (error) => {
             this.store.dispatch(LOGIN_ERROR(error));
         });
     }
