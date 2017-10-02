@@ -1,13 +1,7 @@
-.action-overlay {
+.action-overlay-transparent {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 150;
-}
-
-.action-overlay-transparent {
     background-color: @secondary-6;
     opacity: 0.8;
     width: 100%;
@@ -15,14 +9,14 @@
 }
 
 .action-container {
+    position: fixed;
+    top: 25vh;
+    left: 25vw;
+    width: 50vw;
+    height: 50vh;
     opacity: 1;
     background-color: @secondary-6;
     border: 5px solid @tertiary-5;
-    top: 25vh;
-    left: 15vw;
-    width: 50vw;
-    height: 50vh;
-    position: absolute;
     padding: 10px;
 }
 
