@@ -1,13 +1,10 @@
-<span.action on-click('handleAction')>
+<span.action on-click('handleAction') class=(state.running ? "action-disabled" : "")>
     <span.kix-icon.icon-dummy/>
-    <span>
-        <if(state.running)>~~~</if>
-        <else>${state.action.name}</else>
-    </span>
+    <span>${state.action.name}</span>
 </span>
 <span>
-    <if(state.action.useOverlay)>
-        <action-overlay action=state.action contentData=data.contentData showOverlay=state.showActionOverlay
+    <if(state.template)>
+        <action-overlay template=state.template action=state.action contentData=data.contentData
             on-runAction('runActionClicked') on-cancelAction('cancelActionClicked')/>
     </if>
 </span>

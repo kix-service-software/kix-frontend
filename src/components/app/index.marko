@@ -5,9 +5,12 @@
         <title>KIX 2018</title>
         <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
         <lasso-head/>
-        <!-- <if(state.theme)>
-            <link rel="stylesheet" href="/static/themes/${state.theme}.css"/>
-        </if> -->
+        <if(data.themeCSS)>
+            <link rel="stylesheet" href=data.themeCSS/>
+        </if>
+        <for(specificCSS in data.specificCSS)>
+            <link rel="stylesheet" href=specificCSS/>
+        </for>
     </head>
     <body>
         <if(data.template)>
