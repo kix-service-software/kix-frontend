@@ -13,7 +13,6 @@ export class TranslationService implements ITranslationService {
         this.translationConfiguration = this.configurationService.getTranslationConfiguration();
     }
 
-
     public getTranslation(id: string, languageShortCut: string): string {
         let value = id;
         const translationConfig = this.translationConfiguration.translations.find((t) => t.id === id);
