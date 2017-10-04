@@ -2,8 +2,22 @@ import { ChartComplexValue } from './ChartComplexValue';
 import { ChartDataRow } from './ChartDataRow';
 import { ChartSingleValue } from './ChartSingeValue';
 
+/**
+ * Class to prepare the chart data.
+ *
+ * The class provides methods to get consistent data for charts.
+ */
 export class ChartDataPreparer {
+
+    /**
+     * Returns the consistent data
+     *
+     * @param input TODO: have to be defined
+     *
+     * @return the prepared data - an array of {@link ChartDataRow}
+     */
     public static getData(input: any): ChartDataRow[] {
+        // TODO: just exsamples
         const ChartData: ChartDataRow[] = [
             new ChartDataRow('A', [new ChartSingleValue('15')]),
             new ChartDataRow('B', [new ChartSingleValue('75')]),
@@ -29,6 +43,6 @@ export class ChartDataPreparer {
             ]),
         ];
 
-        return ChartData2;
+        return ChartData;
     }
 }

@@ -1,43 +1,33 @@
-import { ChartFactory } from './../../../model/client/charts/ChartFactory';
-import { ChartDataPreparer } from './../../../model/client/charts/data/ChartDataPreparer';
+import { ChartFactory, ChartConfiguration } from './../../../model/client/charts/';
+import { ChartComponentState } from './model/ChartComponentState';
 
 class ChartWidgetComponent {
 
-    public state: any;
+    public state: ChartComponentState;
 
     public onCreate(input: any): void {
-        let chartType = 'pie';
-        if (input.configuration && input.configuration.chartType) {
-            chartType = input.configuration.chartType;
-        }
+        this.state = new ChartComponentState();
+    }
 
+    public onInput(input: any): void {
         // TODO: just for testing!
-        // chartType = 'bar';
-        // chartType = 'stacked-bar';
-        chartType = 'stacked-bar-horizontal';
+        // input.configuration.chartType = 'bar';
+        // input.configuration.chartType = 'stacked-bar';
+        // input.configuration.chartType = 'stacked-bar-horizontal';
 
-        const data = ChartDataPreparer.getData(input);
-
-        this.state = {
-            id: input.chartId || chartType + '-chart-' + Date.now(),
-            chartType,
-            chartData: data
-        };
+        this.state.configuration = input.configuration || {};
+        (this as any).emit('updateContentConfigurationHandler', this.updateContentConfigurationHandler.bind(this));
     }
 
     public onMount(): void {
-        if (this.state.chartData) {
-            ChartFactory.createChart(this.state.id, this.state.chartType, this.state.chartData);
+        if (this.state.configuration) {
+            ChartFactory.createChart(this.state.svgId, this.state.configuration);
         }
-        // (this as any).emit('contentDataLoaded', this.state);
     }
 
-    public contentDataLoaded(contentData: any): void {
-        // this.state.contentData = contentData;
-    }
-
-    public onUpdateContentConfigurationHandler(handler: any): void {
-        // this.updateContentConfigurationHandler = handler;
+    private updateContentConfigurationHandler(configuration: ChartConfiguration) {
+        this.state.configuration = configuration;
+        ChartFactory.createChart(this.state.svgId, this.state.configuration);
     }
 }
 

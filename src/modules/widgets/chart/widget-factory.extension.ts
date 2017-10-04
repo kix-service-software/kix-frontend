@@ -1,4 +1,5 @@
-import { IWidget, IWidgetFactoryExtension } from '@kix/core';
+import { ChartConfiguration } from '../../../model/client/charts/';
+import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core';
 
 import { ChartWidget } from './ChartWidget';
 
@@ -22,8 +23,9 @@ export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
         return this.getTemplate() + '/configuration';
     }
 
-    public getDefaultConfiguration(): any {
-        return {};
+    public getDefaultConfiguration(): WidgetConfiguration {
+        const chartConfig = new ChartConfiguration();
+        return new WidgetConfiguration("Chart", [], chartConfig);
     }
 
 }

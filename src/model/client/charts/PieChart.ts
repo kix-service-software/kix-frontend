@@ -5,10 +5,10 @@ declare var d3;
 
 export class PieChartWithD3 implements IChart {
 
-    public createChart(elementId: string, chartData: ChartDataRow[]): void {
+    public createChart(domId: string, chartData: ChartDataRow[]): void {
 
         // get svg
-        const svg = d3.select('#' + elementId);
+        const svg = d3.select('#' + domId);
         const width = +svg.attr("width") || 300;
         const height = +svg.attr("height") || 300;
         const radius = width / 2;

@@ -1,3 +1,14 @@
-<div>
-    <h2>Content: ${data.widget.title}</h2>
+<div.configuration-chart>
+    <if(state.configuration)>
+        <label>
+            <!-- TODO: use language service? -->
+            Type
+            <select size=10 on-select('typeChanged')>
+                <for(type in state.types)>
+                    <!-- TODO: use language service? -->
+                    <option value="${type}">${state.types[type]}</option>
+                </for>
+            </select>
+        </label>
+    </if>
 </div>

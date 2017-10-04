@@ -11,9 +11,9 @@ export interface IPreparedData {
 
 export class StackedBarChartWithD3 implements IChart {
 
-    public createChart(elementId: string, chartData: ChartDataRow[]): void {
+    public createChart(domId: string, chartData: ChartDataRow[]): void {
 
-        const svg = d3.select("#" + elementId);
+        const svg = d3.select("#" + domId);
         const margin = { top: 20, right: 60, bottom: 30, left: 40 };
         const width = (+svg.attr("width") || 300) - margin.left - margin.right;
         const height = (+svg.attr("height") || 300) - margin.top - margin.bottom;
