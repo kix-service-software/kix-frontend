@@ -27,6 +27,7 @@ import {
     ITicketStateService,
     ITicketTypeService,
     ITicketService,
+    ITranslationService,
     IValidObjectService
 } from '@kix/core';
 
@@ -43,6 +44,7 @@ import {
     TicketStateService,
     TicketTypeService,
     TicketService,
+    TranslationService,
     ValidObjectService
 } from './services/';
 
@@ -85,6 +87,7 @@ export class ServiceContainer {
         this.container.bind<ITicketPriorityService>("ITicketPriorityService").to(TicketPriorityService);
         this.container.bind<IValidObjectService>("IValidObjectService").to(ValidObjectService);
         this.container.bind<ITicketStateService>("ITicketStateService").to(TicketStateService);
+        this.container.bind<ITranslationService>("ITranslationService").to(TranslationService);
     }
 
     private async bindRouters(): Promise<void> {

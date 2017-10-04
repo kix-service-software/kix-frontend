@@ -1,0 +1,11 @@
+export enum LoginTranslationId {
+
+    TITLE = "LOGIN:TITLE",
+
+    BUTTON_LABEL = "LOGIN:BUTTON:LABEL",
+
+    USERNAME = "LOGIN:USERNAME",
+
+    PASSWORD = "LOGIN:PASSWORD"
+
+}
