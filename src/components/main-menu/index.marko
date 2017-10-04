@@ -1,0 +1,105 @@
+<div.menu-col>
+    <ul.main-menu>
+        <!-- TODO: Remove me! Bespielcode sollte wieder entfernt werden, wenn mehr Menüpunkte existieren -->
+        <li class="active">
+            <a href="https://localhost:3001/dashboard">
+                <span class="menu-item-wrapper cf">
+                    <span class="hover-label">Home</span>
+                    <span class="inline-label-wrapper">
+                        <span class="kix-icon icon-dummy icon-menu"/>
+                        <span class="inline-label">
+                            <br/>Home
+                        </span>
+                    </span>
+                </span>
+            </a>
+        </li>
+        <for(menuEntry in state.menuEntries)>
+            <li class=(menuEntry.active ? "active" : "")>
+                <a href=menuEntry.link>
+                    <span class="hover-label">${menuEntry.text}</span>
+                    <span class="inline-label-wrapper">
+                        <span class="kix-icon icon-dummy icon-menu"/>
+                        <span class="inline-label">
+                            <br/>${menuEntry.text}
+                        </span>
+                    </span>
+                </a>
+            </li>
+        </for>
+        <for(menuEntry in state.menuEntries)>
+            <li class=(menuEntry.active ? "active" : "")>
+                <a href=menuEntry.link>
+                    <span class="menu-item-wrapper cf">
+                        <span class="hover-label">${menuEntry.text}</span>
+                        <span class="inline-label-wrapper">
+                            <span class="kix-icon icon-dummy icon-menu"/>
+                            <span class="inline-label">
+                                <br/>${menuEntry.text}
+                            </span>
+                        </span>
+                    </span>
+                </a>
+            </li>
+        </for>
+        <for(menuEntry in state.menuEntries)>
+            <li class=(menuEntry.active ? "active" : "")>
+                <a href=menuEntry.link>
+                    <span class="menu-item-wrapper cf">
+                        <span class="hover-label">${menuEntry.text}</span>
+                        <span class="inline-label-wrapper">
+                            <span class="kix-icon icon-dummy icon-menu"/>
+                            <span class="inline-label">
+                                <br/>${menuEntry.text}
+                            </span>
+                        </span>
+                    </span>
+                </a>
+            </li>
+        </for>
+        <for(menuEntry in state.menuEntries)>
+            <li class=(menuEntry.active ? "active" : "")>
+                <a href=menuEntry.link>
+                    <span class="menu-item-wrapper cf">
+                        <span class="hover-label">${menuEntry.text}</span>
+                        <span class="inline-label-wrapper">
+                            <span class="kix-icon icon-dummy icon-menu"/>
+                            <span class="inline-label">
+                                <br/>${menuEntry.text}
+                            </span>
+                        </span>
+                    </span>
+                </a>
+            </li>
+        </for>
+    </ul>
+    <ul.user-menu>
+        <!-- TODO: Remove me! Bespielcode sollte wieder entfernt werden, wenn mehr Menüpunkte existieren -->
+        <li>
+            <a href="https://www.google.de">
+                <span class="menu-item-wrapper cf">
+                    <span class="hover-label">Admin</span>
+                    <span class="inline-label-wrapper">
+                        <span class="kix-icon icon-dummy icon-menu"/>
+                        <span class="inline-label">
+                            <br/>Admin
+                        </span>
+                    </span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.google.de">
+                <span class="menu-item-wrapper cf">
+                    <span class="hover-label">Kalender</span>
+                    <span class="inline-label-wrapper">
+                        <span class="kix-icon icon-dummy icon-menu"/>
+                        <span class="inline-label">
+                            <br/>Kalender
+                        </span>
+                    </span>
+                </span>
+            </a>
+        </li>
+    </ul>
+</div>
