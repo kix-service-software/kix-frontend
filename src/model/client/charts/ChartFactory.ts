@@ -23,7 +23,7 @@ export class ChartFactory {
     public static createChart(svgId: string, configuration: ChartConfiguration): void {
 
         // TODO: have to get data from search templates in configruation and give it to preparer?
-        const chartData = ChartDataPreparer.getData([]);
+        const chartData = ChartDataPreparer.getData(configuration.chartType);
 
         // TODO: use extension for more flexible approach
         if (chartData) {

@@ -10,11 +10,6 @@ class ChartWidgetComponent {
     }
 
     public onInput(input: any): void {
-        // TODO: just for testing!
-        // input.configuration.chartType = 'bar';
-        // input.configuration.chartType = 'stacked-bar';
-        // input.configuration.chartType = 'stacked-bar-horizontal';
-
         this.state.configuration = input.configuration || {};
         (this as any).emit('updateContentConfigurationHandler', this.updateContentConfigurationHandler.bind(this));
     }
@@ -27,6 +22,9 @@ class ChartWidgetComponent {
 
     private updateContentConfigurationHandler(configuration: ChartConfiguration) {
         this.state.configuration = configuration;
+
+        // remove chart and add new with changed configuration
+        document.getElementById(this.state.svgId).innerHTML = '';
         ChartFactory.createChart(this.state.svgId, this.state.configuration);
     }
 }

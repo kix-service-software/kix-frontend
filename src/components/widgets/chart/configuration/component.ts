@@ -1,27 +1,30 @@
+import { UIProperty } from '@kix/core/dist/model/client';
+
 class ChartConfigurationComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
-        // TODO: get types with function (including from extensions)
-        const types = {
-            1: 'pie',
-            2: 'bar',
-            3: 'stacked-bar',
-            4: 'stacked-bar-horizontal'
-        };
         this.state = {
             configuration: null,
-            types
+            types: {}
         };
     }
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
+
+        // TODO: get types with function (including types from extensions)
+        this.state.types = {
+            'pie': 'Pie chart',
+            'bar': 'Bar chart',
+            'stacked-bar': 'Stacked bar chart',
+            'stacked-bar-horizontal': 'Stacked bar chart (horizontal)'
+        };
     }
 
     public typeChanged(event): void {
-        this.state.configuration.typeId = event.target.value;
+        this.state.configuration.chartType = event.target.value;
     }
 
 }

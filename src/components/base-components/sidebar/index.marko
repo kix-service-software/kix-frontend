@@ -14,7 +14,9 @@
     </if>
 </div>
 <!--
-<sidebar-configuration-overlay sidebar=data.sidebar showOverlay=state.showConfiguration configuration=state.configuration
+<if(state.showConfiguration)>
+<sidebar-configuration-overlay sidebar=data.sidebar configuration=state.configuration
 on-saveConfigurationOverlay('saveConfigurationOverlay')
 on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+</if>
 -->

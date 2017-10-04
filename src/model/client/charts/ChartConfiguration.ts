@@ -4,6 +4,4 @@ export class ChartConfiguration {
 
     public chartType: string = 'pie';
 
-    public properties: UIProperty[] = [];
-
 }
