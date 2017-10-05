@@ -6,6 +6,5 @@ export class LoginComponentState {
     public error: any = null;
     public doLogin: boolean = false;
     public translations: any = {};
-    public mounted: boolean = false;
 
 }

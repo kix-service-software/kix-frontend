@@ -48,7 +48,6 @@ class LoginFormComponent {
             LoginTranslationId.USERNAME,
             LoginTranslationId.TITLE
         ]);
-        this.state.mounted = true;
     }
 
     public userNameChanged(event: any): void {
