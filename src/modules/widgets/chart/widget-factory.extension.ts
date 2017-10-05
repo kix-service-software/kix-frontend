@@ -1,4 +1,4 @@
-import { ChartConfiguration } from '../../../model/client/charts/';
+import { ChartConfiguration } from '@kix/core/dist/model/client/';
 import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core';
 
 import { ChartWidget } from './ChartWidget';
