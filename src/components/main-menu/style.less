@@ -1,0 +1,100 @@
+.menu-col {
+    float: left;
+}
+ul.main-menu,
+ul.user-menu {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-bottom: .25em;
+    li {
+        .color-theme-2;
+        height: 40px;
+        width: 70px;
+        border-top: 1px solid #35a5de;
+        border-bottom: 1px solid #005a85;
+        transition: width .5s, border-radius .25s;
+        display: block;
+        &:first-child {
+            border-top-right-radius: 5px;
+        }
+        &:last-child {
+            border-bottom-right-radius: 5px;
+        }
+        &:hover:not(.active) {
+            width: 100px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            & a {
+                & span.hover-label {
+                    width: 97px;
+                    border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+                & span.inline-label-wrapper {
+                    opacity: 0;
+                }
+            }
+        }
+        &.active {
+            .color-theme-0; 
+            height: 46px;
+            width: 76px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding-right: 6px;
+            box-sizing: border-box;
+        } 
+        &.active+li {
+            border-top: 0 none;
+        }
+        // TODO: should be removed or replaced with other link solution
+        a {
+            display: block;
+            height: 100%;
+            border-left: 3px solid @primary-0;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            & span.inline-label-wrapper {
+                opacity: 1;
+                transition: opacity .125s;
+                & span.kix-icon,
+                & span.inline-label {
+                    font-size: .75em;
+                }
+                & span.inline-label {
+                    position: relative;
+                    top: -5px;
+                }
+            }
+            & span.hover-label {
+                position: absolute;
+                display: inline-block;
+                background-color: @primary-0;
+                height: 100%;
+                left: 0;
+                width: 0;
+                transition: width .5s, border-radius .5s;
+                z-index: 5;
+                overflow: hidden;
+                line-height: 40px;
+            }
+        }
+    }
+    &#main-menu-extra {
+        margin-top: 2px;
+        .color-theme-5;
+        li {
+            .color-theme-1;
+            border-top: 1px solid lighten(@bc-color, 10%);
+            border-bottom: 1px solid darken(@bc-color, 15%);
+            border-left: 3px solid @tertiary-5;
+        }
+    }
+}
+
+ul.user-menu li {
+    background-color: #0a7cb3;
+}
