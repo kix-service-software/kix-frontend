@@ -1,4 +1,4 @@
-import { ChartFactory, ChartConfiguration } from './../../../model/client/charts/';
+import { ChartFactory, ChartConfiguration } from '@kix/core/dist/model/client';
 import { ChartComponentState } from './model/ChartComponentState';
 
 class ChartWidgetComponent {

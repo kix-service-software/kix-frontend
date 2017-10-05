@@ -1,4 +1,4 @@
-import { ChartConfiguration } from './../../../../model/client/charts/';
+import { ChartConfiguration } from '@kix/core/dist/model/client';
 
 export class ChartComponentState {
 

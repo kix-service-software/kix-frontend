@@ -1,5 +1,3 @@
-import { UIProperty } from '@kix/core/dist/model/client';
-
 class ChartConfigurationComponent {
 
     public state: any;
