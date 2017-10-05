@@ -2,7 +2,8 @@ import {
     Environment,
     IServerConfiguration,
     IConfigurationService,
-    ILoggingService
+    ILoggingService,
+    TranslationConfiguration
 } from '@kix/core';
 import { injectable, inject } from 'inversify';
 
@@ -14,6 +15,7 @@ export class ConfigurationService implements IConfigurationService {
 
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
+    private translationConfiguration: TranslationConfiguration;
 
     private CONFIG_DIR: string = '../../config/';
     private CONFIG_COMPONENTS_DIR: string = '../../config/components/';
@@ -33,6 +35,10 @@ export class ConfigurationService implements IConfigurationService {
 
         this.clearRequireCache(lassoConfig);
         this.lassoConfiguration = require(lassoConfig);
+
+        const translationConfig = this.getConfigurationFilePath("translation");
+        this.clearRequireCache(translationConfig);
+        this.translationConfiguration = require(translationConfig);
     }
 
     public getServerConfiguration(): IServerConfiguration {
@@ -41,6 +47,10 @@ export class ConfigurationService implements IConfigurationService {
 
     public getLassoConfiguration(): any {
         return this.lassoConfiguration;
+    }
+
+    public getTranslationConfiguration(): TranslationConfiguration {
+        return this.translationConfiguration;
     }
 
     public async getComponentConfiguration(
@@ -163,7 +173,7 @@ export class ConfigurationService implements IConfigurationService {
 
     private getConfigurationFile(filePath: string): any {
         let configurationFile = null;
-        if (fs.existsSync(filePath)) {
+        if (fs.existsSync(__dirname + "/" + filePath)) {
             this.clearRequireCache(filePath);
             try {
                 configurationFile = require(filePath);

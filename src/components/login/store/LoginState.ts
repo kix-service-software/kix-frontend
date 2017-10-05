@@ -8,5 +8,6 @@ export class LoginState {
     public error: any = null;
     public socketListener: LoginSocketListener = null;
     public doLogin: boolean = false;
+    public translations: any = {};
 
 }

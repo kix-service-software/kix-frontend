@@ -1,0 +1,32 @@
+{
+    "translations": [
+        {
+            "id": "LOGIN:TITLE",
+            "defaultValue": "Willkommen bei KIX Professional",
+            "translationValues": {
+                "en": "Welcome to KIX Professional"
+            }
+        },
+        {
+            "id": "LOGIN:BUTTON:LABEL",
+            "defaultValue": "Anmelden",
+            "translationValues": {
+                "en": "Login"
+            }
+        },
+        {
+            "id": "LOGIN:USERNAME",
+            "defaultValue": "Benutzername",
+            "translationValues": {
+                "en": "Username"
+            }
+        },
+        {
+            "id": "LOGIN:PASSWORD",
+            "defaultValue": "Passwort",
+            "translationValues": {
+                "en": "Password"
+            }
+        }
+    ]
+}

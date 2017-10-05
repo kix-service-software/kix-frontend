@@ -1,5 +1,7 @@
 import { LoginComponentState } from './model/LoginComponentState';
+import { LoginTranslationId } from './model/LoginTranslationId';
 import { LoginState } from './store/LoginState';
+import { TranslationHandler } from '@kix/core/dist/model/client';
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
@@ -17,9 +19,12 @@ class LoginFormComponent {
 
     public frontendUrl: string;
 
+    public translationIds: any;
+
     public onCreate(input: any): void {
         this.state = new LoginComponentState();
         this.frontendUrl = input.frontendUrl;
+        this.translationIds = LoginTranslationId;
     }
 
     public stateChanged(): void {
@@ -31,10 +36,19 @@ class LoginFormComponent {
         this.state.doLogin = reduxState.doLogin;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(LOGIN_INITIALIZE());
+
+        const translationHandler = await TranslationHandler.getInstance();
+        this.state.translations = await translationHandler.getTranslations([
+            LoginTranslationId.BUTTON_LABEL,
+            LoginTranslationId.PASSWORD,
+            LoginTranslationId.USERNAME,
+            LoginTranslationId.TITLE
+        ]);
+        this.state.mounted = true;
     }
 
     public userNameChanged(event: any): void {
@@ -51,6 +65,14 @@ class LoginFormComponent {
                 this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
             }
         });
+    }
+
+    public getTranslation(id: LoginTranslationId): string {
+        if (this.state.translations[id]) {
+            return this.state.translations[id];
+        }
+
+        return id;
     }
 }
 

@@ -1,10 +1,10 @@
-<div.action-overlay class="${state.showOverlay ? '' : 'action-hide'}">
+<div>
     <div.action-overlay-transparent/>
     <div.action-container>
         <h1>Aktion: ${data.action.name}</h1>
         <div.action-content>
-            <if(state.template)>
-                <include(state.template, {
+            <if(data.template)>
+                <include(data.template, {
                     action: data.action,
                     contentData: data.contentData
                 })/>

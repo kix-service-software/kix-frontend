@@ -12,7 +12,7 @@ export class ActionComponent {
         this.state = {
             action: input.action,
             running: false,
-            showActionOverlay: false
+            template: null
         };
     }
 
@@ -28,20 +28,22 @@ export class ActionComponent {
     }
 
     public handleAction(): void {
-        if (this.state.action.useOverlay) {
-            this.state.showActionOverlay = true;
-        } else {
-            this.executeAction();
+        if (!this.state.running) {
+            if (this.state.action.useOverlay) {
+                this.state.template = require(this.state.action.template);
+            } else {
+                this.executeAction();
+            }
         }
     }
 
     public runActionClicked(): void {
-        this.state.showActionOverlay = false;
+        this.state.template = null;
         this.executeAction();
     }
 
     public cancelActionClicked(): void {
-        this.state.showActionOverlay = false;
+        this.state.template = null;
     }
 
     private executeAction(): void {
