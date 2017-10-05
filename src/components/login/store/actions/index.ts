@@ -4,7 +4,6 @@ import LOGIN_VALIDATE from './login-validate';
 import LOGIN_INITIALIZE from './login-initialize';
 import LOGIN_ERROR from './login-error';
 import LOGIN_AUTH from './login-auth';
-import TRANSLATIONS_LOADED from './translations-loaded';
 
 
 export { LoginAction } from './LoginAction';
@@ -14,6 +13,5 @@ export {
     LOGIN_AUTH,
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
-    LOGIN_VALIDATE,
-    TRANSLATIONS_LOADED
+    LOGIN_VALIDATE
 };

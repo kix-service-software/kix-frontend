@@ -19,9 +19,17 @@ export class TranslationCommunicator extends KIXCommunicator {
         client.on(TranslationEvent.LOAD_TRANSLATIONS, async (data: LoadTranslationRequest) => {
             // TODO: Get language shortcut from personal settings of user. Token is optional.
             // TODO: If no token then use default language setting.
-            const translations = this.translationService.getTranslations(data.ids, "de");
+
+            let translations = {};
+            if (!data.ids || data.ids.length === 0) {
+                translations = this.translationService.getAllTranslations("de");
+
+            } else {
+                translations = this.translationService.getTranslations(data.ids, "de");
+            }
 
             client.emit(TranslationEvent.TRANSLATIONS_LOADED, new LoadTranslationResponse(translations));
+
         });
     }
 

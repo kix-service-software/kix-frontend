@@ -27,9 +27,6 @@ class LoginActionHandler {
             case LoginAction.LOGIN_AUTH + FULFILLED:
                 return { ...state, doLogin: true };
 
-            case LoginAction.TRANSLATIONS_LOADED + FULFILLED:
-                return { ...state, translations: action.payload.translations };
-
             default:
                 return { ...state };
         }
