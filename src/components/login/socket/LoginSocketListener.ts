@@ -4,14 +4,11 @@ import {
     AuthenticationResult,
     LoginRequest,
     SocketEvent,
-    UserType,
-    TranslationEvent,
-    LoadTranslationRequest,
-    LoadTranslationResponse
+    UserType
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
-import { LOGIN_ERROR, TRANSLATIONS_LOADED } from '../store/actions';
+import { LOGIN_ERROR } from '../store/actions';
 
 import { LoginTranslationId } from '../model/LoginTranslationId';
 
@@ -20,39 +17,19 @@ declare var io: any;
 export class LoginSocketListener extends SocketListener {
 
     private authenticationSocket: SocketIO.Server;
-    private translationSocket: SocketIO.Server;
     private store: any;
 
     public constructor() {
         super();
 
         this.authenticationSocket = this.createSocket("authentication", false);
-        this.translationSocket = this.createSocket("translation", false);
         this.store = require('../store');
-        this.initTranslationSocketListener();
         this.initAuthenticationSocketListener();
     }
 
     public login(userName: string, password: string, userType: UserType): void {
         this.authenticationSocket.emit(AuthenticationEvent.LOGIN,
             new LoginRequest(userName, password, UserType.AGENT));
-    }
-
-    private initTranslationSocketListener(): void {
-        this.translationSocket.on(SocketEvent.CONNECT, () => {
-            this.translationSocket.emit(TranslationEvent.LOAD_TRANSLATIONS,
-                new LoadTranslationRequest(null, [
-                    LoginTranslationId.TITLE,
-                    LoginTranslationId.BUTTON_LABEL,
-                    LoginTranslationId.USERNAME,
-                    LoginTranslationId.PASSWORD
-                ])
-            );
-        });
-
-        this.translationSocket.on(TranslationEvent.TRANSLATIONS_LOADED, (data: LoadTranslationResponse) => {
-            this.store.dispatch(TRANSLATIONS_LOADED(data.translations));
-        });
     }
 
     private initAuthenticationSocketListener(): void {

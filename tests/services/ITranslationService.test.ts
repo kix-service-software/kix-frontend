@@ -106,4 +106,20 @@ describe('Ticket Type Service', () => {
         });
 
     });
+
+    describe('Request all translations', () => {
+
+        it('should return all translation with correct values', () => {
+            const translations = translationService.getAllTranslations("de");
+            expect(translations).not.undefined;
+
+            expect(translations["TEST:TRANSLATION"]).not.undefined;
+            expect(translations["TEST:TRANSLATION"]).equals("UEBERSETZT");
+
+            expect(translations["TEST:TRANSLATION1"]).not.undefined;
+            expect(translations["TEST:TRANSLATION1"]).equals("DEFAULT VALUE1");
+
+        });
+
+    });
 });

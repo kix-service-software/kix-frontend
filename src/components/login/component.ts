@@ -1,6 +1,7 @@
 import { LoginComponentState } from './model/LoginComponentState';
 import { LoginTranslationId } from './model/LoginTranslationId';
 import { LoginState } from './store/LoginState';
+import { TranslationHandler } from '@kix/core/dist/model/client';
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
@@ -33,15 +34,21 @@ class LoginFormComponent {
         this.state.valid = reduxState.valid;
         this.state.error = reduxState.error;
         this.state.doLogin = reduxState.doLogin;
-        if (reduxState.translations) {
-            this.state.translations = reduxState.translations;
-        }
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(LOGIN_INITIALIZE());
+
+        const translationHandler = await TranslationHandler.getInstance();
+        this.state.translations = await translationHandler.getTranslations([
+            LoginTranslationId.BUTTON_LABEL,
+            LoginTranslationId.PASSWORD,
+            LoginTranslationId.USERNAME,
+            LoginTranslationId.TITLE
+        ]);
+        this.state.mounted = true;
     }
 
     public userNameChanged(event: any): void {

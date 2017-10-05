@@ -37,4 +37,19 @@ export class TranslationService implements ITranslationService {
         return userTranslation;
     }
 
+    public getAllTranslations(languageShortCut: string): any {
+        const result = {};
+
+        for (const translationConfig of this.translationConfiguration.translations) {
+            const translation = translationConfig.translationValues[languageShortCut];
+            if (translation) {
+                result[translationConfig.id] = translation;
+            } else {
+                result[translationConfig.id] = translationConfig.defaultValue;
+            }
+        }
+
+        return result;
+    }
+
 }
