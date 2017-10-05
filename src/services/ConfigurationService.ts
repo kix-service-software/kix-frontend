@@ -83,22 +83,12 @@ export class ConfigurationService implements IConfigurationService {
         }
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
+        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
 
-        await new Promise<void>((resolve, reject) => {
-            const filePath = __dirname + '/' + this.getComponentConfigurationFilePath(configurationFileName);
+        const configurationContent = this.getConfigurationFile(filePath);
+        configurationContent[componentId] = configuration;
 
-            const configurationFile = this.getConfigurationFile(filePath);
-            configurationFile[componentId] = configuration;
-
-            jsonfile.writeFile(filePath, configurationFile,
-                (fileError: Error) => {
-                    if (fileError) {
-                        reject(fileError);
-                    }
-
-                    resolve();
-                });
-        });
+        return this.saveConfigurationFile(__dirname + '/' + filePath, configurationContent);
     }
 
     public isProductionMode(): boolean {
@@ -122,6 +112,19 @@ export class ConfigurationService implements IConfigurationService {
         }
 
         return nodeEnv.toLocaleLowerCase();
+    }
+
+    private saveConfigurationFile(filePath: string, configurationContent: any): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            jsonfile.writeFile(filePath, configurationContent,
+                (fileError: Error) => {
+                    if (fileError) {
+                        reject(fileError);
+                    }
+
+                    resolve();
+                });
+        });
     }
 
     private loadServerConfig(serverConfig: string): IServerConfiguration {
