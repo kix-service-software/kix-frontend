@@ -42,6 +42,7 @@
     "@types/chai-as-promised": "7.1.0",
     "@types/mocha": "2.2.43",
     "@types/node": "8.0.28",
+    "@types/d3": "4.10.0",
     "@types/request-promise": "4.1.37",
     "@types/socket.io": "1.4.30",
     "chai": "4.1.2",

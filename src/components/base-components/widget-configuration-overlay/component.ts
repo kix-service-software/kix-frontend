@@ -4,14 +4,12 @@ class ConfigurationOverlayComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            showOverlay: false,
             widget: input.widget,
             configuration: null,
         };
     }
 
     public onInput(input: any): void {
-        this.state.showOverlay = input.showOverlay;
         this.state.configuration = input.configuration;
     }
 

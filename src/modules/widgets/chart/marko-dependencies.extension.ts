@@ -1,11 +1,11 @@
 import { IMarkoDependencyExtension } from '@kix/core';
 
-export class StatisticsWidgetMarkoDependencyExtension implements IMarkoDependencyExtension {
+export class ChartWidgetMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            "widgets/statistics",
-            "widgets/statistics/configuration"
+            "widgets/chart",
+            "widgets/chart/configuration"
         ];
     }
 
@@ -16,5 +16,5 @@ export class StatisticsWidgetMarkoDependencyExtension implements IMarkoDependenc
 }
 
 module.exports = (data, host, options) => {
-    return new StatisticsWidgetMarkoDependencyExtension();
+    return new ChartWidgetMarkoDependencyExtension();
 };

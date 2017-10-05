@@ -24,10 +24,12 @@
                 on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
         </if>
     </div>
-    <div>
-        <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
-            configuration=state.contentConfiguration template=state.configurationTemplate
-            on-saveConfigurationOverlay('saveConfigurationOverlay')
-            on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
-    </div>
+    <if(state.showConfiguration)>
+        <div>
+            <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
+                configuration=state.contentConfiguration template=state.configurationTemplate
+                on-saveConfigurationOverlay('saveConfigurationOverlay')
+                on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+        </div>
+    </if>
 </div>

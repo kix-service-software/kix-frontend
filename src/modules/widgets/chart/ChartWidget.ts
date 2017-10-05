@@ -1,6 +1,6 @@
 import { IWidget } from '@kix/core';
 
-export class StatisticWidget implements IWidget {
+export class ChartWidget implements IWidget {
 
     public id: string;
 
