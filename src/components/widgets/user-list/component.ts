@@ -28,7 +28,9 @@ class UserListWidgetComponent {
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.store));
+        this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
+            this.loadUser();
+        });
     }
 
     public stateChanged(): void {

@@ -1,4 +1,4 @@
-import { ClientStorageHandler, SocketEvent } from '@kix/core/dist/model/client';
+import { ClientStorageHandler, SocketEvent, TranslationHandler } from '@kix/core/dist/model/client';
 
 declare var io;
 
@@ -13,7 +13,7 @@ class BaseTemplateComponent {
         };
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const token = ClientStorageHandler.getToken();
         const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
 
@@ -28,6 +28,8 @@ class BaseTemplateComponent {
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
+
+        await TranslationHandler.getInstance();
     }
 
     public toggleConfigurationMode(): void {
