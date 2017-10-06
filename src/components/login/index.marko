@@ -14,7 +14,7 @@
                         <div class="message message-progress">... Login ...</div>
                     </if>
                     <else-if(state.error)>
-                        <div class="message message-error">${JSON.stringify(state.error)}</div>
+                        <div class="message message-error">${state.error}</div>
                     </else-if>
                 </div>
             </if>
