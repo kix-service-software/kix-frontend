@@ -2,8 +2,6 @@ import { DashboardSocketListener } from './../../socket/DashboardSocketListener'
 import { StateAction, SocketEvent } from '@kix/core/dist/model/client';
 import { DashboardAction } from './';
 
-declare var io: any;
-
 export default () => {
     const payload = new Promise((resolve, reject) => {
         const dashboardSocketListener = new DashboardSocketListener();
