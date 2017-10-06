@@ -18,10 +18,8 @@ class UserListWidgetComponent {
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
-        if (this.store && this.state.configuration && !this.initialized) {
-            this.initialized = true;
+        if (this.store && this.state.configuration) {
             this.loadUser();
-            (this as any).emit('updateContentConfigurationHandler', this.updateContentConfigurationHandler.bind(this));
         }
     }
 
@@ -46,18 +44,15 @@ class UserListWidgetComponent {
         }
     }
 
-    private updateContentConfigurationHandler(configuration: UserListConfiguration) {
-        this.state.configuration = configuration;
-        this.loadUser();
-    }
-
     private loadUser(): void {
-        const reduxState: UserListState = this.store.getState();
-        reduxState.socketListener.loadUsers(new LoadUsersRequest(
-            ClientStorageHandler.getToken(),
-            this.state.configuration.properties,
-            this.state.configuration.limit)
-        );
+        if (this.state.configuration) {
+            const reduxState: UserListState = this.store.getState();
+            reduxState.socketListener.loadUsers(new LoadUsersRequest(
+                ClientStorageHandler.getToken(),
+                this.state.configuration.properties,
+                this.state.configuration.limit)
+            );
+        }
     }
 }
 
