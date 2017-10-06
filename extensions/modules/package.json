@@ -1,0 +1,18 @@
+{
+    "name": "kix-modules",
+    "extensions": {
+        "kix:marko:dependencies": {
+            "dashboard-marko": "../../dist/modules/dashboard/marko-dependencies.extension",
+            "tickets-marko": "../../dist/modules/tickets/marko-dependencies.extension"
+        },
+        "kix:menu:main": {
+            "dashboard-menu-main": "../../dist/modules/dashboard/menu.main.extension",
+            "tickets-menu-main": "../../dist/modules/tickets/menu.main.extension"
+        },
+        "kix:module": {
+            "dashboard-module": "../../dist/modules/dashboard/module.extension",
+            "tickets-module": "../../dist/modules/tickets/module.extension",
+            "kix-sidebar-module": "../../dist/modules/kix-sidebar/module.extension"
+        }
+    }
+}

@@ -29,7 +29,9 @@ export class MainMenuCommunicator extends KIXCommunicator {
         client.on(MainMenuEvent.LOAD_MENU_ENTRIES, async () => {
 
             const menuExtensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
-            const mainMenuEntries = menuExtensions.map((me) => new MenuEntry(me.getLink(), me.getIcon(), me.getText()));
+            const mainMenuEntries = menuExtensions.map(
+                (me) => new MenuEntry(me.getLink(), me.getIcon(), me.getText(), me.getContextId())
+            );
 
             client.emit(MainMenuEvent.MENU_ENTRIES_LOADED, new MainMenuEntriesResult(mainMenuEntries));
         });

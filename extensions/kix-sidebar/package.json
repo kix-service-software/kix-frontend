@@ -1,8 +1,0 @@
-{
-    "name": "kix-sidebar-extensions",
-    "extensions": {
-        "kix:module": {
-            "kix-sidebar-module": "../../dist/modules/kix-sidebar/module.extension"
-        }
-    }
-}

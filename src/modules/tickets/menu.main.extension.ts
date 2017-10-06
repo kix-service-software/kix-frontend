@@ -1,9 +1,9 @@
 import { IMainMenuExtension } from '@kix/core';
 
-export class DashboardMainMenuExtension implements IMainMenuExtension {
+export class TicketsMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/dashboard";
+        return "/ticket-dashboard";
     }
 
     public getIcon(): string {
@@ -11,15 +11,15 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
     }
 
     public getText(): string {
-        return "Home";
+        return "Tickets";
     }
 
     public getContextId(): string {
-        return "dashboard";
+        return "ticket-dashboard";
     }
 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardMainMenuExtension();
+    return new TicketsMainMenuExtension();
 };
