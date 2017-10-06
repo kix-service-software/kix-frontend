@@ -1,15 +1,15 @@
 import { ContainerConfiguration, ContainerRow, IModuleFactoryExtension } from '@kix/core';
 
-export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
+export class SearchModuleFactoryExtension implements IModuleFactoryExtension {
 
     public getTemplate(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/modules/tickets/';
+        return '/@kix/frontend$' + version + '/dist/components/modules/search/';
     }
 
     public getModuleId(): string {
-        return "ticket-dashboard";
+        return "search-dashboard";
     }
 
     public getDefaultConfiguration(): any {
@@ -20,5 +20,5 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new TicketModuleFactoryExtension();
+    return new SearchModuleFactoryExtension();
 };
