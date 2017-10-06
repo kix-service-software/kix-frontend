@@ -6,9 +6,7 @@ export class WidgetComponentState {
 
     public showConfiguration: boolean = false;
 
-    public actions: IAction[] = [];
-
-    public contentConfiguration: any = null;
+    public configuration: WidgetConfiguration = null;
 
     public widget: IWidget = null;
 

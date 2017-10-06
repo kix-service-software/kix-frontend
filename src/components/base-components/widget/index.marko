@@ -1,35 +1,36 @@
 <div.widget>
-    <if(data.draggable)>
-        <div.drag-overlay class="${state.configurationMode ? '' : 'hidden'} ${data.drop ? 'drop-element' : ''}"
-            data-id="${data.data_id ? data.data_id : ''}"/>
-    </if>
-    <div.widget-header.clearfix>
-        <span.header-left>
-            <h3>${data.widget.title}</h3>
-            <!-- Hier Filter oder ähnliche Elemente rein-->
-        </span>
-        <span.header-right>
-            <for(action in state.actions)>
-                <action action=action contentData=state.contentData/>
-            </for>
-            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
-                on-click('configClicked')/>
-        </span>
-    </div>
-    <div.widget-content>
-        <if(state.template)>
-            <include(state.template, {
-                    configuration: state.contentConfiguration
-                }) on-contentDataLoaded('contentDataLoaded')
-                on-updateContentConfigurationHandler('onUpdateContentConfigurationHandler')/>
+    <if(state.configuration)>
+        <if(data.draggable)>
+            <div.drag-overlay class="${state.configurationMode ? '' : 'hidden'} ${data.drop ? 'drop-element' : ''}"
+                data-id="${data.data_id ? data.data_id : ''}"/>
         </if>
-    </div>
-    <if(state.showConfiguration)>
-        <div>
-            <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
-                configuration=state.contentConfiguration template=state.configurationTemplate
-                on-saveConfigurationOverlay('saveConfigurationOverlay')
-                on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+        <div.widget-header.clearfix>
+            <span.header-left>
+                <h3>${state.configuration.title}</h3>
+                <!-- Hier Filter oder ähnliche Elemente rein-->
+            </span>
+            <span.header-right>
+                <for(action in state.configuration.actions)>
+                    <action action=action contentData=state.contentData/>
+                </for>
+                <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
+                    on-click('configClicked')/>
+            </span>
         </div>
+        <div.widget-content>
+            <if(state.template)>
+                <include(state.template, {
+                    configuration: state.configuration.contentConfiguration
+                }) on-contentDataLoaded('contentDataLoaded')/>
+            </if>
+        </div>
+        <if(state.showConfiguration)>
+            <div>
+                <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
+                    configuration=state.configuration.contentConfiguration template=state.configurationTemplate
+                    on-saveConfigurationOverlay('saveConfigurationOverlay')
+                    on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+            </div>
+        </if>
     </if>
 </div>
