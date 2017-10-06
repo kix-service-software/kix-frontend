@@ -1,16 +1,14 @@
 <div.container.container-draggable.clearfix>
-    <if(state.containerConfiguration.rows)>
-        <for(row in state.containerConfiguration.rows)>
-            <div.line.clearfix>
-                <for(widget in row.widgets)>
-                    <div.unit-space.drag-widget class="${row.widgets.length === 1 ? 'size1of1' : 'size1of3'}"
-                        draggable="${state.dndState.enabled ? 'true' : 'false'}" data-id=widget.instanceId
-                        on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
-                        <widget widget=widget configurationMode=data.configurationMode draggable=true
-                            drop=(state.dndState.dropElementId === widget.instanceId) data_id=widget.instanceId/>
-                    </div>
-                </for>
-            </div>
-        </for>
-    </if>
+    <for(row in state.containerConfiguration.rows)>
+        <div.line.clearfix>
+            <for(widget in row.widgets)>
+                <div.unit-space.drag-widget class="${row.widgets.length === 1 ? 'size1of1' : 'size1of3'}"
+                    draggable="${state.dndState.enabled ? 'true' : 'false'}" data-id=widget.instanceId
+                    on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
+                    <widget widget=widget configurationMode=data.configurationMode draggable=true
+                        drop=(state.dndState.dropElementId === widget.instanceId) data_id=widget.instanceId/>
+                </div>
+            </for>
+        </div>
+    </for>
 </div>
