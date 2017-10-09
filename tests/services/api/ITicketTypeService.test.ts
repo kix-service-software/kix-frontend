@@ -1,5 +1,5 @@
 /* tslint:disable*/
-import { container } from './../../src/Container';
+import { container } from '../../../src/Container';
 
 import {
     ITicketTypeService,
@@ -58,7 +58,7 @@ describe('Ticket Type Service', () => {
     });
 
     describe('Get multiple ticket types', () => {
-        describe('Create a valid request to retrieve all users.', () => {
+        describe('Create a valid request to retrieve all ticket types.', () => {
 
             before(() => {
                 nockScope
@@ -120,10 +120,10 @@ describe('Ticket Type Service', () => {
             });
 
             it('should return a list of ticket types filtered by changed after.', async () => {
-                const users: TicketType[] = await ticketTypeService.getTicketTypes('', null, null, "20170815");
-                expect(users).not.undefined;
-                expect(users).an('array');
-                expect(users).not.empty;
+                const ticketTypes: TicketType[] = await ticketTypeService.getTicketTypes('', null, null, "20170815");
+                expect(ticketTypes).not.undefined;
+                expect(ticketTypes).an('array');
+                expect(ticketTypes).not.empty;
             });
         });
 
@@ -137,11 +137,11 @@ describe('Ticket Type Service', () => {
             });
 
             it('should return a limited list of ticket types filtered by changed after.', async () => {
-                const users: TicketType[] = await ticketTypeService.getTicketTypes('', 6, null, "20170815");
-                expect(users).not.undefined;
-                expect(users).an('array');
-                expect(users.length).equal(6);
-                expect(users).not.empty;
+                const ticketTypes: TicketType[] = await ticketTypeService.getTicketTypes('', 6, null, "20170815");
+                expect(ticketTypes).not.undefined;
+                expect(ticketTypes).an('array');
+                expect(ticketTypes.length).equal(6);
+                expect(ticketTypes).not.empty;
             });
         });
 
@@ -155,11 +155,11 @@ describe('Ticket Type Service', () => {
             });
 
             it('should return a limited, sorted list of ticket types.', async () => {
-                const users: TicketType[] = await ticketTypeService.getTicketTypes('', 6, SortOrder.UP);
-                expect(users).not.undefined;
-                expect(users).an('array');
-                expect(users.length).equal(6);
-                expect(users).not.empty;
+                const ticketTypes: TicketType[] = await ticketTypeService.getTicketTypes('', 6, SortOrder.UP);
+                expect(ticketTypes).not.undefined;
+                expect(ticketTypes).an('array');
+                expect(ticketTypes.length).equal(6);
+                expect(ticketTypes).not.empty;
             });
         });
 
@@ -173,10 +173,10 @@ describe('Ticket Type Service', () => {
             });
 
             it('should return a sorted list of ticket types filtered by changed after.', async () => {
-                const users: TicketType[] = await ticketTypeService.getTicketTypes('', null, SortOrder.UP, "20170815");
-                expect(users).not.undefined;
-                expect(users).an('array');
-                expect(users).not.empty;
+                const ticketTypes: TicketType[] = await ticketTypeService.getTicketTypes('', null, SortOrder.UP, "20170815");
+                expect(ticketTypes).not.undefined;
+                expect(ticketTypes).an('array');
+                expect(ticketTypes).not.empty;
             });
         });
     });
@@ -190,9 +190,9 @@ describe('Ticket Type Service', () => {
                     .reply(200, buildCreateTicketTypeResponse(123456));
             });
 
-            it('should return a the id of the new users.', async () => {
-                const userId = await ticketTypeService.createTicketType('', 'ticket-type', 1);
-                expect(userId).equal(123456);
+            it('should return a the id of the new ticket types.', async () => {
+                const ticketTypeId = await ticketTypeService.createTicketType('', 'ticket-type', 1);
+                expect(ticketTypeId).equal(123456);
             });
 
         });
@@ -206,7 +206,7 @@ describe('Ticket Type Service', () => {
             });
 
             it('should throw an error if request is invalid.', async () => {
-                const userId = await ticketTypeService.createTicketType('', 'ticket-type', 1)
+                const ticketTypeId = await ticketTypeService.createTicketType('', 'ticket-type', 1)
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {
@@ -225,12 +225,12 @@ describe('Ticket Type Service', () => {
                 nockScope
                     .patch(resourcePath + '/123456',
                     new UpdateTicketTypeRequest('ticket-type', 1))
-                    .reply(200, buildUpdateUserResponse(123456));
+                    .reply(200, buildUpdateTicketTypeResponse(123456));
             });
 
             it('should return the id of the ticket type.', async () => {
-                const userId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1);
-                expect(userId).equal(123456);
+                const ticketTypeId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1);
+                expect(ticketTypeId).equal(123456);
             });
 
         });
@@ -244,7 +244,7 @@ describe('Ticket Type Service', () => {
             });
 
             it('should throw a error.', async () => {
-                const userId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1)
+                const ticketTypeId = await ticketTypeService.updateTicketType('', 123456, 'ticket-type', 1)
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {
@@ -285,7 +285,7 @@ describe('Ticket Type Service', () => {
             });
 
             it('should throw a error.', async () => {
-                const userId = await ticketTypeService.deleteTicketType('', 123456)
+                const ticketTypeId = await ticketTypeService.deleteTicketType('', 123456)
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {
@@ -321,7 +321,7 @@ function buildCreateTicketTypeResponse(id: number): CreateTicketTypeResponse {
     return response;
 }
 
-function buildUpdateUserResponse(id: number): UpdateTicketTypeResponse {
+function buildUpdateTicketTypeResponse(id: number): UpdateTicketTypeResponse {
     const response = new UpdateTicketTypeResponse();
     response.TypeID = id;
     return response;

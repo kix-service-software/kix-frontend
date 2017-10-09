@@ -72,19 +72,12 @@ gulp.task('test', () => {
         'tests/client/**/*.test.ts',
         'tests/model/**/*.test.ts',
         'tests/communicators/**/*.test.ts',
-        'tests/services/IAuthenticationService.test.ts',
+        'tests/services/api/**/*.test.ts',
         'tests/services/IConfigurationService.test.ts',
-        'tests/services/IHTTPService.test.ts',
         'tests/services/ILoggingService.test.ts',
         'tests/services/IPluginService.test.ts',
         'tests/services/ISocketCommunicationService.test.ts',
-        'tests/services/ITicketService.test.ts',
-        'tests/services/ITicketPriorityService.test.ts',
-        'tests/services/ITicketStateService.test.ts',
-        'tests/services/ITicketTypeService.test.ts',
         'tests/services/ITranslationService.test.ts',
-        'tests/services/IUserService.test.ts',
-        'tests/services/IValidObjectService.test.ts'
     ])
         .pipe(mocha({
             reporter: 'spec',

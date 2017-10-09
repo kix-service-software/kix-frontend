@@ -19,7 +19,7 @@ import {
     UpdateTicketResponse
 } from '@kix/core';
 
-import { container } from './../../src/Container';
+import { container } from '../../../src/Container';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
