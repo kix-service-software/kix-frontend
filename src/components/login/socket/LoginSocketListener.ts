@@ -12,8 +12,6 @@ import { LOGIN_ERROR } from '../store/actions';
 
 import { LoginTranslationId } from '../model/LoginTranslationId';
 
-declare var io: any;
-
 export class LoginSocketListener extends SocketListener {
 
     private authenticationSocket: SocketIO.Server;

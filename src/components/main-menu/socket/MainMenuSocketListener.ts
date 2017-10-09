@@ -7,8 +7,6 @@ import {
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
 
-declare var io: any;
-
 export class MainMenuSocketListener extends SocketListener {
 
     private socket: SocketIO.Server;
