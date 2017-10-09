@@ -51,43 +51,44 @@
     color: @secondary-0;
     & .message {
         position: relative;
-        left: -17px;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
+        left: 17px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
         display: inline-block;
-        height: 35px;
+        min-height: 35px;
         line-height: 29px;
         font-weight: 600;
         padding: 0 1em;
         border: 3px solid @tertiary-0;
         box-sizing: border-box;
-        &:after {
+        &:before {
             content: " ";
             position: absolute;
             top: -3px;
-            right: -35px;
+            left: -41px;
             display: block;
             box-sizing: border-box;
             border: 3px solid @tertiary-0;
             width: 35px;
-            height: 35px;
-            border-top-right-radius: @border-radius;
-            border-bottom-right-radius: @border-radius;
+            height: 100%;
+            border-top-left-radius: @border-radius;
+            border-bottom-left-radius: @border-radius;
             color: @tertiary-0;
             cursor: pointer;
+            box-sizing: content-box;
         }
         &.message-progress {
             border-color: @tertiary-4;
-            &:after {
+            &:before {
                 border-color: @tertiary-4;
                 color: @tertiary-4;
             }
         }
         &.message-error {
-            border-color: @tertiary-1;
-            &:after {
-                border-color: @tertiary-1;
-                color: @tertiary-1;
+            border-color: @tertiary-2;
+            &:before {
+                border-color: @tertiary-2;
+                color: @tertiary-2;
             }
         }
     }
