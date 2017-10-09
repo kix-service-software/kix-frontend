@@ -1,14 +1,7 @@
-export { AuthenticationService } from './AuthenticationService';
+export * from './api';
 export { ConfigurationService } from './ConfigurationService';
-export { HttpService } from './HttpService';
 export { LoggingService } from './LoggingService';
 export { MarkoService } from './MarkoService';
 export { PluginService } from './PluginService';
 export { SocketCommunicationService } from './SocketCommuncationService';
-export { TicketPriorityService } from './TicketPriorityService';
-export { TicketService } from './TicketService';
-export { TicketStateService } from './TicketStateService';
-export { TicketTypeService } from './TicketTypeService';
 export { TranslationService } from './TranslationService';
-export { UserService } from './UserService';
-export { ValidObjectService } from './ValidObjectService';

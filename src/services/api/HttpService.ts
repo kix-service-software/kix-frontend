@@ -25,7 +25,7 @@ export class HttpService implements IHttpService {
         this.apiURL = serverConfig.BACKEND_API_URL;
         this.request = require('request-promise');
         this.loggingService = loggingService;
-        this.backendCertificate = fs.readFileSync(path.join(__dirname, '../../cert/backend.pem'));
+        this.backendCertificate = fs.readFileSync(path.join(__dirname, '../../../cert/backend.pem'));
     }
 
     public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
