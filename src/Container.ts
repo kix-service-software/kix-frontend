@@ -17,6 +17,7 @@ import {
     ICommunicatorExtension,
     IConfigurationService,
     IAuthenticationService,
+    IGroupService,
     IHttpService,
     IMarkoService,
     IPluginService,
@@ -35,6 +36,7 @@ import {
     UserService,
     HttpService,
     AuthenticationService,
+    GroupService,
     MarkoService,
     LoggingService,
     SocketCommunicationService,
@@ -88,6 +90,7 @@ export class ServiceContainer {
         this.container.bind<IValidObjectService>("IValidObjectService").to(ValidObjectService);
         this.container.bind<ITicketStateService>("ITicketStateService").to(TicketStateService);
         this.container.bind<ITranslationService>("ITranslationService").to(TranslationService);
+        this.container.bind<IGroupService>("IGroupService").to(GroupService);
     }
 
     private async bindRouters(): Promise<void> {

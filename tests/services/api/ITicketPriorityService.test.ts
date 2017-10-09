@@ -1,5 +1,5 @@
 /* tslint:disable*/
-import { container } from './../../src/Container';
+import { container } from '../../../src/Container';
 
 import {
     ITicketPriorityService,
@@ -23,7 +23,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const resourcePath = "/priority";
+const resourcePath = "/priorities";
 
 describe('Ticket Priority Service', () => {
     let nockScope;

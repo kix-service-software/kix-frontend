@@ -18,7 +18,7 @@ import { ObjectService } from './ObjectService';
 
 export class TicketPriorityService extends ObjectService<TicketPriority> implements ITicketPriorityService {
 
-    protected RESOURCE_URI: string = "priority";
+    protected RESOURCE_URI: string = "priorities";
 
     public async getTicketPriorities(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any

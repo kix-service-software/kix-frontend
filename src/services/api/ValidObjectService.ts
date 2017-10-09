@@ -32,6 +32,4 @@ export class ValidObjectService extends ObjectService<ValidObject> implements IV
         return response.Valid;
     }
 
-
-
 }

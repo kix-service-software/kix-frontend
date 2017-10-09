@@ -13,7 +13,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-import { container } from "./../../src/Container";
+import { container } from "../../../src/Container";
 
 describe('Authentication Service', () => {
     let nockScope;
