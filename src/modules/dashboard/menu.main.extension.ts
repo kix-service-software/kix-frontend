@@ -14,6 +14,10 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
         return "Home";
     }
 
+    public getContextId(): string {
+        return "dashboard";
+    }
+
 }
 
 module.exports = (data, host, options) => {

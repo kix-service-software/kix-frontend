@@ -29,15 +29,8 @@ class WidgetComponent {
     public stateChanged(): void {
         const reduxState: WidgetState = this.store.getState();
         if (reduxState.configuration) {
-            this.state.actions = reduxState.configuration.actions;
-            this.state.contentConfiguration = reduxState.configuration.contentConfiguation;
-        }
-
-        if (reduxState.template) {
+            this.state.configuration = reduxState.configuration;
             this.state.template = require(reduxState.template);
-        }
-
-        if (reduxState.configurationTemplate) {
             this.state.configurationTemplate = require(reduxState.configurationTemplate);
         }
     }
@@ -46,24 +39,21 @@ class WidgetComponent {
         this.state.contentData = contentData;
     }
 
-    public onUpdateContentConfigurationHandler(handler: any): void {
-        this.updateContentConfigurationHandler = handler;
-    }
-
     public configClicked(): void {
         this.state.showConfiguration = true;
     }
 
     public saveConfigurationOverlay(configuration): void {
         this.state.showConfiguration = false;
-        this.state.contentConfiguration = configuration;
-        const reduxState: WidgetState = this.store.getState();
-        reduxState.socketlListener
-            .saveConfiguration(new WidgetConfiguration("", this.state.actions, this.state.contentConfiguration));
+        this.state.configuration.contentConfiguration = configuration;
 
-        if (this.updateContentConfigurationHandler) {
-            this.updateContentConfigurationHandler(this.state.contentConfiguration);
-        }
+        const reduxState: WidgetState = this.store.getState();
+
+        reduxState.socketlListener.saveConfiguration(
+            new WidgetConfiguration("", this.state.configuration.actions, this.state.configuration.contentConfiguration)
+        );
+
+        (this as any).setStateDirty("configuration");
     }
 
     public closeConfigurationOverlay(): void {

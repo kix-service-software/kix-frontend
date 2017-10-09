@@ -19,32 +19,27 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         firstRow.widgets.push({
             id: "chart-widget",
-            instanceId: "20170920072542",
-            title: "Neue Tickets",
+            instanceId: "20170920072542"
         });
         firstRow.widgets.push({
             id: "chart-widget",
-            instanceId: "20170920084512",
-            title: "Prioritäten",
+            instanceId: "20170920084512"
         });
         firstRow.widgets.push({
             id: "search-templates-widget",
-            instanceId: "20170920113214",
-            title: "Suchvorlagen",
+            instanceId: "20170920113214"
         });
 
         const secondRow = new ContainerRow();
         secondRow.widgets.push({
             id: "ticket-list-widget",
-            instanceId: "20170920101621",
-            title: "Suchvorlage: ToDos",
+            instanceId: "20170920101621"
         });
 
         const thirdRow = new ContainerRow();
         thirdRow.widgets.push({
             id: "user-list-widget",
-            instanceId: "20170920093015",
-            title: "Agenten",
+            instanceId: "20170920093015"
         });
 
         content.rows.push(firstRow);

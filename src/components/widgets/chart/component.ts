@@ -11,21 +11,19 @@ class ChartWidgetComponent {
 
     public onInput(input: any): void {
         this.state.configuration = input.configuration || {};
-        (this as any).emit('updateContentConfigurationHandler', this.updateContentConfigurationHandler.bind(this));
+
+        // remove chart and add new with changed configuration
+        const element = document.getElementById(this.state.svgId);
+        if (element) {
+            element.innerHTML = '';
+            ChartFactory.createChart(this.state.svgId, this.state.configuration);
+        }
     }
 
     public onMount(): void {
         if (this.state.configuration) {
             ChartFactory.createChart(this.state.svgId, this.state.configuration);
         }
-    }
-
-    private updateContentConfigurationHandler(configuration: ChartConfiguration) {
-        this.state.configuration = configuration;
-
-        // remove chart and add new with changed configuration
-        document.getElementById(this.state.svgId).innerHTML = '';
-        ChartFactory.createChart(this.state.svgId, this.state.configuration);
     }
 }
 
