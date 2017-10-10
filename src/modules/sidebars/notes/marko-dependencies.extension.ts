@@ -4,8 +4,8 @@ export class NotesSidebarMarkoDependencyExtension implements IMarkoDependencyExt
 
     public getDependencies(): string[] {
         return [
-            "sidebars/notes",
-            "sidebars/notes/configuration"
+            "widgets/notes",
+            "widgets/notes/configuration"
         ];
     }
 

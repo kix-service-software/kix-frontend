@@ -13,8 +13,7 @@
                     <div.sidebar-select id="${sidebar.id}-${loop.getIndex()}-select"
                         class="${state.configuration.sidebars[loop.getIndex()].show ? 'select-active' : ''}"
                         on-click('toggleSidebar', loop.getIndex())>
-                        <span.kix-icon class="${ sidebar.icon ? 'icon-' + sidebar.icon : ''} icon-${sidebar.title.substring(0,1).toLowerCase()}">
-                        </span>
+                        <span.kix-icon class="${ sidebar.icon ? 'icon-' + sidebar.icon : ''} icon-${sidebar.title.substring(0,1).toLowerCase()}"/>
                     </div>
                 </for>
             </div>

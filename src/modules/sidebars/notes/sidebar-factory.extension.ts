@@ -1,20 +1,24 @@
 import { NotesSidebar } from './NotesSidebar';
-import { ISidebarFactoryExtension, ISidebar } from '@kix/core';
+import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
-export class NotesSidebarFactoryExtension implements ISidebarFactoryExtension {
+export class NotesSidebarFactoryExtension implements IWidgetFactoryExtension {
 
-    public createSidebar(): ISidebar {
-        return new NotesSidebar(this.getSidebarId());
+    public createWidget(): IWidget {
+        return new NotesSidebar(this.getWidgetId());
     }
 
-    public getSidebarId(): string {
+    public getWidgetId(): string {
         return "notes-sidebar";
     }
 
     public getTemplate(): string {
         const packageJson = require('../../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/sidebars/notes/';
+        return '/@kix/frontend$' + version + '/dist/components/widgets/notes/';
+    }
+
+    public getConfigurationTemplate(): string {
+        return this.getTemplate() + '/configuration';
     }
 
     public getDefaultConfiguration(): any {

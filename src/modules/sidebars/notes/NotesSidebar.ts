@@ -1,14 +1,12 @@
-import { ISidebar } from '@kix/core';
+import { IWidget } from '@kix/core';
 
-export class NotesSidebar implements ISidebar {
+export class NotesSidebar implements IWidget {
 
     public id: string;
     public instanceId: string = Date.now().toString();
-    public template: string = "sidebars/notes";
-    public configurationTemplate: string = "sidebars/notes/configuration";
-    public title: string = "Notes (Notizen)";
+
+    public type: string = 'sidebar';
     public icon: string = 'dummy';
-    public isExternal: boolean = false;
 
     public constructor(id: string) {
         this.id = id;

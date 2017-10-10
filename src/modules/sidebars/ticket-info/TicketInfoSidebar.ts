@@ -1,14 +1,12 @@
-import { ISidebar } from '@kix/core';
+import { IWidget, WidgetType } from '@kix/core';
 
-export class TicketInfoSidebar implements ISidebar {
+export class TicketInfoSidebar implements IWidget {
 
     public id: string;
     public instanceId: string = Date.now().toString();
-    public template: string = "sidebars/ticket-info";
-    public configurationTemplate: string = "sidebars/ticket-info/configuration";
-    public title: string = "Ticket Info";
+
+    public type: WidgetType = 'sidebar';
     public icon: string = 'dummy';
-    public isExternal: boolean = false;
 
     public constructor(id: string) {
         this.id = id;
