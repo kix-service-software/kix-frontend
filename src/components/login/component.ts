@@ -1,7 +1,7 @@
 import { LoginComponentState } from './model/LoginComponentState';
 import { LoginTranslationId } from './model/LoginTranslationId';
 import { LoginState } from './store/LoginState';
-import { TranslationHandler } from '@kix/core/dist/model/client';
+import { TranslationHandler, ClientStorageHandler } from '@kix/core/dist/model/client';
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,
@@ -21,10 +21,12 @@ class LoginFormComponent {
 
     public translationIds: any;
 
+
     public onCreate(input: any): void {
         this.state = new LoginComponentState();
         this.frontendUrl = input.frontendUrl;
         this.translationIds = LoginTranslationId;
+        this.state.logout = input.logout;
     }
 
     public stateChanged(): void {
@@ -46,8 +48,13 @@ class LoginFormComponent {
             LoginTranslationId.BUTTON_LABEL,
             LoginTranslationId.PASSWORD,
             LoginTranslationId.USERNAME,
-            LoginTranslationId.TITLE
+            LoginTranslationId.TITLE,
+            LoginTranslationId.LOGOUT
         ]);
+
+        if (this.state.logout) {
+            ClientStorageHandler.destroyToken();
+        }
     }
 
     public userNameChanged(event: any): void {

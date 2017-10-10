@@ -27,6 +27,13 @@
             "translationValues": {
                 "en": "Password"
             }
+        },
+        {
+            "id": "LOGIN:LOGOUT",
+            "defaultValue": "Sie haben sich erfolgreich abgemeldet.",
+            "translationValues": {
+                "en": "Logout successful."
+            }
         }
     ]
 }
