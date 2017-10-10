@@ -7,6 +7,8 @@ export class MainMenuState {
 
     public secondaryMenuEntries: MenuEntry[] = [];
 
+    public showText: boolean = false;
+
     public socketListener: MainMenuSocketListener = null;
 
 }

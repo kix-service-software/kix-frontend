@@ -49,7 +49,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
             const secondaryEntries =
                 this.getMenuEntries(menuExtensions, configuration.secondaryMenuEntryConfigurations);
 
-            const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries);
+            const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries, configuration.showText);
             client.emit(MainMenuEvent.MENU_ENTRIES_LOADED, response);
         });
     }

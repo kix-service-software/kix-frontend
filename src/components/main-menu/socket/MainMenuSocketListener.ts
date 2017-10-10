@@ -35,7 +35,9 @@ export class MainMenuSocketListener extends SocketListener {
         });
 
         this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
-            this.store.dispatch(MAIN_MENU_ENTRIES_LOADED(result.primaryMenuEntries, result.secondaryMenuEntries));
+            this.store.dispatch(
+                MAIN_MENU_ENTRIES_LOADED(result.primaryMenuEntries, result.secondaryMenuEntries, result.showText)
+            );
         });
 
         this.socket.on('error', (error) => {

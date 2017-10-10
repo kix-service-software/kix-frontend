@@ -6,4 +6,6 @@ export class MenuComponentState {
 
     public secondaryMenuEntries: MenuEntry[] = [];
 
+    public showText: boolean = false;
+
 }
