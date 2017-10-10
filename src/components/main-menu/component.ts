@@ -23,6 +23,7 @@ class KIXMenuComponent {
         if (reduxState.primaryMenuEntries) {
             this.state.primaryMenuEntries = reduxState.primaryMenuEntries;
             this.state.secondaryMenuEntries = reduxState.secondaryMenuEntries;
+            this.state.showText = reduxState.showText;
 
             const contextId = ClientStorageHandler.getContextId();
             for (const entry of this.state.primaryMenuEntries) {

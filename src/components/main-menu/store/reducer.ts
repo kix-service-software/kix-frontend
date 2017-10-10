@@ -16,7 +16,8 @@ class MainMenuActionHandler {
                 return {
                     ...state,
                     primaryMenuEntries: action.payload.primaryMenuEntries,
-                    secondaryMenuEntries: action.payload.secondaryMenuEntries
+                    secondaryMenuEntries: action.payload.secondaryMenuEntries,
+                    showText: action.payload.showText
                 };
             }
 
