@@ -4,7 +4,7 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
 
     public getDependencies(): string[] {
         return [
-            "tickets"
+            "modules/tickets"
         ];
     }
 

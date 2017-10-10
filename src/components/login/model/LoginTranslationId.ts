@@ -6,6 +6,8 @@ export enum LoginTranslationId {
 
     USERNAME = "LOGIN:USERNAME",
 
-    PASSWORD = "LOGIN:PASSWORD"
+    PASSWORD = "LOGIN:PASSWORD",
+
+    LOGOUT = "LOGIN:LOGOUT"
 
 }

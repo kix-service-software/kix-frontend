@@ -1,4 +1,4 @@
-import { MainMenuEvent, StateAction } from '@kix/core/dist/model/client';
+import { ClientStorageHandler, MainMenuEvent, MainMenuEntriesRequest, StateAction } from '@kix/core/dist/model/client';
 import { MainMenuAction } from './MainMenuAction';
 
 export default (socket: SocketIO.Server) => {
@@ -10,6 +10,6 @@ export default (socket: SocketIO.Server) => {
 };
 
 function loadEntries(socket: SocketIO.Server): any {
-    socket.emit(MainMenuEvent.LOAD_MENU_ENTRIES);
+    socket.emit(MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(ClientStorageHandler.getToken()));
     return {};
 }

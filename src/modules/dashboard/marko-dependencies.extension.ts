@@ -4,7 +4,7 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
 
     public getDependencies(): string[] {
         return [
-            "dashboard"
+            "modules/dashboard"
         ];
     }
 

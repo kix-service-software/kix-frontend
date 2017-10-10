@@ -14,9 +14,7 @@
     </head>
     <body>
         <if(data.template)>
-            <div#content>
-                <include(data.template, data.data)/>
-            </div>
+            <include(data.template, data.data)/>
         </if>
         <script src="/static/js/socket.io.js"/>
         <script src="/static/js/thirdparty/d3-4.10.2/d3.min.js"/>
