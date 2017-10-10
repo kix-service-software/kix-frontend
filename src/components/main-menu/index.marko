@@ -1,10 +1,10 @@
 <div.menu-col>
-    <ul.main-menu>
+    <ul.main-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
                 <a href=menuEntry.link>
                     <span class="hover-label">${menuEntry.text}</span>
-                    <span class="inline-label-wrapper">
+                    <span class="label-wrapper">
                         <span class="kix-icon icon-dummy icon-menu"/>
                         <span class="inline-label">
                             <br/>${menuEntry.text}
@@ -14,13 +14,13 @@
             </li>
         </for>
     </ul>
-    <ul.user-menu>
+    <ul.user-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.secondaryMenuEntries)>
             <li>
                 <a href=menuEntry.link>
                     <span class="menu-item-wrapper cf">
                         <span class="hover-label">${menuEntry.text}</span>
-                        <span class="inline-label-wrapper">
+                        <span class="label-wrapper">
                             <span class="kix-icon icon-dummy icon-menu"/>
                             <span class="inline-label">
                                 <br/>${menuEntry.text}

@@ -24,13 +24,13 @@ ul.user-menu {
             width: 100px;
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
-            & a {
-                & span.hover-label {
+            a {
+                span.hover-label {
                     width: 97px;
                     border-top-right-radius: 5px;
                     border-bottom-right-radius: 5px;
                 }
-                & span.inline-label-wrapper {
+                span.label-wrapper {
                     opacity: 0;
                 }
             }
@@ -57,19 +57,19 @@ ul.user-menu {
             text-align: center;
             overflow: hidden;
             position: relative;
-            & span.inline-label-wrapper {
+            span.label-wrapper {
                 opacity: 1;
                 transition: opacity .125s;
-                & span.kix-icon,
-                & span.inline-label {
+                span.kix-icon,
+                span.inline-label {
                     font-size: .75em;
                 }
-                & span.inline-label {
+                span.inline-label {
                     position: relative;
                     top: -5px;
                 }
             }
-            & span.hover-label {
+            span.hover-label {
                 position: absolute;
                 display: inline-block;
                 background-color: @primary-0;
@@ -83,14 +83,13 @@ ul.user-menu {
             }
         }
     }
-    &#main-menu-extra {
-        margin-top: 2px;
-        .color-theme-5;
-        li {
-            .color-theme-1;
-            border-top: 1px solid lighten(@bc-color, 10%);
-            border-bottom: 1px solid darken(@bc-color, 15%);
-            border-left: 3px solid @tertiary-5;
+    &.image-only li {
+        span.label-wrapper {
+            line-height: 37px;
+            font-size: 1.5em;
+            .inline-label {
+                display: none;
+            }
         }
     }
 }
