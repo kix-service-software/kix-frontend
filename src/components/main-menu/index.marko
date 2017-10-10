@@ -1,5 +1,5 @@
 <div.menu-col>
-    <ul.main-menu class=(state.showText ? "" : "images-only")>
+    <ul.main-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
                 <a href=menuEntry.link>
@@ -14,7 +14,7 @@
             </li>
         </for>
     </ul>
-    <ul.user-menu class=(state.showText ? "" : "images-only")>
+    <ul.user-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.secondaryMenuEntries)>
             <li>
                 <a href=menuEntry.link>
