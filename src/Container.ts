@@ -10,6 +10,7 @@ import {
 } from './routes/';
 
 import {
+    IArticleTypeService,
     ICommunicator,
     IRouter,
     KIXExtensions,
@@ -17,6 +18,7 @@ import {
     ICommunicatorExtension,
     IConfigurationService,
     IAuthenticationService,
+    IGroupService,
     IHttpService,
     IMarkoService,
     IPluginService,
@@ -32,9 +34,11 @@ import {
 } from '@kix/core';
 
 import {
+    ArticleTypeService,
     UserService,
     HttpService,
     AuthenticationService,
+    GroupService,
     MarkoService,
     LoggingService,
     SocketCommunicationService,
@@ -88,6 +92,8 @@ export class ServiceContainer {
         this.container.bind<IValidObjectService>("IValidObjectService").to(ValidObjectService);
         this.container.bind<ITicketStateService>("ITicketStateService").to(TicketStateService);
         this.container.bind<ITranslationService>("ITranslationService").to(TranslationService);
+        this.container.bind<IGroupService>("IGroupService").to(GroupService);
+        this.container.bind<IArticleTypeService>("IArticleTypeService").to(ArticleTypeService);
     }
 
     private async bindRouters(): Promise<void> {

@@ -1,5 +1,5 @@
 /* tslint:disable*/
-import { container } from './../../src/Container';
+import { container } from '../../../src/Container';
 
 import {
     IValidObjectService,

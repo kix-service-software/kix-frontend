@@ -13,7 +13,12 @@ class MainMenuActionHandler {
             }
 
             case MainMenuAction.MAIN_MENU_ENTRIES_LOADED + FULFILLED: {
-                return { ...state, menuEntries: action.payload.menuEntries };
+                return {
+                    ...state,
+                    primaryMenuEntries: action.payload.primaryMenuEntries,
+                    secondaryMenuEntries: action.payload.secondaryMenuEntries,
+                    showText: action.payload.showText
+                };
             }
 
             default:
