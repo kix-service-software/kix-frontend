@@ -1,3 +1,4 @@
+export { ArticleTypeService } from './ArticleTypeService';
 export { AuthenticationService } from './AuthenticationService';
 export { GroupService } from './GroupService';
 export { HttpService } from './HttpService';
