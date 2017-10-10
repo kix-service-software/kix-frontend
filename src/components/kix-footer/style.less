@@ -1,0 +1,17 @@
+.wrapper > footer {
+    margin: 1em 0;
+    nav {
+        font-size: .75em;
+        text-align: center;
+        li {
+            display: inline-block;
+            &:after {
+                content: "|";
+                margin: 0 .5em;
+            }
+            &:last-of-type:after {
+                content: "";
+            }
+        }
+    }
+}
