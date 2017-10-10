@@ -3,7 +3,10 @@ import { MainMenuSocketListener } from './../socket/MainMenuSocketListener';
 
 export class MainMenuState {
 
-    public menuEntries: MenuEntry[] = [];
+    public primaryMenuEntries: MenuEntry[] = [];
+
+    public secondaryMenuEntries: MenuEntry[] = [];
+
     public socketListener: MainMenuSocketListener = null;
 
 }

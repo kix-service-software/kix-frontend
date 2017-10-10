@@ -1,6 +1,6 @@
 <div.menu-col>
     <ul.main-menu>
-        <for(menuEntry in state.menuEntries)>
+        <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
                 <a href=menuEntry.link>
                     <span class="hover-label">${menuEntry.text}</span>
@@ -15,32 +15,20 @@
         </for>
     </ul>
     <ul.user-menu>
-        <!-- TODO: Remove me! Bespielcode sollte wieder entfernt werden, wenn mehr Menüpunkte existieren -->
-        <li>
-            <a href="https://www.google.de">
-                <span class="menu-item-wrapper cf">
-                    <span class="hover-label">Admin</span>
-                    <span class="inline-label-wrapper">
-                        <span class="kix-icon icon-dummy icon-menu"/>
-                        <span class="inline-label">
-                            <br/>Admin
+        <for(menuEntry in state.secondaryMenuEntries)>
+            <li>
+                <a href=menuEntry.link>
+                    <span class="menu-item-wrapper cf">
+                        <span class="hover-label">${menuEntry.text}</span>
+                        <span class="inline-label-wrapper">
+                            <span class="kix-icon icon-dummy icon-menu"/>
+                            <span class="inline-label">
+                                <br/>${menuEntry.text}
+                            </span>
                         </span>
                     </span>
-                </span>
-            </a>
-        </li>
-        <li>
-            <a href="https://www.google.de">
-                <span class="menu-item-wrapper cf">
-                    <span class="hover-label">Kalender</span>
-                    <span class="inline-label-wrapper">
-                        <span class="kix-icon icon-dummy icon-menu"/>
-                        <span class="inline-label">
-                            <br/>Kalender
-                        </span>
-                    </span>
-                </span>
-            </a>
-        </li>
+                </a>
+            </li>
+        </for>
     </ul>
 </div>

@@ -20,11 +20,12 @@ class KIXMenuComponent {
 
     public stateChanged(): void {
         const reduxState: MainMenuState = this.store.getState();
-        if (reduxState.menuEntries) {
-            this.state.menuEntries = reduxState.menuEntries;
+        if (reduxState.primaryMenuEntries) {
+            this.state.primaryMenuEntries = reduxState.primaryMenuEntries;
+            this.state.secondaryMenuEntries = reduxState.secondaryMenuEntries;
 
             const contextId = ClientStorageHandler.getContextId();
-            for (const entry of this.state.menuEntries) {
+            for (const entry of this.state.primaryMenuEntries) {
                 entry.active = entry.contextId === contextId;
             }
         }
