@@ -4,7 +4,20 @@
 </span>
 <span>
     <if(state.template)>
-        <action-overlay template=state.template action=state.action contentData=data.contentData
-            on-runAction('runActionClicked') on-cancelAction('cancelActionClicked')/>
+        <div>
+            <main-dialog>
+                <@title>Aktion: ${data.action.name}</@title>
+                <@body>
+                    <include(state.template, {
+                    action: state.action,
+                    contentData: data.contentData
+                })/>
+                </@body>
+                <@button>
+                    <button on-click('runActionClicked')>Ausführen</button>
+                    <button on-click('cancelActionClicked')>Abbrechen</button>
+                </@button>
+            </main-dialog>
+        </div>
     </if>
 </span>

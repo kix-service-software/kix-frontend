@@ -43,9 +43,8 @@ class WidgetComponent {
         this.state.showConfiguration = true;
     }
 
-    public saveConfigurationOverlay(configuration): void {
+    public saveConfigurationOverlay(): void {
         this.state.showConfiguration = false;
-        this.state.configuration.contentConfiguration = configuration;
 
         const reduxState: WidgetState = this.store.getState();
 

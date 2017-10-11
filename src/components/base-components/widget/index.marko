@@ -26,10 +26,19 @@
         </div>
         <if(state.showConfiguration)>
             <div>
-                <widget-configuration-overlay widget=data.widget showOverlay=state.showConfiguration
-                    configuration=state.configuration.contentConfiguration template=state.configurationTemplate
-                    on-saveConfigurationOverlay('saveConfigurationOverlay')
-                    on-cancelConfigurationOverlay('closeConfigurationOverlay')/>
+                <main-dialog>
+                    <@title>Konfiguration: ${data.widget.title}</@title>
+                    <@body>
+                        <include(state.configurationTemplate, {
+                            widget: data.widget,
+                            configuration: state.configuration.contentConfiguration 
+                        })/>
+                    </@body>
+                    <@button>
+                        <button on-click('saveConfigurationOverlay')>Speichern</button>
+                        <button on-click('closeConfigurationOverlay')>Abbrechen</button>
+                    </@button>
+                </main-dialog>
             </div>
         </if>
     </if>
