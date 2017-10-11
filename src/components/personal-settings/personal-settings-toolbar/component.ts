@@ -6,7 +6,8 @@ class PersonalSettingsToolbarComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            title: "Persönliche Einstellungen"
+            title: "Persönliche Einstellungen",
+            showPersonalSettings: false
         };
     }
 
@@ -15,8 +16,12 @@ class PersonalSettingsToolbarComponent {
         this.state.title = await translationHandler.getTranslation('PERSONAL-SETTINGS:TOOLBAR');
     }
 
-    public openPersonalSettings(event: any): void {
-        alert('Personal Settings');
+    public openPersonalSettings(): void {
+        this.state.showPersonalSettings = true;
+    }
+
+    public closePersonalSettings(): void {
+        this.state.showPersonalSettings = false;
     }
 
 }
