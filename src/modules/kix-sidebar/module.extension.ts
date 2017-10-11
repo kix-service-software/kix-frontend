@@ -21,7 +21,8 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
                     configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/notes/configuration",
                     show: true,
                     icon: "dummy",
-                    isExternal: false
+                    isExternal: false,
+                    type: 'sidebar'
                 },
                 {
                     id: "notes-sidebar",
@@ -30,7 +31,8 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
                     template: "/@kix/frontend$0.0.15/dist/components/sidebars/notes",
                     configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/notes/configuration",
                     icon: "dummy",
-                    isExternal: false
+                    isExternal: false,
+                    type: 'sidebar'
                 },
                 {
                     id: "ticket-info-sidebar",
@@ -40,7 +42,8 @@ export class KixSidebarFactoryExtension implements IModuleFactoryExtension {
                     configurationTemplate: "/@kix/frontend$0.0.15/dist/components/sidebars/ticket-info/configuration",
                     show: true,
                     icon: "dummy",
-                    isExternal: false
+                    isExternal: false,
+                    type: 'sidebar'
                 }
             ]
         };

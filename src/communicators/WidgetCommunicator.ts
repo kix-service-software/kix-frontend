@@ -22,7 +22,7 @@ export class WidgetCommunicator extends KIXCommunicator {
         client.on(WidgetEvent.LOAD_WIDGET, async (data: LoadWidgetRequest) => {
             const user = await this.userService.getUserByToken(data.token);
 
-            const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId);
+            const widgetFactory = await this.pluginService.getWidgetFactory(data.componentId, data.type);
 
             let configuration = await this.configurationService
                 .getComponentConfiguration(data.contextId, data.componentId, data.instanceId, user.UserID);

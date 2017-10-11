@@ -1,4 +1,4 @@
-import { WidgetConfiguration } from '@kix/core/dist/model/client';
+import { WidgetConfiguration, WidgetType } from '@kix/core/dist/model/client';
 import { WidgetComponentState } from './model/WidgetComponentState';
 import { WidgetState } from './store/WidgetState';
 import { WIDGET_INITIALIZE } from './store/actions';
@@ -23,7 +23,11 @@ class WidgetComponent {
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(WIDGET_INITIALIZE(this.state.widget.id, this.state.widget.instanceId, this.store));
+        this.state.widget.type = this.state.widget.type || WidgetType.DASHBOARD;
+        console.log(this.state.widget);
+        this.store.dispatch(WIDGET_INITIALIZE(
+            this.state.widget.id, this.state.widget.instanceId, this.state.widget.type, this.store
+        ));
     }
 
     public stateChanged(): void {

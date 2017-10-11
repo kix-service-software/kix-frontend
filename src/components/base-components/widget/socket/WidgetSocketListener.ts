@@ -6,7 +6,8 @@ import {
     LoadWidgetResponse,
     ClientStorageHandler,
     WidgetEvent,
-    SocketEvent
+    SocketEvent,
+    WidgetType
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
@@ -26,13 +27,15 @@ export class WidgetSocketListener extends SocketListener {
     private contextId: string;
 
     private widgetId: string;
+    private widgetType: WidgetType;
 
     private instanceId: string;
 
-    public constructor(widgetId: string, instanceId: string, store: any) {
+    public constructor(widgetId: string, instanceId: string, widgetType: WidgetType, store: any) {
         super();
         this.contextId = ClientStorageHandler.getContextId();
         this.widgetId = widgetId;
+        this.widgetType = widgetType;
         this.instanceId = instanceId;
 
         this.configurationSocket = this.createSocket("widget");
@@ -53,9 +56,9 @@ export class WidgetSocketListener extends SocketListener {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
             const token = ClientStorageHandler.getToken();
-
+            console.log(this);
             const loadRequest = new LoadWidgetRequest(
-                token, this.contextId, this.widgetId, this.instanceId, true);
+                token, this.contextId, this.widgetId, this.instanceId, true, this.widgetType);
 
             this.configurationSocket.emit(WidgetEvent.LOAD_WIDGET, loadRequest);
         });

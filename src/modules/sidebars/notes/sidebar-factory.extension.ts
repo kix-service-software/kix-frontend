@@ -14,7 +14,7 @@ export class NotesSidebarFactoryExtension implements IWidgetFactoryExtension {
     public getTemplate(): string {
         const packageJson = require('../../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/widgets/notes/';
+        return '/@kix/frontend$' + version + '/dist/components/sidebars/notes/';
     }
 
     public getConfigurationTemplate(): string {
