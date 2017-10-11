@@ -7,7 +7,7 @@ class PersonalSettingsToolbarComponent {
     public onCreate(input: any): void {
         this.state = {
             title: "Persönliche Einstellungen",
-            showPersonlaSettings: false
+            showPersonalSettings: false
         };
     }
 
@@ -17,11 +17,11 @@ class PersonalSettingsToolbarComponent {
     }
 
     public openPersonalSettings(): void {
-        this.state.showPersonlaSettings = true;
+        this.state.showPersonalSettings = true;
     }
 
     public closePersonalSettings(): void {
-        this.state.showPersonlaSettings = false;
+        this.state.showPersonalSettings = false;
     }
 
 }
