@@ -34,6 +34,13 @@
             "translationValues": {
                 "en": "Logout successful."
             }
+        },
+        {
+            "id": "PERSONAL-SETTINGS:TOOLBAR",
+            "defaultValue": "Persönliche Einstellungen",
+            "translationValues": {
+                "en": "Personal Settings"
+            }
         }
     ]
 }
