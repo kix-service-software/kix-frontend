@@ -36,9 +36,7 @@ export class WidgetCommunicator extends KIXCommunicator {
                 configuration = widgetDefaultConfiguration;
             }
 
-            const response = new LoadWidgetResponse(
-                widgetFactory.getTemplate(), widgetFactory.getConfigurationTemplate(), configuration
-            );
+            const response = new LoadWidgetResponse(configuration);
             client.emit(WidgetEvent.WIDGET_LOADED, response);
         });
 

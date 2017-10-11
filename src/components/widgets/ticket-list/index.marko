@@ -1,19 +1,27 @@
 <div>
-    <table.ticket-table>
-        <tr>
-            <for(column in state.columns)>
-                <th>${column}</th>
-            </for>
-        </tr>
-        <for(row in state.values)>
-            <tr>
-                <td>
-                    <input type="checkbox" name="all" value=""/>
-                </td>
-                <for(value in row)>
-                    <td>${value}</td>
+    <widget>
+        <@icon>Ico</@icon>
+        <@title>Ticket List</@title>
+        <@content>
+            <table.ticket-table>
+                <tr>
+                    <for(column in state.columns)>
+                        <th>${column}</th>
+                    </for>
+                </tr>
+                <for(row in state.values)>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="all" value=""/>
+                        </td>
+                        <for(value in row)>
+                            <td>${value}</td>
+                        </for>
+                    </tr>
                 </for>
-            </tr>
-        </for>
-    </table>
+            </table>
+        </@content>
+        <@filter>Filter</@filter>
+        <@actions>Actions</@actions>
+    </widget>
 </div>

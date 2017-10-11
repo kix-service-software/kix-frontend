@@ -1,24 +1,30 @@
 <div>
-    <if(state.error)>
-        <span>${state.error}</span>
-    </if>
-    <if(state.users.length === 0 || !state.configuration)>
-        <span>No user loaded ...</span>
-    </if>
-    <else>
-        <table.user-table>
-            <tr>
-                <for(property in state.configuration.properties)>
-                    <th>${property.displayName}</th>
-                </for>
-            </tr>
-            <for(user in state.users)>
-                <tr>
-                    <for(property in state.configuration.properties)>
-                        <td>${user[property.name]}</td>
+    <if(state.widgetConfiguration)>
+        <widget>
+            <@icon>Icon</@icon>
+            <@title>${state.widgetConfiguration.title}</@title>
+            <@content>
+                <table.user-table>
+                    <tr>
+                        <for(property in state.widgetConfiguration.contentConfiguration.properties)>
+                            <th>${property.displayName}</th>
+                        </for>
+                    </tr>
+                    <for(user in state.users)>
+                        <tr>
+                            <for(property in state.widgetConfiguration.contentConfiguration.properties)>
+                                <td>${user[property.name]}</td>
+                            </for>
+                        </tr>
                     </for>
-                </tr>
-            </for>
-        </table>
-    </else>
+                </table>
+            </@content>
+            <@filter/>
+            <@actions>
+                <for(action in state.widgetConfiguration.actions)>
+                    <action action=action contentData=state.users/>
+                </for>
+            </@actions>
+        </widget>
+    </if>
 </div>

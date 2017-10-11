@@ -17,26 +17,25 @@ class UserListWidgetComponent {
     }
 
     public onInput(input: any): void {
-        this.state.configuration = input.configuration;
-        if (this.store && this.state.configuration) {
-            this.loadUser();
-        }
+        this.state.instanceId = input.instanceId;
     }
 
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
-            this.loadUser();
-        });
+        this.store.dispatch(USER_LIST_INITIALIZE(this.store, 'user-list-widget', this.state.instanceId));
     }
 
     public stateChanged(): void {
         const reduxState: UserListState = this.store.getState();
 
+        if (reduxState.widgetConfiguration && !this.state.widgetConfiguration) {
+            this.state.widgetConfiguration = reduxState.widgetConfiguration;
+            this.loadUser();
+        }
+
         if (reduxState.users) {
             this.state.users = reduxState.users;
-            (this as any).emit('contentDataLoaded', this.state.users);
         }
 
         if (reduxState.error) {
@@ -45,14 +44,12 @@ class UserListWidgetComponent {
     }
 
     private loadUser(): void {
-        if (this.state.configuration) {
-            const reduxState: UserListState = this.store.getState();
-            reduxState.socketListener.loadUsers(new LoadUsersRequest(
-                ClientStorageHandler.getToken(),
-                this.state.configuration.properties,
-                this.state.configuration.limit)
-            );
-        }
+        const reduxState: UserListState = this.store.getState();
+        reduxState.socketListener.loadUsers(new LoadUsersRequest(
+            ClientStorageHandler.getToken(),
+            this.state.widgetConfiguration.contentConfiguration.properties,
+            this.state.widgetConfiguration.contentConfiguration.limit)
+        );
     }
 }
 

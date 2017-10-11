@@ -5,8 +5,7 @@
                 <div.unit-space.drag-widget class="${row.widgets.length === 1 ? 'size1of1' : 'size1of3'}"
                     draggable="${state.dndState.enabled ? 'true' : 'false'}" data-id=widget.instanceId
                     on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
-                    <widget widget=widget configurationMode=data.configurationMode draggable=true
-                        drop=(state.dndState.dropElementId === widget.instanceId) data_id=widget.instanceId/>
+                    <include(component.getWidgetTemplate(widget.id), {instanceId: widget.instanceId})/>
                 </div>
             </for>
         </div>

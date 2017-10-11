@@ -1,5 +1,5 @@
 import { UserListState } from './UserListState';
-import { UserListAction } from './actions';
+import { UserListAction, WidgetAction } from './actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
@@ -20,6 +20,9 @@ class UserListActionHandler {
 
             case UserListAction.USER_LIST_ERROR + FULFILLED:
                 return { ...state, error: action.payload.error };
+
+            case WidgetAction.WIDGET_LOADED + FULFILLED:
+                return { ...state, widgetConfiguration: action.payload.widgetConfiguration };
 
             default:
                 return { ...state };

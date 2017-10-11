@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from '@kix/core/dist/model/client';
+import { ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
 import { DragAndDropState } from './DragAndDropState';
 
 export class ContainerComponentState {
@@ -6,6 +6,8 @@ export class ContainerComponentState {
     public configurationName: string = "";
 
     public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
+
+    public widgetTemplates: WidgetTemplate[] = [];
 
     public widgets: any[] = [];
 

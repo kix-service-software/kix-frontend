@@ -15,8 +15,17 @@ class DragableContainerComponent {
 
     public onInput(input: any): void {
         this.state.containerConfiguration = input.containerConfiguration;
+        this.state.widgetTemplates = input.widgetTemplates;
         this.state.configurationMode = input.configurationMode;
         this.state.dndState.enabled = input.configurationMode;
+    }
+
+    public getWidgetTemplate(widgetId: string): any {
+        const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
+        if (template) {
+            return require(template);
+        }
+        return '';
     }
 
     public dragStart(event): void {

@@ -27,6 +27,7 @@ class DashboardComponent {
         const reduxState: DashboardState = this.store.getState();
         if (reduxState.containerConfiguration) {
             this.state.containerConfiguration = reduxState.containerConfiguration;
+            this.state.widgetTemplates = reduxState.widgetTemplates;
         }
     }
 }
