@@ -1,7 +1,13 @@
 <div>
     <if(state.widgetConfiguration)>
         <widget>
-            <@icon>Icon</@icon>
+            <@overlay>
+                <include(input.dragoverlay)/>
+            </@overlay>
+            <include(input.dragoverlay)/>
+            <@icon>
+                <span class="kix-icon icon-dummy"/>
+            </@icon>
             <@title>${state.widgetConfiguration.title}</@title>
             <@content>
                 <table.user-table>
@@ -19,12 +25,30 @@
                     </for>
                 </table>
             </@content>
-            <@filter/>
+            <@filter>
+                <span/>
+            </@filter>
             <@actions>
                 <for(action in state.widgetConfiguration.actions)>
                     <action action=action contentData=state.users/>
                 </for>
+                <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+                    on-click('showConfigurationClicked')/>
             </@actions>
         </widget>
+        <if(state.showConfiguration)>
+            <div>
+                <main-dialog>
+                    <@title>Konfiguration: User-List</@title>
+                    <@body>
+                        <user-list-configuration configuration=state.widgetConfiguration.contentConfiguration/>
+                    </@body>
+                    <@button>
+                        <button on-click('saveConfiguration')>Speichern</button>
+                        <button on-click('cancelConfiguration')>Abbrechen</button>
+                    </@button>
+                </main-dialog>
+            </div>
+        </if>
     </if>
 </div>

@@ -1,4 +1,4 @@
-import { UserListState } from './UserListState';
+import { UserListReduxState } from './UserListReduxState';
 import { UserListAction, WidgetAction } from './actions';
 
 const PENDING = '_PENDING';
@@ -6,7 +6,7 @@ const FULFILLED = '_FULFILLED';
 
 class UserListActionHandler {
 
-    public handleLoginAction(state: UserListState, action): UserListState {
+    public handleLoginAction(state: UserListReduxState, action): UserListReduxState {
         switch (action.type) {
 
             case UserListAction.USER_LIST_INITIALIZE + FULFILLED:
@@ -33,7 +33,7 @@ class UserListActionHandler {
 const userListActionHandler = new UserListActionHandler();
 
 export default (state, action) => {
-    state = state || new UserListState();
+    state = state || new UserListReduxState();
 
     return userListActionHandler.handleLoginAction(state, action);
 };

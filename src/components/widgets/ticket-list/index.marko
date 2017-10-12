@@ -1,6 +1,11 @@
 <div>
     <widget>
-        <@icon>Ico</@icon>
+        <@overlay>
+            <include(input.dragoverlay)/>
+        </@overlay>
+        <@icon>
+            <span class="kix-icon icon-dummy"/>
+        </@icon>
         <@title>Ticket List</@title>
         <@content>
             <table.ticket-table>
@@ -21,7 +26,12 @@
                 </for>
             </table>
         </@content>
-        <@filter>Filter</@filter>
-        <@actions>Actions</@actions>
+        <@filter>
+            <span/>
+        </@filter>
+        <@actions>
+            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+                on-click('configurationClicked')/>
+        </@actions>
     </widget>
 </div>
