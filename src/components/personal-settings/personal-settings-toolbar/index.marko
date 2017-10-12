@@ -1,0 +1,14 @@
+<span.kix-icon.icon-dummy.icon-menu title=state.title on-click('openPersonalSettings')/>
+<if(state.showPersonalSettings)>
+    <div>
+        <main-dialog>
+            <@title>${state.title}</@title>
+            <@body>
+                <personal-settings-container/>
+            </@body>
+            <@button>
+                <button on-click('closePersonalSettings')>Schließen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>

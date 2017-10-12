@@ -1,5 +1,5 @@
 <div class="login-wrapper">
-    <div class="login-page cf">
+    <div class="login-page clearfix">
         <div class="login-background"/>
         <div class="login-dialog">
             <div class="dialog-header">
@@ -17,7 +17,7 @@
                         <div class="message message-error">${state.error}</div>
                     </else-if>
                     <else-if(state.logout)>
-                        <div class="message message-progress">${component.getTranslation(component.translationIds.LOGOUT)}</div>
+                        <div class="message message-success">${component.getTranslation(component.translationIds.LOGOUT)}</div>
                     </else-if>
                 </div>
             </if>
