@@ -8,8 +8,7 @@ import {
     IConfigurationService,
     IWidgetFactoryExtension,
     IModuleFactoryExtension,
-    KIXExtensions,
-    WidgetType
+    KIXExtensions
 } from '@kix/core';
 
 const host = {
@@ -49,12 +48,8 @@ export class PluginService implements IPluginService {
         });
     }
 
-    public async getWidgetFactory(widgetId: string, type?: WidgetType): Promise<IWidgetFactoryExtension> {
-        let extension = KIXExtensions.WIDGET;
-        if (type === WidgetType.SIDEBAR) {
-            extension = KIXExtensions.SIDEBAR;
-        }
-        const widgetFactories = await this.getExtensions<IWidgetFactoryExtension>(extension);
+    public async getWidgetFactory(widgetId: string): Promise<IWidgetFactoryExtension> {
+        const widgetFactories = await this.getExtensions<IWidgetFactoryExtension>(KIXExtensions.WIDGET);
         const widgetFactory = widgetFactories.find((wf) => wf.getWidgetId() === widgetId);
         return widgetFactory;
     }
