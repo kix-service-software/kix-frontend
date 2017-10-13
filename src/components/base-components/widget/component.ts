@@ -14,7 +14,6 @@ class WidgetComponent {
     public onCreate(input: any): void {
         this.state = new WidgetComponentState();
         this.state.widget = input.widget;
-        console.log(this.state.widget);
     }
 
     public onInput(input: any): void {
