@@ -53,7 +53,6 @@ export class WidgetSocketListener extends SocketListener {
         this.configurationSocket.on(SocketEvent.CONNECT, () => {
             this.store.dispatch(WIDGET_ERROR(null));
             const token = ClientStorageHandler.getToken();
-
             const loadRequest = new LoadWidgetRequest(
                 token, this.contextId, this.widgetId, this.instanceId, true);
 

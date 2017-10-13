@@ -1,4 +1,4 @@
-class NotesSidebarComponent {
+class NotesWidgetComponent {
 
     public state: any;
 
@@ -9,4 +9,4 @@ class NotesSidebarComponent {
     }
 }
 
-module.exports = NotesSidebarComponent;
+module.exports = NotesWidgetComponent;

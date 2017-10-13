@@ -37,26 +37,17 @@
     #default-sidebars {
         min-height: 90px;
     }
-    .kix-sidebar {
-        .color-theme-4();
+    .sidebar-widget {
         width: 250px;
         margin-bottom: 20px;
         margin-left: 50px;
-        box-shadow: @shadow;
-        border-top-left-radius: @border-radius;
-        border-top-right-radius: @border-radius;
-        border-bottom-left-radius: @border-radius;
-        border-bottom-right-radius: @border-radius;
+        padding: 5px;
         overflow: hidden;
-        .sidebar-header {
+        .widget-header {
             .color-theme-1;
-            .height-0;
-            padding: 5px;
-            font-size: 2em;
         }
-        .sidebar-content {
-            .shadow-margin;
-            min-height: 200px;
+        .widget-content {
+            min-height: 10em;
         }
     }
 }

@@ -1,4 +1,4 @@
-class TicketInfoSidebarComponent {
+class TicketInfoWidgetComponent {
 
     public state: any;
 
@@ -22,4 +22,4 @@ class TicketInfoSidebarComponent {
     }
 }
 
-module.exports = TicketInfoSidebarComponent;
+module.exports = TicketInfoWidgetComponent;

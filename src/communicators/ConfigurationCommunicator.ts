@@ -45,7 +45,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             this.emitConfigurationLoadedEvent(client, configuration);
         });
 
-        client.on(ConfigurationEvent.LOAD_KIX_SIDEBAR_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+        client.on(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION, async (data: LoadConfigurationRequest) => {
             const user = await this.userService.getUserByToken(data.token);
 
             let configuration = await this.configurationService
@@ -53,12 +53,12 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
 
             if (!configuration) {
                 const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
-                const kixSidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+                const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, data.instanceId, user.UserID, kixSidebarDefaultConfiguration);
+                    data.contextId, data.componentId, data.instanceId, user.UserID, sidebarDefaultConfiguration);
 
-                configuration = kixSidebarDefaultConfiguration;
+                configuration = sidebarDefaultConfiguration;
             }
 
             this.emitConfigurationLoadedEvent(client, configuration);

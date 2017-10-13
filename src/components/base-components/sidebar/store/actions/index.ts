@@ -1,11 +1,11 @@
-export { KixSidebarAction } from './KixSidebarAction';
+export { SidebarAction } from './SidebarAction';
 
-import KIX_SIDEBAR_INITIALIZE from './kix-sidebar-initialize';
-import KIX_SIDEBAR_CONFIGURATION_LOADED from './kix-sidebar-configuration-loaded';
-import KIX_SIDEBAR_ERROR from './kix-sidebar-error';
+import SIDEBAR_INITIALIZE from './sidebar-initialize';
+import SIDEBAR_CONFIGURATION_LOADED from './sidebar-configuration-loaded';
+import SIDEBAR_ERROR from './sidebar-error';
 
 export {
-    KIX_SIDEBAR_INITIALIZE,
-    KIX_SIDEBAR_CONFIGURATION_LOADED,
-    KIX_SIDEBAR_ERROR
+    SIDEBAR_INITIALIZE,
+    SIDEBAR_CONFIGURATION_LOADED,
+    SIDEBAR_ERROR
 };

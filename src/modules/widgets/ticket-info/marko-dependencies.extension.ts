@@ -1,11 +1,11 @@
 import { IMarkoDependencyExtension } from '@kix/core';
 
-export class NotesSidebarMarkoDependencyExtension implements IMarkoDependencyExtension {
+export class TicketInfoWidgetMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            "sidebars/notes",
-            "sidebars/notes/configuration"
+            "widgets/ticket-info",
+            "widgets/ticket-info/configuration"
         ];
     }
 
@@ -16,5 +16,5 @@ export class NotesSidebarMarkoDependencyExtension implements IMarkoDependencyExt
 }
 
 module.exports = (data, host, options) => {
-    return new NotesSidebarMarkoDependencyExtension();
+    return new TicketInfoWidgetMarkoDependencyExtension();
 };
