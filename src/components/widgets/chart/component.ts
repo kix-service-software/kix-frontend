@@ -46,8 +46,6 @@ class ChartWidgetComponent extends WidgetBaseComponent<ChartComponentState, Char
     }
 
     private drawChart(): void {
-        // remove chart and add new with changed configuration
-        console.log("DrawChart: " + this.state.svgId);
         const element = document.getElementById(this.state.svgId);
         if (element && this.state.widgetConfiguration) {
             element.innerHTML = '';
