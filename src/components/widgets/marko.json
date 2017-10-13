@@ -3,6 +3,7 @@
         "user-list",
         "search-templates",
         "ticket-list",
-        "chart"
+        "chart",
+        "notes"
     ]
 }

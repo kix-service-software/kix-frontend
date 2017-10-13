@@ -9,7 +9,8 @@
             "users-communicator": "../../dist/communicators/UsersCommunicator.extension",
             "widget-communicator": "../../dist/communicators/WidgetCommunicator.extension",
             "translation-communicator": "../../dist/communicators/TranslationCommunicator.extension",
-            "dashboard-communicator": "../../dist/communicators/DashboardCommunicator.extension"
+            "dashboard-communicator": "../../dist/communicators/DashboardCommunicator.extension",
+            "sidebar-communicator": "../../dist/communicators/SidebarCommunicator.extension"
         }
     }
 }
