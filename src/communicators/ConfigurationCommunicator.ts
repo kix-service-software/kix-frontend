@@ -53,12 +53,12 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
 
             if (!configuration) {
                 const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
-                const SidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+                const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, data.instanceId, user.UserID, SidebarDefaultConfiguration);
+                    data.contextId, data.componentId, data.instanceId, user.UserID, sidebarDefaultConfiguration);
 
-                configuration = SidebarDefaultConfiguration;
+                configuration = sidebarDefaultConfiguration;
             }
 
             this.emitConfigurationLoadedEvent(client, configuration);
