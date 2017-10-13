@@ -2,14 +2,14 @@
     <kix-header/>
     <section.clearfix>
         <main-menu/>
+        <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
         <div#mutable-content.clearfix>
-            <kix-sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
             <div#mutable-content-area>
                 <div.content-header>
-                    <kix-breadcrumb/>
-                    <kix-back/>
+                    <breadcrumb/>
+                    <back/>
                 </div>
-                <kix-content configurationMode=state.configurationMode template=data.contentTemplate/>
+                <include(state.template, {configurationMode: state.configurationMode})/>
             </div>
         </div>
     </section>

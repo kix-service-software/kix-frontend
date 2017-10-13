@@ -1,4 +1,4 @@
-class KIXBackComponent {
+class BackComponent {
 
     public state: any;
 
@@ -8,4 +8,4 @@ class KIXBackComponent {
 
 }
 
-module.exports = KIXBackComponent;
+module.exports = BackComponent;
