@@ -1,23 +1,23 @@
 import { SidebarState } from './';
-import { KixSidebarAction } from './actions';
+import { SidebarAction } from './actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
 
-class KixSidebarActionHandler {
+class SidebarActionHandler {
 
-    public handleKixSidebarAction(state: SidebarState, action): SidebarState {
+    public handleSidebarAction(state: SidebarState, action): SidebarState {
         switch (action.type) {
-            case KixSidebarAction.KIX_SIDEBAR_INITIALIZE + FULFILLED:
+            case SidebarAction.SIDEBAR_INITIALIZE + FULFILLED:
                 return { ...state, socketlListener: action.payload.socketListener };
 
-            case KixSidebarAction.KIX_SIDEBAR_CONFIGURATION_LOADED + FULFILLED:
+            case SidebarAction.SIDEBAR_CONFIGURATION_LOADED + FULFILLED:
                 return {
                     ...state,
                     configuration: action.payload.configuration
                 };
 
-            case KixSidebarAction.KIX_SIDEBAR_ERROR + FULFILLED:
+            case SidebarAction.SIDEBAR_ERROR + FULFILLED:
                 return { ...state, error: action.payload.error };
 
             default:
@@ -26,10 +26,10 @@ class KixSidebarActionHandler {
     }
 }
 
-const kixSidebarActionHandler = new KixSidebarActionHandler();
+const sidebarActionHandler = new SidebarActionHandler();
 
 export default (state, action) => {
     state = state || new SidebarState();
 
-    return kixSidebarActionHandler.handleKixSidebarAction(state, action);
+    return sidebarActionHandler.handleSidebarAction(state, action);
 };
