@@ -2,7 +2,7 @@ import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
 import { ContainerRow } from '@kix/core/dist/model/client';
 
-class DragableContainerComponent {
+class DraggableContainerComponent {
 
     public state: ContainerComponentState;
 
@@ -114,4 +114,4 @@ class DragableContainerComponent {
     }
 }
 
-module.exports = DragableContainerComponent;
+module.exports = DraggableContainerComponent;

@@ -1,7 +1,6 @@
 {
     "tags-dir": [
         "./dist/components",
-        "./dist/components/mutableContent",
         "./dist/components/base-components",
         "./dist/components/personal-settings",
         "./dist/components/modules"

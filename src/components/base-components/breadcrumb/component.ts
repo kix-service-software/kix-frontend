@@ -1,4 +1,4 @@
-class KIXWidgetbarComponent {
+class BreadcrumbComponent {
 
     public state: any;
 
@@ -8,4 +8,4 @@ class KIXWidgetbarComponent {
 
 }
 
-module.exports = KIXWidgetbarComponent;
+module.exports = BreadcrumbComponent;
