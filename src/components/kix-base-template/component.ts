@@ -9,11 +9,15 @@ class BaseTemplateComponent {
     public onCreate(input: any): void {
         this.state = {
             auth: false,
-            configurationMode: false
+            configurationMode: false,
+            template: false,
+            templatePath: input.contentTemplate
         };
     }
 
     public async onMount(): Promise<void> {
+        this.state.template = require(this.state.templatePath);
+
         const token = ClientStorageHandler.getToken();
         const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
 

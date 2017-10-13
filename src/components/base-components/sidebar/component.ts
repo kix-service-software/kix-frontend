@@ -1,27 +1,21 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
-import { SidebarState } from './store/SidebarState';
+import { SidebarState } from './store/';
 import { SIDEBAR_INITIALIZE } from './store/actions';
 
 class SidebarComponent {
 
-    public state: any;
-    public store: any;
+    public state: SidebarComponentState;
+    private store: any;
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
-        this.state.sidebar = input.sidebar;
-    }
-
-    public onInput(input: any): void {
-        this.state.configurationMode = input.configurationMode;
+        this.state.configurationMode = false;
     }
 
     public onMount(): void {
-        this.store = require('./store').create();
+        this.store = require('./store/').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(SIDEBAR_INITIALIZE(this.state.sidebar.id, this.state.sidebar.instanceId, this.store));
-
-        this.state.template = require(this.state.sidebar.template);
+        this.store.dispatch(SIDEBAR_INITIALIZE(this.store));
     }
 
     public stateChanged(): void {
@@ -31,21 +25,22 @@ class SidebarComponent {
         }
     }
 
-    public configClicked(): void {
-        this.state.showConfiguration = true;
+    public toggleSidebarWidget(sidebarWidgetIndex: number): void {
+        if (sidebarWidgetIndex === null) {
+            return;
+        }
+        if (this.state.configuration && this.state.configuration.widgets) {
+
+            this.state.configuration.widgets[sidebarWidgetIndex].show =
+                !this.state.configuration.widgets[sidebarWidgetIndex].show;
+            (this as any).setStateDirty('configuration');
+        }
     }
 
-    public saveConfigurationOverlay(configuration): void {
-        this.state.showConfiguration = false;
-        this.state.configuration = configuration;
-        const reduxState: SidebarState = this.store.getState();
-        reduxState.socketlListener.saveConfiguration(configuration);
+    public configurationClicked(): void {
+        this.state.configurationMode = !this.state.configurationMode;
+        (this as any).emit('toggleConfigurationMode');
     }
-
-    public closeConfigurationOverlay(): void {
-        this.state.showConfiguration = false;
-    }
-
 }
 
 module.exports = SidebarComponent;

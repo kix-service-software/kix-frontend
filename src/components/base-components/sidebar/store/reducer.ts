@@ -8,7 +8,6 @@ class SidebarActionHandler {
 
     public handleSidebarAction(state: SidebarState, action): SidebarState {
         switch (action.type) {
-
             case SidebarAction.SIDEBAR_INITIALIZE + FULFILLED:
                 return { ...state, socketlListener: action.payload.socketListener };
 
