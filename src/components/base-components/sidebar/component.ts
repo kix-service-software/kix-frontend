@@ -29,13 +29,10 @@ class SidebarComponent {
         if (sidebarWidgetIndex === null) {
             return;
         }
-        console.log(sidebarWidgetIndex);
-        console.log(this.state.configuration);
         if (this.state.configuration && this.state.configuration.widgets) {
 
             this.state.configuration.widgets[sidebarWidgetIndex].show =
                 !this.state.configuration.widgets[sidebarWidgetIndex].show;
-            // this.state.configuration = { ...this.state.configuration };
             (this as any).setStateDirty('configuration');
         }
     }
