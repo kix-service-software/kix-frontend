@@ -10,8 +10,4 @@ export class UserListReduxState extends WidgetReduxState {
 
     public socketListener: UserListSocketListener;
 
-
-
-
-
 }

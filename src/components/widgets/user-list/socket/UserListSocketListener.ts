@@ -1,21 +1,16 @@
-import { Server } from './../../../../Server';
 import {
     ClientStorageHandler,
     SocketEvent,
     LoadUsersResult,
     UsersEvent,
     LoadUsersRequest,
-    LoadWidgetRequest,
-    LoadWidgetResponse,
-    SaveConfigurationRequest,
-    WidgetEvent,
-    WidgetConfiguration
+    WidgetConfiguration,
+    WIDGET_LOADED
 } from '@kix/core/dist/model/client';
 import { WidgetSocketListener } from '@kix/core/dist/model/client/socket/widget/WidgetSocketListener';
 import {
     USER_LIST_USERS_LOADED,
-    USER_LIST_ERROR,
-    WIDGET_LOADED
+    USER_LIST_ERROR
 } from '../store/actions';
 
 declare var io;

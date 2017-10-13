@@ -1,5 +1,8 @@
 {
     "tags-dir": [
-        "user-list"
+        "user-list",
+        "search-templates",
+        "ticket-list",
+        "chart"
     ]
 }
