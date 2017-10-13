@@ -6,6 +6,8 @@ import { USER_LIST_INITIALIZE } from './store/actions';
 
 class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
 
+    private componentInititalized: boolean = false;
+
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
     }
@@ -17,7 +19,9 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.store, 'user-list-widget', this.state.instanceId));
+        this.store.dispatch(USER_LIST_INITIALIZE(this.store, 'user-list-widget', this.state.instanceId)).then(() => {
+            this.loadUser();
+        });
     }
 
     public stateChanged(): void {
@@ -25,8 +29,9 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
 
         const reduxState: UserListReduxState = this.store.getState();
 
-        if (this.state.widgetConfiguration) {
+        if (!this.componentInititalized && reduxState.widgetConfiguration) {
             this.loadUser();
+            this.componentInititalized = true;
         }
 
         if (reduxState.users) {
@@ -37,7 +42,7 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
     public saveConfiguration(): void {
         const reduxState: UserListReduxState = this.store.getState();
         reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
-        (this as any).setStateDirty("widgetConfiguration");
+        this.loadUser();
         this.cancelConfiguration();
     }
 
