@@ -12,9 +12,12 @@
             <include(input.actions)/>
             <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
                 on-click('configClicked')/>
+            <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
         </span>
     </div>
-    <div.widget-content>
-        <include(input.content)/>
-    </div>
+    <if(state.minimized)>
+        <div.widget-content>
+            <include(input.content)/>
+        </div>
+    </if>
 </div>
