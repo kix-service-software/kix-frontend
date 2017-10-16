@@ -1,4 +1,4 @@
-import { ConfigurationCommunicatior } from './ConfigurationCommunicator';
+import { ConfigurationCommunicatior } from '../ConfigurationCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class ConfigurationCommunicatorExtension implements ICommunicatorExtension {

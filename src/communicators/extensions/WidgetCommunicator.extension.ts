@@ -1,4 +1,4 @@
-import { WidgetCommunicator } from './WidgetCommunicator';
+import { WidgetCommunicator } from '../WidgetCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class WidgetCommunicatorExtension implements ICommunicatorExtension {
