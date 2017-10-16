@@ -1,10 +1,10 @@
 import {
     SidebarConfiguration,
-    LoadConfigurationResult,
-    LoadConfigurationRequest,
+    LoadSidebarResponse,
+    LoadSidebarRequest,
     SocketEvent,
     ClientStorageHandler,
-    ConfigurationEvent
+    SidebarEvent
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
@@ -22,7 +22,7 @@ export class SidebarSocketListener extends SocketListener {
         super();
 
         this.store = store;
-        this.configurationSocket = this.createSocket("configuration");
+        this.configurationSocket = this.createSocket("sidebar");
         this.initConfigruationSocketListener(this.configurationSocket);
     }
 
@@ -31,9 +31,9 @@ export class SidebarSocketListener extends SocketListener {
             this.store.dispatch(SIDEBAR_ERROR(null));
             const token = ClientStorageHandler.getToken();
             const loadRequest =
-                new LoadConfigurationRequest(token, ClientStorageHandler.getContextId(), 'sidebar', null, true);
+                new LoadSidebarRequest(token, ClientStorageHandler.getContextId());
 
-            socket.emit(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION, loadRequest);
+            socket.emit(SidebarEvent.LOAD_SIDEBAR, loadRequest);
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -48,13 +48,13 @@ export class SidebarSocketListener extends SocketListener {
             this.store.dispatch(SIDEBAR_ERROR(String(error)));
         });
 
-        socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<SidebarConfiguration>) => {
-                this.store.dispatch(SIDEBAR_CONFIGURATION_LOADED(result.configuration));
+        socket.on(SidebarEvent.SIDEBAR_LOADED,
+            (result: LoadSidebarResponse) => {
+                this.store.dispatch(SIDEBAR_CONFIGURATION_LOADED(result.configuration, result.widgetTemplates));
             }
         );
 
-        socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED, () => {
+        socket.on(SidebarEvent.SIDEBAR_SAVED, () => {
             alert('Configuration saved!');
         });
     }

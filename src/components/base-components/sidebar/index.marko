@@ -10,9 +10,7 @@
             <!-- TODO: container for the normal sidebars widgets, should be verticaly middle -->
             <div#dependend-sidebars-select>
                 <for(widget in state.configuration.widgets | status-var=loop)>
-                    <div.sidebar-select id="${widget.id}-${loop.getIndex()}-select"
-                        class="${state.configuration.widgets[loop.getIndex()].show ? 'select-active' : ''}"
-                        on-click('toggleSidebarWidget', loop.getIndex())>
+                    <div.sidebar-select class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
                         <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
                     </div>
                 </for>
@@ -25,8 +23,11 @@
             <div#dependend-sidebars>
                 <for(widget in state.configuration.widgets | status-var=loop)>
                     <if(widget.show)>
-                        <div.sidebar-widget id="${widget.id}-${loop.getIndex()}">
-                            <widget widget=widget configurationMode=state.configurationMode data_id=widget.instanceId/>
+                        <div.sidebar-widget>
+                            <include(component.getWidgetTemplate(widget.id), {
+                                instanceId: widget.instanceId,
+                                configurationMode: state.configurationMode
+                                })/>
                         </div>
                     </if>
                 </for>

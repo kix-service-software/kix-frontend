@@ -1,11 +1,8 @@
 import { UserListConfiguration } from './UserListConfiguration';
-import { UIProperty } from '@kix/core/dist/model/client';
-export class UserListComponentState {
+import { UIProperty, WidgetConfiguration, WidgetComponentState } from '@kix/core/dist/model/client';
+
+export class UserListComponentState extends WidgetComponentState {
 
     public users: any[] = [];
-
-    public configuration: UserListConfiguration = new UserListConfiguration();
-
-    public error: string = null;
 
 }

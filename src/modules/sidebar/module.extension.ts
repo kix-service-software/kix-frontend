@@ -16,19 +16,16 @@ export class SidebarFactoryExtension implements IModuleFactoryExtension {
                 {
                     id: "notes-widget",
                     instanceId: "20170915101514",
-                    icon: 'dummy',
                     show: true
                 },
                 {
                     id: "notes-widget",
                     instanceId: "20170915094112",
-                    icon: 'dummy',
                     show: true
                 },
                 {
                     id: "ticket-info-widget",
                     instanceId: "20170915085411",
-                    icon: 'dummy',
                     show: true
                 }
             ]

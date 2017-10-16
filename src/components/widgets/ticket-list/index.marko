@@ -1,19 +1,51 @@
 <div>
-    <table.ticket-table>
-        <tr>
-            <for(column in state.columns)>
-                <th>${column}</th>
-            </for>
-        </tr>
-        <for(row in state.values)>
-            <tr>
-                <td>
-                    <input type="checkbox" name="all" value=""/>
-                </td>
-                <for(value in row)>
-                    <td>${value}</td>
+    <widget>
+        <@overlay>
+            <include(input.dragoverlay)/>
+        </@overlay>
+        <@icon>
+            <span class="kix-icon icon-dummy"/>
+        </@icon>
+        <@title>Ticket List</@title>
+        <@content>
+            <table.ticket-table>
+                <tr>
+                    <for(column in state.columns)>
+                        <th>${column}</th>
+                    </for>
+                </tr>
+                <for(row in state.values)>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="all" value=""/>
+                        </td>
+                        <for(value in row)>
+                            <td>${value}</td>
+                        </for>
+                    </tr>
                 </for>
-            </tr>
-        </for>
-    </table>
+            </table>
+        </@content>
+        <@filter>
+            <span/>
+        </@filter>
+        <@actions>
+            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+                on-click('showConfigurationClicked')/>
+        </@actions>
+    </widget>
+    <if(state.showConfiguration)>
+        <div>
+            <main-dialog>
+                <@title>Konfiguration: Ticketliste</@title>
+                <@body>
+                    <ticket-list-configuration/>
+                </@body>
+                <@button>
+                    <button on-click('saveConfiguration')>Speichern</button>
+                    <button on-click('cancelConfiguration')>Abbrechen</button>
+                </@button>
+            </main-dialog>
+        </div>
+    </if>
 </div>

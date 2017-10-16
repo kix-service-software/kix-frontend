@@ -1,12 +1,13 @@
-import { UserListState } from './UserListState';
+import { UserListReduxState } from './UserListReduxState';
 import { UserListAction } from './actions';
+import { WidgetAction } from '@kix/core/dist/model/client';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
 
 class UserListActionHandler {
 
-    public handleLoginAction(state: UserListState, action): UserListState {
+    public handleLoginAction(state: UserListReduxState, action): UserListReduxState {
         switch (action.type) {
 
             case UserListAction.USER_LIST_INITIALIZE + FULFILLED:
@@ -21,6 +22,9 @@ class UserListActionHandler {
             case UserListAction.USER_LIST_ERROR + FULFILLED:
                 return { ...state, error: action.payload.error };
 
+            case WidgetAction.WIDGET_LOADED + FULFILLED:
+                return { ...state, widgetConfiguration: action.payload.widgetConfiguration };
+
             default:
                 return { ...state };
         }
@@ -30,7 +34,7 @@ class UserListActionHandler {
 const userListActionHandler = new UserListActionHandler();
 
 export default (state, action) => {
-    state = state || new UserListState();
+    state = state || new UserListReduxState();
 
     return userListActionHandler.handleLoginAction(state, action);
 };
