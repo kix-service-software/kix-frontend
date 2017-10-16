@@ -13,6 +13,7 @@
   },
   "author": "c.a.p.e. IT GmbH",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^1.0.0-alpha.1",
     "@kix/core": "^1.1.0",
     "body-parser": "1.18.2",
     "compression": "1.7.1",
