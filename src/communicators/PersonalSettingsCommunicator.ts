@@ -30,7 +30,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
             const userId = user.UserID;
 
             const personalSettingsExtensions = await this.pluginService
-                .getExtensions<IPersonalSettingsExtension<any, any>>(KIXExtensions.PERSONAL_SETTINGS);
+                .getExtensions<IPersonalSettingsExtension>(KIXExtensions.PERSONAL_SETTINGS);
 
             let configuration =
                 await this.configurationService.getComponentConfiguration(PERSONAL_SETTINGS, null, null, userId);
@@ -41,25 +41,23 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
 
             const settings = await this.getPersonalSettings(configuration, personalSettingsExtensions, userId);
 
-            const loadResponse = new LoadPersonalSettingsResponse<any, any>(settings);
+            const loadResponse = new LoadPersonalSettingsResponse(settings);
             client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, loadResponse);
         });
     }
 
     private async getPersonalSettings(
-        configuration: any,
-        personalSettingsExtensions: Array<IPersonalSettingsExtension<any, any>>,
-        userId: number
-    ): Promise<Array<PersonalSettings<any, any>>> {
+        configuration: any, personalSettingsExtensions: IPersonalSettingsExtension[], userId: number
+    ): Promise<PersonalSettings[]> {
 
         let settingsChanged = false;
-        const settings: Array<PersonalSettings<any, any>> = [];
+        const settings: PersonalSettings[] = [];
         for (const psExt of personalSettingsExtensions) {
             const ps = psExt.getPersonalSettings();
 
-            const psConfig = configuration[ps.id];
+            let psConfig = configuration[ps.id];
             if (!psConfig) {
-                configuration[ps.id] = ps.configuration;
+                psConfig = ps.configuration;
                 settingsChanged = true;
             }
 

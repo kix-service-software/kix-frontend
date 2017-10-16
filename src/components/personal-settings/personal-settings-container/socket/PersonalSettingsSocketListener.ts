@@ -13,11 +13,11 @@ export class PersonalSettingsSocketListener extends SocketListener {
 
     private store: any;
 
-    public constructor() {
+    public constructor(store: any) {
         super();
 
         this.socket = this.createSocket("personal-settings");
-        this.store = require('../store/');
+        this.store = store;
         this.initSocketListener();
     }
 

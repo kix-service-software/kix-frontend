@@ -1,8 +1,8 @@
 import { IPersonalSettingsExtension, PersonalSettings } from '@kix/core';
 
-export class MainMenuPersonalSettings implements IPersonalSettingsExtension<any, any> {
+export class MainMenuPersonalSettingsExtension implements IPersonalSettingsExtension {
 
-    public getPersonalSettings(): PersonalSettings<any, any> {
+    public getPersonalSettings(): PersonalSettings {
         return new PersonalSettings(
             "main-menu",
             "Hauptmenü",
@@ -33,3 +33,7 @@ export class MainMenuPersonalSettings implements IPersonalSettingsExtension<any,
     }
 
 }
+
+module.exports = (data, host, options) => {
+    return new MainMenuPersonalSettingsExtension();
+};

@@ -1,24 +1,20 @@
-import { MainMenuState } from './MainMenuState';
-import { MainMenuAction } from './actions';
+import { PersonalSettings } from '@kix/core/dist/model/client';
+import { PersonalSettingsComponentState } from './../model/PersonalSettingsComponentState';
+import { PersonalSettingsAction } from './actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
 
 class PersonalSettingsActionHandler {
 
-    public handleLoginAction(state: MainMenuState, action): MainMenuState {
+    public handleAction(state: PersonalSettingsComponentState, action): PersonalSettingsComponentState {
         switch (action.type) {
-            case MainMenuAction.MAIN_MENU_INITIALIZE + FULFILLED: {
-                return { ...state, socketListener: action.payload.mainMenuSocketListener };
+            case PersonalSettingsAction.PERSONAL_SETTINGS_INITIALIZE + FULFILLED: {
+                return { ...state, socketListener: action.payload.socketListener };
             }
 
-            case MainMenuAction.MAIN_MENU_ENTRIES_LOADED + FULFILLED: {
-                return {
-                    ...state,
-                    primaryMenuEntries: action.payload.primaryMenuEntries,
-                    secondaryMenuEntries: action.payload.secondaryMenuEntries,
-                    showText: action.payload.showText
-                };
+            case PersonalSettingsAction.PERSONAL_SETTINGS_LOADED + FULFILLED: {
+                return { ...state, personalSettings: action.payload.personalSettings };
             }
 
             default:
@@ -30,7 +26,7 @@ class PersonalSettingsActionHandler {
 const actionHandler = new PersonalSettingsActionHandler();
 
 export default (state, action) => {
-    state = state || new MainMenuState();
+    state = state || new PersonalSettingsComponentState();
 
-    return actionHandler.handleLoginAction(state, action);
+    return actionHandler.handleAction(state, action);
 };

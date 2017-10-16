@@ -9,7 +9,8 @@
             "customer-marko": "../../dist/modules/customer/marko-dependencies.extension",
             "faq-marko": "../../dist/modules/faq/marko-dependencies.extension",
             "reports-marko": "../../dist/modules/reports/marko-dependencies.extension",
-            "search-marko": "../../dist/modules/search/marko-dependencies.extension"
+            "search-marko": "../../dist/modules/search/marko-dependencies.extension",
+            "main-menu": "../../dist/modules/main-menu/marko-dependencies.extension"
         },
         "kix:menu:main": {
             "dashboard-menu-main": "../../dist/modules/dashboard/menu.main.extension",
