@@ -22,24 +22,31 @@ class SidebarComponent {
         const reduxState: SidebarState = this.store.getState();
         if (reduxState.configuration) {
             this.state.configuration = reduxState.configuration;
+            this.state.widgetTemplates = reduxState.widgetTemplates;
         }
     }
 
-    public toggleSidebarWidget(sidebarWidgetIndex: number): void {
-        if (sidebarWidgetIndex === null) {
-            return;
-        }
+    public toggleSidebarWidget(instanceId: string): void {
         if (this.state.configuration && this.state.configuration.widgets) {
-
-            this.state.configuration.widgets[sidebarWidgetIndex].show =
-                !this.state.configuration.widgets[sidebarWidgetIndex].show;
-            (this as any).setStateDirty('configuration');
+            const widget = this.state.configuration.widgets.find((w) => w.instanceId === instanceId);
+            if (widget) {
+                widget.show = !widget.show;
+                (this as any).setStateDirty('configuration');
+            }
         }
     }
 
     public configurationClicked(): void {
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
+    }
+
+    public getWidgetTemplate(widgetId: string): any {
+        const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
+        if (template) {
+            return require(template);
+        }
+        return '';
     }
 }
 

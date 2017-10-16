@@ -1,56 +1,66 @@
 import { UserListConfiguration } from './model/UserListConfiguration';
-import { ClientStorageHandler, LoadUsersRequest } from '@kix/core/dist/model/client';
+import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { UserListComponentState } from './model/UserListComponentState';
-import { UserListState } from './store/UserListState';
+import { UserListReduxState } from './store/UserListReduxState';
 import { USER_LIST_INITIALIZE } from './store/actions';
 
-class UserListWidgetComponent {
+class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
 
-    public state: UserListComponentState;
-
-    private store: any;
-
-    private initialized: boolean = false;
+    private componentInititalized: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.configuration = input.configuration;
-        if (this.store && this.state.configuration) {
-            this.loadUser();
-        }
+        this.state.instanceId = input.instanceId;
     }
 
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.store)).then(() => {
+        this.store.dispatch(USER_LIST_INITIALIZE(this.store, 'user-list-widget', this.state.instanceId)).then(() => {
             this.loadUser();
         });
     }
 
     public stateChanged(): void {
-        const reduxState: UserListState = this.store.getState();
+        super.stateChanged();
+
+        const reduxState: UserListReduxState = this.store.getState();
+
+        if (!this.componentInititalized && reduxState.widgetConfiguration) {
+            this.loadUser();
+            this.componentInititalized = true;
+        }
 
         if (reduxState.users) {
             this.state.users = reduxState.users;
-            (this as any).emit('contentDataLoaded', this.state.users);
-        }
-
-        if (reduxState.error) {
-            this.state.error = reduxState.error;
         }
     }
 
+    public saveConfiguration(): void {
+        const reduxState: UserListReduxState = this.store.getState();
+        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
+        this.loadUser();
+        this.cancelConfiguration();
+    }
+
+    protected showConfigurationClicked(): void {
+        this.state.showConfiguration = true;
+    }
+
+    protected cancelConfiguration(): void {
+        this.state.showConfiguration = false;
+    }
+
     private loadUser(): void {
-        if (this.state.configuration) {
-            const reduxState: UserListState = this.store.getState();
+        if (this.state.widgetConfiguration) {
+            const reduxState: UserListReduxState = this.store.getState();
             reduxState.socketListener.loadUsers(new LoadUsersRequest(
                 ClientStorageHandler.getToken(),
-                this.state.configuration.properties,
-                this.state.configuration.limit)
+                this.state.widgetConfiguration.contentConfiguration.properties,
+                this.state.widgetConfiguration.contentConfiguration.limit)
             );
         }
     }

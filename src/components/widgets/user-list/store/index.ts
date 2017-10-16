@@ -3,7 +3,7 @@ import { applyMiddleware, createStore } from 'redux';
 
 import reducer from './reducer';
 
-export { UserListState } from './UserListState';
+export { UserListReduxState } from './UserListReduxState';
 
 
 function create(): any {

@@ -14,7 +14,8 @@ class SidebarActionHandler {
             case SidebarAction.SIDEBAR_CONFIGURATION_LOADED + FULFILLED:
                 return {
                     ...state,
-                    configuration: action.payload.configuration
+                    configuration: action.payload.configuration,
+                    widgetTemplates: action.payload.widgetTemplates
                 };
 
             case SidebarAction.SIDEBAR_ERROR + FULFILLED:
