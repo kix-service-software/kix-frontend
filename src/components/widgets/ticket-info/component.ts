@@ -4,6 +4,7 @@ class TicketInfoWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = {
+            showConfiguration: false,
             ticketAttr: [
                 {
                     label: 'Kundennummer',
@@ -19,6 +20,18 @@ class TicketInfoWidgetComponent {
                 },
             ]
         };
+    }
+
+    public showConfigurationClicked(): void {
+        this.state.showConfiguration = true;
+    }
+
+    public saveConfiguration(): void {
+        this.cancelConfiguration();
+    }
+
+    public cancelConfiguration(): void {
+        this.state.showConfiguration = false;
     }
 }
 

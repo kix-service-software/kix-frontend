@@ -4,6 +4,7 @@ class TicketListWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = {
+            showConfiguration: false,
             columns: [
                 "alle",
                 "Prio",
@@ -22,6 +23,18 @@ class TicketListWidgetComponent {
                 ["5", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
             ]
         };
+    }
+
+    public showConfigurationClicked(): void {
+        this.state.showConfiguration = true;
+    }
+
+    public saveConfiguration(): void {
+        this.cancelConfiguration();
+    }
+
+    public cancelConfiguration(): void {
+        this.state.showConfiguration = false;
     }
 }
 

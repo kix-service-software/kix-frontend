@@ -3,9 +3,11 @@ import {
     SocketEvent,
     LoadUsersResult,
     UsersEvent,
-    LoadUsersRequest
+    LoadUsersRequest,
+    WidgetConfiguration,
+    WIDGET_LOADED
 } from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+import { WidgetSocketListener } from '@kix/core/dist/model/client/socket/widget/WidgetSocketListener';
 import {
     USER_LIST_USERS_LOADED,
     USER_LIST_ERROR
@@ -13,22 +15,27 @@ import {
 
 declare var io;
 
-export class UserListSocketListener extends SocketListener {
+export class UserListSocketListener extends WidgetSocketListener {
 
     private usersSocket: SocketIO.Server;
 
-    private store: any;
-
-    public constructor(store: any) {
-        super();
+    public constructor(store: any, widgetId: string, instanceId: string) {
+        super(store, widgetId, instanceId);
 
         this.usersSocket = this.createSocket("users");
-        this.store = store;
         this.initUsersSocketListener();
     }
 
     public loadUsers(loadUsersRequest: LoadUsersRequest): void {
         this.usersSocket.emit(UsersEvent.LOAD_USERS, loadUsersRequest);
+    }
+
+    protected handleWidgetSocketError(error: any): void {
+        this.store.dispatch(USER_LIST_ERROR(String(error)));
+    }
+
+    protected widgetLoaded(configuration: WidgetConfiguration): void {
+        this.store.dispatch(WIDGET_LOADED(configuration));
     }
 
     private initUsersSocketListener(): void {

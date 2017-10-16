@@ -1,6 +1,7 @@
 import {
-    ConfigurationEvent,
-    LoadConfigurationResult,
+    DashboardEvent,
+    LoadDashboardRequest,
+    LoadDashboardResponse,
     SocketEvent,
     ClientStorageHandler,
     LoadConfigurationRequest,
@@ -20,17 +21,16 @@ export class DashboardSocketListener extends SocketListener {
     public constructor() {
         super();
         this.store = require('../store/');
-        this.configurationSocket = this.createSocket("configuration");
+        this.configurationSocket = this.createSocket("dashboard");
         this.initConfigurationSocketListener(this.configurationSocket);
     }
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             const token = ClientStorageHandler.getToken();
-            const loadRequest = new LoadConfigurationRequest(
-                token, ClientStorageHandler.getContextId(), null, null, true);
+            const loadRequest = new LoadDashboardRequest(token, ClientStorageHandler.getContextId());
 
-            socket.emit(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, loadRequest);
+            socket.emit(DashboardEvent.LOAD_DASHBOARD, loadRequest);
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -41,9 +41,11 @@ export class DashboardSocketListener extends SocketListener {
             console.error("Timeout");
         });
 
-        socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<ContainerConfiguration>) => {
-                this.store.dispatch(DASHBOARD_CONTAINER_CONFIGURATION_LOADED(result.configuration));
+        socket.on(DashboardEvent.DASHBOARD_LOADED,
+            (result: LoadDashboardResponse<ContainerConfiguration>) => {
+                this.store.dispatch(
+                    DASHBOARD_CONTAINER_CONFIGURATION_LOADED(result.configuration, result.widgetTemplates)
+                );
             });
 
         socket.on('error', (error) => {

@@ -13,7 +13,11 @@ class DashboardActionHandler {
             }
 
             case DashboardAction.DASHBOARD_CONTAINER_CONFIGURATION_LOADED + FULFILLED: {
-                return { ...state, containerConfiguration: action.payload.containerConfiguration };
+                return {
+                    ...state,
+                    containerConfiguration: action.payload.containerConfiguration,
+                    widgetTemplates: action.payload.widgetTemplates
+                };
             }
 
             default:

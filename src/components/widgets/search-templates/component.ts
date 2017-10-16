@@ -3,7 +3,9 @@ class SearchTemplatesWidgetComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = {
+            showConfiguration: false
+        };
     }
 
     public newClicked(event): void {
@@ -16,6 +18,18 @@ class SearchTemplatesWidgetComponent {
 
     public deleteClicked(event): void {
         alert('Suchvorlage löschen!');
+    }
+
+    public showConfigurationClicked(): void {
+        this.state.showConfiguration = true;
+    }
+
+    public saveConfiguration(): void {
+        this.cancelConfiguration();
+    }
+
+    public cancelConfiguration(): void {
+        this.state.showConfiguration = false;
     }
 }
 

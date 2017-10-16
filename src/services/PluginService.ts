@@ -1,7 +1,6 @@
 import { injectable, inject } from 'inversify';
 import Plugins = require('js-plugins');
 
-import { WidgetState } from './../components/base-components/widget/store/WidgetState';
 import {
     IPluginService,
     IServerConfiguration,

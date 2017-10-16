@@ -3,7 +3,8 @@ import { applyMiddleware, createStore } from 'redux';
 
 import reducer from './reducer';
 
-export { WidgetState } from './WidgetState';
+export { ChartReduxState } from './ChartReduxState';
+
 
 function create(): any {
     return createStore(reducer, {}, applyMiddleware(

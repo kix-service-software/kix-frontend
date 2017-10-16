@@ -1,11 +1,12 @@
-import { ChartConfiguration } from '@kix/core/dist/model/client';
+import { ChartConfiguration, WidgetComponentState } from '@kix/core/dist/model/client';
 
-export class ChartComponentState {
+export class ChartComponentState extends WidgetComponentState {
 
-    public svgId: string = 'chart-' + Date.now();
+    public svgId: string;
 
-    public configuration: ChartConfiguration = new ChartConfiguration();
-
-    public error: string = null;
+    public constructor() {
+        super();
+        this.svgId = 'chart-' + Date.now() + Math.round((Math.random() * 100 - 80));
+    }
 
 }
