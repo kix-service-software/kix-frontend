@@ -22,10 +22,7 @@ class DraggableContainerComponent {
 
     public getWidgetTemplate(widgetId: string): any {
         const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
-        if (template) {
-            return require(template);
-        }
-        return '';
+        return template ? require(template) : '';
     }
 
     public dragStart(event): void {
