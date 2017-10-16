@@ -1,11 +1,11 @@
 import {
     ClientStorageHandler,
     SocketEvent,
-    MainMenuEvent,
-    MainMenuEntriesResponse
+    PersonalSettingsEvent,
+    LoadPersonalSettingsResponse
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
-import { MAIN_MENU_LOAD_ENTRIES, MAIN_MENU_ENTRIES_LOADED } from '../store/actions';
+import { LOAD_PERSONAL_SETTINGS, PERSONAL_SETTINGS_LOADED } from '../store/actions';
 
 export class PersonalSettingsSocketListener extends SocketListener {
 
@@ -16,14 +16,14 @@ export class PersonalSettingsSocketListener extends SocketListener {
     public constructor() {
         super();
 
-        this.socket = this.createSocket("main-menu");
+        this.socket = this.createSocket("personal-settings");
         this.store = require('../store/');
         this.initSocketListener();
     }
 
     private initSocketListener(): void {
         this.socket.on(SocketEvent.CONNECT, () => {
-            this.store.dispatch(MAIN_MENU_LOAD_ENTRIES(this.socket));
+            this.store.dispatch(LOAD_PERSONAL_SETTINGS(this.socket));
         });
 
         this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -34,10 +34,8 @@ export class PersonalSettingsSocketListener extends SocketListener {
             console.error("Timeout");
         });
 
-        this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
-            this.store.dispatch(
-                MAIN_MENU_ENTRIES_LOADED(result.primaryMenuEntries, result.secondaryMenuEntries, result.showText)
-            );
+        this.socket.on(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, (response: LoadPersonalSettingsResponse) => {
+            this.store.dispatch(PERSONAL_SETTINGS_LOADED(response.personalSettings));
         });
 
         this.socket.on('error', (error) => {
