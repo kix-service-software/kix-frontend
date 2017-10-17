@@ -1,1 +1,27 @@
-<span>Ticket anlegen ...</span>
+<div.create-form>
+    <div.form-group>
+        <h3>Allgemein</h3>
+        <ticket-templates-input/>
+        <ticket-customer-input/>
+        <ticket-customer-id-input/>
+    </div>
+    <div.form-group>
+        <h3>Ticketdaten</h3>
+        <ticket-type-input/>
+        <ticket-queue-input/>
+        <ticket-priority-input/>
+        <ticket-state-input/>
+        <ticket-user-input label="Bearbeiter"/>
+        <ticket-user-input label="Verantwortlicher" type="responsible"/>
+    </div>
+    <div.form-group>
+        <h3>Ticketinhalt</h3>
+        <ticket-subject-input/>
+        <ticket-description-input/>
+        <ticket-attachment-input/>
+    </div>
+    <div.form-group>
+        <h3>Zusätzliches</h3>
+        <ticket-dynamic-field-input/>
+    </div>
+</div>
