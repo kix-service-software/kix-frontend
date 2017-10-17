@@ -1,13 +1,13 @@
 import {
     ClientStorageHandler,
     SocketEvent,
-    CreateDialogEvent,
-    LoadCreateDialogResponse
+    CreationDialogEvent,
+    LoadCreationDialogResponse
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
-import { LOAD_DIALOGS, DIALOGS_LOADED } from '../store/actions';
+import { LOAD_CREATION_DIALOGS, CREATION_DIALOGS_LOADED } from '../store/actions';
 
-export class CreateDialogSocketListener extends SocketListener {
+export class CreationDialogSocketListener extends SocketListener {
 
     private socket: SocketIO.Server;
 
@@ -16,14 +16,14 @@ export class CreateDialogSocketListener extends SocketListener {
     public constructor(store: any) {
         super();
 
-        this.socket = this.createSocket("create-dialog");
+        this.socket = this.createSocket("creation-dialog");
         this.store = store;
         this.initSocketListener();
     }
 
     private initSocketListener(): void {
         this.socket.on(SocketEvent.CONNECT, () => {
-            this.store.dispatch(LOAD_DIALOGS(this.socket));
+            this.store.dispatch(LOAD_CREATION_DIALOGS(this.socket));
         });
 
         this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -34,8 +34,8 @@ export class CreateDialogSocketListener extends SocketListener {
             console.error("Timeout");
         });
 
-        this.socket.on(CreateDialogEvent.CREATE_DIALOGS_LOADED, (response: LoadCreateDialogResponse) => {
-            this.store.dispatch(DIALOGS_LOADED(response.createDialogs));
+        this.socket.on(CreationDialogEvent.CREATION_DIALOGS_LOADED, (response: LoadCreationDialogResponse) => {
+            this.store.dispatch(CREATION_DIALOGS_LOADED(response.creationDialogs));
         });
 
         this.socket.on('error', (error) => {

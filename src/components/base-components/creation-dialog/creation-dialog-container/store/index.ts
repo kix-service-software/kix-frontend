@@ -3,7 +3,7 @@ import { applyMiddleware, createStore } from 'redux';
 
 import reducer from './reducer';
 
-export { CreateObjectDialogReduxState } from './CreateObjectDialogReduxState';
+export { CreationDialogReduxState } from './CreationDialogReduxState';
 
 function create(): any {
     return createStore(reducer, {}, applyMiddleware(

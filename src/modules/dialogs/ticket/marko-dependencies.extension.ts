@@ -1,10 +1,10 @@
 import { IMarkoDependencyExtension } from '@kix/core';
 
-export class FAQMarkoDependencyExtension implements IMarkoDependencyExtension {
+export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            "dialogs/create-ticket"
+            "dialogs/ticket-creation"
         ];
     }
 
@@ -15,5 +15,5 @@ export class FAQMarkoDependencyExtension implements IMarkoDependencyExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new FAQMarkoDependencyExtension();
+    return new TicketMarkoDependencyExtension();
 };
