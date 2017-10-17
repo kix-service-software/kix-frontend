@@ -1,4 +1,4 @@
-import { SidebarCommunicator } from './SidebarCommunicator';
+import { SidebarCommunicator } from '../SidebarCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class SidebarCommunicatorExtension implements ICommunicatorExtension {

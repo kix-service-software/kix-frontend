@@ -1,4 +1,4 @@
-import { DashboardCommunicator } from './DashboardCommunicator';
+import { DashboardCommunicator } from '../DashboardCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class DashboardCommunicatorExtension implements ICommunicatorExtension {

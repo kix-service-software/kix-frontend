@@ -1,4 +1,4 @@
-import { MainMenuCommunicator } from './MainMenuCommunicator';
+import { MainMenuCommunicator } from '../MainMenuCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class MainMenuCommunicatorExtension implements ICommunicatorExtension {
