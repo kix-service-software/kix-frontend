@@ -2,7 +2,7 @@
     "tags-dir": [
         "./dist/components",
         "./dist/components/base-components",
-        "./dist/components/base-components/create-object",
+        "./dist/components/base-components/create-object-dialog",
         "./dist/components/personal-settings",
         "./dist/components/modules"
     ]

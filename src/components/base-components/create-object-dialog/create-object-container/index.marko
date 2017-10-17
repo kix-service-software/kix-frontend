@@ -1,0 +1,10 @@
+<ul.tab-list>
+    <for(dialog in state.createDialogs)>
+        <li.tab-entry on-click("showDialog", dialog.id)>${dialog.name}</li>
+    </for>
+</ul>
+<if(state.currentDialog)>
+    <div.create-content>
+        <include(component.getDialogTemplate())/>
+    </div>
+</if>
