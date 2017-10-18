@@ -1,37 +1,32 @@
-<div#sidebar>
-    <div.sidebar-select-container>
-        <div#content-settings-select.sidebar-select>
-            <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
+<if(state.configuration && component.hasWidgetsToShow())>
+    <div.sidebar>
+        <!-- <div.sidebar-select-container>
+    <div#content-settings-select.sidebar-select>
+        <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
+    </div>
+    <div#information-select.sidebar-select>
+        <span.kix-icon.icon-dummy.icon-i/>
+    </div>
+    <if(state.configuration)>
+        <!-- TODO: container for the normal sidebars widgets, should be verticaly middle -->
+        <!-- <div#dependend-sidebars-select>
+            <for(widget in state.configuration.widgets | status-var=loop)>
+                <div.sidebar-select class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
+                    <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
+                </div>
+            </for>
         </div>
-        <div#information-select.sidebar-select>
-            <span.kix-icon.icon-dummy.icon-i/>
-        </div>
+    </if> -->
+        <!-- </div> -->
         <if(state.configuration)>
-            <!-- TODO: container for the normal sidebars widgets, should be verticaly middle -->
-            <div#dependend-sidebars-select>
-                <for(widget in state.configuration.widgets | status-var=loop)>
-                    <div.sidebar-select class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
-                        <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
-                    </div>
-                </for>
-            </div>
+            <for(widget in state.configuration.widgets | status-var=loop)>
+                <if(widget.show)>
+                    <include(component.getWidgetTemplate(widget.id), {
+            instanceId: widget.instanceId,
+            configurationMode: state.configurationMode
+            })/>
+                </if>
+            </for>
         </if>
     </div>
-    <div.sidebar-container>
-        <div#default-sidebars/>
-        <if(state.configuration)>
-            <div#dependend-sidebars>
-                <for(widget in state.configuration.widgets | status-var=loop)>
-                    <if(widget.show)>
-                        <div.sidebar-widget>
-                            <include(component.getWidgetTemplate(widget.id), {
-                                instanceId: widget.instanceId,
-                                configurationMode: state.configurationMode
-                                })/>
-                        </div>
-                    </if>
-                </for>
-            </div>
-        </if>
-    </div>
-</div>
+</if>

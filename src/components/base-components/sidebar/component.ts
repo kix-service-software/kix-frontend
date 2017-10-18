@@ -48,6 +48,10 @@ class SidebarComponent {
         }
         return '';
     }
+
+    public hasWidgetsToShow(): boolean {
+        return this.state.configuration.widgets.filter((w) => w.show).length > 0;
+    }
 }
 
 module.exports = SidebarComponent;
