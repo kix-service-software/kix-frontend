@@ -11,7 +11,8 @@
             "translation-communicator": "../../dist/communicators/extensions/TranslationCommunicator.extension",
             "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
             "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
-            "personla-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension"
+            "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
+            "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/modules/main-menu/personal-settings.extension"
