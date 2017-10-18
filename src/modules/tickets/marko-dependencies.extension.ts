@@ -11,6 +11,7 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
             "dialogs/ticket-creation/inputs/ticket-customer-input",
             "dialogs/ticket-creation/inputs/ticket-description-input",
             "dialogs/ticket-creation/inputs/ticket-dynamic-field-input",
+            "dialogs/ticket-creation/inputs/ticket-pending-time-input",
             "dialogs/ticket-creation/inputs/ticket-priority-input",
             "dialogs/ticket-creation/inputs/ticket-queue-input",
             "dialogs/ticket-creation/inputs/ticket-state-input",

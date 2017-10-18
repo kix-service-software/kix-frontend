@@ -1,6 +1,22 @@
 export class TicketCreationReduxState {
 
-    public customerId: number;
+    public createTicketInProcess: boolean = false;
+    public resetTicketCreationInProcess: boolean = false;
 
-    public loadCustomerId: boolean;
+    public customer: number = null;
+    public customerId: number = null;
+    public description: string = null;
+    public dynamicFields: any[] = [];
+    public priorityId: number = null;
+    public queueId: number = null;
+    public stateId: number = null;
+    public subject: string = null;
+    public ticketTemplates: any[] = [];
+    public typeId: number = null;
+    public ownerId: number = null;
+    public responsibleId: number = null;
+
+    // process triggers
+    public loadTicketTemplates: boolean = false;
+
 }

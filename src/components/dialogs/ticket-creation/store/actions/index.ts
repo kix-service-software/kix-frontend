@@ -1,7 +1,21 @@
+import CREATE_TICKET from './create-ticket';
+import RESET_TICKET_CREATION from './reset-ticket-creation';
+
+import LOAD_TICKET_TEMPLATES from './load-ticket-templates';
+
+import SUBJECT_CHANGED from './subject-changed';
+
 export { TicketCreationDialogAction } from './TicketCreationDialogAction';
 
-import CUSTOMER_ID_CHANGED from './customer-id-changed';
+export {
+    CREATE_TICKET,
+    RESET_TICKET_CREATION,
+};
 
 export {
-    CUSTOMER_ID_CHANGED
+    SUBJECT_CHANGED
+};
+
+export {
+    LOAD_TICKET_TEMPLATES
 };

@@ -9,18 +9,34 @@ class ActionHandler {
 
     public handleAction(state: TicketCreationReduxState, action): TicketCreationReduxState {
         switch (action.type) {
-            case TicketCreationDialogAction.CUSTOMER_ID_CHANGED + PENDING:
-                state = { ...state, loadCustomerId: true };
+
+            case TicketCreationDialogAction.CREATE_TICKET + PENDING:
+                state = { ...state, createTicketInProcess: true };
                 break;
-            case TicketCreationDialogAction.CUSTOMER_ID_CHANGED + FULFILLED:
-                state = {
-                    ...state,
-                    customerId: action.payload.customerId,
-                    loadCustomerId: false
-                };
+            case TicketCreationDialogAction.CREATE_TICKET + FULFILLED:
+                state = { ...state, createTicketInProcess: false };
                 break;
+
+            case TicketCreationDialogAction.RESET_TICKET_CREATION + PENDING:
+                state = { ...state, resetTicketCreationInProcess: true };
+                break;
+            case TicketCreationDialogAction.RESET_TICKET_CREATION + FULFILLED:
+                state = { ...state, resetTicketCreationInProcess: false };
+                break;
+
+            case TicketCreationDialogAction.LOAD_TICKET_TEMPLATES + PENDING:
+                state = { ...state, loadTicketTemplates: true };
+                break;
+            case TicketCreationDialogAction.LOAD_TICKET_TEMPLATES + FULFILLED:
+                state = { ...state, loadTicketTemplates: false };
+                break;
+
+            case TicketCreationDialogAction.SUBJECT_CHANGED + FULFILLED:
+                state = { ...state, subject: action.payload.subject };
+                break;
+
             default:
-                return null;
+                state = state;
         }
 
         return state;

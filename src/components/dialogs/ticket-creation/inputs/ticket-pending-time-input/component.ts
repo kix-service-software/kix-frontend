@@ -1,20 +1,20 @@
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
 import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 
-class TicketCustomerIdInput extends AbstractTicketCreationInputComponent {
+class TicketPendingTimeInput extends AbstractTicketCreationInputComponent {
 
     public onCreate(input: any): void {
         this.state = {};
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged.bind(this));
+        super.initialize(this.stateChanged);
     }
 
-    public stateChanged(): void {
+    public stateChanged(state: TicketCreationReduxState): void {
         console.log("stateChanged");
     }
 
 }
 
-module.exports = TicketCustomerIdInput;
+module.exports = TicketPendingTimeInput;

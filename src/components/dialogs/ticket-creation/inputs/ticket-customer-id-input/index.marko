@@ -1,13 +1,4 @@
 <label.form-label>
     Kunde
-    <!-- 
-        TODO: Komponente, welche die Eingabe und Ermittlung von Kunden behandelt. 
-        Kann als Input einen gültigen Ansprechpartner erhalten und an Hand dessen den Kunden setzen. 
-    -->
-    <if(state.isLoading)>
-        <span>Loading ...</span>
-    </if>
-    <else>
-        <input type="text" tabindex="2" on-blur('valueChanged') placeholder="0815"/>
-    </else>
+    <input type="text" tabindex="2" placeholder="0815"/>
 </label>

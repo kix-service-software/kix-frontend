@@ -4,7 +4,7 @@
         <main-dialog>
             <@title>${state.title}</@title>
             <@body>
-                <creation-dialog-container/>
+                <creation-dialog-container on-closeDialog('closeCreateObjectDialog')/>
             </@body>
             <@button>
                 <button on-click('closeCreateObjectDialog')>Schließen</button>

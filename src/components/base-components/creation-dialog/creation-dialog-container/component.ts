@@ -33,6 +33,11 @@ class CreationDialogComponent {
         this.state.currentDialog = this.state.creationDialogs.find((cd) => cd.id === id);
     }
 
+    public closeDialog(): void {
+        this.state.currentDialog = null;
+        (this as any).emit('closeDialog');
+    }
+
     public getDialogTemplate(): any {
         return require(this.state.currentDialog.templatePath);
     }

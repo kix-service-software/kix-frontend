@@ -1,27 +1,35 @@
-<div.create-form>
-    <div.form-group>
-        <h3>Allgemein</h3>
-        <ticket-templates-input/>
-        <ticket-customer-input/>
-        <ticket-customer-id-input/>
+<if(state.ticketCreationInProcess)>Ticket wird erstellt ...</if>
+<else-if(state.resetTicketCreationInProcess)>Formular wird zurückgesetzt</else-if>
+<else>
+    <div.create-form>
+        <div.form-group>
+            <h3>Allgemein</h3>
+            <ticket-templates-input/>
+            <ticket-customer-input/>
+            <ticket-customer-id-input/>
+        </div>
+        <div.form-group>
+            <h3>Ticketdaten</h3>
+            <ticket-type-input/>
+            <ticket-queue-input/>
+            <ticket-priority-input/>
+            <ticket-state-input/>
+            <ticket-user-input label="Bearbeiter"/>
+            <ticket-user-input label="Verantwortlicher" type="responsible"/>
+            <ticket-pending-time-input/>
+        </div>
+        <div.form-group>
+            <h3>Ticketinhalt</h3>
+            <ticket-subject-input/>
+            <ticket-description-input/>
+            <ticket-attachment-input/>
+        </div>
+        <div.form-group>
+            <h3>Zusätzliches</h3>
+            <ticket-dynamic-field-input/>
+        </div>
     </div>
-    <div.form-group>
-        <h3>Ticketdaten</h3>
-        <ticket-type-input/>
-        <ticket-queue-input/>
-        <ticket-priority-input/>
-        <ticket-state-input/>
-        <ticket-user-input label="Bearbeiter"/>
-        <ticket-user-input label="Verantwortlicher" type="responsible"/>
+    <div.form-buttons>
+        <button on-click('createTicket')>Speichern</button>
     </div>
-    <div.form-group>
-        <h3>Ticketinhalt</h3>
-        <ticket-subject-input/>
-        <ticket-description-input/>
-        <ticket-attachment-input/>
-    </div>
-    <div.form-group>
-        <h3>Zusätzliches</h3>
-        <ticket-dynamic-field-input/>
-    </div>
-</div>
+</else>

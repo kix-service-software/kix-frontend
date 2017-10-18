@@ -5,6 +5,6 @@
 </ul>
 <if(state.currentDialog)>
     <div.create-content>
-        <include(component.getDialogTemplate())/>
+        <include(component.getDialogTemplate()) on-closeDialog('closeDialog')/>
     </div>
 </if>
