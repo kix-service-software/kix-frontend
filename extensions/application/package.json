@@ -2,15 +2,20 @@
     "name": "application-extensions",
     "extensions": {
         "kix:communicator": {
-            "action-communicator": "../../dist/communicators/ActionCommunicator.extension",
-            "authentication-communicator": "../../dist/communicators/AuthenticationCommunicator.extension",
-            "configuration-communicator": "../../dist/communicators/ConfigurationCommunicator.extension",
-            "main-menu-communicator": "../../dist/communicators/MainMenuCommunicator.extension",
-            "users-communicator": "../../dist/communicators/UsersCommunicator.extension",
-            "widget-communicator": "../../dist/communicators/WidgetCommunicator.extension",
-            "translation-communicator": "../../dist/communicators/TranslationCommunicator.extension",
-            "dashboard-communicator": "../../dist/communicators/DashboardCommunicator.extension",
-            "sidebar-communicator": "../../dist/communicators/SidebarCommunicator.extension"
+            "action-communicator": "../../dist/communicators/extensions/ActionCommunicator.extension",
+            "authentication-communicator": "../../dist/communicators/extensions/AuthenticationCommunicator.extension",
+            "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
+            "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
+            "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
+            "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
+            "translation-communicator": "../../dist/communicators/extensions/TranslationCommunicator.extension",
+            "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
+            "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
+            "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
+            "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension"
+        },
+        "kix:personal:settings": {
+            "personal-seetings-main-menu": "../../dist/modules/main-menu/personal-settings.extension"
         }
     }
 }

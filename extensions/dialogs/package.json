@@ -1,0 +1,10 @@
+{
+    "extensions": {
+        "kix:marko:dependencies": {
+            "ticket-dialog-marko": "../../dist/modules/dialogs/ticket/marko-dependencies.extension"
+        },
+        "kix:dialog:creation": {
+            "ticket-creation-dialog": "../../dist/modules/dialogs/ticket/creation-dialog.extension"
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { ActionCommunicator } from './ActionCommunicator';
+import { ActionCommunicator } from '../ActionCommunicator';
 import { ICommunicatorExtension } from '@kix/core';
 
 export class ActionCommunicatorExtension implements ICommunicatorExtension {

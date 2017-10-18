@@ -1,8 +1,14 @@
-<div>
-    <!-- TODO: Remove example code -->
-    <ul.settings-navigation>
-        <for(setting in state.settings)>
-            <li.settings-link>${setting}</li>
-        </for>
-    </ul>
-</div>
+<!-- TODO: Remove example code -->
+<ul.settings-navigation>
+    <for(setting in state.personalSettings)>
+        <li.settings-link on-click('showSettings', setting.id)>${setting.name}</li>
+    </for>
+</ul>
+<if(state.currentSetting)>
+    <div.ps-content>
+        <include(component.getSettingsTemplate(), {
+            configuration: state.currentSetting.configuration,
+            configurationContent: state.currentSetting.configurationContent
+        })/>
+    </div>
+</if>
