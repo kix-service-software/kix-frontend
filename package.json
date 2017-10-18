@@ -13,7 +13,6 @@
   },
   "author": "c.a.p.e. IT GmbH",
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^1.0.0-alpha.1",
     "@kix/core": "^1.1.0",
     "body-parser": "1.18.2",
     "compression": "1.7.1",
@@ -26,7 +25,7 @@
     "lasso": "2.11.16",
     "lasso-less": "2.4.7",
     "lasso-marko": "2.3.1",
-    "marko": "4.5.0-beta.3",
+    "marko": "4.5.1",
     "marko-loader": "1.3.1",
     "redux": "3.7.2",
     "redux-promise-middleware": "4.4.1",
