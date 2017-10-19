@@ -20,6 +20,11 @@ class NotesWidgetComponent {
     public cancelConfiguration(): void {
         this.state.showConfiguration = false;
     }
+
+    // TODO: remove - just for testing
+    public changeNotes(): void {
+        this.state.notes = '<p>It\'s a me <span style="red">Mario</span> :D</p>';
+    }
 }
 
 module.exports = NotesWidgetComponent;

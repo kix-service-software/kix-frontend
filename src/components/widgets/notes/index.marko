@@ -8,7 +8,9 @@
         </@icon>
         <@title>Notizen</@title>
         <@content>
-            <p>${state.notes}</p>
+            <editor inline=true value=state.notes resize=false on-valueChanged('valueChanged')/>
+            <!-- // TODO: remove - just for testing -->
+            <button title="Change notes" on-click('changeNotes')>Change Notes</button>
         </@content>
         <@filter>
             <span/>
