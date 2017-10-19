@@ -9,14 +9,25 @@ export { TicketCreationReduxState } from './TicketCreationReduxState';
 
 const STATE_ID = 'TicketCreationDialog';
 
-const state = ClientStorageHandler.loadState<TicketCreationReduxState>(STATE_ID);
-const store = createStore(reducer, state, applyMiddleware(
-    promiseMiddleware()
-));
+export class CreationTicketStore {
 
-// TODO: Really save on each change?
-store.subscribe(() => {
-    ClientStorageHandler.saveState<TicketCreationReduxState>(STATE_ID, store.getState());
-});
+    public static INSTANCE = new CreationTicketStore();
 
-module.exports = store;
+    private store: any;
+
+    private constructor() {
+        this.initialize();
+    }
+
+    public initialize(): void {
+        const state = ClientStorageHandler.loadState<TicketCreationReduxState>(STATE_ID);
+        this.store = createStore(reducer, state, applyMiddleware(
+            promiseMiddleware()
+        ));
+    }
+
+    public getStore(): any {
+        return this.store;
+    }
+
+}

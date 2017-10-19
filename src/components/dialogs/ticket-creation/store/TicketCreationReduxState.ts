@@ -7,6 +7,7 @@ export class TicketCreationReduxState {
     public customerId: number = null;
     public description: string = null;
     public dynamicFields: any[] = [];
+    public pendingTime: string = null;
     public priorityId: number = null;
     public queueId: number = null;
     public stateId: number = null;

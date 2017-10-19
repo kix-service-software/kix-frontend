@@ -21,7 +21,7 @@ class TicketSubjectInput extends AbstractTicketCreationInputComponent {
         this.state.subject = reduxState.subject;
     }
 
-    public subjectChanged(event: any): void {
+    public valueChanged(event: any): void {
         this.store.dispatch(SUBJECT_CHANGED(event.target.value));
     }
 

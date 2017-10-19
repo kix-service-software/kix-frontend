@@ -12,7 +12,7 @@ class TicketAttachmentInput extends AbstractTicketCreationInputComponent {
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        console.log("stateChanged.");
+        //
     }
 
 }

@@ -1,3 +1,4 @@
+import { CreationTicketStore } from './store/index';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TicketCreationReduxState } from './store/TicketCreationReduxState';
@@ -17,7 +18,8 @@ class TicketCreationDialogComponent {
     }
 
     public onMount(): void {
-        this.store = require('./store');
+        CreationTicketStore.INSTANCE.initialize();
+        this.store = CreationTicketStore.INSTANCE.getStore();
         this.store.subscribe(this.stateChanged.bind(this));
     }
 

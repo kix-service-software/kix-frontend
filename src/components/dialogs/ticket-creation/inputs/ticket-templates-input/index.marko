@@ -2,7 +2,7 @@
     Vorlage
     <if(state.isLoading)>...</if>
     <else>
-        <select value="none" tabindex="0">
+        <select value="none" on-blur("valueChanged") tabindex="0">
             <option value="none">Keine Vorlage</option>
             <option value="process">Prozessvorlage</option>
             <option value="workflow">Workflow</option>on-blur('valueChanged')
