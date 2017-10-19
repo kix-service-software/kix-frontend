@@ -1,57 +1,55 @@
-<div>
-    <widget>
-        <@overlay>
-            <include(input.dragoverlay)/>
-        </@overlay>
-        <@icon>
-            <span class="kix-icon icon-dummy"/>
-        </@icon>
-        <@title>Suchvorlagen</@title>
-        <@content>
-            <div.left>
-                <select.template-list size=6>
-                    <option>Meine ToDos</option>
-                    <option>Kunden</option>
-                    <option>Hotline</option>
-                    <option>neue Tickets</option>
-                    <option>Wartend</option>
-                    <option>Dringend</option>
-                </select>
-            </div>
-            <div.right>
-                <ul.button-list>
-                    <li>
-                        <button on-click('newClicked')>New</button>
-                    </li>
-                    <li>
-                        <button on-click('editClicked')>Bearbeiten</button>
-                    </li>
-                    <li>
-                        <button on-click('deleteClicked')>Löschen</button>
-                    </li>
-                </ul>
-            </div>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                on-click('showConfigurationClicked')/>
-        </@actions>
-    </widget>
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: Suchvorlagen</@title>
-                <@body>
-                    <search-templates-configuration/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
+<widget>
+    <@overlay>
+        <include(input.dragoverlay)/>
+    </@overlay>
+    <@icon>
+        <span class="kix-icon icon-dummy"/>
+    </@icon>
+    <@title>Suchvorlagen</@title>
+    <@content>
+        <div.left>
+            <select.template-list size=6>
+                <option>Meine ToDos</option>
+                <option>Kunden</option>
+                <option>Hotline</option>
+                <option>neue Tickets</option>
+                <option>Wartend</option>
+                <option>Dringend</option>
+            </select>
         </div>
-    </if>
-</div>
+        <div.right>
+            <ul.button-list>
+                <li>
+                    <button on-click('newClicked')>New</button>
+                </li>
+                <li>
+                    <button on-click('editClicked')>Bearbeiten</button>
+                </li>
+                <li>
+                    <button on-click('deleteClicked')>Löschen</button>
+                </li>
+            </ul>
+        </div>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+            on-click('showConfigurationClicked')/>
+    </@actions>
+</widget>
+<if(state.showConfiguration)>
+    <div>
+        <main-dialog>
+            <@title>Konfiguration: Suchvorlagen</@title>
+            <@body>
+                <search-templates-configuration/>
+            </@body>
+            <@button>
+                <button on-click('saveConfiguration')>Speichern</button>
+                <button on-click('cancelConfiguration')>Abbrechen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>

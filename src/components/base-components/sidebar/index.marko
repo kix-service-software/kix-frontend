@@ -1,23 +1,24 @@
-<if(state.configuration && component.hasWidgetsToShow())>
-    <div.sidebar>
-        <!-- <div.sidebar-select-container>
-    <div#content-settings-select.sidebar-select>
-        <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
-    </div>
-    <div#information-select.sidebar-select>
-        <span.kix-icon.icon-dummy.icon-i/>
+<div.tools-col>
+    <div.static-tools>
+        <div>
+            <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
+        </div>
+        <div>
+            <span.kix-icon.icon-dummy.icon-i/>
+        </div>
     </div>
     <if(state.configuration)>
-        <!-- TODO: container for the normal sidebars widgets, should be verticaly middle -->
-        <!-- <div#dependend-sidebars-select>
+        <div.dynamic-tools>
             <for(widget in state.configuration.widgets | status-var=loop)>
-                <div.sidebar-select class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
+                <div class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
                     <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
                 </div>
             </for>
         </div>
-    </if> -->
-        <!-- </div> -->
+    </if>
+</div>
+<if(state.configuration && component.hasWidgetsToShow())>
+    <div.sidebar>
         <if(state.configuration)>
             <for(widget in state.configuration.widgets | status-var=loop)>
                 <if(widget.show)>

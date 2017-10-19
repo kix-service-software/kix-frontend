@@ -1,35 +1,33 @@
-<div>
-    <widget>
-        <@overlay>
-            <include(input.dragoverlay)/>
-        </@overlay>
-        <@icon>
-            <span class="kix-icon icon-dummy"/>
-        </@icon>
-        <@title>Notizen</@title>
-        <@content>
-            <p>${state.notes}</p>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                on-click('showConfigurationClicked')/>
-        </@actions>
-    </widget>
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: Ticketliste</@title>
-                <@body>
-                    <notes-configuration/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
-        </div>
-    </if>
-</div>
+<widget>
+    <@overlay>
+        <include(input.dragoverlay)/>
+    </@overlay>
+    <@icon>
+        <span class="kix-icon icon-dummy"/>
+    </@icon>
+    <@title>Notizen</@title>
+    <@content>
+        <p>${state.notes}</p>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+            on-click('showConfigurationClicked')/>
+    </@actions>
+</widget>
+<if(state.showConfiguration)>
+    <div>
+        <main-dialog>
+            <@title>Konfiguration: Ticketliste</@title>
+            <@body>
+                <notes-configuration/>
+            </@body>
+            <@button>
+                <button on-click('saveConfiguration')>Speichern</button>
+                <button on-click('cancelConfiguration')>Abbrechen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>

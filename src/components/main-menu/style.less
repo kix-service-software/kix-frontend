@@ -1,34 +1,37 @@
 .menu-col {
-    float: left;
+    position: absolute;
+    left: 0;
 }
+
 ul.main-menu,
 ul.user-menu {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    margin-bottom: .25em;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-bottom: .125em;
     li {
         .color-theme-2;
         height: 40px;
-        width: 70px;
+        width: 64px;
         border-top: 1px solid #35a5de;
         border-bottom: 1px solid #005a85;
         transition: width .5s, border-radius .25s;
         display: block;
+        box-sizing: border-box;
         &:first-child {
-            border-top-right-radius: 5px;
+            border-top-right-radius: 3px;
         }
         &:last-child {
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 3px;
         }
         &:hover:not(.active) {
             width: 100px;
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
             a {
                 span.hover-label {
                     width: 97px;
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;
                 }
                 span.label-wrapper {
                     opacity: 0;
@@ -37,10 +40,9 @@ ul.user-menu {
         }
         &.active {
             .color-theme-0; 
-            height: 46px;
-            width: 76px;
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
+            width: 68px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
             padding-right: 6px;
             box-sizing: border-box;
         } 

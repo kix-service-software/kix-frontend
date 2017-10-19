@@ -1,7 +1,7 @@
 <div.wrapper>
     <kix-header/>
     <section.clearfix>
-        <!--<main-menu/>-->
+        <main-menu/>
         <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
         <section.content>
             <header>
@@ -10,7 +10,6 @@
             </header>
             <include(state.template, {configurationMode: state.configurationMode})/>
         </section>
-        <!--<bubble/>-->
     </section>
     <kix-footer/>
 </div>

@@ -1,39 +1,37 @@
-<div>
-    <if(state.widgetConfiguration)>
-        <widget>
-            <@overlay>
-                <include(input.dragoverlay)/>
-            </@overlay>
-            <@icon>
-                <span class="kix-icon icon-dummy"/>
-            </@icon>
-            <@title>${state.widgetConfiguration.title}</@title>
-            <@content>
-                <div.chart>
-                    <svg id=state.svgId height="300" width="300"/>
-                </div>
-            </@content>
-            <@filter>
-                <span/>
-            </@filter>
-            <@actions>
-                <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                    on-click('showConfigurationClicked')/>
-            </@actions>
-        </widget>
-        <if(state.showConfiguration)>
-            <div>
-                <main-dialog>
-                    <@title>Konfiguration: Charts</@title>
-                    <@body>
-                        <chart-configuration configuration=state.widgetConfiguration.contentConfiguration/>
-                    </@body>
-                    <@button>
-                        <button on-click('saveConfiguration')>Speichern</button>
-                        <button on-click('cancelConfiguration')>Abbrechen</button>
-                    </@button>
-                </main-dialog>
+<if(state.widgetConfiguration)>
+    <widget>
+        <@overlay>
+            <include(input.dragoverlay)/>
+        </@overlay>
+        <@icon>
+            <span class="kix-icon icon-dummy"/>
+        </@icon>
+        <@title>${state.widgetConfiguration.title}</@title>
+        <@content>
+            <div.chart>
+                <svg id=state.svgId height="300" width="300"/>
             </div>
-        </if>
+        </@content>
+        <@filter>
+            <span/>
+        </@filter>
+        <@actions>
+            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+                on-click('showConfigurationClicked')/>
+        </@actions>
+    </widget>
+    <if(state.showConfiguration)>
+        <div>
+            <main-dialog>
+                <@title>Konfiguration: Charts</@title>
+                <@body>
+                    <chart-configuration configuration=state.widgetConfiguration.contentConfiguration/>
+                </@body>
+                <@button>
+                    <button on-click('saveConfiguration')>Speichern</button>
+                    <button on-click('cancelConfiguration')>Abbrechen</button>
+                </@button>
+            </main-dialog>
+        </div>
     </if>
-</div>
+</if>
