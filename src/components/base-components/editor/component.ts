@@ -7,8 +7,17 @@ class EditorComponent {
 
     public onCreate(input: any): void {
         this.state = new EditorComponentState((input.inline ? true : false), input.resize, input.resizeDir);
-        this.state.value = (input.defaultValue ? input.defaultValue : '');
         this.state.inline = (input.inline ? true : false);
+        this.state.value = input.value || '';
+    }
+
+    public onInput(input: any): void {
+        if (this.state.value !== input.value) {
+            this.state.value = input.value || '';
+            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+                CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
+            }
+        }
     }
 
     public onMount(): void {
@@ -28,19 +37,6 @@ class EditorComponent {
     public valueChanged(event: any): void {
         this.state.value = event.target.value;
         (this as any).emit('valueChanged', this.state.value);
-    }
-
-    /**
-     * Adds html text to the richtext editor on cursor position
-     *
-     * @param text the html text string
-     *
-     * @return nothing
-     */
-    public addHTML(text: string): void {
-        if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
-            CKEDITOR.instances[this.state.id].insertHtml(text);
-        }
     }
 }
 

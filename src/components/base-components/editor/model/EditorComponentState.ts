@@ -6,9 +6,9 @@ export class EditorComponentState {
     public config: object = {};
 
     /**
-     * @param inline boolean if toolbar is a inline element (only visible if text field is focused), default: false
-     * @param resize boolean if resizeing is enabled, default: true
-     * @param resizeDir direction for resizing, possible are 'both', 'vertical' ans 'horizontal', default: 'vertical'
+     * @param inline boolean if toolbar is an inline element (only visible if text field is focused), default: false
+     * @param resize boolean if resizing is enabled, default: true
+     * @param resizeDir direction for resizing, possible are 'both', 'vertical' and 'horizontal', default: 'vertical'
      */
     public constructor(inline: boolean, resize?: boolean, resizeDir?: string) {
         this.id = 'editor-' + Date.now();
@@ -73,6 +73,8 @@ export class EditorComponentState {
         }
 
         this.config = {
+            // TODO: add useful title
+            // title: 'some useful title - maybe relevant for screen readers'
             toolbar,
             width: 800,
             height: 500,
