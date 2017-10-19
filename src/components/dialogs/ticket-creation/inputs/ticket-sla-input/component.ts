@@ -1,0 +1,30 @@
+import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
+import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
+import { SLA_ID_CHANGED } from '../../store/actions';
+
+class TicketServiceInput extends AbstractTicketCreationInputComponent {
+
+    public onCreate(input: any): void {
+        this.state = {
+            slaId: null
+        };
+    }
+
+    public onMount(): void {
+        super.initialize(this.stateChanged);
+        const reduxState: TicketCreationReduxState = this.store.getState();
+        this.state.slaId = reduxState.slaId;
+    }
+
+    public stateChanged(state: TicketCreationReduxState): void {
+        const reduxState: TicketCreationReduxState = this.store.getState();
+        this.state.slaId = reduxState.slaId;
+    }
+
+    public valueChanged(event: any): void {
+        this.store.dispatch(SLA_ID_CHANGED(event.target.value));
+    }
+
+}
+
+module.exports = TicketServiceInput;

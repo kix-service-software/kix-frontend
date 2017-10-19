@@ -8,7 +8,8 @@ import {
     IPluginService,
     IAuthenticationService,
     IConfigurationService,
-    ITranslationService
+    ITranslationService,
+    ITicketService
 } from "@kix/core";
 
 @injectable()
@@ -21,6 +22,7 @@ export abstract class KIXCommunicator implements ICommunicator {
     protected configurationService: IConfigurationService;
     protected userService: IUserService;
     protected translationService: ITranslationService;
+    protected ticketService: ITicketService;
 
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
@@ -28,7 +30,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ILoggingService") loggingService: ILoggingService,
         @inject("IPluginService") pluginService: IPluginService,
         @inject("IUserService") userService: IUserService,
-        @inject("ITranslationService") translationService: ITranslationService
+        @inject("ITranslationService") translationService: ITranslationService,
+        @inject("ITicketService") ticketService: ITicketService
     ) {
         this.configurationService = configurationService;
         this.serverConfig = this.configurationService.getServerConfiguration();
@@ -37,6 +40,7 @@ export abstract class KIXCommunicator implements ICommunicator {
         this.pluginService = pluginService;
         this.userService = userService;
         this.translationService = translationService;
+        this.ticketService = ticketService;
     }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

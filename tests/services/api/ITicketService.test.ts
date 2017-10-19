@@ -73,12 +73,12 @@ describe('Ticket Service', () => {
 
             before(() => {
                 nockScope
-                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
+                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
                     .reply(200, buildCreateTicketResponse(123456));
             });
 
             it('should return a the id of the new users.', async () => {
-                const userId = await ticketService.createTicket('', new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []));
+                const userId = await ticketService.createTicket('', new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []));
                 expect(userId).equal(123456);
             });
 
@@ -88,12 +88,12 @@ describe('Ticket Service', () => {
 
             before(() => {
                 nockScope
-                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
+                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
                     .reply(400, {});
             });
 
             it('should throw an error if request is invalid.', async () => {
-                const userId = await ticketService.createTicket('', new CreateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
+                const userId = await ticketService.createTicket('', new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
                     .then((result) => {
                         expect(true).false;
                     }).catch((error: HttpError) => {

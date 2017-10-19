@@ -1,13 +1,12 @@
+import { TicketCreationSocketListener } from './../socket/TicketCreationSocketListener';
+
 export class TicketCreationReduxState {
 
-    public createTicketInProcess: boolean = false;
-    public resetTicketCreationInProcess: boolean = false;
-
-    public customer: number = null;
-    public customerId: number = null;
+    public customer: string = null;
+    public customerId: string = null;
     public description: string = null;
     public dynamicFields: any[] = [];
-    public pendingTime: string = null;
+    public pendingTime: number = null;
     public priorityId: number = null;
     public queueId: number = null;
     public stateId: number = null;
@@ -16,8 +15,14 @@ export class TicketCreationReduxState {
     public typeId: number = null;
     public ownerId: number = null;
     public responsibleId: number = null;
+    public serviceId: number = null;
+    public slaId: number = null;
 
     // process triggers
+    public createTicketInProcess: boolean = false;
+    public resetTicketCreationInProcess: boolean = false;
     public loadTicketTemplates: boolean = false;
+
+    public socketListener: TicketCreationSocketListener;
 
 }

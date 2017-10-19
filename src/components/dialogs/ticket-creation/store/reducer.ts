@@ -10,6 +10,10 @@ class ActionHandler {
     public handleAction(state: TicketCreationReduxState, action): TicketCreationReduxState {
         switch (action.type) {
 
+            case TicketCreationDialogAction.INITIALIZE + FULFILLED:
+                state = { ...state, socketListener: action.payload.socketListener };
+                break;
+
             case TicketCreationDialogAction.CREATE_TICKET + PENDING:
                 state = { ...state, createTicketInProcess: true };
                 break;
@@ -63,6 +67,16 @@ class ActionHandler {
 
             case TicketCreationDialogAction.QUEUE_ID_CHANGED + FULFILLED:
                 state = { ...state, queueId: action.payload.queueId };
+                ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
+                break;
+
+            case TicketCreationDialogAction.SERVICE_ID_CHANGED + FULFILLED:
+                state = { ...state, serviceId: action.payload.serviceId };
+                ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
+                break;
+
+            case TicketCreationDialogAction.SLA_ID_CHANGED + FULFILLED:
+                state = { ...state, slaId: action.payload.slaId };
                 ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
                 break;
 

@@ -2,7 +2,7 @@ import { CreationTicketStore } from './store/index';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TicketCreationReduxState } from './store/TicketCreationReduxState';
-import { CREATE_TICKET, RESET_TICKET_CREATION } from './store/actions';
+import { INITIALIZE, CREATE_TICKET, RESET_TICKET_CREATION } from './store/actions';
 
 class TicketCreationDialogComponent {
 
@@ -21,24 +21,26 @@ class TicketCreationDialogComponent {
         CreationTicketStore.INSTANCE.initialize();
         this.store = CreationTicketStore.INSTANCE.getStore();
         this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(INITIALIZE());
     }
 
     public stateChanged(): void {
         const reduxState: TicketCreationReduxState = this.store.getState();
         this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
         this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
+
+        // handle Ticket Created
+        // ClientStorageHandler.deleteState('TicketCreationDialog');
+        // if (closeDialog) {
+        //     (this as any).emit('closeDialog');
+        // } else {
+        //     this.store.dispatch(RESET_TICKET_CREATION());
+        // }
     }
 
     public createTicket(): void {
-        const closeDialog = this.closeDialogAfterSuccess;
-        this.store.dispatch(CREATE_TICKET()).then(() => {
-            ClientStorageHandler.deleteState('TicketCreationDialog');
-            if (closeDialog) {
-                (this as any).emit('closeDialog');
-            } else {
-                this.store.dispatch(RESET_TICKET_CREATION());
-            }
-        });
+        const reduxState: TicketCreationReduxState = this.store.getState();
+        this.store.dispatch(CREATE_TICKET(reduxState));
     }
 
 }
