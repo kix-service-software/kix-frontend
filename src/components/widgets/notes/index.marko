@@ -8,9 +8,10 @@
         </@icon>
         <@title>Notizen</@title>
         <@content>
-            <editor inline=true value=state.notes resize=false on-valueChanged('valueChanged')/>
+            <editor inline=true readOnly=state.editorReadOnly resize=false value=state.notes on-valueChanged('valueChanged')/>
             <!-- // TODO: remove - just for testing -->
             <button title="Change notes" on-click('changeNotes')>Change Notes</button>
+            <button title="toggle read only" on-click('toggleReadOnly')>toggle read only</button>
         </@content>
         <@filter>
             <span/>
