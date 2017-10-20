@@ -19,15 +19,13 @@
 </div>
 <if(state.configuration && component.hasWidgetsToShow())>
     <div.sidebar>
-        <if(state.configuration)>
-            <for(widget in state.configuration.widgets | status-var=loop)>
-                <if(widget.show)>
-                    <include(component.getWidgetTemplate(widget.id), {
-            instanceId: widget.instanceId,
-            configurationMode: state.configurationMode
-            })/>
-                </if>
-            </for>
-        </if>
+        <for(widget in state.configuration.widgets | status-var=loop)>
+            <if(widget.show)>
+                <include(component.getWidgetTemplate(widget.id), {
+                    instanceId: widget.instanceId,
+                    configurationMode: state.configurationMode
+                })/>
+            </if>
+        </for>
     </div>
 </if>
