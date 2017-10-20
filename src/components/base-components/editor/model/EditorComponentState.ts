@@ -3,18 +3,24 @@ export class EditorComponentState {
     public id: string;
     public value: string = '';
     public inline: boolean = false;
+    public readOnly: boolean = false;
     public config: object = {};
 
     /**
-     * @param inline boolean if toolbar is an inline element (only visible if text field is focused), default: false
-     * @param resize boolean if resizing is enabled, default: true
-     * @param resizeDir direction for resizing, possible are 'both', 'vertical' and 'horizontal', default: 'vertical'
+     * @param inline optional - boolean if toolbar is an inline element (only visible if text field is focused),
+     *               default: false
+     * @param readOnly optional - boolean if editor is read only, default: false
+     * @param resize optional - boolean if resizing is enabled, default: true
+     * @param resizeDir optional - direction for resizing, possible are 'both', 'vertical' and 'horizontal',
+     *                  default: 'vertical'
      */
-    public constructor(inline: boolean, resize?: boolean, resizeDir?: string) {
+    public constructor(inline?: boolean, readOnly?: boolean, resize?: boolean, resizeDir?: string) {
         this.id = 'editor-' + Date.now();
+        this.inline = inline || false;
+        this.readOnly = readOnly || false;
 
         let toolbar = [];
-        if (inline) {
+        if (this.inline) {
             toolbar = [
                 {
                     name: 'basicstyles', items: [
@@ -83,7 +89,8 @@ export class EditorComponentState {
             resize_maxWidth: 1200,
             resize_maxHeight: 1000,
             extraAllowedContent: 'div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
-            toolbarCanCollapse: true
+            toolbarCanCollapse: true,
+            readOnly: this.readOnly
         };
         if (resize || resize === undefined) {
             this.config['resize_dir'] = resizeDir || 'vertical';

@@ -6,8 +6,12 @@ class EditorComponent {
     public state: EditorComponentState;
 
     public onCreate(input: any): void {
-        this.state = new EditorComponentState((input.inline ? true : false), input.resize, input.resizeDir);
-        this.state.inline = (input.inline ? true : false);
+        this.state = new EditorComponentState(
+            input.inline,
+            input.readOnly,
+            input.resize,
+            input.resizeDir
+        );
         this.state.value = input.value || '';
     }
 
@@ -16,6 +20,12 @@ class EditorComponent {
             this.state.value = input.value || '';
             if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
+            }
+        }
+        if (this.state.readOnly !== input.readOnly) {
+            this.state.readOnly = input.readOnly || false;
+            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+                CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
             }
         }
     }
