@@ -1,5 +1,6 @@
 import { NotesWidget } from './NotesSidebar';
-import { IWidgetFactoryExtension, IWidget } from '@kix/core';
+import { IWidgetFactoryExtension, IWidget, WidgetConfiguration } from '@kix/core';
+import { NotesConfiguration } from './../../../components/widgets/notes/model/NotesConfiguration';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -21,8 +22,8 @@ export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
         return this.getTemplate() + '/configuration';
     }
 
-    public getDefaultConfiguration(): any {
-        return {};
+    public getDefaultConfiguration(): WidgetConfiguration {
+        return new WidgetConfiguration("Notes", [], new NotesConfiguration());
     }
 
 }

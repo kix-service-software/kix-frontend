@@ -24,7 +24,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         return this.getTemplate() + '/configuration';
     }
 
-    public getDefaultConfiguration(): any {
+    public getDefaultConfiguration(): WidgetConfiguration {
         const userListConfiguration = new UserListConfiguration();
         userListConfiguration.properties.push(new UIProperty("UserID", "ID"));
         userListConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));

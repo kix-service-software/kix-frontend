@@ -8,8 +8,11 @@
         </@icon>
         <@title>Notizen</@title>
         <@content>
-            <editor inline=true readOnly=state.editorReadOnly resize=false value=state.notes on-valueChanged('valueChanged')/>
-            <!-- // TODO: remove - just for testing -->
+            <if(state.widgetConfiguration)>
+                <editor inline=true readOnly=state.editorReadOnly resize=false
+                    value=state.widgetConfiguration.contentConfiguration.notes on-valueChanged('valueChanged')/>
+                <!-- // TODO: remove - just for testing -->
+            </if>
             <button title="Change notes" on-click('changeNotes')>Change Notes</button>
             <button title="toggle read only" on-click('toggleReadOnly')>toggle read only</button>
         </@content>

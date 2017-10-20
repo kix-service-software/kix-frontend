@@ -1,4 +1,4 @@
-import { ChartConfiguration, WidgetComponentState } from '@kix/core/dist/model/client';
+import { WidgetComponentState } from '@kix/core/dist/model/client';
 
 export class ChartComponentState extends WidgetComponentState {
 

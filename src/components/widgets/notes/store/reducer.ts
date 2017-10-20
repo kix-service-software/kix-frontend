@@ -1,16 +1,16 @@
-import { ChartReduxState } from './ChartReduxState';
-import { ChartAction } from './actions';
+import { NotesReduxState } from './NotesReduxState';
+import { NotesAction } from './actions';
 import { WidgetAction } from '@kix/core/dist/model/client';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
 
-class ChartActionHandler {
+class NotesActionHandler {
 
-    public handleLoginAction(state: ChartReduxState, action): ChartReduxState {
+    public handleLoginAction(state: NotesReduxState, action): NotesReduxState {
         switch (action.type) {
 
-            case ChartAction.CHART_INITIALIZE + FULFILLED:
+            case NotesAction.NOTES_INITIALIZE + FULFILLED:
                 return { ...state, socketListener: action.payload.socketListener };
 
             case WidgetAction.WIDGET_LOADED + FULFILLED:
@@ -22,10 +22,10 @@ class ChartActionHandler {
     }
 }
 
-const chartActionHandler = new ChartActionHandler();
+const notesActionHandler = new NotesActionHandler();
 
 export default (state, action) => {
-    state = state || new ChartReduxState();
+    state = state || new NotesReduxState();
 
-    return chartActionHandler.handleLoginAction(state, action);
+    return notesActionHandler.handleLoginAction(state, action);
 };
