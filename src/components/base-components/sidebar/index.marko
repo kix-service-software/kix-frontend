@@ -1,37 +1,31 @@
-<div#sidebar>
-    <div.sidebar-select-container>
-        <div#content-settings-select.sidebar-select>
+<div.tools-col>
+    <div.static-tools>
+        <div>
             <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
         </div>
-        <div#information-select.sidebar-select>
+        <div>
             <span.kix-icon.icon-dummy.icon-i/>
         </div>
-        <if(state.configuration)>
-            <!-- TODO: container for the normal sidebars widgets, should be verticaly middle -->
-            <div#dependend-sidebars-select>
-                <for(widget in state.configuration.widgets | status-var=loop)>
-                    <div.sidebar-select class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
-                        <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
-                    </div>
-                </for>
-            </div>
-        </if>
     </div>
-    <div.sidebar-container>
-        <div#default-sidebars/>
-        <if(state.configuration)>
-            <div#dependend-sidebars>
-                <for(widget in state.configuration.widgets | status-var=loop)>
-                    <if(widget.show)>
-                        <div.sidebar-widget>
-                            <include(component.getWidgetTemplate(widget.id), {
-                            instanceId: widget.instanceId,
-                            configurationMode: state.configurationMode
-                            })/>
-                        </div>
-                    </if>
-                </for>
-            </div>
-        </if>
-    </div>
+    <if(state.configuration)>
+        <div.dynamic-tools>
+            <for(widget in state.configuration.widgets)>
+                <div class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
+                    <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
+                </div>
+            </for>
+        </div>
+    </if>
 </div>
+<if(state.configuration && component.hasWidgetsToShow())>
+    <div.sidebar>
+        <for(widget in state.configuration.widgets)>
+            <if(widget.show)>
+                <include(component.getWidgetTemplate(widget.id), {
+                    instanceId: widget.instanceId,
+                    configurationMode: state.configurationMode
+                })/>
+            </if>
+        </for>
+    </div>
+</if>
