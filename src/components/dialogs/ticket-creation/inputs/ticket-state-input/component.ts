@@ -1,28 +1,40 @@
+import { CreationTicketStore } from './../../store/index';
+import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { STATE_ID_CHANGED } from '../../store/actions';
 
-class TicketStateInput extends AbstractTicketCreationInputComponent {
+class TicketStateInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {
-            stateId: null
+            stateId: null,
+            ticketStates: [],
+            loading: true
         };
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.stateId = reduxState.stateId;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.stateId = reduxState.stateId;
+
+        const processState: TicketCreationProcessReduxState =
+            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+
+        this.state.ticketStates = processState.states;
+
+        this.state.loading = processState.loadTicketData;
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(STATE_ID_CHANGED(event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(STATE_ID_CHANGED(event.target.value));
     }
 
 }

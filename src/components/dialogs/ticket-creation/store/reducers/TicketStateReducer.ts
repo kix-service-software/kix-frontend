@@ -67,7 +67,6 @@ class ActionHandler {
 
             case TicketCreationDialogAction.TEMPLATE_CHANGED + FULFILLED:
                 state = { ...state }; // TODO: TEMPLATE CHANGED
-                ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
                 break;
 
             case TicketCreationDialogAction.TYPE_ID_CHANGED + FULFILLED:

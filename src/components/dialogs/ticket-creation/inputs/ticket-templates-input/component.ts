@@ -1,9 +1,11 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
-import { LOAD_TICKET_TEMPLATES, TEMPLATE_CHANGED } from '../../store/actions';
+import { TEMPLATE_CHANGED } from '../../store/actions';
 
-class TicketTemplateInput extends AbstractTicketCreationInputComponent {
+class TicketTemplateInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {
@@ -12,17 +14,18 @@ class TicketTemplateInput extends AbstractTicketCreationInputComponent {
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
-        this.store.dispatch(LOAD_TICKET_TEMPLATES());
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
-        this.state.isLoading = reduxState.loadTicketTemplates;
+        const reduxState: TicketCreationProcessReduxState =
+            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+
+        this.state.isLoading = reduxState.loadTicketData;
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(TEMPLATE_CHANGED(event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
     }
 
 }

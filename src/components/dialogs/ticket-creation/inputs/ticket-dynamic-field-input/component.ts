@@ -1,24 +1,26 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { DYNAMIC_FIELD_CHANGED } from '../../store/actions';
 
-class TicketDynamicFieldInput extends AbstractTicketCreationInputComponent {
+class TicketDynamicFieldInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {};
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         // TODO: DYNAMIC FIELD
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(DYNAMIC_FIELD_CHANGED('name', event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(DYNAMIC_FIELD_CHANGED('name', event.target.value));
     }
 
 }

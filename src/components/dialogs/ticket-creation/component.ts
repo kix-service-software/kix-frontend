@@ -3,7 +3,7 @@ import { CreationTicketStore } from './store/index';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TicketCreationReduxState } from './store/TicketCreationReduxState';
-import { INITIALIZE, CREATE_TICKET, RESET_TICKET_CREATION } from './store/actions';
+import { INITIALIZE, CREATE_TICKET, RESET_TICKET_CREATION, LOAD_TICKET_DATA } from './store/actions';
 
 class TicketCreationDialogComponent {
 
@@ -22,7 +22,11 @@ class TicketCreationDialogComponent {
         CreationTicketStore.INSTANCE.initialize();
         this.store = CreationTicketStore.INSTANCE.getStore();
         this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(INITIALIZE());
+
+        this.store.dispatch(INITIALIZE()).then(() => {
+            const ticketProcessState = this.store.getState().ticketProcessState;
+            this.store.dispatch(LOAD_TICKET_DATA(ticketProcessState));
+        });
     }
 
     public stateChanged(): void {

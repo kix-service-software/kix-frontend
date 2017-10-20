@@ -17,6 +17,8 @@ export class CreationTicketStore {
 
     private store: any;
 
+    private stateListener: Array<() => void> = [];
+
     private constructor() {
         this.initialize();
     }
@@ -32,6 +34,15 @@ export class CreationTicketStore {
         this.store = createStore(reducer, { ticketState: state }, applyMiddleware(
             promiseMiddleware()
         ));
+
+        for (const listener of this.stateListener) {
+            this.store.subscribe(listener);
+        }
+    }
+
+    public addStateListener(listener: () => void): void {
+        this.stateListener.push(listener);
+        this.store.subscribe(listener);
     }
 
     public getStore(): any {

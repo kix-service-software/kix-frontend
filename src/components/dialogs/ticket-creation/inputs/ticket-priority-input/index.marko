@@ -1,6 +1,10 @@
 <label.form-label>
     Priorität
-    <select value="low" on-blur("valueChanged") tabindex="5">
-        <option value="low">Low</option>
-    </select>
+    <if(!state.loading)>
+        <select on-change("valueChanged")>
+            <for(ticketPriority in state.ticketPriorities)>
+                <option value=ticketPriority.ID selected=(state.priorityId === ticketPriority.ID)>${ticketPriority.Name}</option>
+            </for>
+        </select>
+    </if>
 </label>

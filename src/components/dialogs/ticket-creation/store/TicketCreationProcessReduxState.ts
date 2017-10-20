@@ -7,13 +7,15 @@ export class TicketCreationProcessReduxState {
 
     public createTicketInProcess: boolean = false;
     public resetTicketCreationInProcess: boolean = false;
-    public loadTicketTemplates: boolean = false;
 
     public ticketTemplates: any[] = []; // TODO: template model
     public services: any[] = []; // TODO: services model
-    public sla: any[] = []; // TODO: sla model
+    public slas: any[] = []; // TODO: sla model
     public priorities: TicketPriority[] = [];
     public types: TicketType[] = [];
     public states: TicketState[] = [];
     public queues: any[] = []; // TODO: queue model
+
+    // Loading triggers
+    public loadTicketData: boolean = true;
 }

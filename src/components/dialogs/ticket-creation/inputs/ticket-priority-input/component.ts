@@ -1,28 +1,40 @@
+import { CreationTicketStore } from './../../store/index';
+import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { PRIORITY_ID_CHANGED } from '../../store/actions';
 
-class TicketPriorityInput extends AbstractTicketCreationInputComponent {
+class TicketPriorityInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {
-            priorityId: null
+            priorityId: null,
+            ticketPriorities: [],
+            loading: true
         };
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.priorityId = reduxState.priorityId;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.priorityId = reduxState.priorityId;
+
+        const processState: TicketCreationProcessReduxState =
+            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+
+        this.state.ticketPriorities = processState.priorities;
+
+        this.state.loading = processState.loadTicketData;
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(PRIORITY_ID_CHANGED(event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(PRIORITY_ID_CHANGED(event.target.value));
     }
 
 }

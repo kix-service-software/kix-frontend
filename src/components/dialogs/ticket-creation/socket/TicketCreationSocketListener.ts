@@ -4,8 +4,13 @@ import {
     ClientStorageHandler,
     TicketCreationRequest,
     TicketCreationResponse,
-    TicketCreationEvent
+    TicketCreationEvent,
+    TicketCreationLoadDataRequest,
+    TicketCreationLoadDataResponse,
+    TicketState
 } from '@kix/core/dist/model/client';
+import { CreationTicketStore } from '../store/';
+import { TICKET_DATA_LOADED } from '../store/actions';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
 
 export class TicketCreationSocketListener extends SocketListener {
@@ -32,17 +37,19 @@ export class TicketCreationSocketListener extends SocketListener {
         this.ticketCreationSocket.emit(TicketCreationEvent.CREATE_TICKET, request);
     }
 
+    public loadTicketData(): void {
+        const token = ClientStorageHandler.getToken();
+        const request = new TicketCreationLoadDataRequest(token);
+        this.ticketCreationSocket.emit(TicketCreationEvent.LOAD_TICKET_DATA, request);
+    }
+
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             //
         });
 
-        socket.on(SocketEvent.CONNECT_ERROR, (error) => {
+        socket.on('error', (error) => {
             console.error(error);
-        });
-
-        socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
-            console.error("Timeout");
         });
 
         socket.on(TicketCreationEvent.TICKET_CREATED,
@@ -50,8 +57,23 @@ export class TicketCreationSocketListener extends SocketListener {
                 //
             });
 
-        socket.on('error', (error) => {
-            console.error(error);
-        });
+        this.registerLoadDataEvents(socket);
+    }
+
+    private registerLoadDataEvents(socket: SocketIO.Server): void {
+        socket.on(TicketCreationEvent.TICKET_DATA_LOADED,
+            (result: TicketCreationLoadDataResponse) => {
+                CreationTicketStore.INSTANCE.getStore().dispatch(
+                    TICKET_DATA_LOADED(
+                        result.templates,
+                        result.queues,
+                        result.services,
+                        result.slas,
+                        result.ticketPriorities,
+                        result.ticketStates,
+                        result.ticketTypes
+                    )
+                );
+            });
     }
 }

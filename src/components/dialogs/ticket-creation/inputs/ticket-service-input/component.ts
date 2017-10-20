@@ -1,8 +1,10 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { SERVICE_ID_CHANGED } from '../../store/actions';
 
-class TicketServiceInput extends AbstractTicketCreationInputComponent {
+class TicketServiceInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {
@@ -11,18 +13,18 @@ class TicketServiceInput extends AbstractTicketCreationInputComponent {
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.serviceId = reduxState.serviceId;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.serviceId = reduxState.serviceId;
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(SERVICE_ID_CHANGED(event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(SERVICE_ID_CHANGED(event.target.value));
     }
 
 }

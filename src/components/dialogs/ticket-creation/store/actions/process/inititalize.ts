@@ -1,6 +1,6 @@
-import { TicketCreationSocketListener } from './../../socket/TicketCreationSocketListener';
+import { TicketCreationSocketListener } from '../../../socket/TicketCreationSocketListener';
 import { StateAction } from '@kix/core/dist/model/client';
-import { TicketCreationDialogAction } from './TicketCreationDialogAction';
+import { TicketCreationProcessAction } from './TicketCreationProcessAction';
 
 export default () => {
     const payload = new Promise((resolve, reject) => {
@@ -8,6 +8,6 @@ export default () => {
         resolve({ socketListener });
     });
 
-    return new StateAction(TicketCreationDialogAction.INITIALIZE, payload);
+    return new StateAction(TicketCreationProcessAction.INITIALIZE, payload);
 };
 

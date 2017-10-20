@@ -1,17 +1,19 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 
-class TicketAttachmentInput extends AbstractTicketCreationInputComponent {
+class TicketAttachmentInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {};
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged.bind(this));
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         //
     }
 

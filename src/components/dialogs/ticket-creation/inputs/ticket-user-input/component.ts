@@ -1,24 +1,26 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { USER_ID_CHANGED } from '../../store/actions';
 
-class TicketUserInput extends AbstractTicketCreationInputComponent {
+class TicketUserInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {};
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         // TODO: USER CHANGED check user type
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(USER_ID_CHANGED(event.target.value, 'owner'));
+        CreationTicketStore.INSTANCE.getStore().dispatch(USER_ID_CHANGED(event.target.value, 'owner'));
     }
 
 }

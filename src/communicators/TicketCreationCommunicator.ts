@@ -3,11 +3,15 @@ import {
     CreateTicket,
     TicketCreationRequest,
     TicketCreationResponse,
-    TicketCreationEvent
+    TicketCreationEvent,
+    TicketCreationLoadDataRequest,
+    TicketCreationLoadDataResponse,
+    TicketState
 } from '@kix/core';
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class TicketCreationCommunicator extends KIXCommunicator {
+
     public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/ticket-creation');
         nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
@@ -19,25 +23,25 @@ export class TicketCreationCommunicator extends KIXCommunicator {
         client.on(TicketCreationEvent.CREATE_TICKET, async (data: TicketCreationRequest) => {
 
             const ticket = new CreateTicket(
-                data.subject,
-                data.customerUser,
-                data.customerId,
-                data.stateId,
-                data.priorityId,
-                data.queueId,
-                null,
-                data.typeId,
-                data.serviceId,
-                data.slaId,
-                data.ownerId,
-                data.responsibleId,
-                data.pendingTime,
-                data.dynamicFields,
-                []
+                data.subject, data.customerUser, data.customerId, data.stateId, data.priorityId,
+                data.queueId, null, data.typeId, data.serviceId, data.slaId, data.ownerId,
+                data.responsibleId, data.pendingTime, data.dynamicFields, []
             );
             const ticketId = await this.ticketService.createTicket(data.token, ticket);
 
             client.emit(TicketCreationEvent.TICKET_CREATED, new TicketCreationResponse(ticketId));
+        });
+
+        client.on(TicketCreationEvent.LOAD_TICKET_DATA, async (data: TicketCreationLoadDataRequest) => {
+            const ticketStates = await this.ticketStateService.getTicketStates(data.token);
+            const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token);
+            const ticketPriorities = await this.ticketPriorityService.getTicketPriorities(data.token);
+
+            const response = new TicketCreationLoadDataResponse(
+                [], ticketStates, ticketTypes, ticketPriorities, [], [], []
+            );
+
+            client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
         });
     }
 }

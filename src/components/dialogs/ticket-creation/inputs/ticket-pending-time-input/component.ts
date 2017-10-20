@@ -1,8 +1,10 @@
+import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { PENDING_TIME_CHANGED } from '../../store/actions';
 
-class TicketPendingTimeInput extends AbstractTicketCreationInputComponent {
+class TicketPendingTimeInput {
+
+    public state: any;
 
     public onCreate(input: any): void {
         this.state = {
@@ -11,18 +13,18 @@ class TicketPendingTimeInput extends AbstractTicketCreationInputComponent {
     }
 
     public onMount(): void {
-        super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.pendingTime = reduxState.pendingTime;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
         this.state.pendingTime = reduxState.pendingTime;
     }
 
     public valueChanged(event: any): void {
-        this.store.dispatch(PENDING_TIME_CHANGED(event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(PENDING_TIME_CHANGED(event.target.value));
     }
 
 }

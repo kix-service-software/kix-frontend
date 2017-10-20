@@ -1,8 +1,8 @@
-import { TicketCreationProcessReduxState } from './../TicketCreationProcessReduxState';
-import { TicketCreationReduxState } from './../TicketCreationReduxState';
-import { TicketCreationSocketListener } from './../../socket/TicketCreationSocketListener';
+import { TicketCreationProcessReduxState } from '../../TicketCreationProcessReduxState';
+import { TicketCreationReduxState } from '../../TicketCreationReduxState';
+import { TicketCreationSocketListener } from '../../../socket/TicketCreationSocketListener';
 import { StateAction } from '@kix/core/dist/model/client';
-import { TicketCreationDialogAction } from './TicketCreationDialogAction';
+import { TicketCreationProcessAction } from './TicketCreationProcessAction';
 
 export default (processState: TicketCreationProcessReduxState, ticketState: TicketCreationReduxState) => {
     const payload = new Promise((resolve, reject) => {
@@ -17,5 +17,5 @@ export default (processState: TicketCreationProcessReduxState, ticketState: Tick
         resolve();
     });
 
-    return new StateAction(TicketCreationDialogAction.CREATE_TICKET, payload);
+    return new StateAction(TicketCreationProcessAction.CREATE_TICKET, payload);
 };
