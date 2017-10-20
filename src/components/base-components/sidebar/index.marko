@@ -9,7 +9,7 @@
     </div>
     <if(state.configuration)>
         <div.dynamic-tools>
-            <for(widget in state.configuration.widgets | status-var=loop)>
+            <for(widget in state.configuration.widgets)>
                 <div class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
                     <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
                 </div>
@@ -19,7 +19,7 @@
 </div>
 <if(state.configuration && component.hasWidgetsToShow())>
     <div.sidebar>
-        <for(widget in state.configuration.widgets | status-var=loop)>
+        <for(widget in state.configuration.widgets)>
             <if(widget.show)>
                 <include(component.getWidgetTemplate(widget.id), {
                     instanceId: widget.instanceId,
