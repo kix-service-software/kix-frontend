@@ -12,12 +12,12 @@ class TicketPriorityInput extends AbstractTicketCreationInputComponent {
 
     public onMount(): void {
         super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.priorityId = reduxState.priorityId;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.priorityId = reduxState.priorityId;
     }
 

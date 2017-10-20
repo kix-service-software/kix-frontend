@@ -1,3 +1,4 @@
+import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
 import { AbstractTicketCreationInputComponent } from '../AbstractTicketCreationInputComponent';
 import { LOAD_TICKET_TEMPLATES, TEMPLATE_CHANGED } from '../../store/actions';
@@ -16,7 +17,7 @@ class TicketTemplateInput extends AbstractTicketCreationInputComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
         this.state.isLoading = reduxState.loadTicketTemplates;
     }
 

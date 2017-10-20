@@ -1,15 +1,17 @@
+import { TicketCreationProcessReduxState } from './../TicketCreationProcessReduxState';
 import { TicketCreationReduxState } from './../TicketCreationReduxState';
 import { TicketCreationSocketListener } from './../../socket/TicketCreationSocketListener';
 import { StateAction } from '@kix/core/dist/model/client';
 import { TicketCreationDialogAction } from './TicketCreationDialogAction';
 
-export default (state: TicketCreationReduxState) => {
+export default (processState: TicketCreationProcessReduxState, ticketState: TicketCreationReduxState) => {
     const payload = new Promise((resolve, reject) => {
-        const socketListener: TicketCreationSocketListener = state.socketListener;
+        const socketListener: TicketCreationSocketListener = processState.socketListener;
         socketListener.createTicket(
-            state.subject, state.customer, state.customerId, state.stateId, state.priorityId, state.queueId,
-            state.typeId, state.serviceId, state.slaId, state.ownerId, state.responsibleId, state.pendingTime,
-            state.description, state.dynamicFields
+            ticketState.subject, ticketState.customer, ticketState.customerId, ticketState.stateId,
+            ticketState.priorityId, ticketState.queueId, ticketState.typeId, ticketState.serviceId,
+            ticketState.slaId, ticketState.ownerId, ticketState.responsibleId, ticketState.pendingTime,
+            ticketState.description, ticketState.dynamicFields
         );
 
         resolve();

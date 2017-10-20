@@ -12,12 +12,12 @@ class TicketDescriptionInput extends AbstractTicketCreationInputComponent {
 
     public onMount(): void {
         super.initialize(this.stateChanged);
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.description = reduxState.description;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.description = reduxState.description;
     }
 

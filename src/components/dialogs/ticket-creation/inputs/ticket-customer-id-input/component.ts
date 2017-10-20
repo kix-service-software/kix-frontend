@@ -12,12 +12,12 @@ class TicketCustomerIdInput extends AbstractTicketCreationInputComponent {
 
     public onMount(): void {
         super.initialize(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.customerId = reduxState.customerId;
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         this.state.customerId = reduxState.customerId;
     }
 

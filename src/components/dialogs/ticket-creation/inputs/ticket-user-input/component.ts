@@ -13,7 +13,7 @@ class TicketUserInput extends AbstractTicketCreationInputComponent {
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         // TODO: USER CHANGED check user type
     }
 

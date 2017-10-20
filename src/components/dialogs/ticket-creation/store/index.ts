@@ -1,9 +1,11 @@
+import { TicketCreationProcessReduxState } from './TicketCreationProcessReduxState';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import promiseMiddleware from 'redux-promise-middleware';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { TicketCreationReduxState } from './TicketCreationReduxState';
 
-import reducer from './reducer';
+import ticketState from './reducers/TicketStateReducer';
+import ticketProcessState from './reducers/TicketProcessReducer';
 
 export { TicketCreationReduxState } from './TicketCreationReduxState';
 
@@ -21,7 +23,13 @@ export class CreationTicketStore {
 
     public initialize(): void {
         const state = ClientStorageHandler.loadState<TicketCreationReduxState>(STATE_ID);
-        this.store = createStore(reducer, state, applyMiddleware(
+
+        const reducer = combineReducers({
+            ticketState,
+            ticketProcessState
+        });
+
+        this.store = createStore(reducer, { ticketState: state }, applyMiddleware(
             promiseMiddleware()
         ));
     }

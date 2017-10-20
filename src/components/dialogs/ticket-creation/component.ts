@@ -1,3 +1,4 @@
+import { TicketCreationProcessReduxState } from './store/TicketCreationProcessReduxState';
 import { CreationTicketStore } from './store/index';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
@@ -25,7 +26,7 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
         this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
         this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
 
@@ -39,8 +40,10 @@ class TicketCreationDialogComponent {
     }
 
     public createTicket(): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
-        this.store.dispatch(CREATE_TICKET(reduxState));
+        const ticketState: TicketCreationReduxState = this.store.getState().ticketState;
+        const processState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
+
+        this.store.dispatch(CREATE_TICKET(processState, ticketState));
     }
 
 }

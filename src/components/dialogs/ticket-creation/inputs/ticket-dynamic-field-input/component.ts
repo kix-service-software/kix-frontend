@@ -13,7 +13,7 @@ class TicketDynamicFieldInput extends AbstractTicketCreationInputComponent {
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = this.store.getState();
+        const reduxState: TicketCreationReduxState = this.store.getState().ticketState;
         // TODO: DYNAMIC FIELD
     }
 
