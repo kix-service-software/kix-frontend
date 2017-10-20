@@ -4,8 +4,9 @@ class NotesWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            notes: 'Das ist eine Notiz :D',
-            showConfiguration: false
+            notes: 'Das ist eine Notiz',
+            showConfiguration: false,
+            editorReadOnly: false
         };
     }
 
@@ -19,6 +20,14 @@ class NotesWidgetComponent {
 
     public cancelConfiguration(): void {
         this.state.showConfiguration = false;
+    }
+
+    // TODO: remove - just for testing
+    public changeNotes(): void {
+        this.state.notes = '<p>It\'s a me <span style="red">Mario</span> :D</p>';
+    }
+    public toggleReadOnly(): void {
+        this.state.editorReadOnly = !this.state.editorReadOnly;
     }
 }
 

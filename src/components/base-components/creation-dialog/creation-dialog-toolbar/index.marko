@@ -1,0 +1,15 @@
+<span.kix-icon.icon-dummy.icon-menu title=state.title on-click('openCreateObjectDialog')/>
+<if(state.showCreateObjectDialog)>
+    <div>
+        <main-dialog>
+            <@title>${state.title}</@title>
+            <@body>
+                <creation-dialog-container/>
+            </@body>
+            <@button>
+                <button on-click('closeCreateObjectDialog')>Speichern</button>
+                <button on-click('closeCreateObjectDialog')>Abbrechen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>
