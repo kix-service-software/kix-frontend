@@ -3,15 +3,13 @@
     <section.clearfix>
         <main-menu/>
         <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
-        <div#mutable-content.clearfix>
-            <div#mutable-content-area>
-                <div.content-header>
-                    <breadcrumb/>
-                    <back/>
-                </div>
-                <include(state.template, {configurationMode: state.configurationMode})/>
-            </div>
-        </div>
+        <section.content>
+            <header>
+                <breadcrumb/>
+                <back/>
+            </header>
+            <include(state.template, {configurationMode: state.configurationMode})/>
+        </section>
     </section>
     <kix-footer/>
 </div>
