@@ -1,35 +1,36 @@
-<div>
-    <widget>
-        <@overlay>
-            <include(input.dragoverlay)/>
-        </@overlay>
-        <@icon>
-            <span class="kix-icon icon-dummy"/>
-        </@icon>
-        <@title>Notizen</@title>
-        <@content>
-            <p>${state.notes}</p>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                on-click('showConfigurationClicked')/>
-        </@actions>
-    </widget>
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: Ticketliste</@title>
-                <@body>
-                    <notes-configuration/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
-        </div>
-    </if>
-</div>
+<widget>
+    <@overlay>
+        <include(input.dragoverlay)/>
+    </@overlay>
+    <@icon>
+        <span class="kix-icon icon-dummy"/>
+    </@icon>
+    <@title>Notizen</@title>
+    <@content>
+        <editor inline=true readOnly=state.editorReadOnly resize=false value=state.notes on-valueChanged('valueChanged')/>
+        <!-- // TODO: remove - just for testing -->
+        <button title="Change notes" on-click('changeNotes')>Change Notes</button>
+        <button title="toggle read only" on-click('toggleReadOnly')>toggle read only</button>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+            on-click('showConfigurationClicked')/>
+    </@actions>
+</widget>
+<if(state.showConfiguration)>
+    <div>
+        <main-dialog>
+            <@title>Konfiguration: Ticketliste</@title>
+            <@body>
+                <notes-configuration/>
+            </@body>
+            <@button>
+                <button on-click('saveConfiguration')>Speichern</button>
+                <button on-click('cancelConfiguration')>Abbrechen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>

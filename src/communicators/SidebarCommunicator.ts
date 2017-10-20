@@ -33,11 +33,11 @@ export class SidebarCommunicator extends KIXCommunicator {
                 .getComponentConfiguration(data.contextId, 'sidebar', null, userId);
 
             if (!configuration) {
-                const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+                const moduleFactory = await this.pluginService.getModuleFactory('sidebar');
                 const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
                 await this.configurationService.saveComponentConfiguration(
-                    data.contextId, null, null, userId, moduleDefaultConfiguration);
+                    data.contextId, 'sidebar', null, userId, moduleDefaultConfiguration);
 
                 configuration = moduleDefaultConfiguration;
             }
@@ -62,7 +62,7 @@ export class SidebarCommunicator extends KIXCommunicator {
             const userId = user && user.UserID;
 
             await this.configurationService
-                .saveComponentConfiguration(data.contextId, null, null, userId, data.configuration);
+                .saveComponentConfiguration(data.contextId, 'sidebar', null, userId, data.configuration);
 
             client.emit(SidebarEvent.SIDEBAR_SAVED);
         });
