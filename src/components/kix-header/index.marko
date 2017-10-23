@@ -1,11 +1,15 @@
-<header.clearfix>
+<header>
     <img#logo alt="KIX Professional 2018" src="static/img/kixpro-logo.png"/>
     <h1>KIX Professional 2018</h1>
     <nav>
+        <!-- Neues Objekt -->
         <ul>
             <li>
                 <creation-dialog-toolbar/>
             </li>
+        </ul>
+        <!-- Lesezeichen & Suchvorlagen -->
+        <ul>
             <li>
                 <div.dropdown>
                     <ul>
@@ -54,8 +58,74 @@
                     </ul>
                 </div>
             </li>
+        </ul>
+        <!-- Schnellsuche -->
+        <ul>
+            <li>
+                <div.dropdown>
+                    <ul>
+                        <li>
+                            <span.kix-icon.icon-dummy/>
+                            <span>
+                                <input type="text" placeholder="| Schnellsuche"/>
+                            </span>
+                        </li>
+                        <li>
+                            <span.kix-icon.icon-dummy/>
+                            <span>
+                                <input type="text" placeholder="Tickets"/>
+                            </span>
+                        </li>
+                        <li>
+                            <span.kix-icon.icon-dummy/>
+                            <span>
+                                <input type="text" placeholder="Kunden"/>
+                            </span>
+                        </li>
+                        <li>
+                            <span.kix-icon.icon-dummy/>
+                            <span>
+                                <input type="text" placeholder="Ansprechpartner"/>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <span.kix-icon.icon-dummy.icon-menu.icon-x title="Dummy"/>
+            </li>
+        </ul>
+        <!-- persönliche Toolbar -->
+        <ul>
+            <li>
+                <ul>
+                    <li>
+                        <span.kix-icon.icon-dummy.icon-menu.icon-x title="Dummy"/>
+                    </li>
+                    <li>
+                        <span.kix-icon.icon-dummy.icon-menu.icon-x title="Dummy"/>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <span.kix-icon.icon-dummy.icon-menu.icon-x title="Dummy"/>
+                    </li>
+                    <li>
+                        <span.kix-icon.icon-dummy.icon-menu.icon-x title="Dummy"/>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Sonderfunktionen -->
+        <ul>
             <li>
                 <personal-settings-toolbar/>
+            </li>
+            <li>
+                <span.kix-icon.icon-dummy.icon-menu.icon-x title="Wechsel Portalfrontend"/>
+            </li>
+            <li>
+                <span.kix-icon.icon-dummy.icon-menu.icon-x title="Hilfe"/>
             </li>
             <li>
                 <a href="/auth?logout">
