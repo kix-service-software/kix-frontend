@@ -30,8 +30,40 @@
             li {
                 display: inline-block;
                 margin: 0 .5em;
+
                 &:last-oft-type {
                     margin-right: 0;
+                }
+            }
+            .dropdown {
+                position: relative;
+                min-width: 300px;
+                ul {
+                    position: absolute;
+                    z-index: 2;
+                    li {
+                        position: relative;
+                        display: none;
+                        &:first-of-type {
+                            display: block;
+                            input {
+                                background-color: #fff;
+                            }
+                        }
+                        input {
+                            padding-left: 2em;
+                            border-color: #fff;
+                            border-radius: 3px;
+                            height: 1.5em;
+                            background-color: #f5f5f5;
+                            
+                        }
+                        span.kix-icon {
+                            position: absolute;
+                            left: 5px;
+                            top: 4px;
+                        }
+                    }
                 }
             }
         }
