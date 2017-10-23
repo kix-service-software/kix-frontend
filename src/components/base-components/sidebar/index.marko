@@ -18,13 +18,13 @@
     </if>
 </div>
 <if(state.configuration && component.hasWidgetsToShow())>
-    <div.sidebar>
+    <div.sidebar key="sidebar">
         <for(widget in state.configuration.widgets)>
             <if(widget.show)>
                 <include(component.getWidgetTemplate(widget.id), {
                     instanceId: widget.instanceId,
                     configurationMode: state.configurationMode
-                })/>
+                }) key=widget.instanceId/>
             </if>
         </for>
     </div>
