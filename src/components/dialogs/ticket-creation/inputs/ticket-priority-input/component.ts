@@ -18,12 +18,12 @@ class TicketPriorityInput {
     public onMount(): void {
         CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
         const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
-        this.state.priorityId = reduxState.priorityId;
+        this.state.priorityId = Number(reduxState.priorityId);
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
         const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
-        this.state.priorityId = reduxState.priorityId;
+        this.state.priorityId = Number(reduxState.priorityId);
 
         const processState: TicketCreationProcessReduxState =
             CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;

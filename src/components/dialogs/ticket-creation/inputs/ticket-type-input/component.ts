@@ -18,19 +18,19 @@ class TicketTypeInput {
     public onMount(): void {
         CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
         const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
-        this.state.typeId = reduxState.typeId;
+        this.state.typeId = Number(reduxState.typeId);
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
-        this.state.typeId = reduxState.typeId;
-
         const processState: TicketCreationProcessReduxState =
             CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
 
         this.state.ticketTypes = processState.types;
 
         this.state.loading = processState.loadTicketData;
+
+        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        this.state.typeId = Number(reduxState.typeId);
     }
 
     public valueChanged(event: any): void {

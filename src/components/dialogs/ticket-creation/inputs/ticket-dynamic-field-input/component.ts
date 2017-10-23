@@ -7,7 +7,9 @@ class TicketDynamicFieldInput {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = {
+            name: input.name
+        };
     }
 
     public onMount(): void {
@@ -20,7 +22,7 @@ class TicketDynamicFieldInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(DYNAMIC_FIELD_CHANGED('name', event.target.value));
+        CreationTicketStore.INSTANCE.getStore().dispatch(DYNAMIC_FIELD_CHANGED(this.state.name, event.target.value));
     }
 
 }

@@ -1,9 +1,10 @@
+import { DynamicField } from '@kix/core/dist/model/client';
 export class TicketCreationReduxState {
 
     public customer: string = null;
     public customerId: string = null;
     public description: string = null;
-    public dynamicFields: any[] = [];
+    public dynamicFields: DynamicField[] = [];
     public pendingTime: number = null;
     public priorityId: number = null;
     public queueId: number = null;

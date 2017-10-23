@@ -3,7 +3,9 @@
     <if(!state.loading)>
         <select on-change("valueChanged")>
             <for(ticketPriority in state.ticketPriorities)>
-                <option value=ticketPriority.ID selected=(state.priorityId === ticketPriority.ID)>${ticketPriority.Name}</option>
+                <option key=ticketPriority.ID value=ticketPriority.ID selected=(state.priorityId === ticketPriority.ID)>
+                    ${ticketPriority.Name}
+                </option>
             </for>
         </select>
     </if>

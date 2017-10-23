@@ -3,7 +3,7 @@
     <if(!state.loading)>
         <select on-change("valueChanged")>
             <for(ticketType in state.ticketTypes)>
-                <option value=ticketType.ID selected=(state.typeId === ticketType.ID)>${ticketType.Name}</option>
+                <option key=ticketType.ID value=ticketType.ID selected=(state.typeId === ticketType.ID)>${ticketType.Name}</option>
             </for>
         </select>
     </if>

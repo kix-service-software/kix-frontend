@@ -1,5 +1,5 @@
 import { TicketCreationReduxState } from '../TicketCreationReduxState';
-import { PersonalSettings, ClientStorageHandler } from '@kix/core/dist/model/client';
+import { PersonalSettings, ClientStorageHandler, DynamicField } from '@kix/core/dist/model/client';
 import { TicketCreationDialogAction } from '../actions';
 
 const PENDING = '_PENDING';
@@ -26,7 +26,16 @@ class ActionHandler {
                 break;
 
             case TicketCreationDialogAction.DYNAMIC_FIELD_CHANGED + FULFILLED:
-                state = { ...state }; // TODO: DYNAMIC FIELD CHANGED
+                const dynamicField: DynamicField = state.dynamicFields.find((df) => df.Name === action.payload.name);
+                if (!dynamicField) {
+                    state.dynamicFields.push({
+                        Name: action.payload.name,
+                        Value: action.payload.value
+                    });
+                } else {
+                    dynamicField.Value = action.payload.value;
+                }
+                state = { ...state, dynamicFields: Array.from(state.dynamicFields) };
                 ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
                 break;
 
