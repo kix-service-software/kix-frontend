@@ -45,20 +45,13 @@ class NotesWidgetComponent extends WidgetBaseComponent<NotesComponentState, Note
     }
 
     public valueChanged(newValue: string): void {
-        console.log('-----------------------');
-        console.log(newValue);
         const reduxState: NotesReduxState = this.store.getState();
         this.state.widgetConfiguration.contentConfiguration.notes = newValue;
         reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
     }
 
-    // TODO: remove - just for testing
-    public changeNotes(): void {
-        this.state.widgetConfiguration.contentConfiguration.notes
-            = '<p>It\'s a me <span style="red">Mario</span> :D</p>';
-    }
-    public toggleReadOnly(): void {
-        this.state.editorReadOnly = !this.state.editorReadOnly;
+    public toggleEditMode(): void {
+        this.state.editMode = !this.state.editMode;
     }
 }
 

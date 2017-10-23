@@ -41,14 +41,11 @@ class EditorComponent {
                 ...this.state.config
             });
         }
+        CKEDITOR.instances[this.state.id].on('blur', (event) => {
+            (this as any).emit('valueChanged', event.editor.getData());
+        });
         // TODO: maybe not necessary
         (this as any).emit('editorInitialized', this.state.id);
-    }
-
-    public valueChanged(event: any): void {
-        this.state.value = event.target.value;
-        console.log(this.state.value);
-        (this as any).emit('valueChanged', this.state.value);
     }
 }
 
