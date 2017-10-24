@@ -5,7 +5,7 @@ import { TicketCreationProcessAction } from './TicketCreationProcessAction';
 export default (value: string) => {
 
     const payload = new Promise(async (resolve, reject) => {
-        const user = await CreationTicketStore.INSTANCE.getSocketListener().searchUser(value);
+        const user = await CreationTicketStore.getInstance().getSocketListener().searchUser(value);
         resolve({ user });
     });
 

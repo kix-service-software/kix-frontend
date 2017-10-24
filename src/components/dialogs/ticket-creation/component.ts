@@ -19,8 +19,8 @@ class TicketCreationDialogComponent {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.initialize();
-        this.store = CreationTicketStore.INSTANCE.getStore();
+        console.log("onMount dialog");
+        this.store = CreationTicketStore.getInstance().getStore();
         this.store.subscribe(this.stateChanged.bind(this));
 
         this.store.dispatch(INITIALIZE()).then(() => {

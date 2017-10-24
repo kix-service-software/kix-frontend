@@ -14,18 +14,18 @@ class TicketTemplateInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
         const reduxState: TicketCreationProcessReduxState =
-            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+            CreationTicketStore.getInstance().getStore().getState().ticketProcessState;
 
         this.state.isLoading = reduxState.loadTicketData;
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
+        CreationTicketStore.getInstance().getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
     }
 
 }

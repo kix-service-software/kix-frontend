@@ -10,7 +10,7 @@ class TicketAttachmentInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {

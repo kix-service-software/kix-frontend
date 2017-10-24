@@ -3,6 +3,7 @@ import { TicketCreationSocketListener } from './../socket/TicketCreationSocketLi
 
 export class TicketCreationProcessReduxState {
 
+    public initialized: boolean = false;
     public socketListener: TicketCreationSocketListener;
 
     public createTicketInProcess: boolean = false;

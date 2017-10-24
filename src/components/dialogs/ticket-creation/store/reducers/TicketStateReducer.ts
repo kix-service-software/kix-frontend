@@ -84,7 +84,12 @@ class ActionHandler {
                 break;
 
             case TicketCreationDialogAction.USER_ID_CHANGED + FULFILLED:
-                state = { ...state, ownerId: action.payload.subject }; // TODO: USER CHANGED
+                if (action.payload.userType === 'owner') {
+                    state = { ...state, ownerId: action.payload.userId };
+                } else {
+                    state = { ...state, responsibleId: action.payload.userId };
+                }
+
                 ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
                 break;
 

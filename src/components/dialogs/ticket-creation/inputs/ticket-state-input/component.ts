@@ -16,17 +16,19 @@ class TicketStateInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState =
+            CreationTicketStore.getInstance().getStore().getState().ticketState;
         this.state.stateId = reduxState.stateId;
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        const reduxState: TicketCreationReduxState =
+            CreationTicketStore.getInstance().getStore().getState().ticketState;
         this.state.stateId = reduxState.stateId;
 
         const processState: TicketCreationProcessReduxState =
-            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+            CreationTicketStore.getInstance().getStore().getState().ticketProcessState;
 
         this.state.ticketStates = processState.states;
 
@@ -34,7 +36,7 @@ class TicketStateInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(STATE_ID_CHANGED(event.target.value));
+        CreationTicketStore.getInstance().getStore().dispatch(STATE_ID_CHANGED(event.target.value));
     }
 
 }

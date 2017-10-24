@@ -14,7 +14,15 @@ const STATE_ID = 'TicketCreationDialog';
 
 export class CreationTicketStore {
 
-    public static INSTANCE = new CreationTicketStore();
+    public static getInstance(): CreationTicketStore {
+        if (!CreationTicketStore.INSTANCE) {
+            CreationTicketStore.INSTANCE = new CreationTicketStore();
+        }
+
+        return CreationTicketStore.INSTANCE;
+    }
+
+    private static INSTANCE = null;
 
     private store: any;
 
@@ -22,23 +30,6 @@ export class CreationTicketStore {
 
     private constructor() {
         this.initialize();
-    }
-
-    public initialize(): void {
-        const state = ClientStorageHandler.loadState<TicketCreationReduxState>(STATE_ID);
-
-        const reducer = combineReducers({
-            ticketState,
-            ticketProcessState
-        });
-
-        this.store = createStore(reducer, { ticketState: state }, applyMiddleware(
-            promiseMiddleware()
-        ));
-
-        for (const listener of this.stateListener) {
-            this.store.subscribe(listener);
-        }
     }
 
     public addStateListener(listener: () => void): void {
@@ -62,4 +53,20 @@ export class CreationTicketStore {
         return this.getProcessState().socketListener;
     }
 
+    private initialize(): void {
+        const state = ClientStorageHandler.loadState<TicketCreationReduxState>(STATE_ID);
+
+        const reducer = combineReducers({
+            ticketState,
+            ticketProcessState
+        });
+
+        this.store = createStore(reducer, { ticketState: state }, applyMiddleware(
+            promiseMiddleware()
+        ));
+
+        for (const listener of this.stateListener) {
+            this.store.subscribe(listener);
+        }
+    }
 }

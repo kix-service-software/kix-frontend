@@ -78,7 +78,7 @@ export class TicketCreationSocketListener extends SocketListener {
     private registerLoadDataEvents(): void {
         this.ticketCreationSocket.on(TicketCreationEvent.TICKET_DATA_LOADED,
             (result: TicketCreationLoadDataResponse) => {
-                CreationTicketStore.INSTANCE.getStore().dispatch(
+                CreationTicketStore.getInstance().getStore().dispatch(
                     TICKET_DATA_LOADED(
                         result.templates,
                         result.queues,

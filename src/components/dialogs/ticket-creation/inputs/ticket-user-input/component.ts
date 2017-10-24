@@ -10,34 +10,41 @@ class TicketUserInput {
 
     public onCreate(input: any): void {
         this.state = {
+            type: input.type ? input.type : 'owner',
             inputId: "user-input-" + Date.now(),
             value: null,
             users: [],
-            search: false
+            userSearched: false,
+            userSearchInProgress: false,
+            userInvalid: false
         };
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
-
-        const input = document.getElementsByName(this.state.inputId)[0];
-        Rx.Observable.fromEvent(input, 'keydown')
-            .throttleTime(250)
-            .map((e) => e.target.value)
-            .subscribe((value) => {
-                CreationTicketStore.INSTANCE.getStore().dispatch(SEARCH_USER(value));
-            });
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const processState = CreationTicketStore.INSTANCE.getProcessState();
-        this.state.search = processState.userSearchInProgress;
+        const processState = CreationTicketStore.getInstance().getProcessState();
+
+        if (processState.initialized && !this.state.userSearched) {
+            this.state.userSearched = true;
+            CreationTicketStore.getInstance().getStore().dispatch(SEARCH_USER(""));
+        }
+
+        this.state.userSearchInProgress = processState.userSearchInProgress;
         this.state.users = processState.user;
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(USER_ID_CHANGED(event.target.value, 'owner'));
         this.state.value = event.target.value;
+        const user = this.state.users.find((u) => u.UserLogin === this.state.value);
+        if (user) {
+            CreationTicketStore.getInstance().getStore().dispatch(USER_ID_CHANGED(user.UserID, this.state.type));
+            this.state.userInvalid = false;
+        } else {
+            this.state.userInvalid = true;
+        }
     }
 
 }

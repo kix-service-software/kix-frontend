@@ -16,17 +16,19 @@ class TicketPriorityInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        const reduxState: TicketCreationReduxState =
+            CreationTicketStore.getInstance().getStore().getState().ticketState;
         this.state.priorityId = Number(reduxState.priorityId);
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        const reduxState: TicketCreationReduxState =
+            CreationTicketStore.getInstance().getStore().getState().ticketState;
         this.state.priorityId = Number(reduxState.priorityId);
 
         const processState: TicketCreationProcessReduxState =
-            CreationTicketStore.INSTANCE.getStore().getState().ticketProcessState;
+            CreationTicketStore.getInstance().getStore().getState().ticketProcessState;
 
         this.state.ticketPriorities = processState.priorities;
 
@@ -34,7 +36,7 @@ class TicketPriorityInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(PRIORITY_ID_CHANGED(event.target.value));
+        CreationTicketStore.getInstance().getStore().dispatch(PRIORITY_ID_CHANGED(event.target.value));
     }
 
 }

@@ -14,11 +14,12 @@ class TicketDynamicFieldInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.INSTANCE.addStateListener(this.stateChanged.bind(this));
+        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
+        const reduxState: TicketCreationReduxState =
+            CreationTicketStore.getInstance().getStore().getState().ticketState;
         const dynamicField = reduxState.dynamicFields.find((df) => df.Name === this.state.name);
         if (dynamicField) {
             this.state.value = dynamicField.Value;
@@ -26,7 +27,8 @@ class TicketDynamicFieldInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.INSTANCE.getStore().dispatch(DYNAMIC_FIELD_CHANGED(this.state.name, event.target.value));
+        CreationTicketStore.getInstance()
+            .getStore().dispatch(DYNAMIC_FIELD_CHANGED(this.state.name, event.target.value));
     }
 
 }

@@ -11,7 +11,7 @@ class ActionHandler {
         switch (action.type) {
 
             case TicketCreationProcessAction.INITIALIZE + FULFILLED:
-                state = { ...state, socketListener: action.payload.socketListener };
+                state = { ...state, initialized: true, socketListener: action.payload.socketListener };
                 break;
 
             case TicketCreationProcessAction.CREATE_TICKET + PENDING:
