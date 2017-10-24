@@ -177,11 +177,22 @@ button {
     content: 'T';
 }
 
+.kix-icon.icon-dummy.icon-x:before {
+    content: 'X';
+}
+
 .kix-icon.icon-dummy.icon-asterisk:before {
     content: '*';
 }
 
-.kix-icon.icon-dummy.icon-menu:before {
-    border-color: #fff;
-    background-color: transparent;
+.kix-icon.icon-dummy.icon-menu {
+    &:before {
+        border-color: #fff;
+        background-color: transparent;
+        transition: background-color .25s;
+        color: #fff;
+    }
+    &:hover:before {
+        background-color: #fff;
+    }
 }

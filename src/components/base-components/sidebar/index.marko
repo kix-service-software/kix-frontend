@@ -21,10 +21,18 @@
     <div.sidebar key="sidebar">
         <for(widget in state.configuration.widgets)>
             <if(widget.show)>
-                <include(component.getWidgetTemplate(widget.id), {
-                    instanceId: widget.instanceId,
-                    configurationMode: state.configurationMode
-                }) key=widget.instanceId/>
+                <!-- 
+                TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
+                sobald das include auch ohne root-Element funktioniert. In der style.less
+                ist dann ".sidebar > div" auch wieder durch ".sidebar > .widget" zu erstetzen!
+                siehe Issue #151
+                -->
+                <div>
+                    <include(component.getWidgetTemplate(widget.id), {
+                        instanceId: widget.instanceId,
+                        configurationMode: state.configurationMode
+                    }) key=widget.instanceId/>
+                </div>
             </if>
         </for>
     </div>

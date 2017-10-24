@@ -1,5 +1,3 @@
-import { WidgetConfiguration } from '@kix/core/dist/model/client';
-
 class WidgetComponent {
 
     public state: any;
