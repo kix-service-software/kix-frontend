@@ -1,13 +1,16 @@
 import {
     DynamicField,
     SocketEvent,
+    SearchUserRequest,
+    SearchUserResponse,
     ClientStorageHandler,
     TicketCreationRequest,
     TicketCreationResponse,
     TicketCreationEvent,
     TicketCreationLoadDataRequest,
     TicketCreationLoadDataResponse,
-    TicketState
+    TicketState,
+    User
 } from '@kix/core/dist/model/client';
 import { CreationTicketStore } from '../store/';
 import { TICKET_DATA_LOADED } from '../store/actions';
@@ -19,7 +22,7 @@ export class TicketCreationSocketListener extends SocketListener {
     public constructor() {
         super();
         this.ticketCreationSocket = this.createSocket("ticket-creation");
-        this.initConfigurationSocketListener(this.ticketCreationSocket);
+        this.initConfigurationSocketListener();
     }
 
     public createTicket(
@@ -43,25 +46,37 @@ export class TicketCreationSocketListener extends SocketListener {
         this.ticketCreationSocket.emit(TicketCreationEvent.LOAD_TICKET_DATA, request);
     }
 
-    private initConfigurationSocketListener(socket: SocketIO.Server): void {
-        socket.on(SocketEvent.CONNECT, () => {
+    public searchUser(value: string): Promise<User[]> {
+        return new Promise<User[]>((resolve, reject) => {
+            const token = ClientStorageHandler.getToken();
+            this.ticketCreationSocket.emit(TicketCreationEvent.SEARCH_USER, new SearchUserRequest(token, value));
+
+            // TODO: Timeout?
+            this.ticketCreationSocket.on(TicketCreationEvent.SEARCH_USER_FINISHED, (result: SearchUserResponse) => {
+                resolve(result.user);
+            });
+        });
+    }
+
+    private initConfigurationSocketListener(): void {
+        this.ticketCreationSocket.on(SocketEvent.CONNECT, () => {
             //
         });
 
-        socket.on('error', (error) => {
+        this.ticketCreationSocket.on('error', (error) => {
             console.error(error);
         });
 
-        socket.on(TicketCreationEvent.TICKET_CREATED,
+        this.ticketCreationSocket.on(TicketCreationEvent.TICKET_CREATED,
             (result: TicketCreationResponse) => {
                 //
             });
 
-        this.registerLoadDataEvents(socket);
+        this.registerLoadDataEvents();
     }
 
-    private registerLoadDataEvents(socket: SocketIO.Server): void {
-        socket.on(TicketCreationEvent.TICKET_DATA_LOADED,
+    private registerLoadDataEvents(): void {
+        this.ticketCreationSocket.on(TicketCreationEvent.TICKET_DATA_LOADED,
             (result: TicketCreationLoadDataResponse) => {
                 CreationTicketStore.INSTANCE.getStore().dispatch(
                     TICKET_DATA_LOADED(

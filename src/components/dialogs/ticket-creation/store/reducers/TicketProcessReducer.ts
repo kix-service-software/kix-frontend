@@ -45,6 +45,18 @@ class ActionHandler {
                 };
                 break;
 
+            case TicketCreationProcessAction.SEARCH_USER + PENDING:
+                state = { ...state, userSearchInProgress: true };
+                break;
+
+            case TicketCreationProcessAction.SEARCH_USER + FULFILLED:
+                state = {
+                    ...state,
+                    userSearchInProgress: false,
+                    user: action.payload.user
+                };
+                break;
+
             default:
                 state = state;
         }

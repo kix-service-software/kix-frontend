@@ -1,5 +1,7 @@
 import {
     SocketEvent,
+    SearchUserRequest,
+    SearchUserResponse,
     CreateTicket,
     TicketCreationRequest,
     TicketCreationResponse,
@@ -42,6 +44,12 @@ export class TicketCreationCommunicator extends KIXCommunicator {
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
+        });
+
+        client.on(TicketCreationEvent.SEARCH_USER, async (data: SearchUserRequest) => {
+            // TODO: Filter via data.searchString
+            const user = await this.userService.getUsers(data.token);
+            client.emit(TicketCreationEvent.SEARCH_USER_FINISHED, new SearchUserResponse(user));
         });
     }
 }

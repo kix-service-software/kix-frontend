@@ -8,7 +8,8 @@ class TicketDynamicFieldInput {
 
     public onCreate(input: any): void {
         this.state = {
-            name: input.name
+            name: input.name,
+            value: null
         };
     }
 
@@ -18,7 +19,10 @@ class TicketDynamicFieldInput {
 
     public stateChanged(state: TicketCreationReduxState): void {
         const reduxState: TicketCreationReduxState = CreationTicketStore.INSTANCE.getStore().getState().ticketState;
-        // TODO: DYNAMIC FIELD
+        const dynamicField = reduxState.dynamicFields.find((df) => df.Name === this.state.name);
+        if (dynamicField) {
+            this.state.value = dynamicField.Value;
+        }
     }
 
     public valueChanged(event: any): void {

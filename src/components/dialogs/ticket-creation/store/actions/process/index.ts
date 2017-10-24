@@ -10,8 +10,10 @@ export {
 };
 
 import LOAD_TICKET_DATA from './load-ticket-data';
+import SEARCH_USER from './search-user';
 export {
-    LOAD_TICKET_DATA
+    LOAD_TICKET_DATA,
+    SEARCH_USER
 };
 
 import TICKET_DATA_LOADED from './ticket-data-loaded';

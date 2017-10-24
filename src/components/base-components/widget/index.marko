@@ -1,16 +1,16 @@
 <div.widget>
-    <include(input.overlay) key="widget-overlay"/>
+    <include(input.overlay)/>
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
                 <!-- Auskommentiert, da noch keine Anforderung vorhanden -->
                 <!-- <include(input.icon)/> -->
-                <include(input.title) key="widget-title"/>
+                <include(input.title)/>
             </h3>
-            <include(input.filter) key="widget-filter"/>
+            <include(input.filter)/>
         </span>
         <span.header-right>
-            <include(input.actions) key="widget-actions"/>
+            <include(input.actions)/>
             <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
                 on-click('configClicked')/>
             <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
@@ -18,7 +18,7 @@
     </div>
     <if(state.minimized)>
         <div.widget-content>
-            <include(input.content) key="widget-content"/>
+            <include(input.content)/>
         </div>
     </if>
 </div>

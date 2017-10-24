@@ -1,3 +1,4 @@
+import { TicketCreationSocketListener } from './../socket/TicketCreationSocketListener';
 import { TicketCreationProcessReduxState } from './TicketCreationProcessReduxState';
 import { ClientStorageHandler } from '@kix/core/dist/model/client';
 import promiseMiddleware from 'redux-promise-middleware';
@@ -47,6 +48,18 @@ export class CreationTicketStore {
 
     public getStore(): any {
         return this.store;
+    }
+
+    public getProcessState(): TicketCreationProcessReduxState {
+        return this.getStore().getState().ticketProcessState;
+    }
+
+    public getTicketState(): TicketCreationReduxState {
+        return this.getStore().getState().ticketState;
+    }
+
+    public getSocketListener(): TicketCreationSocketListener {
+        return this.getProcessState().socketListener;
     }
 
 }

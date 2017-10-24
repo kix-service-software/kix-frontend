@@ -1,4 +1,11 @@
 <label.form-label>
     ${input.label}
-    <input type="text" on-blur("valueChanged") tabindex="6"/>
+    <if(!state.search)>
+        <input name=state.inputId type="text" on-blur("valueChanged") tabindex="6" value=state.value/>
+        <ul>
+            <for(user in state.users)>
+                <li>${user.UserLogin}</li>
+            </for>
+        </ul>
+    </if>
 </label>

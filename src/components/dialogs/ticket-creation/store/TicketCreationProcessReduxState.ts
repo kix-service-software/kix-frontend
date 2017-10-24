@@ -1,4 +1,4 @@
-import { TicketState, TicketType, TicketPriority } from '@kix/core';
+import { TicketState, TicketType, User, TicketPriority } from '@kix/core/dist/model/client';
 import { TicketCreationSocketListener } from './../socket/TicketCreationSocketListener';
 
 export class TicketCreationProcessReduxState {
@@ -15,7 +15,9 @@ export class TicketCreationProcessReduxState {
     public types: TicketType[] = [];
     public states: TicketState[] = [];
     public queues: any[] = []; // TODO: queue model
+    public user: User[] = [];
 
     // Loading triggers
     public loadTicketData: boolean = true;
+    public userSearchInProgress: boolean = false;
 }
