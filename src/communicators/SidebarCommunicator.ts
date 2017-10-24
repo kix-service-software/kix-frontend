@@ -1,15 +1,14 @@
-import { KIXCommunicator } from './KIXCommunicator';
 import {
-    ContainerConfiguration,
-    SidebarEvent,
     LoadSidebarRequest,
     LoadSidebarResponse,
     SaveSidebarRequest,
     SidebarConfiguration,
+    SidebarEvent,
     SocketEvent,
-    User,
-    WidgetTemplate
+    WidgetTemplate,
 } from '@kix/core';
+
+import { KIXCommunicator } from './KIXCommunicator';
 
 export class SidebarCommunicator extends KIXCommunicator {
 

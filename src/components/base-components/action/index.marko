@@ -1,6 +1,8 @@
 <span.action on-click('handleAction') class=(state.running ? "action-disabled" : "")>
     <span.kix-icon.icon-dummy/>
-    <span>${state.action.name}</span>
+    <if(state.showName)>
+        <span>${state.action.name}</span>
+    </if>
 </span>
 <span>
     <if(state.template)>

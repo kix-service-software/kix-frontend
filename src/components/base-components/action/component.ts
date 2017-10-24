@@ -1,4 +1,5 @@
 import { RunActionRequest } from '@kix/core/dist/model/client';
+
 import { ActionSocketListener } from './socket/ActionSocketListener';
 import { DELETE_ACTION_INITIALIZE } from './store/actions';
 
@@ -12,7 +13,8 @@ export class ActionComponent {
         this.state = {
             action: input.action,
             running: false,
-            template: null
+            template: null,
+            showName: (typeof (input.showName) !== 'undefined' ? input.showName : true)
         };
     }
 

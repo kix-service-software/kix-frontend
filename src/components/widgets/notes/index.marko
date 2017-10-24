@@ -1,36 +1,45 @@
-<widget>
-    <@overlay>
-        <include(input.dragoverlay)/>
-    </@overlay>
-    <@icon>
-        <span class="kix-icon icon-dummy"/>
-    </@icon>
-    <@title>Notizen</@title>
-    <@content>
-        <editor inline=true readOnly=state.editorReadOnly resize=false value=state.notes on-valueChanged('valueChanged')/>
-        <!-- // TODO: remove - just for testing -->
-        <button title="Change notes" on-click('changeNotes')>Change Notes</button>
-        <button title="toggle read only" on-click('toggleReadOnly')>toggle read only</button>
-    </@content>
-    <@filter>
-        <span/>
-    </@filter>
-    <@actions>
-        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-            on-click('showConfigurationClicked')/>
-    </@actions>
-</widget>
-<if(state.showConfiguration)>
-    <div>
-        <main-dialog>
-            <@title>Konfiguration: Ticketliste</@title>
-            <@body>
-                <notes-configuration/>
-            </@body>
-            <@button>
-                <button on-click('saveConfiguration')>Speichern</button>
-                <button on-click('cancelConfiguration')>Abbrechen</button>
-            </@button>
-        </main-dialog>
-    </div>
+<if(state.widgetConfiguration)>
+    <widget>
+        <@overlay>
+            <include(input.dragoverlay)/>
+        </@overlay>
+        <@icon>
+            <span class="kix-icon icon-dummy"/>
+        </@icon>
+        <@title>Notizen</@title>
+        <@content>
+            <if(state.widgetConfiguration)>
+                <if(state.editMode)>
+                    <editor inline=true resize=false value=state.widgetConfiguration.contentConfiguration.notes
+                        on-valueChanged('valueChanged')/>
+                </if>
+                <else>
+                    <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
+                    <div.no-editor key=(state.instanceId + "-no-editor")>$!{state.widgetConfiguration.contentConfiguration.notes}</div>
+                </else>
+            </if>
+        </@content>
+        <@filter>
+            <span/>
+        </@filter>
+        <@actions>
+            <span class="kix-icon icon-dummy" on-click('toggleEditMode')/>
+            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
+                on-click('showConfigurationClicked')/>
+        </@actions>
+    </widget>
+    <if(state.showConfiguration)>
+        <div>
+            <main-dialog>
+                <@title>Konfiguration: Ticketliste</@title>
+                <@body>
+                    <notes-configuration/>
+                </@body>
+                <@button>
+                    <button on-click('saveConfiguration')>Speichern</button>
+                    <button on-click('cancelConfiguration')>Abbrechen</button>
+                </@button>
+            </main-dialog>
+        </div>
+    </if>
 </if>

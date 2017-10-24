@@ -82,8 +82,8 @@ export class EditorComponentState {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
             toolbar,
-            width: 800,
-            height: 500,
+            width: '100%',
+            height: '100%',
             resize_minWidth: 200,
             resize_minHeight: 200,
             resize_maxWidth: 1200,
