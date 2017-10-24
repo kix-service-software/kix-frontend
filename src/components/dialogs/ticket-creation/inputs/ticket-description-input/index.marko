@@ -1,3 +1,5 @@
 <label.form-label>
-    Beschreibung <!-- <editor value=state.description on-valueChanged('valueChanged') inline=false/> -->
+    Beschreibung
+    <textarea on-blur('valueChanged')>${state.description}</textarea>
+    <!-- <editor value=state.description on-valueChanged('valueChanged') inline=true/> -->
 </label>

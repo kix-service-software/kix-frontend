@@ -8,7 +8,8 @@ import {
     TicketCreationEvent,
     TicketCreationLoadDataRequest,
     TicketCreationLoadDataResponse,
-    TicketState
+    TicketState,
+    User
 } from '@kix/core';
 import { KIXCommunicator } from './KIXCommunicator';
 
@@ -26,8 +27,8 @@ export class TicketCreationCommunicator extends KIXCommunicator {
 
             const ticket = new CreateTicket(
                 data.subject, data.customerUser, data.customerId, data.stateId, data.priorityId,
-                data.queueId, null, data.typeId, data.serviceId, data.slaId, data.ownerId,
-                data.responsibleId, data.pendingTime, data.dynamicFields, []
+                data.queueId, 1, data.typeId, data.serviceId, data.slaId, data.ownerId,
+                data.responsibleId, data.pendingTime, data.dynamicFields, null
             );
             const ticketId = await this.ticketService.createTicket(data.token, ticket);
 
@@ -49,7 +50,13 @@ export class TicketCreationCommunicator extends KIXCommunicator {
         client.on(TicketCreationEvent.SEARCH_USER, async (data: SearchUserRequest) => {
             // TODO: Filter via data.searchString
             const user = await this.userService.getUsers(data.token);
-            client.emit(TicketCreationEvent.SEARCH_USER_FINISHED, new SearchUserResponse(user));
+            const result: User[] = user.map((u) => {
+                return {
+                    UserID: u.UserID,
+                    UserLogin: u.UserLogin
+                };
+            });
+            client.emit(TicketCreationEvent.SEARCH_USER_FINISHED, new SearchUserResponse(result));
         });
     }
 }

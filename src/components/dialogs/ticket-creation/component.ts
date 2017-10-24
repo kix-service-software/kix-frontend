@@ -34,6 +34,10 @@ class TicketCreationDialogComponent {
         this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
         this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
 
+        if (reduxState.createTicketSuccessful && reduxState.createdTicketId) {
+            this.state.ticketCreated = true;
+            this.state.ticketId = reduxState.createdTicketId;
+        }
         // handle Ticket Created
         // ClientStorageHandler.deleteState('TicketCreationDialog');
         // if (closeDialog) {

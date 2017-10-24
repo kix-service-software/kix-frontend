@@ -18,7 +18,12 @@ class ActionHandler {
                 state = { ...state, createTicketInProcess: true };
                 break;
             case TicketCreationProcessAction.CREATE_TICKET + FULFILLED:
-                state = { ...state, createTicketInProcess: false };
+                state = {
+                    ...state,
+                    createTicketInProcess: false,
+                    createdTicketId: action.payload.ticketId,
+                    createTicketSuccessful: true
+                };
                 break;
 
             case TicketCreationProcessAction.RESET_TICKET_CREATION + PENDING:

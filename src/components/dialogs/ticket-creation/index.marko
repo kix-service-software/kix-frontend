@@ -1,4 +1,5 @@
-<if(state.ticketCreationInProcess)>Ticket wird erstellt ...</if>
+<if(state.ticketCreated)>Ticket wurde erfolgreich erstellt. ${state.ticketId}</if>
+<else-if(state.ticketCreationInProcess)>Ticket wird erstellt ...</else-if>
 <else-if(state.resetTicketCreationInProcess)>Formular wird zurückgesetzt</else-if>
 <else>
     <div.create-form>

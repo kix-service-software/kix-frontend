@@ -25,19 +25,26 @@ export class TicketCreationSocketListener extends SocketListener {
         this.initConfigurationSocketListener();
     }
 
-    public createTicket(
+    public async createTicket(
         subject: string, customerUser: string, customerId: string, stateId: number, priorityId: number,
         queueId: number, typeId: number, serviceId: number, slaId: number, ownerId: number, responsibleId: number,
         pendingTime: number, description: string, dynamicFields: DynamicField[]
-    ): void {
+    ): Promise<number> {
+        return new Promise<number>((resolve, reject) => {
+            const token = ClientStorageHandler.getToken();
+            const request = new TicketCreationRequest(
+                token, subject, customerUser, customerId, stateId, priorityId, queueId, typeId,
+                serviceId, slaId, ownerId, responsibleId, pendingTime, description, dynamicFields
+            );
 
-        const token = ClientStorageHandler.getToken();
-        const request = new TicketCreationRequest(
-            token, subject, customerUser, customerId, stateId, priorityId, queueId, typeId,
-            serviceId, slaId, ownerId, responsibleId, pendingTime, description, dynamicFields
-        );
+            this.ticketCreationSocket.emit(TicketCreationEvent.CREATE_TICKET, request);
 
-        this.ticketCreationSocket.emit(TicketCreationEvent.CREATE_TICKET, request);
+            // TODO: error handling and timeout
+            this.ticketCreationSocket.on(TicketCreationEvent.TICKET_CREATED, (result: TicketCreationResponse) => {
+                resolve(result.ticketId);
+            });
+        });
+
     }
 
     public loadTicketData(): void {

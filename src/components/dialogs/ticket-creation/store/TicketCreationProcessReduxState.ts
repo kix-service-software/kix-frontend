@@ -18,6 +18,9 @@ export class TicketCreationProcessReduxState {
     public queues: any[] = []; // TODO: queue model
     public user: User[] = [];
 
+    public createTicketSuccessful: boolean = false;
+    public createdTicketId: number = null;
+
     // Loading triggers
     public loadTicketData: boolean = true;
     public userSearchInProgress: boolean = false;
