@@ -17,7 +17,7 @@ class EditorComponent {
     }
 
     public onInput(input: any): void {
-        if (input.value && input.value === this.state.value) {
+        if (input.value && input.value !== this.state.value) {
             this.state.value = input.value || '';
             if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
@@ -56,7 +56,8 @@ class EditorComponent {
         // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
         // - siehe bei Notes-Sidebar (toggleEditMode))
         CKEDITOR.instances[this.state.id].on('blur', (event) => {
-            (this as any).emit('valueChanged', event.editor.getData());
+            this.state.value = event.editor.getData();
+            (this as any).emit('valueChanged', this.state.value);
         });
 
         // TODO: maybe not necessary
