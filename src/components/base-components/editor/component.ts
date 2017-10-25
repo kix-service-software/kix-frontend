@@ -41,9 +41,14 @@ class EditorComponent {
                 ...this.state.config
             });
         }
+
+        // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
+        // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
+        // - siehe bei Notes-Sidebar (toggleEditMode))
         CKEDITOR.instances[this.state.id].on('blur', (event) => {
             (this as any).emit('valueChanged', event.editor.getData());
         });
+
         // TODO: maybe not necessary
         (this as any).emit('editorInitialized', this.state.id);
     }
