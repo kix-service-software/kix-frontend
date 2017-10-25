@@ -19,13 +19,19 @@ class TicketCreationDialogComponent {
     }
 
     public onMount(): void {
-        console.log("onMount dialog");
+        const existingState = ClientStorageHandler.loadState('TicketCreationDialog');
+
         this.store = CreationTicketStore.getInstance().getStore();
         this.store.subscribe(this.stateChanged.bind(this));
 
-        this.store.dispatch(INITIALIZE()).then(() => {
-            this.dispatchLoadTicketData();
-        });
+        if (existingState && !confirm('Es existiert ein Entwurf im Zwischenspeicher. Soll dieser geladen werden')) {
+            ClientStorageHandler.deleteState('TicketCreationDialog');
+            this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
+                this.initializeState();
+            });
+        } else {
+            this.initializeState();
+        }
     }
 
     public onInput(input: any) {
@@ -59,6 +65,12 @@ class TicketCreationDialogComponent {
         const ticketState: TicketCreationReduxState = this.store.getState().ticketState;
         const processState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
         this.store.dispatch(CREATE_TICKET(processState, ticketState));
+    }
+
+    private initializeState(): void {
+        this.store.dispatch(INITIALIZE()).then(() => {
+            this.dispatchLoadTicketData();
+        });
     }
 
     private dispatchLoadTicketData(): void {

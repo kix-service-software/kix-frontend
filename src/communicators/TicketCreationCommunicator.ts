@@ -27,7 +27,7 @@ export class TicketCreationCommunicator extends KIXCommunicator {
 
             const ticket = new CreateTicket(
                 data.subject, data.customerUser, data.customerId, data.stateId, data.priorityId,
-                data.queueId, 1, data.typeId, data.serviceId, data.slaId, data.ownerId,
+                data.queueId, null, data.typeId, data.serviceId, data.slaId, data.ownerId,
                 data.responsibleId, data.pendingTime, data.dynamicFields, null
             );
             const ticketId = await this.ticketService.createTicket(data.token, ticket);
