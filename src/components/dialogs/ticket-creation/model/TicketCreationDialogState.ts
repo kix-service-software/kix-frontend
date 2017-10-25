@@ -7,4 +7,6 @@ export class TicketCreationDialogState {
     public ticketCreated: boolean = false;
 
     public ticketId: number = null;
+
+    public createNewObjectAfterFinish: boolean = false;
 }

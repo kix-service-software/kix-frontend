@@ -24,9 +24,12 @@ class TicketCreationDialogComponent {
         this.store.subscribe(this.stateChanged.bind(this));
 
         this.store.dispatch(INITIALIZE()).then(() => {
-            const ticketProcessState = this.store.getState().ticketProcessState;
-            this.store.dispatch(LOAD_TICKET_DATA(ticketProcessState));
+            this.dispatchLoadTicketData();
         });
+    }
+
+    public onInput(input: any) {
+        this.state.createNewObjectAfterFinish = input.createNewObjectAfterFinish;
     }
 
     public stateChanged(): void {
@@ -38,16 +41,29 @@ class TicketCreationDialogComponent {
             this.state.ticketCreated = true;
             this.state.ticketId = reduxState.createdTicketId;
             ClientStorageHandler.deleteState('TicketCreationDialog');
-            this.store.dispatch(RESET_TICKET_CREATION());
-            (this as any).emit('closeDialog');
+            this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
+                this.state = {
+                    ... new TicketCreationDialogState(),
+                    createNewObjectAfterFinish: this.state.createNewObjectAfterFinish
+                };
+
+                if (this.state.createNewObjectAfterFinish) {
+                    this.dispatchLoadTicketData();
+                }
+            });
+            (this as any).emit('finishDialog'); // TODO: Add constant for event to @kix/core
         }
     }
 
     public createTicket(): void {
         const ticketState: TicketCreationReduxState = this.store.getState().ticketState;
         const processState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
-
         this.store.dispatch(CREATE_TICKET(processState, ticketState));
+    }
+
+    private dispatchLoadTicketData(): void {
+        const ticketProcessState = this.store.getState().ticketProcessState;
+        this.store.dispatch(LOAD_TICKET_DATA(ticketProcessState));
     }
 
 }

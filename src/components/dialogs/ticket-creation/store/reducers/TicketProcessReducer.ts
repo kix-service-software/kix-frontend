@@ -30,9 +30,11 @@ class ActionHandler {
             case TicketCreationProcessAction.RESET_TICKET_CREATION + PENDING:
                 state = {
                     ... new TicketCreationProcessReduxState(),
+                    socketListener: state.socketListener,
                     resetTicketCreationInProcess: true,
                 };
                 break;
+
             case TicketCreationProcessAction.RESET_TICKET_CREATION + FULFILLED:
                 state = { ...state, resetTicketCreationInProcess: false };
                 break;

@@ -4,7 +4,13 @@
     </for>
 </ul>
 <if(state.currentDialog)>
+    <span>${state.currentDialog.description}</span>
     <div.create-content>
-        <include(component.getDialogTemplate()) on-closeDialog('closeDialog')/>
+        <include(component.getDialogTemplate()) on-finishDialog('finishDialog')
+            createNewObjectAfterFinish=(!state.closeDialogChecked)/>
     </div>
+    <label>
+        <input type="checkbox" value="closeDailog" checked=state.closeDialogChecked on-click('closeOptionClicked')/>
+        <span>Dialog ${state.currentDialog.name} nach Fertigstellung schließen.</span>
+    </label>
 </if>
