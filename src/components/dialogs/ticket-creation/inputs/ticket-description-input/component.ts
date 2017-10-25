@@ -1,6 +1,6 @@
+import { DESCRIPTION_CHANGED } from '../../store/actions';
 import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { DESCRIPTION_CHANGED } from '../../store/actions';
 
 class TicketDescriptionInput {
 
@@ -25,10 +25,9 @@ class TicketDescriptionInput {
         this.state.description = reduxState.description;
     }
 
-    public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(DESCRIPTION_CHANGED(event.target.value));
+    public valueChanged(newValue: string): void {
+        CreationTicketStore.getInstance().getStore().dispatch(DESCRIPTION_CHANGED(newValue));
     }
-
 }
 
 module.exports = TicketDescriptionInput;
