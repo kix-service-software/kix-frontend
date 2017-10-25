@@ -1,3 +1,4 @@
+import { UsersCommunicator } from './../../../../../communicators/UsersCommunicator';
 import { TicketCreationProcessReduxState } from './../TicketCreationProcessReduxState';
 import { PersonalSettings, ClientStorageHandler } from '@kix/core/dist/model/client';
 import { TicketCreationProcessAction } from '../actions';
@@ -27,7 +28,10 @@ class ActionHandler {
                 break;
 
             case TicketCreationProcessAction.RESET_TICKET_CREATION + PENDING:
-                state = { ...state, resetTicketCreationInProcess: true };
+                state = {
+                    ... new TicketCreationProcessReduxState(),
+                    resetTicketCreationInProcess: true,
+                };
                 break;
             case TicketCreationProcessAction.RESET_TICKET_CREATION + FULFILLED:
                 state = { ...state, resetTicketCreationInProcess: false };

@@ -37,14 +37,10 @@ class TicketCreationDialogComponent {
         if (reduxState.createTicketSuccessful && reduxState.createdTicketId) {
             this.state.ticketCreated = true;
             this.state.ticketId = reduxState.createdTicketId;
+            ClientStorageHandler.deleteState('TicketCreationDialog');
+            this.store.dispatch(RESET_TICKET_CREATION());
+            (this as any).emit('closeDialog');
         }
-        // handle Ticket Created
-        // ClientStorageHandler.deleteState('TicketCreationDialog');
-        // if (closeDialog) {
-        //     (this as any).emit('closeDialog');
-        // } else {
-        //     this.store.dispatch(RESET_TICKET_CREATION());
-        // }
     }
 
     public createTicket(): void {

@@ -1,6 +1,6 @@
 import { TicketCreationReduxState } from '../TicketCreationReduxState';
 import { PersonalSettings, ClientStorageHandler, DynamicField } from '@kix/core/dist/model/client';
-import { TicketCreationDialogAction } from '../actions';
+import { TicketCreationDialogAction, TicketCreationProcessAction } from '../actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
@@ -91,6 +91,10 @@ class ActionHandler {
                 }
 
                 ClientStorageHandler.saveState<TicketCreationReduxState>('TicketCreationDialog', state);
+                break;
+
+            case TicketCreationProcessAction.RESET_TICKET_CREATION + FULFILLED:
+                state = new TicketCreationReduxState();
                 break;
 
             default:
