@@ -4,7 +4,8 @@ export class FAQMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            "modules/faq"
+            "modules/faq",
+            "dialogs/faq-creation",
         ];
     }
 

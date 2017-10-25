@@ -1,7 +1,8 @@
 {
     "extensions": {
         "kix:dialog:creation": {
-            "ticket-creation-dialog": "../../dist/modules/tickets/creation-dialog.extension"
+            "ticket-creation-dialog": "../../dist/modules/tickets/creation-dialog.extension",
+            "faq-creation-dialog": "../../dist/modules/faq/creation-dialog.extension"
         }
     }
 }
