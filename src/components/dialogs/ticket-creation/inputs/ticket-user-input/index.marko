@@ -1,0 +1,11 @@
+<label.form-label>
+    ${input.label}
+    <input class=(state.userInvalid ? "user-invalid" : "") list=state.inputId name=state.inputId type="text"
+        on-blur('valueChanged') tabindex="6" value=state.value/>
+    <datalist id=state.inputId>
+        <for(user in state.users)>
+            <option value=user.UserLogin/>
+        </for>
+    </datalist>
+    <if(state.userSearchInProgress)>Search for user ...</if>
+</label>
