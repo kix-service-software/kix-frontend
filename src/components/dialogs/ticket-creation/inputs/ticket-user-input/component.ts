@@ -1,6 +1,8 @@
+import { TicketsComponentState } from './../../../../modules/tickets/model/TicketsComponentState';
+import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { USER_ID_CHANGED, SEARCH_USER } from '../../store/actions';
+import { USER_ID_CHANGED } from '../../store/actions';
 
 declare var Rx: any;
 
@@ -14,8 +16,6 @@ class TicketUserInput {
             inputId: "user-input-" + Date.now(),
             value: null,
             users: [],
-            userSearched: false,
-            userSearchInProgress: false,
             userInvalid: false
         };
     }
@@ -24,16 +24,20 @@ class TicketUserInput {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         const processState = CreationTicketStore.getInstance().getProcessState();
+        const ticketState = CreationTicketStore.getInstance().getTicketState();
 
-        if (processState.initialized && !this.state.userSearched) {
-            this.state.userSearched = true;
-            CreationTicketStore.getInstance().getStore().dispatch(SEARCH_USER(""));
+        this.state.users = processState.users;
+
+        if (this.state.type === 'owner' && ticketState.ownerId && this.state.users.length) {
+            this.state.value = this.getUserName(ticketState.ownerId);
         }
 
-        this.state.userSearchInProgress = processState.userSearchInProgress;
-        this.state.users = processState.user;
+        if (this.state.type === 'responsible' && ticketState.responsibleId && this.state.users.length) {
+            this.state.value = this.getUserName(ticketState.responsibleId);
+        }
+
     }
 
     public valueChanged(event: any): void {
@@ -45,6 +49,10 @@ class TicketUserInput {
         } else {
             this.state.userInvalid = true;
         }
+    }
+
+    private getUserName(id: number): string {
+        return this.state.users.find((u) => u.UserID === id).UserLogin;
     }
 
 }

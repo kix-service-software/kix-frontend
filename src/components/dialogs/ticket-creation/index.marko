@@ -1,6 +1,12 @@
-<if(state.ticketCreated)>Ticket wurde erfolgreich erstellt. ${state.ticketId}</if>
-<else-if(state.ticketCreationInProcess)>Ticket wird erstellt ...</else-if>
-<else-if(state.resetTicketCreationInProcess)>Formular wird zurückgesetzt</else-if>
+<if(state.ticketCreated)>
+    <div.ticket-info-label>Ticket wurde erfolgreich erstellt. ${state.ticketId}</div>
+</if>
+<else-if(state.ticketCreationInProcess)>
+    <div.ticket-info-label>Ticket wird erstellt ...</div>
+</else-if>
+<else-if(state.resetTicketCreationInProcess)>
+    <div.ticket-info-label>Formular wird zurückgesetzt</div>
+</else-if>
 <else>
     <div.create-form>
         <div.form-group>
