@@ -35,10 +35,12 @@ export class SearchSocketListener extends SocketListener {
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             console.error(error);
+            this.configurationSocket.close();
         });
 
         socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             console.error("Timeout");
+            this.configurationSocket.close();
         });
 
         socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
@@ -48,6 +50,7 @@ export class SearchSocketListener extends SocketListener {
 
         socket.on('error', (error) => {
             console.error(error);
+            this.configurationSocket.close();
         });
     }
 }

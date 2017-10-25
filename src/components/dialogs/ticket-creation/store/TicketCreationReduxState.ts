@@ -3,7 +3,7 @@ export class TicketCreationReduxState {
 
     public customer: string = 'test@kixng.com';
     public customerId: string = 'KIXng';
-    public description: string = '';
+    public description: string = null;
     public dynamicFields: DynamicField[] = [];
     public pendingTime: number = null;
     public priorityId: number = null;

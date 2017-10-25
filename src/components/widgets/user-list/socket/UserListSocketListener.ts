@@ -32,6 +32,7 @@ export class UserListSocketListener extends WidgetSocketListener {
 
     protected handleWidgetSocketError(error: any): void {
         this.store.dispatch(USER_LIST_ERROR(String(error)));
+        this.widgetSocket.close();
     }
 
     protected widgetLoaded(configuration: WidgetConfiguration): void {

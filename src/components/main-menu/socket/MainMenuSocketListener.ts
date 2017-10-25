@@ -28,10 +28,12 @@ export class MainMenuSocketListener extends SocketListener {
 
         this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             console.error(error);
+            this.socket.close();
         });
 
         this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             console.error("Timeout");
+            this.socket.close();
         });
 
         this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
@@ -42,6 +44,7 @@ export class MainMenuSocketListener extends SocketListener {
 
         this.socket.on('error', (error) => {
             console.error(error);
+            this.socket.close();
         });
     }
 }

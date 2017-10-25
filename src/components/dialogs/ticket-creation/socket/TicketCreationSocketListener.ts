@@ -60,6 +60,7 @@ export class TicketCreationSocketListener extends SocketListener {
 
         this.ticketCreationSocket.on('error', (error) => {
             console.error(error);
+            this.ticketCreationSocket.close();
         });
 
         this.ticketCreationSocket.on(TicketCreationEvent.TICKET_CREATED,

@@ -28,10 +28,12 @@ export class PersonalSettingsSocketListener extends SocketListener {
 
         this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             console.error(error);
+            this.socket.close();
         });
 
         this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             console.error("Timeout");
+            this.socket.close();
         });
 
         this.socket.on(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, (response: LoadPersonalSettingsResponse) => {
@@ -40,6 +42,7 @@ export class PersonalSettingsSocketListener extends SocketListener {
 
         this.socket.on('error', (error) => {
             console.error(error);
+            this.socket.close();
         });
     }
 }
