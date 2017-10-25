@@ -52,7 +52,8 @@ class ActionHandler {
                     slas: action.payload.slas,
                     priorities: action.payload.ticketPriorities,
                     states: action.payload.ticketStates,
-                    types: action.payload.ticketTypes
+                    types: action.payload.ticketTypes,
+                    users: action.payload.users
                 };
                 break;
 
@@ -64,7 +65,7 @@ class ActionHandler {
                 state = {
                     ...state,
                     userSearchInProgress: false,
-                    user: action.payload.user
+                    users: action.payload.user
                 };
                 break;
 

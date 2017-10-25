@@ -40,8 +40,16 @@ export class TicketCreationCommunicator extends KIXCommunicator {
             const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token);
             const ticketPriorities = await this.ticketPriorityService.getTicketPriorities(data.token);
 
+            const users = await this.userService.getUsers(data.token);
+            const result: User[] = users.map((u) => {
+                return {
+                    UserID: u.UserID,
+                    UserLogin: u.UserLogin
+                };
+            });
+
             const response = new TicketCreationLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, [], [], []
+                [], ticketStates, ticketTypes, ticketPriorities, [], [], [], users
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);

@@ -53,18 +53,6 @@ export class TicketCreationSocketListener extends SocketListener {
         this.ticketCreationSocket.emit(TicketCreationEvent.LOAD_TICKET_DATA, request);
     }
 
-    public searchUser(value: string): Promise<User[]> {
-        return new Promise<User[]>((resolve, reject) => {
-            const token = ClientStorageHandler.getToken();
-            this.ticketCreationSocket.emit(TicketCreationEvent.SEARCH_USER, new SearchUserRequest(token, value));
-
-            // TODO: Timeout?
-            this.ticketCreationSocket.on(TicketCreationEvent.SEARCH_USER_FINISHED, (result: SearchUserResponse) => {
-                resolve(result.user);
-            });
-        });
-    }
-
     private initConfigurationSocketListener(): void {
         this.ticketCreationSocket.on(SocketEvent.CONNECT, () => {
             //
@@ -93,7 +81,8 @@ export class TicketCreationSocketListener extends SocketListener {
                         result.slas,
                         result.ticketPriorities,
                         result.ticketStates,
-                        result.ticketTypes
+                        result.ticketTypes,
+                        result.users
                     )
                 );
             });

@@ -16,7 +16,7 @@ export class TicketCreationProcessReduxState {
     public types: TicketType[] = [];
     public states: TicketState[] = [];
     public queues: any[] = []; // TODO: queue model
-    public user: User[] = [];
+    public users: User[] = [];
 
     public createTicketSuccessful: boolean = false;
     public createdTicketId: number = null;
