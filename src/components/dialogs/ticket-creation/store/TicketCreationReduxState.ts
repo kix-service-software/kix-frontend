@@ -6,13 +6,13 @@ export class TicketCreationReduxState {
     public description: string = '';
     public dynamicFields: DynamicField[] = [];
     public pendingTime: number = null;
-    public priorityId: number = 0;
+    public priorityId: number = null;
     public queueId: number = 1;
-    public stateId: number = 0;
+    public stateId: number = null;
     public subject: string = null;
-    public typeId: number = 0;
-    public ownerId: number = 1;
-    public responsibleId: number = 1;
+    public typeId: number = null;
+    public ownerId: number = null;
+    public responsibleId: number = null;
     public serviceId: number = null;
     public slaId: number = null;
 

@@ -1,3 +1,4 @@
+import { TicketsComponentState } from './../../../../modules/tickets/model/TicketsComponentState';
 import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
 import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
@@ -24,8 +25,19 @@ class TicketUserInput {
     }
 
     public stateChanged(): void {
-        const processState: TicketCreationProcessReduxState = CreationTicketStore.getInstance().getProcessState();
+        const processState = CreationTicketStore.getInstance().getProcessState();
+        const ticketState = CreationTicketStore.getInstance().getTicketState();
+
         this.state.users = processState.users;
+
+        if (this.state.type === 'owner' && ticketState.ownerId && this.state.users.length) {
+            this.state.value = this.getUserName(ticketState.ownerId);
+        }
+
+        if (this.state.type === 'responsible' && ticketState.responsibleId && this.state.users.length) {
+            this.state.value = this.getUserName(ticketState.responsibleId);
+        }
+
     }
 
     public valueChanged(event: any): void {
@@ -37,6 +49,10 @@ class TicketUserInput {
         } else {
             this.state.userInvalid = true;
         }
+    }
+
+    private getUserName(id: number): string {
+        return this.state.users.find((u) => u.UserID === id).UserLogin;
     }
 
 }
