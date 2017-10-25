@@ -10,6 +10,7 @@ import {
     TicketCreationLoadDataRequest,
     TicketCreationLoadDataResponse,
     TicketState,
+    TicketCreationError,
     User
 } from '@kix/core/dist/model/client';
 import { CreationTicketStore } from '../store/';
@@ -43,6 +44,10 @@ export class TicketCreationSocketListener extends SocketListener {
             this.ticketCreationSocket.on(TicketCreationEvent.TICKET_CREATED, (result: TicketCreationResponse) => {
                 resolve(result.ticketId);
             });
+
+            this.ticketCreationSocket.on(TicketCreationEvent.CREATE_TICKET_FAILED, (error: TicketCreationError) => {
+                reject(error);
+            });
         });
 
     }
@@ -62,11 +67,6 @@ export class TicketCreationSocketListener extends SocketListener {
             console.error(error);
             this.ticketCreationSocket.close();
         });
-
-        this.ticketCreationSocket.on(TicketCreationEvent.TICKET_CREATED,
-            (result: TicketCreationResponse) => {
-                //
-            });
 
         this.registerLoadDataEvents();
     }

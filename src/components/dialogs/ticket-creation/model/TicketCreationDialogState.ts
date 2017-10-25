@@ -1,5 +1,7 @@
 export class TicketCreationDialogState {
 
+    public error: any = null;
+
     public ticketCreationInProcess: boolean = false;
 
     public resetTicketCreationInProcess: boolean = false;

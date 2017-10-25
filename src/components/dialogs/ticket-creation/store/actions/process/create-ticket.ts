@@ -14,7 +14,9 @@ export default (processState: TicketCreationProcessReduxState, ticketState: Tick
             ticketState.priorityId, ticketState.queueId, ticketState.typeId, ticketState.serviceId,
             ticketState.slaId, ticketState.ownerId, ticketState.responsibleId, ticketState.pendingTime,
             ticketState.description, ticketState.dynamicFields
-        );
+        ).catch((error) => {
+            reject({ error });
+        });
 
         resolve({ ticketId });
     });

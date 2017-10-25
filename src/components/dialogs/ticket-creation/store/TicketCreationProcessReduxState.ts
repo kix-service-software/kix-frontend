@@ -1,7 +1,9 @@
-import { TicketState, TicketType, User, TicketPriority } from '@kix/core/dist/model/client';
+import { TicketState, TicketType, User, TicketPriority, TicketCreationError } from '@kix/core/dist/model/client';
 import { TicketCreationSocketListener } from './../socket/TicketCreationSocketListener';
 
 export class TicketCreationProcessReduxState {
+
+    public error: TicketCreationError = null;
 
     public initialized: boolean = false;
     public socketListener: TicketCreationSocketListener;
