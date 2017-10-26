@@ -57,7 +57,11 @@ class EditorComponent {
     }
 
     /**
+<<<<<<< HEAD
      * Checks if editor is ready (with timeout recursion), but stops on 10 attempts
+=======
+     * Does given function when editor is ready (timeout recursion), but stops on 10 attempts
+>>>>>>> 68be3a6d0600e005009a346eead104ec63cfbdf2
      *
      * @param retryCount optional - number of attempts (default: starts with 1)
      *
