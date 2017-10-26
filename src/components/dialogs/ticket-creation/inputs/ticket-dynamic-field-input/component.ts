@@ -15,6 +15,7 @@ class TicketDynamicFieldInput {
 
     public onMount(): void {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        this.setStoreData();
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
