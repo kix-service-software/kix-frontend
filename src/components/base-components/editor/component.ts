@@ -19,13 +19,13 @@ class EditorComponent {
     public onInput(input: any): void {
         if (input.value && input.value !== this.state.value) {
             this.state.value = input.value || '';
-            this.doIfEditorReady(() => {
+            this.doIfEditorIsReady(() => {
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
             });
         }
         if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
             this.state.readOnly = input.readOnly;
-            this.doIfEditorReady(() => {
+            this.doIfEditorIsReady(() => {
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
             });
         }
@@ -62,7 +62,7 @@ class EditorComponent {
      *
      * @return nothing
      */
-    private doIfEditorReady(whatToDo: () => void, retryCount?: number): void {
+    private doIfEditorIsReady(whatToDo: () => void, retryCount?: number): void {
         if (!retryCount) {
             retryCount = 1;
         }
@@ -74,7 +74,7 @@ class EditorComponent {
         } else {
             if (retryCount < 10) {
                 setTimeout(() => {
-                    this.doIfEditorReady(whatToDo, ++retryCount);
+                    this.doIfEditorIsReady(whatToDo, ++retryCount);
                 }, retryCount * 100);    // wait a while longer each iteration
             } else {
                 return;
