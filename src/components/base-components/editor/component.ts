@@ -16,18 +16,23 @@ class EditorComponent {
         this.state.value = input.value || '';
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         if (input.value && input.value !== this.state.value) {
             this.state.value = input.value || '';
-            this.doIfEditorIsReady(() => {
+            if (await this.isEditorReady()) {
+                console.log('und.....?');
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
-            });
+            }
+            // await this.isEditorReady().then(() => {
+            //     console.log('und.....?');
+            //     CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
+            // });
         }
         if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
             this.state.readOnly = input.readOnly;
-            this.doIfEditorIsReady(() => {
+            if (await this.isEditorReady()) {
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
-            });
+            }
         }
     }
 
@@ -49,38 +54,35 @@ class EditorComponent {
             this.state.value = event.editor.getData();
             (this as any).emit('valueChanged', this.state.value);
         });
-
-        // TODO: maybe not necessary
-        (this as any).emit('editorInitialized', this.state.id);
     }
 
     /**
-     * Does given function when editor is read (timeout iteration), but stops on 10 attempts
+     * Checks if editor is ready (with timeout recursion), but stops on 10 attempts
      *
-     * @param whatToDo the function which should be done
      * @param retryCount optional - number of attempts (default: starts with 1)
      *
-     * @return nothing
+     * @return boolean (promise)
      */
-    private doIfEditorIsReady(whatToDo: () => void, retryCount?: number): void {
+    private async isEditorReady(retryCount?: number): Promise<boolean> {
         if (!retryCount) {
             retryCount = 1;
         }
-        if (CKEDITOR.instances &&
-            CKEDITOR.instances[this.state.id] &&
-            CKEDITOR.instances[this.state.id].status === 'ready'
-        ) {
-            whatToDo();
-        } else {
-            if (retryCount < 10) {
+        return new Promise<boolean>((resolve) => {
+            if (CKEDITOR.instances &&
+                CKEDITOR.instances[this.state.id] &&
+                CKEDITOR.instances[this.state.id].status === 'ready'
+            ) {
+                resolve(true);
+            } else if (retryCount < 10) {
                 setTimeout(() => {
-                    this.doIfEditorIsReady(whatToDo, ++retryCount);
-                }, retryCount * 100);    // wait a while longer each iteration
+                    resolve(this.isEditorReady(++retryCount));
+                }, 200);
             } else {
-                return;
+                resolve(false);
             }
-        }
+        });
     }
+
 }
 
 module.exports = EditorComponent;
