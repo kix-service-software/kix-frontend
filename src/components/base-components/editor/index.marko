@@ -1,4 +1,4 @@
-<div.editor-container key="${state.id}-container" no-update>
+<div.editor-container class=(data.inline ? "editor-inline" : "") key="${state.id}-container" no-update>
     <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
     <div id=state.id key="${state.id}" contenteditable="true">$!{data.value}</div>
 </div>

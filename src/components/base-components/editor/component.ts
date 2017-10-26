@@ -19,36 +19,26 @@ class EditorComponent {
     public onInput(input: any): void {
         if (input.value && input.value !== this.state.value) {
             this.state.value = input.value || '';
-            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+            this.doIfEditorReady(() => {
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
-            }
+            });
         }
         if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
             this.state.readOnly = input.readOnly;
-            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+            this.doIfEditorReady(() => {
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
-            }
+            });
         }
     }
 
     public onMount(): void {
         if (this.state.inline) {
             CKEDITOR.inline(this.state.id, {
-                ...this.state.config,
-                on: {
-                    instanceReady: (evt) => {
-                        this.state.ready = true;
-                    }
-                }
+                ...this.state.config
             });
         } else {
             CKEDITOR.replace(this.state.id, {
-                ...this.state.config,
-                on: {
-                    instanceReady: (evt) => {
-                        this.state.ready = true;
-                    }
-                }
+                ...this.state.config
             });
         }
 
@@ -62,6 +52,34 @@ class EditorComponent {
 
         // TODO: maybe not necessary
         (this as any).emit('editorInitialized', this.state.id);
+    }
+
+    /**
+     * Does given function when editor is read (timeout iteration), but stops on 10 attempts
+     *
+     * @param whatToDo the function which should be done
+     * @param retryCount optional - number of attempts (default: starts with 1)
+     *
+     * @return nothing
+     */
+    private doIfEditorReady(whatToDo: () => void, retryCount?: number): void {
+        if (!retryCount) {
+            retryCount = 1;
+        }
+        if (CKEDITOR.instances &&
+            CKEDITOR.instances[this.state.id] &&
+            CKEDITOR.instances[this.state.id].status === 'ready'
+        ) {
+            whatToDo();
+        } else {
+            if (retryCount < 10) {
+                setTimeout(() => {
+                    this.doIfEditorReady(whatToDo, ++retryCount);
+                }, retryCount * 100);    // wait a while longer each iteration
+            } else {
+                return;
+            }
+        }
     }
 }
 

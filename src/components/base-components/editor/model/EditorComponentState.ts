@@ -5,7 +5,6 @@ export class EditorComponentState {
     public inline: boolean = false;
     public readOnly: boolean = false;
     public config: object = {};
-    public ready: boolean = false;
 
     /**
      * @param inline optional - boolean if toolbar is an inline element (only visible if text field is focused),
