@@ -43,6 +43,8 @@ class TicketCreationDialogComponent {
         this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
         this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
 
+        this.state.loadData = reduxState.loadTicketData;
+
         this.state.error = reduxState.error;
 
         if (reduxState.createTicketSuccessful && reduxState.createdTicketId) {

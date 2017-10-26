@@ -7,6 +7,9 @@
 <else-if(state.resetTicketCreationInProcess)>
     <div.ticket-info-label>Formular wird zurückgesetzt</div>
 </else-if>
+<else-if(state.loadData)>
+    <div.ticket-info-label>Ticketdaten werden geladen ...</div>
+</else-if>
 <else>
     <div>
         <sidebar/>

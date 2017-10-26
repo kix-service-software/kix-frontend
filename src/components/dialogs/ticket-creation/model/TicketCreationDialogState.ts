@@ -11,4 +11,6 @@ export class TicketCreationDialogState {
     public ticketId: number = null;
 
     public createNewObjectAfterFinish: boolean = false;
+
+    public loadData: boolean = true;
 }

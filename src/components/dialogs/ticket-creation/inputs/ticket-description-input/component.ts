@@ -14,19 +14,20 @@ class TicketDescriptionInput {
 
     public onMount(): void {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.description = reduxState.description;
+        this.setStoreData();
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.description = reduxState.description;
+        this.setStoreData();
     }
 
     public valueChanged(newValue: string): void {
         CreationTicketStore.getInstance().getStore().dispatch(DESCRIPTION_CHANGED(newValue));
+    }
+
+    private setStoreData(): void {
+        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        this.state.description = reduxState.description;
     }
 }
 

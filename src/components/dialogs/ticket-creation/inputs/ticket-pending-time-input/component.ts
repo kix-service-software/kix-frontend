@@ -14,19 +14,20 @@ class TicketPendingTimeInput {
 
     public onMount(): void {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.pendingTime = reduxState.pendingTime;
+        this.setStoreData();
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.pendingTime = reduxState.pendingTime;
+        this.setStoreData();
     }
 
     public valueChanged(event: any): void {
         CreationTicketStore.getInstance().getStore().dispatch(PENDING_TIME_CHANGED(event.target.value));
+    }
+
+    private setStoreData(): void {
+        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        this.state.pendingTime = reduxState.pendingTime;
     }
 
 }

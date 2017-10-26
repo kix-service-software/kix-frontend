@@ -14,19 +14,20 @@ class TicketServiceInput {
 
     public onMount(): void {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.slaId = reduxState.slaId;
+        this.setStoreData();
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.slaId = reduxState.slaId;
+        this.setStoreData();
     }
 
     public valueChanged(event: any): void {
         CreationTicketStore.getInstance().getStore().dispatch(SLA_ID_CHANGED(event.target.value));
+    }
+
+    private setStoreData(): void {
+        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        this.state.slaId = reduxState.slaId;
     }
 
 }
