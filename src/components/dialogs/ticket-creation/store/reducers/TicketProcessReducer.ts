@@ -5,6 +5,7 @@ import { TicketCreationProcessAction } from '../actions';
 
 const PENDING = '_PENDING';
 const FULFILLED = '_FULFILLED';
+const REJECTED = '_REJECTED';
 
 class ActionHandler {
 
@@ -12,7 +13,7 @@ class ActionHandler {
         switch (action.type) {
 
             case TicketCreationProcessAction.INITIALIZE + FULFILLED:
-                state = { ...state, initialized: true, socketListener: action.payload.socketListener };
+                state = { ...state, initialized: true, error: null, socketListener: action.payload.socketListener };
                 break;
 
             case TicketCreationProcessAction.CREATE_TICKET + PENDING:
@@ -24,6 +25,14 @@ class ActionHandler {
                     createTicketInProcess: false,
                     createdTicketId: action.payload.ticketId,
                     createTicketSuccessful: true
+                };
+                break;
+            case TicketCreationProcessAction.CREATE_TICKET + REJECTED:
+                state = {
+                    ...state,
+                    createTicketInProcess: false,
+                    createTicketSuccessful: false,
+                    error: action.payload.error
                 };
                 break;
 

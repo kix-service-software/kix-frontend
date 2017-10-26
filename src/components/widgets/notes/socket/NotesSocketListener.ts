@@ -12,6 +12,7 @@ export class NotesSocketListener extends WidgetSocketListener {
     protected handleWidgetSocketError(error: any): void {
         // TODO: Error Handling
         console.error(error);
+        this.widgetSocket.close();
     }
 
     protected widgetLoaded(configuration: WidgetConfiguration): void {

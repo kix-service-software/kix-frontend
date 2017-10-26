@@ -1,7 +1,8 @@
 import { TicketCreationProcessReduxState } from './store/TicketCreationProcessReduxState';
-import { CreationTicketStore } from './store/index';
-import { ClientStorageHandler } from '@kix/core/dist/model/client';
+import { CreationTicketStore, STATE_ID } from './store/index';
+import { ClientStorageHandler, TranslationHandler, CreationDialogComponentEvent } from '@kix/core/dist/model/client';
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
+import { TranslationId } from './model/TranslationId';
 import { TicketCreationReduxState } from './store/TicketCreationReduxState';
 import { INITIALIZE, CREATE_TICKET, RESET_TICKET_CREATION, LOAD_TICKET_DATA } from './store/actions';
 
@@ -18,14 +19,17 @@ class TicketCreationDialogComponent {
         this.closeDialogAfterSuccess = true;
     }
 
-    public onMount(): void {
-        const existingState = ClientStorageHandler.loadState('TicketCreationDialog');
+    public async onMount(): Promise<void> {
+        const existingState = ClientStorageHandler.loadState(STATE_ID);
 
         this.store = CreationTicketStore.getInstance().getStore();
         this.store.subscribe(this.stateChanged.bind(this));
 
-        if (existingState && !confirm('Es existiert ein Entwurf im Zwischenspeicher. Soll dieser geladen werden')) {
-            ClientStorageHandler.deleteState('TicketCreationDialog');
+        const translationHandler = await TranslationHandler.getInstance();
+        const questionString = translationHandler.getTranslation(TranslationId.LOAD_DRAFT_QUESTION);
+
+        if (existingState && !confirm(questionString)) {
+            ClientStorageHandler.deleteState(STATE_ID);
             this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
                 this.initializeState();
             });
@@ -43,10 +47,14 @@ class TicketCreationDialogComponent {
         this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
         this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
 
+        this.state.loadData = reduxState.loadTicketData;
+
+        this.state.error = reduxState.error;
+
         if (reduxState.createTicketSuccessful && reduxState.createdTicketId) {
             this.state.ticketCreated = true;
             this.state.ticketId = reduxState.createdTicketId;
-            ClientStorageHandler.deleteState('TicketCreationDialog');
+            ClientStorageHandler.deleteState(STATE_ID);
             this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
                 this.state = {
                     ... new TicketCreationDialogState(),
@@ -57,7 +65,7 @@ class TicketCreationDialogComponent {
                     this.dispatchLoadTicketData();
                 }
             });
-            (this as any).emit('finishDialog'); // TODO: Add constant for event to @kix/core
+            (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
         }
     }
 

@@ -35,10 +35,12 @@ export class DashboardSocketListener extends SocketListener {
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             console.error(error);
+            this.configurationSocket.close();
         });
 
         socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             console.error("Timeout");
+            this.configurationSocket.close();
         });
 
         socket.on(DashboardEvent.DASHBOARD_LOADED,
@@ -50,6 +52,7 @@ export class DashboardSocketListener extends SocketListener {
 
         socket.on('error', (error) => {
             console.error(error);
+            this.configurationSocket.close();
         });
     }
 }

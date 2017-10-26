@@ -38,6 +38,7 @@ export class SidebarSocketListener extends SocketListener {
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
             this.store.dispatch(SIDEBAR_ERROR(String(error)));
+            this.configurationSocket.close();
         });
 
         socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
@@ -46,6 +47,7 @@ export class SidebarSocketListener extends SocketListener {
 
         socket.on('error', (error) => {
             this.store.dispatch(SIDEBAR_ERROR(String(error)));
+            this.configurationSocket.close();
         });
 
         socket.on(SidebarEvent.SIDEBAR_LOADED,

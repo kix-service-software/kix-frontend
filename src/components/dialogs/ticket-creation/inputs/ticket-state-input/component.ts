@@ -10,8 +10,7 @@ class TicketStateInput {
     public onCreate(input: any): void {
         this.state = {
             stateId: null,
-            ticketStates: [],
-            loading: true
+            ticketStates: []
         };
     }
 
@@ -23,20 +22,19 @@ class TicketStateInput {
     }
 
     public stateChanged(state: TicketCreationReduxState): void {
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.stateId = reduxState.stateId;
-
-        const processState: TicketCreationProcessReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketProcessState;
-
-        this.state.ticketStates = processState.states;
-
-        this.state.loading = processState.loadTicketData;
+        this.setStoreData();
     }
 
     public valueChanged(event: any): void {
         CreationTicketStore.getInstance().getStore().dispatch(STATE_ID_CHANGED(event.target.value));
+    }
+
+    private setStoreData(): void {
+        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        const processState: TicketCreationProcessReduxState = CreationTicketStore.getInstance().getProcessState();
+
+        this.state.stateId = reduxState.stateId;
+        this.state.ticketStates = processState.states;
     }
 
 }

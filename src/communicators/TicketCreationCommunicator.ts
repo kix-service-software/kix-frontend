@@ -9,6 +9,7 @@ import {
     TicketCreationLoadDataRequest,
     TicketCreationLoadDataResponse,
     TicketState,
+    TicketCreationError,
     User
 } from '@kix/core';
 import { KIXCommunicator } from './KIXCommunicator';
@@ -30,22 +31,33 @@ export class TicketCreationCommunicator extends KIXCommunicator {
                 data.queueId, null, data.typeId, data.serviceId, data.slaId, data.ownerId,
                 data.responsibleId, data.pendingTime, data.dynamicFields, null
             );
-            const ticketId = await this.ticketService.createTicket(data.token, ticket);
 
-            client.emit(TicketCreationEvent.TICKET_CREATED, new TicketCreationResponse(ticketId));
+            this.ticketService.createTicket(data.token, ticket)
+                .then((ticketId: number) => {
+                    client.emit(TicketCreationEvent.TICKET_CREATED, new TicketCreationResponse(ticketId));
+                })
+                .catch((error) => {
+                    const creationError = new TicketCreationError(error.errorMessage.body);
+                    client.emit(TicketCreationEvent.CREATE_TICKET_FAILED, creationError);
+                });
         });
 
         client.on(TicketCreationEvent.LOAD_TICKET_DATA, async (data: TicketCreationLoadDataRequest) => {
-            const ticketStates = await this.ticketStateService.getTicketStates(data.token);
-            const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token);
-            const ticketPriorities = await this.ticketPriorityService.getTicketPriorities(data.token);
+            const ticketStates = await this.ticketStateService.getTicketStates(data.token, null, null, null, {
+                fields: 'TicketState.ID,TicketState.Name'
+            });
 
-            const users = await this.userService.getUsers(data.token);
-            const result: User[] = users.map((u) => {
-                return {
-                    UserID: u.UserID,
-                    UserLogin: u.UserLogin
-                };
+            const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token, null, null, null, {
+                fields: 'TicketType.ID,TicketType.Name'
+            });
+
+            const ticketPriorities =
+                await this.ticketPriorityService.getTicketPriorities(data.token, null, null, null, {
+                    fields: 'Priority.ID,Priority.Name'
+                });
+
+            const users = await this.userService.getUsers(data.token, {
+                fields: 'User.UserLogin,User.UserID'
             });
 
             const response = new TicketCreationLoadDataResponse(

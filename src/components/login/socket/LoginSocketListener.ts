@@ -37,10 +37,12 @@ export class LoginSocketListener extends SocketListener {
 
         this.authenticationSocket.on(SocketEvent.CONNECT_ERROR, (error) => {
             this.store.dispatch(LOGIN_ERROR('Connection to socket server failed. ' + JSON.stringify(error)));
+            this.authenticationSocket.close();
         });
 
         this.authenticationSocket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             this.store.dispatch(LOGIN_ERROR('Connection to socket server timeout.'));
+            this.authenticationSocket.close();
         });
 
         this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
@@ -54,6 +56,7 @@ export class LoginSocketListener extends SocketListener {
 
         this.authenticationSocket.on('error', (error) => {
             this.store.dispatch(LOGIN_ERROR(error));
+            this.authenticationSocket.close();
         });
     }
 }

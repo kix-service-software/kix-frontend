@@ -1,5 +1,7 @@
 export class TicketCreationDialogState {
 
+    public error: any = null;
+
     public ticketCreationInProcess: boolean = false;
 
     public resetTicketCreationInProcess: boolean = false;
@@ -9,4 +11,6 @@ export class TicketCreationDialogState {
     public ticketId: number = null;
 
     public createNewObjectAfterFinish: boolean = false;
+
+    public loadData: boolean = true;
 }
