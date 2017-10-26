@@ -44,7 +44,7 @@ class LoginFormComponent {
         this.store.dispatch(LOGIN_INITIALIZE());
 
         const translationHandler = await TranslationHandler.getInstance();
-        this.state.translations = await translationHandler.getTranslations([
+        this.state.translations = translationHandler.getTranslations([
             LoginTranslationId.BUTTON_LABEL,
             LoginTranslationId.PASSWORD,
             LoginTranslationId.USERNAME,

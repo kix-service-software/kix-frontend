@@ -10,7 +10,7 @@ import ticketProcessState from './reducers/TicketProcessReducer';
 
 export { TicketCreationReduxState } from './TicketCreationReduxState';
 
-const STATE_ID = 'TicketCreationDialog';
+export const STATE_ID = 'TicketCreationDialog';
 
 export class CreationTicketStore {
 
