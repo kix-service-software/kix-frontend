@@ -1,3 +1,4 @@
+import { CreateArticle } from '@kix/core/dist';
 import {
     SocketEvent,
     SearchUserRequest,
@@ -26,10 +27,12 @@ export class TicketCreationCommunicator extends KIXCommunicator {
     private registerEvents(client: SocketIO.Socket): void {
         client.on(TicketCreationEvent.CREATE_TICKET, async (data: TicketCreationRequest) => {
 
+            const article = new CreateArticle(data.subject, data.description, null, 'text/html', 'utf8');
+
             const ticket = new CreateTicket(
                 data.subject, data.customerUser, data.customerId, data.stateId, data.priorityId,
                 data.queueId, null, data.typeId, data.serviceId, data.slaId, data.ownerId,
-                data.responsibleId, data.pendingTime, data.dynamicFields, null
+                data.responsibleId, data.pendingTime, data.dynamicFields, [article]
             );
 
             this.ticketService.createTicket(data.token, ticket)
