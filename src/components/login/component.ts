@@ -10,6 +10,8 @@ import {
     LOGIN_AUTH
 } from './store/actions';
 
+// tslint:disable-next-line:no-var-requires
+require('babel-polyfill');
 
 class LoginFormComponent {
 
