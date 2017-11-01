@@ -1,4 +1,4 @@
-import { IWidget } from '@kix/core';
+import { IWidget, WidgetSize } from '@kix/core';
 
 export class SearchTemplatesWidget implements IWidget {
 
@@ -8,8 +8,9 @@ export class SearchTemplatesWidget implements IWidget {
 
     public show: boolean = true;
 
+    public size: WidgetSize.SMALL;
+
     public constructor(id: string) {
         this.id = id;
     }
-
 }
