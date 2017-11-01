@@ -17,6 +17,15 @@
         </div>
     </if>
 </div>
+<if(state.configurationMode)>
+    <div.static-sidebar>
+        <div.configOberlay>
+            Hier könnte Ihre Beschreibung stehen ;)
+            <button>Konfigurations-Einstellungen</button>
+            <button>Konfiguration beenden</button>
+        </div>
+    </div>
+</if>
 <if(state.configuration && component.hasWidgetsToShow())>
     <div.sidebar key="sidebar">
         <for(widget in state.configuration.widgets)>
@@ -31,7 +40,13 @@
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
                         configurationMode: state.configurationMode
-                    }) key=widget.instanceId/>
+                    }) key=widget.instanceId>
+                        <@dragoverlay>
+                            <if(state.configurationMode)>
+                                <div.drag-overlay class="${data.drop ? 'drop-element' : ''}" data-id="${data.data_id ? data.data_id : ''}"/>
+                            </if>
+                        </@dragoverlay>
+                    </include>
                 </div>
             </if>
         </for>
