@@ -1,55 +1,51 @@
 import 'reflect-metadata';
-import { Container } from 'inversify';
-import { Server } from './Server';
-
-import { AuthenticationCommunicator } from './communicators/';
-
-import {
-    ApplicationRouter,
-    AuthenticationRouter
-} from './routes/';
 
 import {
     IArticleTypeService,
+    IAuthenticationService,
     ICommunicator,
-    IRouter,
-    KIXExtensions,
-    IRouterExtension,
     ICommunicatorExtension,
     IConfigurationService,
-    IAuthenticationService,
     IGroupService,
     IHttpService,
+    ILoggingService,
     IMarkoService,
     IPluginService,
-    ILoggingService,
-    IUserService,
+    IRoleService,
+    IRouter,
+    IRouterExtension,
     ISocketCommunicationService,
     ITicketPriorityService,
+    ITicketService,
     ITicketStateService,
     ITicketTypeService,
-    ITicketService,
     ITranslationService,
-    IValidObjectService
+    IUserService,
+    IValidObjectService,
+    KIXExtensions,
 } from '@kix/core';
+import { Container } from 'inversify';
 
+import { ApplicationRouter, AuthenticationRouter } from './routes/';
+import { Server } from './Server';
 import {
     ArticleTypeService,
-    UserService,
-    HttpService,
     AuthenticationService,
-    GroupService,
-    MarkoService,
-    LoggingService,
-    SocketCommunicationService,
-    PluginService,
     ConfigurationService,
+    GroupService,
+    HttpService,
+    LoggingService,
+    MarkoService,
+    PluginService,
+    RoleService,
+    SocketCommunicationService,
     TicketPriorityService,
+    TicketService,
     TicketStateService,
     TicketTypeService,
-    TicketService,
     TranslationService,
-    ValidObjectService
+    UserService,
+    ValidObjectService,
 } from './services/';
 
 export class ServiceContainer {
@@ -94,6 +90,7 @@ export class ServiceContainer {
         this.container.bind<ITranslationService>("ITranslationService").to(TranslationService);
         this.container.bind<IGroupService>("IGroupService").to(GroupService);
         this.container.bind<IArticleTypeService>("IArticleTypeService").to(ArticleTypeService);
+        this.container.bind<IRoleService>("IRoleService").to(RoleService);
     }
 
     private async bindRouters(): Promise<void> {
