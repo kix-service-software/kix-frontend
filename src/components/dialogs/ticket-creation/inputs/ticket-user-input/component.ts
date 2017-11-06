@@ -4,8 +4,6 @@ import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
 import { USER_ID_CHANGED } from '../../store/actions';
 
-declare var Rx: any;
-
 class TicketUserInput {
 
     public state: any;
