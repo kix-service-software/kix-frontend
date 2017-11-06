@@ -16,16 +16,16 @@ class EditorComponent {
         this.state.value = input.value || '';
     }
 
-    public onInput(input: any): void {
-        if (input.value) {
+    public async onInput(input: any): Promise<void> {
+        if (input.value && input.value !== this.state.value) {
             this.state.value = input.value || '';
-            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+            if (await this.isEditorReady()) {
                 CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
             }
         }
-        if (this.state.readOnly !== input.readOnly) {
-            this.state.readOnly = input.readOnly || false;
-            if (CKEDITOR.instances && CKEDITOR.instances[this.state.id]) {
+        if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
+            this.state.readOnly = input.readOnly;
+            if (await this.isEditorReady()) {
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
             }
         }
@@ -41,12 +41,40 @@ class EditorComponent {
                 ...this.state.config
             });
         }
+
+        // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
+        // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
+        // - siehe bei Notes-Sidebar (toggleEditMode))
         CKEDITOR.instances[this.state.id].on('blur', (event) => {
-            (this as any).emit('valueChanged', event.editor.getData());
+            this.state.value = event.editor.getData();
+            (this as any).emit('valueChanged', this.state.value);
         });
-        // TODO: maybe not necessary
-        (this as any).emit('editorInitialized', this.state.id);
     }
+
+    /**
+     * Checks if editor is ready (with timeout recursion), stops after 10 attempts
+     *
+     * @param retryCount optional - number of attempts (default: starts with 1)
+     *
+     * @return boolean (promise)
+     */
+    private async isEditorReady(retryCount: number = 1): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            if (CKEDITOR.instances &&
+                CKEDITOR.instances[this.state.id] &&
+                CKEDITOR.instances[this.state.id].status === 'ready'
+            ) {
+                resolve(true);
+            } else if (retryCount < 10) {
+                setTimeout(() => {
+                    resolve(this.isEditorReady(++retryCount));
+                }, 200);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+
 }
 
 module.exports = EditorComponent;

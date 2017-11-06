@@ -1,6 +1,9 @@
 import { ClientStorageHandler, SocketEvent, TranslationHandler } from '@kix/core/dist/model/client';
 
-declare var io;
+// tslint:disable-next-line:no-var-requires
+require('babel-polyfill');
+
+declare var io: any;
 
 class BaseTemplateComponent {
 

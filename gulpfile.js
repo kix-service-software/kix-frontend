@@ -7,6 +7,12 @@ const tslint = require("gulp-tslint");
 const less = require("gulp-less");
 const path = require('path');
 
+const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+
+const uglify = require('gulp-uglify');
+const pump = require('pump');
+
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
 
@@ -25,7 +31,7 @@ const devTSCConfig = {
 
 const prodTSCConfig = {
     target: "es6",
-    lib: ["es6", "dom"],
+    lib: ["es2015", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -64,6 +70,25 @@ gulp.task('compile-src', () => {
         .src(['src/**/*.ts'])
         .pipe(tsc(config))
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('minify-js', (cb) => {
+    return gulp.src('dist/**/*.js')
+        .pipe(babel({
+            presets: [
+                ["env", {
+                    "targets": {
+                        "node": "current"
+                    }
+                }],
+                'es2015',
+                'minify'],
+            plugins: [
+                'babel-plugin-transform-class'
+            ]
+
+        }))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('test', () => {
