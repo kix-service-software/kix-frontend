@@ -1,7 +1,8 @@
 import { StateAction } from '@kix/core/dist/model/client';
+
 import { TicketCreationDialogAction } from './TicketCreationDialogAction';
 
-export default (customerId: number) => {
+export default (customerId: string) => {
 
     const payload = new Promise((resolve, reject) => {
         resolve({ customerId });
