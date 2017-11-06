@@ -37,14 +37,17 @@ export class ActionSocketListener extends SocketListener {
 
         this.actionSocket.on(SocketEvent.CONNECT_ERROR, (error) => {
             this.store.dispatch(ACTION_ERROR(String(error)));
+            this.actionSocket.close();
         });
 
         this.actionSocket.on(SocketEvent.CONNECT_TIMEOUT, () => {
             this.store.dispatch(ACTION_ERROR('Timeout!'));
+            this.actionSocket.close();
         });
 
         this.actionSocket.on('error', (error) => {
             this.store.dispatch(ACTION_ERROR(String(error)));
+            this.actionSocket.close();
         });
 
         this.actionSocket.on(ActionEvent.ACTION_CANNOT_RUN, (data: ActionCannotRunResponse) => {

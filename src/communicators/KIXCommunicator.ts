@@ -8,36 +8,28 @@ import {
     IPluginService,
     IAuthenticationService,
     IConfigurationService,
-    ITranslationService
+    ITranslationService,
+    ITicketService,
+    ITicketStateService,
+    ITicketTypeService,
+    ITicketPriorityService
 } from "@kix/core";
 
 @injectable()
 export abstract class KIXCommunicator implements ICommunicator {
 
-    protected serverConfig: IServerConfiguration;
-    protected authenticationService: IAuthenticationService;
-    protected loggingService: ILoggingService;
-    protected pluginService: IPluginService;
-    protected configurationService: IConfigurationService;
-    protected userService: IUserService;
-    protected translationService: ITranslationService;
-
     public constructor(
-        @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("IAuthenticationService") authenticationService: IAuthenticationService,
-        @inject("ILoggingService") loggingService: ILoggingService,
-        @inject("IPluginService") pluginService: IPluginService,
-        @inject("IUserService") userService: IUserService,
-        @inject("ITranslationService") translationService: ITranslationService
-    ) {
-        this.configurationService = configurationService;
-        this.serverConfig = this.configurationService.getServerConfiguration();
-        this.authenticationService = authenticationService;
-        this.loggingService = loggingService;
-        this.pluginService = pluginService;
-        this.userService = userService;
-        this.translationService = translationService;
-    }
+        @inject("IConfigurationService") protected configurationService: IConfigurationService,
+        @inject("IAuthenticationService") protected authenticationService: IAuthenticationService,
+        @inject("ILoggingService") protected loggingService: ILoggingService,
+        @inject("IPluginService") protected pluginService: IPluginService,
+        @inject("IUserService") protected userService: IUserService,
+        @inject("ITranslationService") protected translationService: ITranslationService,
+        @inject("ITicketService") protected ticketService: ITicketService,
+        @inject("ITicketStateService") protected ticketStateService: ITicketStateService,
+        @inject("ITicketTypeService") protected ticketTypeService: ITicketTypeService,
+        @inject("ITicketPriorityService") protected ticketPriorityService: ITicketPriorityService
+    ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;
 }

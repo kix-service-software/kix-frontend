@@ -1,3 +1,4 @@
-<div.editor no-update>
-    <textarea id=state.id>${data.value}</textarea>
+<div.editor-container no-update>
+    <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
+    <div id=state.id class=(data.inline ? "editor-inline" : "") contenteditable="true">$!{data.value}</div>
 </div>

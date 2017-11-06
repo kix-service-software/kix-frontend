@@ -6,4 +6,6 @@ export class CreationDialogComponentState {
 
     public currentDialog: CreationDialog = null;
 
+    public closeDialogChecked: boolean = false;
+
 }

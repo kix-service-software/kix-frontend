@@ -41,6 +41,13 @@
             "translationValues": {
                 "en": "Personal Settings"
             }
+        },
+        {
+            "id": "CREATION-DIALOG:LOAD-DRAFT-QUESTION",
+            "defaultValue": "Es existiert ein Entwurf im Zwischenspeicher. Soll dieser geladen werden",
+            "translationValues": {
+                "en": "There is a draft stored. Would you like to load the existing draft?"
+            }
         }
     ]
 }
