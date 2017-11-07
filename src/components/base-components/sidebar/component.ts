@@ -9,7 +9,6 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
-        this.state.configurationMode = false;
     }
 
     public onMount(): void {
@@ -36,7 +35,7 @@ class SidebarComponent {
         }
     }
 
-    public configurationClicked(): void {
+    public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
     }

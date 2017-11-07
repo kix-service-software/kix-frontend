@@ -1,16 +1,9 @@
 <div.tools-col>
-    <div.static-tools>
-        <div>
-            <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
-        </div>
-        <div>
-            <span.kix-icon.icon-dummy.icon-i/>
-        </div>
-    </div>
+    <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
     <if(state.configuration)>
-        <div.dynamic-tools>
+        <div.widget-bar>
             <for(widget in state.configuration.widgets)>
-                <div class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
+                <div.bar-icon class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
                     <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
                 </div>
             </for>
