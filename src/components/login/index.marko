@@ -22,19 +22,25 @@
                 </div>
             </if>
             <div class="dialog-content">
-                <label>
-                    ${component.getTranslation(component.translationIds.USERNAME)}
-                    <input type="text" value=state.userName on-blur('userNameChanged') tabindex="1"/>
-                </label>
-                <label>
-                    ${component.getTranslation(component.translationIds.PASSWORD)}
-                    <input type="password" value=state.password on-blur('passwordChanged') tabindex="2"/>
-                </label>
-                <div class="dialog-buttons">
-                    <button class="submit" type="button" on-click('login') tabindex="3">
-                        ${component.getTranslation(component.translationIds.BUTTON_LABEL)}
-                    </button>
-                </div>
+                <form on-keydown('keyDown')>
+                    <label>
+                        ${component.getTranslation(component.translationIds.USERNAME)}
+                        <span no-update>
+                            <input type="text" on-blur('userNameChanged') tabindex="1"/>
+                        </span>
+                    </label>
+                    <label>
+                        ${component.getTranslation(component.translationIds.PASSWORD)}
+                        <span no-update>
+                            <input type="password" on-blur('passwordChanged') tabindex="2"/>
+                        </span>
+                    </label>
+                    <div class="dialog-buttons">
+                        <button class="submit" type="button" on-click('login') tabindex="3">
+                            ${component.getTranslation(component.translationIds.BUTTON_LABEL)}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="login-footer">KIX Professional 18.0.0-alpha | Ein Produkt der c.a.p.e. IT GmbH</div>

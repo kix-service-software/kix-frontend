@@ -25,54 +25,66 @@ class LoginFormComponent {
 
 
     public onCreate(input: any): void {
+        console.log('create');
         this.state = new LoginComponentState();
-        this.frontendUrl = input.frontendUrl;
+        // this.frontendUrl = input.frontendUrl;
         this.translationIds = LoginTranslationId;
-        this.state.logout = input.logout;
+        // this.state.logout = input.logout;
+        console.log('createEnd');
     }
 
     public stateChanged(): void {
-        const reduxState: LoginState = this.store.getState();
-        this.state.userName = reduxState.userName;
-        this.state.password = reduxState.password;
-        this.state.valid = reduxState.valid;
-        this.state.error = reduxState.error;
-        this.state.doLogin = reduxState.doLogin;
+        console.log('changed');
+        // const reduxState: LoginState = this.store.getState();
+        // this.state.userName = reduxState.userName;
+        // this.state.password = reduxState.password;
+        // this.state.valid = reduxState.valid;
+        // this.state.error = reduxState.error;
+        // this.state.doLogin = reduxState.doLogin;
     }
 
     public async onMount(): Promise<void> {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(LOGIN_INITIALIZE());
+        console.log('mount');
+        // this.store = require('./store/');
+        // this.store.subscribe(this.stateChanged.bind(this));
+        // this.store.dispatch(LOGIN_INITIALIZE());
 
-        const translationHandler = await TranslationHandler.getInstance();
-        this.state.translations = translationHandler.getTranslations([
-            LoginTranslationId.BUTTON_LABEL,
-            LoginTranslationId.PASSWORD,
-            LoginTranslationId.USERNAME,
-            LoginTranslationId.TITLE,
-            LoginTranslationId.LOGOUT
-        ]);
+        // const translationHandler = await TranslationHandler.getInstance();
+        // this.state.translations = translationHandler.getTranslations([
+        //     LoginTranslationId.BUTTON_LABEL,
+        //     LoginTranslationId.PASSWORD,
+        //     LoginTranslationId.USERNAME,
+        //     LoginTranslationId.TITLE,
+        //     LoginTranslationId.LOGOUT
+        // ]);
 
-        if (this.state.logout) {
-            ClientStorageHandler.destroyToken();
-        }
+        // if (this.state.logout) {
+        //     ClientStorageHandler.destroyToken();
+        // }
+        console.log('mountEnd');
     }
 
     public userNameChanged(event: any): void {
-        this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value));
+        // this.store.dispatch(LOGIN_USERNAME_CHANGED(event.target.value));
     }
 
     public passwordChanged(event: any): void {
-        this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value));
+        // this.store.dispatch(LOGIN_PASSWORD_CHANGED(event.target.value));
     }
 
     public login(event: any): void {
-        this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password)).then(() => {
-            if (this.state.valid) {
-                this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
-            }
-        });
+        // this.store.dispatch(LOGIN_VALIDATE(this.state.userName, this.state.password)).then(() => {
+        //     if (this.state.valid) {
+        //         this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
+        //     }
+        // });
+    }
+
+    public keyDown(event: any): void {
+        // 13 == Enter
+        if (event.keyCode === 13) {
+            this.login(event);
+        }
     }
 
     public getTranslation(id: LoginTranslationId): string {
