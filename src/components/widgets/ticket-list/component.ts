@@ -1,28 +1,29 @@
-class TicketListWidgetComponent {
+import { WidgetBaseComponent } from '../../../../../core/dist/index';
+import { TicketListComponentState } from './model/TicketListComponentState';
+import { TicketListReduxState } from './store/';
+import { TICKET_LIST_INITIALIZE } from './store/actions/';
+
+class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentState, TicketListReduxState> {
 
     public state: any;
 
+    protected store: any;
+
     public onCreate(input: any): void {
-        this.state = {
-            showConfiguration: false,
-            columns: [
-                "alle",
-                "Prio",
-                "Titel",
-                "T#",
-                "Queue",
-                "Bearbeiter",
-                "Fälligkeitsdatum",
-                "Alter"
-            ],
-            values: [
-                ["1", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
-                ["2", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
-                ["3", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
-                ["4", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
-                ["5", "Werbemittel für neue Messe", "T#20170815104515", "Vertrieb", "Kunde", "29.10.2017", "159d 13h"],
-            ]
-        };
+        this.state = new TicketListComponentState();
+    }
+
+    public onMount(): void {
+        this.store = require('./store').create();
+        this.store.subscribe(this.stateChanged.bind(this));
+        this.store.dispatch(TICKET_LIST_INITIALIZE(this.store, 'ticket-list-widget', this.state.instanceId))
+            .then(() => {
+                // this.loadTicket();
+            });
+    }
+
+    public stateChanged(): void {
+        super.stateChanged();
     }
 
     public showConfigurationClicked(): void {
