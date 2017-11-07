@@ -75,6 +75,13 @@ class LoginFormComponent {
         });
     }
 
+    public keyDown(event: any): void {
+        // 13 == Enter
+        if (event.keyCode === 13) {
+            this.login(event);
+        }
+    }
+
     public getTranslation(id: LoginTranslationId): string {
         if (this.state.translations[id]) {
             return this.state.translations[id];
