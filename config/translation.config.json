@@ -48,6 +48,41 @@
             "translationValues": {
                 "en": "There is a draft stored. Would you like to load the existing draft?"
             }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:TITLE",
+            "defaultValue": "Widgets verwalten",
+            "translationValues": {
+                "en": "Widget management"
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:OPEN-DIALOG",
+            "defaultValue": "Konfigurationseinstellungen",
+            "translationValues": {
+                "en": "configuration settings"
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:DESCRIPTION",
+            "defaultValue": "Die angezeigten Widgets können nach Beginn der Konfiguration mittels Drag & Drop verschoben werden.",
+            "translationValues": {
+                "en": "The displayed widgets can be moved using drag & drop after start of the configuration."
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:START",
+            "defaultValue": "Konfiguration beginnen",
+            "translationValues": {
+                "en": "Start configuration"
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:STOP",
+            "defaultValue": "Konfiguration beenden",
+            "translationValues": {
+                "en": "Stop configuration"
+            }
         }
     ]
 }

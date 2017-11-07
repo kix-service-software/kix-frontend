@@ -1,8 +1,11 @@
+<if(state.configurationMode)>
+    <main-overlay/>
+</if>
 <div.wrapper>
     <kix-header/>
     <section.clearfix>
         <main-menu/>
-        <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
+        <sidebar configurationMode=state.configurationMode on-toggleConfigurationOverlay('toggleConfigurationOverlay')/>
         <section.content>
             <header>
                 <breadcrumb/>
@@ -10,6 +13,10 @@
             </header>
             <include(state.template, {configurationMode: state.configurationMode})/>
         </section>
+        <if(state.showConfigurationOverlay)>
+            <configuration-overlay configurationMode=state.configurationMode
+                on-toggleConfigurationMode('toggleConfigurationMode')/>
+        </if>
     </section>
     <kix-footer/>
 </div>

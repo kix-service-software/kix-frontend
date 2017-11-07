@@ -1,4 +1,4 @@
-<div.widget>
+<div.widget class=(input.configurationMode ? "config-mode" : "")>
     <include(input.overlay)/>
     <div.widget-header.clearfix>
         <span.header-left>
@@ -11,12 +11,12 @@
         </span>
         <span.header-right>
             <include(input.actions)/>
-            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
-                on-click('configClicked')/>
-            <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+            <if(input.minimizable || typeof input.minimizable === 'undefined')>
+                <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+            </if>
         </span>
     </div>
-    <if(state.minimized)>
+    <if(!state.minimized)>
         <div.widget-content>
             <include(input.content)/>
         </div>

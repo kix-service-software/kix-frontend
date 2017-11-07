@@ -4,7 +4,7 @@ class WidgetComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            minimized: true
+            minimized: false
         };
     }
 

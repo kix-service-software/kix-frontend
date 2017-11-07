@@ -10,7 +10,6 @@
         height: 2em;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
-        box-sizing: border-box;
         overflow: hidden;
         .header-left {
             display: inline-block;
@@ -40,5 +39,9 @@
         height: 192px;
         overflow: hidden;
         box-sizing: border-box;
+    }
+    &.config-mode {
+        z-index: 100;
+        position: relative;
     }
 }

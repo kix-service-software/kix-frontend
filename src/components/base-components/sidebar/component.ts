@@ -9,7 +9,12 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
-        this.state.configurationMode = false;
+        this.state.showConfigurationOverlay = false;
+        this.state.configurationMode = input.configurationMode;
+    }
+
+    public onInput(input: any): void {
+        this.state.configurationMode = input.configurationMode;
     }
 
     public onMount(): void {
@@ -36,9 +41,9 @@ class SidebarComponent {
         }
     }
 
-    public configurationClicked(): void {
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+    public toogleConfigurationOverlay(): void {
+        this.state.showConfigurationOverlay = !this.state.showConfigurationOverlay;
+        (this as any).emit('toggleConfigurationOverlay');
     }
 
     public getWidgetTemplate(widgetId: string): any {

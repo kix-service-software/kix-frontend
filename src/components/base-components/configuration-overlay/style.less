@@ -1,0 +1,45 @@
+.color-theme-config-overlay-head() {
+    @bc-color: @config-color;
+    background: @bc-color;
+    @font-color: @secondary-0;
+    color: @font-color;
+}
+
+.color-theme-config-widgets() {
+    @bc-color: @secondary-0;
+    background: @bc-color;
+    @font-color: @config-color;
+    color: @font-color;
+}
+
+.config-overlay {
+    position: absolute;
+    top: 0px;
+    right: 72px;
+    width: 192px;
+    z-index: 200;
+    box-sizing: border-box;
+    border-radius: @border-radius;
+    border: 1px solid @config-color;
+    box-shadow: @shadow;
+    .overlay-header {
+        .color-theme-config-overlay-head;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        box-sizing: border-box;
+        padding: 0 .5em;
+        height: 2em;
+        width: 264px;
+        overflow: hidden;
+    }
+    .overlay-content {
+        .color-theme-4;
+        padding: .5em 1em;
+        overflow: hidden;
+        box-sizing: border-box;
+        button {
+            left: 0px;
+            height: unset;
+        }
+    }
+}

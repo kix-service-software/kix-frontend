@@ -1,7 +1,8 @@
+<!-- TODO: extrahieren #160 -->
 <div.tools-col>
-    <div.static-tools>
+    <div.static-tools class=(state.configurationMode ? "config-mode" : "")>
         <div>
-            <span.kix-icon.icon-dummy.icon-asterisk on-click('configurationClicked')/>
+            <span.kix-icon.icon-dummy.icon-asterisk on-click('toogleConfigurationOverlay')/>
         </div>
         <div>
             <span.kix-icon.icon-dummy.icon-i/>
@@ -17,15 +18,6 @@
         </div>
     </if>
 </div>
-<if(state.configurationMode)>
-    <div.static-sidebar>
-        <div.configOberlay>
-            Hier könnte Ihre Beschreibung stehen ;)
-            <button>Konfigurations-Einstellungen</button>
-            <button>Konfiguration beenden</button>
-        </div>
-    </div>
-</if>
 <if(state.configuration && component.hasWidgetsToShow())>
     <div.sidebar key="sidebar">
         <for(widget in state.configuration.widgets)>
@@ -39,7 +31,8 @@
                 <div>
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
-                        configurationMode: state.configurationMode
+                        configurationMode: state.configurationMode,
+                        minimizable: false
                     }) key=widget.instanceId>
                         <@dragoverlay>
                             <if(state.configurationMode)>
