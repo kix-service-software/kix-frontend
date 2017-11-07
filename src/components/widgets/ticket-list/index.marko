@@ -5,21 +5,22 @@
     <@icon>
         <span class="kix-icon icon-dummy"/>
     </@icon>
-    <@title>Ticket List</@title>
+    <@title>Ticket List (${state.tickets.length})</@title>
     <@content>
         <table.ticket-table>
             <tr>
-                <for(column in state.columns)>
+                <th/>
+                <for(column in state.properties)>
                     <th>${column}</th>
                 </for>
             </tr>
-            <for(row in state.values)>
+            <for(ticket in state.tickets)>
                 <tr>
                     <td>
                         <input type="checkbox" name="all" value=""/>
                     </td>
-                    <for(value in row)>
-                        <td>${value}</td>
+                    <for(column in state.properties)>
+                        <td>${ticket[column]}</td>
                     </for>
                 </tr>
             </for>

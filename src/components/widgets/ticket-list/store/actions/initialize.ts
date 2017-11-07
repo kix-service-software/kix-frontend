@@ -8,5 +8,5 @@ export default (store: any, widgetId: string, instanceId: string) => {
         const socketListener = new TicketListSocketListener(store, widgetId, instanceId);
         resolve({ socketListener });
     });
-    return new StateAction(TicketListAction.TICKET_LIST_INITIALIZE, payload);
+    return new StateAction(TicketListAction.INITIALIZE, payload);
 };

@@ -1,5 +1,6 @@
+import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core';
+
 import { TicketListWidget } from './TicketListWidget';
-import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -22,7 +23,20 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        return {};
+        const config = {
+            limit: 10,
+            properties: [
+                "TicketNumber",
+                "PriorityID",
+                "StateID",
+                "TypeID",
+                "Title",
+                "Created",
+                "Age"
+            ]
+        };
+
+        return new WidgetConfiguration('Ticket-Liste', [], config);
     }
 
 }

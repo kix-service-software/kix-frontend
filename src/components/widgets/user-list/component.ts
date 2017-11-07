@@ -1,8 +1,9 @@
-import { UserListConfiguration } from './model/UserListConfiguration';
 import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@kix/core/dist/model/client';
+
 import { UserListComponentState } from './model/UserListComponentState';
-import { UserListReduxState } from './store/UserListReduxState';
+import { UserListConfiguration } from './model/UserListConfiguration';
 import { USER_LIST_INITIALIZE } from './store/actions';
+import { UserListReduxState } from './store/UserListReduxState';
 
 class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
 
@@ -30,8 +31,8 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
         const reduxState: UserListReduxState = this.store.getState();
 
         if (!this.componentInititalized && reduxState.widgetConfiguration) {
-            this.loadUser();
             this.componentInititalized = true;
+            this.loadUser();
         }
 
         if (reduxState.users) {
