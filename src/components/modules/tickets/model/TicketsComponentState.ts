@@ -1,9 +1,11 @@
-import { ContainerConfiguration } from '@kix/core/dist/model/client';
+import { ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
 
 export class TicketsComponentState {
 
     public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
 
     public configurationMode: boolean = false;
+
+    public widgetTemplates: WidgetTemplate[] = [];
 
 }

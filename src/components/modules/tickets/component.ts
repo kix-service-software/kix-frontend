@@ -27,6 +27,7 @@ class TicketsComponent {
         const reduxState: TicketsState = this.store.getState();
         if (reduxState.containerConfiguration) {
             this.state.containerConfiguration = reduxState.containerConfiguration;
+            this.state.widgetTemplates = reduxState.widgetTemplates;
         }
     }
 }

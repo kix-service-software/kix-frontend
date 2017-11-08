@@ -45,7 +45,9 @@ export class TicketsSocketListener extends SocketListener {
 
         socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
             (result: LoadConfigurationResult<ContainerConfiguration>) => {
-                this.store.dispatch(TICKET_CONTAINER_CONFIGURATION_LOADED(result.configuration));
+                this.store.dispatch(
+                    TICKET_CONTAINER_CONFIGURATION_LOADED(result.configuration)
+                );
             });
 
         socket.on('error', (error) => {

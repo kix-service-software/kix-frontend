@@ -4,6 +4,7 @@
         "./dist/components/base-components",
         "./dist/components/base-components/creation-dialog",
         "./dist/components/personal-settings",
-        "./dist/components/modules"
+        "./dist/components/modules",
+        "./dist/components/widgets"
     ]
 }

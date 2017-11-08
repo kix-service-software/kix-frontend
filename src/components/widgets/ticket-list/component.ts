@@ -16,6 +16,10 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         this.state = new TicketListComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
+    }
+
     public onMount(): void {
         this.store = require('./store').create();
         this.store.subscribe(this.stateChanged.bind(this));

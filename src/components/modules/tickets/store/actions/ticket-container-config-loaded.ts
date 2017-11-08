@@ -1,4 +1,4 @@
-import { StateAction, ContainerConfiguration } from '@kix/core/dist/model/client';
+import { StateAction, ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
 import { TicketAction } from './';
 
 export default (containerConfiguration: ContainerConfiguration) => {
