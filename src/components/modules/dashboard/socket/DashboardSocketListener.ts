@@ -4,7 +4,6 @@ import {
     LoadDashboardResponse,
     SocketEvent,
     ClientStorageHandler,
-    LoadConfigurationRequest,
     ContainerConfiguration
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';

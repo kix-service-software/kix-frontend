@@ -1,9 +1,9 @@
 import {
-    ConfigurationEvent,
-    LoadConfigurationResult,
+    DashboardEvent,
+    LoadDashboardRequest,
+    LoadDashboardResponse,
     SocketEvent,
     ClientStorageHandler,
-    LoadConfigurationRequest,
     ContainerConfiguration
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
@@ -20,17 +20,16 @@ export class TicketsSocketListener extends SocketListener {
     public constructor() {
         super();
         this.store = require('../store/');
-        this.configurationSocket = this.createSocket("configuration");
+        this.configurationSocket = this.createSocket("dashboard");
         this.initConfigurationSocketListener(this.configurationSocket);
     }
 
     private initConfigurationSocketListener(socket: SocketIO.Server): void {
         socket.on(SocketEvent.CONNECT, () => {
             const token = ClientStorageHandler.getToken();
-            const loadRequest = new LoadConfigurationRequest(
-                token, ClientStorageHandler.getContextId(), null, null, true);
+            const loadRequest = new LoadDashboardRequest(token, ClientStorageHandler.getContextId());
 
-            socket.emit(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, loadRequest);
+            socket.emit(DashboardEvent.LOAD_DASHBOARD, loadRequest);
         });
 
         socket.on(SocketEvent.CONNECT_ERROR, (error) => {
@@ -43,10 +42,10 @@ export class TicketsSocketListener extends SocketListener {
             this.configurationSocket.close();
         });
 
-        socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<ContainerConfiguration>) => {
+        socket.on(DashboardEvent.DASHBOARD_LOADED,
+            (result: LoadDashboardResponse<ContainerConfiguration>) => {
                 this.store.dispatch(
-                    TICKET_CONTAINER_CONFIGURATION_LOADED(result.configuration)
+                    TICKET_CONTAINER_CONFIGURATION_LOADED(result.configuration, result.widgetTemplates)
                 );
             });
 
