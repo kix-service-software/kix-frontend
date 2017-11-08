@@ -1,4 +1,10 @@
-import { LoadTicketsRequest, LoadTicketsResponse, SocketEvent, Ticket, TicketEvent } from '@kix/core/dist/model/client';
+import {
+    SearchTicketsRequest,
+    SearchTicketsResponse,
+    SocketEvent,
+    Ticket,
+    TicketEvent
+} from '@kix/core/dist/model/client';
 
 import { KIXCommunicator } from './KIXCommunicator';
 
@@ -12,9 +18,9 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     private registerEvents(client: SocketIO.Socket): void {
-        client.on(TicketEvent.LOAD_TICKETS, async (data: LoadTicketsRequest) => {
+        client.on(TicketEvent.LOAD_TICKETS, async (data: SearchTicketsRequest) => {
             const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit);
-            client.emit(TicketEvent.TICKETS_LOADED, new LoadTicketsResponse((tickets as Ticket[])));
+            client.emit(TicketEvent.TICKETS_LOADED, new SearchTicketsResponse((tickets as Ticket[])));
         });
     }
 

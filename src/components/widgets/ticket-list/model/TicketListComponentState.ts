@@ -4,6 +4,4 @@ export class TicketListComponentState extends WidgetComponentState {
 
     public tickets: Ticket[] = [];
 
-    public properties: string[] = [];
-
 }

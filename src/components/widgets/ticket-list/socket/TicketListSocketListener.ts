@@ -1,7 +1,7 @@
 import {
     ClientStorageHandler,
-    LoadTicketsRequest,
-    LoadTicketsResponse,
+    SearchTicketsRequest,
+    SearchTicketsResponse,
     SocketEvent,
     Ticket,
     TicketEvent,
@@ -24,10 +24,10 @@ export class TicketListSocketListener extends WidgetSocketListener {
     public async loadTickets(limit: number, properties: string[]): Promise<Ticket[]> {
         return new Promise<Ticket[]>((resolve, reject) => {
             const token = ClientStorageHandler.getToken();
-            this.ticketSocket.emit(TicketEvent.LOAD_TICKETS, new LoadTicketsRequest(token, limit, properties));
+            this.ticketSocket.emit(TicketEvent.LOAD_TICKETS, new SearchTicketsRequest(token, limit, properties));
 
             // TODO: Timeout?
-            this.ticketSocket.on(TicketEvent.TICKETS_LOADED, (result: LoadTicketsResponse) => {
+            this.ticketSocket.on(TicketEvent.TICKETS_LOADED, (result: SearchTicketsResponse) => {
                 resolve(result.tickets);
             });
         });

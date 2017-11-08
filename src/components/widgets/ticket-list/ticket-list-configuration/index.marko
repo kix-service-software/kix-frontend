@@ -1,1 +1,45 @@
-<span>Tickelist Konfigurationsinhalt ...</span>
+<if(state.configuration)>
+    <label.config-label>
+        Widget-Titel
+        <input type="text" value=state.configuration.title/>
+    </label>
+    <label.config-label>
+        Suchvorlage
+        <select type="text" value="">
+            <option>...</option>
+        </select>
+    </label>
+    <label.config-label>
+        Zeilenanzahl
+        <input type="text" on-change('limitChanged') value=state.configuration.contentConfiguration.limit/>
+    </label>
+    <label.config-label>
+        Gesamtanzahl Tickets
+        <input type="checkbox" on-change('showTotalCountChanged')
+            checked=state.configuration.contentConfiguration.showTotalCount/>
+    </label>
+    <label.config-label>
+        Spalten
+        <select size=10>
+            <option value="TicketNumber">Ticketnummer</option>
+            <option value="Title">Titel</option>
+            <option value="State">State</option>
+            <option value="Priority">Priority</option>
+            <option value="Queue">Queue</option>
+            <option value="Owner">Owner</option>
+            <option value="Type">Type</option>
+            <option value="SLA">SLA</option>
+            <option value="Service">Service</option>
+            <option value="Responsible">Responsible</option>
+            <option value="Age">Age</option>
+            <option value="Created">Created</option>
+            <option value="CreateBy">CreateBy</option>
+            <option value="Changed">Changed</option>
+            <option value="ChangeBy">ChangeBy</option>
+        </select>
+    </label>
+    <label.config-label>
+        Aktionen
+        <input type="text" value=""/>
+    </label>
+</if>

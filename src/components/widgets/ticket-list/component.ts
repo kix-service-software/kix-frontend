@@ -35,9 +35,6 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         }
 
         if (reduxState.widgetConfiguration) {
-
-            this.state.properties = reduxState.widgetConfiguration.contentConfiguration.properties;
-
             if (!this.componentInititalized) {
                 this.componentInititalized = true;
                 this.loadTickets();
@@ -50,6 +47,9 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
     }
 
     public saveConfiguration(): void {
+        const reduxState: TicketListReduxState = this.store.getState();
+        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
+        this.loadTickets();
         this.cancelConfiguration();
     }
 
