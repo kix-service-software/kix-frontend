@@ -2,7 +2,7 @@ import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
 import { SLA_ID_CHANGED } from '../../store/actions';
 
-class TicketServiceInput {
+class TicketSLAInput {
 
     public state: any;
 
@@ -32,4 +32,4 @@ class TicketServiceInput {
 
 }
 
-module.exports = TicketServiceInput;
+module.exports = TicketSLAInput;

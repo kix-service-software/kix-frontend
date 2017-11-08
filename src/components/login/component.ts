@@ -10,6 +10,8 @@ import {
     LOGIN_AUTH
 } from './store/actions';
 
+// tslint:disable-next-line:no-var-requires
+require('babel-polyfill');
 
 class LoginFormComponent {
 
@@ -71,6 +73,13 @@ class LoginFormComponent {
                 this.store.dispatch(LOGIN_AUTH(this.state.userName, this.state.password));
             }
         });
+    }
+
+    public keyDown(event: any): void {
+        // 13 == Enter
+        if (event.keyCode === 13) {
+            this.login(event);
+        }
     }
 
     public getTranslation(id: LoginTranslationId): string {

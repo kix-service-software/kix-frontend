@@ -1,11 +1,12 @@
-import { TicketCreationProcessReduxState } from './../../TicketCreationProcessReduxState';
 import { StateAction } from '@kix/core/dist/model/client';
+
+import { TicketCreationProcessReduxState } from './../../TicketCreationProcessReduxState';
 import { TicketCreationProcessAction } from './TicketCreationProcessAction';
 
-export default (ticketProcessSate: TicketCreationProcessReduxState) => {
+export default (ticketProcessState: TicketCreationProcessReduxState) => {
 
     const payload = new Promise((resolve, reject) => {
-        ticketProcessSate.socketListener.loadTicketData();
+        ticketProcessState.socketListener.loadTicketData();
         resolve();
     });
 
