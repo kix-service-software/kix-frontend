@@ -1,10 +1,10 @@
 <div.tools-col>
-    <icon-bar configurationMode=state.configurationMode on-toogleConfigurationOverlay('toogleConfigurationOverlay')/>
+    <icon-bar configurationMode=input.configurationMode on-toggleConfigurationOverlay('toggleConfigurationOverlay')/>
     <if(state.configuration)>
         <div.widget-bar>
             <for(widget in state.configuration.widgets)>
-                <div.bar-icon class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
-                    <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
+                <div.bar-icon class=(widget.show ? "select-active" : "") on-click('toggleSidebarWidget', widget.instanceId)>
+                    <span.kix-icon class=(widget.icon ? "icon-" + widget.icon : "")/>
                 </div>
             </for>
         </div>
@@ -23,14 +23,17 @@
                 <div>
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
-                        configurationMode: state.configurationMode,
+                        configurationMode: input.configurationMode,
                         minimizable: false
                     }) key=widget.instanceId>
-                        <@dragoverlay>
-                            <if(state.configurationMode)>
-                                <div.drag-overlay class="${data.drop ? 'drop-element' : ''}" data-id="${data.data_id ? data.data_id : ''}"/>
+                        <@widgetoverlay>
+                            <if(input.configurationMode)>
+                                <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+                                    <div.widget-overlay-header.clearfix/>
+                                    <div.widget-overlay-content/>
+                                </div>
                             </if>
-                        </@dragoverlay>
+                        </@widgetoverlay>
                     </include>
                 </div>
             </if>

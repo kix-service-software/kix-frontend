@@ -1,16 +1,20 @@
 <div.config-overlay>
     <if(state.translations)>
-        <div.overlay-header>${component.getTranslation(component.translationIds.TITLE)}</div>
+        <div.overlay-header>
+            ${component.getTranslation(component.translationIds.TITLE)}
+            <!-- TODO: remove - nur Platzhalter bis "header" in icon-bar ist -->
+            <span.kix-icon.icon-dummy.icon-i style="position:relative; right:0px" on-click('toggleConfigurationOverlay')/>
+        </div>
         <div.overlay-content>
             <h4>Home Dashboard</h4>
+            <!-- TODO: get real dashboard name (home, ticket, ...) and its translation, maybe from parent (input.name) -->
+            <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
             <if(input.configurationMode)>
-                <!-- TODO get real dashboard name (home, ticket, ...) and its translation -->
-                <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
                 <button on-click('showConfigurationDialog')>${component.getTranslation(component.translationIds.OPEN_DIALOG)}</button>
                 ${component.getTranslation(component.translationIds.DESCRIPTION)}
                 <hr/>
             </if>
-            <button on-click('startStopConfiguration')>
+            <button on-click('toggleConfigurationMode')>
                 <if(input.configurationMode)>${component.getTranslation(component.translationIds.STOP)}</if>
                 <else>${component.getTranslation(component.translationIds.START)}</else>
             </button>

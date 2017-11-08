@@ -14,7 +14,9 @@
             <include(state.template, {configurationMode: state.configurationMode})/>
         </section>
         <if(state.showConfigurationOverlay)>
+            <!-- TODO: remove "toggleConfigurationOverlay" - nur Platzhalter bis "header" in icon-bar ist -->
             <configuration-overlay configurationMode=state.configurationMode
+                on-toggleConfigurationOverlay('toggleConfigurationOverlay')
                 on-toggleConfigurationMode('toggleConfigurationMode')/>
         </if>
     </section>

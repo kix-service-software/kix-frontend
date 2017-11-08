@@ -1,9 +1,9 @@
 <widget minimizable=input.minimizable configurationMode=input.configurationMode>
     <@overlay>
-        <include(input.dragoverlay)/>
+        <include(input.widgetoverlay)/>
     </@overlay>
     <@icon>
-        <span class="kix-icon icon-dummy"/>
+        <span.kix-icon.icon-dummy/>
     </@icon>
     <!-- TODO: dynamsicher Titel (${state.widgetConfiguration.title}) -->
     <@title>Suchvorlagen</@title>
@@ -36,10 +36,13 @@
         <span/>
     </@filter>
     <@actions>
-        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-            on-click('showConfigurationClicked')/>
+        <!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
+        <if(input.configurationMode)>
+            <span.kix-icon.icon-dummy.icon-asterisk.configuration on-click('showConfigurationClicked')/>
+        </if>
     </@actions>
 </widget>
+<!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
 <if(state.showConfiguration)>
     <div>
         <main-dialog>

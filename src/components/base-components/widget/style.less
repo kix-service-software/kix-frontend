@@ -25,11 +25,6 @@
             float: right;
             line-height: 2em;
         }
-        .configuration {
-            cursor: pointer;
-            z-index: 2;
-            position: relative;
-        }
     }
     .widget-content {
         .color-theme-4;
@@ -43,5 +38,17 @@
     &.config-mode {
         z-index: 100;
         position: relative;
+        .widget-header {
+            .header-left {
+                z-index: 102;
+                color: @config-color;
+                position: relative
+            }
+            .configuration {
+                cursor: pointer;
+                z-index: 102;
+                position: relative;
+            }
+        }
     }
 }

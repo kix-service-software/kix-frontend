@@ -2,7 +2,7 @@ import { FooterComponentState } from './model/FooterComponentState';
 
 class KIXFooterComponent {
 
-    public state: any;
+    public state: FooterComponentState;
 
     public onCreate(input: any): void {
         this.state = new FooterComponentState();

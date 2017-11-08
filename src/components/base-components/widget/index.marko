@@ -11,7 +11,7 @@
         </span>
         <span.header-right>
             <include(input.actions)/>
-            <if(input.minimizable || typeof input.minimizable === 'undefined')>
+            <if(!input.configurationMode && (input.minimizable || typeof input.minimizable === 'undefined'))>
                 <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
             </if>
         </span>

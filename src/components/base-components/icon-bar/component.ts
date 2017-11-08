@@ -1,4 +1,5 @@
 import { IconBarComponentState } from './model/IconBarComponentState';
+
 class IconBar {
 
     public state: IconBarComponentState;
@@ -7,9 +8,9 @@ class IconBar {
         this.state = new IconBarComponentState();
     }
 
-    public configurationClicked(): void {
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+    public toggleConfigurationOverlay(): void {
+        this.state.showConfigurationOverlay = !this.state.showConfigurationOverlay;
+        (this as any).emit('toggleConfigurationOverlay');
     }
 
 }

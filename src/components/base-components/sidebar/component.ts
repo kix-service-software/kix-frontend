@@ -9,12 +9,6 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
-        this.state.showConfigurationOverlay = false;
-        this.state.configurationMode = input.configurationMode;
-    }
-
-    public onInput(input: any): void {
-        this.state.configurationMode = input.configurationMode;
     }
 
     public onMount(): void {
@@ -41,8 +35,7 @@ class SidebarComponent {
         }
     }
 
-    public toogleConfigurationOverlay(): void {
-        this.state.showConfigurationOverlay = !this.state.showConfigurationOverlay;
+    public toggleConfigurationOverlay(): void {
         (this as any).emit('toggleConfigurationOverlay');
     }
 

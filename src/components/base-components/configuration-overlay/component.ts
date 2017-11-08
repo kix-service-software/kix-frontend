@@ -25,13 +25,18 @@ class ConfigurationOverlay {
         ]);
     }
 
-    public startStopConfiguration(): void {
+    public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
     }
 
     public getTranslation(id: ConfigurationOverlayTranslationId): string {
         return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
+    }
+
+    // TODO: remove - nur Platzhalter bis "header" in icon-bar ist
+    public toggleConfigurationOverlay(): void {
+        (this as any).emit('toggleConfigurationOverlay');
     }
 }
 

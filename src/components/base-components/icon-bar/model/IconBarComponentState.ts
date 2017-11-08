@@ -1,5 +1,5 @@
 export class IconBarComponentState {
 
-    public configurationMode: boolean = false;
+    public showConfigurationOverlay: boolean = false;
 
 }
