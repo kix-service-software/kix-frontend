@@ -1,5 +1,7 @@
 <div.tools-col>
-    <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
+    <if(state.showIconBar)>
+        <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
+    </if>
     <if(state.configuration)>
         <div.widget-bar>
             <for(widget in state.configuration.widgets)>
