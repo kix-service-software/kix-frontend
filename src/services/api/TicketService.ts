@@ -27,7 +27,7 @@ import {
     TicketsResponse,
     UpdateTicket,
     UpdateTicketRequest,
-    UpdateTicketResponse,
+    UpdateTicketResponse
 } from '@kix/core';
 import { Response } from 'express';
 import { inject, injectable } from 'inversify';
