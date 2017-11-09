@@ -7,7 +7,7 @@ import { UserListReduxState } from './store/UserListReduxState';
 
 class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
 
-    private componentInititalized: boolean = false;
+    private componentInitialized: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
@@ -30,8 +30,8 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
 
         const reduxState: UserListReduxState = this.store.getState();
 
-        if (!this.componentInititalized && reduxState.widgetConfiguration) {
-            this.componentInititalized = true;
+        if (!this.componentInitialized && reduxState.widgetConfiguration) {
+            this.componentInitialized = true;
             this.loadUser();
         }
 

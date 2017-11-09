@@ -10,7 +10,7 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
 
     protected store: any;
 
-    private componentInititalized: boolean = false;
+    private componentInitialized: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new TicketListComponentState();
@@ -39,8 +39,8 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         }
 
         if (reduxState.widgetConfiguration) {
-            if (!this.componentInititalized) {
-                this.componentInititalized = true;
+            if (!this.componentInitialized) {
+                this.componentInitialized = true;
                 this.loadTickets();
             }
         }
