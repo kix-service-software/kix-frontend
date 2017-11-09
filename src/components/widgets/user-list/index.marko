@@ -29,7 +29,7 @@
         </@filter>
         <@actions>
             <for(action in state.widgetConfiguration.actions)>
-                <action action=action contentData=state.users/>
+                <action action=action contentData=state.users key=action.id/>
             </for>
             <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
                 on-click('showConfigurationClicked')/>

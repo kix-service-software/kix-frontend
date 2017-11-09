@@ -13,7 +13,8 @@
             "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
             "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
             "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
-            "ticket-creation-communicator": "../../dist/communicators/extensions/TicketCreationCommunicator.extension"
+            "ticket-creation-communicator": "../../dist/communicators/extensions/TicketCreationCommunicator.extension",
+            "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/modules/main-menu/personal-settings.extension"

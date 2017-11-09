@@ -5,25 +5,35 @@
     <@icon>
         <span class="kix-icon icon-dummy"/>
     </@icon>
-    <@title>Ticket List</@title>
+    <@title>
+        <if(state.widgetConfiguration)>
+            <if(state.widgetConfiguration.contentConfiguration.showTotalCount)>Tickets Gesamt: ${state.tickets.length} |</if>
+            Tickets Verfügbar: ${state.widgetConfiguration.contentConfiguration.limit}
+        </if>
+    </@title>
     <@content>
-        <table.ticket-table>
-            <tr>
-                <for(column in state.columns)>
-                    <th>${column}</th>
-                </for>
-            </tr>
-            <for(row in state.values)>
+        <if(state.widgetConfiguration)>
+            <table.ticket-table>
                 <tr>
-                    <td>
-                        <input type="checkbox" name="all" value=""/>
-                    </td>
-                    <for(value in row)>
-                        <td>${value}</td>
+                    <th>
+                        <a href="#">alle</a>
+                    </th>
+                    <for(column in state.widgetConfiguration.contentConfiguration.properties)>
+                        <th>${column}</th>
                     </for>
                 </tr>
-            </for>
-        </table>
+                <for(ticket in state.tickets)>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="all"/>
+                        </td>
+                        <for(column in state.widgetConfiguration.contentConfiguration.properties)>
+                            <td>${ticket[column]}</td>
+                        </for>
+                    </tr>
+                </for>
+            </table>
+        </if>
     </@content>
     <@filter>
         <span/>
@@ -36,9 +46,9 @@
 <if(state.showConfiguration)>
     <div>
         <main-dialog>
-            <@title>Konfiguration: Ticketliste</@title>
+            <@title>Konfiguration: ${state.widgetConfiguration.title}</@title>
             <@body>
-                <ticket-list-configuration/>
+                <ticket-list-configuration configuration=state.widgetConfiguration/>
             </@body>
             <@button>
                 <button on-click('saveConfiguration')>Speichern</button>

@@ -24,15 +24,15 @@ import {
     TicketHistoryItemResponse,
     TicketHistoryResponse,
     TicketResponse,
+    TicketsResponse,
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core';
+import { Response } from 'express';
 import { inject, injectable } from 'inversify';
 
 import { HttpService } from './HttpService';
-import { Response } from 'express';
-
 import { ObjectService } from './ObjectService';
 
 const RESOURCE_ARTICLES: string = "articles";
@@ -62,6 +62,28 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
             const response = await this.getObject<TicketResponse>(token, ticketId);
             return response.Ticket;
         }
+    }
+
+    public async getTickets(token: string, properties: string[], limit: number): Promise<AbstractTicket[]> {
+        let query = {
+            fields: 'Ticket.*'
+        };
+
+        if (properties) {
+            const ticketProperties = [];
+            for (let property of properties) {
+                if (!property.startsWith("Ticket.")) {
+                    property = "Ticket." + property;
+                }
+                ticketProperties.push(property);
+            }
+            query = {
+                fields: ticketProperties.join(',')
+            };
+        }
+
+        const response = await this.getObjects<TicketsResponse>(token, limit, null, null, query);
+        return response.Ticket;
     }
 
     public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {
