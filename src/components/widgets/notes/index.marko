@@ -1,5 +1,6 @@
 <if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable configurationMode=input.configurationMode>
+    <widget minimizable=input.minimizable configurationMode=input.configurationMode
+        on-showConfiguration('showConfigurationClicked')>
         <@overlay>
             <include(input.widgetoverlay)/>
         </@overlay>
@@ -23,13 +24,7 @@
             <span/>
         </@filter>
         <@actions>
-            <!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
-            <if(input.configurationMode)>
-                <span.kix-icon.icon-dummy.icon-asterisk.configuration on-click('showConfigurationClicked')/>
-            </if>
-            <else>
-                <span class="kix-icon icon-dummy" on-click('toggleEditMode')/>
-            </else>
+            <span class="kix-icon icon-dummy" on-click('toggleEditMode')/>
         </@actions>
     </widget>
     <!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->

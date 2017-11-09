@@ -3,6 +3,7 @@
         "./dist/components",
         "./dist/components/base-components",
         "./dist/components/base-components/creation-dialog",
+        "./dist/components/base-components/icon-bar",
         "./dist/components/personal-settings",
         "./dist/components/modules"
     ]

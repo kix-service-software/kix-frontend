@@ -1,0 +1,37 @@
+<div.bar-icon class=(state.configurationMode || state.showConfigurationWidget ? "config-mode" : "")>
+    <span.kix-icon.icon-dummy class=(state.showConfigurationWidget ? "" : "icon-asterisk") on-click('toggleConfigurationWidget')/>
+</div>
+<if(state.translations && state.showConfigurationWidget)>
+    <div.configuration-widget>
+        <widget minimizable=false>
+            <@title>
+                <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
+            </@title>
+            <@content>
+                <h4>Home Dashboard</h4>
+                <!-- TODO: get real dashboard name (home, ticket, ...) and its translation, maybe from parent (input.name) -->
+                <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
+                <if(input.configurationMode)>
+                    <button on-click('openConfigurationDialog')>${component.getTranslation(component.translationIds.OPEN_DIALOG)}</button>
+                    ${component.getTranslation(component.translationIds.DESCRIPTION)}
+                    <hr/>
+                </if>
+                <button on-click('toggleConfigurationMode')>
+                    <if(input.configurationMode)>${component.getTranslation(component.translationIds.STOP)}</if>
+                    <else>${component.getTranslation(component.translationIds.START)}</else>
+                </button>
+            </@content>
+        </widget>
+    </div>
+</if>
+<if(state.showConfigurationDialog)>
+    <div>
+        <main-dialog>
+            <@title>Dashboard Config - Paltzhalter-Titel</@title>
+            <@body>Hehe ... is noch leer :D</@body>
+            <@button>
+                <button on-click('closeConfigurationDialog')>Schließen</button>
+            </@button>
+        </main-dialog>
+    </div>
+</if>

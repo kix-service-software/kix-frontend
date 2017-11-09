@@ -1,5 +1,5 @@
 <div.tools-col>
-    <icon-bar configurationMode=input.configurationMode on-toggleConfigurationOverlay('toggleConfigurationOverlay')/>
+    <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
     <if(state.configuration)>
         <div.widget-bar>
             <for(widget in state.configuration.widgets)>
@@ -23,18 +23,14 @@
                 <div>
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
-                        configurationMode: input.configurationMode,
+                        configurationMode: state.configurationMode,
                         minimizable: false
-                    }) key=widget.instanceId>
-                        <@widgetoverlay>
-                            <if(input.configurationMode)>
-                                <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
-                                    <div.widget-overlay-header.clearfix/>
-                                    <div.widget-overlay-content/>
-                                </div>
-                            </if>
-                        </@widgetoverlay>
-                    </include>
+                    }) key=widget.instanceId/>
+                    <if(state.configurationMode)>
+                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+                            <div.widget-overlay-content/>
+                        </div>
+                    </if>
                 </div>
             </if>
         </for>

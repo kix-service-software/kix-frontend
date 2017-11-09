@@ -35,8 +35,9 @@ class SidebarComponent {
         }
     }
 
-    public toggleConfigurationOverlay(): void {
-        (this as any).emit('toggleConfigurationOverlay');
+    public toggleConfigurationMode(): void {
+        this.state.configurationMode = !this.state.configurationMode;
+        (this as any).emit('toggleConfigurationMode');
     }
 
     public getWidgetTemplate(widgetId: string): any {

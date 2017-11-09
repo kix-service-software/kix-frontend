@@ -1,5 +1,4 @@
 <div.widget class=(input.configurationMode ? "config-mode" : "")>
-    <include(input.overlay)/>
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
@@ -10,10 +9,24 @@
             <include(input.filter)/>
         </span>
         <span.header-right>
-            <include(input.actions)/>
-            <if(!input.configurationMode && (input.minimizable || typeof input.minimizable === 'undefined'))>
-                <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+            <if(input.configurationMode)>
+                <span.kix-icon.icon-dummy.icon-asterisk.configuration on-click('showConfiguration')/>
             </if>
+            <else>
+                <!-- 
+                    TODO: Durch Marko-Bug kein if innerhalb if/else möglich, deshalb wieder "unnützes" div 
+                    wahrscheinlich selbes Problem wie in Issue #151
+                    interessanter weise gehen hier auch nicht mehrere if nebeneinander bzw. if - else-if Konstrukte...
+                -->
+                <div>
+                    <if(input.actions && Object.keys(input.actions).length)>
+                        <include(input.actions)/>
+                    </if>
+                    <if(input.minimizable || typeof input.minimizable === 'undefined')>
+                        <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+                    </if>
+                </div>
+            </else>
         </span>
     </div>
     <if(!state.minimized)>

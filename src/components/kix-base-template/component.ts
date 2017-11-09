@@ -40,13 +40,8 @@ class BaseTemplateComponent {
         await TranslationHandler.getInstance();
     }
 
-    public toggleConfigurationOverlay(): void {
-        this.state.showConfigurationOverlay = !this.state.showConfigurationOverlay;
-    }
-
     public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
-        this.toggleConfigurationOverlay();
     }
 }
 

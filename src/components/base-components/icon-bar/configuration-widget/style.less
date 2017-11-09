@@ -1,0 +1,37 @@
+.config-header-theme() {
+    background: @config-color;
+    color: @secondary-0;
+}
+
+.bar-icon.config-mode {
+    position: relative;
+    z-index: 102;
+    .config-header-theme;
+    box-shadow: none;
+}
+
+.configuration-widget {
+    position: absolute;
+    top: 0px;
+    right: 72px;
+    width: 192px;
+    z-index: 101;
+    .widget {
+        border: 1px solid @config-color;
+        border-top: none;
+        .widget-header {
+            .config-header-theme;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-top-right-radius: 0px;
+            box-sizing: border-box;
+            width: 264px;
+        }
+        .widget-content {
+            button {
+                left: 0px;
+                height: unset;
+            }
+        }
+    }
+}

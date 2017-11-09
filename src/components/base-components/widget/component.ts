@@ -12,6 +12,10 @@ class WidgetComponent {
         this.state.minimized = !this.state.minimized;
     }
 
+    protected showConfiguration(): void {
+        (this as any).emit('showConfiguration');
+    }
+
 }
 
 module.exports = WidgetComponent;

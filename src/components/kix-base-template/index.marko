@@ -1,24 +1,18 @@
 <if(state.configurationMode)>
-    <main-overlay/>
+  <main-overlay/>
 </if>
 <div.wrapper>
-    <kix-header/>
-    <section.clearfix>
-        <main-menu/>
-        <sidebar configurationMode=state.configurationMode on-toggleConfigurationOverlay('toggleConfigurationOverlay')/>
-        <section.content>
-            <header>
-                <breadcrumb/>
-                <back/>
-            </header>
-            <include(state.template, {configurationMode: state.configurationMode})/>
-        </section>
-        <if(state.showConfigurationOverlay)>
-            <!-- TODO: remove "toggleConfigurationOverlay" - nur Platzhalter bis "header" in icon-bar ist -->
-            <configuration-overlay configurationMode=state.configurationMode
-                on-toggleConfigurationOverlay('toggleConfigurationOverlay')
-                on-toggleConfigurationMode('toggleConfigurationMode')/>
-        </if>
+  <kix-header/>
+  <section.clearfix>
+    <main-menu/>
+    <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
+    <section.content>
+      <header>
+        <breadcrumb/>
+        <back/>
+      </header>
+      <include(state.template, {configurationMode: state.configurationMode})/>
     </section>
-    <kix-footer/>
+  </section>
+  <kix-footer/>
 </div>

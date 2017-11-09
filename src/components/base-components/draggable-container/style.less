@@ -1,38 +1,39 @@
-[draggable] {
-    user-select: none;
-}
-
-.widget-overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    cursor: move;
-    border-radius: 3px;
-    z-index: 101;
-    .widget-overlay-header {
-        opacity: 0.8;
-        height: 2em;
-        background-color: @secondary-0;
+.drag-widget {
+    position: relative;
+    [draggable] {
+        user-select: none;
     }
-    .widget-overlay-content {
+    .widget-overlay {
         position: absolute;
-        opacity: 0.2;
-        top: 2em;
+        top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        background-color: @config-color;
-        border: 1px solid @secondary-0;
-        border-top: none;
+        cursor: move;
+        border-radius: 3px;
+        z-index: 101;
+        .widget-overlay-content {
+            position: absolute;
+            opacity: 0.2;
+            top: 2em;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: @config-color;
+            border: 1px solid @secondary-0;
+            border-top: none;
+            box-sizing: border-box;
+        }
     }
-}
-
-.drag-element {
-    opacity: 0.7;
-}
-
-.drop-element {
-    background-color: @tertiary-3;
+    &.size1of1 {
+        .widget-overlay {
+            cursor: ns-resize;
+        }
+    }
+    .drag-element {
+        opacity: 0.7;
+    }
+    .drop-element {
+        background-color: @tertiary-3;
+    }
 }

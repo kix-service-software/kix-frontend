@@ -25,18 +25,27 @@ class ConfigurationOverlay {
         ]);
     }
 
+    public toggleConfigurationWidget(): void {
+        this.state.showConfigurationWidget = !this.state.showConfigurationWidget;
+    }
+
     public toggleConfigurationMode(): void {
+        this.toggleConfigurationWidget();
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
     }
 
-    public getTranslation(id: ConfigurationOverlayTranslationId): string {
-        return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
+    public openConfigurationDialog(): void {
+        this.toggleConfigurationWidget();
+        this.state.showConfigurationDialog = true;
     }
 
-    // TODO: remove - nur Platzhalter bis "header" in icon-bar ist
-    public toggleConfigurationOverlay(): void {
-        (this as any).emit('toggleConfigurationOverlay');
+    public closeConfigurationDialog(): void {
+        this.state.showConfigurationDialog = false;
+    }
+
+    public getTranslation(id: ConfigurationOverlayTranslationId): string {
+        return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
     }
 }
 

@@ -1,7 +1,5 @@
-<div.icon-bar class=(input.configurationMode ? "config-mode" : "")>
-    <div.bar-icon>
-        <span.kix-icon.icon-dummy.icon-asterisk on-click('toggleConfigurationOverlay')/>
-    </div>
+<div.icon-bar>
+    <configuration-widget on-toggleConfigurationMode('toggleConfigurationMode')/>
     <div.bar-icon>
         <span.kix-icon.icon-dummy.icon-i/>
     </div>

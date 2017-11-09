@@ -8,9 +8,8 @@ class IconBar {
         this.state = new IconBarComponentState();
     }
 
-    public toggleConfigurationOverlay(): void {
-        this.state.showConfigurationOverlay = !this.state.showConfigurationOverlay;
-        (this as any).emit('toggleConfigurationOverlay');
+    public toggleConfigurationMode(): void {
+        (this as any).emit('toggleConfigurationMode');
     }
 
 }
