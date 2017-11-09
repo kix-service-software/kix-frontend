@@ -5,7 +5,7 @@ import {
     SocketEvent,
     Ticket,
     TicketEvent,
-    WidgetSocketListener,
+    WidgetSocketListener
 } from '@kix/core/dist/model/client/';
 
 import { TICKET_LIST_ERROR, WIDGET_LOADED } from '../store/actions';
