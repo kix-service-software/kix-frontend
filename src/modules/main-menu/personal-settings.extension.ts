@@ -1,15 +1,27 @@
-import { IPersonalSettingsExtension, PersonalSettings } from '@kix/core';
+import { MenuEntry } from '@kix/core/dist/model/client';
+import {
+    IPersonalSettingsExtension,
+    PersonalSettings,
+    IMainMenuExtension,
+    IPluginService,
+    KIXExtensions,
+    MenuEntryConfiguration
+} from '@kix/core';
+import { container } from '../../Container';
 
 export class MainMenuPersonalSettingsExtension implements IPersonalSettingsExtension {
 
-    public getPersonalSettings(): PersonalSettings {
+    public async getPersonalSettings(): Promise<PersonalSettings> {
+
+        const configurationContent = await this.getConfigurationContent();
+
         return new PersonalSettings(
             "main-menu",
             "Hauptmenü",
             "Nutzerspezifische Einstellungen für das Hauptmenü.",
             this.getTemplatePath(),
             this.getDefaultConfiguration(),
-            this.getConfigurationContent()
+            configurationContent
         );
     }
 
@@ -22,14 +34,20 @@ export class MainMenuPersonalSettingsExtension implements IPersonalSettingsExten
     public getDefaultConfiguration(): any {
         return {
             primaryMenuEntries: [],
-            secondaryMenuEntries: []
+            secondaryMenuEntries: [],
+            showText: true
         };
     }
 
-    public getConfigurationContent(): any {
-        return {
-            availableMenuEntries: []
-        };
+    public async getConfigurationContent(): Promise<any> {
+        const pluginService = container.getDIContainer().get<IPluginService>("IPluginService");
+        const extensions = await pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
+
+        const availableMenuEntries = extensions.map(
+            (me) => new MenuEntry(me.getLink(), me.getIcon(), me.getText(), me.getContextId())
+        );
+
+        return { availableMenuEntries };
     }
 
 }

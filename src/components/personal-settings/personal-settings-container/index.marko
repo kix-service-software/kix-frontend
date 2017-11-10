@@ -1,14 +1,15 @@
 <!-- TODO: Remove example code -->
 <ul.settings-navigation>
-    <for(setting in state.personalSettings)>
-        <li.settings-link on-click('showSettings', setting.id)>${setting.name}</li>
-    </for>
+  <for(setting in state.personalSettings)>
+    <li.settings-link on-click('showSettings', setting.id)>${setting.name}</li>
+  </for>
 </ul>
 <if(state.currentSetting)>
-    <div.ps-content>
-        <include(component.getSettingsTemplate(), {
+  <div.ps-content>
+    <include(component.getSettingsTemplate(), {
             configuration: state.currentSetting.configuration,
             configurationContent: state.currentSetting.configurationContent
         })/>
-    </div>
+    <button on-click('savePersonalSettings')>Speichern</button>
+  </div>
 </if>
