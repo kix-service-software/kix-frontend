@@ -16,9 +16,7 @@ class TicketStateInput {
 
     public onMount(): void {
         CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        const reduxState: TicketCreationReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketState;
-        this.state.stateId = reduxState.stateId;
+        this.setStoreData();
     }
 
     public stateChanged(state: TicketCreationReduxState): void {

@@ -1,6 +1,8 @@
 <label.form-label>
-    An Queue
-    <select value="issue" on-blur("valueChanged") tabindex="4">
-        <option value="issue">Issue</option>
-    </select>
+  An Queue
+  <select on-change("valueChanged")>
+    <for(queue in state.queues)>
+      <option key=queue.QueueID value=queue.QueueID selected=(state.queueId === queue.QueueID)>${queue.Name}</option>
+    </for>
+  </select>
 </label>
