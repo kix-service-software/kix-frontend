@@ -3,7 +3,7 @@ import { TranslationHandler } from '@kix/core/dist/model/client';
 import { ConfigurationWidgetComponentState } from './model/ConfigurationWidgetComponentState';
 import { ConfigurationWidgetTranslationId } from './model/ConfigurationWidgetTranslationId';
 
-class ConfigurationOverlay {
+class ConfigurationWidget {
 
     private state: ConfigurationWidgetComponentState;
 
@@ -51,4 +51,4 @@ class ConfigurationOverlay {
     }
 }
 
-module.exports = ConfigurationOverlay;
+module.exports = ConfigurationWidget;
