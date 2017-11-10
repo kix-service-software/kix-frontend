@@ -1,9 +1,5 @@
-import { injectable, inject } from 'inversify';
-import {
-    IHttpService,
-    SortOrder,
-    Query
-} from '@kix/core';
+import { IHttpService, Query, SortOrder } from '@kix/core';
+import { inject, injectable } from 'inversify';
 
 /**
  * Generic abstract class for all ObjectServices.

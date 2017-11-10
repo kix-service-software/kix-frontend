@@ -9,6 +9,9 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
+        if (input.hasOwnProperty('showIconBar') && input.showIconBar === false) {
+            this.state.showIconBar = false;
+        }
     }
 
     public onMount(): void {
