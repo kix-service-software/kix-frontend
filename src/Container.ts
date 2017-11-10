@@ -23,7 +23,7 @@ import {
     ITranslationService,
     IUserService,
     IValidObjectService,
-    KIXExtensions,
+    KIXExtensions
 } from '@kix/core';
 import { Container } from 'inversify';
 
@@ -47,7 +47,7 @@ import {
     TicketTypeService,
     TranslationService,
     UserService,
-    ValidObjectService,
+    ValidObjectService
 } from './services/';
 
 export class ServiceContainer {
