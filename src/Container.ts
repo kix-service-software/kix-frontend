@@ -11,6 +11,7 @@ import {
     ILoggingService,
     IMarkoService,
     IPluginService,
+    IQueueService,
     IRoleService,
     IRouter,
     IRouterExtension,
@@ -37,6 +38,7 @@ import {
     LoggingService,
     MarkoService,
     PluginService,
+    QueueService,
     RoleService,
     SocketCommunicationService,
     TicketPriorityService,
@@ -91,6 +93,7 @@ export class ServiceContainer {
         this.container.bind<IGroupService>("IGroupService").to(GroupService);
         this.container.bind<IArticleTypeService>("IArticleTypeService").to(ArticleTypeService);
         this.container.bind<IRoleService>("IRoleService").to(RoleService);
+        this.container.bind<IQueueService>("IQueueService").to(QueueService);
     }
 
     private async bindRouters(): Promise<void> {
