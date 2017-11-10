@@ -5,9 +5,9 @@ import { ConfigurationOverlayTranslationId } from './model/ConfigurationOverlayT
 
 class ConfigurationOverlay {
 
-    public state: ConfigurationOverlayComponentState;
+    private state: ConfigurationOverlayComponentState;
 
-    public translationIds: any;
+    private translationIds: any;
 
     public onCreate(input: any): void {
         this.state = new ConfigurationOverlayComponentState();
@@ -18,33 +18,35 @@ class ConfigurationOverlay {
         const translationHandler = await TranslationHandler.getInstance();
         this.state.translations = translationHandler.getTranslations([
             ConfigurationOverlayTranslationId.TITLE,
-            ConfigurationOverlayTranslationId.OPEN_DIALOG,
+            ConfigurationOverlayTranslationId.PRE_DESCRIPTION,
             ConfigurationOverlayTranslationId.DESCRIPTION,
+            ConfigurationOverlayTranslationId.OPEN_DIALOG,
+            ConfigurationOverlayTranslationId.DESCRIPTION_INFO,
             ConfigurationOverlayTranslationId.START,
             ConfigurationOverlayTranslationId.STOP
         ]);
     }
 
-    public toggleConfigurationWidget(): void {
+    private toggleConfigurationWidget(): void {
         this.state.showConfigurationWidget = !this.state.showConfigurationWidget;
     }
 
-    public toggleConfigurationMode(): void {
+    private toggleConfigurationMode(): void {
         this.toggleConfigurationWidget();
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
     }
 
-    public openConfigurationDialog(): void {
+    private openConfigurationDialog(): void {
         this.toggleConfigurationWidget();
         this.state.showConfigurationDialog = true;
     }
 
-    public closeConfigurationDialog(): void {
+    private closeConfigurationDialog(): void {
         this.state.showConfigurationDialog = false;
     }
 
-    public getTranslation(id: ConfigurationOverlayTranslationId): string {
+    private getTranslation(id: ConfigurationOverlayTranslationId): string {
         return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
     }
 }

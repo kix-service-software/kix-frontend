@@ -5,7 +5,7 @@
 
 .bar-icon.config-mode {
     position: relative;
-    z-index: 102;
+    z-index: 111;
     .config-header-theme;
     box-shadow: none;
 }
@@ -15,7 +15,7 @@
     top: 0px;
     right: 72px;
     width: 192px;
-    z-index: 101;
+    z-index: 110;
     .widget {
         border: 1px solid @config-color;
         border-top: none;
@@ -32,6 +32,13 @@
                 left: 0px;
                 height: unset;
             }
+            height: unset;
         }
+    }
+}
+
+.configuration-dialog {
+    .main-overlay {
+        z-index: 120;
     }
 }

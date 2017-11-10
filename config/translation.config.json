@@ -57,22 +57,36 @@
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:OPEN-DIALOG",
-            "defaultValue": "Konfigurationseinstellungen",
+            "id": "CONFIGURATION-OVERLAY:PRE-DESCRIPTION",
+            "defaultValue": "Hier können Sie die angezeigten Widgets anpassen (z.B. hinzufügen, entfernen, konfigurieren sowie deren Position verändern).",
             "translationValues": {
-                "en": "configuration settings"
+                "en": "Here you can adjust the displayed widgets (e.g. add, remove, configure widgets and change their position)."
             }
         },
         {
             "id": "CONFIGURATION-OVERLAY:DESCRIPTION",
-            "defaultValue": "Die angezeigten Widgets können nach Beginn der Konfiguration mittels Drag & Drop verschoben werden.",
+            "defaultValue": "Widgets hinzufügen oder entfernen:",
             "translationValues": {
-                "en": "The displayed widgets can be moved using drag & drop after start of the configuration."
+                "en": "Add or remove widgets:"
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:OPEN-DIALOG",
+            "defaultValue": "Auswahl der Widgets",
+            "translationValues": {
+                "en": "Widget range"
+            }
+        },
+        {
+            "id": "CONFIGURATION-OVERLAY:DESCRIPTION-INFO",
+            "defaultValue": "Die angezeigten Widgets können mittels Drag & Drop verschoben werden.",
+            "translationValues": {
+                "en": "The displayed widgets can be moved per drag'n drop."
             }
         },
         {
             "id": "CONFIGURATION-OVERLAY:START",
-            "defaultValue": "Konfiguration beginnen",
+            "defaultValue": "Konfiguration starten",
             "translationValues": {
                 "en": "Start configuration"
             }

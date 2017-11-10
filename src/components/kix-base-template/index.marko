@@ -1,18 +1,15 @@
-<if(state.configurationMode)>
-  <main-overlay/>
-</if>
 <div.wrapper>
-  <kix-header/>
-  <section.clearfix>
-    <main-menu/>
-    <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
-    <section.content>
-      <header>
-        <breadcrumb/>
-        <back/>
-      </header>
-      <include(state.template, {configurationMode: state.configurationMode})/>
+    <kix-header/>
+    <section.clearfix>
+        <main-menu/>
+        <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
+        <section.content>
+            <header>
+                <breadcrumb/>
+                <back/>
+            </header>
+            <include(state.template, {configurationMode: state.configurationMode})/>
+        </section>
     </section>
-  </section>
-  <kix-footer/>
+    <kix-footer/>
 </div>

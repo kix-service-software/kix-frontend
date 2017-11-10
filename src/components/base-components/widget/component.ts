@@ -4,7 +4,8 @@ class WidgetComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            minimized: false
+            minimized: false,
+            configChanged: false
         };
     }
 
@@ -12,8 +13,13 @@ class WidgetComponent {
         this.state.minimized = !this.state.minimized;
     }
 
-    protected showConfiguration(): void {
+    private showConfiguration(): void {
         (this as any).emit('showConfiguration');
+    }
+
+    private resetConfiguration(): void {
+        // TODO: hol alten stand aus browser "cache" und überschreib neue konfiguration
+        this.state.configChanged = false;
     }
 
 }

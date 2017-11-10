@@ -10,7 +10,10 @@
         </span>
         <span.header-right>
             <if(input.configurationMode)>
-                <span.kix-icon.icon-dummy.icon-asterisk.configuration on-click('showConfiguration')/>
+                <if(state.configChanged)>
+                    <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
+                </if>
+                <span.kix-icon.icon-dummy.icon-asterisk on-click('showConfiguration')/>
             </if>
             <else>
                 <!-- 
