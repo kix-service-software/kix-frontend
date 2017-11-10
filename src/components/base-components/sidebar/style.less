@@ -79,6 +79,9 @@
 
 .sidebar {
     >div {
+        &.config-mode {
+            z-index: 100;
+        }
         position: relative;
         .widget-overlay {
             cursor: ns-resize;
@@ -88,7 +91,6 @@
             bottom: 0;
             left: 0;
             border-radius: 3px;
-            z-index: 101;
             .widget-overlay-content {
                 position: absolute;
                 opacity: 0.2;

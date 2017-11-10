@@ -35,12 +35,15 @@
         overflow: hidden;
         box-sizing: border-box;
     }
-    &.config-mode {
-        z-index: 100;
-        position: relative;
+    /** .config-mode is from .drag-widget */
+    .config-mode & {
         .widget-header {
             color: @config-color;
             background-color: @secondary-0;
+            .header-right {
+                z-index: 100;
+                position: relative;
+            }
         }
     }
 }

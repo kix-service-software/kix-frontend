@@ -3,6 +3,10 @@
     [draggable] {
         user-select: none;
     }
+    &.config-mode {
+        z-index: 100;
+        position: relative;
+    }
     .widget-overlay {
         position: absolute;
         top: 0;
@@ -11,7 +15,6 @@
         left: 0;
         cursor: move;
         border-radius: 3px;
-        z-index: 101;
         .widget-overlay-content {
             position: absolute;
             opacity: 0.2;

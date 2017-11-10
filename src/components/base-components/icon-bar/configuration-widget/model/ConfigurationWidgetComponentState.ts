@@ -1,4 +1,4 @@
-export class ConfigurationOverlayComponentState {
+export class ConfigurationWidgetComponentState {
 
     public configurationMode: boolean = false;
     public showConfigurationWidget: boolean = false;

@@ -1,29 +1,29 @@
 import { TranslationHandler } from '@kix/core/dist/model/client';
 
-import { ConfigurationOverlayComponentState } from './model/ConfigurationOverlayComponentState';
-import { ConfigurationOverlayTranslationId } from './model/ConfigurationOverlayTranslationId';
+import { ConfigurationWidgetComponentState } from './model/ConfigurationWidgetComponentState';
+import { ConfigurationWidgetTranslationId } from './model/ConfigurationWidgetTranslationId';
 
 class ConfigurationOverlay {
 
-    private state: ConfigurationOverlayComponentState;
+    private state: ConfigurationWidgetComponentState;
 
     private translationIds: any;
 
     public onCreate(input: any): void {
-        this.state = new ConfigurationOverlayComponentState();
-        this.translationIds = ConfigurationOverlayTranslationId;
+        this.state = new ConfigurationWidgetComponentState();
+        this.translationIds = ConfigurationWidgetTranslationId;
     }
 
     public async onMount(input: any): Promise<void> {
         const translationHandler = await TranslationHandler.getInstance();
         this.state.translations = translationHandler.getTranslations([
-            ConfigurationOverlayTranslationId.TITLE,
-            ConfigurationOverlayTranslationId.PRE_DESCRIPTION,
-            ConfigurationOverlayTranslationId.DESCRIPTION,
-            ConfigurationOverlayTranslationId.OPEN_DIALOG,
-            ConfigurationOverlayTranslationId.DESCRIPTION_INFO,
-            ConfigurationOverlayTranslationId.START,
-            ConfigurationOverlayTranslationId.STOP
+            ConfigurationWidgetTranslationId.TITLE,
+            ConfigurationWidgetTranslationId.PRE_DESCRIPTION,
+            ConfigurationWidgetTranslationId.DESCRIPTION,
+            ConfigurationWidgetTranslationId.OPEN_DIALOG,
+            ConfigurationWidgetTranslationId.DESCRIPTION_INFO,
+            ConfigurationWidgetTranslationId.START,
+            ConfigurationWidgetTranslationId.STOP
         ]);
     }
 
@@ -46,7 +46,7 @@ class ConfigurationOverlay {
         this.state.showConfigurationDialog = false;
     }
 
-    private getTranslation(id: ConfigurationOverlayTranslationId): string {
+    private getTranslation(id: ConfigurationWidgetTranslationId): string {
         return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
     }
 }

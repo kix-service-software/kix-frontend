@@ -23,7 +23,7 @@
                 siehe Issue #151
                 nicht mehr relevant, wenn durch draggable-container befüllt (das ist sowieso div drum (drag-widget))
                 -->
-                <div>
+                <div class=(state.configurationMode ? "config-mode" : "")>
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
                         configurationMode: state.configurationMode,

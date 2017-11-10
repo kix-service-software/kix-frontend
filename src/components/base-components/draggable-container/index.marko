@@ -2,11 +2,11 @@
     <for(row in state.containerConfiguration.rows)>
         <div.line>
             <for(widget in row.widgets)>
-                <div.unit-space.drag-widget class=(row.widgets.length === 1 ? "size1of1" : "size1of3") draggable=(state.dndState.enabled ? "true" : "false") data-id=widget.instanceId on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
+                <div.unit-space.drag-widget class=[row.widgets.length === 1 ? "size1of1" : "size1of3", input.configurationMode ? "config-mode" : ""] draggable=(state.dndState.enabled ? "true" : "false") data-id=widget.instanceId on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
                     <include(component.getWidgetTemplate(widget.id), {
                         instanceId: widget.instanceId,
-                        configurationMode: state.configurationMode})/>
-                    <if(state.configurationMode)>
+                        configurationMode: input.configurationMode})/>
+                    <if(input.configurationMode)>
                         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
                             <div.widget-overlay-content/>
                         </div>

@@ -1,9 +1,5 @@
 <if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable configurationMode=input.configurationMode
-        on-showConfiguration('showConfigurationClicked')>
-        <@overlay>
-            <include(input.widgetoverlay)/>
-        </@overlay>
+    <widget minimizable=input.minimizable configurationMode=input.configurationMode on-showConfiguration('showConfigurationClicked')>
         <@icon>
             <span.kix-icon.icon-dummy/>
         </@icon>
@@ -11,8 +7,7 @@
         <@content>
             <if(state.widgetConfiguration)>
                 <if(state.editMode)>
-                    <editor inline=true resize=false value=state.widgetConfiguration.contentConfiguration.notes
-                        on-valueChanged('valueChanged')/>
+                    <editor inline=true resize=false value=state.widgetConfiguration.contentConfiguration.notes on-valueChanged('valueChanged')/>
                 </if>
                 <else>
                     <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->

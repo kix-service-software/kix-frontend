@@ -9,14 +9,12 @@ class DraggableContainerComponent {
     public onCreate(input: any): void {
         this.state = new ContainerComponentState();
         this.state.dndState.enabled = true;
-        this.state.configurationMode = input.configurationMode;
         this.state.containerConfiguration = input.containerConfiguration;
     }
 
     public onInput(input: any): void {
         this.state.containerConfiguration = input.containerConfiguration;
         this.state.widgetTemplates = input.widgetTemplates;
-        this.state.configurationMode = input.configurationMode;
         this.state.dndState.enabled = input.configurationMode;
     }
 

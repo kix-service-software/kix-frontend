@@ -12,7 +12,4 @@ export class ContainerComponentState {
     public widgets: any[] = [];
 
     public dndState: DragAndDropState = new DragAndDropState();
-
-    public configurationMode: boolean = false;
-
 }

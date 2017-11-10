@@ -50,49 +50,49 @@
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:TITLE",
+            "id": "CONFIGURATION-WIDGET:TITLE",
             "defaultValue": "Widgets verwalten",
             "translationValues": {
                 "en": "Widget management"
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:PRE-DESCRIPTION",
+            "id": "CONFIGURATION-WIDGET:PRE-DESCRIPTION",
             "defaultValue": "Hier können Sie die angezeigten Widgets anpassen (z.B. hinzufügen, entfernen, konfigurieren sowie deren Position verändern).",
             "translationValues": {
                 "en": "Here you can adjust the displayed widgets (e.g. add, remove, configure widgets and change their position)."
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:DESCRIPTION",
+            "id": "CONFIGURATION-WIDGET:DESCRIPTION",
             "defaultValue": "Widgets hinzufügen oder entfernen:",
             "translationValues": {
                 "en": "Add or remove widgets:"
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:OPEN-DIALOG",
+            "id": "CONFIGURATION-WIDGET:OPEN-DIALOG",
             "defaultValue": "Auswahl der Widgets",
             "translationValues": {
                 "en": "Widget range"
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:DESCRIPTION-INFO",
+            "id": "CONFIGURATION-WIDGET:DESCRIPTION-INFO",
             "defaultValue": "Die angezeigten Widgets können mittels Drag & Drop verschoben werden.",
             "translationValues": {
                 "en": "The displayed widgets can be moved per drag'n drop."
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:START",
+            "id": "CONFIGURATION-WIDGET:START",
             "defaultValue": "Konfiguration starten",
             "translationValues": {
                 "en": "Start configuration"
             }
         },
         {
-            "id": "CONFIGURATION-OVERLAY:STOP",
+            "id": "CONFIGURATION-WIDGET:STOP",
             "defaultValue": "Konfiguration beenden",
             "translationValues": {
                 "en": "Stop configuration"
