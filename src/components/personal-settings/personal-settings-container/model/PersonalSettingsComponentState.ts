@@ -6,4 +6,6 @@ export class PersonalSettingsComponentState {
 
     public currentSetting: PersonalSettings = null;
 
+    public saving: boolean = false;
+
 }

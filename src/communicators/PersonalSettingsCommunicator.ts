@@ -20,6 +20,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
             .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
             .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
                 this.registerPersonalSettingsEvents(client);
+                this.registerSavePersonalSettingsEvents(client);
             });
     }
 
@@ -32,14 +33,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
             const personalSettingsExtensions = await this.pluginService
                 .getExtensions<IPersonalSettingsExtension>(KIXExtensions.PERSONAL_SETTINGS);
 
-            let configuration =
-                await this.configurationService.getComponentConfiguration(PERSONAL_SETTINGS, null, null, userId);
-
-            if (!configuration) {
-                configuration = {};
-            }
-
-            const settings = await this.getPersonalSettings(configuration, personalSettingsExtensions, userId);
+            const settings = await this.getPersonalSettings(personalSettingsExtensions, userId);
 
             const loadResponse = new LoadPersonalSettingsResponse(settings);
             client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, loadResponse);
@@ -47,33 +41,30 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
     }
 
     private async getPersonalSettings(
-        configuration: any, personalSettingsExtensions: IPersonalSettingsExtension[], userId: number
+        personalSettingsExtensions: IPersonalSettingsExtension[], userId: number
     ): Promise<PersonalSettings[]> {
 
-        let settingsChanged = false;
         const settings: PersonalSettings[] = [];
         for (const psExt of personalSettingsExtensions) {
-            const ps = psExt.getPersonalSettings();
+            const ps = await psExt.getPersonalSettings();
 
-            let psConfig = configuration[ps.id];
-            if (!psConfig) {
-                psConfig = ps.configuration;
-                settingsChanged = true;
+            let personalSettings =
+                await this.configurationService.getComponentConfiguration(PERSONAL_SETTINGS, ps.id, null, userId);
+
+            if (!personalSettings) {
+                personalSettings = ps.configuration;
+                await this.configurationService
+                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, null, userId, personalSettings);
             }
 
-            ps.configuration = psConfig;
+            ps.configuration = personalSettings;
             settings.push(ps);
-        }
-
-        if (settingsChanged) {
-            await this.configurationService
-                .saveComponentConfiguration(PERSONAL_SETTINGS, null, null, userId, configuration);
         }
 
         return settings;
     }
 
-    private registerSaveDashboardConfigurationEvents(client: SocketIO.Socket): void {
+    private registerSavePersonalSettingsEvents(client: SocketIO.Socket): void {
         client.on(PersonalSettingsEvent.SAVE_PERSONAL_SETTINGS, async (data: SavePersonalSettingsRequest) => {
 
             const user = await this.userService.getUserByToken(data.token);

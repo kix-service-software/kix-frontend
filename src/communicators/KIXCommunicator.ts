@@ -8,6 +8,7 @@ import {
     IPluginService,
     IAuthenticationService,
     IConfigurationService,
+    IQueueService,
     ITranslationService,
     ITicketService,
     ITicketStateService,
@@ -28,7 +29,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ITicketService") protected ticketService: ITicketService,
         @inject("ITicketStateService") protected ticketStateService: ITicketStateService,
         @inject("ITicketTypeService") protected ticketTypeService: ITicketTypeService,
-        @inject("ITicketPriorityService") protected ticketPriorityService: ITicketPriorityService
+        @inject("ITicketPriorityService") protected ticketPriorityService: ITicketPriorityService,
+        @inject("IQueueService") protected queueService: IQueueService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

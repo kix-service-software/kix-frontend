@@ -10,16 +10,28 @@ class PersonalSettingsActionHandler {
     public handleAction(state: PersonalSettingsReduxState, action): PersonalSettingsReduxState {
         switch (action.type) {
             case PersonalSettingsAction.PERSONAL_SETTINGS_INITIALIZE + FULFILLED: {
-                return { ...state, socketListener: action.payload.socketListener };
+                state = { ...state, socketListener: action.payload.socketListener };
+                break;
             }
 
             case PersonalSettingsAction.PERSONAL_SETTINGS_LOADED + FULFILLED: {
-                return { ...state, personalSettings: action.payload.personalSettings };
+                state = { ...state, personalSettings: action.payload.personalSettings };
+                break;
             }
 
+            case PersonalSettingsAction.SAVE_PERSONAL_SETTINGS + PENDING:
+                state = { ...state, saving: true };
+                break;
+
+            case PersonalSettingsAction.SAVE_PERSONAL_SETTINGS + FULFILLED:
+                state = { ...state, saving: false };
+                break;
+
             default:
-                return { ...state };
+                state = { ...state };
         }
+
+        return state;
     }
 }
 

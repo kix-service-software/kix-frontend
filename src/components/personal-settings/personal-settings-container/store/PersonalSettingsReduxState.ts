@@ -6,4 +6,6 @@ export class PersonalSettingsReduxState {
 
     public socketListener: SocketIO.Server = null;
 
+    public saving: boolean = false;
+
 }

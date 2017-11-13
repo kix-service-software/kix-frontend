@@ -1,18 +1,26 @@
-<p>
-    <span>Available Menu Entries:</span>
-    <select>
-        <option/>
-    </select>
-</p>
-<p>
-    <span>Primary Menu Entries:</span>
-    <select>
-        <option/>
-    </select>
-</p>
-<p>
-    <span>Secondary Menu Entries:</span>
-    <select>
-        <option/>
-    </select>
-</p>
+<label.main-menu-label>
+  Menütext anzeigen
+  <input type="checkbox" on-change('showTextOptionChanged') checked=state.configuration.showText/>
+</label>
+<label.main-menu-label>
+  Primäre Menüeinträge
+  <select size=10 on-change('primaryEntrySelected')>
+    <for(entry in state.configuration.primaryMenuEntryConfigurations)>
+      <option value=entry.contextId selected=(state.primaryEntryId === entry.contextId)>${component.getUIText(entry.contextId)}</option>
+    </for>
+  </select>
+  <button on-click('movePrimaryEntryUp')>nach oben</button>
+  <button on-click('movePrimaryEntryDown')>nach unten</button>
+  <button on-click('moveToSecondaryMenu')>in sekundäres Menü verschieben</button>
+</label>
+<label.main-menu-label>
+  Sekundäre Menüeinträge
+  <select size=10 on-change('secondaryEntrySelected')>
+    <for(entry in state.configuration.secondaryMenuEntryConfigurations)>
+      <option value=entry.contextId selected=(state.secondaryEntryId === entry.contextId)>${component.getUIText(entry.contextId)}</option>
+    </for>
+  </select>
+  <button on-click('moveSecondaryEntryUp')>nach oben</button>
+  <button on-click('moveSecondaryEntryDown')>nach unten</button>
+  <button on-click('moveToPrimaryMenu')>in primäres Menü verschieben</button>
+</label>
