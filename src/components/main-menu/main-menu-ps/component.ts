@@ -16,9 +16,6 @@ class KIXMenuPersonalSettingsComponent {
     public onInput(input: any): void {
         this.state.configuration = input.configuration;
         this.state.configurationContent = input.configurationContent;
-
-        console.log(this.state.configuration);
-        console.log(this.state.configurationContent);
     }
 
     private getUIText(contextId: string): string {
