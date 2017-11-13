@@ -2,10 +2,13 @@ import {
     ClientStorageHandler,
     SocketEvent,
     PersonalSettingsEvent,
-    LoadPersonalSettingsResponse
+    PersonalSettingsConfiguration,
+    LoadPersonalSettingsResponse,
+    LoadPersonalSettingsRequest,
+    SavePersonalSettingsRequest
 } from '@kix/core/dist/model/client';
 import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
-import { LOAD_PERSONAL_SETTINGS, PERSONAL_SETTINGS_LOADED } from '../store/actions';
+import { PERSONAL_SETTINGS_LOADED } from '../store/actions';
 
 export class PersonalSettingsSocketListener extends SocketListener {
 
@@ -21,9 +24,22 @@ export class PersonalSettingsSocketListener extends SocketListener {
         this.initSocketListener();
     }
 
+    public savePersonalSettings(personalSettings: PersonalSettingsConfiguration[]): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const token = ClientStorageHandler.getToken();
+            const request = new SavePersonalSettingsRequest(token, personalSettings);
+            this.socket.emit(PersonalSettingsEvent.SAVE_PERSONAL_SETTINGS, request);
+
+            this.socket.on(PersonalSettingsEvent.PERSONAL_SETTINGS_SAVED, () => {
+                resolve();
+            });
+        });
+    }
+
     private initSocketListener(): void {
         this.socket.on(SocketEvent.CONNECT, () => {
-            this.store.dispatch(LOAD_PERSONAL_SETTINGS(this.socket));
+            const request = new LoadPersonalSettingsRequest(ClientStorageHandler.getToken());
+            this.socket.emit(PersonalSettingsEvent.LOAD_PERSONAL_SETTINGS, request);
         });
 
         this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {

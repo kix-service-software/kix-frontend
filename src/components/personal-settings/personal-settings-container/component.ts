@@ -1,6 +1,6 @@
 import { PersonalSettingsComponentState } from './model/PersonalSettingsComponentState';
 import { PersonalSettingsReduxState } from './store/PersonalSettingsReduxState';
-import { PERSONAL_SETTINGS_INITIALIZE } from './store/actions';
+import { PERSONAL_SETTINGS_INITIALIZE, SAVE_PERSONAL_SETTINGS } from './store/actions';
 
 class PersonalSettingsContainerComponent {
 
@@ -27,6 +27,8 @@ class PersonalSettingsContainerComponent {
                 this.showSettings(ps.id);
             }
         }
+
+        this.state.saving = reduxState.saving;
     }
 
     public showSettings(id: string): void {
@@ -35,6 +37,10 @@ class PersonalSettingsContainerComponent {
 
     public getSettingsTemplate(): any {
         return require(this.state.currentSetting.templatePath);
+    }
+
+    private savePersonalSettings(): any {
+        this.store.dispatch(SAVE_PERSONAL_SETTINGS(this.store, this.state.personalSettings));
     }
 
 }
