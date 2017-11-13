@@ -20,6 +20,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
             .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
             .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
                 this.registerPersonalSettingsEvents(client);
+                this.registerSavePersonalSettingsEvents(client);
             });
     }
 

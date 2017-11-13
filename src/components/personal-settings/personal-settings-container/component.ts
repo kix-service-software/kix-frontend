@@ -27,6 +27,8 @@ class PersonalSettingsContainerComponent {
                 this.showSettings(ps.id);
             }
         }
+
+        this.state.saving = reduxState.saving;
     }
 
     public showSettings(id: string): void {
@@ -38,7 +40,7 @@ class PersonalSettingsContainerComponent {
     }
 
     private savePersonalSettings(): any {
-        this.store.dispatch(SAVE_PERSONAL_SETTINGS(this.store, this.state.currentSetting));
+        this.store.dispatch(SAVE_PERSONAL_SETTINGS(this.store, this.state.personalSettings));
     }
 
 }

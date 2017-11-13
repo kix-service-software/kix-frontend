@@ -5,11 +5,16 @@
   </for>
 </ul>
 <if(state.currentSetting)>
-  <div.ps-content>
-    <include(component.getSettingsTemplate(), {
+  <if(state.saving)>
+    <span>Persönliche EInstellungen werden gespeichert ...</span>
+  </if>
+  <else>
+    <div.ps-content>
+      <include(component.getSettingsTemplate(), {
             configuration: state.currentSetting.configuration,
             configurationContent: state.currentSetting.configurationContent
         })/>
-    <button on-click('savePersonalSettings')>Speichern</button>
-  </div>
+    </div>
+  </else>
+  <button on-click('savePersonalSettings')>Speichern</button>
 </if>
