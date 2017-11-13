@@ -1,6 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { DYNAMIC_FIELD_CHANGED } from '../../store/actions';
+import { TicketStore, TicketCreationReduxState } from "@kix/core/dist/model/client/";
+import { DYNAMIC_FIELD_CHANGED } from '@kix/core/dist/model/client/';
 
 class TicketDynamicFieldInput {
 
@@ -14,7 +13,7 @@ class TicketDynamicFieldInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -23,12 +22,12 @@ class TicketDynamicFieldInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance()
+        TicketStore.getInstance()
             .getStore().dispatch(DYNAMIC_FIELD_CHANGED(this.state.name, event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        const reduxState: TicketCreationReduxState = TicketStore.getInstance().getTicketCreationState();
         const dynamicField = reduxState.dynamicFields.find((df) => df.Name === this.state.name);
         if (dynamicField) {
             this.state.value = dynamicField.Value;

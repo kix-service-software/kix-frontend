@@ -1,7 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { TEMPLATE_CHANGED } from '../../store/actions';
+import { TicketStore, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/";
+import { TEMPLATE_CHANGED } from '@kix/core/dist/model/client/';
 
 class TicketTemplateInput {
 
@@ -14,18 +12,16 @@ class TicketTemplateInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationProcessReduxState =
-            CreationTicketStore.getInstance().getStore().getState().ticketProcessState;
-
+        const reduxState = TicketStore.getInstance().getTicketDataState();
         this.state.isLoading = reduxState.loadTicketData;
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
+        TicketStore.getInstance().getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
     }
 
 }

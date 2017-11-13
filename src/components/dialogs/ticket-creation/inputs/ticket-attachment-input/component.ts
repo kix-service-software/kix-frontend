@@ -1,5 +1,4 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
+import { TicketStore } from "@kix/core/dist/model/client/";
 
 class TicketAttachmentInput {
 
@@ -10,7 +9,7 @@ class TicketAttachmentInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {

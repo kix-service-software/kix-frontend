@@ -1,7 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { PRIORITY_ID_CHANGED } from '../../store/actions';
+import { TicketStore, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/";
+import { PRIORITY_ID_CHANGED } from '@kix/core/dist/model/client/';
 
 class TicketPriorityInput {
 
@@ -15,7 +13,7 @@ class TicketPriorityInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -24,12 +22,12 @@ class TicketPriorityInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(PRIORITY_ID_CHANGED(event.target.value));
+        TicketStore.getInstance().getStore().dispatch(PRIORITY_ID_CHANGED(event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
-        const processState: TicketCreationProcessReduxState = CreationTicketStore.getInstance().getProcessState();
+        const reduxState: TicketCreationReduxState = TicketStore.getInstance().getTicketCreationState();
+        const processState: TicketDataReduxState = TicketStore.getInstance().getTicketDataState();
 
         this.state.priorityId = Number(reduxState.priorityId);
         this.state.ticketPriorities = processState.priorities;
