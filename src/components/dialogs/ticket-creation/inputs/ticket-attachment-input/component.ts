@@ -1,4 +1,4 @@
-import { TicketStore } from "@kix/core/dist/model/client/";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketAttachmentInput {
 
@@ -9,7 +9,7 @@ class TicketAttachmentInput {
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {

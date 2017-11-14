@@ -1,5 +1,5 @@
-import { TicketStore, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/";
-import { SUBJECT_CHANGED } from '@kix/core/dist/model/client/';
+import { SUBJECT_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketSubjectInput {
 
@@ -12,7 +12,7 @@ class TicketSubjectInput {
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -21,11 +21,11 @@ class TicketSubjectInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getInstance().getStore().dispatch(SUBJECT_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(SUBJECT_CHANGED(event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = TicketStore.getInstance().getTicketCreationState();
+        const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
         this.state.subject = reduxState.subject;
     }
 
