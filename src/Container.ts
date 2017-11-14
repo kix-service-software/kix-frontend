@@ -16,6 +16,7 @@ import {
     IRouter,
     IRouterExtension,
     ISocketCommunicationService,
+    IServiceService,
     ITicketPriorityService,
     ITicketService,
     ITicketStateService,
@@ -41,6 +42,7 @@ import {
     QueueService,
     RoleService,
     SocketCommunicationService,
+    ServiceService,
     TicketPriorityService,
     TicketService,
     TicketStateService,
@@ -94,6 +96,7 @@ export class ServiceContainer {
         this.container.bind<IArticleTypeService>("IArticleTypeService").to(ArticleTypeService);
         this.container.bind<IRoleService>("IRoleService").to(RoleService);
         this.container.bind<IQueueService>("IQueueService").to(QueueService);
+        this.container.bind<IServiceService>("IServiceService").to(ServiceService);
     }
 
     private async bindRouters(): Promise<void> {

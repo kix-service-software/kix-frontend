@@ -7,7 +7,8 @@ class TicketServiceInput {
 
     public onCreate(input: any): void {
         this.state = {
-            serviceId: null
+            serviceId: null,
+            services: []
         };
     }
 
@@ -26,7 +27,10 @@ class TicketServiceInput {
 
     private setStoreData(): void {
         const reduxState = TicketStore.getTicketCreationState();
+        const ticketDataState = TicketStore.getTicketDataState();
+
         this.state.serviceId = reduxState.serviceId;
+        this.state.services = ticketDataState.services;
     }
 
 }
