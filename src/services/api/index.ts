@@ -1,3 +1,4 @@
+export { ServiceService } from './ServiceService';
 export { QueueService } from './QueueService';
 export { ArticleTypeService } from './ArticleTypeService';
 export { AuthenticationService } from './AuthenticationService';
