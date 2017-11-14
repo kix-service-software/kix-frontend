@@ -53,8 +53,11 @@ class TicketCreationDialogComponent {
             if (this.state.createNewObjectAfterFinish) {
                 TicketStore.resetTicketCreation();
                 TicketStore.loadTicketData();
+                this.state.error = null;
             }
             (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
+        }).catch((error) => {
+            this.state.error = error;
         });
     }
 }
