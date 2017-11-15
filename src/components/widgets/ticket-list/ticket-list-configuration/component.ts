@@ -13,12 +13,12 @@ class TicketListConfigurationComponent {
     }
 
     public limitChanged(event: any): void {
-        this.state.configuration.contentConfiguration.limit = event.target.value;
+        this.state.configuration.settings.limit = event.target.value;
     }
 
     public showTotalCountChanged(event: any): void {
-        const currentShowTotalCount = this.state.configuration.contentConfiguration.showTotalCount;
-        this.state.configuration.contentConfiguration.showTotalCount = !currentShowTotalCount;
+        const currentShowTotalCount = this.state.configuration.settings.showTotalCount;
+        this.state.configuration.settings.showTotalCount = !currentShowTotalCount;
     }
 
 }

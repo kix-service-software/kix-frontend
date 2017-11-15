@@ -46,7 +46,7 @@ class NotesWidgetComponent extends WidgetBaseComponent<NotesComponentState, Note
 
     public valueChanged(newValue: string): void {
         const reduxState: NotesReduxState = this.store.getState();
-        this.state.widgetConfiguration.contentConfiguration.notes = newValue;
+        this.state.widgetConfiguration.settings.notes = newValue;
         reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
     }
 

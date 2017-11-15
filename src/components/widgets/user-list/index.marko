@@ -1,5 +1,6 @@
 <if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable configurationMode=input.configurationMode on-showConfiguration('showConfigurationClicked')>
+    <widget minimizable=input.minimizable configurationMode=input.configurationMode
+        on-showConfiguration('showConfigurationClicked')>
         <@icon>
             <span.kix-icon.icon-dummy/>
         </@icon>
@@ -7,13 +8,13 @@
         <@content>
             <table.user-table>
                 <tr>
-                    <for(property in state.widgetConfiguration.contentConfiguration.properties)>
+                    <for(property in state.widgetConfiguration.settings.properties)>
                         <th>${property.displayName}</th>
                     </for>
                 </tr>
                 <for(user in state.users)>
                     <tr>
-                        <for(property in state.widgetConfiguration.contentConfiguration.properties)>
+                        <for(property in state.widgetConfiguration.settings.properties)>
                             <td>${user[property.name]}</td>
                         </for>
                     </tr>
@@ -35,7 +36,7 @@
             <main-dialog>
                 <@title>Konfiguration: User-List</@title>
                 <@body>
-                    <user-list-configuration configuration=state.widgetConfiguration.contentConfiguration/>
+                    <user-list-configuration configuration=state.widgetConfiguration.settings/>
                 </@body>
                 <@button>
                     <button on-click('saveConfiguration')>Speichern</button>

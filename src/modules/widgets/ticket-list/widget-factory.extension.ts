@@ -3,15 +3,12 @@ import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core
 import { TicketListWidget } from './TicketListWidget';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = false;
-    isContentWidget: boolean = true;
+    public isSidebar: boolean = false;
+    public isContentWidget: boolean = true;
+    public widgetId: string = "ticket-list-widget";
 
     public createWidget(): IWidget {
-        return new TicketListWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "ticket-list-widget";
+        return new TicketListWidget(this.widgetId);
     }
 
     public getTemplate(): string {

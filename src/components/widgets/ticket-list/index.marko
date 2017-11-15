@@ -1,11 +1,12 @@
-<widget minimizable=input.minimizable configurationMode=input.configurationMode on-showConfiguration('showConfigurationClicked')>
+<widget minimizable=input.minimizable configurationMode=input.configurationMode
+    on-showConfiguration('showConfigurationClicked')>
     <@icon>
         <span.kix-icon.icon-dummy/>
     </@icon>
     <@title>
         <if(state.widgetConfiguration)>
-            <if(state.widgetConfiguration.contentConfiguration.showTotalCount)>Tickets Gesamt: ${state.tickets.length} |</if>
-            Tickets Verfügbar: ${state.widgetConfiguration.contentConfiguration.limit}
+            <if(state.widgetConfiguration.settings.showTotalCount)>Tickets Gesamt: ${state.tickets.length} |</if>
+            Tickets Verfügbar: ${state.widgetConfiguration.settings.limit}
         </if>
     </@title>
     <@content>
@@ -15,7 +16,7 @@
                     <th>
                         <a href="#">alle</a>
                     </th>
-                    <for(column in state.widgetConfiguration.contentConfiguration.properties)>
+                    <for(column in state.widgetConfiguration.settings.properties)>
                         <th>${column}</th>
                     </for>
                 </tr>
@@ -24,7 +25,7 @@
                         <td>
                             <input type="checkbox" name="all"/>
                         </td>
-                        <for(column in state.widgetConfiguration.contentConfiguration.properties)>
+                        <for(column in state.widgetConfiguration.settings.properties)>
                             <td>${ticket[column]}</td>
                         </for>
                     </tr>

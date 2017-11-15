@@ -5,15 +5,12 @@ import { UserListConfiguration } from './../../../components/widgets/user-list/m
 import { UserListWidget } from './UserListWidget';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = false;
-    isContentWidget: boolean = true;
+    public isSidebar: boolean = false;
+    public isContentWidget: boolean = true;
+    public widgetId: string = "user-list-widget";
 
     public createWidget(): IWidget {
-        return new UserListWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "user-list-widget";
+        return new UserListWidget(this.widgetId);
     }
 
     public getTemplate(): string {
@@ -33,7 +30,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
         userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
 
-        // TODO: Remove the logic of actions from here. On place is only content config relevant.
+        // TODO: Remove the logic of actions from here. On place is only content config (settings) relevant.
         const deleteAction = new DeleteAction("delete-action", "Delete", "");
         const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
         return new WidgetConfiguration("User-List", [deleteAction, tourAction], userListConfiguration);

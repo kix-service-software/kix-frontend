@@ -2,15 +2,12 @@ import { TicketInfoWidget } from './TicketInfoWidget';
 import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
 export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = true;
-    isContentWidget: boolean = false;
+    public isSidebar: boolean = true;
+    public isContentWidget: boolean = false;
+    public widgetId: string = "ticket-info-widget";
 
     public createWidget(): IWidget {
-        return new TicketInfoWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "ticket-info-widget";
+        return new TicketInfoWidget(this.widgetId);
     }
 
     public getTemplate(): string {

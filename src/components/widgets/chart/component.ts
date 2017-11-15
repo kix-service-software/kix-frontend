@@ -1,5 +1,5 @@
 import { ChartReduxState } from './store/ChartReduxState';
-import { ChartFactory, ChartConfiguration, WidgetBaseComponent } from '@kix/core/dist/model/client';
+import { ChartFactory, WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { ChartComponentState } from './model/ChartComponentState';
 import { CHARTS_INITIALIZE } from './store/actions';
 
@@ -49,7 +49,7 @@ class ChartWidgetComponent extends WidgetBaseComponent<ChartComponentState, Char
         const element = document.getElementById(this.state.svgId);
         if (element && this.state.widgetConfiguration) {
             element.innerHTML = '';
-            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.contentConfiguration);
+            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.settings);
         }
     }
 }

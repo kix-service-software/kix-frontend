@@ -2,15 +2,12 @@ import { SearchTemplatesWidget } from './SearchTemplatesWidget';
 import { IWidgetFactoryExtension, IWidget } from '@kix/core';
 
 export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = false;
-    isContentWidget: boolean = true;
+    public isSidebar: boolean = false;
+    public isContentWidget: boolean = true;
+    public widgetId: string = "search-templates-widget";
 
     public createWidget(): IWidget {
-        return new SearchTemplatesWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "search-templates-widget";
+        return new SearchTemplatesWidget(this.widgetId);
     }
 
     public getTemplate(): string {

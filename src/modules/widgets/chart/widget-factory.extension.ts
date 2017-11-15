@@ -1,16 +1,13 @@
 import { ChartWidget } from './ChartWidget';
-import { IWidget, IWidgetFactoryExtension, WidgetConfiguration, ChartConfiguration } from '@kix/core';
+import { IWidget, IWidgetFactoryExtension, WidgetConfiguration, ChartSettings } from '@kix/core';
 
 export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = false;
-    isContentWidget: boolean = true;
+    public isSidebar: boolean = false;
+    public isContentWidget: boolean = true;
+    public widgetId: string = "chart-widget";
 
     public createWidget(): IWidget {
-        return new ChartWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "chart-widget";
+        return new ChartWidget(this.widgetId);
     }
 
     public getTemplate(): string {
@@ -24,7 +21,7 @@ export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
     }
 
     public getDefaultConfiguration(): WidgetConfiguration {
-        const chartConfig = new ChartConfiguration();
+        const chartConfig = new ChartSettings();
         return new WidgetConfiguration("Chart", [], chartConfig);
     }
 

@@ -4,15 +4,12 @@ import { NotesConfiguration } from './../../../components/widgets/notes/model/No
 import { NotesWidget } from './NotesSidebar';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
-    isSidebar: boolean = true;
-    isContentWidget: boolean = false;
+    public isSidebar: boolean = true;
+    public isContentWidget: boolean = false;
+    public widgetId: string = "notes-widget";
 
     public createWidget(): IWidget {
-        return new NotesWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "notes-widget";
+        return new NotesWidget(this.widgetId);
     }
 
     public getTemplate(): string {

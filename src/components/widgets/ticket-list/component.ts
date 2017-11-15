@@ -63,8 +63,8 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
 
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
-            const config = this.state.widgetConfiguration.contentConfiguration;
-            this.store.dispatch(LOAD_TICKETS(this.store, config.limit, config.properties));
+            const settings = this.state.widgetConfiguration.settings;
+            this.store.dispatch(LOAD_TICKETS(this.store, settings.limit, settings.properties));
         }
     }
 }

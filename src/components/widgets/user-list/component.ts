@@ -60,8 +60,8 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
             const reduxState: UserListReduxState = this.store.getState();
             reduxState.socketListener.loadUsers(new LoadUsersRequest(
                 ClientStorageHandler.getToken(),
-                this.state.widgetConfiguration.contentConfiguration.properties,
-                this.state.widgetConfiguration.contentConfiguration.limit)
+                this.state.widgetConfiguration.settings.properties,
+                this.state.widgetConfiguration.settings.limit)
             );
         }
     }
