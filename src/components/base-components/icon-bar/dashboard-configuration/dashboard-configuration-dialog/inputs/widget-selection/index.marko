@@ -1,0 +1,76 @@
+<div.widget-selection.clearfix>
+    <if(input.firstTitle)>
+        <div.first-list>
+            <h3>${input.firstTitle}</h3>
+            <input.widget-filter type="text" placeholder="| Verfügbare Widgets filtern"/>
+            <select size=4 multiple=true on-change('firstListSelected')>
+                <for(el in state.firstList)>
+                    <option>${el.title}</option>
+                </for>
+            </select>
+        </div>
+        <div.selection-buttons>
+            <button on-click('addContentWidget')><</button>
+            <button on-click('removeContentWidget')>></button>
+        </div>
+    </if>
+    <div.second-list>
+        <h3>${input.secondTitle}</h3>
+        <div.selection-container>
+            <div.action-names/>
+            <div.selection>
+                <for(el in state.secondList)>
+                    <div.selection-element data-id=el.instanceId>
+                        ${el.title}
+                        <span.selection-actions>
+                            <for(action in state.actions)>
+                                <if(action.type === 'checkbox')>
+                                    <input name="${el.instanceId}-${action.id}" type="checkbox" checked=el[action.id]/>
+                                </if>
+                                <else-if(action.type === 'radio')>
+                                    <for(value in action.values)>
+                                        <input name="${el.instanceId}-${action.id}" type="radio" value=value checked=(el[action.id] === value)/>
+                                    </for>
+                                </else-if>
+                            </for>
+                        </span>
+                    </div>
+                </for>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<select size=4 multiple=true>
+<option>
+Admininfos<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+<option>
+7 Tage Statistik<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+<option>
+Tortendiagramm - Meine To Dos<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+<option>
+Flächendiagramm<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+<option>
+Platzhalter 3<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+<option>
+Platzhalter 4<input type="checkbox"/>
+<input type="radio" value="s" name="adminInfoSize"/>
+<input type="radio" value="l" name="adminInfoSize"/>
+</option>
+</select>
+-->

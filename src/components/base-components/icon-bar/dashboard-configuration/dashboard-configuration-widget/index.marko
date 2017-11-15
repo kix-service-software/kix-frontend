@@ -1,8 +1,9 @@
-<div.bar-icon class=(state.configurationMode || state.showConfigurationWidget ? "config-mode" : "")>
-    <span.kix-icon.icon-dummy class=(state.showConfigurationWidget ? "" : "icon-asterisk") on-click('toggleConfigurationWidget')/>
+<div.bar-icon class=(state.configurationMode || state.showDashboardConfigurationWidget ? "config-mode" : "")>
+    <span.kix-icon.icon-dummy class=(state.showDashboardConfigurationWidget ? "" : "icon-asterisk")
+        on-click('toggleDashboardConfigurationWidget')/>
 </div>
-<if(state.translations && state.showConfigurationWidget)>
-    <div.configuration-widget>
+<if(state.translations && state.showDashboardConfigurationWidget)>
+    <div.dashboard-configuration-widget>
         <widget minimizable=false>
             <@title>
                 <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
@@ -13,7 +14,9 @@
                     <!-- TODO: get real dashboard name (home, ticket, ...) and its translation, maybe from parent (input.name) -->
                     <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
                     ${component.getTranslation(component.translationIds.DESCRIPTION)}
-                    <button on-click('openConfigurationDialog')>${component.getTranslation(component.translationIds.OPEN_DIALOG)}</button>
+                    <button on-click('openDashboardConfigurationDialog')>
+                        ${component.getTranslation(component.translationIds.OPEN_DIALOG)}
+                    </button>
                     <span.kix-icon.icon-dummy.icon-i/>${component.getTranslation(component.translationIds.DESCRIPTION_INFO)}
                     <hr/>
                     <button on-click('toggleConfigurationMode')>${component.getTranslation(component.translationIds.STOP)}</button>
@@ -26,17 +29,20 @@
         </widget>
     </div>
 </if>
-<if(state.showConfigurationDialog)>
-    <div.configuration-dialog>
+<if(state.showDashboardConfigurationDialog)>
+    <div.dashboard-configuration-dialog>
         <main-dialog>
             <@title>Dashboard Config - Paltzhalter-Titel</@title>
-            <@body>Hehe ... is noch leer :D</@body>
+            <@body>
+                Hehe ... is noch leer :D
+                <dashboard-configuration-dialog on-closeDialog('closeDashboardConfigurationDialog')/>
+            </@body>
             <@button>
-                <button on-click('closeConfigurationDialog')>Schließen</button>
+                <button on-click('closeDashboardConfigurationDialog')>Schließen</button>
             </@button>
         </main-dialog>
     </div>
 </if>
-<if(state.configurationMode && !state.showConfigurationDialog)>
+<if(state.configurationMode && !state.showDashboardConfigurationDialog)>
     <main-overlay/>
 </if>

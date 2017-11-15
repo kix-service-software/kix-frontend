@@ -1,0 +1,34 @@
+<div.widget.form-widget>
+    <div.widget-header>
+        <span.kix-icon.icon-dummy.icon-asterisk/>Auswahl der Widgets
+    </div>
+    <div.widget-content>
+        <form>
+            <if(state.error)>
+                <div.create-error>${state.error.message}</div>
+            </if>
+            <div.form-group>
+                <!-- TODO: use translation -->
+                <h3>Explorer-Widgets</h3>
+                <widget-selection secondTitle="Verfügbare Explorer" secondList=state.explorerList actions=state.explorerActions/>
+            </div>
+            <div.form-group>
+                <!-- TODO: use translation -->
+                <h3>Content-Widgets</h3>
+                <widget-selection firstTitle="Verfügbare Widgets" firstList=state.contentFirstList secondTitle="Angezeigte Widgets"
+                    secondList=state.contentSecondList actions=state.contentActions firstListFixed=true/>
+            </div>
+            <div.form-group>
+                <!-- TODO: use translation -->
+                <h3>Sidebar-Widgets</h3>
+                <widget-selection firstTitle="Verfügbare Sideabrs" firstList=state.sidebarFirstList secondTitle="Angezeigte Sideabrs"
+                    secondList=state.sidebarSecondList actions=state.sidebarActions/>
+            </div>
+            <div.form-buttons>
+                <!-- TODO: use translation -->
+                <button on-click('Cancel')>Abbrechen</button>
+                <button on-click('Submit')>Widgets auf ${input.dashboardName} platzieren</button>
+            </div>
+        </form>
+    </div>
+</div>
