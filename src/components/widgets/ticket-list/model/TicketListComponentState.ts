@@ -4,4 +4,8 @@ export class TicketListComponentState extends WidgetComponentState {
 
     public tickets: Ticket[] = [];
 
+    public filteredTickets: Ticket[] = [];
+
+    public filterValue: string = null;
+
 }

@@ -1,4 +1,4 @@
-import { WidgetBaseComponent } from '@kix/core/dist/model/client';
+import { WidgetBaseComponent, Ticket } from '@kix/core/dist/model/client';
 
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketListReduxState } from './store/';
@@ -36,6 +36,7 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
 
         if (reduxState.tickets) {
             this.state.tickets = reduxState.tickets;
+            this.state.filteredTickets = reduxState.tickets;
         }
 
         if (reduxState.widgetConfiguration) {
@@ -67,6 +68,28 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
             this.store.dispatch(LOAD_TICKETS(this.store, config.limit, config.properties));
         }
     }
+
+    private filterChanged(event): void {
+        this.filter(event.target.value);
+    }
+
+    private filter(value: string): void {
+        this.state.filterValue = value;
+
+        if (value === null || value === "") {
+            this.state.filteredTickets = this.state.tickets;
+        } else {
+            const searchValue = value.toLocaleLowerCase();
+            this.state.filteredTickets = this.state.tickets.filter((ticket: Ticket) => {
+                const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
+                const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
+                return foundTitle || foundTicketNumber;
+            });
+        }
+
+        (this as any).setStateDirty('filteredTickets');
+    }
+
 }
 
 module.exports = TicketListWidgetComponent;
