@@ -3,6 +3,7 @@ import { WidgetBaseComponent, Ticket } from '@kix/core/dist/model/client';
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketListReduxState } from './store/';
 import { LOAD_TICKETS, TICKET_LIST_INITIALIZE } from './store/actions/';
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentState, TicketListReduxState> {
 
@@ -27,24 +28,8 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
             .then(() => {
                 this.loadTickets();
             });
-    }
 
-    public stateChanged(): void {
-        super.stateChanged();
-
-        const reduxState: TicketListReduxState = this.store.getState();
-
-        if (reduxState.tickets) {
-            this.state.tickets = reduxState.tickets;
-            this.state.filteredTickets = reduxState.tickets;
-        }
-
-        if (reduxState.widgetConfiguration) {
-            if (!this.componentInitialized) {
-                this.componentInitialized = true;
-                this.loadTickets();
-            }
-        }
+        // TicketStore.addStateListener(this.ticketStateChanged.bind(this));
     }
 
     public showConfigurationClicked(): void {
@@ -62,9 +47,28 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         this.state.showConfiguration = false;
     }
 
+    protected stateChanged(): void {
+        super.stateChanged();
+
+        const reduxState: TicketListReduxState = this.store.getState();
+
+        if (reduxState.tickets) {
+            this.state.tickets = reduxState.tickets;
+            this.state.filteredTickets = reduxState.tickets;
+        }
+
+        if (reduxState.widgetConfiguration) {
+            if (!this.componentInitialized) {
+                this.componentInitialized = true;
+                this.loadTickets();
+            }
+        }
+    }
+
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const config = this.state.widgetConfiguration.contentConfiguration;
+            // TicketStore.getTickets(this.state.instanceId, config.limit, config.properties)
             this.store.dispatch(LOAD_TICKETS(this.store, config.limit, config.properties));
         }
     }
