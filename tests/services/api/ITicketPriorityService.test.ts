@@ -5,7 +5,6 @@ import {
     ITicketPriorityService,
     IConfigurationService,
     HttpError,
-    TicketPriority,
     TicketPriorityResponse,
     TicketPrioritiesResponse,
     CreateTicketPriority,
@@ -16,6 +15,8 @@ import {
     UpdateTicketPriorityResponse,
     SortOrder
 } from '@kix/core';
+
+import { TicketPriority } from '@kix/core/dist/model/client/ticket/model/TicketPriority';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

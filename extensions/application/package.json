@@ -5,7 +5,6 @@
             "action-communicator": "../../dist/communicators/extensions/ActionCommunicator.extension",
             "authentication-communicator": "../../dist/communicators/extensions/AuthenticationCommunicator.extension",
             "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
-            "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
             "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
             "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
             "translation-communicator": "../../dist/communicators/extensions/TranslationCommunicator.extension",
@@ -13,6 +12,7 @@
             "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
             "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
             "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
+            "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension"
         },
         "kix:personal:settings": {

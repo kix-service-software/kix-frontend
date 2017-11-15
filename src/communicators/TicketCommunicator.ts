@@ -1,18 +1,22 @@
 import {
-    SearchTicketsRequest,
-    SearchTicketsResponse,
     SocketEvent,
-    Ticket,
-    TicketEvent,
-    TicketCreationEvent,
-    TicketCreationRequest,
     CreateArticle,
     CreateTicket,
+} from '@kix/core/';
+
+import {
+    SearchTicketsRequest,
+    SearchTicketsResponse,
+    TicketCreationEvent,
+    TicketCreationRequest,
+    TicketEvent,
     TicketCreationResponse,
     TicketCreationError,
     TicketLoadDataRequest,
     TicketLoadDataResponse
-} from '@kix/core/';
+} from '@kix/core/dist/model/client/ticket/socket';
+
+import { Ticket } from '@kix/core/dist/model/client/ticket/model';
 
 import { KIXCommunicator } from './KIXCommunicator';
 

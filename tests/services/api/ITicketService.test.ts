@@ -1,6 +1,5 @@
 /* tslint:disable*/
 import {
-    Article,
     CreateArticle,
     CreateArticleAttachmentRequest,
     CreateArticleRequest,
@@ -12,12 +11,13 @@ import {
     IConfigurationService,
     ITicketService,
     SortOrder,
-    Ticket,
     TicketResponse,
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core';
+
+import { Article, Ticket } from '@kix/core/dist/model/client/ticket/model/';
 
 import { container } from '../../../src/Container';
 

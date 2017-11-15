@@ -1,11 +1,8 @@
 import {
-    AbstractTicket,
-    Article,
     ArticleAttachmentResponse,
     ArticleAttachmentsResponse,
     ArticleResponse,
     ArticlesResponse,
-    Attachment,
     CreateArticle,
     CreateArticleAttachementResponse,
     CreateArticleAttachmentRequest,
@@ -15,12 +12,9 @@ import {
     CreateTicket,
     CreateTicketRequest,
     CreateTicketResponse,
-    DynamicField,
     ExpandedTicketResponse,
     IHttpService,
     ITicketService,
-    Ticket,
-    TicketHistory,
     TicketHistoryItemResponse,
     TicketHistoryResponse,
     TicketResponse,
@@ -29,6 +23,16 @@ import {
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core';
+
+import {
+    DynamicField,
+    AbstractTicket,
+    Article,
+    Attachment,
+    Ticket,
+    TicketHistory,
+} from '@kix/core/dist/model/client/ticket';
+
 import { Response } from 'express';
 import { inject, injectable } from 'inversify';
 

@@ -1,12 +1,15 @@
 import {
     ClientStorageHandler,
-    SearchTicketsRequest,
-    SearchTicketsResponse,
     SocketEvent,
-    Ticket,
-    TicketEvent,
     WidgetSocketListener
 } from '@kix/core/dist/model/client/';
+
+import {
+    SearchTicketsRequest,
+    SearchTicketsResponse,
+    Ticket,
+    TicketEvent,
+} from '@kix/core/dist/model/client/ticket';
 
 import { TICKET_LIST_ERROR, WIDGET_LOADED } from '../store/actions';
 

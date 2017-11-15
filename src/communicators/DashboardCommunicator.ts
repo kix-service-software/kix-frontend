@@ -1,10 +1,13 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
-    ContainerConfiguration,
     DashboardEvent,
     LoadDashboardRequest,
     LoadDashboardResponse,
     SaveDashboardRequest,
+} from '@kix/core/dist/model/client/dashboard/socket';
+
+import {
+    ContainerConfiguration,
     SocketEvent,
     User,
     WidgetTemplate

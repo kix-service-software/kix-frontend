@@ -1,6 +1,5 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
-import { TicketsState } from './store/TicketState';
-import { TICKET_INITIALIZE } from './store/actions';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 
 class TicketsComponent {
 
@@ -14,9 +13,7 @@ class TicketsComponent {
     }
 
     public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(TICKET_INITIALIZE());
+        DashboardStore.loadDashboardConfiguration();
     }
 
     public onInput(input: any) {
@@ -24,10 +21,10 @@ class TicketsComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: TicketsState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
-            this.state.widgetTemplates = reduxState.widgetTemplates;
+        const dashboardConfiguration = DashboardStore.getDashboardConfiguration();
+        if (dashboardConfiguration) {
+            this.state.containerConfiguration = dashboardConfiguration.configuration;
+            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
 }

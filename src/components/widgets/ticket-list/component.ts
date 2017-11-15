@@ -1,4 +1,5 @@
-import { WidgetBaseComponent, Ticket } from '@kix/core/dist/model/client';
+import { WidgetBaseComponent } from '@kix/core/dist/model/client';
+import { Ticket } from '@kix/core/dist/model/client/ticket';
 
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketListReduxState } from './store/';
