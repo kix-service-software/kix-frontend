@@ -4,6 +4,8 @@ import { NotesConfiguration } from './../../../components/widgets/notes/model/No
 import { NotesWidget } from './NotesSidebar';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
+    isSidebar: boolean = true;
+    isContentWidget: boolean = false;
 
     public createWidget(): IWidget {
         return new NotesWidget(this.getWidgetId());

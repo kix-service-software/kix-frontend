@@ -9,11 +9,13 @@ import {
     IAuthenticationService,
     IConfigurationService,
     IQueueService,
+    IServiceService,
     ITranslationService,
     ITicketService,
     ITicketStateService,
     ITicketTypeService,
-    ITicketPriorityService
+    ITicketPriorityService,
+    IWidgetRepositoryService
 } from "@kix/core";
 
 @injectable()
@@ -30,7 +32,9 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ITicketStateService") protected ticketStateService: ITicketStateService,
         @inject("ITicketTypeService") protected ticketTypeService: ITicketTypeService,
         @inject("ITicketPriorityService") protected ticketPriorityService: ITicketPriorityService,
-        @inject("IQueueService") protected queueService: IQueueService
+        @inject("IQueueService") protected queueService: IQueueService,
+        @inject("IServiceService") protected serviceService: IServiceService,
+        @inject("IWidgetRepositoryService") protected widgetRepositoryService: IWidgetRepositoryService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

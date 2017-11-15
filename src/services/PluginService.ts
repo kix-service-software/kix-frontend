@@ -53,6 +53,10 @@ export class PluginService implements IPluginService {
         return widgetFactory;
     }
 
+    public async getWidgetFactories(): Promise<IWidgetFactoryExtension[]> {
+        return await this.getExtensions<IWidgetFactoryExtension>(KIXExtensions.WIDGET);
+    }
+
     public async getModuleFactory(moduleId: string): Promise<IModuleFactoryExtension> {
         const moduleFactories = await this.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
         const moduleFactory = moduleFactories.find((mf) => mf.getModuleId() === moduleId);

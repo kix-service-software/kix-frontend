@@ -16,6 +16,7 @@ import {
     IRouter,
     IRouterExtension,
     ISocketCommunicationService,
+    IServiceService,
     ITicketPriorityService,
     ITicketService,
     ITicketStateService,
@@ -23,6 +24,7 @@ import {
     ITranslationService,
     IUserService,
     IValidObjectService,
+    IWidgetRepositoryService,
     KIXExtensions
 } from '@kix/core';
 import { Container } from 'inversify';
@@ -41,13 +43,15 @@ import {
     QueueService,
     RoleService,
     SocketCommunicationService,
+    ServiceService,
     TicketPriorityService,
     TicketService,
     TicketStateService,
     TicketTypeService,
     TranslationService,
     UserService,
-    ValidObjectService
+    ValidObjectService,
+    WidgetRepositoryService
 } from './services/';
 
 export class ServiceContainer {
@@ -94,6 +98,8 @@ export class ServiceContainer {
         this.container.bind<IArticleTypeService>("IArticleTypeService").to(ArticleTypeService);
         this.container.bind<IRoleService>("IRoleService").to(RoleService);
         this.container.bind<IQueueService>("IQueueService").to(QueueService);
+        this.container.bind<IServiceService>("IServiceService").to(ServiceService);
+        this.container.bind<IWidgetRepositoryService>("IWidgetRepositoryService").to(WidgetRepositoryService);
     }
 
     private async bindRouters(): Promise<void> {

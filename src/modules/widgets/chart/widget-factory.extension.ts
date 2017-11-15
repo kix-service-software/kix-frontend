@@ -2,6 +2,8 @@ import { ChartWidget } from './ChartWidget';
 import { IWidget, IWidgetFactoryExtension, WidgetConfiguration, ChartConfiguration } from '@kix/core';
 
 export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
+    isSidebar: boolean = false;
+    isContentWidget: boolean = true;
 
     public createWidget(): IWidget {
         return new ChartWidget(this.getWidgetId());

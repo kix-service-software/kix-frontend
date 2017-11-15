@@ -52,6 +52,12 @@ export class DashboardCommunicator extends KIXCommunicator {
 
             client.emit(DashboardEvent.DASHBOARD_LOADED, new LoadDashboardResponse(configuration, widgetTemplates));
         });
+        client.on(DashboardEvent.GET_WIDGET_LIST, async (data: LoadDashboardRequest) => {
+            const configuration: ContainerConfiguration = await this.configurationService
+                .getComponentConfiguration('pre-defined-widgets', data.contextId, null, null);
+            const widgetFactories = await this.pluginService.getWidgetFactories();
+
+        });
 
     }
 

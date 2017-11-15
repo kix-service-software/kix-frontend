@@ -1,6 +1,7 @@
 import { CreationTicketStore } from './../../store/index';
 import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
 import { SERVICE_ID_CHANGED } from '../../store/actions';
+import { TicketCreationProcessReduxState } from '../../store/TicketCreationProcessReduxState';
 
 class TicketServiceInput {
 
@@ -8,7 +9,8 @@ class TicketServiceInput {
 
     public onCreate(input: any): void {
         this.state = {
-            serviceId: null
+            serviceId: null,
+            services: []
         };
     }
 
@@ -27,7 +29,10 @@ class TicketServiceInput {
 
     private setStoreData(): void {
         const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        const processState: TicketCreationProcessReduxState = CreationTicketStore.getInstance().getProcessState();
+
         this.state.serviceId = reduxState.serviceId;
+        this.state.services = processState.services;
     }
 
 }

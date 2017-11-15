@@ -67,8 +67,12 @@ export class TicketCreationCommunicator extends KIXCommunicator {
                 fields: 'Queue.QueueID,Queue.Name'
             });
 
+            const services = await this.serviceService.getServices(data.token, null, null, null, {
+                fields: "Service.ServiceID,Service.Name"
+            });
+
             const response = new TicketCreationLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, queues, [], [], users
+                [], ticketStates, ticketTypes, ticketPriorities, queues, services, [], users
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
