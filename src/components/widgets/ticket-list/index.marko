@@ -37,7 +37,7 @@
     </@content>
     <@filter>
         Filter:
-        <input type="text" on-change("filterChanged") on-keyup("filterChanged") value=state.filterValue no-update/>
+        <input type="text" on-change("filterChanged") on-keyup("filterChanged") value=state.filterValue/>
     </@filter>
     <@actions>
         <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
