@@ -13,6 +13,7 @@ class TicketsComponent {
     }
 
     public onMount(): void {
+        DashboardStore.addStateListener(this.stateChanged.bind(this));
         DashboardStore.loadDashboardConfiguration();
     }
 
