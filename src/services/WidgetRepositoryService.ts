@@ -23,65 +23,47 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
     }
 
     /**
-     * ASYNC - returns all content widget descriptors
+     * @description ASYNC - returns all content widget descriptors based on a context
      *
-     * @param contexId id of the context (dashboard)
+     * @param {string} contexId id of the context (dashboard)
      *
      * @return promise of WidgetDescriptor[]
      */
     public async getContentWidgets(contextId: string): Promise<WidgetDescriptor[]> {
         const allWidgets: WidgetDescriptor[] = await this.getAllWidgets(contextId);
-        const contentWidgets: WidgetDescriptor[] = [];
-        allWidgets.forEach((widgetDesc) => {
-            if (widgetDesc.isContentWidget) {
-                contentWidgets.push(widgetDesc);
-            }
-        });
-        return contentWidgets;
+        return allWidgets.filter((wd) => wd.isContentWidget);
     }
 
     /**
-     * ASYNC - returns all sidebar widget descriptors
+     * @description ASYNC - returns all sidebar widget descriptors based on a context
      *
-     * @param contexId id of the context (dashboard)
+     * @param {string} contexId id of the context (dashboard)
      *
      * @return promise of WidgetDescriptor[]
      */
     public async getSidebarWidgets(contextId: string): Promise<WidgetDescriptor[]> {
         const allWidgets: WidgetDescriptor[] = await this.getAllWidgets(contextId);
-        const sidebarWidgets: WidgetDescriptor[] = [];
-        allWidgets.forEach((widgetDesc) => {
-            if (widgetDesc.isSidebarWidget) {
-                sidebarWidgets.push(widgetDesc);
-            }
-        });
-        return sidebarWidgets;
+        return allWidgets.filter((wd) => wd.isSidebarWidget);
     }
 
     /**
-     * ASYNC - returns all widget descriptors
+     * @description ASYNC - returns all widget descriptors based on a context
      *
-     * @param contexId id of the context (dashboard)
+     * @param {string} contexId id of the context (dashboard)
      *
      * @return promise of WidgetDescriptor[]
      */
-    private async getAllWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        // TODO: auslesen und ggf. aufbereiten
-        const preDefinedWidgets: ContainerConfiguration = await this.configurationService
-            .getComponentConfiguration('pre-defined-widgets', contextId, null, null);
+    public async getAllWidgets(contextId: string): Promise<WidgetDescriptor[]> {
+        const preDefinedWidgetsConfiguration: any
+            = await this.configurationService.getPreDefinedWidgetConfiguration();
         const widgetFactories = await this.pluginService.getWidgetFactories();
 
-        const widgetDescriptors: WidgetDescriptor[] = [];
+        const preDefinedWidgetDescriptors: WidgetDescriptor[] = preDefinedWidgetsConfiguration[contextId] || [];
+        const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
+            wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebar
+        ));
+        console.log(widgetDescriptors);
 
-        widgetFactories.forEach((element) => {
-            if (element.isContentWidget) {
-                widgetDescriptors.push(new WidgetDescriptor(
-                    element.widgetId, element.getDefaultConfiguration(),
-                    element.isContentWidget, element.isSidebar
-                ));
-            }
-        });
-
-        return widgetDescriptors;
+        return [...preDefinedWidgetDescriptors, ...widgetDescriptors];
     }
 }

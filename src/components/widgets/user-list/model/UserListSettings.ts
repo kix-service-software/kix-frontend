@@ -1,6 +1,6 @@
 import { UIProperty } from '@kix/core/dist/model/client';
 
-export class UserListConfiguration {
+export class UserListSettings {
 
     public properties: UIProperty[] = [];
 

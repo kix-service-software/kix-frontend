@@ -1,4 +1,4 @@
-export class NotesConfiguration {
+export class NotesSettings {
 
     public notes: string = '';
 

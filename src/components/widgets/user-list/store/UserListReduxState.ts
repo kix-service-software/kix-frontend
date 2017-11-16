@@ -1,4 +1,4 @@
-import { UserListConfiguration } from './../model/UserListConfiguration';
+import { UserListSettings } from './../model/UserListSettings';
 import { UIProperty, WidgetConfiguration, WidgetReduxState } from '@kix/core/dist/model/client';
 import { UserListSocketListener } from './../socket/UserListSocketListener';
 
@@ -6,7 +6,7 @@ export class UserListReduxState extends WidgetReduxState {
 
     public users: any[] = [];
 
-    public configuration: UserListConfiguration;
+    public settings: UserListSettings;
 
     public socketListener: UserListSocketListener;
 

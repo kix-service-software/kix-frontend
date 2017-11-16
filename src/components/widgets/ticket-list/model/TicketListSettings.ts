@@ -1,4 +1,4 @@
-export class TicketListConfiguration {
+export class TicketListSettings {
 
     public limit: number;
 

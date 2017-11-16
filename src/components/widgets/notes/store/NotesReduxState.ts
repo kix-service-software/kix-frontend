@@ -1,10 +1,10 @@
 import { NotesSocketListener } from './../socket/NotesSocketListener';
-import { NotesConfiguration } from './../model/NotesConfiguration';
+import { NotesSettings } from './../model/NotesSettings';
 import { WidgetReduxState } from '@kix/core/dist/model/client';
 
 export class NotesReduxState extends WidgetReduxState {
 
-    public configuration: NotesConfiguration;
+    public settings: NotesSettings;
 
     public socketListener: NotesSocketListener;
 

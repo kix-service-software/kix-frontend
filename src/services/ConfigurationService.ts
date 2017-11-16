@@ -16,6 +16,7 @@ export class ConfigurationService implements IConfigurationService {
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
     private translationConfiguration: TranslationConfiguration;
+    private preDefinedWidgetConfiguration: any;
 
     private CONFIG_DIR: string = '../../config/';
     private CONFIG_COMPONENTS_DIR: string = '../../config/components/';
@@ -39,6 +40,8 @@ export class ConfigurationService implements IConfigurationService {
         const translationConfig = this.getConfigurationFilePath("translation");
         this.clearRequireCache(translationConfig);
         this.translationConfiguration = require(translationConfig);
+
+        this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
     }
 
     public getServerConfiguration(): IServerConfiguration {
@@ -51,6 +54,10 @@ export class ConfigurationService implements IConfigurationService {
 
     public getTranslationConfiguration(): TranslationConfiguration {
         return this.translationConfiguration;
+    }
+
+    public getPreDefinedWidgetConfiguration(): any {
+        return this.preDefinedWidgetConfiguration || {};
     }
 
     public async getComponentConfiguration(

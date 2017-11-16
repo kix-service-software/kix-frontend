@@ -1,7 +1,6 @@
 import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@kix/core/dist/model/client';
 
 import { UserListComponentState } from './model/UserListComponentState';
-import { UserListConfiguration } from './model/UserListConfiguration';
 import { USER_LIST_INITIALIZE } from './store/actions';
 import { UserListReduxState } from './store/UserListReduxState';
 

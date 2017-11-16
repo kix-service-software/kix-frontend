@@ -53,10 +53,8 @@ export class DashboardCommunicator extends KIXCommunicator {
             client.emit(DashboardEvent.DASHBOARD_LOADED, new LoadDashboardResponse(configuration, widgetTemplates));
         });
         client.on(DashboardEvent.GET_WIDGET_LIST, async (data: LoadDashboardRequest) => {
-            const contentWidgets = await this.widgetRepositoryService.getContentWidgets(data.contextId);
-            const sidebarWidgets = await this.widgetRepositoryService.getSidebarWidgets(data.contextId);
-
-            client.emit(DashboardEvent.WIDGET_LIST_GIVEN, contentWidgets, sidebarWidgets);
+            const widgets = await this.widgetRepositoryService.getAllWidgets(data.contextId);
+            client.emit(DashboardEvent.WIDGET_LIST_GIVEN, widgets);
         });
 
     }

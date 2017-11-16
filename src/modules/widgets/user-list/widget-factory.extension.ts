@@ -1,7 +1,7 @@
 import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
 import { DeleteAction } from './../../actions/delete/DeleteAction';
 import { IWidgetFactoryExtension, IWidget, UIProperty, WidgetConfiguration, IAction } from '@kix/core';
-import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
+import { UserListSettings } from './../../../components/widgets/user-list/model/UserListSettings';
 import { UserListWidget } from './UserListWidget';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
@@ -24,7 +24,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
     }
 
     public getDefaultConfiguration(): WidgetConfiguration {
-        const userListConfiguration = new UserListConfiguration();
+        const userListConfiguration = new UserListSettings();
         userListConfiguration.properties.push(new UIProperty("UserID", "ID"));
         userListConfiguration.properties.push(new UIProperty("UserFirstname", "Vorname"));
         userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
