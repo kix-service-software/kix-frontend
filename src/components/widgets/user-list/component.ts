@@ -4,6 +4,8 @@ import { UserListComponentState } from './model/UserListComponentState';
 import { UserListConfiguration } from './model/UserListConfiguration';
 import { USER_LIST_INITIALIZE } from './store/actions';
 import { UserListReduxState } from './store/UserListReduxState';
+import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
+import { User } from '../../../../../core/dist/model/client/user/User';
 
 class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
 
@@ -18,33 +20,23 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
     }
 
     public onMount(): void {
-        this.store = require('./store').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(USER_LIST_INITIALIZE(this.store, 'user-list-widget', this.state.instanceId)).then(() => {
-            this.loadUser();
-        });
+        DashboardStore.addStateListener(this.stateChanged.bind(this));
+        this.init();
     }
 
     public stateChanged(): void {
         super.stateChanged();
 
-        const reduxState: UserListReduxState = this.store.getState();
-
-        if (!this.componentInitialized && reduxState.widgetConfiguration) {
-            this.componentInitialized = true;
-            this.loadUser();
-        }
-
-        if (reduxState.users) {
-            this.state.users = reduxState.users;
-        }
+        // const users: User[] = UserStore.getUsers(this.state.instanceId);
+        // if (users) {
+        //     this.state.users = users;
+        // }
     }
 
     public saveConfiguration(): void {
-        const reduxState: UserListReduxState = this.store.getState();
-        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
-        this.loadUser();
-        this.cancelConfiguration();
+        DashboardStore.saveWidgetConfiguration(
+            'user-list-widget', this.state.instanceId, this.state.widgetConfiguration
+        );
     }
 
     protected showConfigurationClicked(): void {
@@ -55,15 +47,18 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
         this.state.showConfiguration = false;
     }
 
-    private loadUser(): void {
-        if (this.state.widgetConfiguration) {
-            const reduxState: UserListReduxState = this.store.getState();
-            reduxState.socketListener.loadUsers(new LoadUsersRequest(
-                ClientStorageHandler.getToken(),
-                this.state.widgetConfiguration.contentConfiguration.properties,
-                this.state.widgetConfiguration.contentConfiguration.limit)
-            );
+    private init(): void {
+        this.state.widgetConfiguration =
+            DashboardStore.getWidgetConfiguration('user-list-widget', this.state.instanceId);
+
+        if (!this.componentInitialized && this.state.widgetConfiguration) {
+            this.componentInitialized = true;
+            this.loadUser();
         }
+    }
+
+    private loadUser(): void {
+        // UserStore.loadUser(this.state.instanceId);
     }
 }
 
