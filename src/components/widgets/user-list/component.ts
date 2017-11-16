@@ -2,14 +2,16 @@ import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@ki
 
 import { UserListComponentState } from './model/UserListComponentState';
 import { UserListConfiguration } from './model/UserListConfiguration';
-import { USER_LIST_INITIALIZE } from './store/actions';
-import { UserListReduxState } from './store/UserListReduxState';
-import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
-import { User } from '../../../../../core/dist/model/client/user/User';
 
-class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState, UserListReduxState> {
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { UserStore } from '@kix/core/dist/model/client/user/store/UserStore';
+import { User } from '../../../../../core/dist/model/client/user/model/User';
+
+class UserListWidgetComponent {
 
     private componentInitialized: boolean = false;
+
+    private state: UserListComponentState;
 
     public onCreate(input: any): void {
         this.state = new UserListComponentState();
@@ -20,17 +22,15 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
     }
 
     public onMount(): void {
-        DashboardStore.addStateListener(this.stateChanged.bind(this));
+        UserStore.addStateListener(this.userStateChanged.bind(this));
         this.init();
     }
 
-    public stateChanged(): void {
-        super.stateChanged();
-
-        // const users: User[] = UserStore.getUsers(this.state.instanceId);
-        // if (users) {
-        //     this.state.users = users;
-        // }
+    public userStateChanged(): void {
+        const users: User[] = UserStore.getUsers(this.state.instanceId);
+        if (users) {
+            this.state.users = users;
+        }
     }
 
     public saveConfiguration(): void {
@@ -58,7 +58,8 @@ class UserListWidgetComponent extends WidgetBaseComponent<UserListComponentState
     }
 
     private loadUser(): void {
-        // UserStore.loadUser(this.state.instanceId);
+        const settings = this.state.widgetConfiguration.contentConfiguration;
+        UserStore.loadUser(this.state.instanceId, settings.properties, settings.limit);
     }
 }
 
