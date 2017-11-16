@@ -10,87 +10,87 @@ class DashboardConfigurationDialog {
         this.state = {
             explorerList: [
                 {
-                    instanceId: '20171114000011', title: 'Queues',
-                    required: true, show: true
+                    instanceId: '20171114000011', widgetId: 'explorer-widget', title: 'Queues',
+                    required: true, show: true, id: 'explorer-widget-1'
                 },
                 {
-                    instanceId: '20171114000012', title: 'Service',
-                    required: false, show: true
+                    instanceId: '20171114000012', widgetId: 'explorer-widget', title: 'Service',
+                    required: false, show: true, id: 'explorer-widget-2'
                 }
             ],
             explorerActions: [
                 { id: 'show', title: 'Anzeigen', type: 'checkbox' }
             ],
             contentFirstList: [
-                {                       // TODO: oder fixedConf?
-                    id: 'chart-widget', preConf: 'oneMonth', title: '1 Monat Statistik',
-                    required: false, size: 's'
+                {                             // TODO: oder fixedConf?
+                    widgetId: 'chart-widget', preConf: 'oneMonth', title: '1 Monat Statistik',
+                    required: false, size: 's', id: 'chart-widget-1'
                 },
                 {
-                    id: 'search-template-widget', title: 'Suchvorlage',
-                    required: false, size: 's'
+                    widgetId: 'search-template-widget', title: 'Suchvorlage',
+                    required: false, size: 's', id: 'search-template-widget-1'
                 },
-                {                             // TODO: oder fixedConf?
-                    id: 'ticket-list-widget', preConf: 'escalation', title: 'Eskalierte Tickets',
-                    required: false, size: 'l'
-                },
-                {
-                    id: 'ticket-list-widget', title: 'Liste',
-                    required: false, size: 'l'
+                {                                   // TODO: oder fixedConf?
+                    widgetId: 'ticket-list-widget', preConf: 'escalation', title: 'Eskalierte Tickets',
+                    required: false, size: 'l', id: 'ticket-list-widget-1'
                 },
                 {
-                    id: 'chart-widget', title: 'Diagramm',
-                    required: false, size: 's'
+                    widgetId: 'ticket-list-widget', title: 'Liste',
+                    required: false, size: 'l', id: 'ticket-list-widget-2'
                 },
-                {                             // TODO: oder fixedConf?
-                    id: 'ticket-list-widget', preConf: 'place1', title: 'Platzhalter 1',
-                    required: true, size: 's'
+                {
+                    widgetId: 'chart-widget', title: 'Diagramm',
+                    required: false, size: 's', id: 'chart-widget-2'
                 },
-                {                             // TODO: oder fixedConf?
-                    id: 'ticket-list-widget', preConf: 'place2', title: 'Platzhalter 2',
-                    required: true, size: 's'
+                {                                   // TODO: oder fixedConf?
+                    widgetId: 'ticket-list-widget', preConf: 'place1', title: 'Platzhalter 1',
+                    required: true, size: 's', id: 'ticket-list-widget-3'
+                },
+                {                                   // TODO: oder fixedConf?
+                    widgetId: 'ticket-list-widget', preConf: 'place2', title: 'Platzhalter 2',
+                    required: true, size: 's', id: 'ticket-list-widget-4'
                 }
             ],
             contentSecondList: [
                 {
-                    instanceId: '20171114000001', id: 'admin-info-widget', title: 'Admininfos',
-                    required: true, show: true, size: 's'
-                },
-                {                                                     // TODO: oder fixedConf?
-                    instanceId: '20171114000002', id: 'chart-widget', preConf: 'sevenDay',
-                    title: '7 Tage Statistik', required: false, show: true, size: 's'
-                },
-                {
-                    instanceId: '20171114000003', id: 'chart-widget', title: 'Tortendiagramm - Meine To Dos',
-                    required: false, show: true, size: 's'
-                },
-                {
-                    instanceId: '20171114000004', id: 'chart-widget', title: 'Flächendiagramm',
-                    required: false, show: false, size: 's'
+                    instanceId: '20171114000001', widgetId: 'admin-info-widget', title: 'Admininfos',
+                    required: true, show: true, size: 's', id: 'admin-info-widget-1'
                 },
                 {                                                           // TODO: oder fixedConf?
-                    instanceId: '20171114000005', id: 'ticket-list-widget', preConf: 'place1',
-                    title: 'Platzhalter 1 Blub', required: false, show: false, size: 'l'
+                    instanceId: '20171114000002', widgetId: 'chart-widget', preConf: 'sevenDay',
+                    title: '7 Tage Statistik', required: false, show: true, size: 's', id: 'chart-widget-3'
                 },
-                {                                                           // TODO: oder fixedConf?
-                    instanceId: '20171114000006', id: 'ticket-list-widget', preConf: 'place2',
-                    title: 'Platzhalter 2 Bla', required: false, show: false, size: 'l'
+                {
+                    instanceId: '20171114000003', widgetId: 'chart-widget', title: 'Tortendiagramm - Meine To Dos',
+                    required: false, show: true, size: 's', id: 'chart-widget-4'
+                },
+                {
+                    instanceId: '20171114000004', widgetId: 'chart-widget', title: 'Flächendiagramm',
+                    required: false, show: false, size: 's', id: 'chart-widget-5'
+                },
+                {                                                                 // TODO: oder fixedConf?
+                    instanceId: '20171114000005', widgetId: 'ticket-list-widget', preConf: 'place1',
+                    title: 'Platzhalter 1 Blub', required: false, show: false, size: 'l', id: 'ticket-list-widget-5'
+                },
+                {                                                                 // TODO: oder fixedConf?
+                    instanceId: '20171114000006', widgetId: 'ticket-list-widget', preConf: 'place2',
+                    title: 'Platzhalter 2 Bla', required: false, show: false, size: 'l', id: 'ticket-list-widget-6'
                 }
             ],
             contentActions: [
-                { id: 'show', title: 'Anzeigen', type: 'checkbox' },
-                { id: 'size', title: 'Größen', type: 'radio', values: ['s', 'l'] }
+                { id: 'size', title: 'Größen', type: 'radio', values: ['s', 'l'] },
+                { id: 'show', title: 'Anzeigen', type: 'checkbox' }
             ],
             sidebarFirstList: [
                 {
-                    id: 'customer-info-widget', title: 'Kunden',
-                    required: false
+                    widgetId: 'customer-info-widget', title: 'Kunden',
+                    required: false, id: 'customer-info-widget-1'
                 }
             ],
             sidebarSecondList: [
                 {
-                    instanceId: '20171114000021', title: 'Notizen',
-                    required: true, show: true
+                    instanceId: '20171114000021', widgetId: 'notes-widget', title: 'Notizen',
+                    required: true, show: true, id: 'notes-widget-1'
                 }
             ],
             sidebarActions: [

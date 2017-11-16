@@ -10,19 +10,21 @@
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Explorer-Widgets</h3>
-                <widget-selection secondTitle="Verfügbare Explorer" secondList=state.explorerList actions=state.explorerActions/>
+                <selection-with-action title="Verfügbare Explorer" secondList=state.explorerList actions=state.explorerActions/>
             </div>
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Content-Widgets</h3>
-                <widget-selection firstTitle="Verfügbare Widgets" firstList=state.contentFirstList secondTitle="Angezeigte Widgets"
-                    secondList=state.contentSecondList actions=state.contentActions firstListFixed=true/>
+                <two-list-selection firstTitle="Verfügbare Widgets" firstList=state.contentFirstList secondTitle="Angezeigte Widgets"
+                    secondList=state.contentSecondList actions=state.contentActions firstListFixed=true
+                    filterPlaceholder="Verfügbare Widgets filtern" size=4 firstMultiple=true secondMultiple=true/>
             </div>
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Sidebar-Widgets</h3>
-                <widget-selection firstTitle="Verfügbare Sideabrs" firstList=state.sidebarFirstList secondTitle="Angezeigte Sideabrs"
-                    secondList=state.sidebarSecondList actions=state.sidebarActions/>
+                <two-list-selection firstTitle="Verfügbare Sideabrs" firstList=state.sidebarFirstList secondTitle="Angezeigte Sidebars"
+                    secondList=state.sidebarSecondList actions=state.sidebarActions
+                    filterPlaceholder="Verfügbare Sidebars filtern" size=4 firstMultiple=true secondMultiple=true/>
             </div>
             <div.form-buttons>
                 <!-- TODO: use translation -->

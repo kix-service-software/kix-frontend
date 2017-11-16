@@ -1,4 +1,4 @@
-import { IWidget } from '@kix/core';
+import { IWidget, WidgetSize } from '@kix/core';
 
 export class TicketListWidget implements IWidget {
 
@@ -8,8 +8,9 @@ export class TicketListWidget implements IWidget {
 
     public show: boolean = true;
 
+    public size: WidgetSize.BIG;
+
     public constructor(id: string) {
         this.id = id;
     }
-
 }
