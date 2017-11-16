@@ -1,12 +1,11 @@
 import { WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { Ticket } from '@kix/core/dist/model/client/ticket';
-
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketListReduxState } from './store/';
-import { LOAD_TICKETS, TICKET_LIST_INITIALIZE } from './store/actions/';
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
+import { TicketState } from '../../../../../core/dist/model/client/ticket/model/TicketState';
 
-class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentState, TicketListReduxState> {
+class TicketListWidgetComponent {
 
     public state: TicketListComponentState;
 
@@ -22,16 +21,12 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         this.state.instanceId = input.instanceId;
     }
 
-    // Test
     public onMount(): void {
-        this.store = require('./store').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(TICKET_LIST_INITIALIZE(this.store, 'ticket-list-widget', this.state.instanceId))
-            .then(() => {
-                this.loadTickets();
-            });
+        TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        this.state.widgetConfiguration =
+            DashboardStore.getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
 
-        // TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        this.loadTickets();
     }
 
     public showConfigurationClicked(): void {
@@ -39,8 +34,10 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
     }
 
     public saveConfiguration(): void {
-        const reduxState: TicketListReduxState = this.store.getState();
-        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
+        DashboardStore.saveWidgetConfiguration(
+            'ticket-list-widget', this.state.instanceId, this.state.widgetConfiguration
+        );
+
         this.loadTickets();
         this.cancelConfiguration();
     }
@@ -49,29 +46,15 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         this.state.showConfiguration = false;
     }
 
-    protected stateChanged(): void {
-        super.stateChanged();
-
-        const reduxState: TicketListReduxState = this.store.getState();
-
-        if (reduxState.tickets) {
-            this.state.tickets = reduxState.tickets;
-            this.state.filteredTickets = reduxState.tickets;
-        }
-
-        if (reduxState.widgetConfiguration) {
-            if (!this.componentInitialized) {
-                this.componentInitialized = true;
-                this.loadTickets();
-            }
-        }
+    private ticketStateChanged(): void {
+        this.state.tickets = TicketStore.getTickets(this.state.instanceId);
+        this.state.filteredTickets = this.state.tickets;
     }
 
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const config = this.state.widgetConfiguration.contentConfiguration;
-            // TicketStore.getTickets(this.state.instanceId, config.limit, config.properties)
-            this.store.dispatch(LOAD_TICKETS(this.store, config.limit, config.properties));
+            TicketStore.loadTickets(this.state.instanceId, config.limit, config.properties);
         }
     }
 

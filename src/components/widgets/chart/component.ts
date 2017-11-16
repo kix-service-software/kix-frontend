@@ -1,10 +1,10 @@
-import { ChartReduxState } from './store/ChartReduxState';
 import { ChartFactory, ChartConfiguration, WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { ChartComponentState } from './model/ChartComponentState';
-import { CHARTS_INITIALIZE } from './store/actions';
+import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
 
-class ChartWidgetComponent extends WidgetBaseComponent<ChartComponentState, ChartReduxState> {
+class ChartWidgetComponent {
 
+    private state: ChartComponentState;
     private componentInititalized: boolean = false;
 
     public onCreate(input: any): void {
@@ -16,20 +16,10 @@ class ChartWidgetComponent extends WidgetBaseComponent<ChartComponentState, Char
     }
 
     public onMount(): void {
-        this.store = require('./store').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(CHARTS_INITIALIZE(this.store, 'chart-widget', this.state.instanceId));
-    }
+        this.state.widgetConfiguration =
+            DashboardStore.getWidgetConfiguration('chart-widget', this.state.instanceId);
 
-    public stateChanged(): void {
-        super.stateChanged();
-
-        const reduxState: ChartReduxState = this.store.getState();
-
-        if (!this.componentInititalized && reduxState.widgetConfiguration) {
-            this.drawChart();
-            this.componentInititalized = true;
-        }
+        this.drawChart();
     }
 
     public showConfigurationClicked(): void {
