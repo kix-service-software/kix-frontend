@@ -5,11 +5,12 @@ import {
     ITicketStateService,
     IConfigurationService,
     HttpError,
-    TicketState,
     TicketStateResponse,
     TicketStatesResponse,
     SortOrder
 } from '@kix/core';
+
+import { TicketState } from '@kix/core/dist/model/client/ticket/model';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

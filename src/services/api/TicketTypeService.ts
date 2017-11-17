@@ -1,7 +1,6 @@
 import {
     IHttpService,
     ITicketTypeService,
-    TicketType,
     CreateTicketTypeRequest,
     CreateTicketTypeResponse,
     UpdateTicketTypeRequest,
@@ -11,6 +10,9 @@ import {
     SortOrder,
     Query
 } from '@kix/core';
+
+import { TicketType } from '@kix/core/dist/model/client/ticket';
+
 import { ObjectService } from './ObjectService';
 
 export class TicketTypeService extends ObjectService<TicketType> implements ITicketTypeService {

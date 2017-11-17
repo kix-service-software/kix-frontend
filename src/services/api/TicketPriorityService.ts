@@ -1,7 +1,6 @@
 import {
     IHttpService,
     ITicketPriorityService,
-    TicketPriority,
     CreateTicketPriority,
     CreateTicketPriorityRequest,
     CreateTicketPriorityResponse,
@@ -13,6 +12,8 @@ import {
     SortOrder,
     Query
 } from '@kix/core';
+
+import { TicketPriority } from '@kix/core/dist/model/client/ticket';
 
 import { ObjectService } from './ObjectService';
 

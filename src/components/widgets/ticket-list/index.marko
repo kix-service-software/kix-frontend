@@ -6,7 +6,7 @@
     <@title>
         <if(state.widgetConfiguration)>
             <if(state.widgetConfiguration.settings.showTotalCount)>Tickets Gesamt: ${state.tickets.length} |</if>
-            Tickets Verfügbar: ${state.widgetConfiguration.settings.limit}
+            Tickets Verfügbar: ${state.filteredTickets.length}
         </if>
     </@title>
     <@content>
@@ -20,7 +20,7 @@
                         <th>${column}</th>
                     </for>
                 </tr>
-                <for(ticket in state.tickets)>
+                <for(ticket in state.filteredTickets)>
                     <tr>
                         <td>
                             <input type="checkbox" name="all"/>
@@ -34,7 +34,8 @@
         </if>
     </@content>
     <@filter>
-        <span/>
+        Filter:
+        <input type="text" on-change("filterChanged") on-keyup("filterChanged") value=state.filterValue/>
     </@filter>
     <@actions/>
 </widget>

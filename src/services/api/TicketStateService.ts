@@ -1,12 +1,13 @@
 import {
     IHttpService,
     ITicketStateService,
-    TicketState,
     TicketStateResponse,
     TicketStatesResponse,
     SortOrder,
     Query
 } from '@kix/core';
+
+import { TicketState } from '@kix/core/dist/model/client/ticket';
 
 import { ObjectService } from './ObjectService';
 
