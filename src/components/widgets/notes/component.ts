@@ -1,12 +1,13 @@
 import { WidgetBaseComponent } from '@kix/core/dist/model/client/';
 
 import { NotesComponentState } from './model/NotesComponentState';
-import { NotesReduxState } from './store';
-import { NOTES_INITIALIZE } from './store/actions';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 
-class NotesWidgetComponent extends WidgetBaseComponent<NotesComponentState, NotesReduxState> {
+class NotesWidgetComponent {
 
     private componentInititalized: boolean = false;
+
+    private state: NotesComponentState;
 
     public onCreate(input: any): void {
         this.state = new NotesComponentState();
@@ -17,19 +18,8 @@ class NotesWidgetComponent extends WidgetBaseComponent<NotesComponentState, Note
     }
 
     public onMount(): void {
-        this.store = require('./store').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(NOTES_INITIALIZE(this.store, 'notes-widget', this.state.instanceId));
-    }
-
-    public stateChanged(): void {
-        super.stateChanged();
-
-        const reduxState: NotesReduxState = this.store.getState();
-
-        if (!this.componentInititalized && reduxState.widgetConfiguration) {
-            this.componentInititalized = true;
-        }
+        this.state.widgetConfiguration =
+            DashboardStore.getWidgetConfiguration('notes-widget', this.state.instanceId);
     }
 
     public showConfigurationClicked(): void {
@@ -45,9 +35,7 @@ class NotesWidgetComponent extends WidgetBaseComponent<NotesComponentState, Note
     }
 
     public valueChanged(newValue: string): void {
-        const reduxState: NotesReduxState = this.store.getState();
-        this.state.widgetConfiguration.contentConfiguration.notes = newValue;
-        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
+        DashboardStore.saveWidgetConfiguration('notes-widget', this.state.instanceId, this.state.widgetConfiguration);
     }
 
     public toggleEditMode(): void {

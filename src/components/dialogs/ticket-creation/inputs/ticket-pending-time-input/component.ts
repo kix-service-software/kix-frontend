@@ -1,6 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { PENDING_TIME_CHANGED } from '../../store/actions';
+import { PENDING_TIME_CHANGED, TicketCreationReduxState } from "@kix/core/dist/model/client/ticket";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketPendingTimeInput {
 
@@ -13,7 +12,7 @@ class TicketPendingTimeInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -22,11 +21,11 @@ class TicketPendingTimeInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(PENDING_TIME_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(PENDING_TIME_CHANGED(event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
         this.state.pendingTime = reduxState.pendingTime;
     }
 

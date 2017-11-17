@@ -1,7 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { QUEUE_ID_CHANGED } from '../../store/actions';
-import { TicketCreationProcessReduxState } from '../../store/TicketCreationProcessReduxState';
+import { QUEUE_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketQueueInput {
 
@@ -15,7 +13,7 @@ class TicketQueueInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -24,15 +22,15 @@ class TicketQueueInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(QUEUE_ID_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(QUEUE_ID_CHANGED(event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
-        const processState: TicketCreationProcessReduxState = CreationTicketStore.getInstance().getProcessState();
+        const reduxState = TicketStore.getTicketCreationState();
+        const ticketDataState = TicketStore.getTicketDataState();
 
         this.state.queueId = Number(reduxState.queueId);
-        this.state.queues = processState.queues;
+        this.state.queues = ticketDataState.queues;
     }
 
 }

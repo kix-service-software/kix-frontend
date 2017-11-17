@@ -1,6 +1,8 @@
 import { DashboardComponentState } from './model/DashboardComponentState';
-import { DashboardState } from './store/DashboardState';
-import { DASHBOARD_INITIALIZE } from './store/actions';
+
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { ClientStorageHandler, ContainerConfiguration } from '@kix/core/dist/model/client/';
+import { DashboardReduxState, DashboardConfiguration } from '@kix/core/dist/model/client/dashboard';
 
 class DashboardComponent {
 
@@ -14,9 +16,8 @@ class DashboardComponent {
     }
 
     public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(DASHBOARD_INITIALIZE());
+        DashboardStore.addStateListener(this.stateChanged.bind(this));
+        DashboardStore.loadDashboardConfiguration();
     }
 
     public onInput(input: any) {
@@ -24,10 +25,10 @@ class DashboardComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: DashboardState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
-            this.state.widgetTemplates = reduxState.widgetTemplates;
+        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getDashboardConfiguration();
+        if (dashboardConfiguration) {
+            this.state.containerConfiguration = dashboardConfiguration.configuration;
+            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
 }

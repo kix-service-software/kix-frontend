@@ -1,6 +1,5 @@
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { SLA_ID_CHANGED } from '../../store/actions';
+import { SLA_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketSLAInput {
 
@@ -13,7 +12,7 @@ class TicketSLAInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -22,11 +21,11 @@ class TicketSLAInput {
     }
 
     public valueChanged(event: any): void {
-        CreationTicketStore.getInstance().getStore().dispatch(SLA_ID_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(SLA_ID_CHANGED(event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = CreationTicketStore.getInstance().getTicketState();
+        const reduxState = TicketStore.getTicketCreationState();
         this.state.slaId = reduxState.slaId;
     }
 

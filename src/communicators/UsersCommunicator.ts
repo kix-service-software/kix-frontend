@@ -3,11 +3,14 @@ import { KIXCommunicator } from './KIXCommunicator';
 import {
     UserType,
     SocketEvent,
-    UIProperty,
+    UIProperty
+} from '@kix/core';
+
+import {
     UsersEvent,
     LoadUsersRequest,
-    LoadUsersResult
-} from '@kix/core';
+    LoadUsersResponse
+} from '@kix/core/dist/model/client/user';
 
 export class UsersCommunicator extends KIXCommunicator {
 
@@ -23,7 +26,7 @@ export class UsersCommunicator extends KIXCommunicator {
     private registerUsersEvents(client: SocketIO.Socket): void {
         client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
             if (!data.properties) {
-                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult([]));
+                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResponse([]));
             } else {
                 const fields = [];
                 for (const prop of data.properties) {
@@ -44,7 +47,7 @@ export class UsersCommunicator extends KIXCommunicator {
                     return user;
                 });
 
-                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResult(users));
+                client.emit(UsersEvent.USERS_LOADED, new LoadUsersResponse(users));
             }
         });
     }

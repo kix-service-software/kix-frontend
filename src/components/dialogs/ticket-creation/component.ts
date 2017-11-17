@@ -1,16 +1,14 @@
-import { TicketCreationProcessReduxState } from './store/TicketCreationProcessReduxState';
-import { CreationTicketStore, STATE_ID } from './store/index';
-import { ClientStorageHandler, TranslationHandler, CreationDialogComponentEvent } from '@kix/core/dist/model/client';
+import { ClientStorageHandler, TranslationHandler } from '@kix/core/dist/model/client';
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { CreationDialogComponentEvent } from '@kix/core/dist/model/client/components';
+
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TranslationId } from './model/TranslationId';
-import { TicketCreationReduxState } from './store/TicketCreationReduxState';
-import { INITIALIZE, CREATE_TICKET, RESET_TICKET_CREATION, LOAD_TICKET_DATA } from './store/actions';
+
 
 class TicketCreationDialogComponent {
 
     public state: TicketCreationDialogState;
-
-    private store: any;
 
     private closeDialogAfterSuccess: boolean;
 
@@ -20,21 +18,21 @@ class TicketCreationDialogComponent {
     }
 
     public async onMount(): Promise<void> {
-        const existingState = ClientStorageHandler.loadState(STATE_ID);
+        this.state = new TicketCreationDialogState();
+        const existingState = ClientStorageHandler.loadState(TicketStore.TICKET_CREATION_STATE_ID);
 
-        this.store = CreationTicketStore.getInstance().getStore();
-        this.store.subscribe(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
 
         const translationHandler = await TranslationHandler.getInstance();
         const questionString = translationHandler.getTranslation(TranslationId.LOAD_DRAFT_QUESTION);
 
         if (existingState && !confirm(questionString)) {
-            ClientStorageHandler.deleteState(STATE_ID);
-            this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
-                this.initializeState();
+            ClientStorageHandler.deleteState(TicketStore.TICKET_CREATION_STATE_ID);
+            TicketStore.resetTicketCreation().then(() => {
+                TicketStore.loadTicketData();
             });
         } else {
-            this.initializeState();
+            TicketStore.loadTicketData();
         }
     }
 
@@ -43,49 +41,25 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const reduxState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
-        this.state.ticketCreationInProcess = reduxState.createTicketInProcess;
-        this.state.resetTicketCreationInProcess = reduxState.resetTicketCreationInProcess;
+        const ticketDataState = TicketStore.getTicketDataState();
+        const ticketCreationState = TicketStore.getTicketCreationState();
+        this.state.loadData = ticketDataState.loadTicketData;
 
-        this.state.loadData = reduxState.loadTicketData;
-
-        this.state.error = reduxState.error;
-
-        if (reduxState.createTicketSuccessful && reduxState.createdTicketId) {
-            this.state.ticketCreated = true;
-            this.state.ticketId = reduxState.createdTicketId;
-            ClientStorageHandler.deleteState(STATE_ID);
-            this.store.dispatch(RESET_TICKET_CREATION()).then(() => {
-                this.state = {
-                    ... new TicketCreationDialogState(),
-                    createNewObjectAfterFinish: this.state.createNewObjectAfterFinish
-                };
-
-                if (this.state.createNewObjectAfterFinish) {
-                    this.dispatchLoadTicketData();
-                }
-            });
-            (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
-        }
+        this.state.error = ticketCreationState.error;
     }
 
     public createTicket(): void {
-        const ticketState: TicketCreationReduxState = this.store.getState().ticketState;
-        const processState: TicketCreationProcessReduxState = this.store.getState().ticketProcessState;
-        this.store.dispatch(CREATE_TICKET(processState, ticketState));
-    }
-
-    private initializeState(): void {
-        this.store.dispatch(INITIALIZE()).then(() => {
-            this.dispatchLoadTicketData();
+        TicketStore.createTicket().then(() => {
+            if (this.state.createNewObjectAfterFinish) {
+                TicketStore.resetTicketCreation();
+                TicketStore.loadTicketData();
+                this.state.error = null;
+            }
+            (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
+        }).catch((error) => {
+            this.state.error = error;
         });
     }
-
-    private dispatchLoadTicketData(): void {
-        const ticketProcessState = this.store.getState().ticketProcessState;
-        this.store.dispatch(LOAD_TICKET_DATA(ticketProcessState));
-    }
-
 }
 
 module.exports = TicketCreationDialogComponent;

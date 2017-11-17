@@ -1,10 +1,11 @@
 import { WidgetBaseComponent } from '@kix/core/dist/model/client';
-
+import { Ticket } from '@kix/core/dist/model/client/ticket';
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketListReduxState } from './store/';
-import { LOAD_TICKETS, TICKET_LIST_INITIALIZE } from './store/actions/';
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { TicketState } from '@kix/core/dist/model/client/ticket/model/TicketState';
 
-class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentState, TicketListReduxState> {
+class TicketListWidgetComponent {
 
     public state: TicketListComponentState;
 
@@ -21,29 +22,11 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
     }
 
     public onMount(): void {
-        this.store = require('./store').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(TICKET_LIST_INITIALIZE(this.store, 'ticket-list-widget', this.state.instanceId))
-            .then(() => {
-                this.loadTickets();
-            });
-    }
+        TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        this.state.widgetConfiguration =
+            DashboardStore.getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
 
-    public stateChanged(): void {
-        super.stateChanged();
-
-        const reduxState: TicketListReduxState = this.store.getState();
-
-        if (reduxState.tickets) {
-            this.state.tickets = reduxState.tickets;
-        }
-
-        if (reduxState.widgetConfiguration) {
-            if (!this.componentInitialized) {
-                this.componentInitialized = true;
-                this.loadTickets();
-            }
-        }
+        this.loadTickets();
     }
 
     public showConfigurationClicked(): void {
@@ -51,8 +34,10 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
     }
 
     public saveConfiguration(): void {
-        const reduxState: TicketListReduxState = this.store.getState();
-        reduxState.socketListener.saveWidgetContentConfiguration(this.state.widgetConfiguration);
+        DashboardStore.saveWidgetConfiguration(
+            'ticket-list-widget', this.state.instanceId, this.state.widgetConfiguration
+        );
+
         this.loadTickets();
         this.cancelConfiguration();
     }
@@ -61,12 +46,39 @@ class TicketListWidgetComponent extends WidgetBaseComponent<TicketListComponentS
         this.state.showConfiguration = false;
     }
 
+    private ticketStateChanged(): void {
+        this.state.tickets = TicketStore.getTickets(this.state.instanceId);
+        this.state.filteredTickets = this.state.tickets;
+    }
+
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const config = this.state.widgetConfiguration.contentConfiguration;
-            this.store.dispatch(LOAD_TICKETS(this.store, config.limit, config.properties));
+            TicketStore.loadTickets(this.state.instanceId, config.limit, config.properties);
         }
     }
+
+    private filterChanged(event): void {
+        this.filter(event.target.value);
+    }
+
+    private filter(value: string): void {
+        this.state.filterValue = value;
+
+        if (value === null || value === "") {
+            this.state.filteredTickets = this.state.tickets;
+        } else {
+            const searchValue = value.toLocaleLowerCase();
+            this.state.filteredTickets = this.state.tickets.filter((ticket: Ticket) => {
+                const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
+                const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
+                return foundTitle || foundTicketNumber;
+            });
+        }
+
+        (this as any).setStateDirty('filteredTickets');
+    }
+
 }
 
 module.exports = TicketListWidgetComponent;

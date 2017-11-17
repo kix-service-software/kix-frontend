@@ -5,7 +5,6 @@ import {
     ITicketTypeService,
     IConfigurationService,
     HttpError,
-    TicketType,
     TicketTypeResponse,
     TicketTypesResponse,
     CreateTicketTypeRequest,
@@ -14,6 +13,8 @@ import {
     UpdateTicketTypeResponse,
     SortOrder
 } from '@kix/core';
+
+import { TicketType } from '@kix/core/dist/model/client/ticket/model';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

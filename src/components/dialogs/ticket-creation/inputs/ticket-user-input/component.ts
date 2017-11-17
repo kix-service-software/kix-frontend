@@ -1,8 +1,5 @@
-import { TicketsComponentState } from './../../../../modules/tickets/model/TicketsComponentState';
-import { TicketCreationProcessReduxState } from './../../store/TicketCreationProcessReduxState';
-import { CreationTicketStore } from './../../store/index';
-import { TicketCreationReduxState } from './../../store/TicketCreationReduxState';
-import { USER_ID_CHANGED } from '../../store/actions';
+import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
+import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
 
 class TicketUserInput {
 
@@ -19,7 +16,7 @@ class TicketUserInput {
     }
 
     public onMount(): void {
-        CreationTicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        TicketStore.addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -31,7 +28,7 @@ class TicketUserInput {
         this.state.value = event.target.value;
         const user = this.state.users.find((u) => u.UserLogin === this.state.value);
         if (user) {
-            CreationTicketStore.getInstance().getStore().dispatch(USER_ID_CHANGED(user.UserID, this.state.type));
+            TicketStore.getStore().dispatch(USER_ID_CHANGED(user.UserID, this.state.type));
             this.state.userInvalid = false;
         } else {
             this.state.userInvalid = true;
@@ -39,8 +36,8 @@ class TicketUserInput {
     }
 
     private setStoreData(): void {
-        const processState = CreationTicketStore.getInstance().getProcessState();
-        const ticketState = CreationTicketStore.getInstance().getTicketState();
+        const processState = TicketStore.getTicketDataState();
+        const ticketState = TicketStore.getTicketCreationState();
 
         this.state.users = processState.users;
 
