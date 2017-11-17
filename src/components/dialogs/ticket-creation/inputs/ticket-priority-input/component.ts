@@ -4,6 +4,8 @@ import {
     TicketDataReduxState
 } from "@kix/core/dist/model/client/ticket";
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
+
 
 class TicketPriorityInput {
 
@@ -31,10 +33,12 @@ class TicketPriorityInput {
 
     private setStoreData(): void {
         const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
-        const processState: TicketDataReduxState = TicketStore.getTicketDataState();
-
         this.state.priorityId = Number(reduxState.priorityId);
-        this.state.ticketPriorities = processState.priorities;
+
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+        if (ticketData) {
+            this.state.ticketPriorities = ticketData.priorities;
+        }
     }
 
 }

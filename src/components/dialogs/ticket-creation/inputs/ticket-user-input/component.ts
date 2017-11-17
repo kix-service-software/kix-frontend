@@ -1,5 +1,6 @@
 import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
 
 class TicketUserInput {
 
@@ -36,11 +37,12 @@ class TicketUserInput {
     }
 
     private setStoreData(): void {
-        const processState = TicketStore.getTicketDataState();
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+        if (ticketData) {
+            this.state.users = ticketData.users;
+        }
+
         const ticketState = TicketStore.getTicketCreationState();
-
-        this.state.users = processState.users;
-
         if (this.state.type === 'owner' && ticketState.ownerId && this.state.users.length) {
             this.state.value = this.getUserName(ticketState.ownerId);
         }

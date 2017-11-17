@@ -16,8 +16,7 @@ class TicketTemplateInput {
     }
 
     public stateChanged(): void {
-        const reduxState = TicketStore.getTicketDataState();
-        this.state.isLoading = reduxState.loadTicketData;
+        // const reduxState = TicketStore.getTicketData(TICKET_CREATION_DATA_ID);
     }
 
     public valueChanged(event: any): void {

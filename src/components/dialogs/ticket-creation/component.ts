@@ -5,6 +5,7 @@ import { CreationDialogComponentEvent } from '@kix/core/dist/model/client/compon
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TranslationId } from './model/TranslationId';
 
+import { ComponentId } from './model/ComponentId';
 
 class TicketCreationDialogComponent {
 
@@ -29,10 +30,10 @@ class TicketCreationDialogComponent {
         if (existingState && !confirm(questionString)) {
             ClientStorageHandler.deleteState(TicketStore.TICKET_CREATION_STATE_ID);
             TicketStore.resetTicketCreation().then(() => {
-                TicketStore.loadTicketData();
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
             });
         } else {
-            TicketStore.loadTicketData();
+            TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
         }
     }
 
@@ -41,9 +42,8 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const ticketDataState = TicketStore.getTicketDataState();
+        const ticketDataState = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
         const ticketCreationState = TicketStore.getTicketCreationState();
-        this.state.loadData = ticketDataState.loadTicketData;
 
         this.state.error = ticketCreationState.error;
     }
@@ -52,7 +52,7 @@ class TicketCreationDialogComponent {
         TicketStore.createTicket().then(() => {
             if (this.state.createNewObjectAfterFinish) {
                 TicketStore.resetTicketCreation();
-                TicketStore.loadTicketData();
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
                 this.state.error = null;
             }
             (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
