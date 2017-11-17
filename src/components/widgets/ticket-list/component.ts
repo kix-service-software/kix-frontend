@@ -47,14 +47,14 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        this.state.tickets = TicketStore.getTickets(this.state.instanceId);
+        this.state.tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
         this.state.filteredTickets = this.state.tickets;
     }
 
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const config = this.state.widgetConfiguration.contentConfiguration;
-            TicketStore.loadTickets(this.state.instanceId, config.limit, config.properties);
+            TicketStore.searchTickets(this.state.instanceId, config.limit, config.properties);
         }
     }
 
