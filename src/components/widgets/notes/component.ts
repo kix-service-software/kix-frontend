@@ -35,7 +35,7 @@ class NotesWidgetComponent {
     }
 
     public valueChanged(newValue: string): void {
-        DashboardStore.saveWidgetConfiguration('chart-widget', this.state.instanceId, this.state.widgetConfiguration);
+        DashboardStore.saveWidgetConfiguration('notes-widget', this.state.instanceId, this.state.widgetConfiguration);
     }
 
     public toggleEditMode(): void {
