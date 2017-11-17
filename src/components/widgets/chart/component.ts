@@ -1,6 +1,6 @@
 import { ChartFactory, ChartConfiguration, WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { ChartComponentState } from './model/ChartComponentState';
-import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 
 class ChartWidgetComponent {
 

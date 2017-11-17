@@ -13,11 +13,11 @@ import {
     User,
     WidgetTemplate
 } from '@kix/core';
-import { WidgetConfiguration } from '../../../core/dist/model/client/components/widget/WidgetConfiguration';
-import { IWidgetFactoryExtension } from '../../../core/dist/extensions/ui/IWidgetFactoryExtension';
-import { DashboardAction } from '../../../core/dist/model/client/dashboard/store/actions/DashboardAction';
-import { IWidget } from '../../../core/dist/model/client/components/widget/IWidget';
-import { SidebarConfiguration } from '../../../core/dist/model/client/components/sidebar/SidebarConfiguration';
+import { WidgetConfiguration } from '@kix/core/dist/model/client/components/widget/WidgetConfiguration';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/ui/IWidgetFactoryExtension';
+import { DashboardAction } from '@kix/core/dist/model/client/dashboard/store/actions/DashboardAction';
+import { IWidget } from '@kix/core/dist/model/client/components/widget/IWidget';
+import { SidebarConfiguration } from '@kix/core/dist/model/client/components/sidebar/SidebarConfiguration';
 
 export class DashboardCommunicator extends KIXCommunicator {
 

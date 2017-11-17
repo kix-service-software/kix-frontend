@@ -5,7 +5,7 @@ import { UserListConfiguration } from './model/UserListConfiguration';
 
 import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 import { UserStore } from '@kix/core/dist/model/client/user/store/UserStore';
-import { User } from '../../../../../core/dist/model/client/user/model/User';
+import { User } from '@kix/core/dist/model/client/user/model/User';
 
 class UserListWidgetComponent {
 

@@ -2,8 +2,8 @@ import { WidgetBaseComponent } from '@kix/core/dist/model/client';
 import { Ticket } from '@kix/core/dist/model/client/ticket';
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
-import { DashboardStore } from '../../../../../core/dist/model/client/dashboard/store/DashboardStore';
-import { TicketState } from '../../../../../core/dist/model/client/ticket/model/TicketState';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { TicketState } from '@kix/core/dist/model/client/ticket/model/TicketState';
 
 class TicketListWidgetComponent {
 
