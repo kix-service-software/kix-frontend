@@ -47,8 +47,12 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        this.state.tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
-        this.state.filteredTickets = this.state.tickets;
+        const tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
+        if (tickets) {
+            this.state.tickets = tickets;
+            this.state.filteredTickets = tickets;
+        }
+
     }
 
     private loadTickets(): void {

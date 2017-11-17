@@ -1,5 +1,6 @@
-import { SUBJECT_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
+import { SUBJECT_CHANGED } from "@kix/core/dist/model/client/ticket";
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
 
 class TicketSubjectInput {
 
@@ -16,17 +17,19 @@ class TicketSubjectInput {
         this.setStoreData();
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         this.setStoreData();
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(SUBJECT_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(SUBJECT_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
-        this.state.subject = reduxState.subject;
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.subject = creationData.subject;
+        }
     }
 
 }

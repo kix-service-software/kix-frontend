@@ -23,14 +23,16 @@ class TicketQueueInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(QUEUE_ID_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(QUEUE_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState = TicketStore.getTicketCreationState();
-        this.state.queueId = Number(reduxState.queueId);
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.queueId = Number(creationData.queueId);
+        }
 
-        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         if (ticketData) {
             this.state.queues = ticketData.queues;
         }

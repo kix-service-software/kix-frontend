@@ -1,6 +1,6 @@
-import { DYNAMIC_FIELD_CHANGED, TicketCreationReduxState } from "@kix/core/dist/model/client/ticket";
+import { DYNAMIC_FIELD_CHANGED } from "@kix/core/dist/model/client/ticket";
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
-
+import { ComponentId } from '../../model/ComponentId';
 class TicketDynamicFieldInput {
 
     public state: any;
@@ -17,20 +17,24 @@ class TicketDynamicFieldInput {
         this.setStoreData();
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         this.setStoreData();
     }
 
     public valueChanged(event: any): void {
         TicketStore
-            .getStore().dispatch(DYNAMIC_FIELD_CHANGED(this.state.name, event.target.value));
+            .getStore().dispatch(DYNAMIC_FIELD_CHANGED(
+                ComponentId.TICKET_CREATION_ID, this.state.name, event.target.value
+            ));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
-        const dynamicField = reduxState.dynamicFields.find((df) => df.Name === this.state.name);
-        if (dynamicField) {
-            this.state.value = dynamicField.Value;
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            const dynamicField = creationData.dynamicFields.find((df) => df.Name === this.state.name);
+            if (dynamicField) {
+                this.state.value = dynamicField.Value;
+            }
         }
     }
 

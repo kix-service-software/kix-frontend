@@ -1,5 +1,6 @@
 import { TEMPLATE_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
 import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
 
 class TicketTemplateInput {
 
@@ -20,7 +21,7 @@ class TicketTemplateInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(TEMPLATE_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(TEMPLATE_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
     }
 
 }

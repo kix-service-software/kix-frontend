@@ -13,6 +13,7 @@ class TicketCreationDialogComponent {
 
     private closeDialogAfterSuccess: boolean;
 
+
     public onCreate(input: any): void {
         this.state = new TicketCreationDialogState();
         this.closeDialogAfterSuccess = true;
@@ -29,11 +30,11 @@ class TicketCreationDialogComponent {
 
         if (existingState && !confirm(questionString)) {
             ClientStorageHandler.deleteState(TicketStore.TICKET_CREATION_STATE_ID);
-            TicketStore.resetTicketCreation().then(() => {
-                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+            TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID).then(() => {
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
             });
         } else {
-            TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+            TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         }
     }
 
@@ -42,17 +43,17 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const ticketDataState = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
-        const ticketCreationState = TicketStore.getTicketCreationState();
-
-        this.state.error = ticketCreationState.error;
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.error = creationData.error;
+        }
     }
 
     public createTicket(): void {
-        TicketStore.createTicket().then(() => {
+        TicketStore.createTicket(ComponentId.TICKET_CREATION_ID).then(() => {
             if (this.state.createNewObjectAfterFinish) {
-                TicketStore.resetTicketCreation();
-                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+                TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID);
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
                 this.state.error = null;
             }
             (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);

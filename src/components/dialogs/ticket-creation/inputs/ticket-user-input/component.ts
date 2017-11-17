@@ -29,7 +29,9 @@ class TicketUserInput {
         this.state.value = event.target.value;
         const user = this.state.users.find((u) => u.UserLogin === this.state.value);
         if (user) {
-            TicketStore.getStore().dispatch(USER_ID_CHANGED(user.UserID, this.state.type));
+            TicketStore.getStore().dispatch(USER_ID_CHANGED(
+                ComponentId.TICKET_CREATION_ID, user.UserID, this.state.type
+            ));
             this.state.userInvalid = false;
         } else {
             this.state.userInvalid = true;
@@ -37,18 +39,19 @@ class TicketUserInput {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_DATA_ID);
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         if (ticketData) {
             this.state.users = ticketData.users;
         }
 
-        const ticketState = TicketStore.getTicketCreationState();
-        if (this.state.type === 'owner' && ticketState.ownerId && this.state.users.length) {
-            this.state.value = this.getUserName(ticketState.ownerId);
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData && this.state.type === 'owner' && creationData.ownerId && this.state.users.length) {
+            this.state.value = this.getUserName(creationData.ownerId);
         }
 
-        if (this.state.type === 'responsible' && ticketState.responsibleId && this.state.users.length) {
-            this.state.value = this.getUserName(ticketState.responsibleId);
+        if (creationData && this.state.type === 'responsible' &&
+            creationData.responsibleId && this.state.users.length) {
+            this.state.value = this.getUserName(creationData.responsibleId);
         }
     }
 
