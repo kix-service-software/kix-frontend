@@ -4,7 +4,7 @@ import {
     LoadTranslationResponse,
     SocketEvent,
     TranslationEvent
-} from '@kix/core';
+} from '@kix/core/dist/model';
 
 export class TranslationCommunicator extends KIXCommunicator {
 

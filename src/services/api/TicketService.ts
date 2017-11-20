@@ -13,8 +13,6 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     ExpandedTicketResponse,
-    IHttpService,
-    ITicketService,
     TicketHistoryItemResponse,
     TicketHistoryResponse,
     TicketResponse,
@@ -22,7 +20,7 @@ import {
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
 import {
     DynamicField,
@@ -31,7 +29,9 @@ import {
     Attachment,
     Ticket,
     TicketHistory,
-} from '@kix/core/dist/model/client/ticket';
+} from '@kix/core/dist/model/';
+
+import { ITicketService } from '@kix/core/dist/services';
 
 import { Response } from 'express';
 import { inject, injectable } from 'inversify';

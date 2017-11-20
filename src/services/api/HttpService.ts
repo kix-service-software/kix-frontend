@@ -1,10 +1,8 @@
-import {
-    HttpError,
-    IServerConfiguration,
-    IHttpService,
-    IConfigurationService,
-    ILoggingService
-} from '@kix/core';
+import { IHttpService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
+
+import { HttpError } from '@kix/core/dist/api';
+import { IServerConfiguration } from '@kix/core/dist/common';
+
 import { injectable, inject } from 'inversify';
 import * as path from 'path';
 import fs = require('fs');

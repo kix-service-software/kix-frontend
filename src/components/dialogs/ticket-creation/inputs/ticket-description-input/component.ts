@@ -1,5 +1,6 @@
-import { DESCRIPTION_CHANGED, TicketCreationReduxState } from "@kix/core/dist/model/client/ticket";
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { DESCRIPTION_CHANGED } from "@kix/core/dist/browser/ticket";
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { ComponentId } from '../../model/ComponentId';
 
 class TicketDescriptionInput {
 
@@ -16,17 +17,19 @@ class TicketDescriptionInput {
         this.setStoreData();
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         this.setStoreData();
     }
 
     public valueChanged(newValue: string): void {
-        TicketStore.getStore().dispatch(DESCRIPTION_CHANGED(newValue));
+        TicketStore.getStore().dispatch(DESCRIPTION_CHANGED(ComponentId.TICKET_CREATION_ID, newValue));
     }
 
     private setStoreData(): void {
-        const reduxState: TicketCreationReduxState = TicketStore.getTicketCreationState();
-        this.state.description = reduxState.description;
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.description = creationData.description;
+        }
     }
 }
 

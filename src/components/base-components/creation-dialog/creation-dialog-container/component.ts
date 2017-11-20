@@ -1,4 +1,4 @@
-import { ClientStorageHandler } from '@kix/core/dist/model/client';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { CreationDialogComponentState } from './model/CreationDialogComponentState';
 import { CreationDialogReduxState } from './store/CreationDialogReduxState';
 import { CREATION_DIALOGS_INITIALIZE } from './store/actions';

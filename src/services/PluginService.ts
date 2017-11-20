@@ -1,14 +1,9 @@
 import { injectable, inject } from 'inversify';
 import Plugins = require('js-plugins');
 
-import {
-    IPluginService,
-    IServerConfiguration,
-    IConfigurationService,
-    IWidgetFactoryExtension,
-    IModuleFactoryExtension,
-    KIXExtensions
-} from '@kix/core';
+import { IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { IPluginService, IConfigurationService } from '@kix/core/dist/services';
+import { IServerConfiguration } from '@kix/core/dist/common';
 
 const host = {
     debug: true

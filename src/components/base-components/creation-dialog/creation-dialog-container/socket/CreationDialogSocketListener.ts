@@ -1,10 +1,6 @@
-import {
-    ClientStorageHandler,
-    SocketEvent,
-    CreationDialogEvent,
-    LoadCreationDialogResponse
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+import { SocketEvent, CreationDialogEvent, LoadCreationDialogResponse } from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import { LOAD_CREATION_DIALOGS, CREATION_DIALOGS_LOADED } from '../store/actions';
 
 export class CreationDialogSocketListener extends SocketListener {

@@ -3,17 +3,17 @@ import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 
+import { Environment, IServerConfiguration, } from '@kix/core/dist/common';
+
 import {
-    KIXExtensions,
-    IStaticContentExtension,
+    IMarkoService,
     ILoggingService,
     IConfigurationService,
     ISocketCommunicationService,
     IPluginService,
-    Environment,
-    IServerConfiguration,
-    IMarkoService
-} from '@kix/core';
+} from '@kix/core/dist/services';
+
+import { KIXExtensions, IStaticContentExtension } from '@kix/core/dist/extensions';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files

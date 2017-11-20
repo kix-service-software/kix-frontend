@@ -3,10 +3,10 @@ import {
     LoadSidebarResponse,
     LoadSidebarRequest,
     SocketEvent,
-    ClientStorageHandler,
     SidebarEvent
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+} from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 
 import {
     SIDEBAR_CONFIGURATION_LOADED,

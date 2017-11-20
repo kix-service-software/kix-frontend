@@ -1,4 +1,4 @@
-import { ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
+import { ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model';
 
 export class TicketsComponentState {
 

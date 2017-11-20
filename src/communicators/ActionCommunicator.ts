@@ -1,14 +1,13 @@
 import { KIXCommunicator } from './KIXCommunicator';
+import { KIXExtensions, IMainMenuExtension, IActionFactoryExtension } from '@kix/core/dist/extensions';
+
 import {
-    RunActionRequest,
-    KIXExtensions,
-    ActionEvent,
-    IMainMenuExtension,
-    SocketEvent,
-    IActionFactoryExtension,
     ActionCannotRunResponse,
-    ActionFailedResponse
-} from '@kix/core';
+    ActionFailedResponse,
+    ActionEvent,
+    SocketEvent,
+    RunActionRequest,
+} from '@kix/core/dist/model';
 
 export class ActionCommunicator extends KIXCommunicator {
 

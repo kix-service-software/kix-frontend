@@ -5,9 +5,9 @@ import {
     RunActionRequest,
     ActionEvent,
     SocketEvent
-} from '@kix/core/dist/model/client';
+} from '@kix/core/dist/model/';
 
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import {
     ACTION_ERROR,
     ACTION_FINISHED

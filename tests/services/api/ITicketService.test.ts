@@ -8,16 +8,15 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     HttpError,
-    IConfigurationService,
-    ITicketService,
     SortOrder,
     TicketResponse,
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
-import { Article, Ticket } from '@kix/core/dist/model/client/ticket/model/';
+import { Article, Ticket } from '@kix/core/dist/model';
+import { IConfigurationService, ITicketService } from '@kix/core/dist/services';
 
 import { container } from '../../../src/Container';
 

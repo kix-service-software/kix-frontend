@@ -1,9 +1,6 @@
-import {
-    ClientStorageHandler,
-    CreationDialogEvent,
-    LoadCreationDialogRequest,
-    StateAction
-} from '@kix/core/dist/model/client';
+import { CreationDialogEvent, LoadCreationDialogRequest } from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { CreationDialogAction } from './CreationDialogAction';
 
 export default (socket: SocketIO.Server) => {

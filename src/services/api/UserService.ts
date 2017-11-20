@@ -5,12 +5,12 @@ import {
     UpdateUserResponse,
     UsersResponse,
     SortOrder,
-    User,
     Query,
     UserResponse,
-    IUserService,
-    IHttpService
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { IUserService } from '@kix/core/dist/services';
+import { User } from '@kix/core/dist/model';
 
 import { ObjectService } from './ObjectService';
 

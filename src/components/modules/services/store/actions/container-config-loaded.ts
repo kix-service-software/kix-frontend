@@ -1,5 +1,6 @@
-import { StateAction, ContainerConfiguration } from '@kix/core/dist/model/client';
+import { ContainerConfiguration } from '@kix/core/dist/model';
 import { ServicesAction } from './';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 
 export default (containerConfiguration: ContainerConfiguration) => {
     const payload = new Promise((resolve, reject) => {

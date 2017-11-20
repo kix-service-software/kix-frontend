@@ -6,7 +6,7 @@ import {
     SidebarEvent,
     SocketEvent,
     WidgetTemplate,
-} from '@kix/core';
+} from '@kix/core/dist/model';
 
 import { KIXCommunicator } from './KIXCommunicator';
 

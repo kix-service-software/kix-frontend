@@ -1,4 +1,4 @@
-import { IWidget } from '@kix/core';
+import { IWidget } from '@kix/core/dist/model';
 
 export class TicketListWidget implements IWidget {
 

@@ -1,6 +1,6 @@
 import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
-import { ContainerRow } from '@kix/core/dist/model/client';
+import { ContainerRow } from '@kix/core/dist/model';
 
 class DraggableContainerComponent {
 

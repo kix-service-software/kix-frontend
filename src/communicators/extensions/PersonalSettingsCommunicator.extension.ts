@@ -1,5 +1,5 @@
 import { PersonalSettingsCommunicator } from '../PersonalSettingsCommunicator';
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 export class PersonalSettingsCommunicatorExtension implements ICommunicatorExtension {
 

@@ -1,7 +1,8 @@
 import { LoginComponentState } from './model/LoginComponentState';
 import { LoginTranslationId } from './model/LoginTranslationId';
 import { LoginState } from './store/LoginState';
-import { TranslationHandler, ClientStorageHandler } from '@kix/core/dist/model/client';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import {
     LOGIN_USERNAME_CHANGED,
     LOGIN_PASSWORD_CHANGED,

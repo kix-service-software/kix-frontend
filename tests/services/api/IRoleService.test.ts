@@ -3,15 +3,16 @@ import {
     CreateRoleRequest,
     CreateRoleResponse,
     HttpError,
-    IConfigurationService,
-    IRoleService,
-    Role,
     RoleResponse,
     RolesResponse,
     SortOrder,
     UpdateRoleRequest,
     UpdateRoleResponse,
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { Role } from '@kix/core/dist/model';
+import { IConfigurationService, IRoleService } from '@kix/core/dist/services';
+
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 

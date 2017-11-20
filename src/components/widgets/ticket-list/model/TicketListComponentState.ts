@@ -1,6 +1,5 @@
-import { WidgetComponentState } from '@kix/core/dist/model/client';
-
-import { Ticket } from '@kix/core/dist/model/client/ticket';
+import { WidgetComponentState } from '@kix/core/dist/browser/model';
+import { Ticket } from '@kix/core/dist/model';
 
 export class TicketListComponentState extends WidgetComponentState {
 

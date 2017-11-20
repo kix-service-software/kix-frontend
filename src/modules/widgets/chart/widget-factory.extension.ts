@@ -1,5 +1,7 @@
 import { ChartWidget } from './ChartWidget';
-import { IWidget, IWidgetFactoryExtension, WidgetConfiguration, ChartConfiguration } from '@kix/core';
+import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
+import { ChartConfiguration } from '@kix/core/dist/browser/model/charts/ChartConfiguration';
 
 export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
 

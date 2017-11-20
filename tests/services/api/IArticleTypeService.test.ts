@@ -1,15 +1,9 @@
 /* tslint:disable*/
 import { container } from '../../../src/Container';
 
-import {
-    IArticleTypeService,
-    IConfigurationService,
-    HttpError,
-    ArticleType,
-    ArticleTypeResponse,
-    ArticleTypesResponse,
-    SortOrder
-} from '@kix/core';
+import { HttpError, ArticleTypeResponse, ArticleTypesResponse, SortOrder } from '@kix/core/dist/api';
+import { IArticleTypeService, IConfigurationService } from '@kix/core/dist/services';
+import { ArticleType } from '@kix/core/dist/model';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

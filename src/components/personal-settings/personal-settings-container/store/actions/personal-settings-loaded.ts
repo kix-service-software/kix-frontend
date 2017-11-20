@@ -1,5 +1,6 @@
-import { StateAction, PersonalSettings } from '@kix/core/dist/model/client';
+import { PersonalSettings } from '@kix/core/dist/model';
 import { PersonalSettingsAction } from './PersonalSettingsAction';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 
 export default (personalSettings: PersonalSettings[]) => {
     const payload = new Promise((resolve, reject) => {

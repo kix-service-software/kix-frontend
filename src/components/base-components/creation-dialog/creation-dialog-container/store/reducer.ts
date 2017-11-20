@@ -1,5 +1,5 @@
 import { CreationDialogReduxState } from './CreationDialogReduxState';
-import { PersonalSettings } from '@kix/core/dist/model/client';
+import { PersonalSettings } from '@kix/core/dist/model';
 import { CreationDialogAction } from './actions';
 
 const PENDING = '_PENDING';

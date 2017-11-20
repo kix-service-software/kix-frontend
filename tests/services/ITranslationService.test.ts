@@ -1,9 +1,7 @@
 /* tslint:disable*/
 import { container } from './../../src/Container';
 
-import {
-    ITranslationService,
-} from '@kix/core';
+import { ITranslationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

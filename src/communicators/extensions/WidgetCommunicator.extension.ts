@@ -1,5 +1,5 @@
 import { WidgetCommunicator } from '../WidgetCommunicator';
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 export class WidgetCommunicatorExtension implements ICommunicatorExtension {
 

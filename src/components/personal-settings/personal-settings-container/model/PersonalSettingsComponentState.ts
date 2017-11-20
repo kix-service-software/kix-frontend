@@ -1,4 +1,4 @@
-import { PersonalSettings } from '@kix/core/dist/model/client';
+import { PersonalSettings } from '@kix/core/dist/model';
 
 export class PersonalSettingsComponentState {
 

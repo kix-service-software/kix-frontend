@@ -1,6 +1,7 @@
 import { ReportsSocketListener } from './../../socket/SocketListener';
-import { StateAction, SocketEvent } from '@kix/core/dist/model/client';
+import { SocketEvent } from '@kix/core/dist/model';
 import { ReportsAction } from './';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 
 export default () => {
     const payload = new Promise((resolve, reject) => {

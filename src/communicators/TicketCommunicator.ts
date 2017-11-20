@@ -1,10 +1,12 @@
 import {
-    SocketEvent,
+
     CreateArticle,
     CreateTicket,
-} from '@kix/core/';
+} from '@kix/core/dist/api';
 
 import {
+    Ticket,
+    SocketEvent,
     SearchTicketsRequest,
     SearchTicketsResponse,
     TicketCreationEvent,
@@ -14,9 +16,7 @@ import {
     TicketCreationError,
     TicketLoadDataRequest,
     TicketLoadDataResponse
-} from '@kix/core/dist/model/client/ticket/socket';
-
-import { Ticket } from '@kix/core/dist/model/client/ticket/model';
+} from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
 
@@ -30,9 +30,9 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     private registerEvents(client: SocketIO.Socket): void {
-        client.on(TicketEvent.LOAD_TICKETS, async (data: SearchTicketsRequest) => {
+        client.on(TicketEvent.SEARCH_TICKETS, async (data: SearchTicketsRequest) => {
             const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit);
-            client.emit(TicketEvent.TICKETS_LOADED, new SearchTicketsResponse((tickets as Ticket[])));
+            client.emit(TicketEvent.TICKETS_SEARCH_FINISHED, new SearchTicketsResponse((tickets as Ticket[])));
         });
 
         client.on(TicketCreationEvent.CREATE_TICKET, async (data: TicketCreationRequest) => {
