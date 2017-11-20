@@ -2,8 +2,6 @@
 import { container } from '../../../src/Container';
 
 import {
-    ITicketTypeService,
-    IConfigurationService,
     HttpError,
     TicketTypeResponse,
     TicketTypesResponse,
@@ -12,9 +10,10 @@ import {
     UpdateTicketTypeRequest,
     UpdateTicketTypeResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
-import { TicketType } from '@kix/core/dist/model/client/ticket/model';
+import { TicketType } from '@kix/core/dist/model';
+import { ITicketTypeService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

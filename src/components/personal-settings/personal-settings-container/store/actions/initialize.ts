@@ -1,5 +1,5 @@
 import { PersonalSettingsSocketListener } from './../../socket/PersonalSettingsSocketListener';
-import { StateAction } from '@kix/core/dist/model/client';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { PersonalSettingsAction } from './PersonalSettingsAction';
 
 export default (store: any) => {

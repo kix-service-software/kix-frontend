@@ -1,13 +1,10 @@
 import { KIXRouter } from '@kix/core/dist/routes/';
-import {
-    IAuthenticationService,
-    IConfigurationService,
-    IServerConfiguration,
-    IRouter,
-    IModuleFactoryExtension,
-    ISpecificCSSExtension,
-    KIXExtensions
-} from '@kix/core';
+import { IAuthenticationService, IConfigurationService } from '@kix/core/dist/services';
+
+import { IServerConfiguration } from '@kix/core/dist/common';
+import { IRouter } from '@kix/core/dist/routes';
+import { IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions } from '@kix/core/dist/extensions';
+
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 

@@ -1,13 +1,13 @@
 import {
-    ClientStorageHandler,
     SocketEvent,
     PersonalSettingsEvent,
     PersonalSettingsConfiguration,
     LoadPersonalSettingsResponse,
     LoadPersonalSettingsRequest,
     SavePersonalSettingsRequest
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+} from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import { PERSONAL_SETTINGS_LOADED } from '../store/actions';
 
 export class PersonalSettingsSocketListener extends SocketListener {

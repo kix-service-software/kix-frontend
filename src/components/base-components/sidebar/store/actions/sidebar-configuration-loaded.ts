@@ -1,4 +1,5 @@
-import { StateAction, SidebarConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
+import { SidebarConfiguration, WidgetTemplate } from '@kix/core/dist/model';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { SidebarAction } from './';
 
 export default (configuration: SidebarConfiguration, widgetTemplates: WidgetTemplate[]) => {

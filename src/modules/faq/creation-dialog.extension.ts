@@ -1,7 +1,5 @@
-import {
-    ICreationDialogExtension,
-    CreationDialog
-} from '@kix/core';
+import { ICreationDialogExtension } from '@kix/core/dist/extensions';
+import { CreationDialog } from '@kix/core/dist/model';
 
 export class FAQCreationDialogExtension implements ICreationDialogExtension {
     public getDialog(): CreationDialog {

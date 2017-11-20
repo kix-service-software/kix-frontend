@@ -1,5 +1,5 @@
-import { TicketStore } from "../../../../core/dist/model/client/ticket/store/TicketStore";
-import { TicketProperties } from "../../../../core/dist/model/client/ticket/model/TicketProperties";
+import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
+import { TicketProperties } from "@kix/core/dist/model";
 
 class TicketSearchComponent {
 

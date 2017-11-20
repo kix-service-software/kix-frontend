@@ -1,5 +1,5 @@
 import { SidebarSocketListener } from '../../socket/SidebarSocketListener';
-import { StateAction } from '@kix/core/dist/model/client';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { SidebarAction } from './';
 
 export default (store: any) => {

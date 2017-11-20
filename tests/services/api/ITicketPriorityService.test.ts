@@ -2,8 +2,6 @@
 import { container } from '../../../src/Container';
 
 import {
-    ITicketPriorityService,
-    IConfigurationService,
     HttpError,
     TicketPriorityResponse,
     TicketPrioritiesResponse,
@@ -14,9 +12,10 @@ import {
     UpdateTicketPriorityRequest,
     UpdateTicketPriorityResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
-import { TicketPriority } from '@kix/core/dist/model/client/ticket/model/TicketPriority';
+import { TicketPriority } from '@kix/core/dist/model';
+import { ITicketPriorityService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

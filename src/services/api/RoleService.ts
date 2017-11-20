@@ -2,14 +2,15 @@ import {
     CreateRole,
     CreateRoleRequest,
     CreateRoleResponse,
-    IRoleService,
-    Role,
     RoleResponse,
     RolesResponse,
     SortOrder,
     UpdateRoleRequest,
     UpdateRoleResponse,
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { IRoleService } from '@kix/core/dist/services';
+import { Role } from '@kix/core/dist/model';
 
 import { ObjectService } from './ObjectService';
 

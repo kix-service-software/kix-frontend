@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { RequiredError } from "@kix/core";
+import { RequiredError } from "@kix/core/dist/decorators/RequiredError";
 
 const requiredMetadataKey = "required";
 function validate(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>): any {

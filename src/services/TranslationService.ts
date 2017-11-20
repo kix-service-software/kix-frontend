@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
-import { ITranslationService, IConfigurationService, TranslationConfiguration } from '@kix/core';
+import { ITranslationService, IConfigurationService } from '@kix/core/dist/services';
+import { TranslationConfiguration } from '@kix/core/dist/model';
 
 @injectable()
 export class TranslationService implements ITranslationService {

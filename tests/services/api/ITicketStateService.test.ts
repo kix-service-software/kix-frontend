@@ -2,15 +2,14 @@
 import { container } from '../../../src/Container';
 
 import {
-    ITicketStateService,
-    IConfigurationService,
     HttpError,
     TicketStateResponse,
     TicketStatesResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
-import { TicketState } from '@kix/core/dist/model/client/ticket/model';
+import { TicketState } from '@kix/core/dist/model';
+import { IConfigurationService, ITicketStateService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

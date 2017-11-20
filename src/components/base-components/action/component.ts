@@ -1,4 +1,4 @@
-import { RunActionRequest } from '@kix/core/dist/model/client';
+import { RunActionRequest } from '@kix/core/dist/model';
 
 import { ActionSocketListener } from './socket/ActionSocketListener';
 import { DELETE_ACTION_INITIALIZE } from './store/actions';

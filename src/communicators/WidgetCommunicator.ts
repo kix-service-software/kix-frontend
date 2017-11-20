@@ -1,12 +1,11 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
     SocketEvent,
-    KIXExtensions,
     WidgetEvent,
     LoadWidgetRequest,
     LoadWidgetResponse,
     SaveConfigurationRequest
-} from '@kix/core';
+} from '@kix/core/dist/model';
 export class WidgetCommunicator extends KIXCommunicator {
 
     public registerNamespace(socketIO: SocketIO.Server): void {

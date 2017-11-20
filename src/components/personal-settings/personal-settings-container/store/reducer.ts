@@ -1,5 +1,5 @@
 import { PersonalSettingsReduxState } from './PersonalSettingsReduxState';
-import { PersonalSettings } from '@kix/core/dist/model/client';
+import { PersonalSettings } from '@kix/core/dist/model';
 import { PersonalSettingsAction } from './actions';
 
 const PENDING = '_PENDING';

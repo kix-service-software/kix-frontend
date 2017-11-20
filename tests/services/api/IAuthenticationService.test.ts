@@ -2,10 +2,10 @@
 import {
     IAuthenticationService,
     IHttpService,
-    IConfigurationService,
-    HttpError,
-    UserType
-} from '@kix/core/';
+    IConfigurationService
+} from '@kix/core/dist/services';
+import { UserType } from '@kix/core/dist/model';
+import { HttpError } from '@kix/core/dist/api';
 import { Request, Response } from 'express';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

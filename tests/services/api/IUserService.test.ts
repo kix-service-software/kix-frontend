@@ -1,18 +1,19 @@
 /* tslint:disable no-var-requires no-unused-expression max-line-length */
 import {
-    User,
     SortOrder,
     UsersResponse,
     UserResponse,
     CreateUserResponse,
     CreateUserRequest,
-    UserLogin,
     UpdateUserRequest,
     UpdateUserResponse,
     HttpError,
-    IConfigurationService,
-    IUserService
-} from '@kix/core/';
+
+} from '@kix/core/dist/api';
+
+import { TicketType, User, UserLogin } from '@kix/core/dist/model';
+import { IConfigurationService, IUserService } from '@kix/core/dist/services';
+
 import { container } from '../../../src/Container';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

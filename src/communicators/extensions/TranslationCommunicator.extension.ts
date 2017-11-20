@@ -1,5 +1,5 @@
 import { TranslationCommunicator } from '../TranslationCommunicator';
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 export class TranslationCommunicatorExtension implements ICommunicatorExtension {
 

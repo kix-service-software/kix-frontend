@@ -1,4 +1,4 @@
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 import { TicketCommunicator } from '../TicketCommunicator';
 

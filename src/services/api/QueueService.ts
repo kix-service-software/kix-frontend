@@ -1,10 +1,13 @@
 import {
-    IQueueService,
     SortOrder,
-    Queue, QueuesResponse, QueueResponse,
+    QueuesResponse, QueueResponse,
     CreateQueue, CreateQueueRequest, CreateQueueResponse,
     UpdateQueue, UpdateQueueRequest, UpdateQueueResponse
-} from "@kix/core/";
+} from "@kix/core/dist/api";
+
+import { IQueueService } from '@kix/core/dist/services';
+import { Queue } from '@kix/core/dist/model';
+
 import { ObjectService } from './ObjectService';
 
 export class QueueService extends ObjectService<Queue> implements IQueueService {

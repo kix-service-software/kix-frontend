@@ -1,5 +1,5 @@
-import { CUSTOMER_CHANGED } from "@kix/core/dist/model/client/ticket";
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { CUSTOMER_CHANGED } from "@kix/core/dist/browser/ticket";
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { ComponentId } from "../../model/ComponentId";
 
 class TicketCustomerInput {

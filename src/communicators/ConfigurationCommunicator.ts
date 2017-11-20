@@ -6,7 +6,7 @@ import {
     SaveConfigurationRequest,
     SocketEvent,
     User
-} from '@kix/core';
+} from '@kix/core/dist/model';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {
 

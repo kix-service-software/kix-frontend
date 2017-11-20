@@ -1,4 +1,4 @@
-import { SidebarConfiguration, WidgetTemplate } from '@kix/core/dist/model/client';
+import { SidebarConfiguration, WidgetTemplate } from '@kix/core/dist/model';
 import { SidebarSocketListener } from './../socket/SidebarSocketListener';
 
 export class SidebarState {

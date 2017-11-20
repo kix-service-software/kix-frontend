@@ -1,5 +1,6 @@
 import { SearchTemplatesWidget } from './SearchTemplatesWidget';
-import { IWidgetFactoryExtension, IWidget } from '@kix/core';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
+import { IWidget } from '@kix/core/dist/model/widget/IWidget';
 
 export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
 

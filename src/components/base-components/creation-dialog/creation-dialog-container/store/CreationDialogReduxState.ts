@@ -1,5 +1,4 @@
-import { CreationDialog } from '@kix/core/dist/model/client';
-import { PersonalSettings } from '@kix/core';
+import { PersonalSettings, CreationDialog } from '@kix/core/dist/model';
 
 export class CreationDialogReduxState {
 

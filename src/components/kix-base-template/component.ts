@@ -1,4 +1,6 @@
-import { ClientStorageHandler, SocketEvent, TranslationHandler } from '@kix/core/dist/model/client';
+import { SocketEvent } from '@kix/core/dist/model';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 // tslint:disable-next-line:no-var-requires
 require('babel-polyfill');

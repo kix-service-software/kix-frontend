@@ -1,7 +1,8 @@
-import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
 import { NotesConfiguration } from './../../../components/widgets/notes/model/NotesConfiguration';
 import { NotesWidget } from './NotesSidebar';
+import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
 

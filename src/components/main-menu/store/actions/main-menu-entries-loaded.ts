@@ -1,5 +1,6 @@
-import { StateAction, MenuEntry } from '@kix/core/dist/model/client';
+import { MenuEntry } from '@kix/core/dist/model';
 import { MainMenuAction } from './MainMenuAction';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 
 export default (primaryMenuEntries: MenuEntry[], secondaryMenuEntries: MenuEntry[], showText: boolean) => {
     const payload = new Promise((resolve, reject) => {

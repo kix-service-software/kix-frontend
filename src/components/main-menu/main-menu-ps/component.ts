@@ -1,5 +1,5 @@
-import { ClientStorageHandler, MenuEntry, MenuEntryConfiguration } from '@kix/core/dist/model/client';
-
+import { MenuEntry, MenuEntryConfiguration } from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 class KIXMenuPersonalSettingsComponent {
 
     private state: any;

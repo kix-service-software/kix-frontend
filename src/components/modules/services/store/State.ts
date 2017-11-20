@@ -1,4 +1,4 @@
-import { ContainerConfiguration } from '@kix/core/dist/model/client';
+import { ContainerConfiguration } from '@kix/core/dist/model';
 import { ServicesSocketListener } from './../socket/SocketListener';
 
 export class ServicesState {

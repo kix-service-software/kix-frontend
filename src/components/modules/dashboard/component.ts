@@ -1,8 +1,7 @@
 import { DashboardComponentState } from './model/DashboardComponentState';
-
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
-import { ClientStorageHandler, ContainerConfiguration } from '@kix/core/dist/model/client/';
-import { DashboardReduxState, DashboardConfiguration } from '@kix/core/dist/model/client/dashboard';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { DashboardConfiguration, ContainerConfiguration } from '@kix/core/dist/model/';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class DashboardComponent {
 

@@ -1,5 +1,5 @@
-import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/browser/ticket";
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { ComponentId } from "../../model/ComponentId";
 
 class TicketUserInput {

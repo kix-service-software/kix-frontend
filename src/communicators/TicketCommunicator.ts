@@ -1,10 +1,12 @@
 import {
-    SocketEvent,
+
     CreateArticle,
     CreateTicket,
-} from '@kix/core/';
+} from '@kix/core/dist/api';
 
 import {
+    Ticket,
+    SocketEvent,
     SearchTicketsRequest,
     SearchTicketsResponse,
     TicketCreationEvent,
@@ -14,9 +16,7 @@ import {
     TicketCreationError,
     TicketLoadDataRequest,
     TicketLoadDataResponse
-} from '@kix/core/dist/model/client/ticket/socket';
-
-import { Ticket } from '@kix/core/dist/model/client/ticket/model';
+} from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
 
