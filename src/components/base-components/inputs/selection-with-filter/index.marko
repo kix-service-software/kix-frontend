@@ -1,7 +1,9 @@
-<h3>${input.title}</h3>
-<input.filter type="text" placeholder="| ${input.placeholder}"/>
-<select size=input.size multiple=input.multiple on-change('listSelected')>
-    <for(el in state.list)>
-        <option>${el.title}</option>
-    </for>
-</select>
+<div.selection-with-filter>
+    <h3>${input.title}</h3>
+    <input.filter type="text" placeholder="| ${input.placeholder}"/>
+    <select size=input.size multiple=input.multiple on-change('listSelected')>
+        <for(el in state.list)>
+            <option value=el.id on-select('test123')>${el.title}</option>
+        </for>
+    </select>
+</div>

@@ -15,7 +15,6 @@ import {
 } from '@kix/core';
 import { WidgetConfiguration } from '@kix/core/dist/model/client/components/widget/WidgetConfiguration';
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/ui/IWidgetFactoryExtension';
-import { DashboardAction } from '@kix/core/dist/model/client/dashboard/store/actions/DashboardAction';
 import { IWidget } from '@kix/core/dist/model/client/components/widget/IWidget';
 import { SidebarConfiguration } from '@kix/core/dist/model/client/components/sidebar/SidebarConfiguration';
 
@@ -31,7 +30,6 @@ export class DashboardCommunicator extends KIXCommunicator {
                 this.client = client;
                 this.client.on(DashboardEvent.LOAD_DASHBOARD, this.loadDashboard.bind(this));
                 this.client.on(DashboardEvent.SAVE_DASHBOARD, this.saveDashboard.bind(this));
-                this.client.on(DashboardEvent.GET_WIDGET_LIST, this.getWidgetList.bind(this));
                 this.client.on(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
             });
     }
@@ -79,7 +77,9 @@ export class DashboardCommunicator extends KIXCommunicator {
             widgetConfigurations.push([widget.instanceId, widgetConfiguration]);
         }
 
-        const response = new LoadDashboardResponse(configuration, widgetTemplates, widgetConfigurations);
+        const widgetList = await this.widgetRepositoryService.getAllWidgets(data.contextId);
+
+        const response = new LoadDashboardResponse(configuration, widgetTemplates, widgetConfigurations, widgetList);
         this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
     }
 
@@ -92,11 +92,6 @@ export class DashboardCommunicator extends KIXCommunicator {
             .saveComponentConfiguration(data.contextId, null, null, userId, data.configuration);
 
         this.client.emit(DashboardEvent.DASHBOARD_SAVED);
-    }
-
-    private async getWidgetList(data: any): Promise<void> {
-        const widgets = await this.widgetRepositoryService.getAllWidgets(data.contextId);
-        this.client.emit(DashboardEvent.WIDGET_LIST_GIVEN, widgets);
     }
 
     private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<void> {

@@ -1,14 +1,14 @@
-<div.widget-selection.clearfix>
+<div.two-list-selection.clearfix>
     <div.first-list>
         <selection-with-filter title=input.firstTitle list=state.firstList placeholder=input.filterPlaceholder size=input.size
-            multiple=input.firstMultiple/>
+            multiple=input.firstMultiple on-selected('setFirstListSelected')/>
     </div>
     <div.selection-buttons>
-        <button on-click('addToSecond')><</button>
-        <button on-click('removeFromSecond')>></button>
+        <input type="button" on-click('addToSecond') value=">"/>
+        <input type="button" on-click('removeFromSecond') value="<"/>
     </div>
     <div.second-list>
-        <selection-with-action title=input.secondTitle list=state.secondList actions=input.actions size=input.size
-            multiple=input.secondMultiple/>
+        <selection-with-properties title=input.secondTitle list=state.secondList properties=input.properties size=input.size
+            multiple=input.secondMultiple on-selected('setSecondListSelected')/>
     </div>
 </div>

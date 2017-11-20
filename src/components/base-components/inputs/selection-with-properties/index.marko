@@ -1,0 +1,37 @@
+<div.selection-with-properties>
+    <h3>${input.title}</h3>
+    <div.properties-names>
+        <for(property in state.properties)>
+            <if(property.type === 'checkbox')>
+                <span>${property.label}</span>
+            </if>
+            <else-if(property.type === 'radio')>
+                <span>
+                    ${property.label}
+                    <for(value in property.values)>
+                        <span>${value.label}</span>
+                    </for>
+                </span>
+            </else-if>
+        </for>
+    </div>
+    <div.selection>
+        <for(el in state.list | status-var=loop)>
+            <div.selection-element class=(((loop.getIndex() + 1) % 2) != 0 ? "uneven" : "") data-id=el.id>
+                ${el.title}
+                <span.selection-properties>
+                    <for(property in state.properties)>
+                        <if(property.type === 'checkbox')>
+                            <input name="${el.id}-${property.id}" type="checkbox" checked=el[property.id]/>
+                        </if>
+                        <else-if(property.type === 'radio')>
+                            <for(value in property.values)>
+                                <input name="${el.id}-${property.id}" type="radio" value=value.id checked=(el[property.id] === value.id)/>
+                            </for>
+                        </else-if>
+                    </for>
+                </span>
+            </div>
+        </for>
+    </div>
+</div>

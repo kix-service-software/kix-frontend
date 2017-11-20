@@ -1,4 +1,5 @@
 import { TranslationHandler } from '@kix/core/dist/model/client';
+import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 
 class DashboardConfigurationDialog {
 
@@ -7,6 +8,14 @@ class DashboardConfigurationDialog {
     private translationIds: any;
 
     public onCreate(input: any): void {
+        this.state = {};
+    }
+
+    public async onMount(input: any): Promise<void> {
+        // const widgetList = DashboardStore.getWidgetList();
+        // console.log(widgetList);
+        const translationHandler = await TranslationHandler.getInstance();
+        // this.state.translations = translationHandler.getTranslations([]);
         this.state = {
             explorerList: [
                 {
@@ -18,8 +27,8 @@ class DashboardConfigurationDialog {
                     required: false, show: true, id: 'explorer-widget-2'
                 }
             ],
-            explorerActions: [
-                { id: 'show', title: 'Anzeigen', type: 'checkbox' }
+            explorerProperties: [
+                { id: 'show', label: 'Anzeigen', type: 'checkbox' }
             ],
             contentFirstList: [
                 {                             // TODO: oder fixedConf?
@@ -77,9 +86,12 @@ class DashboardConfigurationDialog {
                     title: 'Platzhalter 2 Bla', required: false, show: false, size: 'l', id: 'ticket-list-widget-6'
                 }
             ],
-            contentActions: [
-                { id: 'size', title: 'Größen', type: 'radio', values: ['s', 'l'] },
-                { id: 'show', title: 'Anzeigen', type: 'checkbox' }
+            contentProperties: [
+                { id: 'show', label: 'Anzeigen', type: 'checkbox' },
+                {
+                    id: 'size', label: 'Größen', type: 'radio',
+                    values: [{ id: 's', label: 's' }, { id: 'l', label: 'l' }]
+                }
             ],
             sidebarFirstList: [
                 {
@@ -93,15 +105,10 @@ class DashboardConfigurationDialog {
                     required: true, show: true, id: 'notes-widget-1'
                 }
             ],
-            sidebarActions: [
-                { id: 'show', title: 'Anzeigen', type: 'checkbox' }
+            sidebarProperties: [
+                { id: 'show', label: 'Anzeigen', type: 'checkbox' }
             ]
         };
-    }
-
-    public async onMount(input: any): Promise<void> {
-        const translationHandler = await TranslationHandler.getInstance();
-        // this.state.translations = translationHandler.getTranslations([]);
     }
 
     // private getTranslation(id: ConfigurationWidgetTranslationId): string {

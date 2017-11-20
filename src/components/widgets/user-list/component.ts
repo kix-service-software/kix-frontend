@@ -1,7 +1,6 @@
 import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@kix/core/dist/model/client';
 
 import { UserListComponentState } from './model/UserListComponentState';
-import { UserListConfiguration } from './model/UserListConfiguration';
 
 import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
 import { UserStore } from '@kix/core/dist/model/client/user/store/UserStore';

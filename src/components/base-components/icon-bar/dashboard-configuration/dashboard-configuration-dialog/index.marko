@@ -10,20 +10,20 @@
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Explorer-Widgets</h3>
-                <selection-with-action title="Verfügbare Explorer" secondList=state.explorerList actions=state.explorerActions/>
+                <selection-with-properties title="Verfügbare Explorer" list=state.explorerList properties=state.explorerProperties/>
             </div>
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Content-Widgets</h3>
                 <two-list-selection firstTitle="Verfügbare Widgets" firstList=state.contentFirstList secondTitle="Angezeigte Widgets"
-                    secondList=state.contentSecondList actions=state.contentActions firstListFixed=true
+                    secondList=state.contentSecondList properties=state.contentProperties firstListFixed=true
                     filterPlaceholder="Verfügbare Widgets filtern" size=4 firstMultiple=true secondMultiple=true/>
             </div>
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Sidebar-Widgets</h3>
                 <two-list-selection firstTitle="Verfügbare Sideabrs" firstList=state.sidebarFirstList secondTitle="Angezeigte Sidebars"
-                    secondList=state.sidebarSecondList actions=state.sidebarActions
+                    secondList=state.sidebarSecondList properties=state.sidebarProperties
                     filterPlaceholder="Verfügbare Sidebars filtern" size=4 firstMultiple=true secondMultiple=true/>
             </div>
             <div.form-buttons>
