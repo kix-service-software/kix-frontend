@@ -1,5 +1,5 @@
 import { CreationDialogSocketListener } from './../../socket/CreationDialogSocketListener';
-import { StateAction } from '@kix/core/dist/model/client';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { CreationDialogAction } from './CreationDialogAction';
 
 export default (store: any) => {

@@ -2,14 +2,12 @@ import {
     ConfigurationEvent,
     LoadConfigurationResult,
     SocketEvent,
-    ClientStorageHandler,
     LoadConfigurationRequest,
     ContainerConfiguration
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
-import {
-    SEARCH_CONTAINER_CONFIGURATION_LOADED
-} from '../store/actions';
+} from '@kix/core/dist/model';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
+import { SEARCH_CONTAINER_CONFIGURATION_LOADED } from '../store/actions';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 export class SearchSocketListener extends SocketListener {
 

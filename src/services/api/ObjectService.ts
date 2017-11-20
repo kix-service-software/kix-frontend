@@ -1,4 +1,6 @@
-import { IHttpService, Query, SortOrder } from '@kix/core';
+import { IHttpService } from '@kix/core/dist/services';
+import { Query, SortOrder } from '@kix/core/dist/api';
+
 import { inject, injectable } from 'inversify';
 
 /**

@@ -1,5 +1,5 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class TicketsComponent {
 

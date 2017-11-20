@@ -1,16 +1,19 @@
-import { ClientStorageHandler, TranslationHandler } from '@kix/core/dist/model/client';
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
-import { CreationDialogComponentEvent } from '@kix/core/dist/model/client/components';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { CreationDialogComponentEvent } from '@kix/core/dist/model';
 
 import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TranslationId } from './model/TranslationId';
 
+import { ComponentId } from './model/ComponentId';
 
 class TicketCreationDialogComponent {
 
     public state: TicketCreationDialogState;
 
     private closeDialogAfterSuccess: boolean;
+
 
     public onCreate(input: any): void {
         this.state = new TicketCreationDialogState();
@@ -28,11 +31,11 @@ class TicketCreationDialogComponent {
 
         if (existingState && !confirm(questionString)) {
             ClientStorageHandler.deleteState(TicketStore.TICKET_CREATION_STATE_ID);
-            TicketStore.resetTicketCreation().then(() => {
-                TicketStore.loadTicketData();
+            TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID).then(() => {
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
             });
         } else {
-            TicketStore.loadTicketData();
+            TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         }
     }
 
@@ -41,18 +44,17 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const ticketDataState = TicketStore.getTicketDataState();
-        const ticketCreationState = TicketStore.getTicketCreationState();
-        this.state.loadData = ticketDataState.loadTicketData;
-
-        this.state.error = ticketCreationState.error;
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.error = creationData.error;
+        }
     }
 
     public createTicket(): void {
-        TicketStore.createTicket().then(() => {
+        TicketStore.createTicket(ComponentId.TICKET_CREATION_ID).then(() => {
             if (this.state.createNewObjectAfterFinish) {
-                TicketStore.resetTicketCreation();
-                TicketStore.loadTicketData();
+                TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID);
+                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
                 this.state.error = null;
             }
             (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);

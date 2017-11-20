@@ -1,16 +1,16 @@
 import { ObjectService } from './ObjectService';
+import { IGroupService } from '@kix/core/dist/services';
+import { Group } from '@kix/core/dist/model';
 import {
     CreateGroup,
     CreateGroupResponse,
     CreateGroupRequest,
-    Group,
     GroupsResponse,
-    IGroupService,
     GroupResponse,
     SortOrder,
     UpdateGroupResponse,
     UpdateGroupRequest
-} from '@kix/core';
+} from '@kix/core/dist/api';
 
 export class GroupService extends ObjectService<Group> implements IGroupService {
 

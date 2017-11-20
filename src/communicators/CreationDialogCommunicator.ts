@@ -1,13 +1,13 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
-    ICreationDialogExtension,
     CreationDialog,
     CreationDialogEvent,
     LoadCreationDialogRequest,
     LoadCreationDialogResponse,
-    SocketEvent,
-    KIXExtensions
-} from '@kix/core';
+    SocketEvent
+} from '@kix/core/dist/model';
+
+import { ICreationDialogExtension, KIXExtensions } from '@kix/core/dist/extensions';
 
 const CREATION_DIALOG = "creation-dialog";
 

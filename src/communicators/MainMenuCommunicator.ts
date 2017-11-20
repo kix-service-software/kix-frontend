@@ -5,15 +5,12 @@ import {
     MainMenuEntriesResponse,
     MenuEntryConfiguration,
     MainMenuConfiguration,
-    IMainMenuExtension,
-    KIXExtensions,
-    MainMenuEvent,
-    IServerConfiguration,
-    ICommunicator,
-    IAuthenticationService,
-    ILoggingService,
-    IConfigurationService
-} from '@kix/core';
+    MainMenuEvent
+} from '@kix/core/dist/model';
+
+import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { IServerConfiguration, ICommunicator } from '@kix/core/dist/common';
+import { IAuthenticationService, ILoggingService, IConfigurationService } from '@kix/core/dist/services';
 
 import { KIXCommunicator } from './KIXCommunicator';
 

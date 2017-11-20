@@ -2,14 +2,12 @@ import {
     ConfigurationEvent,
     LoadConfigurationResult,
     SocketEvent,
-    ClientStorageHandler,
     LoadConfigurationRequest,
     ContainerConfiguration
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
-import {
-    FAQ_CONTAINER_CONFIGURATION_LOADED
-} from '../store/actions';
+} from '@kix/core/dist/model';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { FAQ_CONTAINER_CONFIGURATION_LOADED } from '../store/actions';
 
 export class FAQSocketListener extends SocketListener {
 

@@ -1,5 +1,5 @@
 import { CreationDialogCommunicator } from '../CreationDialogCommunicator';
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 export class CreationDialogCommunicatorExtension implements ICommunicatorExtension {
 

@@ -1,4 +1,4 @@
-import { StateAction } from '@kix/core/dist/model/client';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 import { LoginAction } from './LoginAction';
 
 export default (password: string) => {

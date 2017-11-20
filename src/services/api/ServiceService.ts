@@ -1,8 +1,12 @@
 import {
-    IServiceService, Service, SortOrder, ServicesResponse, ServiceResponse,
+    SortOrder, ServicesResponse, ServiceResponse,
     CreateService, CreateServiceRequest, CreateServiceResponse,
     UpdateService, UpdateServiceRequest, UpdateServiceResponse
-} from "@kix/core/";
+} from "@kix/core/dist/api";
+
+import { IServiceService } from '@kix/core/dist/services';
+import { Service } from '@kix/core/dist/model';
+
 import { ObjectService } from './ObjectService';
 
 export class ServiceService extends ObjectService<Service> implements IServiceService {

@@ -1,10 +1,10 @@
-import { ClientStorageHandler, LoadUsersRequest, WidgetBaseComponent } from '@kix/core/dist/model/client';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 import { UserListComponentState } from './model/UserListComponentState';
 
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
-import { UserStore } from '@kix/core/dist/model/client/user/store/UserStore';
-import { User } from '@kix/core/dist/model/client/user/model/User';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { UserStore } from '@kix/core/dist/browser/user/UserStore';
+import { User, LoadUsersRequest } from '@kix/core/dist/model/';
 
 class UserListWidgetComponent {
 

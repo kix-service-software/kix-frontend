@@ -1,12 +1,11 @@
 import {
-    ClientStorageHandler,
     AuthenticationEvent,
     AuthenticationResult,
     LoginRequest,
     SocketEvent,
     UserType
-} from '@kix/core/dist/model/client';
-import { SocketListener } from '@kix/core/dist/model/client/socket/SocketListener';
+} from '@kix/core/dist/model';
+import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 
 import { LOGIN_ERROR } from '../store/actions';
 

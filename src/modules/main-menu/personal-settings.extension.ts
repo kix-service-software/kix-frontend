@@ -1,12 +1,6 @@
-import { MenuEntry } from '@kix/core/dist/model/client';
-import {
-    IPersonalSettingsExtension,
-    PersonalSettings,
-    IMainMenuExtension,
-    IPluginService,
-    KIXExtensions,
-    MenuEntryConfiguration
-} from '@kix/core';
+import { MenuEntryConfiguration, PersonalSettings, MenuEntry } from '@kix/core/dist/model';
+import { IPersonalSettingsExtension, IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { IPluginService } from '@kix/core/dist/services';
 import { container } from '../../Container';
 
 export class MainMenuPersonalSettingsExtension implements IPersonalSettingsExtension {

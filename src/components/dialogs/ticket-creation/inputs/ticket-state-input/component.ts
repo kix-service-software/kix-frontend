@@ -1,5 +1,6 @@
-import { STATE_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { STATE_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/browser/ticket";
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
 
 class TicketStateInput {
 
@@ -17,20 +18,24 @@ class TicketStateInput {
         this.setStoreData();
     }
 
-    public stateChanged(state: TicketCreationReduxState): void {
+    public stateChanged(): void {
         this.setStoreData();
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(STATE_ID_CHANGED(event.target.value));
+        TicketStore.getStore().dispatch(STATE_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
     }
 
     private setStoreData(): void {
-        const reduxState = TicketStore.getTicketCreationState();
-        const processState = TicketStore.getTicketDataState();
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData) {
+            this.state.stateId = creationData.stateId;
+        }
 
-        this.state.stateId = reduxState.stateId;
-        this.state.ticketStates = processState.states;
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+        if (ticketData) {
+            this.state.ticketStates = ticketData.states;
+        }
     }
 
 }

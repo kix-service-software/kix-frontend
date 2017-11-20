@@ -1,9 +1,7 @@
-import { WidgetBaseComponent } from '@kix/core/dist/model/client';
-import { Ticket } from '@kix/core/dist/model/client/ticket';
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
-import { TicketState } from '@kix/core/dist/model/client/ticket/model/TicketState';
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { Ticket, TicketState } from '@kix/core/dist/model/';
 
 class TicketListWidgetComponent {
 
@@ -47,14 +45,18 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        this.state.tickets = TicketStore.getTickets(this.state.instanceId);
-        this.state.filteredTickets = this.state.tickets;
+        const tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
+        if (tickets) {
+            this.state.tickets = tickets;
+            this.state.filteredTickets = tickets;
+        }
+
     }
 
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const settings = this.state.widgetConfiguration.settings;
-            TicketStore.loadTickets(this.state.instanceId, settings.limit, settings.properties);
+            TicketStore.searchTickets(this.state.instanceId, settings.limit, settings.properties);
         }
     }
 

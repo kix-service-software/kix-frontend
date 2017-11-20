@@ -1,7 +1,8 @@
-import { IWidget, IWidgetFactoryExtension, WidgetConfiguration } from '@kix/core';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
 import { NotesSettings } from './../../../components/widgets/notes/model/NotesSettings';
 import { NotesWidget } from './NotesSidebar';
+import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = true;

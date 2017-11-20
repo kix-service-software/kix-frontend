@@ -1,7 +1,5 @@
-import { WidgetBaseComponent } from '@kix/core/dist/model/client/';
-
 import { NotesComponentState } from './model/NotesComponentState';
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class NotesWidgetComponent {
 

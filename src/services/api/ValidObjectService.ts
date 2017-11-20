@@ -1,12 +1,7 @@
-import {
-    IHttpService,
-    IValidObjectService,
-    ValidObject,
-    ValidObjectResponse,
-    ValidObjectsResponse,
-    SortOrder,
-    Query
-} from '@kix/core';
+import { ValidObjectResponse, ValidObjectsResponse, SortOrder, Query } from '@kix/core/dist/api';
+import { IValidObjectService } from '@kix/core/dist/services';
+import { ValidObject } from '@kix/core/dist/model';
+
 
 import { ObjectService } from './ObjectService';
 

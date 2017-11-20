@@ -1,7 +1,8 @@
-import { ClientStorageHandler, MenuEntry } from '@kix/core/dist/model/client';
+import { MenuEntry } from '@kix/core/dist/model';
 import { MenuComponentState } from './model/MenuComponentState';
 import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class KIXMenuComponent {
 

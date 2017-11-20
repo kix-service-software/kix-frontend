@@ -2,10 +2,7 @@
 import { container } from '../../../src/Container';
 
 import {
-    IGroupService,
-    IConfigurationService,
     HttpError,
-    Group,
     GroupResponse,
     GroupsResponse,
     CreateGroup,
@@ -14,7 +11,10 @@ import {
     UpdateGroupRequest,
     UpdateGroupResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { Group } from '@kix/core/dist/model';
+import { IGroupService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

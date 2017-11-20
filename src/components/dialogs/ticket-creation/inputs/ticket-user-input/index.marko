@@ -2,7 +2,6 @@
     ${input.label}
     <input class=(state.userInvalid ? "user-invalid" : "") list=state.inputId name=state.inputId type="text"
         on-blur('valueChanged') tabindex="6" value=state.value/>
-    // TODO: wird scheinbarnicht von safari unterstützt, ggf. alternative anbieten (einfaches select?)
     <datalist id=state.inputId>
         <for(user in state.users)>
             <option value=user.UserLogin/>

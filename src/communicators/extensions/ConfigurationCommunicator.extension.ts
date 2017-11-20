@@ -1,5 +1,5 @@
 import { ConfigurationCommunicatior } from '../ConfigurationCommunicator';
-import { ICommunicatorExtension } from '@kix/core';
+import { ICommunicatorExtension } from '@kix/core/dist/extensions';
 
 export class ConfigurationCommunicatorExtension implements ICommunicatorExtension {
 

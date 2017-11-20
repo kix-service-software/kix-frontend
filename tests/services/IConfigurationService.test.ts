@@ -1,6 +1,7 @@
 /* tslint:disable no-var-requires no-unused-expression */
 import { ConfigurationService } from './../../src/services/ConfigurationService';
-import { IConfigurationService, IServerConfiguration, Environment, LogLevel } from '@kix/core/';
+import { IServerConfiguration, Environment, LogLevel } from '@kix/core/dist/common';
+import { IConfigurationService } from '@kix/core/dist/services';
 import { container } from './../../src/Container';
 
 import chaiAsPromised = require('chai-as-promised');

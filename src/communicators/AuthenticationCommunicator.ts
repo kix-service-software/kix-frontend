@@ -2,14 +2,18 @@ import {
     AuthenticationResult,
     LoginRequest,
     AuthenticationEvent,
+    UserType,
+    SocketEvent
+} from '@kix/core/dist/model';
+
+import { HttpError } from '@kix/core/dist/api';
+import { IServerConfiguration } from '@kix/core/dist/common';
+
+import {
     IAuthenticationService,
     IConfigurationService,
     ILoggingService,
-    UserType,
-    SocketEvent,
-    IServerConfiguration,
-    HttpError
-} from '@kix/core';
+} from '@kix/core/dist/services';
 
 import { injectable, inject } from 'inversify';
 import { KIXCommunicator } from './KIXCommunicator';

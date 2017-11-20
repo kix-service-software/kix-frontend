@@ -1,4 +1,4 @@
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 
 class TicketAttachmentInput {
 

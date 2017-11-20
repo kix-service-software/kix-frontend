@@ -1,4 +1,4 @@
-import { IMarkoDependencyExtension } from '@kix/core';
+import { IMarkoDependencyExtension } from '@kix/core/dist/extensions';
 
 export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtension {
 

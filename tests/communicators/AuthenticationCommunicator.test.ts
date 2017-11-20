@@ -1,16 +1,13 @@
 // tslint:disable
 import { container } from "./../../src/Container";
 import {
-    AuthenticationEvent,
-    AuthenticationResult,
-    HttpError,
     IAuthenticationService,
     IConfigurationService,
     IPluginService,
     ISocketCommunicationService,
-    LoginRequest,
-    UserType
-} from '@kix/core/';
+} from '@kix/core/dist/services';
+import { HttpError } from '@kix/core/dist/api';
+import { AuthenticationEvent, AuthenticationResult, LoginRequest, UserType } from '@kix/core/dist/model'
 
 import { AuthenticationCommunicator } from './../../src/communicators/';
 

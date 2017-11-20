@@ -1,4 +1,5 @@
-import { ContainerConfiguration, ContainerRow, IModuleFactoryExtension } from '@kix/core';
+import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
+import { ContainerConfiguration } from '@kix/core/dist/model/';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 

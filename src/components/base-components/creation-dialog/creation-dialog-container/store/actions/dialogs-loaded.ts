@@ -1,5 +1,6 @@
-import { StateAction, PersonalSettings, CreationDialog } from '@kix/core/dist/model/client';
+import { PersonalSettings, CreationDialog } from '@kix/core/dist/model';
 import { CreationDialogAction } from './CreationDialogAction';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
 
 export default (creationDialogs: CreationDialog[]) => {
     const payload = new Promise((resolve, reject) => {

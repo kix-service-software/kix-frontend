@@ -3,8 +3,6 @@ import 'reflect-metadata';
 import {
     IArticleTypeService,
     IAuthenticationService,
-    ICommunicator,
-    ICommunicatorExtension,
     IConfigurationService,
     IGroupService,
     IHttpService,
@@ -13,8 +11,6 @@ import {
     IPluginService,
     IQueueService,
     IRoleService,
-    IRouter,
-    IRouterExtension,
     ISocketCommunicationService,
     IServiceService,
     ITicketPriorityService,
@@ -24,9 +20,12 @@ import {
     ITranslationService,
     IUserService,
     IValidObjectService,
-    IWidgetRepositoryService,
-    KIXExtensions
-} from '@kix/core';
+    IWidgetRepositoryService
+} from '@kix/core/dist/services';
+import { ICommunicator } from '@kix/core/dist/common';
+import { KIXExtensions, ICommunicatorExtension, IRouterExtension } from '@kix/core/dist/extensions';
+import { IRouter } from '@kix/core/dist/routes';
+
 import { Container } from 'inversify';
 
 import { ApplicationRouter, AuthenticationRouter } from './routes/';

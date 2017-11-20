@@ -1,5 +1,7 @@
-import { ClientStorageHandler, MainMenuEvent, MainMenuEntriesRequest, StateAction } from '@kix/core/dist/model/client';
+import { MainMenuEvent, MainMenuEntriesRequest } from '@kix/core/dist/model';
 import { MainMenuAction } from './MainMenuAction';
+import { StateAction } from '@kix/core/dist/browser/StateAction';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 export default (socket: SocketIO.Server) => {
     const payload = new Promise((resolve, reject) => {

@@ -1,5 +1,6 @@
-import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/model/client/ticket";
-import { TicketStore } from '@kix/core/dist/model/client/ticket/store/TicketStore';
+import { USER_ID_CHANGED, TicketCreationReduxState, TicketDataReduxState } from "@kix/core/dist/browser/ticket";
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { ComponentId } from "../../model/ComponentId";
 
 class TicketUserInput {
 
@@ -28,7 +29,9 @@ class TicketUserInput {
         this.state.value = event.target.value;
         const user = this.state.users.find((u) => u.UserLogin === this.state.value);
         if (user) {
-            TicketStore.getStore().dispatch(USER_ID_CHANGED(user.UserID, this.state.type));
+            TicketStore.getStore().dispatch(USER_ID_CHANGED(
+                ComponentId.TICKET_CREATION_ID, user.UserID, this.state.type
+            ));
             this.state.userInvalid = false;
         } else {
             this.state.userInvalid = true;
@@ -36,17 +39,19 @@ class TicketUserInput {
     }
 
     private setStoreData(): void {
-        const processState = TicketStore.getTicketDataState();
-        const ticketState = TicketStore.getTicketCreationState();
-
-        this.state.users = processState.users;
-
-        if (this.state.type === 'owner' && ticketState.ownerId && this.state.users.length) {
-            this.state.value = this.getUserName(ticketState.ownerId);
+        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+        if (ticketData) {
+            this.state.users = ticketData.users;
         }
 
-        if (this.state.type === 'responsible' && ticketState.responsibleId && this.state.users.length) {
-            this.state.value = this.getUserName(ticketState.responsibleId);
+        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        if (creationData && this.state.type === 'owner' && creationData.ownerId && this.state.users.length) {
+            this.state.value = this.getUserName(creationData.ownerId);
+        }
+
+        if (creationData && this.state.type === 'responsible' &&
+            creationData.responsibleId && this.state.users.length) {
+            this.state.value = this.getUserName(creationData.responsibleId);
         }
     }
 

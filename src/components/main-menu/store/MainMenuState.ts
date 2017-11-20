@@ -1,4 +1,4 @@
-import { MenuEntry } from '@kix/core/dist/model/client';
+import { MenuEntry } from '@kix/core/dist/model';
 import { MainMenuSocketListener } from './../socket/MainMenuSocketListener';
 
 export class MainMenuState {

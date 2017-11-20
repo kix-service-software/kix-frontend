@@ -1,5 +1,7 @@
 import { ChartWidget } from './ChartWidget';
-import { IWidget, IWidgetFactoryExtension, WidgetConfiguration, ChartSettings } from '@kix/core';
+import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
+import { ChartSettings } from '@kix/core/dist/browser/model/charts';
 
 export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = false;

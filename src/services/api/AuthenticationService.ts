@@ -1,15 +1,9 @@
 import { injectable, inject } from 'inversify';
-import {
-    HttpError,
-    LoginResponse,
-    UserLogin,
-    Session,
-    SessionResponse,
-    UserType,
-    IAuthenticationService,
-    SocketAuthenticationError,
-    IHttpService
-} from '@kix/core';
+
+import { IAuthenticationService, IHttpService } from '@kix/core/dist/services';
+import { UserType, UserLogin, Session, SocketAuthenticationError } from '@kix/core/dist/model';
+import { HttpError, LoginResponse, SessionResponse } from '@kix/core/dist/api';
+
 import { Request, Response } from 'express';
 
 @injectable()

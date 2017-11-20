@@ -1,5 +1,6 @@
 import { AssignTourAction } from './AssignTourAction';
-import { IActionFactoryExtension, IAction } from '@kix/core';
+import { IAction } from '@kix/core/dist/model';
+import { IActionFactoryExtension } from '@kix/core/dist/extensions';
 
 export class AssignTourActionFactoryExtension implements IActionFactoryExtension {
 

@@ -1,5 +1,5 @@
 import { ActionSocketListener } from './../socket/ActionSocketListener';
-import { UIProperty } from '@kix/core/dist/model/client';
+import { UIProperty } from '@kix/core/dist/model';
 
 export class DeleteActionState {
 

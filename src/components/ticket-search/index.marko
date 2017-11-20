@@ -1,4 +1,23 @@
 <div.ticket-search-container>
     <h1>${state.title}</h1>
-    <ticket-form/>
+    <if(state.searching)>
+        <label>Suche läuft ...</label>
+    </if>
+    <else>
+        <div.search-group>
+            <label>
+                Limit
+                <input type="number" value=state.limit on-change('limitChanged')/>
+            </label>
+        </div>
+        <button on-click('searchTickets')>Suche starten</button>
+    </else>
+</div>
+<div.search-result>
+    <h2>Suchergebnis (${state.tickets.length} Tickets in ${state.time} Sekunden)</h2>
+    <ul>
+        <for(ticket in state.tickets)>
+            <li>${ticket.TicketNumber} - ${ticket.Title}</li>
+        </for>
+    </ul>
 </div>

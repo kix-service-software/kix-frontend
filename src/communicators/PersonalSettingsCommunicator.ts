@@ -1,14 +1,14 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
-    IPersonalSettingsExtension,
-    KIXExtensions,
     LoadPersonalSettingsRequest,
     LoadPersonalSettingsResponse,
     PersonalSettingsEvent,
     PersonalSettings,
     SavePersonalSettingsRequest,
     SocketEvent
-} from '@kix/core';
+} from '@kix/core/dist/model';
+
+import { IPersonalSettingsExtension, KIXExtensions } from '@kix/core/dist/extensions';
 
 const PERSONAL_SETTINGS = "personal-settings";
 

@@ -2,10 +2,7 @@
 import { container } from '../../../src/Container';
 
 import {
-    IServiceService,
-    IConfigurationService,
     HttpError,
-    Service,
     ServiceResponse,
     ServicesResponse,
     CreateService,
@@ -15,7 +12,10 @@ import {
     UpdateServiceRequest,
     UpdateServiceResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { Service } from '@kix/core/dist/model';
+import { IServiceService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');

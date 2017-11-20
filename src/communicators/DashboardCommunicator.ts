@@ -4,19 +4,17 @@ import {
     LoadDashboardRequest,
     LoadDashboardResponse,
     SaveDashboardRequest,
-    SaveWidgetRequest
-} from '@kix/core/dist/model/client/dashboard/socket';
-
-import {
+    SaveWidgetRequest,
     ContainerConfiguration,
     SocketEvent,
     User,
-    WidgetTemplate
-} from '@kix/core';
-import { WidgetConfiguration } from '@kix/core/dist/model/client/components/widget/WidgetConfiguration';
-import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/ui/IWidgetFactoryExtension';
-import { IWidget } from '@kix/core/dist/model/client/components/widget/IWidget';
-import { SidebarConfiguration } from '@kix/core/dist/model/client/components/sidebar/SidebarConfiguration';
+    WidgetTemplate,
+    WidgetConfiguration,
+    IWidget,
+    SidebarConfiguration
+} from '@kix/core/dist/model';
+
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/';
 
 export class DashboardCommunicator extends KIXCommunicator {
 

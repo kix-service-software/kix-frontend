@@ -1,6 +1,7 @@
 import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
 import { DeleteAction } from './../../actions/delete/DeleteAction';
-import { IWidgetFactoryExtension, IWidget, UIProperty, WidgetConfiguration, IAction } from '@kix/core';
+import { IWidget, UIProperty, WidgetConfiguration, IAction } from '@kix/core/dist/model';
+import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { UserListSettings } from './../../../components/widgets/user-list/model/UserListSettings';
 import { UserListWidget } from './UserListWidget';
 

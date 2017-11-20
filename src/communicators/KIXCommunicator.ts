@@ -1,9 +1,6 @@
 import { inject, injectable } from 'inversify';
 import {
     IUserService,
-    ICommunicator,
-    SocketEvent,
-    IServerConfiguration,
     ILoggingService,
     IPluginService,
     IAuthenticationService,
@@ -16,7 +13,9 @@ import {
     ITicketTypeService,
     ITicketPriorityService,
     IWidgetRepositoryService
-} from "@kix/core";
+} from "@kix/core/dist/services";
+import { SocketEvent } from '@kix/core/dist/model';
+import { ICommunicator, IServerConfiguration } from '@kix/core/dist/common';
 
 @injectable()
 export abstract class KIXCommunicator implements ICommunicator {

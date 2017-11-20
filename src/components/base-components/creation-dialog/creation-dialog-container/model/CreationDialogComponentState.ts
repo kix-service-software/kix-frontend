@@ -1,4 +1,4 @@
-import { CreationDialog } from '@kix/core/dist/model/client';
+import { CreationDialog } from '@kix/core/dist/model';
 
 export class CreationDialogComponentState {
 

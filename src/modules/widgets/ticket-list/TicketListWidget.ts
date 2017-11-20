@@ -1,4 +1,4 @@
-import { IWidget, WidgetSize } from '@kix/core';
+import { IWidget, WidgetSize } from '@kix/core/dist/model';
 
 export class TicketListWidget implements IWidget {
 

@@ -1,4 +1,4 @@
-import { PersonalSettings } from '@kix/core';
+import { PersonalSettings } from '@kix/core/dist/model';
 
 export class PersonalSettingsReduxState {
 

@@ -2,14 +2,14 @@
 import { container } from '../../../src/Container';
 
 import {
-    IValidObjectService,
-    IConfigurationService,
     HttpError,
-    ValidObject,
     ValidObjectResponse,
     ValidObjectsResponse,
     SortOrder
-} from '@kix/core';
+} from '@kix/core/dist/api';
+
+import { ValidObject } from '@kix/core/dist/model';
+import { IValidObjectService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
