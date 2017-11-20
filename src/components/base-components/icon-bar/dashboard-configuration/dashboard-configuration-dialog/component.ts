@@ -1,5 +1,5 @@
-import { TranslationHandler } from '@kix/core/dist/model/client';
-import { DashboardStore } from '@kix/core/dist/model/client/dashboard/store/DashboardStore';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class DashboardConfigurationDialog {
 

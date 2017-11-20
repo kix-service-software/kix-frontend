@@ -2,11 +2,13 @@ import { injectable, inject } from 'inversify';
 
 import {
     ContainerConfiguration,
-    WidgetDescriptor,
+    WidgetDescriptor
+} from '@kix/core/dist/model';
+import {
     IPluginService,
     IConfigurationService,
     IWidgetRepositoryService
-} from '@kix/core';
+} from '@kix/core/dist/services';
 
 @injectable()
 export class WidgetRepositoryService implements IWidgetRepositoryService {

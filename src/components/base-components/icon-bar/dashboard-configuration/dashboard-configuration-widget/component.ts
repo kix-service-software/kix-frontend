@@ -1,4 +1,4 @@
-import { TranslationHandler } from '@kix/core/dist/model/client';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 
 import { DashboardConfigurationWidgetComponentState } from './model/DashboardConfigurationWidgetComponentState';
 import { DashboardConfigurationWidgetTranslationId } from './model/DashboardConfigurationWidgetTranslationId';
