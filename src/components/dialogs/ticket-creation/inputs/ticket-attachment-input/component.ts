@@ -9,7 +9,7 @@ class TicketAttachmentInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {

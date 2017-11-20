@@ -20,9 +20,9 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         this.state.widgetConfiguration =
-            DashboardStore.getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
 
         this.loadTickets();
     }
@@ -32,7 +32,7 @@ class TicketListWidgetComponent {
     }
 
     public saveConfiguration(): void {
-        DashboardStore.saveWidgetConfiguration(
+        DashboardStore.getInstance().saveWidgetConfiguration(
             'ticket-list-widget', this.state.instanceId, this.state.widgetConfiguration
         );
 
@@ -45,7 +45,7 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        const tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
+        const tickets = TicketStore.getInstance().getTicketsSearchResult(this.state.instanceId);
         if (tickets) {
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
@@ -56,7 +56,7 @@ class TicketListWidgetComponent {
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const config = this.state.widgetConfiguration.contentConfiguration;
-            TicketStore.searchTickets(this.state.instanceId, config.limit, config.properties);
+            TicketStore.getInstance().searchTickets(this.state.instanceId, config.limit, config.properties);
         }
     }
 

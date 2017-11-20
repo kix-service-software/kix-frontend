@@ -17,7 +17,7 @@ class ChartWidgetComponent {
 
     public onMount(): void {
         this.state.widgetConfiguration =
-            DashboardStore.getWidgetConfiguration('chart-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration('chart-widget', this.state.instanceId);
 
         this.drawChart();
     }

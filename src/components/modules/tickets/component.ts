@@ -13,8 +13,8 @@ class TicketsComponent {
     }
 
     public onMount(): void {
-        DashboardStore.addStateListener(this.stateChanged.bind(this));
-        DashboardStore.loadDashboardConfiguration();
+        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        DashboardStore.getInstance().loadDashboardConfiguration();
     }
 
     public onInput(input: any) {
@@ -22,7 +22,7 @@ class TicketsComponent {
     }
 
     public stateChanged(): void {
-        const dashboardConfiguration = DashboardStore.getDashboardConfiguration();
+        const dashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
             this.state.containerConfiguration = dashboardConfiguration.configuration;
             this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;

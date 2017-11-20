@@ -15,8 +15,8 @@ class DashboardComponent {
     }
 
     public onMount(): void {
-        DashboardStore.addStateListener(this.stateChanged.bind(this));
-        DashboardStore.loadDashboardConfiguration();
+        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        DashboardStore.getInstance().loadDashboardConfiguration();
     }
 
     public onInput(input: any) {
@@ -24,7 +24,7 @@ class DashboardComponent {
     }
 
     public stateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getDashboardConfiguration();
+        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
             this.state.containerConfiguration = dashboardConfiguration.configuration;
             this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;

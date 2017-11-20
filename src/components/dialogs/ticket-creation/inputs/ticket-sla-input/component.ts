@@ -13,7 +13,7 @@ class TicketSLAInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -22,11 +22,13 @@ class TicketSLAInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(SLA_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
+        TicketStore.getInstance().getStore().dispatch(
+            SLA_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value)
+        );
     }
 
     private setStoreData(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             this.state.slaId = creationData.slaId;
         }
