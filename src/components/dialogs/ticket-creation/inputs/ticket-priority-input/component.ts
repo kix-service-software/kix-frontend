@@ -15,7 +15,7 @@ class TicketPriorityInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -24,16 +24,18 @@ class TicketPriorityInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(PRIORITY_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
+        TicketStore.getInstance().getStore().dispatch(
+            PRIORITY_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value)
+        );
     }
 
     private setStoreData(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             this.state.priorityId = Number(creationData.priorityId);
         }
 
-        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+        const ticketData = TicketStore.getInstance().getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         if (ticketData) {
             this.state.ticketPriorities = ticketData.priorities;
         }

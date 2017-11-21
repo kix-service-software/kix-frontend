@@ -14,7 +14,7 @@ class TicketQueueInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -23,16 +23,18 @@ class TicketQueueInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(QUEUE_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
+        TicketStore.getInstance().getStore().dispatch(
+            QUEUE_ID_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value)
+        );
     }
 
     private setStoreData(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             this.state.queueId = Number(creationData.queueId);
         }
 
-        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+        const ticketData = TicketStore.getInstance().getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         if (ticketData) {
             this.state.queues = ticketData.queues;
         }

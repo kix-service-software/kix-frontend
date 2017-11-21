@@ -20,7 +20,7 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
 
@@ -45,7 +45,7 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        const tickets = TicketStore.getTicketsSearchResult(this.state.instanceId);
+        const tickets = TicketStore.getInstance().getTicketsSearchResult(this.state.instanceId);
         if (tickets) {
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
@@ -56,7 +56,7 @@ class TicketListWidgetComponent {
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const settings = this.state.widgetConfiguration.settings;
-            TicketStore.searchTickets(this.state.instanceId, settings.limit, settings.properties);
+            TicketStore.getInstance().searchTickets(this.state.instanceId, settings.limit, settings.properties);
         }
     }
 

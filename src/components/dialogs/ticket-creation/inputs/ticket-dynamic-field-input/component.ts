@@ -13,7 +13,7 @@ class TicketDynamicFieldInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -22,14 +22,14 @@ class TicketDynamicFieldInput {
     }
 
     public valueChanged(event: any): void {
-        TicketStore
+        TicketStore.getInstance()
             .getStore().dispatch(DYNAMIC_FIELD_CHANGED(
                 ComponentId.TICKET_CREATION_ID, this.state.name, event.target.value
             ));
     }
 
     private setStoreData(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             const dynamicField = creationData.dynamicFields.find((df) => df.Name === this.state.name);
             if (dynamicField) {

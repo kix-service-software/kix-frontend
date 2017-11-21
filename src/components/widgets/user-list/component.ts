@@ -21,7 +21,7 @@ class UserListWidgetComponent {
     }
 
     public onMount(): void {
-        UserStore.addStateListener(this.userStateChanged.bind(this));
+        UserStore.getInstance().addStateListener(this.userStateChanged.bind(this));
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration('user-list-widget', this.state.instanceId);
 
@@ -32,7 +32,7 @@ class UserListWidgetComponent {
     }
 
     public userStateChanged(): void {
-        const users: User[] = UserStore.getUsers(this.state.instanceId);
+        const users: User[] = UserStore.getInstance().getUsers(this.state.instanceId);
         if (users) {
             this.state.users = users;
         }
@@ -56,7 +56,7 @@ class UserListWidgetComponent {
 
     private loadUser(): void {
         const settings = this.state.widgetConfiguration.settings;
-        UserStore.loadUser(this.state.instanceId, settings.properties, settings.limit);
+        UserStore.getInstance().loadUser(this.state.instanceId, settings.properties, settings.limit);
     }
 }
 

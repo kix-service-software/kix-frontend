@@ -22,20 +22,20 @@ class TicketCreationDialogComponent {
 
     public async onMount(): Promise<void> {
         this.state = new TicketCreationDialogState();
-        const existingState = ClientStorageHandler.loadState(TicketStore.TICKET_CREATION_STATE_ID);
+        const existingState = ClientStorageHandler.loadState(TicketStore.getInstance().TICKET_CREATION_STATE_ID);
 
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
 
         const translationHandler = await TranslationHandler.getInstance();
         const questionString = translationHandler.getTranslation(TranslationId.LOAD_DRAFT_QUESTION);
 
         if (existingState && !confirm(questionString)) {
-            ClientStorageHandler.deleteState(TicketStore.TICKET_CREATION_STATE_ID);
-            TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID).then(() => {
-                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+            ClientStorageHandler.deleteState(TicketStore.getInstance().TICKET_CREATION_STATE_ID);
+            TicketStore.getInstance().resetTicketCreation(ComponentId.TICKET_CREATION_ID).then(() => {
+                TicketStore.getInstance().loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
             });
         } else {
-            TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+            TicketStore.getInstance().loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         }
     }
 
@@ -44,17 +44,17 @@ class TicketCreationDialogComponent {
     }
 
     public stateChanged(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             this.state.error = creationData.error;
         }
     }
 
     public createTicket(): void {
-        TicketStore.createTicket(ComponentId.TICKET_CREATION_ID).then(() => {
+        TicketStore.getInstance().createTicket(ComponentId.TICKET_CREATION_ID).then(() => {
             if (this.state.createNewObjectAfterFinish) {
-                TicketStore.resetTicketCreation(ComponentId.TICKET_CREATION_ID);
-                TicketStore.loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+                TicketStore.getInstance().resetTicketCreation(ComponentId.TICKET_CREATION_ID);
+                TicketStore.getInstance().loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
                 this.state.error = null;
             }
             (this as any).emit(CreationDialogComponentEvent.FINISH_DIALOG);
