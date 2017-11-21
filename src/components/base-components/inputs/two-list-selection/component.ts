@@ -27,19 +27,20 @@ class TwoListSelection {
     }
 
     private addToSecond(): void {
-        if (this.state.firstListSelected.length) {
-            this.state.firstListSelected.forEach((id) => {
-                const entry = this.state.firstList.find((me) => me.id === id);
-                const index = this.state.firstList.findIndex((me) => me.id === id);
+        console.log(this.state.firstListSelected);
+        // if (this.state.firstListSelected.length) {
+        //     this.state.firstListSelected.forEach((id) => {
+        //         const entry = this.state.firstList.find((me) => me.id === id);
+        //         const index = this.state.firstList.findIndex((me) => me.id === id);
 
-                this.state.firstList.splice(index, 1);
+        //         this.state.firstList.splice(index, 1);
 
-                this.state.configuration.secondList.push(entry);
-            });
-            this.state.firstListSelected = [];
-            (this as any).setStateDirty('firstList');
-            (this as any).setStateDirty('secondList');
-        }
+        //         this.state.configuration.secondList.push(entry);
+        //     });
+        //     this.state.firstListSelected = [];
+        //     (this as any).setStateDirty('firstList');
+        //     (this as any).setStateDirty('secondList');
+        // }
     }
 }
 

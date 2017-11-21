@@ -11,9 +11,9 @@ class DashboardConfigurationDialog {
         this.state = {};
     }
 
-    public async onMount(input: any): Promise<void> {
-        // const widgetList = DashboardStore.getWidgetList();
-        // console.log(widgetList);
+    public async onMount(): Promise<void> {
+        const widgetList = DashboardStore.getInstance().getWidgetList();
+        console.log(widgetList);
         const translationHandler = await TranslationHandler.getInstance();
         // this.state.translations = translationHandler.getTranslations([]);
         this.state = {

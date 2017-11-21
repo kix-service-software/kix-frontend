@@ -22,7 +22,7 @@ class TicketListWidgetComponent {
     public onMount(): void {
         TicketStore.addStateListener(this.ticketStateChanged.bind(this));
         this.state.widgetConfiguration =
-            DashboardStore.getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
 
         this.loadTickets();
     }
@@ -32,7 +32,7 @@ class TicketListWidgetComponent {
     }
 
     public saveConfiguration(): void {
-        DashboardStore.saveWidgetConfiguration(
+        DashboardStore.getInstance().saveWidgetConfiguration(
             'ticket-list-widget', this.state.instanceId, this.state.widgetConfiguration
         );
 

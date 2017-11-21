@@ -23,7 +23,7 @@ class UserListWidgetComponent {
     public onMount(): void {
         UserStore.addStateListener(this.userStateChanged.bind(this));
         this.state.widgetConfiguration =
-            DashboardStore.getWidgetConfiguration('user-list-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration('user-list-widget', this.state.instanceId);
 
         if (!this.componentInitialized && this.state.widgetConfiguration) {
             this.componentInitialized = true;
@@ -39,7 +39,7 @@ class UserListWidgetComponent {
     }
 
     public saveConfiguration(): void {
-        DashboardStore.saveWidgetConfiguration(
+        DashboardStore.getInstance().saveWidgetConfiguration(
             'user-list-widget', this.state.instanceId, this.state.widgetConfiguration
         );
         this.loadUser();
