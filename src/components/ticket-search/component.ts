@@ -11,16 +11,27 @@ class TicketSearchComponent {
             searching: false,
             tickets: [],
             time: 0,
+            values: {
+                TicketNumber: null,
+                Title: null
+            },
             limit: 100
         };
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.ticketStateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
     }
 
     private limitChanged(event: any): void {
         this.state.limit = event.target.value;
+    }
+
+    private searchVlaueChanged(property: string, event: any): void {
+        const value: string = event.target.value;
+        this.state.values[property] = value;
+
+        TicketStore.getInstance().prepareSearch('ticket-search', [property, [value]]);
     }
 
     private searchTickets(): void {
@@ -34,7 +45,7 @@ class TicketSearchComponent {
         ];
 
         const start = Date.now();
-        TicketStore.searchTickets('ticket-search', this.state.limit, properties).then(() => {
+        TicketStore.getInstance().searchTickets('ticket-search', this.state.limit, properties).then(() => {
             const end = Date.now();
             this.state.time = (end - start) / 1000;
             this.state.searching = false;
@@ -42,7 +53,7 @@ class TicketSearchComponent {
     }
 
     private ticketStateChanged(): void {
-        const result = TicketStore.getTicketsSearchResult('ticket-search');
+        const result = TicketStore.getInstance().getTicketsSearchResult('ticket-search');
         if (result) {
             this.state.tickets = result;
         }

@@ -17,7 +17,7 @@ class TicketUserInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -29,7 +29,7 @@ class TicketUserInput {
         this.state.value = event.target.value;
         const user = this.state.users.find((u) => u.UserLogin === this.state.value);
         if (user) {
-            TicketStore.getStore().dispatch(USER_ID_CHANGED(
+            TicketStore.getInstance().getStore().dispatch(USER_ID_CHANGED(
                 ComponentId.TICKET_CREATION_ID, user.UserID, this.state.type
             ));
             this.state.userInvalid = false;
@@ -39,12 +39,12 @@ class TicketUserInput {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketStore.getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+        const ticketData = TicketStore.getInstance().getTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
         if (ticketData) {
             this.state.users = ticketData.users;
         }
 
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData && this.state.type === 'owner' && creationData.ownerId && this.state.users.length) {
             this.state.value = this.getUserName(creationData.ownerId);
         }

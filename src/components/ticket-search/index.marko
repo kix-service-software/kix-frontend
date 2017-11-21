@@ -6,6 +6,16 @@
     <else>
         <div.search-group>
             <label>
+                T#:
+                <input type="text" value=state.values["TicketNumber"] on-change('searchVlaueChanged', 'TicketNumber')/>
+            </label>
+            <label>
+                Titel:
+                <input type="text" value=state.values["Title"] on-change('searchVlaueChanged', 'Title')/>
+            </label>
+        </div>
+        <div.search-group>
+            <label>
                 Limit
                 <input type="number" value=state.limit on-change('limitChanged')/>
             </label>

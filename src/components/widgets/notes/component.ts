@@ -17,7 +17,7 @@ class NotesWidgetComponent {
 
     public onMount(): void {
         this.state.widgetConfiguration =
-            DashboardStore.getWidgetConfiguration('notes-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration('notes-widget', this.state.instanceId);
     }
 
     public showConfigurationClicked(): void {
@@ -33,7 +33,9 @@ class NotesWidgetComponent {
     }
 
     public valueChanged(newValue: string): void {
-        DashboardStore.saveWidgetConfiguration('notes-widget', this.state.instanceId, this.state.widgetConfiguration);
+        DashboardStore.getInstance().saveWidgetConfiguration(
+            'notes-widget', this.state.instanceId, this.state.widgetConfiguration
+        );
     }
 
     public toggleEditMode(): void {

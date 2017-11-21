@@ -13,7 +13,7 @@ class TicketDescriptionInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
         this.setStoreData();
     }
 
@@ -22,11 +22,11 @@ class TicketDescriptionInput {
     }
 
     public valueChanged(newValue: string): void {
-        TicketStore.getStore().dispatch(DESCRIPTION_CHANGED(ComponentId.TICKET_CREATION_ID, newValue));
+        TicketStore.getInstance().getStore().dispatch(DESCRIPTION_CHANGED(ComponentId.TICKET_CREATION_ID, newValue));
     }
 
     private setStoreData(): void {
-        const creationData = TicketStore.getTicketCreationData(ComponentId.TICKET_CREATION_ID);
+        const creationData = TicketStore.getInstance().getTicketCreationData(ComponentId.TICKET_CREATION_ID);
         if (creationData) {
             this.state.description = creationData.description;
         }

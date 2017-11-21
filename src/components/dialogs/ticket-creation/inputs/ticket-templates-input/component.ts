@@ -13,15 +13,17 @@ class TicketTemplateInput {
     }
 
     public onMount(): void {
-        TicketStore.addStateListener(this.stateChanged.bind(this));
+        TicketStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
-        // const reduxState = TicketStore.getTicketData(TICKET_CREATION_DATA_ID);
+        // const reduxState = TicketStore.getInstance().getTicketData(TICKET_CREATION_DATA_ID);
     }
 
     public valueChanged(event: any): void {
-        TicketStore.getStore().dispatch(TEMPLATE_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value));
+        TicketStore.getInstance().getStore().dispatch(
+            TEMPLATE_CHANGED(ComponentId.TICKET_CREATION_ID, event.target.value)
+        );
     }
 
 }

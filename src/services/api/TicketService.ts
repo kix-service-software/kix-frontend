@@ -68,10 +68,13 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         }
     }
 
-    public async getTickets(token: string, properties: string[], limit: number): Promise<AbstractTicket[]> {
-        let query = {
-            fields: 'Ticket.*'
-        };
+    public async getTickets(
+        token: string, properties: string[], limit: number, query?: any
+    ): Promise<AbstractTicket[]> {
+
+        if (!query) {
+            query = { fields: "Ticket.*" };
+        }
 
         if (properties) {
             const ticketProperties = [];
@@ -81,9 +84,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
                 }
                 ticketProperties.push(property);
             }
-            query = {
-                fields: ticketProperties.join(',')
-            };
+            query.fields = ticketProperties.join(',');
         }
 
         const response = await this.getObjects<TicketsResponse>(token, limit, null, null, query);
