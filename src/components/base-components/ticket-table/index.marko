@@ -1,0 +1,20 @@
+<table.ticket-table>
+    <tr>
+        <th>
+            <a href="#">alle</a>
+        </th>
+        <for(property in state.properties)>
+            <th>${property[1]}</th>
+        </for>
+    </tr>
+    <for(ticket in state.tickets)>
+        <tr>
+            <td>
+                <input type="checkbox" name="all"/>
+            </td>
+            <for(property in state.properties)>
+                <td>${ticket[property[0]]}</td>
+            </for>
+        </tr>
+    </for>
+</table>

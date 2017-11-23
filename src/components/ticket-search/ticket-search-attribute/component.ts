@@ -43,6 +43,7 @@ export class TicketSearchAttributeComponent {
         // TODO: handle multiple values
         const value = event.target.value;
         this.state.attribute[2] = value === '' ? [] : [value];
+        this.state.invalid = value === '';
         this.attributeChanged();
     }
 

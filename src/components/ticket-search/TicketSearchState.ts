@@ -9,11 +9,14 @@ export class TicketSearchState {
         public tickets: Ticket[] = [],
         public time: number = 0,
         public limit: number = 100,
+        public ticketProperties: Array<[string, string]> = [],
+        public properties: string[] = [],
         public searchAttributes: Array<[string, TicketProperty, SearchOperator, string[]]> =
             [
                 ['attribute-0', TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, ['*']]
             ],
-        public canSearch: boolean = true
+        public canSearch: boolean = true,
+        public error: any = null
     ) { }
 
 }

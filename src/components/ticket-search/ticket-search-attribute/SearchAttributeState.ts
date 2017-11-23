@@ -7,7 +7,8 @@ export class SearchAttributeState {
         public attributeId: string = '',
         public properties: Array<[string, string]> = [],
         public operations: Array<[string, string]> = [],
-        public attribute: [TicketProperty, SearchOperator, string[]] = [null, SearchOperator.CONTAINS, ['*']]
+        public attribute: [TicketProperty, SearchOperator, string[]] = [null, SearchOperator.CONTAINS, ['*']],
+        public invalid: boolean = false
     ) { }
 
 }

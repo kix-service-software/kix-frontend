@@ -207,15 +207,33 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         const filterObject = {};
         const filterOperations = [];
         for (const filter of ticketFilter) {
-            filterOperations.push({
-                Field: filter[0],
-                Operator: filter[1],
-                Value: filter[2].join(" ")
-            });
+            if (this.isNumericSearchOperation(filter[1])) {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: Number(filter[2][0]),
+                    Type: "numeric"
+                });
+            } else {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: filter[2].join(" ")
+                });
+            }
         }
 
         filterObject['AND'] = filterOperations;
 
         return filterObject;
+    }
+
+    private isNumericSearchOperation(operator: SearchOperator): boolean {
+        return (
+            operator === SearchOperator.LESS_THAN ||
+            operator === SearchOperator.LESS_THAN_OR_EQUAL ||
+            operator === SearchOperator.GREATER_THAN ||
+            operator === SearchOperator.GREATER_THAN_OR_EQUAL
+        );
     }
 }

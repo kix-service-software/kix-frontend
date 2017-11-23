@@ -1,5 +1,8 @@
 <div.ticket-search-container>
     <h1>${state.title}</h1>
+    <if(state.error)>
+        <span.search-error>${state.error}</span>
+    </if>
     <if(state.searching)>
         <label>Suche läuft ...</label>
     </if>
@@ -16,18 +19,26 @@
         </div>
         <div.search-group>
             <label>
-                Limit
+                max. Suchergebnisse
                 <input type="number" value=state.limit on-change('limitChanged')/>
             </label>
+            <label>
+                Ticketattribute
+                <select size=6 multiple on-change('ticketPropertiesChanged')>
+                    <for(property in state.ticketProperties)>
+                        <option value=property[0] selected=component.isPropertySelected(property[0])>${property[0]}</option>
+                    </for>
+                </select>
+            </label>
         </div>
-        <button disabled=(!state.canSearch) on-click('searchTickets')>Suche starten</button>
+        <button disabled=((!state.canSearch) || state.error) on-click('searchTickets')>Suche starten</button>
     </else>
 </div>
-<div.search-result>
-    <h2>Suchergebnis (${state.tickets.length} Tickets in ${state.time} Sekunden)</h2>
-    <ul>
-        <for(ticket in state.tickets)>
-            <li>${ticket.TicketNumber} - ${ticket.Title}</li>
-        </for>
-    </ul>
-</div>
+<if(!state.searching)>
+    <div.search-result>
+        <span>
+            <b>Gefundene Tickets:</b> ${state.tickets.length} <b>Suchdauer:</b> ${state.time} Sekunden
+        </span>
+        <ticket-table tickets=state.tickets properties=state.properties/>
+    </div>
+</if>

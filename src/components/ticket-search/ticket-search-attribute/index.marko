@@ -8,4 +8,4 @@
         <option value=operator[0] selected=(state.attribute[1] === operator[0])>${operator[1]}</option>
     </for>
 </select>
-<input on-change('valueChanged') type="text" value=data.value/>
+<input on-change('valueChanged') type="text" value=data.value class=(state.invalid ? "invalid" : "")/>
