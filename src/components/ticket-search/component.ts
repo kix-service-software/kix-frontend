@@ -1,22 +1,14 @@
 import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
-import { TicketProperties } from "@kix/core/dist/model";
+import { TicketProperty } from "@kix/core/dist/model";
+import { SearchOperator } from "@kix/core/dist/browser/SearchOperator";
+import { TicketSearchState } from './TicketSearchState';
 
 class TicketSearchComponent {
 
-    public state: any;
+    public state: TicketSearchState;
 
     public onCreate(input: any): void {
-        this.state = {
-            title: "Ticketsuche",
-            searching: false,
-            tickets: [],
-            time: 0,
-            values: {
-                TicketNumber: null,
-                Title: null
-            },
-            limit: 100
-        };
+        this.state = new TicketSearchState();
     }
 
     public onMount(): void {
@@ -27,11 +19,26 @@ class TicketSearchComponent {
         this.state.limit = event.target.value;
     }
 
-    private searchVlaueChanged(property: string, event: any): void {
-        const value: string = event.target.value;
-        this.state.values[property] = value;
+    private addSearchAttribute(event: any): void {
+        const id = Date.now();
+        this.state.searchAttributes.push(['attribute-' + id, null, SearchOperator.CONTAINS, ['*']]);
+        this.setComponentDirty();
+    }
 
-        TicketStore.getInstance().prepareSearch('ticket-search', [property, [value]]);
+    private deletSearchAtribute(attributeId: string) {
+        const idx = this.state.searchAttributes.findIndex((sa) => sa[0] === attributeId);
+        if (idx > -1) {
+            this.state.searchAttributes.splice(idx, 1);
+        }
+        this.setComponentDirty();
+    }
+
+    private attributeChanged(attributeId: string, attribute: [TicketProperty, SearchOperator, string[]]): void {
+        const idx = this.state.searchAttributes.findIndex((sa) => sa[0] === attributeId);
+        this.state.searchAttributes[idx][1] = attribute[0];
+        this.state.searchAttributes[idx][2] = attribute[1];
+        this.state.searchAttributes[idx][3] = attribute[2];
+        this.setComponentDirty();
     }
 
     private searchTickets(): void {
@@ -39,10 +46,14 @@ class TicketSearchComponent {
         this.state.tickets = [];
 
         const properties = [
-            TicketProperties.TICKET_ID,
-            TicketProperties.TICKET_NUMBER,
-            TicketProperties.TITLE
+            TicketProperty.TICKET_ID,
+            TicketProperty.TICKET_NUMBER,
+            TicketProperty.TITLE
         ];
+
+        for (const attribute of this.state.searchAttributes) {
+            TicketStore.getInstance().prepareSearch('ticket-search', [attribute[1], attribute[2], attribute[3]]);
+        }
 
         const start = Date.now();
         TicketStore.getInstance().searchTickets('ticket-search', this.state.limit, properties).then(() => {
@@ -57,6 +68,12 @@ class TicketSearchComponent {
         if (result) {
             this.state.tickets = result;
         }
+    }
+
+    private setComponentDirty(): void {
+        const attributes = this.state.searchAttributes;
+        this.state.canSearch = (attributes.length > 0) && (attributes.filter((sa) => !sa[1]).length === 0);
+        (this as any).setStateDirty('searchFilter');
     }
 
 }

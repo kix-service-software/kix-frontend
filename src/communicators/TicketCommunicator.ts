@@ -31,31 +31,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
     private registerEvents(client: SocketIO.Socket): void {
         client.on(TicketEvent.SEARCH_TICKETS, async (data: SearchTicketsRequest) => {
-
-            let query = null;
-            if (data.filter && data.filter.length) {
-                const filterValues = [];
-
-                for (const propertyFilter of data.filter) {
-                    filterValues.push(
-                        {
-                            Field: propertyFilter[0],
-                            Operation: "CONTAINS",
-                            Value: propertyFilter[1].join(" ")
-                        }
-                    );
-                }
-
-                query = {
-                    filter: {
-                        Ticket: {
-                            AND: filterValues
-                        }
-                    }
-                };
-            }
-
-            const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit, query);
+            const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit, data.filter);
             client.emit(TicketEvent.TICKETS_SEARCH_FINISHED, new SearchTicketsResponse((tickets as Ticket[])));
         });
 

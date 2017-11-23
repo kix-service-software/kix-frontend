@@ -1,0 +1,11 @@
+<select on-change('propertyChanged')>
+    <for(property in state.properties)>
+        <option value=property[0] selected=(state.attribute[0] === property[0])>${property[0]}</option>
+    </for>
+</select>
+<select on-change('operatorChanged')>
+    <for(operator in state.operations)>
+        <option value=operator[0] selected=(state.attribute[1] === operator[0])>${operator[1]}</option>
+    </for>
+</select>
+<input on-change('valueChanged') type="text" value=data.value/>

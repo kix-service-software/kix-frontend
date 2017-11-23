@@ -5,14 +5,14 @@
     </if>
     <else>
         <div.search-group>
-            <label>
-                T#:
-                <input type="text" value=state.values["TicketNumber"] on-change('searchVlaueChanged', 'TicketNumber')/>
-            </label>
-            <label>
-                Titel:
-                <input type="text" value=state.values["Title"] on-change('searchVlaueChanged', 'Title')/>
-            </label>
+            <for(attribute in state.searchAttributes)>
+                <label>
+                    <ticket-search-attribute attributeId=attribute[0] property=attribute[1] operator=attribute[2] value=attribute[3]
+                        on-attributeChanged('attributeChanged')/>
+                    <button on-click('deletSearchAtribute', attribute[0])>X</button>
+                </label>
+            </for>
+            <button on-click('addSearchAttribute')>+</button>
         </div>
         <div.search-group>
             <label>
@@ -20,7 +20,7 @@
                 <input type="number" value=state.limit on-change('limitChanged')/>
             </label>
         </div>
-        <button on-click('searchTickets')>Suche starten</button>
+        <button disabled=(!state.canSearch) on-click('searchTickets')>Suche starten</button>
     </else>
 </div>
 <div.search-result>
