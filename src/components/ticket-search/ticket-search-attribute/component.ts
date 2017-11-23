@@ -40,7 +40,9 @@ export class TicketSearchAttributeComponent {
     }
 
     private valueChanged(event: any): void {
-        this.state.attribute[2] = event.target.value;
+        // TODO: handle multiple values
+        const value = event.target.value;
+        this.state.attribute[2] = value === '' ? [] : [value];
         this.attributeChanged();
     }
 

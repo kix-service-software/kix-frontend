@@ -30,6 +30,7 @@ class TicketSearchComponent {
         if (idx > -1) {
             this.state.searchAttributes.splice(idx, 1);
         }
+        TicketStore.getInstance().prepareSearch('ticket-search', [attributeId, null, null, null]);
         this.setComponentDirty();
     }
 
@@ -38,10 +39,15 @@ class TicketSearchComponent {
         this.state.searchAttributes[idx][1] = attribute[0];
         this.state.searchAttributes[idx][2] = attribute[1];
         this.state.searchAttributes[idx][3] = attribute[2];
+
+        TicketStore.getInstance().prepareSearch(
+            'ticket-search', [attributeId, attribute[0], attribute[1], attribute[2], attribute[3]]
+        );
+
         this.setComponentDirty();
     }
 
-    private searchTickets(): void {
+    private async searchTickets(): Promise<void> {
         this.state.searching = true;
         this.state.tickets = [];
 
@@ -50,10 +56,6 @@ class TicketSearchComponent {
             TicketProperty.TICKET_NUMBER,
             TicketProperty.TITLE
         ];
-
-        for (const attribute of this.state.searchAttributes) {
-            TicketStore.getInstance().prepareSearch('ticket-search', [attribute[1], attribute[2], attribute[3]]);
-        }
 
         const start = Date.now();
         TicketStore.getInstance().searchTickets('ticket-search', this.state.limit, properties).then(() => {
@@ -72,7 +74,11 @@ class TicketSearchComponent {
 
     private setComponentDirty(): void {
         const attributes = this.state.searchAttributes;
-        this.state.canSearch = (attributes.length > 0) && (attributes.filter((sa) => !sa[1]).length === 0);
+        this.state.canSearch = (
+            (attributes.length > 0) &&
+            (attributes.filter((sa) => !sa[1]).length === 0) &&
+            (attributes.filter((sa) => sa[3].length === 0).length === 0)
+        );
         (this as any).setStateDirty('searchFilter');
     }
 
