@@ -11,10 +11,8 @@ export class TicketSearchState {
         public limit: number = 100,
         public ticketProperties: Array<[string, string]> = [],
         public properties: string[] = [],
-        public searchAttributes: Array<[string, TicketProperty, SearchOperator, string[]]> =
-            [
-                ['attribute-' + Date.now(), null, null, null]
-            ],
+        public searchAttributes:
+            Array<[string, TicketProperty, SearchOperator, string | number | string[] | number[]]> = [],
         public canSearch: boolean = true,
         public error: any = null
     ) { }

@@ -14,6 +14,7 @@ class TicketSearchComponent {
 
     public async onMount(): Promise<void> {
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketStore.getInstance().loadTicketData('ticket-search');
 
         const th = await TranslationHandler.getInstance();
         this.state.ticketProperties = Object.keys(TicketProperty).map(
@@ -28,8 +29,9 @@ class TicketSearchComponent {
     }
 
     private addSearchAttribute(event: any): void {
-        const id = Date.now();
-        this.state.searchAttributes.push(['attribute-' + id, null, null, null]);
+        const attributeId = 'attribute-' + Date.now();
+        this.state.searchAttributes.push([attributeId, null, null, null]);
+        TicketStore.getInstance().prepareSearch('ticket-search', [attributeId, null, null, null]);
         this.setComponentDirty();
     }
 
@@ -54,7 +56,10 @@ class TicketSearchComponent {
         this.state.properties = selectedProperties;
     }
 
-    private attributeChanged(attributeId: string, attribute: [TicketProperty, SearchOperator, string[]]): void {
+    private attributeChanged(
+        attributeId: string,
+        attribute: [TicketProperty, SearchOperator, string | number | number[] | string[]]
+    ): void {
         const idx = this.state.searchAttributes.findIndex((sa) => sa[0] === attributeId);
         this.state.searchAttributes[idx][1] = attribute[0];
         this.state.searchAttributes[idx][2] = attribute[1];
@@ -94,8 +99,7 @@ class TicketSearchComponent {
         const attributes = this.state.searchAttributes;
         this.state.canSearch = (
             (attributes.length > 0) &&
-            (attributes.filter((sa) => !sa[1]).length === 0) &&
-            (attributes.filter((sa) => sa[3] && sa[3].length === 0).length === 0)
+            (attributes.filter((sa) => !sa[1]).length === 0)
         );
 
         if (!this.state.canSearch) {

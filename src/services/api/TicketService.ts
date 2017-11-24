@@ -203,7 +203,9 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return filter;
     }
 
-    private prepareFilterOperations(ticketFilter: Array<[TicketProperty, SearchOperator, string[]]>): any {
+    private prepareFilterOperations(
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+    ): any {
         const filterObject = {};
         const filterOperations = [];
         for (const filter of ticketFilter) {
@@ -211,21 +213,21 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
                 filterOperations.push({
                     Field: filter[0],
                     Operator: filter[1],
-                    Value: Number(filter[2][0]),
+                    Value: Number(filter[2]),
                     Type: "numeric"
                 });
             } else if (this.isINSearch(filter[1])) {
                 filterOperations.push({
                     Field: filter[0],
                     Operator: filter[1],
-                    Value: filter[2][0].split(" "),
+                    Value: (filter[2] as string).split(" "),
                     Type: "numeric"
                 });
             } else {
                 filterOperations.push({
                     Field: filter[0],
                     Operator: filter[1],
-                    Value: filter[2].join(" ")
+                    Value: String(filter[2])
                 });
             }
         }
