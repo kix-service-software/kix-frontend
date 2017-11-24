@@ -19,6 +19,8 @@ class TicketSearchComponent {
         this.state.ticketProperties = Object.keys(TicketProperty).map(
             (key) => [TicketProperty[key], th.getTranslation(key)]
         ) as Array<[string, string]>;
+
+        this.setComponentDirty();
     }
 
     private limitChanged(event: any): void {
@@ -27,7 +29,7 @@ class TicketSearchComponent {
 
     private addSearchAttribute(event: any): void {
         const id = Date.now();
-        this.state.searchAttributes.push(['attribute-' + id, null, SearchOperator.CONTAINS, ['*']]);
+        this.state.searchAttributes.push(['attribute-' + id, null, null, null]);
         this.setComponentDirty();
     }
 
@@ -93,7 +95,7 @@ class TicketSearchComponent {
         this.state.canSearch = (
             (attributes.length > 0) &&
             (attributes.filter((sa) => !sa[1]).length === 0) &&
-            (attributes.filter((sa) => sa[3].length === 0).length === 0)
+            (attributes.filter((sa) => sa[3] && sa[3].length === 0).length === 0)
         );
 
         if (!this.state.canSearch) {

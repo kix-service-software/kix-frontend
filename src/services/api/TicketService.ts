@@ -214,6 +214,13 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
                     Value: Number(filter[2][0]),
                     Type: "numeric"
                 });
+            } else if (this.isINSearch(filter[1])) {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: filter[2][0].split(" "),
+                    Type: "numeric"
+                });
             } else {
                 filterOperations.push({
                     Field: filter[0],
@@ -235,5 +242,9 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
             operator === SearchOperator.GREATER_THAN ||
             operator === SearchOperator.GREATER_THAN_OR_EQUAL
         );
+    }
+
+    private isINSearch(operator: SearchOperator): boolean {
+        return operator === SearchOperator.IN;
     }
 }

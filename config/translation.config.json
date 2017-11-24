@@ -48,6 +48,83 @@
             "translationValues": {
                 "en": "There is a draft stored. Would you like to load the existing draft?"
             }
+        },
+        {
+            "id": "EQ",
+            "defaultValue": "Ist Gleich",
+            "translationValues": {
+                "en": "Equals"
+            }
+        },
+        {
+            "id": "NE",
+            "defaultValue": "Ungleich",
+            "translationValues": {
+                "en": "Not Equals"
+            }
+        },
+        {
+            "id": "LT",
+            "defaultValue": "Kleiner",
+            "translationValues": {
+                "en": "Less Than"
+            }
+        },
+        {
+            "id": "GT",
+            "defaultValue": "Größer",
+            "translationValues": {
+                "en": "Greater Than"
+            }
+        },
+        {
+            "id": "LTE",
+            "defaultValue": "Kleiner Gleich",
+            "translationValues": {
+                "en": "Less Than"
+            }
+        },
+        {
+            "id": "GTE",
+            "defaultValue": "Größer Gleich",
+            "translationValues": {
+                "en": "Greater Than"
+            }
+        },
+        {
+            "id": "IN",
+            "defaultValue": "IN",
+            "translationValues": {
+                "en": "IN"
+            }
+        },
+        {
+            "id": "CONTAINS",
+            "defaultValue": "Enthält",
+            "translationValues": {
+                "en": "Contains"
+            }
+        },
+        {
+            "id": "STARTSWITH",
+            "defaultValue": "Beginnt mit",
+            "translationValues": {
+                "en": "Starts With"
+            }
+        },
+        {
+            "id": "ENDSWITH",
+            "defaultValue": "Endet mit",
+            "translationValues": {
+                "en": "Ends With"
+            }
+        },
+        {
+            "id": "LIKE",
+            "defaultValue": "Like",
+            "translationValues": {
+                "en": "Like"
+            }
         }
     ]
 }

@@ -13,7 +13,7 @@ export class TicketSearchState {
         public properties: string[] = [],
         public searchAttributes: Array<[string, TicketProperty, SearchOperator, string[]]> =
             [
-                ['attribute-0', TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, ['*']]
+                ['attribute-' + Date.now(), null, null, null]
             ],
         public canSearch: boolean = true,
         public error: any = null
