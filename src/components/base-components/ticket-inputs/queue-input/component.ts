@@ -22,7 +22,7 @@ export class QueueInputComponent {
         this.setStoreData();
     }
 
-    private queueChanged(event: any): void {
+    private valueChanged(event: any): void {
         this.state.queueId = Number(event.target.value);
         (this as any).emit('valueChanged', this.state.queueId);
     }

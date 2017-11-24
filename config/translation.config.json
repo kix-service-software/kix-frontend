@@ -125,6 +125,83 @@
             "translationValues": {
                 "en": "Like"
             }
+        },
+        {
+            "id": "QueueID",
+            "defaultValue": "Queue",
+            "translationValues": {
+                "en": "Queue"
+            }
+        },
+        {
+            "id": "StateID",
+            "defaultValue": "Status",
+            "translationValues": {
+                "en": "State"
+            }
+        },
+        {
+            "id": "TypeID",
+            "defaultValue": "Typ",
+            "translationValues": {
+                "en": "Type"
+            }
+        },
+        {
+            "id": "Title",
+            "defaultValue": "Titel",
+            "translationValues": {
+                "en": "Title"
+            }
+        },
+        {
+            "id": "TicketNumber",
+            "defaultValue": "Ticketnummer",
+            "translationValues": {
+                "en": "Ticket Number"
+            }
+        },
+        {
+            "id": "PriorityID",
+            "defaultValue": "Priorität",
+            "translationValues": {
+                "en": "Priority"
+            }
+        },
+        {
+            "id": "CustomerID",
+            "defaultValue": "Ansprechpartner",
+            "translationValues": {
+                "en": "Customer"
+            }
+        },
+        {
+            "id": "OwnerID",
+            "defaultValue": "Besitzer",
+            "translationValues": {
+                "en": "Owner"
+            }
+        },
+        {
+            "id": "ResponsibleID",
+            "defaultValue": "Verantwortlicher",
+            "translationValues": {
+                "en": "Responsible"
+            }
+        },
+        {
+            "id": "SLAID",
+            "defaultValue": "SLA",
+            "translationValues": {
+                "en": "SLA"
+            }
+        },
+        {
+            "id": "ServiceID",
+            "defaultValue": "Service",
+            "translationValues": {
+                "en": "Service"
+            }
         }
     ]
 }

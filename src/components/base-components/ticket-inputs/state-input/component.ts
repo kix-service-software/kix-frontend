@@ -1,20 +1,20 @@
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 
-export class PriorityInputComponent {
+export class StateInputComponent {
 
     private state: any;
 
     public onCreate(input: any): void {
         this.state = {
             ticketDataId: null,
-            priorities: [],
-            priorityId: null
+            states: [],
+            stateId: null
         };
     }
 
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
-        this.state.priorityId = Number(input.value);
+        this.state.stateId = input.value;
         TicketStore.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
     }
 
@@ -22,9 +22,9 @@ export class PriorityInputComponent {
         this.setStoreData();
     }
 
-    private priorityChanged(event: any): void {
-        this.state.priorityId = Number(event.target.value);
-        (this as any).emit('valueChanged', this.state.priorityId);
+    private valueChanged(event: any): void {
+        this.state.stateId = event.target.value;
+        (this as any).emit('valueChanged', this.state.stateId);
     }
 
     private ticketDataStateChanged(): void {
@@ -34,10 +34,10 @@ export class PriorityInputComponent {
     private setStoreData(): void {
         const ticketData = TicketStore.getInstance().getTicketData(this.state.ticketDataId);
         if (ticketData) {
-            this.state.priorities = ticketData.priorities;
+            this.state.states = ticketData.states;
         }
     }
 
 }
 
-module.exports = PriorityInputComponent;
+module.exports = StateInputComponent;

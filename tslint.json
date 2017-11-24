@@ -1,6 +1,7 @@
 {
     "extends": "tslint:recommended",
     "rules": {
+        "member-ordering": false,
         "arrow-parens": true,
         "indent": [
             true,

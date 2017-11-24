@@ -1,6 +1,6 @@
 <select.attribute-input on-change('propertyChanged')>
     <for(property in state.properties)>
-        <option value=property[0] selected=(state.attribute[0] === property[0])>${property[0]}</option>
+        <option value=property[0] selected=(state.attribute[0] === property[0])>${property[1]}</option>
     </for>
 </select>
 <select.attribute-input on-change('operatorChanged')>
@@ -8,12 +8,5 @@
         <option value=operator[0] selected=(state.attribute[1] === operator[0])>${operator[1]}</option>
     </for>
 </select>
-<if(state.attribute[0] === 'QueueID')>
-    <queue-input ticketDataId="ticket-search" on-valueChanged('value2Changed') value=data.value/>
-</if>
-<else-if(state.attribute[0] === 'PriorityID')>
-    <priority-input ticketDataId="ticket-search" on-valueChanged('value2Changed') value=data.value/>
-</else-if>
-<else>
-    <input.attribute-input on-change('valueChanged') type="text" value=data.value class=(state.invalid ? "invalid" : "")/>
-</else>
+<ticket-property-input property=state.attribute[0] ticketDataId="ticket-search" value=data.value
+    on-valueChanged('valueChanged')/>

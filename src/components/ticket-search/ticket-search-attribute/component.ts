@@ -27,7 +27,7 @@ export class TicketSearchAttributeComponent {
         this.state.properties =
             Object.keys(TicketProperty)
                 .filter((key) => TicketPropertyOperationMapper.getInstance().hasSearchOperations(TicketProperty[key]))
-                .map((key) => [TicketProperty[key], th.getTranslation(key)]) as Array<[string, string]>;
+                .map((key) => [TicketProperty[key], th.getTranslation(TicketProperty[key])]) as Array<[string, string]>;
 
         if (this.state.attribute[0]) {
             const operations =
@@ -54,14 +54,7 @@ export class TicketSearchAttributeComponent {
         this.attributeChanged();
     }
 
-    private valueChanged(event: any): void {
-        // TODO: handle multiple values
-        const value = event.target.value;
-        this.state.attribute[2] = value;
-        this.attributeChanged();
-    }
-
-    private value2Changed(value: string | number | string[] | number[]): void {
+    private valueChanged(value: string | number | string[] | number[]): void {
         this.state.attribute[2] = value;
         this.attributeChanged();
     }

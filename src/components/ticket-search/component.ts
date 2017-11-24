@@ -30,8 +30,10 @@ class TicketSearchComponent {
 
     private addSearchAttribute(event: any): void {
         const attributeId = 'attribute-' + Date.now();
-        this.state.searchAttributes.push([attributeId, null, null, null]);
-        TicketStore.getInstance().prepareSearch('ticket-search', [attributeId, null, null, null]);
+        const attribute: [string, TicketProperty, SearchOperator, any] = [attributeId, null, null, null];
+
+        this.state.searchAttributes.push(attribute);
+        TicketStore.getInstance().prepareSearch('ticket-search', attribute);
         this.setComponentDirty();
     }
 

@@ -1,4 +1,4 @@
-<select on-change('priorityChanged')>
+<select on-change('valueChanged')>
     <for(priority in state.priorities)>
         <option value=priority.ID selected=(state.priorityId === priority.ID)>${priority.Name}</option>
     </for>
