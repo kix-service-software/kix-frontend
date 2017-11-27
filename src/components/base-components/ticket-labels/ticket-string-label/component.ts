@@ -1,6 +1,5 @@
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
-import { TicketState } from '../../../../../../core/dist/model/ticket/TicketState';
-import { TicketProperty } from '../../../../../../core/dist/model/ticket/TicketProperty';
+import { TicketProperty, TicketState } from '@kix/core/dist/model/';
 
 export class TicketStringLabelComponent {
 
