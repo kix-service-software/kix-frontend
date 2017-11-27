@@ -12,7 +12,7 @@
         </div>
     </if>
 </div>
-<if(state.configuration && component.hasWidgetsToShow())>
+<if(state.configuration)>
     <div.sidebar>
         <for(widget in state.configuration.widgets)>
             <if(widget.show)>

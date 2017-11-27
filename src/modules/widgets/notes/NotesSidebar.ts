@@ -8,8 +8,6 @@ export class NotesWidget implements IWidget {
 
     public icon: string = 'dummy';
 
-    public show: boolean = true;
-
     public constructor(id: string) {
         this.id = id;
     }

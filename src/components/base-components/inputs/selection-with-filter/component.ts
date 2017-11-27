@@ -15,11 +15,11 @@ class SelectionWithFilter {
     }
 
     public listSelected(event: any): void {
-        const selectedElements = event.target.selectedOptions;
+        const selectedElements = event.target.selectedOptions || [];
         const selectedIds = [];
-        selectedElements.forEach((element) => {
+        for (const element of selectedElements) {
             selectedIds.push(element.value);
-        });
+        }
         (this as any).emit('selected', selectedIds);
     }
 }

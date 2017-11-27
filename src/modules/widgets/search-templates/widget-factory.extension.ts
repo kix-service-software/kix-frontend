@@ -1,11 +1,12 @@
 import { SearchTemplatesWidget } from './SearchTemplatesWidget';
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
-import { IWidget } from '@kix/core/dist/model/widget/IWidget';
+import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = false;
     public isContentWidget: boolean = true;
     public widgetId: string = "search-templates-widget";
+    public size: WidgetSize = WidgetSize.SMALL;
 
     public createWidget(): IWidget {
         return new SearchTemplatesWidget(this.widgetId);
@@ -22,7 +23,7 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
     }
 
     public getDefaultConfiguration(): any {
-        return {};
+        return new WidgetConfiguration('Suchvorlagen', [], {}, true, WidgetSize.SMALL);
     }
 
 }

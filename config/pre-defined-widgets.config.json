@@ -1,7 +1,7 @@
 {
     "dashboard": [
         {
-            "id": "user-list-widget",
+            "widgetId": "user-list-widget",
             "isContentWidget": true,
             "isSidebarWidget": false,
             "required": false,
@@ -43,11 +43,13 @@
                         }
                     ],
                     "limit": 2
-                }
+                },
+                "show": true,
+                "size": "small"
             }
         },
         {
-            "id": "chart-widget",
+            "widgetId": "chart-widget",
             "isContentWidget": true,
             "isSidebarWidget": false,
             "required": false,
@@ -57,10 +59,12 @@
                 "settings": {
                     "type": "bar-chart"
                 }
-            }
+            },
+            "show": true,
+            "size": "small"
         },
         {
-            "id": "notes-widget",
+            "widgetId": "notes-widget",
             "isContentWidget": false,
             "isSidebarWidget": true,
             "required": true,
@@ -70,7 +74,9 @@
                 "settings": {
                     "notes": "ich bin <strong>Admin</strong> :D"
                 }
-            }
+            },
+            "show": true,
+            "size": "small"
         }
     ]
 }

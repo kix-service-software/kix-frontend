@@ -3,7 +3,7 @@
     <input.filter type="text" placeholder="| ${input.placeholder}"/>
     <select size=input.size multiple=input.multiple on-change('listSelected')>
         <for(el in state.list)>
-            <option value=el.id on-select('test123')>${el.title}</option>
+            <option value=el.id on-select('test123')>${el.label}</option>
         </for>
     </select>
 </div>

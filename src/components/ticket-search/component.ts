@@ -27,7 +27,7 @@ class TicketSearchComponent {
         this.state.limit = event.target.value;
     }
 
-    private searchVlaueChanged(property: string, event: any): void {
+    private searchValueChanged(property: string, event: any): void {
         const value: string = event.target.value;
         this.state.values[property] = value;
 

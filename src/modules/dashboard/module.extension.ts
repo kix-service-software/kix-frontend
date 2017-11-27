@@ -20,32 +20,27 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         firstRow.widgets.push({
             id: "chart-widget",
-            instanceId: "20170920072542",
-            show: true
+            instanceId: "20170920072542"
         });
         firstRow.widgets.push({
             id: "chart-widget",
-            instanceId: "20170920084512",
-            show: true
+            instanceId: "20170920084512"
         });
         firstRow.widgets.push({
             id: "search-templates-widget",
-            instanceId: "20170920113214",
-            show: true
+            instanceId: "20170920113214"
         });
 
         const secondRow = new ContainerRow();
         secondRow.widgets.push({
             id: "ticket-list-widget",
-            instanceId: "20170920101621",
-            show: true
+            instanceId: "20170920101621"
         });
 
         const thirdRow = new ContainerRow();
         thirdRow.widgets.push({
             id: "user-list-widget",
-            instanceId: "20170920093015",
-            show: true
+            instanceId: "20170920093015"
         });
 
         content.rows.push(firstRow);

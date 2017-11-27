@@ -18,7 +18,7 @@
     <div.selection>
         <for(el in state.list | status-var=loop)>
             <div.selection-element class=(((loop.getIndex() + 1) % 2) != 0 ? "uneven" : "") data-id=el.id>
-                ${el.title}
+                ${el.label}
                 <span.selection-properties>
                     <for(property in state.properties)>
                         <if(property.type === 'checkbox')>
