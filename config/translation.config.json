@@ -170,9 +170,30 @@
         },
         {
             "id": "CustomerID",
-            "defaultValue": "Ansprechpartner",
+            "defaultValue": "Kunde",
             "translationValues": {
                 "en": "Customer"
+            }
+        },
+        {
+            "id": "CustomerUserID",
+            "defaultValue": "Ansprechpartner",
+            "translationValues": {
+                "en": "Customer User"
+            }
+        },
+        {
+            "id": "TicketID",
+            "defaultValue": "Ticket ID",
+            "translationValues": {
+                "en": "Ticket ID"
+            }
+        },
+        {
+            "id": "StateTypeID",
+            "defaultValue": "Statustyp",
+            "translationValues": {
+                "en": "State Type"
             }
         },
         {
@@ -201,6 +222,55 @@
             "defaultValue": "Service",
             "translationValues": {
                 "en": "Service"
+            }
+        },
+        {
+            "id": "From",
+            "defaultValue": "Von",
+            "translationValues": {
+                "en": "From"
+            }
+        },
+        {
+            "id": "To",
+            "defaultValue": "An",
+            "translationValues": {
+                "en": "To"
+            }
+        },
+        {
+            "id": "Age",
+            "defaultValue": "Alter",
+            "translationValues": {
+                "en": "Age"
+            }
+        },
+        {
+            "id": "Cc",
+            "defaultValue": "Cc",
+            "translationValues": {
+                "en": "Cc"
+            }
+        },
+        {
+            "id": "Subject",
+            "defaultValue": "Betreff",
+            "translationValues": {
+                "en": "Subject"
+            }
+        },
+        {
+            "id": "Body",
+            "defaultValue": "Inhalt",
+            "translationValues": {
+                "en": "Body"
+            }
+        },
+        {
+            "id": "To",
+            "defaultValue": "An",
+            "translationValues": {
+                "en": "To"
             }
         }
     ]

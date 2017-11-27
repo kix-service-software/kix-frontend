@@ -20,6 +20,7 @@ class TicketSearchComponent {
         this.state.ticketProperties = Object.keys(TicketProperty).map(
             (key) => [TicketProperty[key], th.getTranslation(key)]
         ) as Array<[string, string]>;
+        this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
 
         this.setComponentDirty();
     }

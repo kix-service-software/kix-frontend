@@ -8,7 +8,7 @@ export class TicketSearchState {
         public searching: boolean = false,
         public tickets: Ticket[] = [],
         public time: number = 0,
-        public limit: number = 100,
+        public limit: number = 25000,
         public ticketProperties: Array<[string, string]> = [],
         public properties: string[] = [],
         public searchAttributes:

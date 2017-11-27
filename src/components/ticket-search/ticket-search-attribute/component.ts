@@ -29,6 +29,8 @@ export class TicketSearchAttributeComponent {
                 .filter((key) => TicketPropertyOperationMapper.getInstance().hasSearchOperations(TicketProperty[key]))
                 .map((key) => [TicketProperty[key], th.getTranslation(TicketProperty[key])]) as Array<[string, string]>;
 
+        this.state.properties = this.state.properties.sort((a, b) => a[1].localeCompare(b[1]));
+
         if (this.state.attribute[0]) {
             const operations =
                 TicketPropertyOperationMapper.getInstance().getPropertyOperations(this.state.attribute[0]);

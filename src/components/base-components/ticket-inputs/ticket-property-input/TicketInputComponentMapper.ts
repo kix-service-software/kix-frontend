@@ -31,6 +31,19 @@ export class TicketInputComponentMapper {
                 component = require('../state-input');
                 break;
 
+            case TicketProperty.SERVICE_ID:
+                component = require('../service-input');
+                break;
+
+            case TicketProperty.SLA_ID:
+                component = require('../sla-input');
+                break;
+
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                component = require('../user-input');
+                break;
+
             default:
                 component = require('../text-input');
         }
