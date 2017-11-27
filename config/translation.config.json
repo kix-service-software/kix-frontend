@@ -265,13 +265,6 @@
             "translationValues": {
                 "en": "Body"
             }
-        },
-        {
-            "id": "To",
-            "defaultValue": "An",
-            "translationValues": {
-                "en": "To"
-            }
         }
     ]
 }
