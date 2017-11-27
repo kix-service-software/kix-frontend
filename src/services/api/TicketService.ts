@@ -73,7 +73,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     public async getTickets(
         token: string, properties: string[], limit: number,
-        filter?: Array<[TicketProperty, SearchOperator, string[]]>
+        filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
     ): Promise<AbstractTicket[]> {
 
         const ticketProperties = this.getTicketProperties(properties).join(',');
@@ -191,7 +191,9 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return ticketProperties;
     }
 
-    private prepareTicketFilter(ticketFilter: Array<[TicketProperty, SearchOperator, string[]]>): string {
+    private prepareTicketFilter(
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+    ): string {
         let filter = "";
         if (ticketFilter && ticketFilter.length) {
             const filterObject = {
