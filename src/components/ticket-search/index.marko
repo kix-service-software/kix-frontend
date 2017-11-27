@@ -1,44 +1,54 @@
-<div.ticket-search-container>
-    <h1>${state.title}</h1>
-    <if(state.error)>
-        <span.search-error>${state.error}</span>
-    </if>
-    <if(state.searching)>
-        <span.search-label>Suche läuft ...</span>
-    </if>
-    <else>
-        <div.search-group>
-            <for(attribute in state.searchAttributes)>
-                <label>
-                    <ticket-search-attribute attributeId=attribute[0] property=attribute[1] operator=attribute[2] value=attribute[3]
-                        on-attributeChanged('attributeChanged')/>
-                    <button on-click('deletSearchAtribute', attribute[0])>X</button>
-                </label>
-            </for>
-            <button on-click('addSearchAttribute')>+</button>
-        </div>
-        <div.search-group>
-            <label>
-                max. Suchergebnisse
-                <input type="number" value=state.limit on-change('limitChanged')/>
-            </label>
-            <label>
-                Ticketattribute
-                <select size=6 multiple on-change('ticketPropertiesChanged')>
-                    <for(property in state.ticketProperties)>
-                        <option value=property[0] selected=component.isPropertySelected(property[0])>${property[0]}</option>
-                    </for>
-                </select>
-            </label>
-        </div>
-        <button disabled=((!state.canSearch) || state.error) on-click('searchTickets')>Suche starten</button>
-    </else>
-</div>
+<button on-click('openSearchDialog')>Suche bearbeiten</button>
 <if(!state.searching)>
     <div.search-result>
         <span>
             <b>Gefundene Tickets:</b> ${state.tickets.length} <b>Suchdauer:</b> ${state.time} Sekunden
         </span>
         <ticket-table tickets=state.tickets properties=state.properties/>
+    </div>
+</if>
+<if(state.searching)>
+    <span.search-label>Suche läuft ...</span>
+</if>
+<if(state.showSearchDialog)>
+    <div>
+        <main-dialog>
+            <@title>Suche</@title>
+            <@body>
+                <div.ticket-search-container>
+                    <if(state.error)>
+                        <span.search-error>${state.error}</span>
+                    </if>
+                    <div.search-group>
+                        <for(attribute in state.searchAttributes)>
+                            <label>
+                                <ticket-search-attribute attributeId=attribute[0] property=attribute[1] operator=attribute[2] value=attribute[3]
+                                    on-attributeChanged('attributeChanged')/>
+                                <button on-click('deletSearchAtribute', attribute[0])>X</button>
+                            </label>
+                        </for>
+                        <button on-click('addSearchAttribute')>+</button>
+                    </div>
+                    <div.search-group>
+                        <label>
+                            max. Suchergebnisse
+                            <input type="number" value=state.limit on-change('limitChanged')/>
+                        </label>
+                        <label>
+                            Ticketattribute
+                            <select size=6 multiple on-change('ticketPropertiesChanged')>
+                                <for(property in state.ticketProperties)>
+                                    <option value=property[0] selected=component.isPropertySelected(property[0])>${property[0]}</option>
+                                </for>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </@body>
+            <@button>
+                <button disabled=((!state.canSearch) || state.error) on-click('searchTickets')>Suche starten</button>
+                <button on-click('closeSearchDialog')>Abbrechen</button>
+            </@button>
+        </main-dialog>
     </div>
 </if>

@@ -76,6 +76,7 @@ class TicketSearchComponent {
     }
 
     private async searchTickets(): Promise<void> {
+        this.closeSearchDialog();
         this.state.searching = true;
         this.state.tickets = [];
 
@@ -89,6 +90,14 @@ class TicketSearchComponent {
             this.state.error = TicketStore.getInstance().getTicketsSearchError('ticket-search');
             this.state.searching = false;
         });
+    }
+
+    private openSearchDialog(): void {
+        this.state.showSearchDialog = true;
+    }
+
+    private closeSearchDialog(): void {
+        this.state.showSearchDialog = false;
     }
 
     private ticketStateChanged(): void {
