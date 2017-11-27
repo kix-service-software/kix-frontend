@@ -73,7 +73,7 @@ export class TicketCommunicator extends KIXCommunicator {
                 });
 
             const users = await this.userService.getUsers(data.token, {
-                fields: 'User.UserLogin,User.UserID'
+                fields: 'User.UserLogin,User.UserID,User.UserFullname'
             });
 
             const queues = await this.queueService.getQueues(data.token, null, null, null, {
