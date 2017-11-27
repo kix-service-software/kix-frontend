@@ -1,5 +1,8 @@
 <button on-click('openSearchDialog')>Suche bearbeiten</button>
-<if(!state.searching)>
+<if(state.searching)>
+    <span.search-label>Suche läuft ...</span>
+</if>
+<else>
     <div.search-result>
         <span>
             <b>Gefundene Tickets:</b> ${state.tickets.length} <b>Suchdauer:</b> ${state.time} Sekunden
@@ -8,10 +11,7 @@
             <ticket-table displayLimit=10 tickets=state.tickets properties=state.properties/>
         </p>
     </div>
-</if>
-<if(state.searching)>
-    <span.search-label>Suche läuft ...</span>
-</if>
+</else>
 <if(state.showSearchDialog)>
     <div>
         <main-dialog>
