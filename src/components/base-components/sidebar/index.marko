@@ -4,18 +4,20 @@
     </if>
     <if(state.configuration)>
         <div.widget-bar>
-            <for(widget in state.configuration.widgets)>
-                <div.bar-icon class=(widget.show ? "select-active" : "") on-click('toggleSidebarWidget', widget.instanceId)>
-                    <span.kix-icon class=(widget.icon ? "icon-" + widget.icon : "")/>
-                </div>
+            <for(widgetTuple in state.configuration.configuredWidgets)>
+                <if(component.isShown(widgetTuple[0]))>
+                    <div.bar-icon class=(widgetTuple[1].show ? "select-active" : "") on-click('toggleSidebarWidget', widgetTuple[0])>
+                        <span.kix-icon class=(widgetTuple[1].icon ? "icon-" + widgetTuple[1].icon : "")/>
+                    </div>
+                </if>
             </for>
         </div>
     </if>
 </div>
 <if(state.configuration)>
     <div.sidebar>
-        <for(widget in state.configuration.widgets)>
-            <if(widget.show)>
+        <for(row in state.configuration.rows)>
+            <for(widgetInstanceId in row)>
                 <!-- 
                 TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
                 sobald das include auch ohne root-Element funktioniert. In der style.less
@@ -24,18 +26,18 @@
                 nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))
                 -->
                 <div class=(state.configurationMode ? "config-mode" : "")>
-                    <include(component.getWidgetTemplate(widget.id), {
-                        instanceId: widget.instanceId,
+                    <include(component.getWidgetTemplate(widgetInstanceId), {
+                        instanceId: widgetInstanceId,
                         configurationMode: state.configurationMode,
                         minimizable: false
-                    }) key=widget.instanceId/>
+                    }) key=widgetInstanceId/>
                     <if(state.configurationMode)>
                         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
                             <div.widget-overlay-content/>
                         </div>
                     </if>
                 </div>
-            </if>
+            </for>
         </for>
     </div>
 </if>

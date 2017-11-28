@@ -1,8 +1,8 @@
-import { ContainerConfiguration, WidgetTemplate } from '@kix/core/dist/model';
+import { WidgetTemplate } from '@kix/core/dist/model';
 
 export class DashboardComponentState {
 
-    public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
+    public rows: string[][] = [];
 
     public widgetTemplates: WidgetTemplate[] = [];
 

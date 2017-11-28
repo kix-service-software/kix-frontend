@@ -2,8 +2,7 @@ import {
     ConfigurationEvent,
     LoadConfigurationResult,
     SocketEvent,
-    LoadConfigurationRequest,
-    ContainerConfiguration
+    LoadConfigurationRequest
 } from '@kix/core/dist/model';
 import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
@@ -42,7 +41,7 @@ export class FAQSocketListener extends SocketListener {
         });
 
         socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<ContainerConfiguration>) => {
+            (result: LoadConfigurationResult<any>) => {
                 this.store.dispatch(FAQ_CONTAINER_CONFIGURATION_LOADED(result.configuration));
             });
 

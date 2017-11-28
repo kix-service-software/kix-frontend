@@ -25,8 +25,8 @@ class FAQComponent {
 
     public stateChanged(): void {
         const reduxState: FAQState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
+        if (reduxState.rows) {
+            this.state.rows = reduxState.rows;
         }
     }
 }

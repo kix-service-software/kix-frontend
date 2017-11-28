@@ -1,5 +1,4 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContainerConfiguration } from '@kix/core/dist/model/draggable-container/ContainerConfiguration';
 
 export class SearchModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -14,7 +13,7 @@ export class SearchModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const content = new ContainerConfiguration();
+        const content = {};
         return content;
     }
 

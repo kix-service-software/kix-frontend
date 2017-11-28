@@ -25,8 +25,8 @@ class SearchComponent {
 
     public stateChanged(): void {
         const reduxState: SearchState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
+        if (reduxState.rows) {
+            this.state.rows = reduxState.rows;
         }
     }
 }

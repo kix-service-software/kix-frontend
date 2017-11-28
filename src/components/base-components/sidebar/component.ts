@@ -29,13 +29,26 @@ class SidebarComponent {
     }
 
     public toggleSidebarWidget(instanceId: string): void {
-        if (this.state.configuration && this.state.configuration.widgets) {
-            const widget = this.state.configuration.widgets.find((w) => w.instanceId === instanceId);
-            if (widget) {
-                widget.show = !widget.show;
+        if (this.state.configuration && this.state.configuration.configuredWidgets) {
+            const widgetTuple = this.state.configuration.configuredWidgets.find((w) => w[0] === instanceId);
+            if (widgetTuple) {
+                widgetTuple[1].show = !widgetTuple[1].show;
                 (this as any).setStateDirty('configuration');
+                // TODO: in widget konfiguration speichern?
             }
         }
+    }
+
+    public isShown(instanceId: string): boolean {
+        let isShown: boolean = false;
+        if (this.state.configuration && this.state.configuration.rows) {
+            let instanceIds = [];
+            this.state.configuration.rows.forEach((row) => {
+                instanceIds = [...instanceIds, ...row];
+            });
+            isShown = instanceIds.some((wiId) => wiId === instanceId);
+        }
+        return isShown;
     }
 
     public toggleConfigurationMode(): void {
@@ -43,12 +56,9 @@ class SidebarComponent {
         (this as any).emit('toggleConfigurationMode');
     }
 
-    public getWidgetTemplate(widgetId: string): any {
-        const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
-        if (template) {
-            return require(template);
-        }
-        return '';
+    public getWidgetTemplate(instanceId: string): any {
+        const template = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId).template;
+        return template ? require(template) : '';
     }
 }
 

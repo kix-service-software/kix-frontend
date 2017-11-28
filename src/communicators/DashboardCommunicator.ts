@@ -5,7 +5,6 @@ import {
     LoadDashboardResponse,
     SaveDashboardRequest,
     SaveWidgetRequest,
-    ContainerConfiguration,
     SocketEvent,
     User,
     WidgetTemplate,
@@ -36,7 +35,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
-        let configuration: ContainerConfiguration = await this.configurationService
+        let configuration: any = await this.configurationService
             .getComponentConfiguration(data.contextId, null, null, userId);
 
         if (!configuration) {
@@ -52,32 +51,20 @@ export class DashboardCommunicator extends KIXCommunicator {
         const widgetTemplates: WidgetTemplate[] = [];
         const widgetConfigurations: Array<[string, WidgetConfiguration]> = [];
 
-        let widgets: IWidget[] = [];
-        for (const row of configuration.rows) {
-            widgets = [...widgets, ...row.widgets];
-        }
-
-        // Sidebarkonfigurationene laden
+        // get sidebar configuration
         const sidebarConfiguration: SidebarConfiguration =
             await this.configurationService.getComponentConfiguration(data.contextId, 'sidebar', null, userId);
 
-        widgets = [...widgets, ...sidebarConfiguration.widgets];
-
-        for (const widget of widgets) {
-            const widgetFactory = await this.pluginService.getWidgetFactory(widget.id);
-            widgetTemplates.push(new WidgetTemplate(widget.id, widgetFactory.getTemplate()));
-
-            const widgetConfiguration =
-                await this.getWidgetConfiguration(
-                    data.contextId, widget.id, widget.instanceId, userId, widgetFactory
-                );
-
-            widgetConfigurations.push([widget.instanceId, widgetConfiguration]);
+        for (const widget of [...configuration.configuredWidgets, ...sidebarConfiguration.configuredWidgets]) {
+            const widgetFactory = await this.pluginService.getWidgetFactory(widget[1].widgetId);
+            widgetTemplates.push(new WidgetTemplate(widget[0], widgetFactory.getTemplate()));
         }
 
-        const widgetList = await this.widgetRepositoryService.getAllWidgets(data.contextId);
+        const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
 
-        const response = new LoadDashboardResponse(configuration, widgetTemplates, widgetConfigurations, widgetList);
+        const response = new LoadDashboardResponse(
+            configuration.rows, widgetTemplates, configuration.configuredWidgets, availableWidgets
+        );
         this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
     }
 

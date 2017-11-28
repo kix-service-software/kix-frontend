@@ -13,10 +13,10 @@ class DashboardConfigurationDialog {
     }
 
     public async onMount(): Promise<void> {
-        const widgetDescriptorList: WidgetDescriptor[] = DashboardStore.getInstance().getWidgetList();
+        const widgetDescriptorList: WidgetDescriptor[] = DashboardStore.getInstance().getAvailableWidgets();
         const dashboardConfig: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        console.log(widgetDescriptorList);
-        console.log(dashboardConfig);
+        // console.log(widgetDescriptorList);
+        // console.log(dashboardConfig);
         this.state = {
             // TODO: nur Beispiel
             explorerList: [
@@ -95,31 +95,31 @@ class DashboardConfigurationDialog {
             }
         });
 
-        const widgetConfigs = {};
-        dashboardConfig.widgetConfigurations.forEach((wc) => {
-            widgetConfigs[wc[0]] = wc[1];
-        });
-        dashboardConfig.configuration.rows.forEach((row, index) => {
-            row.widgets.forEach((widget) => {
-                if (widgetConfigs[widget.instanceId]) {
-                    const listElement = {
-                        id: widget.id + Date.now().toString(),
-                        label: widgetConfigs[widget.instanceId].title,
-                        properties: {
-                            show: widgetConfigs[widget.instanceId].show,
-                            size: widgetConfigs[widget.instanceId].size
-                        }
-                    };
-                }
+        // const widgetConfigs = {};
+        // dashboardConfig.configuredWidgets.forEach((wc) => {
+        //     widgetConfigs[wc[0]] = wc[1];
+        // });
+        // dashboardConfig.rows.forEach((row, index) => {
+        //     row.forEach((widget) => {
+        //         if (widgetConfigs[widget.instanceId]) {
+        //             const listElement = {
+        //                 id: widget.id + Date.now().toString(),
+        //                 label: widgetConfigs[widget.instanceId].title,
+        //                 properties: {
+        //                     show: widgetConfigs[widget.instanceId].show,
+        //                     size: widgetConfigs[widget.instanceId].size
+        //                 }
+        //             };
+        //         }
 
-            });
-            if (wc.isContentWidget) {
-                this.state.contentFirstList.push(listElement);
-            }
-            if (wc.isSidebarWidget) {
-                this.state.sidebarFirstList.push(listElement);
-            }
-        });
+        //     });
+        //     // if (wc.isContentWidget) {
+        //     //     this.state.contentFirstList.push(listElement);
+        //     // }
+        //     // if (wc.isSidebarWidget) {
+        //     //     this.state.sidebarFirstList.push(listElement);
+        //     // }
+        // });
         const translationHandler = await TranslationHandler.getInstance();
         // this.state.translations = translationHandler.getTranslations([]);
     }

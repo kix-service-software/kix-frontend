@@ -25,7 +25,7 @@ export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public getDefaultConfiguration(): WidgetConfiguration {
         const chartConfig = new ChartSettings();
-        return new WidgetConfiguration("Chart", [], chartConfig, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, "Chart", [], chartConfig, true, WidgetSize.SMALL);
     }
 
 }

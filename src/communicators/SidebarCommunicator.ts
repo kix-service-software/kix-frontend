@@ -43,9 +43,9 @@ export class SidebarCommunicator extends KIXCommunicator {
 
             const widgetTemplates: WidgetTemplate[] = [];
 
-            for (const widget of configuration.widgets) {
-                const widgetFactory = await this.pluginService.getWidgetFactory(widget.id);
-                widgetTemplates.push(new WidgetTemplate(widget.id, widgetFactory.getTemplate()));
+            for (const widget of configuration.configuredWidgets) {
+                const widgetFactory = await this.pluginService.getWidgetFactory(widget[1].widgetId);
+                widgetTemplates.push(new WidgetTemplate(widget[0], widgetFactory.getTemplate()));
             }
 
             const response = new LoadSidebarResponse(configuration, widgetTemplates);

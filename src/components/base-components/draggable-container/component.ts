@@ -1,6 +1,5 @@
 import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
-import { ContainerRow } from '@kix/core/dist/model';
 
 class DraggableContainerComponent {
 
@@ -9,17 +8,17 @@ class DraggableContainerComponent {
     public onCreate(input: any): void {
         this.state = new ContainerComponentState();
         this.state.dndState.enabled = true;
-        this.state.containerConfiguration = input.containerConfiguration;
+        this.state.rows = input.rows;
     }
 
     public onInput(input: any): void {
-        this.state.containerConfiguration = input.containerConfiguration;
+        this.state.rows = input.rows;
         this.state.widgetTemplates = input.widgetTemplates;
         this.state.dndState.enabled = input.configurationMode;
     }
 
-    public getWidgetTemplate(widgetId: string): any {
-        const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
+    public getWidgetTemplate(instanceId: string): any {
+        const template = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId).template;
         return template ? require(template) : '';
     }
 
@@ -54,14 +53,14 @@ class DraggableContainerComponent {
 
     public drop(event): void {
         const rows = this.switchWidgets(
-            this.state.containerConfiguration.rows, this.state.dndState.dragElementId, this.state.dndState.dropElementId
+            this.state.rows, this.state.dndState.dragElementId, this.state.dndState.dropElementId
         );
 
-        this.state.containerConfiguration.rows = null;
-        (this as any).setStateDirty("containerConfiguration");
+        this.state.rows = null;
+        (this as any).setStateDirty("rows");
         setTimeout(() => {
-            this.state.containerConfiguration.rows = rows;
-            (this as any).setStateDirty("containerConfiguration");
+            this.state.rows = rows;
+            (this as any).setStateDirty("rows");
         }, 0);
     }
 
@@ -78,7 +77,7 @@ class DraggableContainerComponent {
         return (event.target.dataset.hasOwnProperty('id')) && (event.target.dataset.id !== "");
     }
 
-    private switchWidgets(rows: ContainerRow[], firstWidgetId: string, secondWidgetId: string): ContainerRow[] {
+    private switchWidgets(rows: string[][], firstWidgetId: string, secondWidgetId: string): string[][] {
         let firstRowIndex = -1;
         let firstWidgetIndex = -1;
         let secondRowIndex = -1;
@@ -87,7 +86,7 @@ class DraggableContainerComponent {
         for (let i = 0; i < rows.length; i++) {
 
             if (firstRowIndex === -1) {
-                firstWidgetIndex = rows[i].widgets.findIndex((w) => w.instanceId === firstWidgetId);
+                firstWidgetIndex = rows[i].findIndex((wiId) => wiId === firstWidgetId);
 
                 if (firstWidgetIndex >= 0) {
                     firstRowIndex = i;
@@ -95,7 +94,7 @@ class DraggableContainerComponent {
             }
 
             if (secondRowIndex === -1) {
-                secondWidgetIndex = rows[i].widgets.findIndex((w) => w.instanceId === secondWidgetId);
+                secondWidgetIndex = rows[i].findIndex((wiId) => wiId === secondWidgetId);
 
                 if (secondWidgetIndex >= 0) {
                     secondRowIndex = i;
@@ -108,11 +107,11 @@ class DraggableContainerComponent {
         }
 
 
-        const firstWidget = rows[firstRowIndex].widgets[firstWidgetIndex];
-        const secondWidget = rows[secondRowIndex].widgets[secondWidgetIndex];
+        const firstWidget = rows[firstRowIndex][firstWidgetIndex];
+        const secondWidget = rows[secondRowIndex][secondWidgetIndex];
 
-        rows[firstRowIndex].widgets[firstWidgetIndex] = secondWidget;
-        rows[secondRowIndex].widgets[secondWidgetIndex] = firstWidget;
+        rows[firstRowIndex][firstWidgetIndex] = secondWidget;
+        rows[secondRowIndex][secondWidgetIndex] = firstWidget;
 
         return rows;
     }

@@ -27,7 +27,7 @@ class TwoListSelection {
     }
 
     private addToSecond(): void {
-        console.log(this.state.firstListSelected);
+        // console.log(this.state.firstListSelected);
         // if (this.state.firstListSelected.length) {
         //     this.state.firstListSelected.forEach((id) => {
         //         const entry = this.state.firstList.find((me) => me.id === id);

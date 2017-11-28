@@ -1,9 +1,6 @@
 import { injectable, inject } from 'inversify';
 
-import {
-    ContainerConfiguration,
-    WidgetDescriptor
-} from '@kix/core/dist/model';
+import { WidgetDescriptor } from '@kix/core/dist/model';
 import {
     IPluginService,
     IConfigurationService,
@@ -32,7 +29,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
      * @return promise of WidgetDescriptor[]
      */
     public async getContentWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAllWidgets(contextId);
+        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
         return allWidgets.filter((wd) => wd.isContentWidget);
     }
 
@@ -44,7 +41,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
      * @return promise of WidgetDescriptor[]
      */
     public async getSidebarWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAllWidgets(contextId);
+        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
         return allWidgets.filter((wd) => wd.isSidebarWidget);
     }
 
@@ -55,7 +52,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
      *
      * @return promise of WidgetDescriptor[]
      */
-    public async getAllWidgets(contextId: string): Promise<WidgetDescriptor[]> {
+    public async getAvailableWidgets(contextId: string): Promise<WidgetDescriptor[]> {
         const preDefinedWidgetsConfiguration: any
             = await this.configurationService.getPreDefinedWidgetConfiguration();
         const widgetFactories = await this.pluginService.getWidgetFactories();
@@ -64,7 +61,6 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
         const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
             wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebar
         ));
-        console.log(widgetDescriptors);
 
         return [...preDefinedWidgetDescriptors, ...widgetDescriptors];
     }

@@ -1,11 +1,11 @@
-import { ContainerConfiguration } from '@kix/core/dist/model';
 import { FAQAction } from './';
 import { StateAction } from '@kix/core/dist/browser/StateAction';
 
-export default (containerConfiguration: ContainerConfiguration) => {
+export default (rows: string[][]) => {
     const payload = new Promise((resolve, reject) => {
-        resolve({ containerConfiguration });
+        resolve({ rows });
     });
 
+    // TODO: wenn's nicht wegfliegt, noch umbennenen (container_configuration gibs nicht mehr)
     return new StateAction(FAQAction.FAQ_CONTAINER_CONFIGURATION_LOADED, payload);
 };

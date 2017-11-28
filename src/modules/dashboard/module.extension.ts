@@ -1,5 +1,5 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContainerConfiguration, ContainerRow } from '@kix/core/dist/model';
+import { WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -14,40 +14,112 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): any {
-        const content = new ContainerConfiguration();
 
-        const firstRow = new ContainerRow();
+        // TODO: aus einer config auslesen, oder wirklich DashboardConfiguration zurückgeben
+        const rows: string[][] = [
+            [
+                '20170920072542',
+                '20170920084512',
+                '20170920113214',
+            ],
+            ['20170920101621'],
+            ['20170920093015']
+        ];
+        const configuredWidgets: Array<[string, WidgetConfiguration]> = [
+            [
+                '20170920072542',
+                {
+                    widgetId: 'chart-widget',
+                    title: 'Chart',
+                    actions: [],
+                    settings: {
+                        chartType: 'bar'
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL
+                }
+            ],
+            [
+                '20170920084512',
+                {
+                    widgetId: 'chart-widget',
+                    title: 'Chart 2',
+                    actions: [],
+                    settings: {
+                        chartType: 'pie'
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL
+                }
+            ],
+            [
+                '20170920113214',
+                {
+                    widgetId: 'search-templates-widget',
+                    title: 'Suchvorlagen',
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL
+                },
+            ],
+            [
+                '20170920101621',
+                {
+                    widgetId: 'ticket-list-widget',
+                    title: 'Ticket-Liste',
+                    actions: [],
+                    settings: {
+                        limit: 10,
+                        showTotalCount: true,
+                        properties: [
+                            'TicketNumber',
+                            'PriorityID',
+                            'StateID',
+                            'TypeID',
+                            'Title',
+                            'Created',
+                            'Age'
+                        ]
+                    },
+                    show: true,
+                    size: WidgetSize.LARGE
+                },
+            ],
+            [
+                '20170920093015',
+                {
+                    widgetId: 'user-list-widget',
+                    title: 'User-List',
+                    actions: [],
+                    settings: {
+                        properties: [
+                            {
+                                name: 'UserID',
+                                displayName: 'ID'
+                            },
+                            {
+                                name: 'UserFirstname',
+                                displayName: 'Vorname'
+                            },
+                            {
+                                name: 'UserLastname',
+                                displayName: 'Nachname'
+                            },
+                            {
+                                name: 'UserEmail',
+                                displayName: 'Email'
+                            }
+                        ],
+                        limit: 10
+                    },
+                    show: true,
+                    size: WidgetSize.LARGE
+                }
+            ]
+        ];
 
-        firstRow.widgets.push({
-            id: "chart-widget",
-            instanceId: "20170920072542"
-        });
-        firstRow.widgets.push({
-            id: "chart-widget",
-            instanceId: "20170920084512"
-        });
-        firstRow.widgets.push({
-            id: "search-templates-widget",
-            instanceId: "20170920113214"
-        });
-
-        const secondRow = new ContainerRow();
-        secondRow.widgets.push({
-            id: "ticket-list-widget",
-            instanceId: "20170920101621"
-        });
-
-        const thirdRow = new ContainerRow();
-        thirdRow.widgets.push({
-            id: "user-list-widget",
-            instanceId: "20170920093015"
-        });
-
-        content.rows.push(firstRow);
-        content.rows.push(secondRow);
-        content.rows.push(thirdRow);
-
-        return content;
+        return { rows, configuredWidgets };
     }
 
 }

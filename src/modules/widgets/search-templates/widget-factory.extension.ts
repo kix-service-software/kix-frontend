@@ -23,7 +23,7 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
     }
 
     public getDefaultConfiguration(): any {
-        return new WidgetConfiguration('Suchvorlagen', [], {}, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, 'Suchvorlagen', [], {}, true, WidgetSize.SMALL);
     }
 
 }

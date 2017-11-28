@@ -25,8 +25,8 @@ class ServicesComponent {
 
     public stateChanged(): void {
         const reduxState: ServicesState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
+        if (reduxState.rows) {
+            this.state.rows = reduxState.rows;
         }
     }
 }

@@ -13,7 +13,7 @@ class ActionHandler {
             }
 
             case CustomerAction.CUSTOMER_CONTAINER_CONFIGURATION_LOADED + FULFILLED: {
-                return { ...state, containerConfiguration: action.payload.containerConfiguration };
+                return { ...state, rows: action.payload.rows };
             }
 
             default:

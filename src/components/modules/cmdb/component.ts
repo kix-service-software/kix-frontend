@@ -25,8 +25,8 @@ class CMDBComponent {
 
     public stateChanged(): void {
         const reduxState: CMDBState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
+        if (reduxState.rows) {
+            this.state.rows = reduxState.rows;
         }
     }
 }

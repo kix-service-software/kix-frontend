@@ -36,7 +36,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         const deleteAction = new DeleteAction("delete-action", "Delete", "");
         const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
         return new WidgetConfiguration(
-            "User-List", [deleteAction, tourAction], userListConfiguration, true, WidgetSize.LARGE
+            this.widgetId, "User-List", [deleteAction, tourAction], userListConfiguration, true, WidgetSize.LARGE
         );
     }
 

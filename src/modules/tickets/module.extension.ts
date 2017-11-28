@@ -1,5 +1,4 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContainerConfiguration } from '@kix/core/dist/model/';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -14,7 +13,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const content = new ContainerConfiguration();
+        const content = {};
         return content;
     }
 

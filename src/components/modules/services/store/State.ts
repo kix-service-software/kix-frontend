@@ -1,9 +1,8 @@
-import { ContainerConfiguration } from '@kix/core/dist/model';
 import { ServicesSocketListener } from './../socket/SocketListener';
 
 export class ServicesState {
 
-    public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
+    public rows: string[][] = [];
 
     public socketListener: ServicesSocketListener = null;
 

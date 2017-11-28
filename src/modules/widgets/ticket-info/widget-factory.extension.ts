@@ -23,7 +23,7 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        return new WidgetConfiguration('Ticket-Info', [], {}, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Info', [], {}, true, WidgetSize.SMALL);
     }
 
 }

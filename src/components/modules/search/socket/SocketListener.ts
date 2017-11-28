@@ -2,8 +2,7 @@ import {
     ConfigurationEvent,
     LoadConfigurationResult,
     SocketEvent,
-    LoadConfigurationRequest,
-    ContainerConfiguration
+    LoadConfigurationRequest
 } from '@kix/core/dist/model';
 import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import { SEARCH_CONTAINER_CONFIGURATION_LOADED } from '../store/actions';
@@ -42,7 +41,7 @@ export class SearchSocketListener extends SocketListener {
         });
 
         socket.on(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            (result: LoadConfigurationResult<ContainerConfiguration>) => {
+            (result: LoadConfigurationResult<any>) => {
                 this.store.dispatch(SEARCH_CONTAINER_CONFIGURATION_LOADED(result.configuration));
             });
 

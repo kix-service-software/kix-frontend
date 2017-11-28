@@ -1,8 +1,6 @@
-import { ContainerConfiguration } from '@kix/core/dist/model';
-
 export class FAQComponentState {
 
-    public containerConfiguration: ContainerConfiguration = new ContainerConfiguration();
+    public rows: string[][] = [];
 
     public configurationMode: boolean = false;
 

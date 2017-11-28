@@ -38,7 +38,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
             ]
         };
 
-        return new WidgetConfiguration('Ticket-Liste', [], config, true, WidgetSize.LARGE);
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], config, true, WidgetSize.LARGE);
     }
 
 }

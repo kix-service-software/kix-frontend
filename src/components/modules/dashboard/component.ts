@@ -1,6 +1,6 @@
 import { DashboardComponentState } from './model/DashboardComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { DashboardConfiguration, ContainerConfiguration } from '@kix/core/dist/model/';
+import { DashboardConfiguration } from '@kix/core/dist/model/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class DashboardComponent {
@@ -26,7 +26,7 @@ class DashboardComponent {
     public stateChanged(): void {
         const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
-            this.state.containerConfiguration = dashboardConfiguration.configuration;
+            this.state.rows = dashboardConfiguration.rows;
             this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
