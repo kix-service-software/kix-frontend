@@ -1,8 +1,0 @@
-<label.form-label>
-    Service
-    <select on-change("valueChanged")>
-        <for(service in state.services)>
-            <option value=service.ServiceID selected=(state.serviceId === service.ServiceID)>${service.Name}</option>
-        </for>
-    </select>
-</label>

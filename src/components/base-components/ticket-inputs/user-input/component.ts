@@ -40,7 +40,7 @@ export class UserInputComponent {
 
     private setStoreData(): void {
         const ticketData = TicketStore.getInstance().getTicketData(this.state.ticketDataId);
-        if (ticketData) {
+        if (ticketData && ticketData.users) {
             this.state.users = ticketData.users;
             if (this.state.userId) {
                 const user = this.state.users.find((u) => u.UserID === this.state.userId);
