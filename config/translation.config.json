@@ -48,6 +48,223 @@
             "translationValues": {
                 "en": "There is a draft stored. Would you like to load the existing draft?"
             }
+        },
+        {
+            "id": "EQ",
+            "defaultValue": "Ist Gleich",
+            "translationValues": {
+                "en": "Equals"
+            }
+        },
+        {
+            "id": "NE",
+            "defaultValue": "Ungleich",
+            "translationValues": {
+                "en": "Not Equals"
+            }
+        },
+        {
+            "id": "LT",
+            "defaultValue": "Kleiner",
+            "translationValues": {
+                "en": "Less Than"
+            }
+        },
+        {
+            "id": "GT",
+            "defaultValue": "Größer",
+            "translationValues": {
+                "en": "Greater Than"
+            }
+        },
+        {
+            "id": "LTE",
+            "defaultValue": "Kleiner Gleich",
+            "translationValues": {
+                "en": "Less Than"
+            }
+        },
+        {
+            "id": "GTE",
+            "defaultValue": "Größer Gleich",
+            "translationValues": {
+                "en": "Greater Than"
+            }
+        },
+        {
+            "id": "IN",
+            "defaultValue": "IN",
+            "translationValues": {
+                "en": "IN"
+            }
+        },
+        {
+            "id": "CONTAINS",
+            "defaultValue": "Enthält",
+            "translationValues": {
+                "en": "Contains"
+            }
+        },
+        {
+            "id": "STARTSWITH",
+            "defaultValue": "Beginnt mit",
+            "translationValues": {
+                "en": "Starts With"
+            }
+        },
+        {
+            "id": "ENDSWITH",
+            "defaultValue": "Endet mit",
+            "translationValues": {
+                "en": "Ends With"
+            }
+        },
+        {
+            "id": "LIKE",
+            "defaultValue": "Like",
+            "translationValues": {
+                "en": "Like"
+            }
+        },
+        {
+            "id": "QueueID",
+            "defaultValue": "Queue",
+            "translationValues": {
+                "en": "Queue"
+            }
+        },
+        {
+            "id": "StateID",
+            "defaultValue": "Status",
+            "translationValues": {
+                "en": "State"
+            }
+        },
+        {
+            "id": "TypeID",
+            "defaultValue": "Typ",
+            "translationValues": {
+                "en": "Type"
+            }
+        },
+        {
+            "id": "Title",
+            "defaultValue": "Titel",
+            "translationValues": {
+                "en": "Title"
+            }
+        },
+        {
+            "id": "TicketNumber",
+            "defaultValue": "Ticketnummer",
+            "translationValues": {
+                "en": "Ticket Number"
+            }
+        },
+        {
+            "id": "PriorityID",
+            "defaultValue": "Priorität",
+            "translationValues": {
+                "en": "Priority"
+            }
+        },
+        {
+            "id": "CustomerID",
+            "defaultValue": "Kunde",
+            "translationValues": {
+                "en": "Customer"
+            }
+        },
+        {
+            "id": "CustomerUserID",
+            "defaultValue": "Ansprechpartner",
+            "translationValues": {
+                "en": "Customer User"
+            }
+        },
+        {
+            "id": "TicketID",
+            "defaultValue": "Ticket ID",
+            "translationValues": {
+                "en": "Ticket ID"
+            }
+        },
+        {
+            "id": "StateTypeID",
+            "defaultValue": "Statustyp",
+            "translationValues": {
+                "en": "State Type"
+            }
+        },
+        {
+            "id": "OwnerID",
+            "defaultValue": "Besitzer",
+            "translationValues": {
+                "en": "Owner"
+            }
+        },
+        {
+            "id": "ResponsibleID",
+            "defaultValue": "Verantwortlicher",
+            "translationValues": {
+                "en": "Responsible"
+            }
+        },
+        {
+            "id": "SLAID",
+            "defaultValue": "SLA",
+            "translationValues": {
+                "en": "SLA"
+            }
+        },
+        {
+            "id": "ServiceID",
+            "defaultValue": "Service",
+            "translationValues": {
+                "en": "Service"
+            }
+        },
+        {
+            "id": "From",
+            "defaultValue": "Von",
+            "translationValues": {
+                "en": "From"
+            }
+        },
+        {
+            "id": "To",
+            "defaultValue": "An",
+            "translationValues": {
+                "en": "To"
+            }
+        },
+        {
+            "id": "Age",
+            "defaultValue": "Alter",
+            "translationValues": {
+                "en": "Age"
+            }
+        },
+        {
+            "id": "Cc",
+            "defaultValue": "Cc",
+            "translationValues": {
+                "en": "Cc"
+            }
+        },
+        {
+            "id": "Subject",
+            "defaultValue": "Betreff",
+            "translationValues": {
+                "en": "Subject"
+            }
+        },
+        {
+            "id": "Body",
+            "defaultValue": "Inhalt",
+            "translationValues": {
+                "en": "Body"
+            }
         }
     ]
 }
