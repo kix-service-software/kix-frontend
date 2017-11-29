@@ -42,7 +42,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const article = new CreateArticle(data.subject, data.description, null, 'text/html', 'utf8');
 
-            const dynamicFields = data.dynamicFields && data.dynamicFields.length === 0 ? null : data.dynamicFields;
+            const dynamicFields = (data.dynamicFields && data.dynamicFields.length !== 0) ? data.dynamicFields : null;
 
             const ticket = new CreateTicket(
                 data.subject, data.customerUser, data.customerId, data.stateId, data.priorityId,

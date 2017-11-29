@@ -7,7 +7,6 @@ import { TicketCreationDialogState } from './model/TicketCreationDialogState';
 import { TranslationId } from './model/TranslationId';
 
 import { ComponentId } from './model/ComponentId';
-import { validate } from '../../../decorators/methods/validate';
 
 class TicketCreationDialogComponent {
 
