@@ -8,6 +8,8 @@ import { IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions } from '@
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 
+import marko = require('marko/dist/compiler/');
+
 export class ApplicationRouter extends KIXRouter {
 
     public getBaseRoute(): string {
@@ -60,7 +62,10 @@ export class ApplicationRouter extends KIXRouter {
             const template = moduleFactory.getTemplate();
             const themeCSS = await this.getUserThemeCSS(user.UserID);
             const specificCSS = await this.getSpecificCSS();
-            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS);
+
+            const tagLib = await this.markoService.getComponentTags();
+
+            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS, tagLib);
         } else {
             next();
         }

@@ -8,6 +8,12 @@ export class ServicesMarkoDependencyExtension implements IMarkoDependencyExtensi
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['services', 'modules/services']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

@@ -28,6 +28,26 @@ export class MarkoService implements IMarkoService {
         await this.saveBrowserJSON(browserJSON);
     }
 
+    public async getComponentTags(): Promise<Array<[string, string]>> {
+        const markoDependencies: IMarkoDependencyExtension[] =
+            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
+
+        const packageJson = require('../../package.json');
+        const version = packageJson.version;
+        const prePath = '/@kix/frontend$' + version + '/dist/components/';
+
+        const tags: Array<[string, string]> = [];
+
+        for (const plugin of markoDependencies) {
+            for (const tag of plugin.getComponentTags()) {
+                tag[1] = prePath + tag[1];
+                tags.push(tag);
+            }
+        }
+
+        return tags;
+    }
+
     private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependencyExtension[]): void {
         for (const plugin of markoDependencies) {
             let prePath = 'require ../';

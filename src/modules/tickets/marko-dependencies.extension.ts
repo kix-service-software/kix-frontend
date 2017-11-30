@@ -24,6 +24,13 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['tickets', 'modules/tickets'],
+            ['ticket-table', 'base-components/ticket-table']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

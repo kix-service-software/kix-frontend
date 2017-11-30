@@ -8,6 +8,12 @@ export class NotesWidgetMarkoDependencyExtension implements IMarkoDependencyExte
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['notes', 'widgets/notes']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

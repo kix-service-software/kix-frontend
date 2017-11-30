@@ -8,6 +8,12 @@ export class CMDBMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['cmdb', 'modules/cmdb']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

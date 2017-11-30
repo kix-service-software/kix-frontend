@@ -16,11 +16,13 @@ class BaseTemplateComponent {
             auth: false,
             configurationMode: false,
             template: false,
-            templatePath: input.contentTemplate
+            templatePath: input.contentTemplate,
+            tagLib: input.tagLib
         };
     }
 
     public async onMount(): Promise<void> {
+        ClientStorageHandler.setTagLib(this.state.tagLib);
         this.state.template = require(this.state.templatePath);
 
         const token = ClientStorageHandler.getToken();

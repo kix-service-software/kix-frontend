@@ -8,6 +8,12 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['dashboard', 'modules/dashboard']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

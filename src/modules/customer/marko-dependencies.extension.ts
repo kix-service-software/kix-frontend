@@ -8,6 +8,12 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['customer', 'modules/customer']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

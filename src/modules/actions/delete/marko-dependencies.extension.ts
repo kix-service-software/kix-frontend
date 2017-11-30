@@ -8,6 +8,12 @@ export class DeleteActionMarkoDependencyExtension implements IMarkoDependencyExt
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['delete', 'actions/delete']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }
