@@ -13,8 +13,6 @@ class DashboardConfigurationDialog {
     }
 
     public async onMount(): Promise<void> {
-        const widgetDescriptorList: WidgetDescriptor[] = DashboardStore.getInstance().getAvailableWidgets();
-        const dashboardConfig: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         // console.log(widgetDescriptorList);
         // console.log(dashboardConfig);
         this.state = {
@@ -33,32 +31,7 @@ class DashboardConfigurationDialog {
                 { id: 'show', label: 'Anzeigen', type: 'checkbox' }
             ],
             contentFirstList: [],
-            contentSecondList: [
-                {
-                    instanceId: '20171114000001', widgetId: 'admin-info-widget', label: 'Admininfos',
-                    required: true, show: true, size: 's', id: 'admin-info-widget-1'
-                },
-                {                                                           // TODO: oder fixedConf?
-                    instanceId: '20171114000002', widgetId: 'chart-widget', preConf: 'sevenDay',
-                    label: '7 Tage Statistik', required: false, show: true, size: 's', id: 'chart-widget-3'
-                },
-                {
-                    instanceId: '20171114000003', widgetId: 'chart-widget', label: 'Tortendiagramm - Meine To Dos',
-                    required: false, show: true, size: 's', id: 'chart-widget-4'
-                },
-                {
-                    instanceId: '20171114000004', widgetId: 'chart-widget', label: 'Flächendiagramm',
-                    required: false, show: false, size: 's', id: 'chart-widget-5'
-                },
-                {                                                                 // TODO: oder fixedConf?
-                    instanceId: '20171114000005', widgetId: 'ticket-list-widget', preConf: 'place1',
-                    label: 'Platzhalter 1 Blub', required: false, show: false, size: 'l', id: 'ticket-list-widget-5'
-                },
-                {                                                                 // TODO: oder fixedConf?
-                    instanceId: '20171114000006', widgetId: 'ticket-list-widget', preConf: 'place2',
-                    label: 'Platzhalter 2 Bla', required: false, show: false, size: 'l', id: 'ticket-list-widget-6'
-                }
-            ],
+            contentSecondList: [],
             contentProperties: [
                 { id: 'show', label: 'Anzeigen', type: 'checkbox' },
                 {
@@ -67,18 +40,23 @@ class DashboardConfigurationDialog {
                 }
             ],
             sidebarFirstList: [],
-            sidebarSecondList: [
-                {
-                    instanceId: '20171114000021', widgetId: 'notes-widget', label: 'Notizen',
-                    required: true, show: true, id: 'notes-widget-1'
-                }
-            ],
+            sidebarSecondList: [],
         };
 
+        this.prepareFirstLists();
+        this.prepareSecondLists();
+        this.state.contentFirstList = this.state.contentFirstList.sort(this.sortList);
+        this.state.sidebarFirstList = this.state.sidebarFirstList.sort(this.sortList);
+        this.state.contentSecondList = this.state.contentSecondList.sort(this.sortList);
+        this.state.sidebarSecondList = this.state.sidebarSecondList.sort(this.sortList);
+
+        const translationHandler = await TranslationHandler.getInstance();
+        // this.state.translations = translationHandler.getTranslations([]);
+    }
+
+    private prepareFirstLists() {
+        const widgetDescriptorList: WidgetDescriptor[] = DashboardStore.getInstance().getAvailableWidgets();
         widgetDescriptorList.forEach((wd, index) => {
-            if (wd.required) {
-                // TODO: muss in secondList sein, braucht nicht in firstList
-            }
             const listElement = {
                 id: wd.widgetId + Date.now().toString(),
                 label: wd.configuration.title,
@@ -88,42 +66,66 @@ class DashboardConfigurationDialog {
                 }
             };
             if (wd.isContentWidget) {
-                this.state.contentFirstList.push(listElement);
+                if (wd.required) {
+                    this.state.contentSecondList.push(listElement);
+                } else {
+                    this.state.contentFirstList.push(listElement);
+                }
             }
             if (wd.isSidebarWidget) {
-                this.state.sidebarFirstList.push(listElement);
+                if (wd.required) {
+                    this.state.sidebarSecondList.push(listElement);
+                } else {
+                    this.state.sidebarFirstList.push(listElement);
+                }
             }
         });
-
-        // const widgetConfigs = {};
-        // dashboardConfig.configuredWidgets.forEach((wc) => {
-        //     widgetConfigs[wc[0]] = wc[1];
-        // });
-        // dashboardConfig.rows.forEach((row, index) => {
-        //     row.forEach((widget) => {
-        //         if (widgetConfigs[widget.instanceId]) {
-        //             const listElement = {
-        //                 id: widget.id + Date.now().toString(),
-        //                 label: widgetConfigs[widget.instanceId].title,
-        //                 properties: {
-        //                     show: widgetConfigs[widget.instanceId].show,
-        //                     size: widgetConfigs[widget.instanceId].size
-        //                 }
-        //             };
-        //         }
-
-        //     });
-        //     // if (wc.isContentWidget) {
-        //     //     this.state.contentFirstList.push(listElement);
-        //     // }
-        //     // if (wc.isSidebarWidget) {
-        //     //     this.state.sidebarFirstList.push(listElement);
-        //     // }
-        // });
-        const translationHandler = await TranslationHandler.getInstance();
-        // this.state.translations = translationHandler.getTranslations([]);
     }
 
+    private prepareSecondLists() {
+        const dashboardConfig: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
+        let instanceIds = [];
+        dashboardConfig.rows.forEach((row) => {
+            instanceIds = [...instanceIds, ...row];
+        });
+
+        dashboardConfig.configuredContentWidgets.forEach((widgetTuple) => {
+            const listElement = {
+                id: widgetTuple[1].widgetId + Date.now().toString(),
+                label: widgetTuple[1].title,
+                properties: {
+                    show: instanceIds.some((wiId) => wiId === widgetTuple[0]),
+                    size: widgetTuple[1].size
+                }
+            };
+            this.state.contentSecondList.push(listElement);
+        });
+
+        dashboardConfig.configuredSidebarWidgets.forEach((widgetTuple) => {
+            const listElement = {
+                id: widgetTuple[1].widgetId + Date.now().toString(),
+                label: widgetTuple[1].title,
+                properties: {
+                    show: instanceIds.some((wiId) => wiId === widgetTuple[0]),
+                    size: widgetTuple[1].size
+                }
+            };
+            this.state.sidebarSecondList.push(listElement);
+        });
+    }
+
+    private sortList(a, b) {
+        const labelA = a.label.toUpperCase();
+        const labelB = b.label.toUpperCase();
+        let result: number = 0;
+        if (labelA < labelB) {
+            result = -1;
+        }
+        if (labelA > labelB) {
+            result = 1;
+        }
+        return result;
+    }
     // private getTranslation(id: ConfigurationWidgetTranslationId): string {
     //     return (this.state.translations && this.state.translations[id]) ?
     // this.state.translations[id] : id.toString();

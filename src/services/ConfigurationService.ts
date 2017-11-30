@@ -82,6 +82,7 @@ export class ConfigurationService implements IConfigurationService {
             componentId = contextId;
         }
 
+        // TODO: kann ggf. weg,... für widgets nicht mehr notwendig
         if (instanceId) {
             componentId = componentId + "-" + instanceId;
         }

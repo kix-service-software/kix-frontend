@@ -1,6 +1,7 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
 import { SidebarState } from './store/';
 import { SIDEBAR_INITIALIZE } from './store/actions';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class SidebarComponent {
 
@@ -32,9 +33,12 @@ class SidebarComponent {
         if (this.state.configuration && this.state.configuration.configuredWidgets) {
             const widgetTuple = this.state.configuration.configuredWidgets.find((w) => w[0] === instanceId);
             if (widgetTuple) {
+                console.log(widgetTuple[0] + '---' + widgetTuple[1].show);
                 widgetTuple[1].show = !widgetTuple[1].show;
                 (this as any).setStateDirty('configuration');
-                // TODO: in widget konfiguration speichern?
+                DashboardStore.getInstance().saveWidgetConfiguration(
+                    widgetTuple[1].widgetId, widgetTuple[0], widgetTuple[1], 'sidebar'
+                );
             }
         }
     }
