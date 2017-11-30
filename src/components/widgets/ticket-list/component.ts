@@ -61,16 +61,14 @@ class TicketListWidgetComponent {
     }
 
     private filterChanged(event): void {
-        this.filter(event.target.value);
+        this.state.filterValue = event.target.value;
     }
 
-    private filter(value: string): void {
-        this.state.filterValue = value;
-
-        if (value === null || value === "") {
+    private filter(): void {
+        if (this.state.filterValue === null || this.state.filterValue === "") {
             this.state.filteredTickets = this.state.tickets;
         } else {
-            const searchValue = value.toLocaleLowerCase();
+            const searchValue = this.state.filterValue.toLocaleLowerCase();
             this.state.filteredTickets = this.state.tickets.filter((ticket: Ticket) => {
                 const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
                 const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;

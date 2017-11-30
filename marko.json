@@ -1,11 +1,13 @@
 {
-    "tags-dir": [
-        "./dist/components",
-        "./dist/components/base-components",
-        "./dist/components/base-components/creation-dialog",
-        "./dist/components/base-components/inputs",
-        "./dist/components/personal-settings",
-        "./dist/components/modules",
-        "./dist/components/widgets"
-    ]
+        "tags-dir": [
+                "./dist/components",
+                "./dist/components/base-components",
+                "./dist/components/base-components/creation-dialog",
+                "./dist/components/base-components/inputs",
+                "./dist/components/base-components/ticket-inputs",
+                "./dist/components/base-components/ticket-labels",
+                "./dist/components/personal-settings",
+                "./dist/components/modules",
+                "./dist/components/widgets"
+        ]
 }

@@ -1,0 +1,5 @@
+<select on-change('valueChanged')>
+    <for(sla in state.slas)>
+        <option value=sla.SLAID selected=(state.slaId === sla.SLAID)>${sla.Name}</option>
+    </for>
+</select>

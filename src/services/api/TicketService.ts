@@ -17,6 +17,7 @@ import {
     TicketHistoryResponse,
     TicketResponse,
     TicketsResponse,
+    TicketQuery,
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
@@ -29,6 +30,7 @@ import {
     Attachment,
     Ticket,
     TicketHistory,
+    TicketProperty
 } from '@kix/core/dist/model/';
 
 import { ITicketService } from '@kix/core/dist/services';
@@ -38,6 +40,7 @@ import { inject, injectable } from 'inversify';
 
 import { HttpService } from './HttpService';
 import { ObjectService } from './ObjectService';
+import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
 
 const RESOURCE_ARTICLES: string = "articles";
 const RESOURCE_ATTACHMENTS: string = "attachments";
@@ -69,23 +72,13 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     }
 
     public async getTickets(
-        token: string, properties: string[], limit: number, query?: any
+        token: string, properties: string[], limit: number,
+        filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
     ): Promise<AbstractTicket[]> {
 
-        if (!query) {
-            query = { fields: "Ticket.*" };
-        }
-
-        if (properties) {
-            const ticketProperties = [];
-            for (let property of properties) {
-                if (!property.startsWith("Ticket.")) {
-                    property = "Ticket." + property;
-                }
-                ticketProperties.push(property);
-            }
-            query.fields = ticketProperties.join(',');
-        }
+        const ticketProperties = this.getTicketProperties(properties).join(',');
+        const ticketFilter = this.prepareTicketFilter(filter);
+        const query = new TicketQuery(ticketProperties, ticketFilter);
 
         const response = await this.getObjects<TicketsResponse>(token, limit, null, null, query);
         return response.Ticket;
@@ -185,4 +178,77 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.History;
     }
 
+    private getTicketProperties(properties: string[]): string[] {
+        const ticketProperties = [];
+        if (properties) {
+            for (let property of properties) {
+                if (!property.startsWith("Ticket.")) {
+                    property = "Ticket." + property;
+                }
+                ticketProperties.push(property);
+            }
+        }
+        return ticketProperties;
+    }
+
+    private prepareTicketFilter(
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+    ): string {
+        let filter = "";
+        if (ticketFilter && ticketFilter.length) {
+            const filterObject = {
+                Ticket: this.prepareFilterOperations(ticketFilter)
+            };
+
+            filter = JSON.stringify(filterObject);
+        }
+        return filter;
+    }
+
+    private prepareFilterOperations(
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+    ): any {
+        const filterObject = {};
+        const filterOperations = [];
+        for (const filter of ticketFilter) {
+            if (this.isNumericSearchOperation(filter[1])) {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: Number(filter[2]),
+                    Type: "numeric"
+                });
+            } else if (this.isINSearch(filter[1])) {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: (filter[2] as string).split(" "),
+                    Type: "numeric"
+                });
+            } else {
+                filterOperations.push({
+                    Field: filter[0],
+                    Operator: filter[1],
+                    Value: String(filter[2])
+                });
+            }
+        }
+
+        filterObject['AND'] = filterOperations;
+
+        return filterObject;
+    }
+
+    private isNumericSearchOperation(operator: SearchOperator): boolean {
+        return (
+            operator === SearchOperator.LESS_THAN ||
+            operator === SearchOperator.LESS_THAN_OR_EQUAL ||
+            operator === SearchOperator.GREATER_THAN ||
+            operator === SearchOperator.GREATER_THAN_OR_EQUAL
+        );
+    }
+
+    private isINSearch(operator: SearchOperator): boolean {
+        return operator === SearchOperator.IN;
+    }
 }

@@ -1,0 +1,5 @@
+<select on-change('valueChanged')>
+    <for(ticketState in state.states)>
+        <option value=ticketState.ID selected=(state.stateId === ticketState.ID)>${ticketState.Name}</option>
+    </for>
+</select>

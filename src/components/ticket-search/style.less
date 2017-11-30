@@ -1,8 +1,45 @@
-.search-group {
-    border: 1px solid #000;
-    padding: 10px;
-    margin: 3px;
-    label {
-        display: block;
+.ticket-search-container {
+    .search-group {
+        border: 1px solid #000;
+        padding: 10px;
+        margin: 3px;
+        label {
+            display: block;
+        }
     }
+    .search-error {
+        background-color: @tertiary-2;
+        color: #fff;
+        font-weight: bold;
+        display: block;
+        height: 35px;
+        line-height: 35px;
+        padding: 3px;
+        margin: 5px;
+    }
+    button {
+        left: unset;
+    }
+    button:disabled {
+        background-color: @secondary-1
+    }
+}
+
+.search-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 3em;
+    background-color: @tertiary-5;
+    color: #fff;
+}
+
+.search-result {
+    background-color: #fff;
+    font-size: 0.8em;
+    color: #000;
+    margin-top: 10px;
 }
