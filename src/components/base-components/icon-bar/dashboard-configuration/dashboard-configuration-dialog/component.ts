@@ -84,20 +84,25 @@ class DashboardConfigurationDialog {
 
     private prepareSecondLists() {
         const dashboardConfig: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        let instanceIds = [];
-        dashboardConfig.rows.forEach((row) => {
-            instanceIds = [...instanceIds, ...row];
+        let contentInstanceIds = [];
+        dashboardConfig.contentRows.forEach((row) => {
+            contentInstanceIds = [...contentInstanceIds, ...row];
         });
 
-        dashboardConfig.configuredContentWidgets.forEach((widgetTuple) => {
+        dashboardConfig.configuredWidgets.forEach((widgetTuple) => {
             const listElement = {
                 id: widgetTuple[1].widgetId + Date.now().toString(),
                 label: widgetTuple[1].title,
                 properties: {
-                    show: instanceIds.some((wiId) => wiId === widgetTuple[0]),
-                    size: widgetTuple[1].size
+                    size: widgetTuple[1].size,
+                    show: undefined
                 }
             };
+            if (contentInstanceIds.some((wiId) => wiId === widgetTuple[0])) {
+                listElement.properties.show = contentInstanceIds.some((wiId) => wiId === widgetTuple[0]),
+                    this.state.contentSecondList.push(listElement);
+
+            }
             this.state.contentSecondList.push(listElement);
         });
 

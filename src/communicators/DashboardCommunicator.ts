@@ -1,16 +1,18 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
+    IWidget,
+    ConfiguredWidget,
     DashboardEvent,
+    DashboardConfiguration,
     LoadDashboardRequest,
     LoadDashboardResponse,
     SaveDashboardRequest,
     SaveWidgetRequest,
+    SidebarConfiguration,
     SocketEvent,
     User,
-    WidgetTemplate,
     WidgetConfiguration,
-    IWidget,
-    SidebarConfiguration
+    WidgetTemplate
 } from '@kix/core/dist/model';
 
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/';
@@ -36,44 +38,39 @@ export class DashboardCommunicator extends KIXCommunicator {
         const userId = user.UserID;
 
         let configuration: any = await this.configurationService
-            .getComponentConfiguration(data.contextId, null, null, userId);
+            .getModuleConfiguration(data.contextId, userId);
 
         if (!configuration) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
-            await this.configurationService.saveComponentConfiguration(
-                data.contextId, null, null, userId, moduleDefaultConfiguration);
+            await this.configurationService.saveModuleConfiguration(
+                data.contextId, userId, moduleDefaultConfiguration);
 
             configuration = moduleDefaultConfiguration;
         }
 
         const widgetTemplates: WidgetTemplate[] = [];
-        const widgetConfigurations: Array<[string, WidgetConfiguration]> = [];
 
-        // get sidebar configuration
-        const sidebarConfiguration: SidebarConfiguration =
-            await this.configurationService.getComponentConfiguration(data.contextId, 'sidebar', null, userId);
-
-        const widgets = [
-            ...(configuration ? configuration.configuredWidgets : []),
-            ...(sidebarConfiguration ? sidebarConfiguration.configuredWidgets : [])
-        ];
+        const widgets = [...configuration.contentConfiguredWidgets, ...configuration.sidebarConfiguredWidgets];
 
         for (const widget of widgets) {
-            const widgetFactory = await this.pluginService.getWidgetFactory(widget[1].widgetId);
-            widgetTemplates.push(new WidgetTemplate(widget[0], widgetFactory.getTemplate()));
+            const widgetFactory = await this.pluginService.getWidgetFactory(widget.configuration.widgetId);
+            widgetTemplates.push(new WidgetTemplate(widget.instanceId, widgetFactory.getTemplate()));
         }
 
         const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
 
         const response = new LoadDashboardResponse(
-            configuration.rows,
-            widgetTemplates,
-            (configuration ? configuration.configuredWidgets : []),
-            // TODO: wenn sidebar config mit im dashboard behandelt wird ggf. dann immer vorhanden
-            (sidebarConfiguration ? sidebarConfiguration.configuredWidgets : []),
-            availableWidgets
+            new DashboardConfiguration(
+                data.contextId,
+                configuration.contentRows,
+                configuration.sidebarRows,
+                widgetTemplates,
+                configuration.contentConfiguredWidgets,
+                configuration.sidebarConfiguredWidgets,
+                availableWidgets
+            )
         );
         this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
     }
@@ -84,7 +81,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         const userId = user && user.UserID;
 
         await this.configurationService
-            .saveComponentConfiguration(data.contextId, null, null, userId, data.configuration);
+            .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
         this.client.emit(DashboardEvent.DASHBOARD_SAVED);
     }
@@ -93,23 +90,21 @@ export class DashboardCommunicator extends KIXCommunicator {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
-        const config = await this.configurationService.getComponentConfiguration(
+        const moduleConfiguration: DashboardConfiguration = await this.configurationService.getModuleConfiguration(
             data.contextId,
-            (data.componentId ? data.componentId : null),
-            null,
             userId
         );
-        config.configuredWidgets.forEach((wt) => {
-            if (wt[0] === data.instanceId) {
-                wt[1] = data.widgetConfiguration;
-            }
-        });
+        let index = moduleConfiguration.contentConfiguredWidgets.findIndex((cw) => cw.instanceId === data.instanceId);
+        if (index > -1) {
+            moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
+        } else {
+            index = moduleConfiguration.sidebarConfiguredWidgets.findIndex((cw) => cw.instanceId === data.instanceId);
+            moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
+        }
 
-        await this.configurationService.saveComponentConfiguration(
-            data.contextId, data.componentId, null, userId, config
+        await this.configurationService.saveModuleConfiguration(
+            data.contextId, userId, moduleConfiguration
         );
-
         this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
     }
-
 }

@@ -57,43 +57,51 @@ export class ConfigurationService implements IConfigurationService {
         return this.preDefinedWidgetConfiguration || {};
     }
 
-    public async getComponentConfiguration(
-        contextId: string, componentId: string, instanceId: string, userId: number): Promise<any> {
+    public async getModuleConfiguration(
+        contextId: string, userId: number): Promise<any> {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
-        const configurationFile = this.getConfigurationFile(filePath);
+        const moduleConfiguration = this.getConfigurationFile(filePath);
+
+        return moduleConfiguration;
+    }
+
+    public async saveModuleConfiguration(
+        contextId: string, userId: number, configuration: any): Promise<void> {
+
+        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
+        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
+
+        return this.saveConfigurationFile(__dirname + '/' + filePath, configuration);
+    }
+
+    public async getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): Promise<any> {
+
+        const moduleConfiguration = this.getModuleConfiguration(contextId, userId);
 
         if (componentId === null) {
             componentId = contextId;
         }
 
-        if (instanceId) {
-            componentId = componentId + "-" + instanceId;
-        }
-
-        return configurationFile[componentId];
+        return moduleConfiguration[componentId];
     }
 
     public async saveComponentConfiguration(
-        contextId: string, componentId: string, instanceId: string, userId: number, configuration: any): Promise<void> {
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
 
         if (componentId === null) {
             componentId = contextId;
         }
 
-        // TODO: kann ggf. weg,... für widgets nicht mehr notwendig
-        if (instanceId) {
-            componentId = componentId + "-" + instanceId;
-        }
-
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
+        const moduleConfiguration = this.getConfigurationFile(filePath);
 
-        const configurationContent = this.getConfigurationFile(filePath);
-        configurationContent[componentId] = configuration;
+        moduleConfiguration[componentId] = configuration;
 
-        return this.saveConfigurationFile(__dirname + '/' + filePath, configurationContent);
+        return this.saveConfigurationFile(__dirname + '/' + filePath, moduleConfiguration);
     }
 
     public isProductionMode(): boolean {

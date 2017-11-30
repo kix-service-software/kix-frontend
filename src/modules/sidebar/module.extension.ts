@@ -12,52 +12,7 @@ export class SidebarFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const sidebarDefaultConfiguration: SidebarConfiguration = {
-            rows: [
-                ['20170915101514'],
-                ['20170915094112'],
-                ['20170915085411']
-            ],
-            configuredWidgets: [
-                [
-                    '20170915101514',
-                    {
-                        widgetId: 'notes-widget',
-                        title: "Notes",
-                        actions: [],
-                        settings: {
-                            notes: 'Test <strong style="color:red">123</strong>'
-                        },
-                        show: true,
-                        size: WidgetSize.SMALL
-                    },
-                ],
-                [
-                    '20170915094112',
-                    {
-                        widgetId: 'notes-widget',
-                        title: "Notes 2",
-                        actions: [],
-                        settings: {
-                            notes: ""
-                        },
-                        show: true,
-                        size: WidgetSize.SMALL
-                    },
-                ],
-                [
-                    '20170915085411',
-                    {
-                        widgetId: 'ticket-info-widget',
-                        title: "Ticket-Info",
-                        actions: [],
-                        settings: {},
-                        show: true,
-                        size: WidgetSize.SMALL
-                    }
-                ]
-            ]
-        };
+        const sidebarDefaultConfiguration: SidebarConfiguration = {};
         return sidebarDefaultConfiguration;
     }
 }
