@@ -1,3 +1,5 @@
+import { ApplicationStore } from "../../../../../core/dist/browser/application/ApplicationStore";
+
 class TicketInfoWidgetComponent {
 
     public state: any;
@@ -23,7 +25,7 @@ class TicketInfoWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./configuration'));
     }
 
     public saveConfiguration(): void {

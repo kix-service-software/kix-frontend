@@ -1,6 +1,7 @@
 import { ChartFactory, ChartConfiguration } from '@kix/core/dist/browser/model/charts';
 import { ChartComponentState } from './model/ChartComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class ChartWidgetComponent {
 
@@ -23,7 +24,7 @@ class ChartWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./chart-configuration'));
     }
 
     public saveConfiguration(): void {

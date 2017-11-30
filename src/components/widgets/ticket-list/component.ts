@@ -2,6 +2,7 @@ import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { Ticket, TicketState } from '@kix/core/dist/model/';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class TicketListWidgetComponent {
 
@@ -28,7 +29,7 @@ class TicketListWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./ticket-list-configuration'));
     }
 
     public saveConfiguration(): void {

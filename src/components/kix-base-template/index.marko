@@ -12,4 +12,18 @@
         </section>
     </section>
     <kix-footer/>
+    <if(state.showOverlay)>
+        <main-overlay/>
+    </if>
+    <if(state.showDialog)>
+        <!-- div zwecks Marko Bug #920 -->
+        <div>
+            <main-dialog>
+                <@title>Dialogtitel</@title>
+                <@content>
+                    <include(state.dialogContent)/>
+                </@content>
+            </main-dialog>
+        </div>
+    </if>
 </div>

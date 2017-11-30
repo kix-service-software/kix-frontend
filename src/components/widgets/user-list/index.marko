@@ -35,18 +35,4 @@
                 on-click('showConfigurationClicked')/>
         </@actions>
     </widget>
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: User-List</@title>
-                <@body>
-                    <user-list-configuration configuration=state.widgetConfiguration.contentConfiguration/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
-        </div>
-    </if>
 </if>

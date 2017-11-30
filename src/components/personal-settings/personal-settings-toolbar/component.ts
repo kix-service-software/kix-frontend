@@ -1,27 +1,15 @@
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class PersonalSettingsToolbarComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {
-            title: "Persönliche Einstellungen",
-            showPersonalSettings: false
-        };
-    }
-
-    public async onMount(): Promise<void> {
-        const translationHandler = await TranslationHandler.getInstance();
-        this.state.title = await translationHandler.getTranslation('PERSONAL-SETTINGS:TOOLBAR');
+        this.state = {};
     }
 
     public openPersonalSettings(): void {
-        this.state.showPersonalSettings = true;
-    }
-
-    public closePersonalSettings(): void {
-        this.state.showPersonalSettings = false;
+        ApplicationStore.getInstance().toggleDialog(require('../personal-settings-container'));
     }
 
 }
