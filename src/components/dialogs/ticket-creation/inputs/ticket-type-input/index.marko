@@ -1,8 +1,0 @@
-<label.form-label>
-    Typ
-    <select on-change("valueChanged")>
-        <for(ticketType in state.ticketTypes)>
-            <option key=ticketType.ID value=ticketType.ID selected=(state.typeId === ticketType.ID)>${ticketType.Name}</option>
-        </for>
-    </select>
-</label>
