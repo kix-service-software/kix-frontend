@@ -40,6 +40,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
+                this.loggingService.error('Error during http GET request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
 
@@ -60,6 +61,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
+                this.loggingService.error('Error during http POST request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
 
@@ -80,6 +82,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
+                this.loggingService.error('Error during http PUT request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
         return response;
@@ -99,6 +102,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request(options)
             .catch((error) => {
+                this.loggingService.error('Error during http PATCH request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
         return response;
@@ -117,6 +121,7 @@ export class HttpService implements IHttpService {
 
         const response = await this.request.delete(options)
             .catch((error) => {
+                this.loggingService.error('Error during http DELETE request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
         return response;
