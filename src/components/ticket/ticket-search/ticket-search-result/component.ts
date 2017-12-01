@@ -24,6 +24,9 @@ export class TicketSearchResultComponent {
         if (result) {
             this.state.tickets = result;
         }
+
+        const properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
+        this.state.properties = properties ? properties : [];
     }
 
 }

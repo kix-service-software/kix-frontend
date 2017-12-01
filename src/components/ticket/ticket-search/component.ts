@@ -1,6 +1,8 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
-import { TicketProperty } from "../../../../core/dist/model/ticket/TicketProperty";
+import { TicketProperty } from "@kix/core/dist/model/";
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { TicketStore } from "../../../../../core/dist/browser/ticket/TicketStore";
 
 class TicketSearchComponent {
 
@@ -8,21 +10,23 @@ class TicketSearchComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            properties: [
-                TicketProperty.TICKET_NUMBER,
-                TicketProperty.TITLE
-            ],
+            properties: [],
             ticketProperties: []
         };
     }
 
     public async onMount(): Promise<void> {
         this.openSearchDialog();
+        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+
         const th = await TranslationHandler.getInstance();
         this.state.ticketProperties = Object.keys(TicketProperty).map(
             (key) => [TicketProperty[key], th.getTranslation(key)]
         ) as Array<[string, string]>;
         this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
+        KIXRouterStore.getInstance().navigate(
+            'ticket-search', 'ticket-search-result'
+        );
     }
 
     private openSearchDialog(): void {
@@ -40,7 +44,12 @@ class TicketSearchComponent {
         for (const selectedProperty of event.target.selectedOptions) {
             selectedProperties.push(selectedProperty.value);
         }
-        this.state.properties = selectedProperties;
+        TicketStore.getInstance().prepareSearchProperties('ticket-search', selectedProperties);
+    }
+
+    private ticketStateChanged(): void {
+        const properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
+        this.state.properties = properties ? properties : [];
     }
 
 }

@@ -1,6 +1,7 @@
 import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { ClientStorageHandler } from '../../../../../core/dist/browser/ClientStorageHandler';
 import { ComponentId } from '../../dialogs/ticket-creation/model/ComponentId';
+import { KIXRouter } from '../../../../../core/dist/routes/KIXRouter';
 
 export class RouterOutletComponent {
 
@@ -10,7 +11,8 @@ export class RouterOutletComponent {
         this.state = {
             componentId: null,
             template: null,
-            routerId: null
+            routerId: null,
+            data: null
         };
     }
 
@@ -27,6 +29,9 @@ export class RouterOutletComponent {
 
         const componentId = KIXRouterStore.getInstance().getCurrentComponent(this.state.routerId);
         this.state.componentId = componentId;
+
+        const data = KIXRouterStore.getInstance().getCurrentComponentData(this.state.routerId);
+        this.state.data = data;
 
         const tag = tagLib.find((t) => t[0] === componentId);
         if (tag) {

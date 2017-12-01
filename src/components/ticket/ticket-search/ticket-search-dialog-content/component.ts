@@ -13,10 +13,6 @@ export class TicketSearchDialogComponent {
         this.state = new TicketSearchState();
     }
 
-    public onInput(input: any): void {
-        this.state.properties = input.properties;
-    }
-
     public async onMount(): Promise<void> {
         TicketStore.getInstance().loadTicketData('ticket-search');
 
@@ -31,8 +27,10 @@ export class TicketSearchDialogComponent {
         const searchFilter = TicketStore.getInstance().getTicketSearchFilter('ticket-search');
         if (searchFilter) {
             this.state.searchAttributes = searchFilter;
-            this.setComponentDirty();
         }
+
+        this.state.properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
+        this.setComponentDirty();
     }
 
     private limitChanged(event: any): void {
