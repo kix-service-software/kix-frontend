@@ -1,6 +1,7 @@
 import { SocketEvent } from '@kix/core/dist/model';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 // tslint:disable-next-line:no-var-requires
 require('babel-polyfill');
@@ -17,11 +18,16 @@ class BaseTemplateComponent {
             configurationMode: false,
             showConfigurationOverlay: false,
             template: false,
-            templatePath: input.contentTemplate
+            templatePath: input.contentTemplate,
+            showOverlay: false,
+            showDialog: false,
+            dialogContent: null
         };
     }
 
     public async onMount(): Promise<void> {
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+
         this.state.template = require(this.state.templatePath);
 
         const token = ClientStorageHandler.getToken();
@@ -44,6 +50,12 @@ class BaseTemplateComponent {
 
     public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
+    }
+
+    private applicationStateChanged(): void {
+        this.state.showOverlay = ApplicationStore.getInstance().isShowOverlay();
+        this.state.showDialog = ApplicationStore.getInstance().isShowDialog();
+        this.state.dialogContent = ApplicationStore.getInstance().getDialogContent();
     }
 }
 

@@ -1,5 +1,6 @@
 import { NotesComponentState } from './model/NotesComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class NotesWidgetComponent {
 
@@ -21,7 +22,7 @@ class NotesWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./notes-configuration'));
     }
 
     public saveConfiguration(): void {

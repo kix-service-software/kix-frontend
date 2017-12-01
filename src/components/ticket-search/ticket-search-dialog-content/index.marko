@@ -1,0 +1,27 @@
+<div.ticket-search-container>
+    <if(state.error)>
+        <span.search-error>${state.error}</span>
+    </if>
+    <if(state.searching)>
+        <span>Suche läuft ...</span>
+    </if>
+    <else>
+        <div.search-group>
+            <for(attribute in state.searchAttributes)>
+                <label>
+                    <ticket-search-attribute attributeId=attribute[0] property=attribute[1] operator=attribute[2] value=attribute[3]
+                        on-attributeChanged('attributeChanged')/>
+                    <button on-click('deletSearchAtribute', attribute[0])>X</button>
+                </label>
+            </for>
+            <button on-click('addSearchAttribute')>+</button>
+        </div>
+        <div.search-group>
+            <label>
+                max. Suchergebnisse
+                <input type="number" value=state.limit on-change('limitChanged')/>
+            </label>
+        </div>
+        <button on-click('searchTickets') disabled=(!state.canSearch)>Suchen</button>
+    </else>
+</div>

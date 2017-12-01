@@ -30,19 +30,4 @@
             </for>
         </@actions>
     </widget>
-    <!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: User-List</@title>
-                <@body>
-                    <user-list-configuration configuration=state.widgetConfiguration.settings/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
-        </div>
-    </if>
 </if>

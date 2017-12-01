@@ -5,6 +5,7 @@ import { UserListComponentState } from './model/UserListComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { UserStore } from '@kix/core/dist/browser/user/UserStore';
 import { User, LoadUsersRequest } from '@kix/core/dist/model/';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class UserListWidgetComponent {
 
@@ -47,7 +48,7 @@ class UserListWidgetComponent {
     }
 
     protected showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./user-list-configuration'));
     }
 
     protected cancelConfiguration(): void {

@@ -1,15 +1,14 @@
 <main-overlay/>
 <div.main-dialog>
+    <!-- Sollte das Schließkreuz werden ;) -->
+    <button on-click('closeDialog')>Schließen</button>
     <div.dialog-title>
         <h2>
             <include(input.title)/>
         </h2>
     </div>
     <div.dialog-content>
-        <include(input.body)/>
-    </div>
-    <div.dialog-buttons>
-        <include(input.button)/>
+        <include(input.content)/>
     </div>
     <!-- TODO: use translation -->
     <p>Alle mit * gekennzeichneten Felder sind Pflichfelder</p>

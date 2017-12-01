@@ -1,4 +1,5 @@
-<widget minimizable=input.minimizable configurationMode=input.configurationMode on-showConfiguration('showConfigurationClicked')>
+<widget minimizable=input.minimizable configurationMode=input.configurationMode
+    on-showConfiguration('showConfigurationClicked')>
     <@icon>
         <span.kix-icon.icon-dummy/>
     </@icon>
@@ -34,18 +35,3 @@
     </@filter>
     <@actions/>
 </widget>
-<!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
-<if(state.showConfiguration)>
-    <div>
-        <main-dialog>
-            <@title>Konfiguration: Suchvorlagen</@title>
-            <@body>
-                <search-templates-configuration/>
-            </@body>
-            <@button>
-                <button on-click('saveConfiguration')>Speichern</button>
-                <button on-click('cancelConfiguration')>Abbrechen</button>
-            </@button>
-        </main-dialog>
-    </div>
-</if>

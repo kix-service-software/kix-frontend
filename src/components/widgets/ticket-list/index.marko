@@ -20,18 +20,3 @@
     </@filter>
     <@actions/>
 </widget>
-<!-- TODO: ggf. ins widget übernehmen, da im Moment recht allgemein -->
-<if(state.showConfiguration)>
-    <div>
-        <main-dialog>
-            <@title>Konfiguration: ${state.widgetConfiguration.title}</@title>
-            <@body>
-                <ticket-list-configuration configuration=state.widgetConfiguration/>
-            </@body>
-            <@button>
-                <button on-click('saveConfiguration')>Speichern</button>
-                <button on-click('cancelConfiguration')>Abbrechen</button>
-            </@button>
-        </main-dialog>
-    </div>
-</if>
