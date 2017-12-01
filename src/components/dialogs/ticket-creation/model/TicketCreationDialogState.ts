@@ -1,4 +1,4 @@
-import { TicketProperty } from "../../../../../../core/dist/model/ticket/TicketProperty";
+import { TicketProperty } from "@kix/core/dist/model/ticket/TicketProperty";
 import { ComponentId } from "./ComponentId";
 
 export class TicketCreationDialogState {
