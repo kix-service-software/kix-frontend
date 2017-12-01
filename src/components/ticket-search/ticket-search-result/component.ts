@@ -6,8 +6,13 @@ export class TicketSearchResultComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            tickets: []
+            tickets: [],
+            properties: []
         };
+    }
+
+    public onInput(input: any): void {
+        this.state.properties = input.properties;
     }
 
     public onMount(): void {

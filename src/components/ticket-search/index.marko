@@ -1,2 +1,10 @@
 <button on-click('openSearchDialog')>Suche bearbeiten</button>
-<ticket-search-result/>
+<p>
+    Ticketattribute
+    <select size=6 multiple on-change('ticketPropertiesChanged')>
+        <for(property in state.ticketProperties)>
+            <option value=property[0] selected=component.isPropertySelected(property[0])>${property[0]}</option>
+        </for>
+    </select>
+</p>
+<ticket-search-result properties=state.properties/>
