@@ -1,4 +1,4 @@
-import { ApplicationStore } from "../../../../../core/dist/browser/application/ApplicationStore";
+import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 
 class TicketInfoWidgetComponent {
 

@@ -1,5 +1,5 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
-import { TicketProperty } from "../../../../core/dist/model/ticket/TicketProperty";
+import { TicketProperty } from "@kix/core/dist/model/ticket/TicketProperty";
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 
 class TicketSearchComponent {
