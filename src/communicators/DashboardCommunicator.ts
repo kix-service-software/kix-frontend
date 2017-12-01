@@ -8,7 +8,6 @@ import {
     LoadDashboardResponse,
     SaveDashboardRequest,
     SaveWidgetRequest,
-    SidebarConfiguration,
     SocketEvent,
     User,
     WidgetConfiguration,
@@ -40,10 +39,9 @@ export class DashboardCommunicator extends KIXCommunicator {
         let configuration: any = await this.configurationService
             .getModuleConfiguration(data.contextId, userId);
 
-        if (!configuration) {
+        if (!configuration.hasOwnProperty('contentRows')) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
-
             await this.configurationService.saveModuleConfiguration(
                 data.contextId, userId, moduleDefaultConfiguration);
 
@@ -51,8 +49,10 @@ export class DashboardCommunicator extends KIXCommunicator {
         }
 
         const widgetTemplates: WidgetTemplate[] = [];
-
-        const widgets = [...configuration.contentConfiguredWidgets, ...configuration.sidebarConfiguredWidgets];
+        const widgets = [
+            ...(configuration.contentConfiguredWidgets || []),
+            ...(configuration.sidebarConfiguredWidgets || [])
+        ];
 
         for (const widget of widgets) {
             const widgetFactory = await this.pluginService.getWidgetFactory(widget.configuration.widgetId);

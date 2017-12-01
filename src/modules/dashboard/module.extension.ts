@@ -25,7 +25,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             ['20170920101621'],
             ['20170920093015']
         ];
-        const SidebarRows: string[][] = [
+        const sidebarRows: string[][] = [
             ['20170915101514'],
             ['20170915094112'],
             ['20170915085411']
@@ -163,7 +163,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             }
         ];
 
-        return { contentRows, SidebarRows, contentConfiguredWidgets, sidebarConfiguredWidgets };
+        return { contentRows, sidebarRows, contentConfiguredWidgets, sidebarConfiguredWidgets };
     }
 
 }

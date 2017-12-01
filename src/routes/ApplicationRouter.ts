@@ -69,7 +69,7 @@ export class ApplicationRouter extends KIXRouter {
     private async getUserThemeCSS(userId: number): Promise<string> {
         // TODO: define context id for personal settings.
         const configuration =
-            await this.configurationService.getComponentConfiguration("personal-settings", null, null, userId);
+            await this.configurationService.getComponentConfiguration("personal-settings", null, userId);
 
         if (configuration) {
             return configuration.theme;

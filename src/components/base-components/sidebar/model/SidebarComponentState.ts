@@ -1,8 +1,9 @@
-import { SidebarConfiguration, WidgetTemplate } from '@kix/core/dist/model';
+import { ConfiguredWidget, WidgetTemplate } from '@kix/core/dist/model';
 
 export class SidebarComponentState {
 
-    public configuration: SidebarConfiguration = null;
+    public rows: string[][] = [];
+    public configuredWidgets: ConfiguredWidget[] = [];
     public configurationMode: boolean = false;
     public widgetTemplates: WidgetTemplate[] = [];
     public showIconBar: boolean = true;

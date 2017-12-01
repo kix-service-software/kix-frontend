@@ -15,16 +15,38 @@
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Content-Widgets</h3>
-                <two-list-selection firstTitle="Verfügbare Widgets" firstList=state.contentFirstList secondTitle="Angezeigte Widgets"
-                    secondList=state.contentSecondList properties=state.contentProperties firstListFixed=true
-                    filterPlaceholder="Verfügbare Widgets filtern" size=4 firstMultiple=true secondMultiple=true/>
+                <div.two-selection>
+                    <div.first-list>
+                        <selection-with-filter title="Verfügbare Widgets" list=state.contentFirstList placeholder="Verfügbare Widgets filtern"
+                            size=4 multiple=true on-selected('setFirstListSelected')/>
+                    </div>
+                    <div.selection-buttons>
+                        <input type="button" on-click('addToSecondContent') value=">"/>
+                        <input type="button" on-click('removeFromSecondContent') value="<"/>
+                    </div>
+                    <div.second-list>
+                        <selection-with-properties title="Angezeigte Widgets" list=state.contentSecondList properties=state.contentProperties
+                            size=4 multiple=true on-selected('setSecondListSelected')/>
+                    </div>
+                </div>
             </div>
             <div.form-group>
                 <!-- TODO: use translation -->
                 <h3>Sidebar-Widgets</h3>
-                <two-list-selection firstTitle="Verfügbare Sideabrs" firstList=state.sidebarFirstList secondTitle="Angezeigte Sidebars"
-                    secondList=state.sidebarSecondList properties=state.sidebarProperties
-                    filterPlaceholder="Verfügbare Sidebars filtern" size=4 firstMultiple=true secondMultiple=true/>
+                <div.two-selection>
+                    <div.first-list>
+                        <selection-with-filter title="Verfügbare Sideabrs" list=state.sidebarFirstList placeholder="Verfügbare Widgets filtern"
+                            size=4 multiple=true on-selected('setFirstListSelected')/>
+                    </div>
+                    <div.selection-buttons>
+                        <input type="button" on-click('addToSecondSidebar') value=">"/>
+                        <input type="button" on-click('removeFromSecondSidebar') value="<"/>
+                    </div>
+                    <div.second-list>
+                        <selection-with-properties title="Angezeigte Sidebars" list=state.sidebarSecondList properties=state.sidebarProperties
+                            size=4 multiple=true on-selected('setSecondListSelected')/>
+                    </div>
+                </div>
             </div>
             <div.form-buttons>
                 <!-- TODO: use translation -->

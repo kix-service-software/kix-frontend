@@ -24,7 +24,8 @@ class TicketsComponent {
     public stateChanged(): void {
         const dashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
-            this.state.rows = dashboardConfiguration.rows;
+            this.state.rows = dashboardConfiguration.contentRows;
+            this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
             this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }

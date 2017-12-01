@@ -1,13 +1,10 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
-import { SidebarState } from './store/';
-import { SIDEBAR_INITIALIZE } from './store/actions';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { ConfiguredWidget } from '@kix/core/dist/model';
+import { ConfiguredWidget, DashboardConfiguration } from '@kix/core/dist/model';
 
 class SidebarComponent {
 
     public state: SidebarComponentState;
-    private store: any;
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
@@ -17,26 +14,25 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        this.store = require('./store/').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(SIDEBAR_INITIALIZE(this.store));
+        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        this.stateChanged();
     }
 
     public stateChanged(): void {
-        const reduxState: SidebarState = this.store.getState();
-        if (reduxState.configuration) {
-            this.state.configuration = reduxState.configuration;
-            this.state.widgetTemplates = reduxState.widgetTemplates;
+        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
+        if (dashboardConfiguration) {
+            this.state.rows = dashboardConfiguration.sidebarRows;
+            this.state.configuredWidgets = dashboardConfiguration.sidebarConfiguredWidgets;
+            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
 
     public toggleSidebarWidget(instanceId: string): void {
-        if (this.state.configuration && this.state.configuration.configuredWidgets) {
-            const configuredWidget: ConfiguredWidget = this.state.configuration.configuredWidgets.find(
-                (cw) => cw[0] === instanceId
+        if (this.state.configuredWidgets) {
+            const configuredWidget: ConfiguredWidget = this.state.configuredWidgets.find(
+                (cw) => cw.instanceId === instanceId
             );
             if (configuredWidget) {
-                console.log(configuredWidget.instanceId + '---' + configuredWidget.configuration.show);
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
                 (this as any).setStateDirty('configuration');
                 DashboardStore.getInstance().saveWidgetConfiguration(
@@ -50,9 +46,9 @@ class SidebarComponent {
 
     public isShown(instanceId: string): boolean {
         let isShown: boolean = false;
-        if (this.state.configuration && this.state.configuration.rows) {
+        if (this.state.rows) {
             let instanceIds = [];
-            this.state.configuration.rows.forEach((row) => {
+            this.state.rows.forEach((row) => {
                 instanceIds = [...instanceIds, ...row];
             });
             isShown = instanceIds.some((wiId) => wiId === instanceId);

@@ -2,11 +2,12 @@
     <if(state.showIconBar)>
         <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
     </if>
-    <if(state.configuration)>
+    <if(state.configuredWidgets)>
         <div.widget-bar>
-            <for(widget in state.configuration.configuredWidgets)>
+            <for(widget in state.configuredWidgets)>
                 <if(component.isShown(widget.instanceId))>
-                    <div.bar-icon class=(widget.configuration.show ? "select-active" : "") on-click('toggleSidebarWidget', widgetTuple[0])>
+                    <div.bar-icon class=(widget.configuration.show ? "select-active" : "")
+                        on-click('toggleSidebarWidget', widget.instanceId)>
                         <span.kix-icon class=(widget.configuration.icon ? "icon-" + widget.configuration.icon : "")/>
                     </div>
                 </if>
@@ -14,9 +15,9 @@
         </div>
     </if>
 </div>
-<if(state.configuration)>
+<if(state.configuredWidgets)>
     <div.sidebar>
-        <for(widget in state.configuration.configuredWidgets)>
+        <for(widget in state.configuredWidgets)>
             <if(component.isShown(widget.instanceId) && widget.configuration.show)>
                 <!-- 
                 TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,

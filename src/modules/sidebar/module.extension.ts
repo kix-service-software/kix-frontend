@@ -1,5 +1,5 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { SidebarConfiguration, WidgetSize } from '@kix/core/dist/model';
+import { WidgetSize } from '@kix/core/dist/model';
 
 export class SidebarFactoryExtension implements IModuleFactoryExtension {
 
@@ -12,8 +12,7 @@ export class SidebarFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const sidebarDefaultConfiguration: SidebarConfiguration = {};
-        return sidebarDefaultConfiguration;
+        return {};
     }
 }
 
