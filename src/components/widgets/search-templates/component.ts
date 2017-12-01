@@ -1,3 +1,5 @@
+import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+
 class SearchTemplatesWidgetComponent {
 
     public state: any;
@@ -21,7 +23,7 @@ class SearchTemplatesWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        this.state.showConfiguration = true;
+        ApplicationStore.getInstance().toggleDialog(require('./search-templates-configuration'));
     }
 
     public saveConfiguration(): void {
