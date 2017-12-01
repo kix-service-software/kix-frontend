@@ -3,6 +3,7 @@ import { MenuComponentState } from './model/MenuComponentState';
 import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 class KIXMenuComponent {
 
@@ -31,6 +32,11 @@ class KIXMenuComponent {
                 entry.active = entry.contextId === contextId;
             }
         }
+    }
+
+    private menuClicked(contextId: string): void {
+        ClientStorageHandler.setContextId(contextId);
+        KIXRouterStore.getInstance().navigate('base-router', contextId);
     }
 }
 

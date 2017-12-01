@@ -8,7 +8,8 @@
                 <breadcrumb/>
                 <back/>
             </header>
-            <include(state.template, {configurationMode: state.configurationMode})/>
+            <!-- <include(state.template, {configurationMode: state.configurationMode})/> -->
+            <router-outlet id="base-router"/>
         </section>
     </section>
     <kix-footer/>

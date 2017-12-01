@@ -2,7 +2,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 import { TicketProperty } from "@kix/core/dist/model/";
 import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
-import { TicketStore } from "../../../../../core/dist/browser/ticket/TicketStore";
+import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
 
 class TicketSearchComponent {
 
@@ -24,9 +24,7 @@ class TicketSearchComponent {
             (key) => [TicketProperty[key], th.getTranslation(key)]
         ) as Array<[string, string]>;
         this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
-        KIXRouterStore.getInstance().navigate(
-            'ticket-search', 'ticket-search-result'
-        );
+        KIXRouterStore.getInstance().navigate('ticket-search', 'ticket-search-result');
     }
 
     private openSearchDialog(): void {

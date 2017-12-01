@@ -10,7 +10,7 @@ export class SearchMarkoDependencyExtension implements IMarkoDependencyExtension
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['search', 'modules/search']
+            ['search-dashboard', 'modules/search']
         ];
     }
 

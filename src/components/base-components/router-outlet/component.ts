@@ -1,7 +1,6 @@
 import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
-import { ClientStorageHandler } from '../../../../../core/dist/browser/ClientStorageHandler';
-import { ComponentId } from '../../dialogs/ticket-creation/model/ComponentId';
-import { KIXRouter } from '../../../../../core/dist/routes/KIXRouter';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { KIXRouter } from '@kix/core/dist/routes/KIXRouter';
 
 export class RouterOutletComponent {
 

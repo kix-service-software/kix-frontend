@@ -1,5 +1,5 @@
 import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
-import { KIXRouterStore } from "../../../../../../core/dist/browser/router/KIXRouterStore";
+import { KIXRouterStore } from "@kix/core/dist/browser/router/KIXRouterStore";
 
 export class TicketSearchResultComponent {
 

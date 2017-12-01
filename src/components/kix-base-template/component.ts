@@ -16,7 +16,7 @@ class BaseTemplateComponent {
         this.state = {
             auth: false,
             configurationMode: false,
-            template: false,
+            template: '',
             templatePath: input.contentTemplate,
             tagLib: input.tagLib,
             showOverlay: false,
