@@ -1,20 +1,15 @@
+import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+
 class CreateObjectToolbarComponent {
 
     public state: any;
 
     public onCreate(): void {
-        this.state = {
-            title: "Neues Objekt erstellen",
-            showCreateObjectDialog: false
-        };
+        this.state = {};
     }
 
     public openCreateObjectDialog(): void {
-        this.state.showCreateObjectDialog = true;
-    }
-
-    public closeCreateObjectDialog(): void {
-        this.state.showCreateObjectDialog = false;
+        ApplicationStore.getInstance().toggleDialog(require('../creation-dialog-container'));
     }
 
 }

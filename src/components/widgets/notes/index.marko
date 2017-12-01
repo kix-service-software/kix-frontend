@@ -28,18 +28,4 @@
                 on-click('showConfigurationClicked')/>
         </@actions>
     </widget>
-    <if(state.showConfiguration)>
-        <div>
-            <main-dialog>
-                <@title>Konfiguration: Ticketliste</@title>
-                <@body>
-                    <notes-configuration/>
-                </@body>
-                <@button>
-                    <button on-click('saveConfiguration')>Speichern</button>
-                    <button on-click('cancelConfiguration')>Abbrechen</button>
-                </@button>
-            </main-dialog>
-        </div>
-    </if>
 </if>
