@@ -3,6 +3,6 @@
         <b>Gefundene Tickets:</b> ${state.tickets.length}
     </span>
     <p>
-        <ticket-table displayLimit=10 tickets=state.tickets properties=state.properties/>
+        <ticket-table displayLimit=10 tickets=state.tickets properties=state.properties on-ticketClicked('ticketClicked')/>
     </p>
 </div>

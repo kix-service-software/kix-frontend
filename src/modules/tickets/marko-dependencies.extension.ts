@@ -6,7 +6,8 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
         return [
             "modules/tickets",
             "dialogs/ticket-creation",
-            "ticket/ticket-search/ticket-search-result"
+            "ticket/ticket-search/ticket-search-result",
+            "ticket/ticket-details"
         ];
     }
 

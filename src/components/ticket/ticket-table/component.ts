@@ -24,7 +24,9 @@ export class TicketTableComponent {
     public async onInput(input: any): Promise<void> {
         const th = await TranslationHandler.getInstance();
 
-        this.state.properties = input.properties.map((sp) => [sp, th.getTranslation(sp)]);
+        if (input.properties) {
+            this.state.properties = input.properties.map((sp) => [sp, th.getTranslation(sp)]);
+        }
         this.state.tickets = input.tickets;
         this.state.displayLimit = input.displayLimit;
     }
@@ -41,6 +43,10 @@ export class TicketTableComponent {
             limit = this.state.tickets.length;
         }
         this.state.displayLimit = limit;
+    }
+
+    private ticketClicked(ticketId: string): void {
+        (this as any).emit('ticketClicked', ticketId);
     }
 }
 

@@ -1,4 +1,5 @@
 import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
+import { KIXRouterStore } from "../../../../../../core/dist/browser/router/KIXRouterStore";
 
 export class TicketSearchResultComponent {
 
@@ -27,6 +28,10 @@ export class TicketSearchResultComponent {
 
         const properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
         this.state.properties = properties ? properties : [];
+    }
+
+    private ticketClicked(ticketId: string): void {
+        KIXRouterStore.getInstance().navigate('ticket-search', 'ticket-details', { ticketId });
     }
 
 }
