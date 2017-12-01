@@ -8,6 +8,10 @@ class TicketSearchComponent {
         this.state = {};
     }
 
+    public onMount(): void {
+        ApplicationStore.getInstance().toggleDialog(require('./ticket-search-dialog'));
+    }
+
     private openSearchDialog(): void {
         ApplicationStore.getInstance().toggleDialog(require('./ticket-search-dialog'));
     }
