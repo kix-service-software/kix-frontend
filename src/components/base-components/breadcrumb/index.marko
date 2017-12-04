@@ -1,4 +1,9 @@
 <div.breadcrumb>
     <span.kix-icon.icon-dummy.icon-h/>
-    <span>Home Dashboard</span>
+    <for(historyItem in state.history)>
+        <span>
+            |
+            <a href="#" on-click('navigate', historyItem[0])>${historyItem[0]}</a>
+        </span>
+    </for>
 </div>
