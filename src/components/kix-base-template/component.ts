@@ -14,10 +14,7 @@ class BaseTemplateComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            auth: false,
             configurationMode: false,
-            template: '',
-            templatePath: input.contentTemplate,
             tagLib: input.tagLib,
             showOverlay: false,
             showDialog: false,
@@ -29,8 +26,6 @@ class BaseTemplateComponent {
         ClientStorageHandler.setTagLib(this.state.tagLib);
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
 
-        this.state.template = require(this.state.templatePath);
-
         const token = ClientStorageHandler.getToken();
         const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
 
@@ -38,15 +33,9 @@ class BaseTemplateComponent {
             query: "Token=" + token
         });
 
-        configurationSocket.on(SocketEvent.CONNECT, () => {
-            this.state.auth = true;
-        });
-
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
-
-        await TranslationHandler.getInstance();
     }
 
     public toggleConfigurationMode(): void {

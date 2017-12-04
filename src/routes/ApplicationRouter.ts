@@ -59,13 +59,12 @@ export class ApplicationRouter extends KIXRouter {
             const token: string = req.cookies.token;
             const user = await this.userService.getUserByToken(token);
 
-            const template = moduleFactory.getTemplate();
             const themeCSS = await this.getUserThemeCSS(user.UserID);
             const specificCSS = await this.getSpecificCSS();
 
             const tagLib = await this.markoService.getComponentTags();
 
-            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS, tagLib);
+            this.prepareMarkoTemplate(res, moduleFactory.getModuleId(), themeCSS, specificCSS, tagLib);
         } else {
             next();
         }
