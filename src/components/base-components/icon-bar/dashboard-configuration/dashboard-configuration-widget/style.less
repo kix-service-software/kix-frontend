@@ -5,9 +5,11 @@
 
 .bar-icon.config-mode {
     position: relative;
-    z-index: 111;
     .config-header-theme;
     box-shadow: none;
+    &:not(.config-dialog-shown) {
+        z-index: 111;
+    }
 }
 
 .dashboard-configuration-widget {

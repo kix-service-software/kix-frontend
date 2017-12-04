@@ -12,7 +12,7 @@
             <include(input.filter)/>
         </span>
         <span.header-right>
-            <if(input.configurationMode)>
+            <if(component.isConfigMode())>
                 <if(state.configChanged)>
                     <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
                 </if>

@@ -7,11 +7,6 @@ class IconBar {
     public onCreate(input: any): void {
         this.state = new IconBarComponentState();
     }
-
-    public toggleConfigurationMode(): void {
-        (this as any).emit('toggleConfigurationMode');
-    }
-
 }
 
 module.exports = IconBar;

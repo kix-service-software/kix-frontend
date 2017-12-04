@@ -1,9 +1,10 @@
 import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class DraggableContainerComponent {
 
-    public state: ContainerComponentState;
+    private state: ContainerComponentState;
 
     public onCreate(input: any): void {
         this.state = new ContainerComponentState();
@@ -17,12 +18,16 @@ class DraggableContainerComponent {
         this.state.dndState.enabled = input.configurationMode;
     }
 
-    public getWidgetTemplate(instanceId: string): any {
+    public onMount(): void {
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+    }
+
+    private getWidgetTemplate(instanceId: string): any {
         const template = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId).template;
         return template ? require(template) : '';
     }
 
-    public dragStart(event): void {
+    private dragStart(event): void {
         this.state.dndState = {
             ...this.state.dndState,
             dragging: true,
@@ -31,7 +36,7 @@ class DraggableContainerComponent {
         event.dataTransfer.setData("dragId", event.target.dataset.id);
     }
 
-    public dragOver(event): void {
+    private dragOver(event): void {
         if (!this.isValidDnDEvent(event)) {
             return;
         }
@@ -51,7 +56,7 @@ class DraggableContainerComponent {
         };
     }
 
-    public drop(event): void {
+    private drop(event): void {
         const rows = this.switchWidgets(
             this.state.rows, this.state.dndState.dragElementId, this.state.dndState.dropElementId
         );
@@ -64,7 +69,7 @@ class DraggableContainerComponent {
         }, 0);
     }
 
-    public dragEnd(event): void {
+    private dragEnd(event): void {
         this.state.dndState = {
             ...this.state.dndState,
             dragging: false,
@@ -114,6 +119,18 @@ class DraggableContainerComponent {
         rows[secondRowIndex][secondWidgetIndex] = firstWidget;
 
         return rows;
+    }
+
+    private applicationStateChanged() {
+        (this as any).setStateDirty();
+    }
+
+    private isConfigMode(): boolean {
+        return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private isConfigDialogShown(): boolean {
+        return ApplicationStore.getInstance().isShowDialog();
     }
 }
 

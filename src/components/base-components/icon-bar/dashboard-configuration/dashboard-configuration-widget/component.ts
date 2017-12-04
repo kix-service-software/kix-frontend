@@ -1,4 +1,5 @@
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 import { DashboardConfigurationWidgetComponentState } from './model/DashboardConfigurationWidgetComponentState';
 import { DashboardConfigurationWidgetTranslationId } from './model/DashboardConfigurationWidgetTranslationId';
@@ -15,6 +16,7 @@ class DashboardConfigurationWidget {
     }
 
     public async onMount(input: any): Promise<void> {
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
         const translationHandler = await TranslationHandler.getInstance();
         this.state.translations = translationHandler.getTranslations([
             DashboardConfigurationWidgetTranslationId.TITLE,
@@ -33,21 +35,31 @@ class DashboardConfigurationWidget {
 
     private toggleConfigurationMode(): void {
         this.toggleDashboardConfigurationWidget();
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+        ApplicationStore.getInstance().toggleConfigurationMode();
     }
 
     private openDashboardConfigurationDialog(): void {
         this.toggleDashboardConfigurationWidget();
-        this.state.showDashboardConfigurationDialog = true;
-    }
-
-    private closeDashboardConfigurationDialog(): void {
-        this.state.showDashboardConfigurationDialog = false;
+        ApplicationStore.getInstance().toggleDialog(
+            require('../dashboard-configuration-dialog'),
+            { title: 'Dashboard Config - Paltzhalter-Titel' }
+        );
     }
 
     private getTranslation(id: DashboardConfigurationWidgetTranslationId): string {
         return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
+    }
+
+    private applicationStateChanged() {
+        (this as any).setStateDirty();
+    }
+
+    private isConfigMode(): boolean {
+        return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private isConfigDialogShown(): boolean {
+        return ApplicationStore.getInstance().isShowDialog();
     }
 }
 

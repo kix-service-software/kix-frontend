@@ -94,17 +94,23 @@ export class DashboardCommunicator extends KIXCommunicator {
             data.contextId,
             userId
         );
-        let index = moduleConfiguration.contentConfiguredWidgets.findIndex((cw) => cw.instanceId === data.instanceId);
-        if (index > -1) {
-            moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
-        } else {
-            index = moduleConfiguration.sidebarConfiguredWidgets.findIndex((cw) => cw.instanceId === data.instanceId);
-            moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
-        }
+        if (moduleConfiguration) {
+            let index = moduleConfiguration.contentConfiguredWidgets.findIndex(
+                (cw) => cw.instanceId === data.instanceId
+            );
+            if (index > -1) {
+                moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
+            } else {
+                index = moduleConfiguration.sidebarConfiguredWidgets.findIndex(
+                    (cw) => cw.instanceId === data.instanceId
+                );
+                moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
+            }
 
-        await this.configurationService.saveModuleConfiguration(
-            data.contextId, userId, moduleConfiguration
-        );
-        this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
+            await this.configurationService.saveModuleConfiguration(
+                data.contextId, userId, moduleConfiguration
+            );
+            this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
+        }
     }
 }

@@ -2,13 +2,13 @@
     <kix-header/>
     <section.clearfix>
         <main-menu/>
-        <sidebar on-toggleConfigurationMode('toggleConfigurationMode')/>
+        <sidebar/>
         <section.content>
             <header>
                 <breadcrumb/>
                 <back/>
             </header>
-            <include(state.template, {configurationMode: state.configurationMode})/>
+            <include(state.template, {})/>
         </section>
     </section>
     <kix-footer/>

@@ -2,13 +2,11 @@
     <for(row in state.rows)>
         <div.line>
             <for(widgetInstanceId in row)>
-                <div.unit-space.drag-widget class=[row.length === 1 ? "size1of1" : "size1of3", input.configurationMode ? "config-mode" : ""]
+                <div.unit-space.drag-widget class=[row.length === 1 ? "size1of1" : "size1of3", component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]
                     draggable=(state.dndState.enabled ? "true" : "false") data-id=widgetInstanceId
                     on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
-                    <include(component.getWidgetTemplate(widgetInstanceId ), {
-                        instanceId: widgetInstanceId ,
-                        configurationMode: input.configurationMode})/>
-                    <if(input.configurationMode)>
+                    <include(component.getWidgetTemplate(widgetInstanceId ), {instanceId: widgetInstanceId})/>
+                    <if(component.isConfigMode())>
                         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
                             <div.widget-overlay-content/>
                         </div>

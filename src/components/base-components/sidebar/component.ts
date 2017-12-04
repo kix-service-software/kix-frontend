@@ -1,10 +1,11 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { ConfiguredWidget, DashboardConfiguration } from '@kix/core/dist/model';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class SidebarComponent {
 
-    public state: SidebarComponentState;
+    private state: SidebarComponentState;
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
@@ -14,11 +15,12 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        this.stateChanged();
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
+        this.dashboardStateChanged();
     }
 
-    public stateChanged(): void {
+    private dashboardStateChanged(): void {
         const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.sidebarRows;
@@ -27,7 +29,7 @@ class SidebarComponent {
         }
     }
 
-    public toggleSidebarWidget(instanceId: string): void {
+    private toggleSidebarWidget(instanceId: string): void {
         if (this.state.configuredWidgets) {
             const configuredWidget: ConfiguredWidget = this.state.configuredWidgets.find(
                 (cw) => cw.instanceId === instanceId
@@ -44,7 +46,7 @@ class SidebarComponent {
         }
     }
 
-    public isShown(instanceId: string): boolean {
+    private isShown(instanceId: string): boolean {
         let isShown: boolean = false;
         if (this.state.rows) {
             let instanceIds = [];
@@ -56,14 +58,26 @@ class SidebarComponent {
         return isShown;
     }
 
-    public toggleConfigurationMode(): void {
+    private toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
         (this as any).emit('toggleConfigurationMode');
     }
 
-    public getWidgetTemplate(instanceId: string): any {
+    private getWidgetTemplate(instanceId: string): any {
         const template = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId).template;
         return template ? require(template) : '';
+    }
+
+    private applicationStateChanged() {
+        (this as any).setStateDirty();
+    }
+
+    private isConfigMode(): boolean {
+        return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private isConfigDialogShown(): boolean {
+        return ApplicationStore.getInstance().isShowDialog();
     }
 }
 
