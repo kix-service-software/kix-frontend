@@ -8,8 +8,6 @@ import { IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions } from '@
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 
-import marko = require('marko/dist/compiler/');
-
 export class ApplicationRouter extends KIXRouter {
 
     public getBaseRoute(): string {

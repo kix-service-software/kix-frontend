@@ -7,12 +7,6 @@ const tslint = require("gulp-tslint");
 const less = require("gulp-less");
 const path = require('path');
 
-const babel = require('gulp-babel');
-const sourcemaps = require('gulp-sourcemaps');
-
-const uglify = require('gulp-uglify');
-const pump = require('pump');
-
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
 
