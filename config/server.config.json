@@ -10,5 +10,5 @@
     "LOG_LEVEL": 2,
     "LOG_FILEDIR": "logs",
     "LOG_TRACE": true,
-    "DEFAULT_MODULE_ID": "dashboard"
+    "DEFAULT_MODULE_ID": "home"
 }

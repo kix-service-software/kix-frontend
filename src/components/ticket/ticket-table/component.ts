@@ -1,6 +1,7 @@
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 export class TicketTableComponent {
 
@@ -46,7 +47,7 @@ export class TicketTableComponent {
     }
 
     private ticketClicked(ticketId: string): void {
-        (this as any).emit('ticketClicked', ticketId);
+        KIXRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId });
     }
 }
 

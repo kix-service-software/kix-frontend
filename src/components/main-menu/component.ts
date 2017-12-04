@@ -38,6 +38,7 @@ class KIXMenuComponent {
         ClientStorageHandler.setContextId(contextId);
         KIXRouterStore.getInstance().navigate('base-router', contextId);
     }
+
 }
 
 module.exports = KIXMenuComponent;

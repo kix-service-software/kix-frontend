@@ -10,7 +10,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getModuleId(): string {
-        return "dashboard";
+        return "home";
     }
 
     public getDefaultConfiguration(): any {

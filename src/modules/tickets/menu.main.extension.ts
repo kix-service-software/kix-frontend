@@ -3,7 +3,7 @@ import { IMainMenuExtension } from '@kix/core/dist/extensions';
 export class TicketsMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/ticket-dashboard";
+        return "/tickets";
     }
 
     public getIcon(): string {
@@ -15,7 +15,7 @@ export class TicketsMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "ticket-dashboard";
+        return "tickets";
     }
 
 }

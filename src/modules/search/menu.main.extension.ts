@@ -3,7 +3,7 @@ import { IMainMenuExtension } from '@kix/core/dist/extensions';
 export class SearchMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/search-dashboard";
+        return "/search";
     }
 
     public getIcon(): string {
@@ -15,7 +15,7 @@ export class SearchMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "search-dashboard";
+        return "search";
     }
 
 }

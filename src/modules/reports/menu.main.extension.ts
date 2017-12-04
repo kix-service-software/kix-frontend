@@ -3,7 +3,7 @@ import { IMainMenuExtension } from '@kix/core/dist/extensions';
 export class ReportsMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/reports-dashboard";
+        return "/reports";
     }
 
     public getIcon(): string {
@@ -15,7 +15,7 @@ export class ReportsMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "reports-dashboard";
+        return "reports";
     }
 
 }

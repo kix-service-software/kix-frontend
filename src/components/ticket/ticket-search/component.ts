@@ -16,7 +16,6 @@ class TicketSearchComponent {
     }
 
     public async onMount(): Promise<void> {
-        this.openSearchDialog();
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
         const th = await TranslationHandler.getInstance();
@@ -24,7 +23,11 @@ class TicketSearchComponent {
             (key) => [TicketProperty[key], th.getTranslation(key)]
         ) as Array<[string, string]>;
         this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
-        KIXRouterStore.getInstance().navigate('ticket-search', 'ticket-search-result');
+
+        const searchResult = TicketStore.getInstance().getTicketsSearchResult('ticket-search');
+        if (!searchResult) {
+            this.openSearchDialog();
+        }
     }
 
     private openSearchDialog(): void {

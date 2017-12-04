@@ -10,7 +10,7 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['dashboard', 'modules/dashboard']
+            ['home', 'modules/dashboard']
         ];
     }
 

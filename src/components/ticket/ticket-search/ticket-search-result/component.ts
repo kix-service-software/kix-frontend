@@ -30,10 +30,6 @@ export class TicketSearchResultComponent {
         this.state.properties = properties ? properties : [];
     }
 
-    private ticketClicked(ticketId: string): void {
-        KIXRouterStore.getInstance().navigate('ticket-search', 'ticket-details', { ticketId });
-    }
-
 }
 
 module.exports = TicketSearchResultComponent;

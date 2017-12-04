@@ -19,6 +19,7 @@ import {
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
+import { TicketProperty } from '../../../core/dist/model/ticket/TicketProperty';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -31,6 +32,10 @@ export class TicketCommunicator extends KIXCommunicator {
 
     private registerEvents(client: SocketIO.Socket): void {
         client.on(TicketEvent.SEARCH_TICKETS, async (data: SearchTicketsRequest) => {
+            if (!data.properties.find((p) => p === TicketProperty.TICKET_ID)) {
+                data.properties.push(TicketProperty.TICKET_ID);
+            }
+
             const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit, data.filter)
                 .catch((error) => {
                     client.emit(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
