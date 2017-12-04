@@ -18,6 +18,7 @@ class KIXMenuComponent {
         this.store = require('./store');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(MAIN_MENU_INITIALIZE());
+        KIXRouterStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
@@ -31,6 +32,12 @@ class KIXMenuComponent {
             for (const entry of this.state.primaryMenuEntries) {
                 entry.active = entry.contextId === contextId;
             }
+
+            for (const entry of this.state.secondaryMenuEntries) {
+                entry.active = entry.contextId === contextId;
+            }
+
+            (this as any).setStateDirty('primaryMenuEntries');
         }
     }
 

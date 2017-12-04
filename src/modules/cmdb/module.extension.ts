@@ -10,7 +10,7 @@ export class CMDBModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "cmdb-dashboard";
+        return "cmdb";
     }
 
     public getDefaultConfiguration(): any {

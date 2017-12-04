@@ -10,7 +10,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "ticket-dashboard";
+        return "ticket";
     }
 
     public getDefaultConfiguration(): any {

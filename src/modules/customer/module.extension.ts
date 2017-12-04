@@ -10,7 +10,7 @@ export class CustomerModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "customer-dashboard";
+        return "customer";
     }
 
     public getDefaultConfiguration(): any {

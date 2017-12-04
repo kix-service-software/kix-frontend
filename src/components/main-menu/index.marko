@@ -16,7 +16,7 @@
     </ul>
     <ul.user-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.secondaryMenuEntries)>
-            <li>
+            <li class=(menuEntry.active ? "active" : "")>
                 <a href="#" on-click('menuClicked', menuEntry.contextId)>
                     <span class="menu-item-wrapper cf">
                         <span class="hover-label">${menuEntry.text}</span>

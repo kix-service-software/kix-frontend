@@ -15,11 +15,11 @@ import {
     TicketCreationResponse,
     TicketCreationError,
     TicketLoadDataRequest,
-    TicketLoadDataResponse
+    TicketLoadDataResponse,
+    TicketProperty
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { TicketProperty } from '../../../core/dist/model/ticket/TicketProperty';
 
 export class TicketCommunicator extends KIXCommunicator {
 

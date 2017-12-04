@@ -10,7 +10,7 @@ export class SearchModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "search-dashboard";
+        return "search";
     }
 
     public getDefaultConfiguration(): any {

@@ -1,4 +1,5 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 class TicketsComponent {
 
@@ -8,13 +9,19 @@ class TicketsComponent {
 
     public onCreate(input: any): void {
         this.state = new TicketsComponentState();
-        this.state.configurationMode = input.configurationMode;
     }
 
     public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
+        this.state.ticketId = input.objectId;
     }
 
+    public onMount(): void {
+        if (this.state.ticketId) {
+            KIXRouterStore.getInstance().navigate(
+                'base-router', 'ticket-details', { ticketId: this.state.ticketId }
+            );
+        }
+    }
 }
 
 module.exports = TicketsComponent;
