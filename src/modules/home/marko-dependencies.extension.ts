@@ -1,16 +1,16 @@
 import { IMarkoDependencyExtension } from '@kix/core/dist/extensions';
 
-export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtension {
+export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            "modules/customer"
+            "modules/home"
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['customer', 'modules/customer']
+            ['home', 'modules/home']
         ];
     }
 
@@ -21,5 +21,5 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
 }
 
 module.exports = (data, host, options) => {
-    return new CustomerMarkoDependencyExtension();
+    return new DashboardMarkoDependencyExtension();
 };

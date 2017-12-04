@@ -3,7 +3,7 @@ import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore'
 import { DashboardConfiguration, ContainerConfiguration } from '@kix/core/dist/model/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
-class DashboardComponent {
+class HomeComponent {
 
     public state: DashboardComponentState;
 
@@ -32,4 +32,4 @@ class DashboardComponent {
     }
 }
 
-module.exports = DashboardComponent;
+module.exports = HomeComponent;

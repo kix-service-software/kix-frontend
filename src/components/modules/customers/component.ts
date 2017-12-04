@@ -1,6 +1,6 @@
 import { CustomerComponentState } from './model/ComponentState';
 
-class CustomerComponent {
+class CustomersComponent {
 
     public state: CustomerComponentState;
 
@@ -17,4 +17,4 @@ class CustomerComponent {
 
 }
 
-module.exports = CustomerComponent;
+module.exports = CustomersComponent;
