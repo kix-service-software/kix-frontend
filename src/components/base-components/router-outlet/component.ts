@@ -30,9 +30,9 @@ export class RouterOutletComponent {
         const data = KIXRouterStore.getInstance().getCurrentComponentData(this.state.routerId);
         this.state.data = data;
 
-        const tag = ClientStorageHandler.getComponentTemplate(componentId);
-        if (tag) {
-            this.state.template = tag;
+        const template = ClientStorageHandler.getComponentTemplate(componentId);
+        if (template) {
+            this.state.template = template;
         } else {
             this.state.template = null;
         }
