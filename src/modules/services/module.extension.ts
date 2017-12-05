@@ -10,7 +10,7 @@ export class ServicesModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "services-dashboard";
+        return "services";
     }
 
     public getDefaultConfiguration(): any {

@@ -8,6 +8,12 @@ export class ChartWidgetMarkoDependencyExtension implements IMarkoDependencyExte
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['chart', 'widgets/chart']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

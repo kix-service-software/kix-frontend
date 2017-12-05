@@ -8,6 +8,12 @@ export class TicketInfoWidgetMarkoDependencyExtension implements IMarkoDependenc
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['ticket-info', 'widgets/ticket-info']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

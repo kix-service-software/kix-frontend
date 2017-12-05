@@ -8,6 +8,12 @@ export class MainMenuMarkoDependencyExtension implements IMarkoDependencyExtensi
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['main-menu', 'modules/main-menu']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

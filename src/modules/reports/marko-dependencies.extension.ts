@@ -8,6 +8,12 @@ export class ReportsMarkoDependencyExtension implements IMarkoDependencyExtensio
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['reports', 'modules/reports']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

@@ -8,6 +8,12 @@ export class UserListWidgetMarkoDependencyExtension implements IMarkoDependencyE
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['user-list', 'widgets/user-list']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

@@ -1,0 +1,31 @@
+<span>angezeigte Tickets: ${state.displayLimit}</span>
+<table.ticket-table>
+    <tr>
+        <th>
+            <a href="#">alle</a>
+        </th>
+        <for(property in state.properties)>
+            <th>${property[1]}</th>
+        </for>
+    </tr>
+    <if(state.tickets && state.tickets.length)>
+        <for(let i =0; i< state.displayLimit; i++)>
+            $ let ticket = state.tickets[i];
+            <if(ticket)>
+                <tr>
+                    <td>
+                        <input type="checkbox"/>
+                    </td>
+                    <for(property in state.properties)>
+                        <td>
+                            <a href="#" on-click('ticketClicked', ticket.TicketID)>
+                                <ticket-property-label ticketDataId="ticket-table-data" property=property[0] value=ticket[property[0]]/>
+                            </a>
+                        </td>
+                    </for>
+                </tr>
+            </if>
+        </for>
+    </if>
+</table>
+<button on-click('showMore') disabled=(state.displayLimit >= state.tickets.length)>10 mehr ...</button>

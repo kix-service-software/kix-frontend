@@ -1,6 +1,4 @@
 import { ServicesComponentState } from './model/ComponentState';
-import { ServicesState } from './store/State';
-import { SERVICE_INITIALIZE } from './store/actions';
 
 class ServicesComponent {
 
@@ -13,22 +11,10 @@ class ServicesComponent {
         this.state.configurationMode = input.configurationMode;
     }
 
-    public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(SERVICE_INITIALIZE());
-    }
-
     public onInput(input: any) {
         this.state.configurationMode = input.configurationMode;
     }
 
-    public stateChanged(): void {
-        const reduxState: ServicesState = this.store.getState();
-        if (reduxState.containerConfiguration) {
-            this.state.containerConfiguration = reduxState.containerConfiguration;
-        }
-    }
 }
 
 module.exports = ServicesComponent;

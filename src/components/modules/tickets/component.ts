@@ -1,5 +1,5 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 class TicketsComponent {
 
@@ -9,23 +9,17 @@ class TicketsComponent {
 
     public onCreate(input: any): void {
         this.state = new TicketsComponentState();
-        this.state.configurationMode = input.configurationMode;
-    }
-
-    public onMount(): void {
-        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        DashboardStore.getInstance().loadDashboardConfiguration();
     }
 
     public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
+        this.state.ticketId = input.objectId;
     }
 
-    public stateChanged(): void {
-        const dashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
-            this.state.containerConfiguration = dashboardConfiguration.configuration;
-            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
+    public onMount(): void {
+        if (this.state.ticketId) {
+            KIXRouterStore.getInstance().navigate(
+                'base-router', 'ticket-details', { ticketId: this.state.ticketId }
+            );
         }
     }
 }
