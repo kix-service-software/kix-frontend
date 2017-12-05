@@ -18,7 +18,7 @@
                     </td>
                     <for(property in state.properties)>
                         <td>
-                            <a href="#" on-click('ticketClicked', ticket.TicketID)>
+                            <a href="tickets/${ticket.TicketID}" on-click('ticketClicked', ticket.TicketID)>
                                 <ticket-property-label ticketDataId="ticket-table-data" property=property[0] value=ticket[property[0]]/>
                             </a>
                         </td>

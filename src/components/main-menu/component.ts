@@ -41,9 +41,12 @@ class KIXMenuComponent {
         }
     }
 
-    private menuClicked(contextId: string): void {
+    private menuClicked(contextId: string, event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
         ClientStorageHandler.setContextId(contextId);
-        KIXRouterStore.getInstance().navigate('base-router', contextId);
+        KIXRouterStore.getInstance().navigate('base-router', contextId, {}, true);
     }
 
 }

@@ -18,7 +18,7 @@ class TicketsComponent {
     public onMount(): void {
         if (this.state.ticketId) {
             KIXRouterStore.getInstance().navigate(
-                'base-router', 'ticket-details', { ticketId: this.state.ticketId }
+                'base-router', 'ticket-details', { ticketId: this.state.ticketId }, true, this.state.ticketId
             );
         }
     }
