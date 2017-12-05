@@ -46,8 +46,11 @@ export class TicketTableComponent {
         this.state.displayLimit = limit;
     }
 
-    private ticketClicked(ticketId: string): void {
-        KIXRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId });
+    private ticketClicked(ticketId: string, event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        KIXRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
     }
 }
 
