@@ -1,5 +1,6 @@
 import { KIXRouterStore } from "@kix/core/dist/browser/router/KIXRouterStore";
 import { KIXRouterHistoryEntry } from '@kix/core/dist/browser/router/KIXRouterHistoryEntry';
+import { ClientStorageHandler } from "../../../../../core/dist/browser/ClientStorageHandler";
 
 class BreadcrumbComponent {
 
@@ -7,7 +8,7 @@ class BreadcrumbComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            history: []
+            contextId: null
         };
     }
 
@@ -16,7 +17,8 @@ class BreadcrumbComponent {
     }
 
     private routerStateChanged(): void {
-        const history = KIXRouterStore.getInstance().getCurrentRouterHistory('base-router');
+        this.state.contextId = ClientStorageHandler.getContextId();
+        const history = KIXRouterStore.getInstance().getC
         this.state.history = history ? history : [];
         (this as any).setStateDirty('history');
     }
