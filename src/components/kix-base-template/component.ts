@@ -51,7 +51,7 @@ class BaseTemplateComponent {
 
         const currentDialog = ApplicationStore.getInstance().getCurrentDialog();
         if (currentDialog[0]) {
-            this.state.dialogTemplate = require(ClientStorageHandler.getComponentTemplate(currentDialog[0]));
+            this.state.dialogTemplate = ClientStorageHandler.getComponentTemplate(currentDialog[0]);
             this.state.dialogInput = currentDialog[1];
         }
     }

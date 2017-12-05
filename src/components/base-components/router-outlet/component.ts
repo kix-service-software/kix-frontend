@@ -32,8 +32,7 @@ export class RouterOutletComponent {
 
         const tag = ClientStorageHandler.getComponentTemplate(componentId);
         if (tag) {
-            const template = require(tag);
-            this.state.template = template;
+            this.state.template = tag;
         } else {
             this.state.template = null;
         }
