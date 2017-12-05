@@ -8,7 +8,8 @@ class BreadcrumbComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            contextId: null
+            contextId: null,
+            parameter: null
         };
     }
 
@@ -18,9 +19,22 @@ class BreadcrumbComponent {
 
     private routerStateChanged(): void {
         this.state.contextId = ClientStorageHandler.getContextId();
-        const history = KIXRouterStore.getInstance().getC
-        this.state.history = history ? history : [];
-        (this as any).setStateDirty('history');
+        this.state.parameter = KIXRouterStore.getInstance().getCurrentParameterValue('base-router');
+        (this as any).setStateDirty('parameter');
+    }
+
+    private navigate(event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        KIXRouterStore.getInstance().navigate('base-router', this.state.contextId, {}, true);
+    }
+
+    private navigateParameter(event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        KIXRouterStore.getInstance().navigate('base-router', this.state.contextId, {}, true, this.state.parameter);
     }
 
 }

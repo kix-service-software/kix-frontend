@@ -1,6 +1,10 @@
 <div.breadcrumb>
     <span.kix-icon.icon-dummy.icon-h/>
     <span>
-        <a href=state.contextId on-click('navigate', state.contextId)>${state.contextId}</a>
+        <a href="/${state.contextId}" on-click('navigate')>${state.contextId}</a>
+        <if(state.parameter)>
+            <span>/</span>
+            <a href="/${state.contextId}/${state.parameter}" on-click('navigateParameter')>${state.parameter}</a>
+        </if>
     </span>
 </div>
