@@ -7,7 +7,7 @@ export class CMDBMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "cmdb";
     }
 
     public getText(): string {

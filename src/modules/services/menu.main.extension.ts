@@ -7,7 +7,7 @@ export class ServicesMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "handshake";
     }
 
     public getText(): string {

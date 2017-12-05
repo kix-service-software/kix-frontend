@@ -7,7 +7,7 @@ export class FAQMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "faq";
     }
 
     public getText(): string {

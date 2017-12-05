@@ -6,7 +6,7 @@
         <div.widget-bar>
             <for(widget in state.configuration.widgets)>
                 <div.bar-icon class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
-                    <span.kix-icon class="${ widget.icon ? 'icon-' + widget.icon : ''}"/>
+                    <span class="${ widget.icon ? 'kix-icon-' + widget.icon : ''}"/>
                 </div>
             </for>
         </div>

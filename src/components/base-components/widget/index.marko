@@ -3,9 +3,10 @@
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
-                <if(input.icon)>
+                <!-- @todo: Auf Screens aktuell kein Icon zu sehen. Klären und notfalls entfernen! -->
+                <!-- <if(input.icon)>
                     <include(input.icon)/>
-                </if>
+                </if> -->
                 <include(input.title)/>
             </h3>
         </span>
@@ -14,9 +15,11 @@
         </span>
         <span.header-right>
             <include(input.actions)/>
-            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
-                on-click('configClicked')/>
+            <span class="kix-icon-gear configuration ${state.configurationMode ? '' : 'not-visible'}" on-click('configClicked')/>
+            <!-- @todo: Klären, ob Widget minimierbar sein soll. Bis dahin wird Icon versteckt -->
+            <!--
             <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+            -->
         </span>
     </div>
     <if(state.minimized)>

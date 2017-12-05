@@ -7,7 +7,7 @@ export class SearchMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "search";
     }
 
     public getText(): string {

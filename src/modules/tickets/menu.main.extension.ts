@@ -7,7 +7,7 @@ export class TicketsMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "ticket";
     }
 
     public getText(): string {
