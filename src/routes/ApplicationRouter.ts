@@ -16,7 +16,7 @@ export class ApplicationRouter extends KIXRouter {
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
-        await this.handleRoute(moduleId, null, req, res, next);
+        await this.handleRoute(moduleId, null, req, res);
     }
 
     public async getModule(req: Request, res: Response, next: () => void): Promise<void> {
@@ -28,7 +28,7 @@ export class ApplicationRouter extends KIXRouter {
             return;
         }
 
-        await this.handleRoute(moduleId, objectId, req, res, next);
+        await this.handleRoute(moduleId, objectId, req, res);
     }
 
 
@@ -57,9 +57,7 @@ export class ApplicationRouter extends KIXRouter {
         );
     }
 
-    private async handleRoute(
-        moduleId: string, objectId: string, req: Request, res: Response, next: () => void
-    ): Promise<void> {
+    private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
         const user = await this.userService.getUserByToken(token);
 
