@@ -1,4 +1,7 @@
 import { CMDBComponentState } from './model/ComponentState';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 class CMDBComponent {
 
@@ -8,11 +11,13 @@ class CMDBComponent {
 
     public onCreate(input: any): void {
         this.state = new CMDBComponentState();
-        this.state.configurationMode = input.configurationMode;
     }
 
-    public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
+    public onMount(): void {
+        const contextId = ClientStorageHandler.getContextId();
+        const breadcrumbDetails =
+            new BreadcrumbDetails(contextId, null, null, 'CMDB-Dashboard', null, null);
+        KIXRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
 }

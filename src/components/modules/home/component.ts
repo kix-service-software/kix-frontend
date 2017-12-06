@@ -2,6 +2,8 @@ import { DashboardComponentState } from './model/DashboardComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { DashboardConfiguration, ContainerConfiguration } from '@kix/core/dist/model/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
+import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 
 class HomeComponent {
 
@@ -17,6 +19,11 @@ class HomeComponent {
     public onMount(): void {
         DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
         DashboardStore.getInstance().loadDashboardConfiguration();
+
+        const contextId = ClientStorageHandler.getContextId();
+        const breadcrumbDetails =
+            new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard', null, null);
+        KIXRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
     public onInput(input: any) {

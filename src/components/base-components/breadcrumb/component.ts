@@ -1,15 +1,14 @@
 import { KIXRouterStore } from "@kix/core/dist/browser/router/KIXRouterStore";
 import { KIXRouterHistoryEntry } from '@kix/core/dist/browser/router/KIXRouterHistoryEntry';
+import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 
 class BreadcrumbComponent {
 
     public state: any;
 
     public onCreate(input: any): void {
-        // @todo: Icon aus dem zentralen State befüllen
         this.state = {
-            history: [],
-            icon: "home"
+            breadcrumbDetails: null
         };
     }
 
@@ -18,9 +17,14 @@ class BreadcrumbComponent {
     }
 
     private routerStateChanged(): void {
-        const history = KIXRouterStore.getInstance().getCurrentRouterHistory('base-router');
-        this.state.history = history ? history : [];
-        (this as any).setStateDirty('history');
+        this.state.breadcrumbDetails = KIXRouterStore.getInstance().getBreadcrumbDetails();
+    }
+
+    private navigate(event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        KIXRouterStore.getInstance().navigate('base-router', this.state.breadcrumbDetails.contextId, {}, true);
     }
 
 }

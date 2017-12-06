@@ -36,7 +36,7 @@ class BaseTemplateComponent {
         if (this.state.contextId) {
             ClientStorageHandler.setContextId(this.state.contextId);
             KIXRouterStore.getInstance().navigate(
-                'base-router', this.state.contextId, { objectId: this.state.objectId }
+                'base-router', this.state.contextId, { objectId: this.state.objectId }, true, this.state.objectId
             );
         }
     }
