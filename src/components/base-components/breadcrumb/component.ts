@@ -1,6 +1,6 @@
 import { KIXRouterStore } from "@kix/core/dist/browser/router/KIXRouterStore";
 import { KIXRouterHistoryEntry } from '@kix/core/dist/browser/router/KIXRouterHistoryEntry';
-import { ClientStorageHandler } from "../../../../../core/dist/browser/ClientStorageHandler";
+import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 
 class BreadcrumbComponent {
 
@@ -8,8 +8,7 @@ class BreadcrumbComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            contextId: null,
-            parameter: null
+            breadcrumbDetails: null
         };
     }
 
@@ -18,23 +17,14 @@ class BreadcrumbComponent {
     }
 
     private routerStateChanged(): void {
-        this.state.contextId = ClientStorageHandler.getContextId();
-        this.state.parameter = KIXRouterStore.getInstance().getCurrentParameterValue('base-router');
-        (this as any).setStateDirty('parameter');
+        this.state.breadcrumbDetails = KIXRouterStore.getInstance().getBreadcrumbDetails();
     }
 
     private navigate(event: any): void {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        KIXRouterStore.getInstance().navigate('base-router', this.state.contextId, {}, true);
-    }
-
-    private navigateParameter(event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-        KIXRouterStore.getInstance().navigate('base-router', this.state.contextId, {}, true, this.state.parameter);
+        KIXRouterStore.getInstance().navigate('base-router', this.state.breadcrumbDetails.contextId, {}, true);
     }
 
 }

@@ -26,18 +26,18 @@ export class RouterOutletComponent {
     private routerStateChanged(): void {
         const tagLib = ClientStorageHandler.getTagLib();
 
-        const componentId = KIXRouterStore.getInstance().getCurrentComponent(this.state.routerId);
-        this.state.componentId = componentId;
+        const router = KIXRouterStore.getInstance().getCurrentRouter(this.state.routerId);
+        if (router) {
+            this.state.componentId = router.componentId;
+            this.state.data = router.data;
 
-        const data = KIXRouterStore.getInstance().getCurrentComponentData(this.state.routerId);
-        this.state.data = data;
-
-        const tag = tagLib.find((t) => t[0] === componentId);
-        if (tag) {
-            const template = require(tag[1]);
-            this.state.template = template;
-        } else {
-            this.state.template = null;
+            const tag = tagLib.find((t) => t[0] === router.componentId);
+            if (tag) {
+                const template = require(tag[1]);
+                this.state.template = template;
+            } else {
+                this.state.template = null;
+            }
         }
     }
 

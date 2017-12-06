@@ -1,10 +1,16 @@
 <div.breadcrumb>
-    <span.kix-icon.icon-dummy.icon-h/>
-    <span>
-        <a href="/${state.contextId}" on-click('navigate')>${state.contextId}</a>
-        <if(state.parameter)>
-            <span>/</span>
-            <a href="/${state.contextId}/${state.parameter}" on-click('navigateParameter')>${state.parameter}</a>
+    <if(state.breadcrumbDetails)>
+        <if(state.breadcrumbDetails.icon)>
+            <span.kix-icon class=state.breadcrumbDetails.icon/>
         </if>
-    </span>
+        <else>
+            <span.kix-icon.icon-dummy.icon-h/>
+        </else>
+        <span>
+            <a href="/${state.breadcrumbDetails.contextId}" on-click('navigate')>
+                ${state.breadcrumbDetails.componentDisplayText}
+            </a>
+            <if(state.breadcrumbDetails.parameterDisplayText)>${' '}| ${state.breadcrumbDetails.parameterDisplayText}</if>
+        </span>
+    </if>
 </div>
