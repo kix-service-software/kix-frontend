@@ -6,8 +6,10 @@ class BreadcrumbComponent {
     public state: any;
 
     public onCreate(input: any): void {
+        // @todo: Icon aus dem zentralen State befüllen
         this.state = {
-            history: []
+            history: [],
+            icon: "home"
         };
     }
 
