@@ -14,9 +14,11 @@
         </span>
         <span.header-right>
             <include(input.actions)/>
-            <span class="kix-icon icon-dummy configuration ${state.configurationMode ? '' : 'not-visible'}"
-                on-click('configClicked')/>
+            <span class="kix-icon-gear configuration ${state.configurationMode ? '' : 'not-visible'}" on-click('configClicked')/>
+            <!-- @todo: Klären, ob Widget minimierbar sein soll. Bis dahin wird Icon versteckt -->
+            <!--
             <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+            -->
         </span>
     </div>
     <if(state.minimized)>

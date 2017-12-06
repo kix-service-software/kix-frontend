@@ -24,16 +24,13 @@ export class RouterOutletComponent {
     }
 
     private routerStateChanged(): void {
-        const tagLib = ClientStorageHandler.getTagLib();
-
         const router = KIXRouterStore.getInstance().getCurrentRouter(this.state.routerId);
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
 
-            const tag = tagLib.find((t) => t[0] === router.componentId);
-            if (tag) {
-                const template = require(tag[1]);
+            const template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
+            if (template) {
                 this.state.template = template;
             } else {
                 this.state.template = null;

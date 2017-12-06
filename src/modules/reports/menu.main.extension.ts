@@ -7,7 +7,7 @@ export class ReportsMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "kpi-reports";
     }
 
     public getText(): string {

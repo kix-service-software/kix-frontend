@@ -12,7 +12,7 @@ declare var io: any;
 
 class BaseTemplateComponent {
 
-    public state: any;
+    public state: BaseTemplateComponentState;
 
     public onCreate(input: any): void {
         this.state = new BaseTemplateComponentState(input.contextId, input.objectId, input.tagLib);
@@ -48,7 +48,12 @@ class BaseTemplateComponent {
     private applicationStateChanged(): void {
         this.state.showOverlay = ApplicationStore.getInstance().isShowOverlay();
         this.state.showDialog = ApplicationStore.getInstance().isShowDialog();
-        this.state.dialogContent = ApplicationStore.getInstance().getDialogContent();
+
+        const currentDialog = ApplicationStore.getInstance().getCurrentDialog();
+        if (currentDialog[0]) {
+            this.state.dialogTemplate = ClientStorageHandler.getComponentTemplate(currentDialog[0]);
+            this.state.dialogInput = currentDialog[1];
+        }
     }
 }
 

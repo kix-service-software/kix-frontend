@@ -6,7 +6,7 @@ export class NotesWidget implements IWidget {
 
     public instanceId: string = Date.now().toString();
 
-    public icon: string = 'dummy';
+    public icon: string = 'note';
 
     public show: boolean = true;
 
