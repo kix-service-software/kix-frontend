@@ -7,7 +7,8 @@ export class BaseTemplateComponentState {
         public configurationMode: boolean = false,
         public showOverlay: boolean = false,
         public showDialog: boolean = false,
-        public dialogContent: any = null,
+        public dialogTemplate: any = null,
+        public dialogInput: any = null
     ) { }
 
 }

@@ -24,7 +24,7 @@ class ChartWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog(require('./chart-configuration'));
+        ApplicationStore.getInstance().toggleDialog('chart-configuration');
     }
 
     public saveConfiguration(): void {
