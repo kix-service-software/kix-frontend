@@ -7,7 +7,7 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "home";
     }
 
     public getText(): string {

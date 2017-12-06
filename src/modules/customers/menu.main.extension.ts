@@ -7,7 +7,7 @@ export class CustomerMainMenuExtension implements IMainMenuExtension {
     }
 
     public getIcon(): string {
-        return "";
+        return "customers";
     }
 
     public getText(): string {

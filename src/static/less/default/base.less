@@ -89,6 +89,10 @@ button {
         }
         &:hover {
             background-color: @tertiary-6;
+            & [class^="kix-icon-"],
+            & [class*=" kix-icon-"] {
+                    color: @tertiary-6;
+            }
         }
         &:hover:after {
             border-color: @tertiary-6;
@@ -101,6 +105,16 @@ button {
             border-color: @tertiary-3;
             color: @tertiary-3;
         }
+        & [class^="kix-icon-"],
+        & [class*=" kix-icon-"] {
+            color: @tertiary-0;
+        }
+    }
+    & [class^="kix-icon-"],
+    & [class*=" kix-icon-"] {
+        position: absolute;
+        top: 10px;
+        right: -25px;
     }
 }
 

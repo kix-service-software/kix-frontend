@@ -1,9 +1,6 @@
 <div.breadcrumb>
-    <span.kix-icon.icon-dummy.icon-h/>
+    <span.kix-icon-${state.icon}/>
     <for(historyEntry in state.history)>
-        <span>
-            |
-            <a href="#" on-click('navigate', historyEntry.componentId)>${historyEntry.componentId}</a>
-        </span>
+        <a href="#" on-click('navigate', historyEntry.componentId)>${historyEntry.componentId}</a>
     </for>
 </div>
