@@ -1,7 +1,7 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
 import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router/';
-import { ClientStorageHandler } from '../../../../../core/dist/browser/ClientStorageHandler';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class TicketsComponent {
 

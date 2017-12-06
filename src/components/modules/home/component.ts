@@ -16,7 +16,6 @@ class HomeComponent {
         this.state.configurationMode = input.configurationMode;
     }
 
-
     public onMount(): void {
         DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
         DashboardStore.getInstance().loadDashboardConfiguration();
