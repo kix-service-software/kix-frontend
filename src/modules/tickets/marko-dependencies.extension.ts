@@ -4,10 +4,11 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
 
     public getDependencies(): string[] {
         return [
-            "modules/tickets",
-            "dialogs/ticket-creation",
-            "ticket/ticket-search/ticket-search-result",
-            "ticket/ticket-details"
+            'modules/tickets',
+            'dialogs/ticket-creation',
+            'ticket/ticket-search/ticket-search-result',
+            'ticket/ticket-search/ticket-search-dialog-content',
+            'ticket/ticket-details'
         ];
     }
 
@@ -16,8 +17,9 @@ export class TicketsMarkoDependencyExtension implements IMarkoDependencyExtensio
             ['tickets', 'modules/tickets'],
             ['ticket-table', 'base-components/ticket-table'],
             ['ticket-details', 'ticket/ticket-details'],
+            ['ticket-creation', 'dialogs/ticket-creation'],
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
-            ['ticket-creation', 'dialogs/ticket-creation']
+            ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content']
         ];
     }
 
