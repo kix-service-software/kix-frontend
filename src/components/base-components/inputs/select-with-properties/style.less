@@ -1,4 +1,4 @@
-.selection-with-properties {
+.select-with-properties {
     h3 {
         text-transform: uppercase;
     }
@@ -10,19 +10,22 @@
             }
         }
     }
-    .selection {
+    .select {
         border: 1px solid @secondary-3;
         border-radius: @border-radius;
         padding: 3px;
         overflow: auto;
         height: 110px; // nur temporär, muss irgendwie mit 'size' erechnet werden
-        .selection-element {
+        .select-element {
             padding: 0px 15px;
             border-radius: @border-radius;
-            &.uneven {
+            height: 28px;
+            box-sizing: border-box;
+            &:nth-child(2n+1) {
                 background-color: @secondary-5;
             }
-            &:hover {
+            &:hover,
+            &.selected {
                 background-color: @config-color;
             }
         }

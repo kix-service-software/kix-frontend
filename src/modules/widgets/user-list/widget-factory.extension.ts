@@ -9,7 +9,6 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = false;
     public isContentWidget: boolean = true;
     public widgetId: string = "user-list-widget";
-    public size: WidgetSize = WidgetSize.LARGE;
 
     public createWidget(): IWidget {
         return new UserListWidget(this.widgetId);

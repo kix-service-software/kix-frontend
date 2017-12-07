@@ -8,7 +8,6 @@ export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = true;
     public isContentWidget: boolean = false;
     public widgetId: string = "notes-widget";
-    public size: WidgetSize = WidgetSize.SMALL;
 
     public createWidget(): IWidget {
         return new NotesWidget(this.widgetId);

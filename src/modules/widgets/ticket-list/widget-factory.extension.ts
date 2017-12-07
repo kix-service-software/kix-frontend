@@ -7,7 +7,6 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
     public isSidebar: boolean = false;
     public isContentWidget: boolean = true;
     public widgetId: string = "ticket-list-widget";
-    public size: WidgetSize = WidgetSize.LARGE;
 
     public createWidget(): IWidget {
         return new TicketListWidget(this.widgetId);

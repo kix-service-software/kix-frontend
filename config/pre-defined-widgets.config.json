@@ -58,10 +58,10 @@
                 "actions": [],
                 "settings": {
                     "type": "bar-chart"
-                }
-            },
-            "show": true,
-            "size": "small"
+                },
+                "show": true,
+                "size": "small"
+            }
         },
         {
             "widgetId": "notes-widget",
@@ -73,10 +73,10 @@
                 "actions": [],
                 "settings": {
                     "notes": "ich bin <strong>Admin</strong> :D"
-                }
-            },
-            "show": true,
-            "size": "small"
+                },
+                "show": true,
+                "size": "small"
+            }
         }
     ]
 }

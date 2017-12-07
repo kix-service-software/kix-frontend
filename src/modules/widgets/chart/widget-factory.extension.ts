@@ -7,7 +7,6 @@ export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = false;
     public isContentWidget: boolean = true;
     public widgetId: string = "chart-widget";
-    public size: WidgetSize = WidgetSize.SMALL;
 
     public createWidget(): IWidget {
         return new ChartWidget(this.widgetId);

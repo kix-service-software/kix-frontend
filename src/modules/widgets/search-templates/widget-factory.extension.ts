@@ -6,7 +6,6 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
     public isSidebar: boolean = false;
     public isContentWidget: boolean = true;
     public widgetId: string = "search-templates-widget";
-    public size: WidgetSize = WidgetSize.SMALL;
 
     public createWidget(): IWidget {
         return new SearchTemplatesWidget(this.widgetId);
