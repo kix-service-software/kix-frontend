@@ -1,4 +1,4 @@
-import { DashboardComponentState } from './model/DashboardComponentState';
+import { HomeComponentState } from './model/HomeComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { DashboardConfiguration } from '@kix/core/dist/model/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
@@ -7,11 +7,10 @@ import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRou
 
 class HomeComponent {
 
-    public state: DashboardComponentState;
+    public state: HomeComponentState;
 
     public onCreate(input: any): void {
-        this.state = new DashboardComponentState();
-        this.state.configurationMode = input.configurationMode;
+        this.state = new HomeComponentState();
     }
 
     public onMount(): void {
@@ -22,10 +21,6 @@ class HomeComponent {
         const breadcrumbDetails =
             new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
-    }
-
-    public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
     }
 
     public stateChanged(): void {

@@ -1,4 +1,4 @@
-export class CustomerComponentState {
+export class CmdbComponentState {
 
     public rows: string[][] = [];
 

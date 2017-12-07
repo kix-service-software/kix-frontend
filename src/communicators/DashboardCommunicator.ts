@@ -49,7 +49,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         }
 
         const widgetTemplates: WidgetTemplate[] = [];
-        const widgets = [
+        const widgets: ConfiguredWidget[] = [
             ...(configuration.contentConfiguredWidgets || []),
             ...(configuration.sidebarConfiguredWidgets || [])
         ];

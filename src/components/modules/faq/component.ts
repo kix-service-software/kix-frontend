@@ -1,16 +1,16 @@
-import { FAQComponentState } from './model/ComponentState';
+import { FaqComponentState } from './model/FaqComponentState';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class FAQComponent {
 
-    public state: FAQComponentState;
+    public state: FaqComponentState;
 
     public store: any;
 
     public onCreate(input: any): void {
-        this.state = new FAQComponentState();
+        this.state = new FaqComponentState();
     }
 
     public onMount(): void {

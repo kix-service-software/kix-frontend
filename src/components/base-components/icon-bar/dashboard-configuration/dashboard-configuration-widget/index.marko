@@ -1,5 +1,5 @@
 <div.bar-icon class=[component.isConfigMode() || state.showDashboardConfigurationWidget ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-    <span.kix-icon.icon-dummy class=(state.showDashboardConfigurationWidget ? "" : "icon-asterisk")
+    <span.kix-icon-gear class=(state.showDashboardConfigurationWidget ? "" : "icon-asterisk")
         on-click('toggleDashboardConfigurationWidget')/>
 </div>
 <if(state.translations && state.showDashboardConfigurationWidget)>

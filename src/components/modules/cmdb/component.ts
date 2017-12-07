@@ -1,16 +1,16 @@
-import { CMDBComponentState } from './model/ComponentState';
+import { CmdbComponentState } from './model/CmdbComponentState';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class CMDBComponent {
 
-    public state: CMDBComponentState;
+    public state: CmdbComponentState;
 
     public store: any;
 
     public onCreate(input: any): void {
-        this.state = new CMDBComponentState();
+        this.state = new CmdbComponentState();
     }
 
     public onMount(): void {
