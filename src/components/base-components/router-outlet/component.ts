@@ -27,13 +27,7 @@ export class RouterOutletComponent {
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
-
-            const template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
-            if (template) {
-                this.state.template = template;
-            } else {
-                this.state.template = null;
-            }
+            this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
         }
     }
 

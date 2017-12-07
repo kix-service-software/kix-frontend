@@ -16,7 +16,7 @@ class FAQComponent {
     public onMount(): void {
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'FAQ-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'FAQ-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 }

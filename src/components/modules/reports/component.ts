@@ -16,7 +16,7 @@ class ReportsComponent {
     public onMount(): void {
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Reports-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'Reports-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 

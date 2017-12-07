@@ -20,7 +20,7 @@ class TicketsComponent {
     public onMount(): void {
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Ticket-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'Ticket-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
 
         if (this.state.ticketId) {
