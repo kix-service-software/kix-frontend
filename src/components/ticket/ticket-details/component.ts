@@ -22,13 +22,7 @@ export class TicketDetailsComponent {
     }
 
     public onMount(): void {
-        const contextId = ClientStorageHandler.getContextId();
-        const breadcrumbDetails = new BreadcrumbDetails(
-            contextId, 'ticket-details', this.state.ticketId, 'Ticket-Dashboard', '#' + this.state.ticketId, null
-        );
-
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
-
+        this.setBreadcrumbDetails();
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         TicketStore.getInstance().loadTicketDetails(this.state.ticketId);
     }
@@ -38,7 +32,19 @@ export class TicketDetailsComponent {
         if (ticketDetails) {
             this.state.ticket = ticketDetails.ticket;
             this.state.articles = ticketDetails.articles;
+            this.setBreadcrumbDetails();
         }
+    }
+
+    private setBreadcrumbDetails(): void {
+        const contextId = ClientStorageHandler.getContextId();
+        const value = this.state.ticket ? this.state.ticket.TicketNumber : this.state.ticketId;
+
+        const breadcrumbDetails = new BreadcrumbDetails(
+            contextId, 'ticket-details', this.state.ticketId, 'Ticket-Dashboard', '#' + value, null
+        );
+
+        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
 }
