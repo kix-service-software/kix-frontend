@@ -8,6 +8,12 @@ export class AssignTourActionMarkoDependencyExtension implements IMarkoDependenc
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['assign-tour', 'actions/assign-tour']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

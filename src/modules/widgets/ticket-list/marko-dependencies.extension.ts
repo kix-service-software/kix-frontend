@@ -8,6 +8,13 @@ export class TicketListWidgetMarkoDependencyExtension implements IMarkoDependenc
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['ticket-list', 'widgets/ticket-list'],
+            ['ticket-list-configuration', 'widgets/ticket-list/ticket-list-configuration']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

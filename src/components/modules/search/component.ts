@@ -1,6 +1,7 @@
 import { SearchComponentState } from './model/ComponentState';
-import { SearchState } from './store/State';
-import { SEARCH_INITIALIZE } from './store/actions';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class SearchComponent {
 
@@ -10,25 +11,15 @@ class SearchComponent {
 
     public onCreate(input: any): void {
         this.state = new SearchComponentState();
-        this.state.configurationMode = input.configurationMode;
     }
 
     public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(SEARCH_INITIALIZE());
+        const contextId = ClientStorageHandler.getContextId();
+        const breadcrumbDetails =
+            new BreadcrumbDetails(contextId, null, null, 'Search-Dashboard', null, null);
+        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
-    public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
-    }
-
-    public stateChanged(): void {
-        const reduxState: SearchState = this.store.getState();
-        if (reduxState.rows) {
-            this.state.rows = reduxState.rows;
-        }
-    }
 }
 
 module.exports = SearchComponent;

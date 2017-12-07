@@ -48,7 +48,7 @@ class UserListWidgetComponent {
     }
 
     protected showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog(require('./user-list-configuration'));
+        ApplicationStore.getInstance().toggleDialog('user-list-configuration');
     }
 
     protected cancelConfiguration(): void {

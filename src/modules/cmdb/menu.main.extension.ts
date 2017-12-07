@@ -3,11 +3,11 @@ import { IMainMenuExtension } from '@kix/core/dist/extensions';
 export class CMDBMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/cmdb-dashboard";
+        return "/cmdb";
     }
 
     public getIcon(): string {
-        return "";
+        return "cmdb";
     }
 
     public getText(): string {
@@ -15,7 +15,7 @@ export class CMDBMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "cmdb-dashboard";
+        return "cmdb";
     }
 
 }

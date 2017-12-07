@@ -11,6 +11,10 @@
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
         overflow: hidden;
+        [class^="kix-icon-"],
+        [class*=" kix-icon-"] {
+            vertical-align: middle;
+        }
         .header-left {
             display: inline-block;
             float: left;
@@ -53,3 +57,10 @@
     height: auto;
     min-height: 150px;
 }
+
+.container-draggable .widget .widget-header .header-left h3 {
+    & [class^="kix-icon-"],
+    & [class*=" kix-icon-"] {
+        display: none;
+    }
+} 

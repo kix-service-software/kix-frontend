@@ -1,6 +1,7 @@
 import { CMDBComponentState } from './model/ComponentState';
-import { CMDBState } from './store/State';
-import { TICKET_INITIALIZE } from './store/actions';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class CMDBComponent {
 
@@ -10,25 +11,15 @@ class CMDBComponent {
 
     public onCreate(input: any): void {
         this.state = new CMDBComponentState();
-        this.state.configurationMode = input.configurationMode;
     }
 
     public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(TICKET_INITIALIZE());
+        const contextId = ClientStorageHandler.getContextId();
+        const breadcrumbDetails =
+            new BreadcrumbDetails(contextId, null, null, 'CMDB-Dashboard', null, null);
+        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
-    public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
-    }
-
-    public stateChanged(): void {
-        const reduxState: CMDBState = this.store.getState();
-        if (reduxState.rows) {
-            this.state.rows = reduxState.rows;
-        }
-    }
 }
 
 module.exports = CMDBComponent;

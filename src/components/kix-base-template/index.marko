@@ -8,7 +8,7 @@
                 <breadcrumb/>
                 <back/>
             </header>
-            <include(state.template, {})/>
+            <router-outlet id="base-router"/>
         </section>
     </section>
     <kix-footer/>
@@ -21,7 +21,7 @@
             <main-dialog>
                 <@title>Dialogtitel</@title>
                 <@content>
-                    <include(state.dialogContent[0], state.dialogContent[1])/>
+                    <include(state.dialogTemplate, state.dialogInput)/>
                 </@content>
             </main-dialog>
         </div>

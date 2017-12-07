@@ -1,4 +1,16 @@
 <div.breadcrumb>
-    <span.kix-icon.icon-dummy.icon-h/>
-    <span>Home Dashboard</span>
+    <if(state.breadcrumbDetails)>
+        <if(state.breadcrumbDetails.icon)>
+            <span.kix-icon class=state.breadcrumbDetails.icon/>
+        </if>
+        <else>
+            <span.kix-icon.icon-dummy.icon-h/>
+        </else>
+        <span>
+            <a href="/${state.breadcrumbDetails.contextId}" on-click('navigate')>
+                ${state.breadcrumbDetails.componentDisplayText}
+            </a>
+            <if(state.breadcrumbDetails.parameterDisplayText)>${' '}| ${state.breadcrumbDetails.parameterDisplayText}</if>
+        </span>
+    </if>
 </div>

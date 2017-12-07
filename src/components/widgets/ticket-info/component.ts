@@ -25,7 +25,7 @@ class TicketInfoWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog(require('./configuration'));
+        ApplicationStore.getInstance().toggleDialog('ticket-info-configuration');
     }
 
     public saveConfiguration(): void {

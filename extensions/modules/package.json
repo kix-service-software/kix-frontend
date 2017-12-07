@@ -2,33 +2,30 @@
     "name": "kix-modules",
     "extensions": {
         "kix:marko:dependencies": {
-            "dashboard-marko": "../../dist/modules/dashboard/marko-dependencies.extension",
+            "home-marko": "../../dist/modules/home/marko-dependencies.extension",
             "tickets-marko": "../../dist/modules/tickets/marko-dependencies.extension",
             "cmdb-marko": "../../dist/modules/cmdb/marko-dependencies.extension",
-            "services-marko": "../../dist/modules/services/marko-dependencies.extension",
-            "customer-marko": "../../dist/modules/customer/marko-dependencies.extension",
+            "customers-marko": "../../dist/modules/customers/marko-dependencies.extension",
             "faq-marko": "../../dist/modules/faq/marko-dependencies.extension",
             "reports-marko": "../../dist/modules/reports/marko-dependencies.extension",
             "search-marko": "../../dist/modules/search/marko-dependencies.extension",
             "main-menu": "../../dist/modules/main-menu/marko-dependencies.extension"
         },
         "kix:menu:main": {
-            "dashboard-menu-main": "../../dist/modules/dashboard/menu.main.extension",
+            "home-menu-main": "../../dist/modules/home/menu.main.extension",
             "tickets-menu-main": "../../dist/modules/tickets/menu.main.extension",
             "cmdb-menu-main": "../../dist/modules/cmdb/menu.main.extension",
-            "services-menu-main": "../../dist/modules/services/menu.main.extension",
-            "cutsomer-menu-main": "../../dist/modules/customer/menu.main.extension",
+            "cutsomers-menu-main": "../../dist/modules/customers/menu.main.extension",
             "faq-menu-main": "../../dist/modules/faq/menu.main.extension",
             "reports-menu-main": "../../dist/modules/reports/menu.main.extension",
             "search-menu-main": "../../dist/modules/search/menu.main.extension"
         },
         "kix:module": {
-            "dashboard-module": "../../dist/modules/dashboard/module.extension",
+            "home-module": "../../dist/modules/home/module.extension",
             "tickets-module": "../../dist/modules/tickets/module.extension",
             "sidebar-module": "../../dist/modules/sidebar/module.extension",
             "cmdb-module": "../../dist/modules/cmdb/module.extension",
-            "services-module": "../../dist/modules/services/module.extension",
-            "customer-module": "../../dist/modules/customer/module.extension",
+            "customers-module": "../../dist/modules/customers/module.extension",
             "faq-module": "../../dist/modules/faq/module.extension",
             "reports-module": "../../dist/modules/reports/module.extension",
             "search-module": "../../dist/modules/search/module.extension"

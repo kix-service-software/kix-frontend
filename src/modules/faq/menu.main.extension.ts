@@ -3,11 +3,11 @@ import { IMainMenuExtension } from '@kix/core/dist/extensions';
 export class FAQMainMenuExtension implements IMainMenuExtension {
 
     public getLink(): string {
-        return "/faq-dashboard";
+        return "/faq";
     }
 
     public getIcon(): string {
-        return "";
+        return "faq";
     }
 
     public getText(): string {
@@ -15,7 +15,7 @@ export class FAQMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "faq-dashboard";
+        return "faq";
     }
 
 }

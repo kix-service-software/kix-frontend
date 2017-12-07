@@ -9,7 +9,7 @@ export class FAQModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "faq-dashboard";
+        return "faq";
     }
 
     public getDefaultConfiguration(): any {

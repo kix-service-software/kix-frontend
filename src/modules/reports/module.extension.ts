@@ -9,7 +9,7 @@ export class ReportsModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "reports-dashboard";
+        return "reports";
     }
 
     public getDefaultConfiguration(): any {

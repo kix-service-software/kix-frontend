@@ -4,7 +4,15 @@ export class TicketInfoWidgetMarkoDependencyExtension implements IMarkoDependenc
 
     public getDependencies(): string[] {
         return [
-            "widgets/ticket-info"
+            "widgets/ticket-info",
+            "widgets/ticket-info/ticket-info-configuration"
+        ];
+    }
+
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['ticket-info', 'widgets/ticket-info'],
+            ['ticket-info-configuration', 'widgets/ticket-info/ticket-info-configuration'],
         ];
     }
 

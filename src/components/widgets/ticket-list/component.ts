@@ -29,7 +29,7 @@ class TicketListWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog(require('./ticket-list-configuration'));
+        ApplicationStore.getInstance().toggleDialog('ticket-list-configuration');
     }
 
     public saveConfiguration(): void {

@@ -1,6 +1,7 @@
 import { FAQComponentState } from './model/ComponentState';
-import { FAQState } from './store/State';
-import { FAQ_INITIALIZE } from './store/actions';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class FAQComponent {
 
@@ -10,24 +11,13 @@ class FAQComponent {
 
     public onCreate(input: any): void {
         this.state = new FAQComponentState();
-        this.state.configurationMode = input.configurationMode;
     }
 
     public onMount(): void {
-        this.store = require('./store/');
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(FAQ_INITIALIZE());
-    }
-
-    public onInput(input: any) {
-        this.state.configurationMode = input.configurationMode;
-    }
-
-    public stateChanged(): void {
-        const reduxState: FAQState = this.store.getState();
-        if (reduxState.rows) {
-            this.state.rows = reduxState.rows;
-        }
+        const contextId = ClientStorageHandler.getContextId();
+        const breadcrumbDetails =
+            new BreadcrumbDetails(contextId, null, null, 'FAQ-Dashboard', null, null);
+        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 }
 

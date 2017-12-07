@@ -8,7 +8,7 @@
                 <if(component.isShown(widget.instanceId))>
                     <div.bar-icon class=(widget.configuration.show ? "select-active" : "")
                         on-click('toggleSidebarWidget', widget.instanceId)>
-                        <span.kix-icon class=(widget.configuration.icon ? "icon-" + widget.configuration.icon : "")/>
+                        <span class=(widget.icon ? "kix-icon-" + widget.icon : "")/>
                     </div>
                 </if>
             </for>

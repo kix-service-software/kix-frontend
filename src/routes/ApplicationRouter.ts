@@ -16,18 +16,19 @@ export class ApplicationRouter extends KIXRouter {
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
-        await this.handleModuleRequest(moduleId, req, res, next);
+        await this.handleRoute(moduleId, null, req, res);
     }
 
     public async getModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = req.params.moduleId;
+        const objectId = req.params.objectId;
 
         if (moduleId === 'socket.io') {
             next();
             return;
         }
 
-        await this.handleModuleRequest(moduleId, req, res, next);
+        await this.handleRoute(moduleId, objectId, req, res);
     }
 
 
@@ -48,22 +49,24 @@ export class ApplicationRouter extends KIXRouter {
             this.authenticationService.isAuthenticated.bind(this.authenticationService),
             this.getModule.bind(this)
         );
+
+        this.router.get(
+            "/:moduleId/:objectId",
+            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            this.getModule.bind(this)
+        );
     }
 
-    private async handleModuleRequest(moduleId: string, req: Request, res: Response, next: () => void): Promise<void> {
-        const moduleFactory: IModuleFactoryExtension = await this.pluginService.getModuleFactory(moduleId);
-        if (moduleFactory) {
+    private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
+        const token: string = req.cookies.token;
+        const user = await this.userService.getUserByToken(token);
 
-            const token: string = req.cookies.token;
-            const user = await this.userService.getUserByToken(token);
+        const themeCSS = await this.getUserThemeCSS(user.UserID);
+        const specificCSS = await this.getSpecificCSS();
 
-            const template = moduleFactory.getTemplate();
-            const themeCSS = await this.getUserThemeCSS(user.UserID);
-            const specificCSS = await this.getSpecificCSS();
-            this.prepareMarkoTemplate(res, template, moduleFactory.getModuleId(), themeCSS, specificCSS);
-        } else {
-            next();
-        }
+        const tagLib = await this.markoService.getComponentTags();
+
+        this.prepareMarkoTemplate(res, moduleId, objectId, themeCSS, specificCSS, tagLib);
     }
 
     private async getUserThemeCSS(userId: number): Promise<string> {

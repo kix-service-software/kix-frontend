@@ -3,14 +3,21 @@
     .color-theme-4;
     margin-bottom: .5em;
     box-shadow: @shadow;
-    padding: .5em;
+    padding: 0 .5em;
     border-radius: 3px;
     height: 2em;
     box-sizing: border-box;
     overflow: hidden;
-    & span {
+    line-height: 2em;
+    vertical-align: middle;
+    & span,
+    & a {
         font-size: .75em;
-        vertical-align: middle;
         margin-right: .25em;
+    }
+    & a:not(:first-of-type)::before {
+        content: "|";
+        display: inline-block;
+        margin: 0 .25em;
     }
 }

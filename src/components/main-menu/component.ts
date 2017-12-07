@@ -3,6 +3,7 @@ import { MenuComponentState } from './model/MenuComponentState';
 import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class KIXMenuComponent {
 
@@ -17,6 +18,7 @@ class KIXMenuComponent {
         this.store = require('./store');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(MAIN_MENU_INITIALIZE());
+        ComponentRouterStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
@@ -30,8 +32,23 @@ class KIXMenuComponent {
             for (const entry of this.state.primaryMenuEntries) {
                 entry.active = entry.contextId === contextId;
             }
+
+            for (const entry of this.state.secondaryMenuEntries) {
+                entry.active = entry.contextId === contextId;
+            }
+
+            (this as any).setStateDirty('primaryMenuEntries');
         }
     }
+
+    private menuClicked(contextId: string, event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        ClientStorageHandler.setContextId(contextId);
+        ComponentRouterStore.getInstance().navigate('base-router', contextId, {}, true);
+    }
+
 }
 
 module.exports = KIXMenuComponent;

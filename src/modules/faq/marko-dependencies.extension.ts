@@ -9,6 +9,12 @@ export class FAQMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
     }
 
+    public getComponentTags(): Array<[string, string]> {
+        return [
+            ['faq', 'modules/faq']
+        ];
+    }
+
     public isExternal(): boolean {
         return false;
     }

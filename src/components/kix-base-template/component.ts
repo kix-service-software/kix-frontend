@@ -2,6 +2,8 @@ import { SocketEvent } from '@kix/core/dist/model';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 
 // tslint:disable-next-line:no-var-requires
 require('babel-polyfill');
@@ -10,25 +12,15 @@ declare var io: any;
 
 class BaseTemplateComponent {
 
-    public state: any;
+    public state: BaseTemplateComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            auth: false,
-            configurationMode: false,
-            showConfigurationOverlay: false,
-            template: false,
-            templatePath: input.contentTemplate,
-            showOverlay: false,
-            showDialog: false,
-            dialogContent: null
-        };
+        this.state = new BaseTemplateComponentState(input.contextId, input.objectId, input.tagLib);
     }
 
     public async onMount(): Promise<void> {
+        ClientStorageHandler.setTagLib(this.state.tagLib);
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-
-        this.state.template = require(this.state.templatePath);
 
         const token = ClientStorageHandler.getToken();
         const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
@@ -37,15 +29,16 @@ class BaseTemplateComponent {
             query: "Token=" + token
         });
 
-        configurationSocket.on(SocketEvent.CONNECT, () => {
-            this.state.auth = true;
-        });
-
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
 
-        await TranslationHandler.getInstance();
+        if (this.state.contextId) {
+            ClientStorageHandler.setContextId(this.state.contextId);
+            ComponentRouterStore.getInstance().navigate(
+                'base-router', this.state.contextId, { objectId: this.state.objectId }, true, this.state.objectId
+            );
+        }
     }
 
     public toggleConfigurationMode(): void {
@@ -55,7 +48,12 @@ class BaseTemplateComponent {
     private applicationStateChanged(): void {
         this.state.showOverlay = ApplicationStore.getInstance().isShowOverlay();
         this.state.showDialog = ApplicationStore.getInstance().isShowDialog();
-        this.state.dialogContent = ApplicationStore.getInstance().getDialogContent();
+
+        const currentDialog = ApplicationStore.getInstance().getCurrentDialog();
+        if (currentDialog[0]) {
+            this.state.dialogTemplate = ClientStorageHandler.getComponentTemplate(currentDialog[0]);
+            this.state.dialogInput = currentDialog[1];
+        }
     }
 }
 
