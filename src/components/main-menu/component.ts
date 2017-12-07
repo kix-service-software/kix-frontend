@@ -3,7 +3,7 @@ import { MenuComponentState } from './model/MenuComponentState';
 import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class KIXMenuComponent {
 
@@ -18,7 +18,7 @@ class KIXMenuComponent {
         this.store = require('./store');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(MAIN_MENU_INITIALIZE());
-        KIXRouterStore.getInstance().addStateListener(this.stateChanged.bind(this));
+        ComponentRouterStore.getInstance().addStateListener(this.stateChanged.bind(this));
     }
 
     public stateChanged(): void {
@@ -46,7 +46,7 @@ class KIXMenuComponent {
             event.preventDefault();
         }
         ClientStorageHandler.setContextId(contextId);
-        KIXRouterStore.getInstance().navigate('base-router', contextId, {}, true);
+        ComponentRouterStore.getInstance().navigate('base-router', contextId, {}, true);
     }
 
 }

@@ -1,7 +1,7 @@
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 export class TicketTableComponent {
@@ -52,7 +52,7 @@ export class TicketTableComponent {
             event.preventDefault();
         }
         ClientStorageHandler.setContextId('tickets');
-        KIXRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
+        ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
     }
 }
 
