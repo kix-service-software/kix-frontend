@@ -1,6 +1,5 @@
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { KIXRouter } from '@kix/core/dist/routes/KIXRouter';
 
 export class RouterOutletComponent {
 
@@ -20,11 +19,11 @@ export class RouterOutletComponent {
     }
 
     public onMount(): void {
-        KIXRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
+        ComponentRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
     }
 
     private routerStateChanged(): void {
-        const router = KIXRouterStore.getInstance().getCurrentRouter(this.state.routerId);
+        const router = ComponentRouterStore.getInstance().getCurrentRouter(this.state.routerId);
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;

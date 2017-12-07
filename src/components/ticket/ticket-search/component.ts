@@ -1,6 +1,5 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { TicketProperty } from "@kix/core/dist/model/";
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
 
@@ -24,15 +23,12 @@ class TicketSearchComponent {
         ) as Array<[string, string]>;
         this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
 
-        const searchResult = TicketStore.getInstance().getTicketsSearchResult('ticket-search');
-        if (!searchResult) {
-            this.openSearchDialog();
-        }
+        this.openSearchDialog();
     }
 
     private openSearchDialog(): void {
         ApplicationStore.getInstance().toggleDialog(
-            require('./ticket-search-dialog-content'), { properties: this.state.properties }
+            'ticket-search-dialog-content', { properties: this.state.properties }
         );
     }
 

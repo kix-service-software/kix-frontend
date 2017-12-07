@@ -1,7 +1,7 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 export class TicketDetailsComponent {
 
@@ -25,7 +25,7 @@ export class TicketDetailsComponent {
             contextId, 'ticket-details', this.state.ticketId, 'Ticket-Dashboard', '#' + this.state.ticketId, null
         );
 
-        KIXRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
 
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         TicketStore.getInstance().loadTicketDetails(this.state.ticketId);

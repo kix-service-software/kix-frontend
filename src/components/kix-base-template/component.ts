@@ -2,7 +2,7 @@ import { SocketEvent } from '@kix/core/dist/model';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
+import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 
 // tslint:disable-next-line:no-var-requires
@@ -35,7 +35,7 @@ class BaseTemplateComponent {
 
         if (this.state.contextId) {
             ClientStorageHandler.setContextId(this.state.contextId);
-            KIXRouterStore.getInstance().navigate(
+            ComponentRouterStore.getInstance().navigate(
                 'base-router', this.state.contextId, { objectId: this.state.objectId }, true, this.state.objectId
             );
         }
