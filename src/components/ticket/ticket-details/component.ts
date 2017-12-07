@@ -1,6 +1,7 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { KIXRouterStore } from '@kix/core/dist/browser/router/KIXRouterStore';
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 
 export class TicketDetailsComponent {
 
@@ -25,6 +26,17 @@ export class TicketDetailsComponent {
         );
 
         KIXRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+
+        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketStore.getInstance().loadTicketDetails(this.state.ticketId);
+    }
+
+    private ticketStateChanged(): void {
+        const ticketDetails = TicketStore.getInstance().getTicketDetails(this.state.ticketId);
+        if (ticketDetails) {
+            this.state.ticket = ticketDetails.ticket;
+            this.state.articles = ticketDetails.articles;
+        }
     }
 
 }
