@@ -22,7 +22,8 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        return new WidgetConfiguration(this.widgetId, 'Ticket-Info', [], {}, true, WidgetSize.SMALL);
+        // TODO: richtiges Icon geben lassen, sobald Widget "definiert" wurde
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Info', [], {}, true, WidgetSize.SMALL, 'minus');
     }
 
 }

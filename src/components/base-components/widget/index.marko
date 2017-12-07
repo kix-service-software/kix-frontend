@@ -2,7 +2,7 @@
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
-                <if(input.icon)>
+                <if(input.icon && Object.keys(input.icon).length)>
                     <include(input.icon)/>
                 </if>
                 <include(input.title)/>

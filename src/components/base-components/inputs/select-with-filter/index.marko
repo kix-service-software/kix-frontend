@@ -2,7 +2,7 @@
     <h3>${input.title}</h3>
     <input.filter type="text" placeholder="| ${input.placeholder}" value=state.filterValue on-change("filterChanged")/>
     <button on-click('filter')>
-        <span.kix-icon.icon-dummy/>
+        <span.kix-icon-filter/>
     </button>
     <select size=input.size multiple=input.multiple on-change('markSelected')>
         <for(el in state.filteredList)>

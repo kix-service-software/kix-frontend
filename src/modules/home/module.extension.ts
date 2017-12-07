@@ -41,7 +41,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         chartType: 'bar'
                     },
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    icon: null
                 }
             },
             {
@@ -54,7 +55,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         chartType: 'pie'
                     },
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    icon: null
                 }
             },
             {
@@ -65,7 +67,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     actions: [],
                     settings: {},
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    icon: null
                 },
             },
             {
@@ -88,7 +91,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         ]
                     },
                     show: true,
-                    size: WidgetSize.LARGE
+                    size: WidgetSize.LARGE,
+                    icon: null
                 },
             },
             {
@@ -119,7 +123,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         limit: 10
                     },
                     show: true,
-                    size: WidgetSize.LARGE
+                    size: WidgetSize.LARGE,
+                    icon: null
                 }
             }
         ];
@@ -134,7 +139,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         notes: 'Test <strong style="color:red">123</strong>'
                     },
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
                 },
             },
             {
@@ -147,7 +153,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         notes: ""
                     },
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
                 },
             },
             {
@@ -158,7 +165,9 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     actions: [],
                     settings: {},
                     show: true,
-                    size: WidgetSize.SMALL
+                    size: WidgetSize.SMALL,
+                    // TODO: richtiges Icon angeben
+                    icon: 'minus'
                 }
             }
         ];

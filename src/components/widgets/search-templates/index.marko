@@ -1,36 +1,35 @@
-<widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
-    <@icon>
-        <span.kix-icon-minus/>
-    </@icon>
-    <!-- TODO: dynamsicher Titel (${state.widgetConfiguration.title}) -->
-    <@title>Suchvorlagen</@title>
-    <@content>
-        <div.left>
-            <select.template-list size=6>
-                <option>Meine ToDos</option>
-                <option>Kunden</option>
-                <option>Hotline</option>
-                <option>neue Tickets</option>
-                <option>Wartend</option>
-                <option>Dringend</option>
-            </select>
-        </div>
-        <div.right>
-            <ul.button-list>
-                <li>
-                    <button on-click('newClicked')>New</button>
-                </li>
-                <li>
-                    <button on-click('editClicked')>Bearbeiten</button>
-                </li>
-                <li>
-                    <button on-click('deleteClicked')>Löschen</button>
-                </li>
-            </ul>
-        </div>
-    </@content>
-    <@filter>
-        <span/>
-    </@filter>
-    <@actions/>
-</widget>
+<if(state.widgetConfiguration)>
+    <widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
+        <@icon/>
+        <@title>${state.widgetConfiguration.title}</@title>
+        <@content>
+            <div.left>
+                <select.template-list size=6>
+                    <option>Meine ToDos</option>
+                    <option>Kunden</option>
+                    <option>Hotline</option>
+                    <option>neue Tickets</option>
+                    <option>Wartend</option>
+                    <option>Dringend</option>
+                </select>
+            </div>
+            <div.right>
+                <ul.button-list>
+                    <li>
+                        <button on-click('newClicked')>New</button>
+                    </li>
+                    <li>
+                        <button on-click('editClicked')>Bearbeiten</button>
+                    </li>
+                    <li>
+                        <button on-click('deleteClicked')>Löschen</button>
+                    </li>
+                </ul>
+            </div>
+        </@content>
+        <@filter>
+            <span/>
+        </@filter>
+        <@actions/>
+    </widget>
+</if>
