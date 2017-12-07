@@ -16,7 +16,7 @@ class CMDBComponent {
     public onMount(): void {
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'CMDB-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'CMDB-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 

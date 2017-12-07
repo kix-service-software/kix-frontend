@@ -16,10 +16,14 @@ import {
     TicketCreationError,
     TicketLoadDataRequest,
     TicketLoadDataResponse,
-    TicketProperty
+    TicketProperty,
+    LoadTicketDetailsRequest,
+    LoadTicketDetailsResponse,
+    TicketDetails
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
+import { TicketService } from '../services/api/TicketService';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -92,6 +96,17 @@ export class TicketCommunicator extends KIXCommunicator {
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
+        });
+
+        client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
+
+            const ticket = await this.ticketService.getTicket(data.token, data.ticketId, false);
+            const articles = await this.ticketService.getArticles(data.token, data.ticketId);
+
+            const ticketDetails = new TicketDetails(data.ticketId, (ticket as Ticket), articles);
+
+            const response = new LoadTicketDetailsResponse(ticketDetails);
+            client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
         });
     }
 

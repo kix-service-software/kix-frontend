@@ -16,7 +16,7 @@ class SearchComponent {
     public onMount(): void {
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Search-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'Search-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 

@@ -9,7 +9,9 @@ export class TicketDetailsComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            ticketId: input.ticketId
+            ticketId: input.ticketId,
+            ticket: null,
+            articles: []
         };
     }
 
