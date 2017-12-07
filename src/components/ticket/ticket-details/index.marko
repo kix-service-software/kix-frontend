@@ -1,1 +1,81 @@
-<h1>Ticket: ${data.ticketId}</h1>
+<if(state.ticket)>
+    <h1>T#${state.ticket.TicketNumber} - ${state.ticket.Title}</h1>
+    <label.detail-label>
+        Kunde:
+        <ticket-property-label ticketDataId="ticket-table-data" property="CustomerID" value=state.ticket.CustomerID/>
+    </label>
+    <label.detail-label>
+        Ansprechpartner:
+        <ticket-property-label ticketDataId="ticket-table-data" property="CustomerUserID" value=state.ticket.CustomerUserID/>
+    </label>
+    <label.detail-label>
+        Alter:
+        <ticket-property-label ticketDataId="ticket-table-data" property="Age" value=state.ticket.Age/>
+    </label>
+    <label.detail-label>
+        Typ:
+        <ticket-property-label ticketDataId="ticket-table-data" property="TypeID" value=state.ticket.TypeID/>
+    </label>
+    <label.detail-label>
+        Service:
+        <ticket-property-label ticketDataId="ticket-table-data" property="ServiceID" value=state.ticket.ServiceID/>
+    </label>
+    <label.detail-label>
+        SLA:
+        <ticket-property-label ticketDataId="ticket-table-data" property="SLAID" value=state.ticket.SLAID/>
+    </label>
+    <label.detail-label>
+        Queue:
+        <ticket-property-label ticketDataId="ticket-table-data" property="QueueID" value=state.ticket.QueueID/>
+    </label>
+    <label.detail-label>
+        Priorität:
+        <ticket-property-label ticketDataId="ticket-table-data" property="PriorityID" value=state.ticket.PriorityID/>
+    </label>
+    <label.detail-label>
+        Verantwortlicher:
+        <ticket-property-label ticketDataId="ticket-table-data" property="ResponsibleID" value=state.ticket.ResponsibleID/>
+    </label>
+    <label.detail-label>
+        Bearbeiter:
+        <ticket-property-label ticketDataId="ticket-table-data" property="OwnerID" value=state.ticket.OwnerID/>
+    </label>
+    <label.detail-label>
+        Status:
+        <ticket-property-label ticketDataId="ticket-table-data" property="StateID" value=state.ticket.StateID/>
+    </label>
+</if>
+<h2>Articles</h2>
+<if(state.articles)>
+    <table.article-table>
+        <tr>
+            <th>alle</th>
+            <th>Nr.</th>
+            <th>Sender</th>
+            <th>Type</th>
+            <th>von</th>
+            <th>Betreff</th>
+            <th>erstellt</th>
+            <th>Anlage</th>
+        </tr>
+        <for(article in state.articles  | status-var=loop)>
+            <tr>
+                <td>
+                    <input type="checkbox"/>
+                </td>
+                <td>${loop.getLength() - loop.getIndex()}</td>
+                <td>${article.SenderTypeID}</td>
+                <td>${article.ArticleTypeID}</td>
+                <td>${article.From}</td>
+                <td>${article.Subject}</td>
+                <td>${article.IncomingTime}</td>
+                <if(article.Attachments)>
+                    <td>${article.Attachments.length}</td>
+                </if>
+                <else>
+                    <td>-</td>
+                </else>
+            </tr>
+        </for>
+    </table>
+</if>

@@ -20,7 +20,7 @@ class HomeComponent {
 
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard', null, null);
+            new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
