@@ -2,7 +2,6 @@ import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { Ticket, TicketState } from '@kix/core/dist/model/';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class TicketListWidgetComponent {
 
@@ -22,27 +21,11 @@ class TicketListWidgetComponent {
 
     public onMount(): void {
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
         this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration('ticket-list-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
         this.loadTickets();
-    }
-
-    public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog('ticket-list-configuration');
-    }
-
-    public saveConfiguration(): void {
-        DashboardStore.getInstance().saveWidgetConfiguration(
-            'ticket-list-widget', this.state.instanceId, this.state.widgetConfiguration
-        );
-
-        this.loadTickets();
-        this.cancelConfiguration();
-    }
-
-    public cancelConfiguration(): void {
-        this.state.showConfiguration = false;
     }
 
     private ticketStateChanged(): void {
@@ -52,6 +35,13 @@ class TicketListWidgetComponent {
             this.state.filteredTickets = tickets;
         }
 
+    }
+
+    private dashboardStoreChanged(): void {
+        this.state.widgetConfiguration =
+            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+
+        this.loadTickets();
     }
 
     private loadTickets(): void {

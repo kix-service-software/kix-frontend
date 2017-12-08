@@ -16,7 +16,7 @@ class SearchTemplatesWidgetComponent {
 
     public onMount(): void {
         this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration('search-template-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
     }
 
     private newClicked(event): void {

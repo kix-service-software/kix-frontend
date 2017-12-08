@@ -1,8 +1,10 @@
-<if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
-        <@icon/>
-        <@title>${state.widgetConfiguration.title}</@title>
-        <@content>
+<widget instanceId=state.instanceId configurationTagId="user-list-configuration" minimizable=input.minimizable>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <if(state.widgetConfiguration)>
             <table.user-table>
                 <tr>
                     <for(property in state.widgetConfiguration.settings.properties)>
@@ -17,14 +19,16 @@
                     </tr>
                 </for>
             </table>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
+        </if>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <if(state.widgetConfiguration)>
             <for(action in state.widgetConfiguration.actions)>
                 <action action=action contentData=state.users key=action.id/>
             </for>
-        </@actions>
-    </widget>
-</if>
+        </if>
+    </@actions>
+</widget>

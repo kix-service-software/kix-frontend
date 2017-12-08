@@ -7,8 +7,15 @@ class WidgetComponent {
     public onCreate(input: any): void {
         this.state = {
             minimized: false,
-            configChanged: false
+            configChanged: false,
+            instanceId: null,
+            configurationTagId: null
         };
+    }
+
+    public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
+        this.state.configurationTagId = input.configurationTagId;
     }
 
     public onMount(): void {
@@ -20,7 +27,9 @@ class WidgetComponent {
     }
 
     private showConfiguration(): void {
-        (this as any).emit('showConfiguration');
+        ApplicationStore.getInstance().toggleDialog(
+            this.state.configurationTagId, { instanceId: this.state.instanceId }
+        );
     }
 
     private resetConfiguration(): void {

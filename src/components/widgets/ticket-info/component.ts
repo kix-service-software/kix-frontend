@@ -30,7 +30,7 @@ class TicketInfoWidgetComponent {
 
     public onMount(): void {
         this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration('ticket-info-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
     }
 
     private showConfigurationClicked(): void {

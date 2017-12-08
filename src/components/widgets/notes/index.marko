@@ -1,10 +1,14 @@
-<if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
-        <@icon>
+<widget instanceId=state.instanceId configurationTagId="notes-configuration" minimizable=input.minimizable>
+    <@icon>
+        <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
-        </@icon>
-        <@title>${state.widgetConfiguration.title}</@title>
-        <@content>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <if(state.widgetConfiguration)>
             <if(state.editMode)>
                 <editor inline=true resize=false value=state.widgetConfiguration.settings.notes on-valueChanged('valueChanged')/>
             </if>
@@ -12,12 +16,12 @@
                 <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
                 <div.no-editor key=(state.instanceId + "-no-editor")>$!{state.widgetConfiguration.settings.notes}</div>
             </else>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy" on-click('toggleEditMode')/>
-        </@actions>
-    </widget>
-</if>
+        </if>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <span class="kix-icon-edit" on-click('toggleEditMode')/>
+    </@actions>
+</widget>

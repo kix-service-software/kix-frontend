@@ -1,10 +1,14 @@
-<if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
-        <@icon>
+<widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+    <@icon>
+        <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
-        </@icon>
-        <@title>${state.widgetConfiguration.title}</@title>
-        <@content>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <if(state.widgetConfiguration)>
             <table>
                 <for(attr in state.ticketAttr)>
                     <tr>
@@ -13,10 +17,10 @@
                     </tr>
                 </for>
             </table>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions/>
-    </widget>
-</if>
+        </if>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>

@@ -1,15 +1,15 @@
-<if(state.widgetConfiguration)>
-    <widget minimizable=input.minimizable on-showConfiguration('showConfigurationClicked')>
-        <@icon/>
-        <@title>${state.widgetConfiguration.title}</@title>
-        <@content>
-            <div.chart>
-                <svg id=state.svgId height="300" width="300"/>
-            </div>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions/>
-    </widget>
-</if>
+<widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <div.chart>
+            <svg id=state.svgId height="300" width="300"/>
+        </div>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>

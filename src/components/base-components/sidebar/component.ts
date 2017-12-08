@@ -38,7 +38,6 @@ class SidebarComponent {
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
                 (this as any).setStateDirty('configuration');
                 DashboardStore.getInstance().saveWidgetConfiguration(
-                    configuredWidget.configuration.widgetId,
                     configuredWidget.instanceId,
                     configuredWidget.configuration,
                 );

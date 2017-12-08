@@ -1,20 +1,19 @@
 <div.configuration-chart>
-    <if(state.configuration)>
-        <label>
-            <!-- TODO: use language service? -->
-            Type
-            <select on-change('typeChanged')>
-                <for(type, displayName in state.types)>
-                    <if(type == state.configuration.chartType)>
-                        <!-- TODO: use language service? -->
-                        <option value=type selected="selected">${displayName}</option>
-                    </if>
-                    <else>
-                        <!-- TODO: use language service? -->
-                        <option value=type>${displayName}</option>
-                    </else>
-                </for>
-            </select>
-        </label>
-    </if>
+    <label>
+        <!-- TODO: use language service? -->
+        Type
+        <select on-change('typeChanged')>
+            <for(type, displayName in state.types)>
+                <if(type == state.configuration.chartType)>
+                    <!-- TODO: use language service? -->
+                    <option value=type selected="selected">${displayName}</option>
+                </if>
+                <else>
+                    <!-- TODO: use language service? -->
+                    <option value=type>${displayName}</option>
+                </else>
+            </for>
+        </select>
+    </label>
+    <button on-click('saveConfiguration')>Speichern</button>
 </div>
