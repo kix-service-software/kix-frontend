@@ -28,7 +28,6 @@ class HomeComponent {
         if (dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.contentRows;
             this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
-            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
 }

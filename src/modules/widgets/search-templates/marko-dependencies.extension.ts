@@ -11,7 +11,7 @@ export class SearchTemplatesWidgetMarkoDependencyExtension implements IMarkoDepe
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['search-templates', 'widgets/search-templates'],
+            ['search-templates-widget', 'widgets/search-templates'],
             ['search-templates-configuration', 'widgets/search-templates/search-templates-configuration']
         ];
     }

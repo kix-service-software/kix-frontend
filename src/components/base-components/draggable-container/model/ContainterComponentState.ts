@@ -7,8 +7,6 @@ export class ContainerComponentState {
 
     public rows: string[][] = [];
 
-    public widgetTemplates: WidgetTemplate[] = [];
-
     public widgets: any[] = [];
 
     public dndState: DragAndDropState = new DragAndDropState();

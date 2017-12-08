@@ -48,17 +48,6 @@ export class DashboardCommunicator extends KIXCommunicator {
             configuration = moduleDefaultConfiguration;
         }
 
-        const widgetTemplates: WidgetTemplate[] = [];
-        const widgets: ConfiguredWidget[] = [
-            ...(configuration.contentConfiguredWidgets || []),
-            ...(configuration.sidebarConfiguredWidgets || [])
-        ];
-
-        for (const widget of widgets) {
-            const widgetFactory = await this.pluginService.getWidgetFactory(widget.configuration.widgetId);
-            widgetTemplates.push(new WidgetTemplate(widget.instanceId, widgetFactory.getTemplate()));
-        }
-
         const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
 
         const response = new LoadDashboardResponse(
@@ -66,7 +55,6 @@ export class DashboardCommunicator extends KIXCommunicator {
                 data.contextId,
                 configuration.contentRows,
                 configuration.sidebarRows,
-                widgetTemplates,
                 configuration.contentConfiguredWidgets,
                 configuration.sidebarConfiguredWidgets,
                 availableWidgets

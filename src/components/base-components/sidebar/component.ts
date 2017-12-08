@@ -25,7 +25,6 @@ class SidebarComponent {
         if (dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.sidebarRows;
             this.state.configuredWidgets = dashboardConfiguration.sidebarConfiguredWidgets;
-            this.state.widgetTemplates = dashboardConfiguration.widgetTemplates;
         }
     }
 
@@ -63,8 +62,7 @@ class SidebarComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const widgetTemplate = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId);
-        return (widgetTemplate && widgetTemplate.template) ? require(widgetTemplate.template) : '';
+        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
     }
 
     private applicationStateChanged() {
