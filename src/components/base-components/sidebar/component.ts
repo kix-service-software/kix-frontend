@@ -20,7 +20,7 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
         this.dashboardStateChanged();
     }
@@ -64,10 +64,6 @@ class SidebarComponent {
 
     private getWidgetTemplate(instanceId: string): any {
         return DashboardStore.getInstance().getWidgetTemplate(instanceId);
-    }
-
-    private applicationStateChanged() {
-        (this as any).setStateDirty();
     }
 
     private isConfigMode(): boolean {
