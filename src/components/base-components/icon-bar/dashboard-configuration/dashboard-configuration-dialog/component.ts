@@ -55,6 +55,9 @@ class DashboardConfigurationDialog {
     }
 
     public async onMount(): Promise<void> {
+        await DashboardStore.getInstance().loadDashboardConfiguration();
+        this.state.dashboardConfig = DashboardStore.getInstance().getDashboardConfiguration();
+
         this.prepareFirstLists();
         this.prepareSecondLists();
 
@@ -89,8 +92,6 @@ class DashboardConfigurationDialog {
     }
 
     private prepareSecondLists(): void {
-        this.state.dashboardConfig = DashboardStore.getInstance().getDashboardConfiguration();
-
         this.buildList(
             this.state.dashboardConfig.contentRows,
             this.state.dashboardConfig.contentConfiguredWidgets,

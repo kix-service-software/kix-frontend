@@ -9,7 +9,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getModuleId(): string {
-        return "ticket";
+        return "tickets";
     }
 
     public getDefaultConfiguration(): any {

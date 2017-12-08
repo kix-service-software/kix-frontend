@@ -15,7 +15,7 @@
         </div>
     </if>
 </div>
-<if(state.configuredWidgets)>
+<if(component.hasSidebarsToShow())>
     <div.sidebar>
         <for(widget in state.configuredWidgets)>
             <if(component.isShown(widget.instanceId) && widget.configuration.show)>

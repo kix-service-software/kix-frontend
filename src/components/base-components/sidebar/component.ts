@@ -63,8 +63,8 @@ class SidebarComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const template = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId).template;
-        return template ? require(template) : '';
+        const widgetTemplate = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId);
+        return (widgetTemplate && widgetTemplate.template) ? require(widgetTemplate.template) : '';
     }
 
     private applicationStateChanged() {
@@ -77,6 +77,10 @@ class SidebarComponent {
 
     private isConfigDialogShown(): boolean {
         return ApplicationStore.getInstance().isShowDialog();
+    }
+
+    private hasSidebarsToShow(): boolean {
+        return this.state.configuredWidgets.some((w) => w.configuration.show);
     }
 }
 
