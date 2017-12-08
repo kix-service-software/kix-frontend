@@ -9,9 +9,14 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
+    }
+
+    public onInput(input: any): void {
         if (input.hasOwnProperty('showIconBar') && input.showIconBar === false) {
             this.state.showIconBar = false;
         }
+
+        this.state.context = input.context;
     }
 
     public onMount(): void {
@@ -21,9 +26,18 @@ class SidebarComponent {
     }
 
     private dashboardStateChanged(): void {
-        const sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
-        this.state.rows = sidebarConfiguration[0];
-        this.state.configuredWidgets = sidebarConfiguration[1];
+        let sidebarConfiguration = null;
+
+        if (this.state.context === "dialog") {
+            sidebarConfiguration = DashboardStore.getInstance().getDialogSidebars();
+        } else {
+            sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
+        }
+
+        if (sidebarConfiguration && sidebarConfiguration.length) {
+            this.state.rows = sidebarConfiguration[0];
+            this.state.configuredWidgets = sidebarConfiguration[1];
+        }
     }
 
     private toggleSidebarWidget(instanceId: string): void {

@@ -6,5 +6,6 @@ export class SidebarComponentState {
     public configurationMode: boolean = false;
     public showIconBar: boolean = true;
     public rows: string[] = [];
+    public context: string = "dashboard";
 
 }
