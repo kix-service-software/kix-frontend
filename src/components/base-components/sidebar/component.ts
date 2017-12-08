@@ -21,44 +21,31 @@ class SidebarComponent {
     }
 
     private dashboardStateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
-            this.state.rows = dashboardConfiguration.sidebarRows;
-            this.state.configuredWidgets = dashboardConfiguration.sidebarConfiguredWidgets;
-        }
+        const sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
+        this.state.rows = sidebarConfiguration[0];
+        this.state.configuredWidgets = sidebarConfiguration[1];
     }
 
     private toggleSidebarWidget(instanceId: string): void {
         if (this.state.configuredWidgets) {
-            const configuredWidget: ConfiguredWidget = this.state.configuredWidgets.find(
-                (cw) => cw.instanceId === instanceId
-            );
+
+            const configuredWidget = this.state.configuredWidgets.find((cw) => cw.instanceId === instanceId);
+
             if (configuredWidget) {
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
-                (this as any).setStateDirty('configuration');
+
                 DashboardStore.getInstance().saveWidgetConfiguration(
                     configuredWidget.instanceId,
                     configuredWidget.configuration,
                 );
+
+                (this as any).setStateDirty('configuration');
             }
         }
     }
 
-    private isShown(instanceId: string): boolean {
-        let isShown: boolean = false;
-        if (this.state.rows) {
-            let instanceIds = [];
-            this.state.rows.forEach((row) => {
-                instanceIds = [...instanceIds, ...row];
-            });
-            isShown = instanceIds.some((wiId) => wiId === instanceId);
-        }
-        return isShown;
-    }
-
-    private toggleConfigurationMode(): void {
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+    private sidebarAvailable(instanceId: string): boolean {
+        return this.state.rows.some((r) => r === instanceId);
     }
 
     private getWidgetTemplate(instanceId: string): any {

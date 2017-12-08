@@ -5,7 +5,7 @@
     <if(state.configuredWidgets)>
         <div.widget-bar>
             <for(widget in state.configuredWidgets)>
-                <if(component.isShown(widget.instanceId))>
+                <if(component.sidebarAvailable(widget.instanceId))>
                     <div.bar-icon class=(widget.configuration.show ? "select-active" : "")
                         on-click('toggleSidebarWidget', widget.instanceId)>
                         <span class=(widget.configuration.icon ? "kix-icon-" + widget.configuration.icon : "")/>
@@ -18,7 +18,7 @@
 <if(component.hasSidebarsToShow())>
     <div.sidebar>
         <for(widget in state.configuredWidgets)>
-            <if(component.isShown(widget.instanceId) && widget.configuration.show)>
+            <if(widget.configuration.show && component.sidebarAvailable(widget.instanceId))>
                 <!-- 
                 TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
                 sobald das include auch ohne root-Element funktioniert. In der style.less
