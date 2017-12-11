@@ -1,5 +1,4 @@
-import { UserListConfiguration } from './../../../components/widgets/user-list/model/UserListConfiguration';
-import { IWidget } from '@kix/core/dist/model';
+import { IWidget, WidgetSize } from '@kix/core/dist/model';
 
 export class UserListWidget implements IWidget {
 
@@ -7,10 +6,7 @@ export class UserListWidget implements IWidget {
 
     public instanceId: string = Date.now().toString();
 
-    public show: boolean = true;
-
     public constructor(id: string) {
         this.id = id;
     }
-
 }

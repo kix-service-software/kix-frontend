@@ -1,19 +1,16 @@
-<widget>
-    <@overlay>
-        <include(input.dragoverlay)/>
-    </@overlay>
+<widget instanceId=state.instanceId configurationTagId="ticket-list-configuration" minimizable=input.minimizable>
     <@icon>
-        <span class="kix-icon-minus"/>
+        <span.kix-icon-minus/>
     </@icon>
     <@title>
-        <if(state.widgetConfiguration && state.widgetConfiguration.contentConfiguration.showTotalCount)>
-            Tickets Gesamt: ${state.tickets.length} |
+        <if(state.widgetConfiguration)>
+            ${state.widgetConfiguration.title}
+            <if(state.widgetConfiguration.settings.showTotalCount)>(${state.tickets.length})</if>
         </if>
     </@title>
     <@content>
         <if(state.widgetConfiguration)>
-            <ticket-table displayLimit=10 tickets=state.filteredTickets
-                properties=state.widgetConfiguration.contentConfiguration.properties/>
+            <ticket-table displayLimit=10 tickets=state.filteredTickets properties=state.widgetConfiguration.settings.properties/>
         </if>
     </@content>
     <@filter>
@@ -21,8 +18,5 @@
         <input type="text" on-change("filterChanged") value=state.filterValue/>
         <button on-click('filter')>Filter</button>
     </@filter>
-    <@actions>
-        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-            on-click('showConfigurationClicked')/>
-    </@actions>
+    <@actions/>
 </widget>

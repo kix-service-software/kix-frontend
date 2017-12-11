@@ -5,3 +5,4 @@ export { MarkoService } from './MarkoService';
 export { PluginService } from './PluginService';
 export { SocketCommunicationService } from './SocketCommuncationService';
 export { TranslationService } from './TranslationService';
+export { WidgetRepositoryService } from './WidgetRepositoryService';

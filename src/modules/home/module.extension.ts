@@ -1,5 +1,5 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContainerConfiguration, ContainerRow } from '@kix/core/dist/model';
+import { ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -14,45 +14,165 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): any {
-        const content = new ContainerConfiguration();
 
-        const firstRow = new ContainerRow();
+        // TODO: aus einer config auslesen, oder wirklich DashboardConfiguration zurückgeben
+        const contentRows: string[][] = [
+            [
+                '20170920072542',
+                '20170920084512',
+                '20170920113214',
+            ],
+            ['20170920101621'],
+            ['20170920093015']
+        ];
+        const sidebarRows: string[][] = [
+            ['20170915101514'],
+            ['20170915094112'],
+            ['20170915085411']
+        ];
+        const contentConfiguredWidgets: ConfiguredWidget[] = [
+            {
+                instanceId: '20170920072542',
+                configuration: {
+                    widgetId: 'chart-widget',
+                    title: 'Chart',
+                    actions: [],
+                    settings: {
+                        chartType: 'bar'
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: null
+                }
+            },
+            {
+                instanceId: '20170920084512',
+                configuration: {
+                    widgetId: 'chart-widget',
+                    title: 'Chart 2',
+                    actions: [],
+                    settings: {
+                        chartType: 'pie'
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: null
+                }
+            },
+            {
+                instanceId: '20170920113214',
+                configuration: {
+                    widgetId: 'search-templates-widget',
+                    title: 'Suchvorlagen',
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: null
+                },
+            },
+            {
+                instanceId: '20170920101621',
+                configuration: {
+                    widgetId: 'ticket-list-widget',
+                    title: 'Ticket-Liste',
+                    actions: [],
+                    settings: {
+                        limit: 10,
+                        showTotalCount: true,
+                        properties: [
+                            'TicketNumber',
+                            'PriorityID',
+                            'StateID',
+                            'TypeID',
+                            'Title',
+                            'Created',
+                            'Age'
+                        ]
+                    },
+                    show: true,
+                    size: WidgetSize.LARGE,
+                    icon: null
+                },
+            },
+            {
+                instanceId: '20170920093015',
+                configuration: {
+                    widgetId: 'user-list-widget',
+                    title: 'User-List',
+                    actions: [],
+                    settings: {
+                        properties: [
+                            {
+                                name: 'UserID',
+                                displayName: 'ID'
+                            },
+                            {
+                                name: 'UserFirstname',
+                                displayName: 'Vorname'
+                            },
+                            {
+                                name: 'UserLastname',
+                                displayName: 'Nachname'
+                            },
+                            {
+                                name: 'UserEmail',
+                                displayName: 'Email'
+                            }
+                        ],
+                        limit: 10
+                    },
+                    show: true,
+                    size: WidgetSize.LARGE,
+                    icon: null
+                }
+            }
+        ];
+        const sidebarConfiguredWidgets: ConfiguredWidget[] = [
+            {
+                instanceId: '20170915101514',
+                configuration: {
+                    widgetId: 'notes-widget',
+                    title: "Notes",
+                    actions: [],
+                    settings: {
+                        notes: 'Test <strong style="color:red">123</strong>'
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
+                },
+            },
+            {
+                instanceId: '20170915094112',
+                configuration: {
+                    widgetId: 'notes-widget',
+                    title: "Notes 2",
+                    actions: [],
+                    settings: {
+                        notes: ""
+                    },
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
+                },
+            },
+            {
+                instanceId: '20170915085411',
+                configuration: {
+                    widgetId: 'ticket-info-widget',
+                    title: "Ticket-Info",
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    // TODO: richtiges Icon angeben
+                    icon: 'minus'
+                }
+            }
+        ];
 
-        firstRow.widgets.push({
-            id: "chart-widget",
-            instanceId: "20170920072542",
-            show: true
-        });
-        firstRow.widgets.push({
-            id: "chart-widget",
-            instanceId: "20170920084512",
-            show: true
-        });
-        firstRow.widgets.push({
-            id: "search-templates-widget",
-            instanceId: "20170920113214",
-            show: true
-        });
-
-        const secondRow = new ContainerRow();
-        secondRow.widgets.push({
-            id: "ticket-list-widget",
-            instanceId: "20170920101621",
-            show: true
-        });
-
-        const thirdRow = new ContainerRow();
-        thirdRow.widgets.push({
-            id: "user-list-widget",
-            instanceId: "20170920093015",
-            show: true
-        });
-
-        content.rows.push(firstRow);
-        content.rows.push(secondRow);
-        content.rows.push(thirdRow);
-
-        return content;
+        return { contentRows, sidebarRows, contentConfiguredWidgets, sidebarConfiguredWidgets };
     }
 
 }

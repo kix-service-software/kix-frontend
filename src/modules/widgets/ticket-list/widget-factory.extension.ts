@@ -1,16 +1,15 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
 import { TicketListWidget } from './TicketListWidget';
-import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
+import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
+    public isSidebar: boolean = false;
+    public isContentWidget: boolean = true;
+    public widgetId: string = "ticket-list-widget";
 
     public createWidget(): IWidget {
-        return new TicketListWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "ticket-list-widget";
+        return new TicketListWidget(this.widgetId);
     }
 
     public getTemplate(): string {
@@ -38,7 +37,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
             ]
         };
 
-        return new WidgetConfiguration('Ticket-Liste', [], config);
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], config, true, WidgetSize.LARGE);
     }
 
 }

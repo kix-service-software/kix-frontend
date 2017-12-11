@@ -1,0 +1,45 @@
+.config-header-theme() {
+    background: @config-color;
+    color: @secondary-0;
+}
+
+.bar-icon.config-mode {
+    position: relative;
+    .config-header-theme;
+    box-shadow: none;
+    &:not(.config-dialog-shown) {
+        z-index: 111;
+    }
+}
+
+.dashboard-configuration-widget {
+    position: absolute;
+    top: 0px;
+    right: 72px;
+    width: 192px;
+    z-index: 110;
+    .widget {
+        border: 1px solid @config-color;
+        border-top: none;
+        .widget-header {
+            .config-header-theme;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 3px;
+            box-sizing: border-box;
+            width: 264px;
+        }
+        .widget-content {
+            button {
+                left: 0px;
+                height: unset;
+            }
+            height: unset;
+        }
+    }
+}
+
+.dashboard-configuration-dialog {
+    .main-overlay {
+        z-index: 120;
+    }
+}

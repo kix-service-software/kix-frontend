@@ -49,12 +49,12 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
             const ps = await psExt.getPersonalSettings();
 
             let personalSettings =
-                await this.configurationService.getComponentConfiguration(PERSONAL_SETTINGS, ps.id, null, userId);
+                await this.configurationService.getComponentConfiguration(PERSONAL_SETTINGS, ps.id, userId);
 
             if (!personalSettings) {
                 personalSettings = ps.configuration;
                 await this.configurationService
-                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, null, userId, personalSettings);
+                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, userId, personalSettings);
             }
 
             ps.configuration = personalSettings;
@@ -72,7 +72,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
 
             for (const ps of data.personalSettings) {
                 await this.configurationService
-                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, null, userId, ps.configuration);
+                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, userId, ps.configuration);
             }
 
             client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_SAVED);

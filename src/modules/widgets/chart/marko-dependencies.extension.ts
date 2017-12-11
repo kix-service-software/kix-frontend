@@ -4,7 +4,8 @@ export class ChartWidgetMarkoDependencyExtension implements IMarkoDependencyExte
 
     public getDependencies(): string[] {
         return [
-            "widgets/chart"
+            "widgets/chart",
+            'widgets/chart/chart-configuration'
         ];
     }
 

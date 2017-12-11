@@ -1,11 +1,8 @@
-<widget>
-    <@overlay>
-        <include(input.dragoverlay)/>
-    </@overlay>
-    <@icon>
-        <span class="kix-icon-minus"/>
-    </@icon>
-    <@title>Suchvorlagen</@title>
+<widget instanceId=state.instanceId configurationTagId="search-templates-configuration" minimizable=input.minimizable>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
     <@content>
         <div.left>
             <select.template-list size=6>
@@ -34,8 +31,5 @@
     <@filter>
         <span/>
     </@filter>
-    <@actions>
-        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-            on-click('showConfigurationClicked')/>
-    </@actions>
+    <@actions/>
 </widget>

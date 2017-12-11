@@ -19,7 +19,8 @@ import {
     ITicketTypeService,
     ITranslationService,
     IUserService,
-    IValidObjectService
+    IValidObjectService,
+    IWidgetRepositoryService
 } from '@kix/core/dist/services';
 import { ICommunicator } from '@kix/core/dist/common';
 import { KIXExtensions, ICommunicatorExtension, IRouterExtension } from '@kix/core/dist/extensions';
@@ -48,7 +49,8 @@ import {
     TicketTypeService,
     TranslationService,
     UserService,
-    ValidObjectService
+    ValidObjectService,
+    WidgetRepositoryService
 } from './services/';
 
 export class ServiceContainer {
@@ -96,6 +98,7 @@ export class ServiceContainer {
         this.container.bind<IRoleService>("IRoleService").to(RoleService);
         this.container.bind<IQueueService>("IQueueService").to(QueueService);
         this.container.bind<IServiceService>("IServiceService").to(ServiceService);
+        this.container.bind<IWidgetRepositoryService>("IWidgetRepositoryService").to(WidgetRepositoryService);
     }
 
     private async bindRouters(): Promise<void> {

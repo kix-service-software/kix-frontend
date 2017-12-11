@@ -1,23 +1,41 @@
-[draggable] {
-    user-select: none;
-}
-
-.drag-overlay {
-    opacity: 0.2;
-    background-color: @tertiary-5;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    cursor: move;
-    border-radius: 3px;
-}
-
-.drag-element {
-    opacity: 0.7;
-}
-
-.drop-element {
-    background-color: @tertiary-3;
+.drag-widget {
+    position: relative;
+    [draggable] {
+        user-select: none;
+    }
+    &.config-mode:not(.config-dialog-shown) {
+        z-index: 100;
+    }
+    .widget-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        cursor: move;
+        border: 1px solid @secondary-0;
+        border-top: none;
+        border-radius: @border-radius;
+        .widget-overlay-content {
+            position: absolute;
+            opacity: 0.2;
+            top: 2em;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: @config-color;
+            box-sizing: border-box;
+        }
+    }
+    &.size1of1 {
+        .widget-overlay {
+            cursor: ns-resize;
+        }
+    }
+    .drag-element {
+        opacity: 0.7;
+    }
+    .drop-element {
+        background-color: @tertiary-3;
+    }
 }

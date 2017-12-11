@@ -1,23 +1,15 @@
-<if(state.widgetConfiguration)>
-    <widget>
-        <@overlay>
-            <include(input.dragoverlay)/>
-        </@overlay>
-        <@icon>
-            <span class="kix-icon-minus"/>
-        </@icon>
-        <@title>${state.widgetConfiguration.title}</@title>
-        <@content>
-            <div.chart>
-                <svg id=state.svgId height="300" width="300"/>
-            </div>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                on-click('showConfigurationClicked')/>
-        </@actions>
-    </widget>
-</if>
+<widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <div.chart>
+            <svg id=state.svgId height="300" width="300"/>
+        </div>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>

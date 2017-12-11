@@ -1,32 +1,41 @@
 <div.tools-col>
     <if(state.showIconBar)>
-        <icon-bar on-toggleConfigurationMode('toggleConfigurationMode')/>
+        <icon-bar/>
     </if>
-    <if(state.configuration)>
+    <if(state.configuredWidgets)>
         <div.widget-bar>
-            <for(widget in state.configuration.widgets)>
-                <div.bar-icon class="${widget.show ? 'select-active' : ''}" on-click('toggleSidebarWidget', widget.instanceId)>
-                    <span class="${ widget.icon ? 'kix-icon-' + widget.icon : ''}"/>
-                </div>
+            <for(widget in state.configuredWidgets)>
+                <if(component.isShown(widget.instanceId))>
+                    <div.bar-icon class=(widget.configuration.show ? "select-active" : "")
+                        on-click('toggleSidebarWidget', widget.instanceId)>
+                        <span class=(widget.configuration.icon ? "kix-icon-" + widget.configuration.icon : "")/>
+                    </div>
+                </if>
             </for>
         </div>
     </if>
 </div>
-<if(state.configuration && component.hasWidgetsToShow())>
+<if(component.hasSidebarsToShow())>
     <div.sidebar>
-        <for(widget in state.configuration.widgets)>
-            <if(widget.show)>
+        <for(widget in state.configuredWidgets)>
+            <if(component.isShown(widget.instanceId) && widget.configuration.show)>
                 <!-- 
                 TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
                 sobald das include auch ohne root-Element funktioniert. In der style.less
                 ist dann ".sidebar > div" auch wieder durch ".sidebar > .widget" zu erstetzen!
                 siehe Issue #151
+                nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))
                 -->
-                <div>
-                    <include(component.getWidgetTemplate(widget.id), {
+                <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
+                    <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
-                        configurationMode: state.configurationMode
+                        minimizable: false
                     }) key=widget.instanceId/>
+                    <if(component.isConfigMode())>
+                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+                            <div.widget-overlay-content/>
+                        </div>
+                    </if>
                 </div>
             </if>
         </for>

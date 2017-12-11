@@ -1,31 +1,27 @@
-<if(state.widgetConfiguration)>
-    <widget>
-        <@overlay>
-            <include(input.dragoverlay)/>
-        </@overlay>
-        <@icon>
-            <span class="kix-icon-note"/>
-        </@icon>
-        <@title>Notizen</@title>
-        <@content>
-            <if(state.widgetConfiguration)>
-                <if(state.editMode)>
-                    <editor inline=true resize=false value=state.widgetConfiguration.contentConfiguration.notes
-                        on-valueChanged('valueChanged')/>
-                </if>
-                <else>
-                    <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
-                    <div.no-editor key=(state.instanceId + "-no-editor")>$!{state.widgetConfiguration.contentConfiguration.notes}</div>
-                </else>
+<widget instanceId=state.instanceId configurationTagId="notes-configuration" minimizable=input.minimizable>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <if(state.widgetConfiguration)>
+            <if(state.editMode)>
+                <editor inline=true resize=false value=state.widgetConfiguration.settings.notes on-valueChanged('valueChanged')/>
             </if>
-        </@content>
-        <@filter>
-            <span/>
-        </@filter>
-        <@actions>
-            <span class="kix-icon icon-dummy" on-click('toggleEditMode')/>
-            <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-                on-click('showConfigurationClicked')/>
-        </@actions>
-    </widget>
-</if>
+            <else>
+                <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
+                <div.no-editor key=(state.instanceId + "-no-editor")>$!{state.widgetConfiguration.settings.notes}</div>
+            </else>
+        </if>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions>
+        <span class="kix-icon-edit" on-click('toggleEditMode')/>
+    </@actions>
+</widget>

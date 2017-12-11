@@ -1,9 +1,8 @@
 <div.widget>
-    <include(input.overlay)/>
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
-                <if(input.icon)>
+                <if(input.icon && Object.keys(input.icon).length)>
                     <include(input.icon)/>
                 </if>
                 <include(input.title)/>
@@ -13,15 +12,30 @@
             <include(input.filter)/>
         </span>
         <span.header-right>
-            <include(input.actions)/>
-            <span class="kix-icon-gear configuration ${state.configurationMode ? '' : 'not-visible'}" on-click('configClicked')/>
-            <!-- @todo: Klären, ob Widget minimierbar sein soll. Bis dahin wird Icon versteckt -->
-            <!--
-            <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
-            -->
+            <if(component.isConfigMode())>
+                <if(state.configChanged)>
+                    <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
+                </if>
+                <span.kix-icon-gear on-click('showConfiguration')/>
+            </if>
+            <else>
+                <!-- 
+                    TODO: Durch Marko-Bug kein if innerhalb if/else möglich, deshalb wieder "unnützes" div 
+                    wahrscheinlich selbes Problem wie in Issue #151
+                    interessanter weise gehen hier auch nicht mehrere if nebeneinander bzw. if - else-if Konstrukte...
+                -->
+                <div>
+                    <if(input.actions && Object.keys(input.actions).length)>
+                        <include(input.actions)/>
+                    </if>
+                    <if(input.minimizable || typeof input.minimizable === 'undefined')>
+                        <span class="kix-icon icon-dummy" on-click('minimizeWidget')/>
+                    </if>
+                </div>
+            </else>
         </span>
     </div>
-    <if(state.minimized)>
+    <if(!state.minimized)>
         <div.widget-content>
             <include(input.content)/>
         </div>

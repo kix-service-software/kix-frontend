@@ -4,7 +4,8 @@ export class SearchTemplatesWidgetMarkoDependencyExtension implements IMarkoDepe
 
     public getDependencies(): string[] {
         return [
-            "widgets/search-templates"
+            'widgets/search-templates',
+            'widgets/search-templates/search-templates-configuration'
         ];
     }
 

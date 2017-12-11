@@ -13,6 +13,7 @@ export class ConfigurationService implements IConfigurationService {
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
     private translationConfiguration: TranslationConfiguration;
+    private preDefinedWidgetConfiguration: any;
 
     private CONFIG_DIR: string = '../../config/';
     private CONFIG_COMPONENTS_DIR: string = '../../config/components/';
@@ -36,6 +37,8 @@ export class ConfigurationService implements IConfigurationService {
         const translationConfig = this.getConfigurationFilePath("translation");
         this.clearRequireCache(translationConfig);
         this.translationConfiguration = require(translationConfig);
+
+        this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
     }
 
     public getServerConfiguration(): IServerConfiguration {
@@ -50,42 +53,55 @@ export class ConfigurationService implements IConfigurationService {
         return this.translationConfiguration;
     }
 
-    public async getComponentConfiguration(
-        contextId: string, componentId: string, instanceId: string, userId: number): Promise<any> {
+    public getPreDefinedWidgetConfiguration(): any {
+        return this.preDefinedWidgetConfiguration || {};
+    }
+
+    public async getModuleConfiguration(
+        contextId: string, userId: number): Promise<any> {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
-        const configurationFile = this.getConfigurationFile(filePath);
+        const moduleConfiguration = this.getConfigurationFile(filePath);
+
+        return moduleConfiguration;
+    }
+
+    public async saveModuleConfiguration(
+        contextId: string, userId: number, configuration: any): Promise<void> {
+
+        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
+        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
+
+        return this.saveConfigurationFile(__dirname + '/' + filePath, configuration);
+    }
+
+    public async getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): Promise<any> {
+
+        const moduleConfiguration = this.getModuleConfiguration(contextId, userId);
 
         if (componentId === null) {
             componentId = contextId;
         }
 
-        if (instanceId) {
-            componentId = componentId + "-" + instanceId;
-        }
-
-        return configurationFile[componentId];
+        return moduleConfiguration[componentId];
     }
 
     public async saveComponentConfiguration(
-        contextId: string, componentId: string, instanceId: string, userId: number, configuration: any): Promise<void> {
+        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
 
         if (componentId === null) {
             componentId = contextId;
         }
 
-        if (instanceId) {
-            componentId = componentId + "-" + instanceId;
-        }
-
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
+        const moduleConfiguration = this.getConfigurationFile(filePath);
 
-        const configurationContent = this.getConfigurationFile(filePath);
-        configurationContent[componentId] = configuration;
+        moduleConfiguration[componentId] = configuration;
 
-        return this.saveConfigurationFile(__dirname + '/' + filePath, configurationContent);
+        return this.saveConfigurationFile(__dirname + '/' + filePath, moduleConfiguration);
     }
 
     public isProductionMode(): boolean {
