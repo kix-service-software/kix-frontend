@@ -1,0 +1,32 @@
+<widget instanceId=state.instanceId configurationTagId="" minimizable=true>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <ul>
+            <li>
+                Support
+                <ul>
+                    <li>Telefon</li>
+                    <li>Email</li>
+                </ul>
+            </li>
+            <li>
+                Entwicklung
+                <ul>
+                    <li>Produkt</li>
+                    <li>Kunden</li>
+                </ul>
+            </li>
+        </ul>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>

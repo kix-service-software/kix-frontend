@@ -14,16 +14,6 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         return new UserListWidget(this.widgetId);
     }
 
-    public getTemplate(): string {
-        const packageJson = require('../../../../package.json');
-        const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/widgets/user-list';
-    }
-
-    public getConfigurationTemplate(): string {
-        return this.getTemplate() + '/configuration';
-    }
-
     public getDefaultConfiguration(): WidgetConfiguration {
         const userListConfiguration = new UserListSettings();
         userListConfiguration.properties.push(new UIProperty("UserID", "ID"));

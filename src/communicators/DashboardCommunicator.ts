@@ -55,8 +55,10 @@ export class DashboardCommunicator extends KIXCommunicator {
                 data.contextId,
                 configuration.contentRows,
                 configuration.sidebarRows,
+                configuration.explorerRows,
                 configuration.contentConfiguredWidgets,
                 configuration.sidebarConfiguredWidgets,
+                configuration.explorerConfiguredWidgets,
                 availableWidgets
             )
         );

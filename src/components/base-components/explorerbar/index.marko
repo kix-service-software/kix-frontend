@@ -1,6 +1,12 @@
 <input#first-explorer class="explorer-toggle" type="checkbox"/>
 <input#second-explorer class="explorer-toggle" type="checkbox"/>
 <div class="explorerbar">
+    <for(widget in state.configuredWidgets)>
+        <include(component.getWidgetTemplate(widget.instanceId), {
+                        instanceId: widget.instanceId,
+                        minimizable: false
+                    }) key=widget.instanceId/>
+    </for>
     <div.widget.first-explorer.explorer>
         <div.widget-header.clearfix>
             <span.header-left>

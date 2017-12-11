@@ -25,11 +25,17 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             ['20170920101621'],
             ['20170920093015']
         ];
+
         const sidebarRows: string[][] = [
             ['20170915101514'],
             ['20170915094112'],
             ['20170915085411']
         ];
+
+        const explorerRows: string[][] = [
+            ['20171211155412']
+        ];
+
         const contentConfiguredWidgets: ConfiguredWidget[] = [
             {
                 instanceId: '20170920072542',
@@ -172,7 +178,25 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             }
         ];
 
-        return { contentRows, sidebarRows, contentConfiguredWidgets, sidebarConfiguredWidgets };
+        const explorerConfiguredWidgets: ConfiguredWidget[] = [
+            {
+                instanceId: '20171211155412',
+                configuration: {
+                    widgetId: 'queue-explorer-widget',
+                    title: "Queues",
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
+                },
+            }
+        ];
+
+        return {
+            contentRows, sidebarRows, explorerRows,
+            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets
+        };
     }
 
 }
