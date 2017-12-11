@@ -9,64 +9,61 @@ class SidebarComponent {
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
+    }
+
+    public onInput(input: any): void {
         if (input.hasOwnProperty('showIconBar') && input.showIconBar === false) {
             this.state.showIconBar = false;
         }
+
+        this.state.context = input.context;
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
         this.dashboardStateChanged();
     }
 
     private dashboardStateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
-            this.state.rows = dashboardConfiguration.sidebarRows;
-            this.state.configuredWidgets = dashboardConfiguration.sidebarConfiguredWidgets;
+        let sidebarConfiguration = null;
+
+        if (this.state.context === "dialog") {
+            sidebarConfiguration = DashboardStore.getInstance().getDialogSidebars();
+        } else {
+            sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
+        }
+
+        if (sidebarConfiguration && sidebarConfiguration.length) {
+            this.state.rows = sidebarConfiguration[0];
+            this.state.configuredWidgets = sidebarConfiguration[1];
         }
     }
 
     private toggleSidebarWidget(instanceId: string): void {
         if (this.state.configuredWidgets) {
-            const configuredWidget: ConfiguredWidget = this.state.configuredWidgets.find(
-                (cw) => cw.instanceId === instanceId
-            );
+
+            const configuredWidget = this.state.configuredWidgets.find((cw) => cw.instanceId === instanceId);
+
             if (configuredWidget) {
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
-                (this as any).setStateDirty('configuration');
+
                 DashboardStore.getInstance().saveWidgetConfiguration(
                     configuredWidget.instanceId,
                     configuredWidget.configuration,
                 );
+
+                (this as any).setStateDirty('configuration');
             }
         }
     }
 
-    private isShown(instanceId: string): boolean {
-        let isShown: boolean = false;
-        if (this.state.rows) {
-            let instanceIds = [];
-            this.state.rows.forEach((row) => {
-                instanceIds = [...instanceIds, ...row];
-            });
-            isShown = instanceIds.some((wiId) => wiId === instanceId);
-        }
-        return isShown;
-    }
-
-    private toggleConfigurationMode(): void {
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+    private sidebarAvailable(instanceId: string): boolean {
+        return this.state.rows.some((r) => r === instanceId);
     }
 
     private getWidgetTemplate(instanceId: string): any {
         return DashboardStore.getInstance().getWidgetTemplate(instanceId);
-    }
-
-    private applicationStateChanged() {
-        (this as any).setStateDirty();
     }
 
     private isConfigMode(): boolean {
