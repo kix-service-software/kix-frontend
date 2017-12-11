@@ -39,3 +39,13 @@
         padding: inherit;
     }
 }
+
+#first-explorer:not(:checked) ~ .explorerbar .first-explorer.explorer .header-left label,
+#second-explorer:not(:checked) ~ .explorerbar .second-explorer.explorer .header-left label {
+    display: none;
+}
+
+#first-explorer:checked ~ .explorerbar .first-explorer.explorer .header-right label,
+#second-explorer:checked ~ .explorerbar .second-explorer.explorer .header-right label {
+    display: none;
+}
