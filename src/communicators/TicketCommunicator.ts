@@ -44,7 +44,10 @@ export class TicketCommunicator extends KIXCommunicator {
                 .catch((error) => {
                     client.emit(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
                 });
-            client.emit(TicketEvent.TICKETS_SEARCH_FINISHED, new SearchTicketsResponse((tickets as Ticket[])));
+            client.emit(
+                TicketEvent.TICKETS_SEARCH_FINISHED,
+                new SearchTicketsResponse(data.requestId, tickets as Ticket[])
+            );
         });
 
         client.on(TicketCreationEvent.CREATE_TICKET, async (data: TicketCreationRequest) => {

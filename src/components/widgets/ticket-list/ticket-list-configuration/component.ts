@@ -1,3 +1,4 @@
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class TicketListConfigurationComponent {
@@ -19,6 +20,10 @@ class TicketListConfigurationComponent {
         this.state.configuration = DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
     }
 
+    public displayLimitChanged(event: any): void {
+        this.state.configuration.settings.displayLimit = event.target.value;
+    }
+
     public limitChanged(event: any): void {
         this.state.configuration.settings.limit = event.target.value;
     }
@@ -30,6 +35,7 @@ class TicketListConfigurationComponent {
 
     private saveConfiguration(): void {
         DashboardStore.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
+        ApplicationStore.getInstance().toggleDialog();
     }
 
 }

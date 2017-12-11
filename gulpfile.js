@@ -37,7 +37,7 @@ const prodTSCConfig = {
 };
 
 gulp.task('default', (cb) => {
-    runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+    runseq('clean', 'tslint', 'compile-src', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
 });
 
 gulp.task('clean', () => {
