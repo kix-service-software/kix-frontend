@@ -8,7 +8,7 @@ export class RouterOutletComponent {
     public onCreate(input: any): void {
         this.state = {
             componentId: null,
-            template: null,
+            template: "",
             routerId: null,
             data: null
         };
@@ -28,6 +28,9 @@ export class RouterOutletComponent {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
+            if (!this.state.template) {
+                this.state.template = "";
+            }
         }
     }
 
