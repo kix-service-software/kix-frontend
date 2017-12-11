@@ -11,7 +11,7 @@ export class NotesWidgetMarkoDependencyExtension implements IMarkoDependencyExte
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['notes', 'widgets/notes'],
+            ['notes-widget', 'widgets/notes'],
             ['notes-configuration', 'widgets/notes/notes-configuration']
         ];
     }

@@ -5,6 +5,4 @@ export class HomeComponentState {
     public rows: string[][] = [];
 
     public configuredWidgets: ConfiguredWidget[] = [];
-
-    public widgetTemplates: WidgetTemplate[] = [];
 }

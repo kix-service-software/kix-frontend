@@ -1,6 +1,7 @@
 import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 
 class DraggableContainerComponent {
 
@@ -14,7 +15,6 @@ class DraggableContainerComponent {
 
     public onInput(input: any): void {
         this.state.rows = input.rows;
-        this.state.widgetTemplates = input.widgetTemplates;
         this.state.dndState.enabled = input.configurationMode;
     }
 
@@ -23,8 +23,7 @@ class DraggableContainerComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const widgetTemplate = this.state.widgetTemplates.find((wt) => wt.instanceId === instanceId);
-        return widgetTemplate && widgetTemplate.template ? require(widgetTemplate.template) : '';
+        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
     }
 
     private dragStart(event): void {
