@@ -1,58 +1,81 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
-import { SidebarState } from './store/';
-import { SIDEBAR_INITIALIZE } from './store/actions';
+import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ConfiguredWidget, DashboardConfiguration } from '@kix/core/dist/model';
+import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 class SidebarComponent {
 
-    public state: SidebarComponentState;
-    private store: any;
+    private state: SidebarComponentState;
 
     public onCreate(input: any): void {
         this.state = new SidebarComponentState();
+    }
+
+    public onInput(input: any): void {
         if (input.hasOwnProperty('showIconBar') && input.showIconBar === false) {
             this.state.showIconBar = false;
         }
+
+        this.state.context = input.context;
     }
 
     public onMount(): void {
-        this.store = require('./store/').create();
-        this.store.subscribe(this.stateChanged.bind(this));
-        this.store.dispatch(SIDEBAR_INITIALIZE(this.store));
+        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
+        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
+        this.dashboardStateChanged();
     }
 
-    public stateChanged(): void {
-        const reduxState: SidebarState = this.store.getState();
-        if (reduxState.configuration) {
-            this.state.configuration = reduxState.configuration;
-            this.state.widgetTemplates = reduxState.widgetTemplates;
+    private dashboardStateChanged(): void {
+        let sidebarConfiguration = null;
+
+        if (this.state.context === "dialog") {
+            sidebarConfiguration = DashboardStore.getInstance().getDialogSidebars();
+        } else {
+            sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
+        }
+
+        if (sidebarConfiguration && sidebarConfiguration.length) {
+            this.state.rows = sidebarConfiguration[0];
+            this.state.configuredWidgets = sidebarConfiguration[1];
         }
     }
 
-    public toggleSidebarWidget(instanceId: string): void {
-        if (this.state.configuration && this.state.configuration.widgets) {
-            const widget = this.state.configuration.widgets.find((w) => w.instanceId === instanceId);
-            if (widget) {
-                widget.show = !widget.show;
+    private toggleSidebarWidget(instanceId: string): void {
+        if (this.state.configuredWidgets) {
+
+            const configuredWidget = this.state.configuredWidgets.find((cw) => cw.instanceId === instanceId);
+
+            if (configuredWidget) {
+                configuredWidget.configuration.show = !configuredWidget.configuration.show;
+
+                DashboardStore.getInstance().saveWidgetConfiguration(
+                    configuredWidget.instanceId,
+                    configuredWidget.configuration,
+                );
+
                 (this as any).setStateDirty('configuration');
             }
         }
     }
 
-    public toggleConfigurationMode(): void {
-        this.state.configurationMode = !this.state.configurationMode;
-        (this as any).emit('toggleConfigurationMode');
+    private sidebarAvailable(instanceId: string): boolean {
+        return this.state.rows.some((r) => r === instanceId);
     }
 
-    public getWidgetTemplate(widgetId: string): any {
-        const template = this.state.widgetTemplates.find((wt) => wt.widgetId === widgetId).template;
-        if (template) {
-            return require(template);
-        }
-        return '';
+    private getWidgetTemplate(instanceId: string): any {
+        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
     }
 
-    public hasWidgetsToShow(): boolean {
-        return this.state.configuration.widgets.filter((w) => w.show).length > 0;
+    private isConfigMode(): boolean {
+        return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private isConfigDialogShown(): boolean {
+        return ApplicationStore.getInstance().isShowDialog();
+    }
+
+    private hasSidebarsToShow(): boolean {
+        return this.state.configuredWidgets.some((w) => w.configuration.show);
     }
 }
 

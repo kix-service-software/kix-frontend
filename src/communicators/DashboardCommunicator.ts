@@ -1,17 +1,17 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
+    IWidget,
+    ConfiguredWidget,
     DashboardEvent,
+    DashboardConfiguration,
     LoadDashboardRequest,
     LoadDashboardResponse,
     SaveDashboardRequest,
     SaveWidgetRequest,
-    ContainerConfiguration,
     SocketEvent,
     User,
-    WidgetTemplate,
     WidgetConfiguration,
-    IWidget,
-    SidebarConfiguration
+    WidgetTemplate
 } from '@kix/core/dist/model';
 
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/';
@@ -36,46 +36,30 @@ export class DashboardCommunicator extends KIXCommunicator {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
-        let configuration: ContainerConfiguration = await this.configurationService
-            .getComponentConfiguration(data.contextId, null, null, userId);
+        let configuration: any = await this.configurationService
+            .getModuleConfiguration(data.contextId, userId);
 
-        if (!configuration) {
+        if (!configuration.hasOwnProperty('contentRows')) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
-
-            await this.configurationService.saveComponentConfiguration(
-                data.contextId, null, null, userId, moduleDefaultConfiguration);
+            await this.configurationService.saveModuleConfiguration(
+                data.contextId, userId, moduleDefaultConfiguration);
 
             configuration = moduleDefaultConfiguration;
         }
 
-        const widgetTemplates: WidgetTemplate[] = [];
-        const widgetConfigurations: Array<[string, WidgetConfiguration]> = [];
+        const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
 
-        let widgets: IWidget[] = [];
-        for (const row of configuration.rows) {
-            widgets = [...widgets, ...row.widgets];
-        }
-
-        // Sidebarkonfigurationene laden
-        const sidebarConfiguration: SidebarConfiguration =
-            await this.configurationService.getComponentConfiguration(data.contextId, 'sidebar', null, userId);
-
-        widgets = [...widgets, ...sidebarConfiguration.widgets];
-
-        for (const widget of widgets) {
-            const widgetFactory = await this.pluginService.getWidgetFactory(widget.id);
-            widgetTemplates.push(new WidgetTemplate(widget.id, widgetFactory.getTemplate()));
-
-            const widgetConfiguration =
-                await this.getWidgetConfiguration(
-                    data.contextId, widget.id, widget.instanceId, userId, widgetFactory
-                );
-
-            widgetConfigurations.push([widget.instanceId, widgetConfiguration]);
-        }
-
-        const response = new LoadDashboardResponse(configuration, widgetTemplates, widgetConfigurations);
+        const response = new LoadDashboardResponse(
+            new DashboardConfiguration(
+                data.contextId,
+                configuration.contentRows,
+                configuration.sidebarRows,
+                configuration.contentConfiguredWidgets,
+                configuration.sidebarConfiguredWidgets,
+                availableWidgets
+            )
+        );
         this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
     }
 
@@ -85,7 +69,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         const userId = user && user.UserID;
 
         await this.configurationService
-            .saveComponentConfiguration(data.contextId, null, null, userId, data.configuration);
+            .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
         this.client.emit(DashboardEvent.DASHBOARD_SAVED);
     }
@@ -94,30 +78,27 @@ export class DashboardCommunicator extends KIXCommunicator {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
-        await this.configurationService.saveComponentConfiguration(
-            data.contextId, data.widgetId, data.instanceId, userId, data.widgetConfiguration
+        const moduleConfiguration: DashboardConfiguration = await this.configurationService.getModuleConfiguration(
+            data.contextId,
+            userId
         );
+        if (moduleConfiguration) {
+            let index = moduleConfiguration.contentConfiguredWidgets.findIndex(
+                (cw) => cw.instanceId === data.instanceId
+            );
+            if (index > -1) {
+                moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
+            } else {
+                index = moduleConfiguration.sidebarConfiguredWidgets.findIndex(
+                    (cw) => cw.instanceId === data.instanceId
+                );
+                moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
+            }
 
-        this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
-    }
-
-    private async getWidgetConfiguration(
-        contextId: string, widgetId: string, instanceId: string, userId: number, widgetFactory: IWidgetFactoryExtension
-    ): Promise<WidgetConfiguration> {
-
-        let configuration = await this.configurationService
-            .getComponentConfiguration(contextId, widgetId, instanceId, userId);
-
-        if (!configuration) {
-            const widgetDefaultConfiguration = widgetFactory.getDefaultConfiguration();
-
-            await this.configurationService.saveComponentConfiguration(
-                contextId, widgetId, instanceId, userId, widgetDefaultConfiguration);
-
-            configuration = widgetDefaultConfiguration;
+            await this.configurationService.saveModuleConfiguration(
+                data.contextId, userId, moduleConfiguration
+            );
+            this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
         }
-
-        return configuration;
     }
-
 }

@@ -1,17 +1,16 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
-import { NotesConfiguration } from './../../../components/widgets/notes/model/NotesConfiguration';
+import { NotesSettings } from './../../../components/widgets/notes/model/NotesSettings';
 import { NotesWidget } from './NotesSidebar';
-import { IWidget, WidgetConfiguration } from '@kix/core/dist/model';
+import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
+    public isSidebar: boolean = true;
+    public isContentWidget: boolean = false;
+    public widgetId: string = "notes-widget";
 
     public createWidget(): IWidget {
-        return new NotesWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "notes-widget";
+        return new NotesWidget(this.widgetId);
     }
 
     public getTemplate(): string {
@@ -25,7 +24,7 @@ export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
     }
 
     public getDefaultConfiguration(): WidgetConfiguration {
-        return new WidgetConfiguration("Notes", [], new NotesConfiguration());
+        return new WidgetConfiguration(this.widgetId, "Notes", [], new NotesSettings(), true, WidgetSize.SMALL, 'note');
     }
 
 }

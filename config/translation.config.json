@@ -50,6 +50,55 @@
             }
         },
         {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:TITLE",
+            "defaultValue": "Widgets verwalten",
+            "translationValues": {
+                "en": "Widget management"
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:PRE-DESCRIPTION",
+            "defaultValue": "Hier können Sie die angezeigten Widgets anpassen (z.B. hinzufügen, entfernen, konfigurieren sowie deren Position verändern).",
+            "translationValues": {
+                "en": "Here you can adjust the displayed widgets (e.g. add, remove, configure widgets and change their position)."
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:DESCRIPTION",
+            "defaultValue": "Widgets hinzufügen oder entfernen:",
+            "translationValues": {
+                "en": "Add or remove widgets:"
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:OPEN-DIALOG",
+            "defaultValue": "Auswahl der Widgets",
+            "translationValues": {
+                "en": "Widget range"
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:DESCRIPTION-INFO",
+            "defaultValue": "Die angezeigten Widgets können mittels Drag & Drop verschoben werden.",
+            "translationValues": {
+                "en": "The displayed widgets can be moved per drag'n drop."
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:START",
+            "defaultValue": "Konfiguration starten",
+            "translationValues": {
+                "en": "Start configuration"
+            }
+        },
+        {
+            "id": "DASHBOARD-CONFIGURATION-WIDGET:STOP",
+            "defaultValue": "Konfiguration beenden",
+            "translationValues": {
+                "en": "Stop configuration"
+            }
+        },
+        {
             "id": "EQ",
             "defaultValue": "Ist Gleich",
             "translationValues": {

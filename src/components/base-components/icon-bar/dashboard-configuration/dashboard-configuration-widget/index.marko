@@ -1,0 +1,31 @@
+<div.bar-icon class=[component.isConfigMode() || state.showDashboardConfigurationWidget ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
+    <span.kix-icon-gear class=(state.showDashboardConfigurationWidget ? "" : "icon-asterisk")
+        on-click('toggleDashboardConfigurationWidget')/>
+</div>
+<if(state.translations && state.showDashboardConfigurationWidget)>
+    <div.dashboard-configuration-widget>
+        <widget minimizable=false>
+            <@title>
+                <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
+            </@title>
+            <@content>
+                <if(component.isConfigMode())>
+                    <h4>Home Dashboard</h4>
+                    <!-- TODO: get real dashboard name (home, ticket, ...) and its translation, maybe from parent (input.name) -->
+                    <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
+                    ${component.getTranslation(component.translationIds.DESCRIPTION)}
+                    <button on-click('openDashboardConfigurationDialog')>
+                        ${component.getTranslation(component.translationIds.OPEN_DIALOG)}
+                    </button>
+                    <span.kix-icon.icon-dummy.icon-i/>${component.getTranslation(component.translationIds.DESCRIPTION_INFO)}
+                    <hr/>
+                    <button on-click('toggleConfigurationMode')>${component.getTranslation(component.translationIds.STOP)}</button>
+                </if>
+                <else>
+                    ${component.getTranslation(component.translationIds.PRE_DESCRIPTION)}
+                    <button on-click('toggleConfigurationMode')>${component.getTranslation(component.translationIds.START)}</button>
+                </else>
+            </@content>
+        </widget>
+    </div>
+</if>

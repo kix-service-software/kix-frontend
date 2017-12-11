@@ -1,15 +1,14 @@
 import { TicketInfoWidget } from './TicketInfoWidget';
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
-import { IWidget } from '@kix/core/dist/model/widget/IWidget';
+import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension {
+    public isSidebar: boolean = true;
+    public isContentWidget: boolean = false;
+    public widgetId: string = "ticket-info-widget";
 
     public createWidget(): IWidget {
-        return new TicketInfoWidget(this.getWidgetId());
-    }
-
-    public getWidgetId(): string {
-        return "ticket-info-widget";
+        return new TicketInfoWidget(this.widgetId);
     }
 
     public getTemplate(): string {
@@ -23,7 +22,8 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        return {};
+        // TODO: richtiges Icon geben lassen, sobald Widget "definiert" wurde
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Info', [], {}, true, WidgetSize.SMALL, 'minus');
     }
 
 }

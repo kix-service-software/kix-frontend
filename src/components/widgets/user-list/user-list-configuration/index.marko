@@ -1,7 +1,8 @@
 <div.configuration-user-list>
     <if(state.configuration)>
         <label>
-            Limit<input type="text" tabindex="1" value="${state.configuration.limit}" on-keyup('limitChanged')/>
+            Limit<input type="text" tabindex="1" value="${state.configuration.settings.limit}"
+                on-change('limitChanged')/>
         </label>
         <label>
             Spalten
@@ -11,5 +12,6 @@
                 </for>
             </select>
         </label>
+        <button on-click('saveConfiguration')>Speichern</button>
     </if>
 </div>

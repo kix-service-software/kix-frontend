@@ -1,26 +1,26 @@
-<widget>
-    <@overlay>
-        <include(input.dragoverlay)/>
-    </@overlay>
+<widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
     <@icon>
-        <span class="kix-icon-minus"/>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
     </@icon>
-    <@title>Notizen</@title>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
     <@content>
-        <table>
-            <for(attr in state.ticketAttr)>
-                <tr>
-                    <td>${attr.label}</td>
-                    <td>${attr.value}</td>
-                </tr>
-            </for>
-        </table>
+        <if(state.widgetConfiguration)>
+            <table>
+                <for(attr in state.ticketAttr)>
+                    <tr>
+                        <td>${attr.label}</td>
+                        <td>${attr.value}</td>
+                    </tr>
+                </for>
+            </table>
+        </if>
     </@content>
     <@filter>
         <span/>
     </@filter>
-    <@actions>
-        <span class="kix-icon icon-dummy configuration ${input.configurationMode ? '' : 'not-visible'}"
-            on-click('showConfigurationClicked')/>
-    </@actions>
+    <@actions/>
 </widget>

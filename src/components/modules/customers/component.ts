@@ -1,16 +1,16 @@
-import { CustomerComponentState } from './model/ComponentState';
+import { CustomersComponentState } from './model/CustomersComponentState';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 
 class CustomersComponent {
 
-    public state: CustomerComponentState;
+    public state: CustomersComponentState;
 
     public store: any;
 
     public onCreate(input: any): void {
-        this.state = new CustomerComponentState();
+        this.state = new CustomersComponentState();
     }
 
     public onMount(): void {

@@ -1,5 +1,5 @@
 export class FooterComponentState {
 
-    public date: string = new Date().toDateString();
+    public date: string = new Date().toLocaleDateString();
 
 }

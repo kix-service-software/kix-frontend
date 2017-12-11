@@ -11,7 +11,8 @@ import {
     ITicketService,
     ITicketStateService,
     ITicketTypeService,
-    ITicketPriorityService
+    ITicketPriorityService,
+    IWidgetRepositoryService
 } from "@kix/core/dist/services";
 import { SocketEvent } from '@kix/core/dist/model';
 import { ICommunicator, IServerConfiguration } from '@kix/core/dist/common';
@@ -31,7 +32,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ITicketTypeService") protected ticketTypeService: ITicketTypeService,
         @inject("ITicketPriorityService") protected ticketPriorityService: ITicketPriorityService,
         @inject("IQueueService") protected queueService: IQueueService,
-        @inject("IServiceService") protected serviceService: IServiceService
+        @inject("IServiceService") protected serviceService: IServiceService,
+        @inject("IWidgetRepositoryService") protected widgetRepositoryService: IWidgetRepositoryService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

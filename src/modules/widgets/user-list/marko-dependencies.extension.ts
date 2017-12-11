@@ -4,13 +4,14 @@ export class UserListWidgetMarkoDependencyExtension implements IMarkoDependencyE
 
     public getDependencies(): string[] {
         return [
-            "widgets/user-list"
+            'widgets/user-list',
+            'widgets/user-list/user-list-configuration'
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['user-list', 'widgets/user-list'],
+            ['user-list-widget', 'widgets/user-list'],
             ['user-list-configuration', 'widgets/user-list/user-list-configuration']
         ];
     }

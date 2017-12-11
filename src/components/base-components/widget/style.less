@@ -10,7 +10,6 @@
         height: 2em;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
-        box-sizing: border-box;
         overflow: hidden;
         [class^="kix-icon-"],
         [class*=" kix-icon-"] {
@@ -31,11 +30,6 @@
             float: right;
             line-height: 2em;
         }
-        .configuration {
-            cursor: pointer;
-            z-index: 2;
-            position: relative;
-        }
     }
     .widget-content {
         .color-theme-4;
@@ -45,6 +39,17 @@
         height: 192px;
         overflow: hidden;
         box-sizing: border-box;
+    }
+    /** .config-mode is from .drag-widget */
+    .config-mode & {
+        .widget-header {
+            color: @config-color;
+            background-color: @secondary-0;
+            .header-right span {
+                z-index: 1;
+                position: relative;
+            }
+        }
     }
 }
 

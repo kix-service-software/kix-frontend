@@ -1,0 +1,40 @@
+<div.select-with-properties>
+    <h3>${input.title}</h3>
+    <div.properties-names>
+        <for(property in state.properties)>
+            <if(property.type === 'checkbox')>
+                <span>${property.label}</span>
+            </if>
+            <else-if(property.type === 'radio')>
+                <span>
+                    ${property.label}
+                    <for(value in property.values)>
+                        <span>${value.label}</span>
+                    </for>
+                </span>
+            </else-if>
+        </for>
+    </div>
+    <div.select>
+        <for(el in state.list)>
+            <div.select-element class=(el.selected ? "selected" : "") on-click('selectElement', el.id)>
+                ${el.label}
+                <span.select-properties>
+                    <for(property in state.properties)>
+                        <if(property.type === 'checkbox')>
+                            <input name="${el.id}-${property.id}" type="checkbox" checked=(el.properties && el.properties[property.id])
+                                on-click("checkboxToggle", el.id, property.id)/>
+                        </if>
+                        <else-if(property.type === 'radio')>
+                            <for(value in property.values)>
+                                <input name="${el.id}-${property.id}" type="radio" value=value.id
+                                    checked=(el.properties && (el.properties[property.id] === value.id))
+                                    on-click("radioToggle", el.id, property.id, value.id)/>
+                            </for>
+                        </else-if>
+                    </for>
+                </span>
+            </div>
+        </for>
+    </div>
+</div>

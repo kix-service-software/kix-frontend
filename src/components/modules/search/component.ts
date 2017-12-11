@@ -1,4 +1,4 @@
-import { SearchComponentState } from './model/ComponentState';
+import { SearchComponentState } from './model/SearchComponentState';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';

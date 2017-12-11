@@ -1,4 +1,4 @@
-import { ChartFactory, ChartConfiguration } from '@kix/core/dist/browser/model/charts';
+import { ChartFactory } from '@kix/core/dist/browser/model/charts';
 import { ChartComponentState } from './model/ChartComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
@@ -18,7 +18,7 @@ class ChartWidgetComponent {
 
     public onMount(): void {
         this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration('chart-widget', this.state.instanceId);
+            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
         this.drawChart();
     }
@@ -40,7 +40,7 @@ class ChartWidgetComponent {
         const element = document.getElementById(this.state.svgId);
         if (element && this.state.widgetConfiguration) {
             element.innerHTML = '';
-            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.contentConfiguration);
+            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.settings);
         }
     }
 }

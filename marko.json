@@ -8,6 +8,7 @@
         "./dist/components/widgets",
         "./dist/components/ticket",
         "./dist/components/ticket/ticket-inputs",
-        "./dist/components/ticket/ticket-labels"
+        "./dist/components/ticket/ticket-labels",
+        "./dist/components/base-components/inputs"
     ]
 }
