@@ -24,6 +24,9 @@ class ExplorerbarComponent {
         if (explorerConfiguration && explorerConfiguration.length) {
             this.state.rows = explorerConfiguration[0];
             this.state.configuredWidgets = explorerConfiguration[1];
+        } else {
+            this.state.rows = [];
+            this.state.configuredWidgets = [];
         }
     }
 

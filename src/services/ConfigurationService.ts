@@ -194,11 +194,10 @@ export class ConfigurationService implements IConfigurationService {
             try {
                 configurationFile = require(filePath);
             } catch (error) {
-                configurationFile = {};
+                // do nothing
             }
-        } else {
-            configurationFile = {};
         }
+
         return configurationFile;
     }
 
