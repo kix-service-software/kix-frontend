@@ -25,6 +25,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
     public getDefaultConfiguration(): any {
         const config = {
             limit: 10,
+            displayLimit: 10,
             showTotalCount: true,
             properties: [
                 "TicketNumber",
