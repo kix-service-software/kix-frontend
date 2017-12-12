@@ -72,6 +72,7 @@ class DashboardConfigurationDialog {
             const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
             if (wd.isContentWidget) {
+                // TODO: handle required
                 // if (wd.required) {
                 //     this.state.contentSecondList.push(listElement);
                 // } else {
@@ -79,6 +80,7 @@ class DashboardConfigurationDialog {
                 // }
             }
             if (wd.isSidebarWidget) {
+                // TODO: handle required
                 // if (wd.required) {
                 //     this.state.sidebarSecondList.push(listElement);
                 // } else {
@@ -178,7 +180,10 @@ class DashboardConfigurationDialog {
                 targetList.push(newSecondListElement);
 
                 configuratedWidgets.push(
-                    { instanceId: newInstanceId, configuration: descListElement.descriptor.configuration }
+                    {
+                        instanceId: newInstanceId,
+                        configuration: { ...descListElement.descriptor.configuration }
+                    }
                 );
             }
         });

@@ -53,7 +53,7 @@ class SidebarComponent {
                     configuredWidget.configuration,
                 );
 
-                (this as any).setStateDirty('configuration');
+                (this as any).setStateDirty('configuredWidgets');
             }
         }
     }
