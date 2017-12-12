@@ -4,6 +4,7 @@ import {
     IArticleTypeService,
     IAuthenticationService,
     IConfigurationService,
+    IDynamicFieldService,
     IGroupService,
     IHttpService,
     ILoggingService,
@@ -34,6 +35,7 @@ import {
     ArticleTypeService,
     AuthenticationService,
     ConfigurationService,
+    DynamicFieldService,
     GroupService,
     HttpService,
     LoggingService,
@@ -99,6 +101,7 @@ export class ServiceContainer {
         this.container.bind<IQueueService>("IQueueService").to(QueueService);
         this.container.bind<IServiceService>("IServiceService").to(ServiceService);
         this.container.bind<IWidgetRepositoryService>("IWidgetRepositoryService").to(WidgetRepositoryService);
+        this.container.bind<IDynamicFieldService>("IDynamicFieldService").to(DynamicFieldService);
     }
 
     private async bindRouters(): Promise<void> {

@@ -11,6 +11,10 @@
     </label>
     <label.config-label>
         Zeilenanzahl
+        <input type="text" on-change('displayLimitChanged') value=state.configuration.settings.displayLimit/>
+    </label>
+    <label.config-label>
+        Such-Limit
         <input type="text" on-change('limitChanged') value=state.configuration.settings.limit/>
     </label>
     <label.config-label>

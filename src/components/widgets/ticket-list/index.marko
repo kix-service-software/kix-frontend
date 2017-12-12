@@ -10,7 +10,8 @@
     </@title>
     <@content>
         <if(state.widgetConfiguration)>
-            <ticket-table displayLimit=10 tickets=state.filteredTickets properties=state.widgetConfiguration.settings.properties/>
+            <ticket-table displayLimit=state.widgetConfiguration.settings.displayLimit tickets=state.filteredTickets
+                properties=state.widgetConfiguration.settings.properties/>
         </if>
     </@content>
     <@filter>
