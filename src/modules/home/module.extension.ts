@@ -32,10 +32,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             ['20170915085411']
         ];
 
-        const explorerRows: string[][] = [
-            ['20171211155412']
-        ];
-
         const contentConfiguredWidgets: ConfiguredWidget[] = [
             {
                 instanceId: '20170920072542',
@@ -85,6 +81,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     actions: [],
                     settings: {
                         limit: 10,
+                        displayLimit: 10,
                         showTotalCount: true,
                         properties: [
                             'TicketNumber',
@@ -178,24 +175,10 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             }
         ];
 
-        const explorerConfiguredWidgets: ConfiguredWidget[] = [
-            {
-                instanceId: '20171211155412',
-                configuration: {
-                    widgetId: 'queue-explorer-widget',
-                    title: "Queues",
-                    actions: [],
-                    settings: {},
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: 'note'
-                },
-            }
-        ];
 
         return {
-            contentRows, sidebarRows, explorerRows,
-            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets
+            contentRows, sidebarRows, explorerRows: [],
+            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets: []
         };
     }
 

@@ -1,4 +1,5 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
+import { ConfiguredWidget, WidgetSize } from '@kix/core/dist/model/';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -13,8 +14,31 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
-        const content = {};
-        return content;
+        const explorerRows: string[][] = [
+            [
+                '20171211155412'
+            ]
+        ];
+
+        const explorerConfiguredWidgets: ConfiguredWidget[] = [
+            {
+                instanceId: '20171211155412',
+                configuration: {
+                    widgetId: 'queue-explorer-widget',
+                    title: "Queues",
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: 'note'
+                },
+            }
+        ];
+
+        return {
+            contentRows: [], sidebarRows: [], explorerRows,
+            contentConfiguredWidgets: [], sidebarConfiguredWidgets: [], explorerConfiguredWidgets
+        };
     }
 
 }
