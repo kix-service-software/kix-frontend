@@ -97,8 +97,7 @@ export class ConfigurationService implements IConfigurationService {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
-        const moduleConfiguration = this.getConfigurationFile(filePath);
-
+        const moduleConfiguration = this.getConfigurationFile(filePath) || {};
         moduleConfiguration[componentId] = configuration;
 
         return this.saveConfigurationFile(__dirname + '/' + filePath, moduleConfiguration);
