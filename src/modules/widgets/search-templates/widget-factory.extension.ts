@@ -11,16 +11,6 @@ export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExte
         return new SearchTemplatesWidget(this.widgetId);
     }
 
-    public getTemplate(): string {
-        const packageJson = require('../../../../package.json');
-        const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/widgets/search-templates';
-    }
-
-    public getConfigurationTemplate(): string {
-        return this.getTemplate() + '/configuration';
-    }
-
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(this.widgetId, 'Suchvorlagen', [], {}, true, WidgetSize.SMALL);
     }

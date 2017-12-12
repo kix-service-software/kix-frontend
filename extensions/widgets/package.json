@@ -7,7 +7,8 @@
             "ticket-list": "../../dist/modules/widgets/ticket-list/widget-factory.extension",
             "user-list": "../../dist/modules/widgets/user-list/widget-factory.extension",
             "notes": "../../dist/modules/widgets/notes/widget-factory.extension",
-            "ticket-info": "../../dist/modules/widgets/ticket-info/widget-factory.extension"
+            "ticket-info": "../../dist/modules/widgets/ticket-info/widget-factory.extension",
+            "queue-explorer": "../../dist/modules/widgets/queue-explorer/widget-factory.extension"
         },
         "kix:marko:dependencies": {
             "chart-widget-marko": "../../dist/modules/widgets/chart/marko-dependencies.extension",
@@ -15,7 +16,8 @@
             "ticket-list-widget-marko": "../../dist/modules/widgets/ticket-list/marko-dependencies.extension",
             "user-list-widget-marko": "../../dist/modules/widgets/user-list/marko-dependencies.extension",
             "notes-sidebar-marko": "../../dist/modules/widgets/notes/marko-dependencies.extension",
-            "ticket-info-sidebar-marko": "../../dist/modules/widgets/ticket-info/marko-dependencies.extension"
+            "ticket-info-sidebar-marko": "../../dist/modules/widgets/ticket-info/marko-dependencies.extension",
+            "queue-explorer-marko": "../../dist/modules/widgets/queue-explorer/marko-dependencies.extension"
         }
     }
 }

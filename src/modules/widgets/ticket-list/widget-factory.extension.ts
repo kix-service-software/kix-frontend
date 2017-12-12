@@ -12,16 +12,6 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
         return new TicketListWidget(this.widgetId);
     }
 
-    public getTemplate(): string {
-        const packageJson = require('../../../../package.json');
-        const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/widgets/ticket-list';
-    }
-
-    public getConfigurationTemplate(): string {
-        return this.getTemplate() + '/configuration';
-    }
-
     public getDefaultConfiguration(): any {
         const config = {
             limit: 10,

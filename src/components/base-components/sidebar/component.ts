@@ -37,6 +37,9 @@ class SidebarComponent {
         if (sidebarConfiguration && sidebarConfiguration.length) {
             this.state.rows = sidebarConfiguration[0];
             this.state.configuredWidgets = sidebarConfiguration[1];
+        } else {
+            this.state.rows = [];
+            this.state.configuredWidgets = [];
         }
     }
 

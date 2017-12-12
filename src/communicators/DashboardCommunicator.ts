@@ -39,7 +39,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         let configuration: any = await this.configurationService
             .getModuleConfiguration(data.contextId, userId);
 
-        if (!configuration.hasOwnProperty('contentRows')) {
+        if (!configuration) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
             await this.configurationService.saveModuleConfiguration(
@@ -55,8 +55,10 @@ export class DashboardCommunicator extends KIXCommunicator {
                 data.contextId,
                 configuration.contentRows,
                 configuration.sidebarRows,
+                configuration.explorerRows,
                 configuration.contentConfiguredWidgets,
                 configuration.sidebarConfiguredWidgets,
+                configuration.explorerConfiguredWidgets,
                 availableWidgets
             )
         );
