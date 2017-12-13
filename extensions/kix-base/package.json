@@ -3,12 +3,6 @@
     "extensions": {
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
-            "home-marko": "../../dist/modules/home/marko-dependencies.extension",
-            "cmdb-marko": "../../dist/modules/cmdb/marko-dependencies.extension",
-            "customers-marko": "../../dist/modules/customers/marko-dependencies.extension",
-            "faq-marko": "../../dist/modules/faq/marko-dependencies.extension",
-            "reports-marko": "../../dist/modules/reports/marko-dependencies.extension",
-            "search-marko": "../../dist/modules/search/marko-dependencies.extension",
             "main-menu": "../../dist/modules/main-menu/marko-dependencies.extension",
             "chart-widget-marko": "../../dist/modules/widgets/chart/marko-dependencies.extension",
             "search-template-widget-marko": "../../dist/modules/widgets/search-templates/marko-dependencies.extension",

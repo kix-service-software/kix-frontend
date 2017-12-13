@@ -5,7 +5,7 @@ export class CustomerModuleFactoryExtension implements IModuleFactoryExtension {
     public getTemplate(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/modules/customers/';
+        return '/@kix/frontend$' + version + '/dist/componets/customers/';
     }
 
     public getModuleId(): string {

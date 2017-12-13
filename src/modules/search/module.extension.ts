@@ -5,7 +5,7 @@ export class SearchModuleFactoryExtension implements IModuleFactoryExtension {
     public getTemplate(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/modules/search/';
+        return '/@kix/frontend$' + version + '/dist/componets/search/';
     }
 
     public getModuleId(): string {

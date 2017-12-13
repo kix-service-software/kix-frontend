@@ -5,7 +5,7 @@ export class FAQModuleFactoryExtension implements IModuleFactoryExtension {
     public getTemplate(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/modules/faq/';
+        return '/@kix/frontend$' + version + '/dist/componets/faq/';
     }
 
     public getModuleId(): string {

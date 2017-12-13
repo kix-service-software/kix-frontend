@@ -15,7 +15,7 @@ export class FAQCreationDialogExtension implements ICreationDialogExtension {
     private getTemplatePath(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/dialogs/faq-creation/';
+        return '/@kix/frontend$' + version + '/dist/components/faq-creation-dialog/';
     }
 }
 
