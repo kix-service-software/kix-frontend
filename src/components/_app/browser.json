@@ -3,6 +3,6 @@
         "require @kix/core/dist/browser/*",
         "require @kix/core/dist/model",
         "require ../login",
-        "require ../kix-base-template"
+        "require ../_base-template"
     ]
 }

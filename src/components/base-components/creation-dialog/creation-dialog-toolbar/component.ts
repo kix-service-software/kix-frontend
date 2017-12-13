@@ -9,7 +9,7 @@ class CreateObjectToolbarComponent {
     }
 
     public openCreateObjectDialog(): void {
-        ApplicationStore.getInstance().toggleDialog('ticket-creation');
+        ApplicationStore.getInstance().toggleDialog('creation-dialog-container');
     }
 
 }

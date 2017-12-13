@@ -15,7 +15,7 @@ export class TicketCreationDialogExtension implements ICreationDialogExtension {
     private getTemplatePath(): string {
         const packageJson = require('../../../package.json');
         const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/components/dialogs/ticket-creation/';
+        return '/@kix/frontend$' + version + '/dist/components/ticket-creation-dialog/';
     }
 }
 
