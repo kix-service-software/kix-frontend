@@ -3,6 +3,6 @@
         "ticket-inputs",
         "ticket-labels",
         "_base-template",
-        "base-components"
+        "_base-components"
     ]
 }

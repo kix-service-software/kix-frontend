@@ -4,7 +4,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            'base-components/creation-dialog/creation-dialog-container',
+            '_base-components/creation-dialog/creation-dialog-container',
             'ticket-module',
             'ticket-details',
             'ticket-search/ticket-search-result',
@@ -19,10 +19,10 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['creation-dialog-container', 'base-components/creation-dialog/creation-dialog-container'],
+            ['creation-dialog-container', '_base-components/creation-dialog/creation-dialog-container'],
             ['tickets', 'ticket-module'],
             ['ticket-details', 'ticket-details'],
-            ['ticket-table', 'base-components/ticket-table'],
+            ['ticket-table', '_base-components/ticket-table'],
             ['ticket-search-result', 'ticket-search/ticket-search-result'],
             ['ticket-search-dialog-content', 'ticket-search/ticket-search-dialog-content'],
             ['ticket-list-widget', 'ticket-list-widget'],

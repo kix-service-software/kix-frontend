@@ -5,7 +5,7 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
     public getDependencies(): string[] {
         return [
             "modules/home",
-            'base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+            '_base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
         ];
     }
 
@@ -14,7 +14,7 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
             ['home', 'modules/home'],
             [
                 'dashboard-configuration-dialog',
-                'base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+                '_base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
             ]
         ];
     }
