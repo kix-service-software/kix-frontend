@@ -22,7 +22,7 @@ export class AuthenticationRouter extends KIXRouter {
         const logout = req.query.logout !== undefined;
 
         res.marko(template, {
-            template: require('../components/login/'),
+            template: require('../components/_login/'),
             data: {
                 frontendSocketUrl: this.getServerUrl(),
                 logout

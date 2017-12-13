@@ -1,5 +1,5 @@
 // tslint:disable
-import { LoginState } from './../../../src/components/login/store';
+import { LoginState } from './../../../src/components/_login/store';
 import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
 
@@ -11,13 +11,13 @@ import {
     LOGIN_PASSWORD_CHANGED,
     LOGIN_ERROR,
     LOGIN_VALIDATE
-} from '../../../src/components/login/store/actions';
+} from '../../../src/components/_login/store/actions';
 
 describe('Client - Reducer - Login', () => {
     let store;
 
     before(() => {
-        store = require('../../../src/components/login/store');
+        store = require('../../../src/components/_login/store');
     });
 
     describe('Dispatch LOGIN_USERNAME_CHANGED Action', () => {

@@ -2,7 +2,7 @@
     "dependencies": [
         "require @kix/core/dist/browser/*",
         "require @kix/core/dist/model",
-        "require ../login",
+        "require ../_login",
         "require ../_base-template"
     ]
 }
