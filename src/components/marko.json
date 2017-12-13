@@ -3,8 +3,12 @@
         "_base-template",
         "_base-components",
         "_base-components/dialog-creation",
-        "ticket",
-        "ticket/ticket-inputs",
-        "ticket/ticket-labels"
+        "cmdb",
+        "customers",
+        "faq",
+        "home",
+        "reports",
+        "search",
+        "ticket"
     ]
 }
