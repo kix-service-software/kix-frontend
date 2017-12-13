@@ -19,7 +19,7 @@ export class ServerRouter {
         for (const router of registeredRouter) {
             this.expressRouter.use(router.getBaseRoute(), router.getRouter());
 
-            router.setAppTemplate(require('./components/app/index.marko'));
+            router.setAppTemplate(require('./components/_app'));
             router.setBaseTemplate(require('./components/kix-base-template/index.marko'));
         }
     }

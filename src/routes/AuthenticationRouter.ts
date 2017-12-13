@@ -16,7 +16,7 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     public login(req: Request, res: Response): void {
-        const template = require('../components/app/');
+        const template = require('../components/_app/');
         this.setFrontendSocketUrl(res);
 
         const logout = req.query.logout !== undefined;

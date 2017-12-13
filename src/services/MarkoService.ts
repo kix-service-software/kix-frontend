@@ -6,7 +6,7 @@ import jsonfile = require('jsonfile');
 @injectable()
 export class MarkoService implements IMarkoService {
 
-    private browserJsonPath: string = '../components/app/browser.json';
+    private browserJsonPath: string = '../components/_app/browser.json';
     private pluginService: IPluginService;
     private loggingService: ILoggingService;
 
