@@ -1,9 +1,10 @@
 {
     "tags-dir": [
-        "ticket-inputs",
-        "ticket-labels",
         "_base-template",
         "_base-components",
-        "_base-components/dialog-creation"
+        "_base-components/dialog-creation",
+        "ticket",
+        "ticket/ticket-inputs",
+        "ticket/ticket-labels"
     ]
 }
