@@ -3,17 +3,17 @@
     "extensions": {
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
-            "main-menu": "../../dist/modules/main-menu/marko-dependencies.extension",
-            "chart-widget-marko": "../../dist/modules/widgets/chart/marko-dependencies.extension",
-            "search-template-widget-marko": "../../dist/modules/widgets/search-templates/marko-dependencies.extension",
-            "user-list-widget-marko": "../../dist/modules/widgets/user-list/marko-dependencies.extension",
-            "notes-sidebar-marko": "../../dist/modules/widgets/notes/marko-dependencies.extension",
-            "queue-explorer-marko": "../../dist/modules/widgets/queue-explorer/marko-dependencies.extension",
-            "assign-tour-action-marko": "../../dist/modules/actions/assign-tour/marko-dependencies.extension"
+            "main-menu": "../../dist/registry-modules/main-menu/marko-dependencies.extension",
+            "chart-widget-marko": "../../dist/registry-modules/widgets/chart/marko-dependencies.extension",
+            "search-template-widget-marko": "../../dist/registry-modules/widgets/search-templates/marko-dependencies.extension",
+            "user-list-widget-marko": "../../dist/registry-modules/widgets/user-list/marko-dependencies.extension",
+            "notes-sidebar-marko": "../../dist/registry-modules/widgets/notes/marko-dependencies.extension",
+            "queue-explorer-marko": "../../dist/registry-modules/widgets/queue-explorer/marko-dependencies.extension",
+            "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
         "kix:dialog:creation": {
-            "ticket-creation-dialog": "../../dist/modules/tickets/creation-dialog.extension",
-            "faq-creation-dialog": "../../dist/modules/faq/creation-dialog.extension"
+            "ticket-creation-dialog": "../../dist/registry-modules/tickets/creation-dialog.extension",
+            "faq-creation-dialog": "../../dist/registry-modules/faq/creation-dialog.extension"
         },
         "kix:communicator": {
             "action-communicator": "../../dist/communicators/extensions/ActionCommunicator.extension",
@@ -30,35 +30,35 @@
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension"
         },
         "kix:personal:settings": {
-            "personal-seetings-main-menu": "../../dist/modules/main-menu/personal-settings.extension"
+            "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
         },
         "kix:menu:main": {
-            "home-menu-main": "../../dist/modules/home/menu.main.extension",
-            "tickets-menu-main": "../../dist/modules/tickets/menu.main.extension",
-            "cmdb-menu-main": "../../dist/modules/cmdb/menu.main.extension",
-            "cutsomers-menu-main": "../../dist/modules/customers/menu.main.extension",
-            "faq-menu-main": "../../dist/modules/faq/menu.main.extension",
-            "reports-menu-main": "../../dist/modules/reports/menu.main.extension",
-            "search-menu-main": "../../dist/modules/search/menu.main.extension"
+            "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
+            "tickets-menu-main": "../../dist/registry-modules/tickets/menu.main.extension",
+            "cmdb-menu-main": "../../dist/registry-modules/cmdb/menu.main.extension",
+            "cutsomers-menu-main": "../../dist/registry-modules/customers/menu.main.extension",
+            "faq-menu-main": "../../dist/registry-modules/faq/menu.main.extension",
+            "reports-menu-main": "../../dist/registry-modules/reports/menu.main.extension",
+            "search-menu-main": "../../dist/registry-modules/search/menu.main.extension"
         },
         "kix:module": {
-            "home-module": "../../dist/modules/home/module.extension",
-            "tickets-module": "../../dist/modules/tickets/module.extension",
-            "sidebar-module": "../../dist/modules/sidebar/module.extension",
-            "cmdb-module": "../../dist/modules/cmdb/module.extension",
-            "customers-module": "../../dist/modules/customers/module.extension",
-            "faq-module": "../../dist/modules/faq/module.extension",
-            "reports-module": "../../dist/modules/reports/module.extension",
-            "search-module": "../../dist/modules/search/module.extension"
+            "home-module": "../../dist/registry-modules/home/module.extension",
+            "tickets-module": "../../dist/registry-modules/tickets/module.extension",
+            "sidebar-module": "../../dist/registry-modules/sidebar/module.extension",
+            "cmdb-module": "../../dist/registry-modules/cmdb/module.extension",
+            "customers-module": "../../dist/registry-modules/customers/module.extension",
+            "faq-module": "../../dist/registry-modules/faq/module.extension",
+            "reports-module": "../../dist/registry-modules/reports/module.extension",
+            "search-module": "../../dist/registry-modules/search/module.extension"
         },
         "kix:widget": {
-            "chart": "../../dist/modules/widgets/chart/widget-factory.extension",
-            "search-templates": "../../dist/modules/widgets/search-templates/widget-factory.extension",
-            "user-list": "../../dist/modules/widgets/user-list/widget-factory.extension",
-            "notes": "../../dist/modules/widgets/notes/widget-factory.extension",
-            "ticket-list": "../../dist/modules/widgets/ticket-list/widget-factory.extension",
-            "ticket-info": "../../dist/modules/widgets/ticket-info/widget-factory.extension",
-            "queue-explorer": "../../dist/modules/widgets/queue-explorer/widget-factory.extension"
+            "chart": "../../dist/registry-modules/widgets/chart/widget-factory.extension",
+            "search-templates": "../../dist/registry-modules/widgets/search-templates/widget-factory.extension",
+            "user-list": "../../dist/registry-modules/widgets/user-list/widget-factory.extension",
+            "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
+            "ticket-list": "../../dist/registry-modules/widgets/ticket-list/widget-factory.extension",
+            "ticket-info": "../../dist/registry-modules/widgets/ticket-info/widget-factory.extension",
+            "queue-explorer": "../../dist/registry-modules/widgets/queue-explorer/widget-factory.extension"
         },
         "kix:action": {}
     }
