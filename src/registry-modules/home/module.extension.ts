@@ -3,12 +3,6 @@ import { ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
-    public getTemplate(): string {
-        const packageJson = require('../../../package.json');
-        const version = packageJson.version;
-        return '/@kix/frontend$' + version + '/dist/componets/home/';
-    }
-
     public getModuleId(): string {
         return "home";
     }
