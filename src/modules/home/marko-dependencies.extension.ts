@@ -4,18 +4,13 @@ export class DashboardMarkoDependencyExtension implements IMarkoDependencyExtens
 
     public getDependencies(): string[] {
         return [
-            "modules/home",
-            '_base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+            "modules/home"
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['home', 'modules/home'],
-            [
-                'dashboard-configuration-dialog',
-                '_base-components/icon-bar/dashboard-configuration/dashboard-configuration-dialog'
-            ]
+            ['home', 'modules/home']
         ];
     }
 

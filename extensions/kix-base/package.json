@@ -66,9 +66,6 @@
             "ticket-info": "../../dist/modules/widgets/ticket-info/widget-factory.extension",
             "queue-explorer": "../../dist/modules/widgets/queue-explorer/widget-factory.extension"
         },
-        "kix:action": {
-            "delete-action": "../../dist/modules/actions/delete/action-factory.extension",
-            "assign-tour-action": "../../dist/modules/actions/assign-tour/action-factory.extension"
-        }
+        "kix:action": {}
     }
 }

@@ -1,5 +1,3 @@
-import { AssignTourAction } from './../../actions/assign-tour/AssignTourAction';
-import { DeleteAction } from './../../actions/delete/DeleteAction';
 import { IWidget, UIProperty, WidgetConfiguration, IAction, WidgetSize } from '@kix/core/dist/model';
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { UserListSettings } from './../../../components/widgets/user-list/model/UserListSettings';
@@ -21,11 +19,8 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         userListConfiguration.properties.push(new UIProperty("UserLastname", "Nachname"));
         userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
 
-        // TODO: Remove the logic of actions from here. On place is only content config (settings) relevant.
-        const deleteAction = new DeleteAction("delete-action", "Delete", "");
-        const tourAction = new AssignTourAction("assign-tour-action", "Assign Tour", "");
         return new WidgetConfiguration(
-            this.widgetId, "User-List", [deleteAction, tourAction], userListConfiguration, true, WidgetSize.LARGE
+            this.widgetId, "User-List", [], userListConfiguration, true, WidgetSize.LARGE
         );
     }
 

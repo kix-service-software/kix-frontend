@@ -13,7 +13,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket-list-widget/ticket-list-configuration',
             'ticket-info-widget',
             'ticket-info-widget/ticket-info-configuration',
-            'ticket-creation-dialog'
+            'ticket-creation-dialog',
+            'icon-bar/dashboard-configuration/dashboard-configuration-dialog'
         ];
     }
 
@@ -30,6 +31,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-info-widget', 'ticket-info-widget'],
             ['ticket-info-configuration', 'ticket-info-widget/ticket-info-configuration'],
             ['ticket-creation-dialog', 'ticket-creation-dialog'],
+            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog']
         ];
     }
 
