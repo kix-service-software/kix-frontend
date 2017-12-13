@@ -4,14 +4,20 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
+            ...this.getTicketDependencies(),
+            ...this.getFaqDependencies(),
             '_base-components/dialog-creation/dialog-creation-container',
             'cmdb/cmdb-module',
             'customers/customers-module',
-            'faq/faq-module',
-            'faq/faq-creation-dialog',
             'home/home-module',
             'reports/reports-module',
             'search/search-module',
+            'icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+        ];
+    }
+
+    private getTicketDependencies(): string[] {
+        return [
             'ticket/ticket-module',
             'ticket/ticket-details',
             'ticket/ticket-search/ticket-search-result',
@@ -20,21 +26,33 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-list-widget/ticket-list-configuration',
             'ticket/ticket-info-widget',
             'ticket/ticket-info-widget/ticket-info-configuration',
-            'ticket/ticket-creation-dialog',
-            'icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+            'ticket/ticket-creation-dialog'
+        ];
+    }
+
+    private getFaqDependencies(): string[] {
+        return [
+            'faq/faq-module',
+            'faq/faq-creation-dialog'
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
+            ...this.getTicketComponentTags(),
+            ...this.getFaqComponentTags(),
             ['cmdb', 'cmdb/cmdb-module'],
             ['customers', 'customers/customers-module'],
-            ['faq', 'faq/faq-module'],
-            ['faq-creation-dialog', 'faq/faq-creation-dialog'],
             ['dialog-creation-container', '_base-components/dialog-creation/dialog-creation-container'],
             ['home', 'home/home-module'],
             ['reports', 'reports/reports-module'],
             ['search', 'search/search-module'],
+            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog']
+        ];
+    }
+
+    private getTicketComponentTags(): Array<[string, string]> {
+        return [
             ['tickets', 'ticket/ticket-module'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-table', 'ticket/ticket-table'],
@@ -45,7 +63,13 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-info-widget', 'ticket/ticket-info-widget'],
             ['ticket-info-configuration', 'ticket/ticket-info-widget/ticket-info-configuration'],
             ['ticket-creation-dialog', 'ticket/ticket-creation-dialog'],
-            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog']
+        ];
+    }
+
+    private getFaqComponentTags(): Array<[string, string]> {
+        return [
+            ['faq', 'faq/faq-module'],
+            ['faq-creation-dialog', 'faq/faq-creation-dialog']
         ];
     }
 
