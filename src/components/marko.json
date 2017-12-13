@@ -3,6 +3,7 @@
         "ticket-inputs",
         "ticket-labels",
         "_base-template",
-        "_base-components"
+        "_base-components",
+        "_base-components/dialog-creation"
     ]
 }
