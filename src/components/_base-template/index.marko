@@ -19,12 +19,12 @@
     <if(state.showDialog)>
         <!-- div zwecks Marko Bug #920 -->
         <div>
-            <main-dialog>
+            <dialog-main>
                 <@title>Dialogtitel</@title>
                 <@content>
                     <include(state.dialogTemplate, state.dialogInput)/>
                 </@content>
-            </main-dialog>
+            </dialog-main>
         </div>
     </if>
 </div>

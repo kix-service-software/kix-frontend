@@ -1,6 +1,8 @@
 {
     "tags-dir": [
         "ticket-inputs",
-        "ticket-labels"
+        "ticket-labels",
+        "_base-template",
+        "base-components"
     ]
 }
