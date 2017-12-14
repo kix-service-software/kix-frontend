@@ -48,7 +48,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             {
                 instanceId: "ticket-module-chart1",
                 configuration: {
-                    widgetId: "chart - widget",
+                    widgetId: "chart-widget",
                     title: "Prioritäten",
                     actions: [],
                     settings: {

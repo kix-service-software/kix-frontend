@@ -33,6 +33,14 @@ export class QueueExplorerComponent {
         }
     }
 
+    private isConfigMode(): boolean {
+        return true;
+    }
+
+    private queueClicked(queueId: number): void {
+        console.log("Queue selected: " + queueId);
+    }
+
 }
 
 module.exports = QueueExplorerComponent;
