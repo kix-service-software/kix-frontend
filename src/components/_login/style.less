@@ -44,13 +44,14 @@
                 color: @secondary-0;
                 .message {
                     .clearfix();
+                    position: relative;
                     border-radius: 3px;
                     display: inline-block;
                     height: 35px;
-                    line-height: 29px;
+                    line-height: 32px;
                     font-weight: 600;
                     padding-right: 1em;
-                    border: 3px solid @tertiary-0;
+                    border: 2px solid @tertiary-0;
                     box-sizing: border-box;
                     overflow: hidden;
                     &:before {
@@ -58,19 +59,12 @@
                         display: block;
                         float: left;
                         box-sizing: border-box;
-                        border-right: 3px solid @tertiary-0;
+                        border-right: 2px solid @tertiary-0;
                         width: 35px;
                         height: 100%;
                         color: @tertiary-0;
                         cursor: pointer;
                         margin-right: 1em;
-                    }
-                    &.message-progress {
-                        border-color: @tertiary-4;
-                        &:before {
-                            border-right-color: @tertiary-4;
-                            color: @tertiary-4;
-                        }
                     }
                     &.message-error {
                         border-color: @tertiary-2;
@@ -78,13 +72,29 @@
                             border-right-color: @tertiary-2;
                             color: @tertiary-2;
                         }
+                        & [class^="kix-icon-"],
+                        & [class*=" kix-icon-"] {
+                            color: @tertiary-2;
+                        }
                     }
                     &.message-success {
-                        border-color: @tertiary-3;
+                        border-color: @tertiary-0;
                         &:before {
-                            border-right-color: @tertiary-3;
-                            color: @tertiary-3;
+                            border-right-color: @tertiary-0;
+                            color: @tertiary-0;
                         }
+                        & [class^="kix-icon-"],
+                        & [class*=" kix-icon-"] {
+                            color: @tertiary-0;
+                        }
+                    }
+                    & [class^="kix-icon-"],
+                    & [class*=" kix-icon-"] {
+                        position: absolute;
+                        top: 3px;
+                        left: 4px;
+                        font-size: 1.5em;
+                        color: @secondary-0;
                     }
                 }
             }
