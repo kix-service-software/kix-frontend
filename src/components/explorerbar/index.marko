@@ -1,13 +1,18 @@
 <if(state.rows.length)>
     <div class="explorerbar">
         <for(widget in state.configuredWidgets)>
-            <div>
-                <include(component.getWidgetTemplate(widget.instanceId), {
+            <if(component.isExpanded(widget.instanceId))>
+                <div>
+                    <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
                         minimizable: false,
                         explorer: true
                     }) key=widget.instanceId/>
-            </div>
+                </div>
+            </if>
+            <else>
+                <button on-click('toggleExplorer')>${widget.configuration.title}</button>
+            </else>
         </for>
     </div>
 </if>

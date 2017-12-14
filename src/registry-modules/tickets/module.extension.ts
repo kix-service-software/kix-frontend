@@ -42,7 +42,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     },
                     show: true,
                     size: "large",
-                    icon: null
+                    icon: null,
+                    contextDependent: true
                 }
             },
             {
@@ -56,7 +57,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     },
                     show: true,
                     size: "small",
-                    icon: null
+                    icon: null,
+                    contextDependent: true
                 }
             },
             {
@@ -70,7 +72,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     },
                     show: true,
                     size: "small",
-                    icon: null
+                    icon: null,
+                    contextDependent: true
                 }
             },
             {
@@ -84,7 +87,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     },
                     show: true,
                     size: "small",
-                    icon: null
+                    icon: null,
+                    contextDependent: true
                 }
             }
         ];
@@ -105,7 +109,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     settings: {},
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: 'note'
+                    icon: 'note',
+                    contextDependent: false
                 },
             }
         ];

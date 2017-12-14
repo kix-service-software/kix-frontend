@@ -1,4 +1,5 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
 
 class WidgetComponent {
 
@@ -27,7 +28,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        // TODO: change it on the store
+        ContextStore.getInstance().toggleExplorer();
     }
 
     private showConfiguration(): void {

@@ -1,5 +1,6 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
+import { ContextStore } from "@kix/core/dist/browser/context/ContextStore";
 
 class ExplorerbarComponent {
 
@@ -15,6 +16,7 @@ class ExplorerbarComponent {
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
+        ContextStore.getInstance().addStateListener(this.contextStateChanged.bind(this));
         this.dashboardStateChanged();
     }
 
@@ -24,14 +26,30 @@ class ExplorerbarComponent {
         if (explorerConfiguration && explorerConfiguration.length) {
             this.state.rows = explorerConfiguration[0];
             this.state.configuredWidgets = explorerConfiguration[1];
+
+            ContextStore.getInstance().provideExplorer(this.state.rows);
         } else {
+            ContextStore.getInstance().provideExplorer([]);
             this.state.rows = [];
             this.state.configuredWidgets = [];
         }
     }
 
+    private contextStateChanged(): void {
+        (this as any).setStateDirty('rows');
+    }
+
     private getWidgetTemplate(instanceId: string): any {
         return DashboardStore.getInstance().getWidgetTemplate(instanceId);
+    }
+
+    private isExpanded(instanceId: string): boolean {
+        const expanded = ContextStore.getInstance().getExplorerExpandedState(instanceId);
+        return expanded;
+    }
+
+    private toggleExplorer(): void {
+        ContextStore.getInstance().toggleExplorer();
     }
 }
 

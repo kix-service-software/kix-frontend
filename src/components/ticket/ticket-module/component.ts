@@ -4,7 +4,7 @@ import { BreadcrumbDetails } from '@kix/core/dist/browser/router/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
-import { DashboardConfiguration } from '../../../../../core/dist/model/dashboard/DashboardConfiguration';
+import { DashboardConfiguration } from '@kix/core/dist/model/dashboard/DashboardConfiguration';
 
 class TicketsComponent {
 

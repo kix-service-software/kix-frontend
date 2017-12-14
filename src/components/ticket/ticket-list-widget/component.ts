@@ -1,7 +1,8 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { Ticket, TicketState } from '@kix/core/dist/model/';
+import { Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
+import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
 
 class TicketListWidgetComponent {
 
@@ -25,6 +26,8 @@ class TicketListWidgetComponent {
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
+        ContextStore.getInstance().addStateListener(this.filter.bind(this));
+
         this.loadTickets();
     }
 
@@ -34,7 +37,6 @@ class TicketListWidgetComponent {
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
         }
-
     }
 
     private dashboardStoreChanged(): void {
@@ -47,6 +49,9 @@ class TicketListWidgetComponent {
     private loadTickets(): void {
         if (this.state.widgetConfiguration) {
             const settings = this.state.widgetConfiguration.settings;
+            if (settings.properties.findIndex((p) => p === TicketProperty.QUEUE_ID) < 0) {
+                settings.properties.push(TicketProperty.QUEUE_ID);
+            }
             TicketStore.getInstance().searchTickets(this.state.instanceId, settings.limit, settings.properties);
         }
     }
@@ -56,11 +61,18 @@ class TicketListWidgetComponent {
     }
 
     private filter(): void {
-        if (this.state.filterValue === null || this.state.filterValue === "") {
-            this.state.filteredTickets = this.state.tickets;
-        } else {
+        if (this.state.widgetConfiguration.contextDependent) {
+            const contextFilter = ContextStore.getInstance().getContextFilter();
+            // TODO: use enum for objectType
+            if (contextFilter && contextFilter.objectType === 'Queue' && contextFilter.objectValue) {
+                this.state.filteredTickets =
+                    this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
+            }
+        }
+
+        if (this.state.filterValue !== null && this.state.filterValue !== "") {
             const searchValue = this.state.filterValue.toLocaleLowerCase();
-            this.state.filteredTickets = this.state.tickets.filter((ticket: Ticket) => {
+            this.state.filteredTickets = this.state.filteredTickets.filter((ticket: Ticket) => {
                 const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
                 const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
                 return foundTitle || foundTicketNumber;
