@@ -5,7 +5,7 @@ import { QueueExplorer } from './QueueExplorer';
 export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebar: boolean = true;
     public isContentWidget: boolean = false;
-    public widgetId: string = "queue-explorer-widget";
+    public widgetId: string = "ticket-queue-explorer";
 
     public createWidget(): IWidget {
         return new QueueExplorer(this.widgetId);
@@ -13,7 +13,7 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public getDefaultConfiguration(): any {
         // TODO: richtiges Icon geben lassen, sobald Widget "definiert" wurde
-        return new WidgetConfiguration(this.widgetId, 'Queue-Explorer', [], {}, true, WidgetSize.SMALL, 'minus');
+        return new WidgetConfiguration(this.widgetId, 'Übersicht Queues', [], {}, true, WidgetSize.SMALL, 'minus');
     }
 
 }

@@ -8,7 +8,6 @@
             "search-template-widget-marko": "../../dist/registry-modules/widgets/search-templates/marko-dependencies.extension",
             "user-list-widget-marko": "../../dist/registry-modules/widgets/user-list/marko-dependencies.extension",
             "notes-sidebar-marko": "../../dist/registry-modules/widgets/notes/marko-dependencies.extension",
-            "queue-explorer-marko": "../../dist/registry-modules/widgets/queue-explorer/marko-dependencies.extension",
             "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
         "kix:dialog:creation": {

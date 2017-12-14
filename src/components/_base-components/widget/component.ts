@@ -26,6 +26,10 @@ class WidgetComponent {
         this.state.minimized = !this.state.minimized;
     }
 
+    private minimizeExplorer(): void {
+        // TODO: change it on the store
+    }
+
     private showConfiguration(): void {
         ApplicationStore.getInstance().toggleDialog(
             this.state.configurationTagId, { instanceId: this.state.instanceId }

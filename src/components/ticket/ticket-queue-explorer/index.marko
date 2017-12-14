@@ -1,0 +1,23 @@
+<widget instanceId=state.instanceId configurationTagId="" minimizable=true explorer=input.explorer>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <ul.queue-list>
+            <for(queue in state.queues)>
+                <li.queue-list-entry>
+                    <ticket-property-label ticketDataId="ticket-table-data" property="QueueID" value=queue.QueueID/>
+                </li>
+            </for>
+        </ul>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>
