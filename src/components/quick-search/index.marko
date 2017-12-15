@@ -1,0 +1,21 @@
+<ul>
+    <li>
+        <div.dropdown>
+            <ul>
+                <li>
+                    <span.kix-icon-dropdown-ticket/>
+                    <span>
+                        <input type="text" placeholder="| Schnellsuche" value=state.searchValue on-keyup('searchValueChanged')/>
+                        <if(state.suggestions.length)>
+                            <ul.suggestion-list>
+                                <for(suggestion in state.suggestions)>
+                                    <li on-click('navigate', suggestion[0])>${suggestion[1].substring(0,50)}</li>
+                                </for>
+                            </ul>
+                        </if>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>

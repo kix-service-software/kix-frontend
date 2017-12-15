@@ -19,11 +19,13 @@ import {
     TicketProperty,
     LoadTicketDetailsRequest,
     LoadTicketDetailsResponse,
-    TicketDetails
+    TicketDetails,
+    QuickSearchRequest
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/TicketService';
+import { SearchOperator } from '../../../core/dist/browser/SearchOperator';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -46,6 +48,34 @@ export class TicketCommunicator extends KIXCommunicator {
                 });
             client.emit(
                 TicketEvent.TICKETS_SEARCH_FINISHED,
+                new SearchTicketsResponse(data.requestId, tickets as Ticket[])
+            );
+        });
+
+        client.on(TicketEvent.EXECUTE_QUICK_SEARCH, async (data: QuickSearchRequest) => {
+            const properties = [
+                TicketProperty.TICKET_ID,
+                TicketProperty.TITLE
+            ];
+
+            const value = '*' + data.searchValue + '*';
+
+            const filter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]> = [
+                [TicketProperty.TICKET_NUMBER, SearchOperator.LIKE, value],
+                [TicketProperty.TITLE, SearchOperator.LIKE, value],
+                [TicketProperty.BODY, SearchOperator.LIKE, value],
+                [TicketProperty.FROM, SearchOperator.LIKE, value],
+                [TicketProperty.TO, SearchOperator.LIKE, value],
+                [TicketProperty.CC, SearchOperator.LIKE, value]
+            ];
+
+            const tickets = await this.ticketService.getTickets(data.token, properties, 15, filter, true)
+                .catch((error) => {
+                    client.emit(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
+                });
+
+            client.emit(
+                TicketEvent.QUICK_SEARCH_FINISHED,
                 new SearchTicketsResponse(data.requestId, tickets as Ticket[])
             );
         });
