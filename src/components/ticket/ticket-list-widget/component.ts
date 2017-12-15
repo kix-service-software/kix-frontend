@@ -61,22 +61,29 @@ class TicketListWidgetComponent {
     }
 
     private filter(): void {
+        let usedContextFilter = false;
         if (this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent) {
             const contextFilter = ContextStore.getInstance().getContextFilter();
             // TODO: use enum for objectType
             if (contextFilter && contextFilter.objectType === 'Queue' && contextFilter.objectValue) {
                 this.state.filteredTickets =
                     this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
+                usedContextFilter = true;
             }
         }
 
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
             const searchValue = this.state.filterValue.toLocaleLowerCase();
-            this.state.filteredTickets = this.state.filteredTickets.filter((ticket: Ticket) => {
+
+            const tickets = usedContextFilter ? this.state.filteredTickets : this.state.tickets;
+
+            this.state.filteredTickets = tickets.filter((ticket: Ticket) => {
                 const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
                 const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
                 return foundTitle || foundTicketNumber;
             });
+        } else if (!usedContextFilter) {
+            this.state.filteredTickets = this.state.tickets;
         }
 
         (this as any).setStateDirty('filteredTickets');
