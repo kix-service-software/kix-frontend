@@ -1,51 +1,28 @@
-.explorer-toggle {
-    display: none;
-}
-
 .explorerbar {
     float: left;
-    padding: 5px;
-    width: 40px;
+    width: 200px;
     overflow: hidden;
-    & .widget.explorer {
-        width: 192px;
-        margin-bottom: 192px;
-        transform: rotate(270deg);
-        transform-origin: 96px 96px;
-        & .widget-content {
-            height: 0;
-            padding: 0;
+    div {
+        .widget {
+            width: 195px;
+            margin-top: 10px;
+            .widget-content {
+                height: unset;
+                min-height: 192px;
+                max-height: 400px;
+                overflow: auto;
+                padding: 0;
+            }
         }
     }
 }
 
-#first-explorer:checked ~ .explorerbar,
-#second-explorer:checked ~ .explorerbar {
+.collapsed-explorer {
+    margin-bottom: 192px;
+    margin-top: 15px;
     width: 192px;
-}
-
-#first-explorer:checked ~ .explorerbar .first-explorer.explorer,
-#second-explorer:checked ~ .explorerbar .second-explorer.explorer {
-    width: 192px;
-}
-
-#first-explorer:checked ~ .explorerbar .first-explorer.explorer,
-#second-explorer:checked ~ .explorerbar .second-explorer.explorer {
-    transform: rotate(360deg);
-    transform-origin: 50% 50%;
-    margin-bottom: 1.5em;
-    & .widget-content {
-        height: inherit;
-        padding: inherit;
-    }
-}
-
-#first-explorer:not(:checked) ~ .explorerbar .first-explorer.explorer .header-left label,
-#second-explorer:not(:checked) ~ .explorerbar .second-explorer.explorer .header-left label {
-    display: none;
-}
-
-#first-explorer:checked ~ .explorerbar .first-explorer.explorer .header-right label,
-#second-explorer:checked ~ .explorerbar .second-explorer.explorer .header-right label {
-    display: none;
+    border: 1px solid;
+    padding: 2px;
+    transform: rotate(270deg);
+    transform-origin: 96px 96px;
 }

@@ -3,6 +3,8 @@ import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRou
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { DashboardConfiguration } from '@kix/core/dist/model/dashboard/DashboardConfiguration';
 
 class TicketsComponent {
 
@@ -19,7 +21,11 @@ class TicketsComponent {
     }
 
     public onMount(): void {
+        TicketStore.getInstance().loadTicketData('ticket-table-data');
+
+        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
         DashboardStore.getInstance().loadDashboardConfiguration();
+
         const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
             new BreadcrumbDetails(contextId, null, null, 'Ticket-Dashboard');
@@ -29,6 +35,13 @@ class TicketsComponent {
             ComponentRouterStore.getInstance().navigate(
                 'base-router', 'ticket-details', { ticketId: this.state.ticketId }, true, this.state.ticketId
             );
+        }
+    }
+
+    private stateChanged(): void {
+        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
+        if (dashboardConfiguration) {
+            this.state.rows = dashboardConfiguration.contentRows;
         }
     }
 }

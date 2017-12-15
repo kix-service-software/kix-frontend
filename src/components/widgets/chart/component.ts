@@ -37,11 +37,13 @@ class ChartWidgetComponent {
     }
 
     private drawChart(): void {
-        const element = document.getElementById(this.state.svgId);
-        if (element && this.state.widgetConfiguration) {
-            element.innerHTML = '';
-            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.settings);
-        }
+        setTimeout(() => {
+            const element = document.getElementById(this.state.svgId);
+            if (element && this.state.widgetConfiguration) {
+                element.innerHTML = '';
+                ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.settings);
+            }
+        }, 1);
     }
 }
 
