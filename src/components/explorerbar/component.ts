@@ -1,6 +1,7 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
 import { ContextStore } from "@kix/core/dist/browser/context/ContextStore";
+import { inspect } from "util";
 
 class ExplorerbarComponent {
 
@@ -43,13 +44,16 @@ class ExplorerbarComponent {
         return DashboardStore.getInstance().getWidgetTemplate(instanceId);
     }
 
-    private isExpanded(instanceId: string): boolean {
-        const expanded = ContextStore.getInstance().getExplorerExpandedState(instanceId);
-        return expanded;
+    private isExplorerBarExpanded(instanceId: string): boolean {
+        return ContextStore.getInstance().getExplorerBarExpandedState();
     }
 
-    private toggleExplorer(): void {
-        ContextStore.getInstance().toggleExplorer();
+    private isExplorerMinimized(instanceId: string): boolean {
+        return ContextStore.getInstance().getExplorerExpandedState(instanceId);
+    }
+
+    private toggleExplorerBar(): void {
+        ContextStore.getInstance().toggleExplorerBar();
     }
 }
 

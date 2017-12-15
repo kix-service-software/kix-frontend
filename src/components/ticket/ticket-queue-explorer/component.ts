@@ -24,6 +24,7 @@ export class QueueExplorerComponent {
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
         TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        this.ticketStateChanged();
     }
 
     private ticketStateChanged(): void {

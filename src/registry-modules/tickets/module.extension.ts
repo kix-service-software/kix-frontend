@@ -9,14 +9,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
     public getDefaultConfiguration(): any {
         const contentRows = [
-            [
-                "ticket-module-chart1",
-                "ticket-module-chart2",
-                "ticket-module-chart3"
-            ],
-            [
-                "ticket-module-ticket-list"
-            ]
+            ["ticket-module-chart1", "ticket-module-chart2", "ticket-module-chart3"],
+            ["ticket-module-ticket-list"]
         ];
 
         const contentConfiguredWidgets = [
@@ -94,9 +88,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         ];
 
         const explorerRows: string[][] = [
-            [
-                '20171211155412'
-            ]
+            ['20171211155412'],
+            ['20171215093654']
         ];
 
         const explorerConfiguredWidgets: ConfiguredWidget[] = [
@@ -112,13 +105,24 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     icon: 'note',
                     contextDependent: false
                 },
+            },
+            {
+                instanceId: '20171215093654',
+                configuration: {
+                    widgetId: 'ticket-queue-explorer',
+                    title: "Übersicht Queues",
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: 'note',
+                    contextDependent: false
+                },
             }
         ];
 
         const sidebarRows = [
-            [
-                "ticket-module-notes"
-            ]
+            ["ticket-module-notes"]
         ];
 
         const sidebarConfiguredWidgets = [

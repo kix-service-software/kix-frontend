@@ -1,17 +1,18 @@
 <if(state.rows.length)>
     <div class="explorerbar">
         <for(widget in state.configuredWidgets)>
-            <if(component.isExpanded(widget.instanceId))>
+            <if(component.isExplorerBarExpanded())>
                 <div>
                     <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
                         minimizable: false,
+                        minimized: component.isExplorerMinimized(widget.instanceId),
                         explorer: true
                     }) key=widget.instanceId/>
                 </div>
             </if>
             <else>
-                <button on-click('toggleExplorer')>${widget.configuration.title}</button>
+                <div.collapsed-explorer on-click('toggleExplorerBar')>${widget.configuration.title}</div>
             </else>
         </for>
     </div>

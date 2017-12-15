@@ -61,7 +61,7 @@ class TicketListWidgetComponent {
     }
 
     private filter(): void {
-        if (this.state.widgetConfiguration.contextDependent) {
+        if (this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent) {
             const contextFilter = ContextStore.getInstance().getContextFilter();
             // TODO: use enum for objectType
             if (contextFilter && contextFilter.objectType === 'Queue' && contextFilter.objectValue) {

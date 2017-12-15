@@ -10,13 +10,16 @@ class WidgetComponent {
             minimized: false,
             configChanged: false,
             instanceId: null,
-            configurationTagId: null
+            configurationTagId: null,
+            explorer: false
         };
     }
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.state.configurationTagId = input.configurationTagId;
+        this.state.explorer = input.explorer;
+        this.state.minimized = input.minimized;
     }
 
     public onMount(): void {
@@ -24,11 +27,15 @@ class WidgetComponent {
     }
 
     private minimizeWidget(): void {
-        this.state.minimized = !this.state.minimized;
+        if (this.state.explorer) {
+            ContextStore.getInstance().toggleExplorer();
+        } else {
+            this.state.minimized = !this.state.minimized;
+        }
     }
 
     private minimizeExplorer(): void {
-        ContextStore.getInstance().toggleExplorer();
+        ContextStore.getInstance().toggleExplorerBar();
     }
 
     private showConfiguration(): void {
