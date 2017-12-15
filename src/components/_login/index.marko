@@ -8,16 +8,19 @@
                 </div>
                 <h1>${component.getTranslation(component.translationIds.TITLE)}</h1>
             </div>
-            <if(state.error || state.doLogin || state.logout)>
+            <if(state.error || state.logout)>
                 <div class="dialog-message-area">
-                    <if(state.doLogin)>
-                        <div class="message message-progress">... Login ...</div>
+                    <if(state.error)>
+                        <div class="message message-error">
+                            <span.kix-icon-exclamation/>
+                            ${state.error}
+                        </div>
                     </if>
-                    <else-if(state.error)>
-                        <div class="message message-error">${state.error}</div>
-                    </else-if>
                     <else-if(state.logout)>
-                        <div class="message message-success">${component.getTranslation(component.translationIds.LOGOUT)}</div>
+                        <div class="message message-success">
+                            <span.kix-icon-icircle/>
+                            ${component.getTranslation(component.translationIds.LOGOUT)}
+                        </div>
                     </else-if>
                 </div>
             </if>

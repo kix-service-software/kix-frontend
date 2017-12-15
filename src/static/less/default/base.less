@@ -72,7 +72,7 @@ button {
             right: -35px;
             display: block;
             box-sizing: border-box;
-            border: 3px solid @tertiary-0;
+            border: 2px solid @tertiary-0;
             width: 35px;
             height: 35px;
             border-top-right-radius: @border-radius;
@@ -83,7 +83,7 @@ button {
         &.disabled {
             background-color: @secondary-1;
             &:after {
-                border: 3px solid @secondary-1;
+                border: 2px solid @secondary-1;
                 color: @secondary-1;
             }
         }
@@ -99,22 +99,26 @@ button {
             color: @tertiary-6;
         }
         &:active {
-            background-color: @tertiary-3;
+            background-color: @tertiary-9;
         }
         &:active:after {
-            border-color: @tertiary-3;
-            color: @tertiary-3;
+            border-color: @tertiary-9;
         }
         & [class^="kix-icon-"],
         & [class*=" kix-icon-"] {
             color: @tertiary-0;
         }
+        &:active [class^="kix-icon-"],
+        &:active [class*=" kix-icon-"] {
+            color: @tertiary-9;
+        }
     }
     & [class^="kix-icon-"],
     & [class*=" kix-icon-"] {
         position: absolute;
-        top: 10px;
-        right: -25px;
+        top: 6px;
+        right: -28px;
+        font-size: 1.5em;
     }
 }
 

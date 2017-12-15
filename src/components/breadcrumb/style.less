@@ -10,14 +10,18 @@
     overflow: hidden;
     line-height: 2em;
     vertical-align: middle;
-    & span,
-    & a {
+    span,
+    a {
         font-size: .75em;
         margin-right: .25em;
     }
-    & a:not(:first-of-type)::before {
+    a:not(:first-of-type)::before {
         content: "|";
         display: inline-block;
         margin: 0 .25em;
+    }
+    [class^="kix-icon-"],
+    [class*=" kix-icon-"] {
+        color: #82c826;
     }
 }
