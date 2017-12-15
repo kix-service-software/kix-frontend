@@ -19,6 +19,8 @@ export class TicketDetailsComponent {
         this.state = {
             ticketId: input.ticketId
         };
+
+        TicketStore.getInstance().loadTicketDetails(this.state.ticketId);
     }
 
     public onMount(): void {

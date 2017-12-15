@@ -5,14 +5,20 @@
                 <li>
                     <span.kix-icon-dropdown-ticket/>
                     <span>
-                        <input type="text" placeholder="| Schnellsuche" value=state.searchValue on-keyup('searchValueChanged')/>
-                        <if(state.suggestions.length)>
+                        <input on-click('searchInputClicked') disabled=state.searching type="text" placeholder="| Schnellsuche" value=state.searchValue
+                            on-keyup('searchValueChanged')/>
+                        <if(state.searching)>
+                            <div.search-info>
+                                <span>Suche läuft</span>
+                            </div>
+                        </if>
+                        <else-if(state.suggestions.length && state.showSuggestions)>
                             <ul.suggestion-list>
                                 <for(suggestion in state.suggestions)>
                                     <li on-click('navigate', suggestion[0])>${suggestion[1].substring(0,50)}</li>
                                 </for>
                             </ul>
-                        </if>
+                        </else-if>
                     </span>
                 </li>
             </ul>

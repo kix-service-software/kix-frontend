@@ -9,7 +9,9 @@ export class QuickSearchComponent {
         this.state = {
             quickSearchId: 'ticket',
             searchValue: '',
-            suggestions: []
+            suggestions: [],
+            searching: false,
+            showSuggestions: false
         };
     }
 
@@ -21,6 +23,8 @@ export class QuickSearchComponent {
         const tickets = TicketStore.getInstance().getQuickSearchResult();
         if (tickets) {
             this.state.suggestions = tickets.map((t) => [t.TicketID, t.Title]);
+            this.state.searching = false;
+            this.state.showSuggestions = true;
         }
     }
 
@@ -28,11 +32,20 @@ export class QuickSearchComponent {
         this.state.searchValue = event.target.value;
         if (this.state.searchValue.length >= 4) {
             TicketStore.getInstance().executeQuickSearch(this.state.searchValue);
+            this.state.searching = true;
+            this.state.showSuggestions = false;
         }
-        console.log('searchValueChanged: ' + event.target.value);
+    }
+
+    private searchInputClicked(): void {
+        if (!this.state.searching) {
+            this.state.showSuggestions = true;
+        }
     }
 
     private navigate(objectId: string): void {
+        this.state.showSuggestions = false;
+        (this as any).setStateDirty('showSuggestions');
         ComponentRouterStore.getInstance().navigate(
             'base-router', 'ticket-details', { ticketId: objectId }, true, objectId
         );
