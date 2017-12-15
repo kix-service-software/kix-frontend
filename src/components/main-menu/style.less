@@ -62,13 +62,16 @@ ul.user-menu {
             span.label-wrapper {
                 opacity: 1;
                 transition: opacity .125s;
-                span.kix-icon,
-                span.inline-label {
-                    font-size: .75em;
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    font-size: .875em;
+                    position: relative;
+                    top: 4px;
                 }
                 span.inline-label {
                     position: relative;
                     top: -5px;
+                    font-size: .75em;
                 }
             }
             span.hover-label {
@@ -89,6 +92,12 @@ ul.user-menu {
         span.label-wrapper {
             line-height: 45px;
             font-size: 1.25em;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                font-size: inherit;
+                position: relative;
+                top: auto;
+            }
             .inline-label {
                 display: none;
             }
