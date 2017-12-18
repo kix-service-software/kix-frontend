@@ -26,7 +26,8 @@
             "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
             "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
             "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
-            "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension"
+            "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
+            "quick-search-communicator": "../../dist/communicators/extensions/QuickSearchCommunicator.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
@@ -59,6 +60,11 @@
             "ticket-info": "../../dist/registry-modules/widgets/ticket-info/widget-factory.extension",
             "queue-explorer": "../../dist/registry-modules/widgets/queue-explorer/widget-factory.extension"
         },
-        "kix:action": {}
+        "kix:action": {},
+        "kix:quick-search": {
+            "ticket-quick-search": "../../dist/registry-modules/tickets/quicksearch.extension",
+            "cutsomer-quick-search": "../../dist/registry-modules/customers/customer-quicksearch.extension",
+            "cutsomer-user-quick-search": "../../dist/registry-modules/customers/customer-user-quicksearch.extension"
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
+import { QuickSearchStore } from '@kix/core/dist/browser/quick-search/QuickSearchStore';
 import { ComponentRouterStore } from "@kix/core/dist/browser/router/ComponentRouterStore";
 
 export class QuickSearchComponent {
@@ -11,27 +11,37 @@ export class QuickSearchComponent {
             searchValue: '',
             suggestions: [],
             searching: false,
-            showSuggestions: false
+            showSuggestions: false,
+            quickSearches: []
         };
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        QuickSearchStore.getInstance().addStateListener(this.quickSearchStateChanged.bind(this));
+        this.state.quickSearches = QuickSearchStore.getInstance().getQuickSearches();
     }
 
-    private ticketStateChanged(): void {
-        const tickets = TicketStore.getInstance().getQuickSearchResult();
-        if (tickets) {
-            this.state.suggestions = tickets.map((t) => [t.TicketID, t.Title]);
+    private quickSearchStateChanged(): void {
+        this.state.quickSearches = QuickSearchStore.getInstance().getQuickSearches();
+
+        const result = QuickSearchStore.getInstance().getQuickSearchResult();
+        if (result) {
+            this.state.suggestions = result;
             this.state.searching = false;
             this.state.showSuggestions = true;
         }
+
+        (this as any).setStateDirty("quickSearches");
+    }
+
+    private quickSearchChanged(event: any): void {
+        this.state.quickSearchId = event.target.value;
     }
 
     private searchValueChanged(event: any): void {
         this.state.searchValue = event.target.value;
         if (this.state.searchValue.length >= 4) {
-            TicketStore.getInstance().executeQuickSearch(this.state.searchValue);
+            QuickSearchStore.getInstance().executeQuickSearch(this.state.quickSearchId, this.state.searchValue);
             this.state.searching = true;
             this.state.showSuggestions = false;
         }
@@ -45,7 +55,6 @@ export class QuickSearchComponent {
 
     private navigate(objectId: string): void {
         this.state.showSuggestions = false;
-        (this as any).setStateDirty('showSuggestions');
         ComponentRouterStore.getInstance().navigate(
             'base-router', 'ticket-details', { ticketId: objectId }, true, objectId
         );

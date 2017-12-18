@@ -1,5 +1,4 @@
 import {
-
     CreateArticle,
     CreateTicket,
 } from '@kix/core/dist/api';
@@ -48,34 +47,6 @@ export class TicketCommunicator extends KIXCommunicator {
                 });
             client.emit(
                 TicketEvent.TICKETS_SEARCH_FINISHED,
-                new SearchTicketsResponse(data.requestId, tickets as Ticket[])
-            );
-        });
-
-        client.on(TicketEvent.EXECUTE_QUICK_SEARCH, async (data: QuickSearchRequest) => {
-            const properties = [
-                TicketProperty.TICKET_ID,
-                TicketProperty.TITLE
-            ];
-
-            const value = '*' + data.searchValue + '*';
-
-            const filter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]> = [
-                [TicketProperty.TICKET_NUMBER, SearchOperator.LIKE, value],
-                [TicketProperty.TITLE, SearchOperator.LIKE, value],
-                [TicketProperty.BODY, SearchOperator.LIKE, value],
-                [TicketProperty.FROM, SearchOperator.LIKE, value],
-                [TicketProperty.TO, SearchOperator.LIKE, value],
-                [TicketProperty.CC, SearchOperator.LIKE, value]
-            ];
-
-            const tickets = await this.ticketService.getTickets(data.token, properties, 15, filter, true)
-                .catch((error) => {
-                    client.emit(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
-                });
-
-            client.emit(
-                TicketEvent.QUICK_SEARCH_FINISHED,
                 new SearchTicketsResponse(data.requestId, tickets as Ticket[])
             );
         });
