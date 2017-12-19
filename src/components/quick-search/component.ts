@@ -26,7 +26,8 @@ export class QuickSearchComponent {
 
         const result = QuickSearchStore.getInstance().getQuickSearchResult();
         if (result) {
-            this.state.suggestions = result;
+            // TODO: mapping object attributes from IQuickSearch
+            this.state.suggestions = result.map((r) => [r['TicketID'], r['Title']]);
             this.state.searching = false;
             this.state.showSuggestions = true;
         }
@@ -40,7 +41,10 @@ export class QuickSearchComponent {
 
     private searchValueChanged(event: any): void {
         this.state.searchValue = event.target.value;
-        if (this.state.searchValue.length >= 4) {
+    }
+
+    private searchClicked(): void {
+        if (!this.state.searching) {
             QuickSearchStore.getInstance().executeQuickSearch(this.state.quickSearchId, this.state.searchValue);
             this.state.searching = true;
             this.state.showSuggestions = false;
