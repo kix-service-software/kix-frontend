@@ -6,7 +6,7 @@ import {
 } from '@kix/core/dist/extensions';
 import { IPluginService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import { IServerConfiguration } from '@kix/core/dist/common';
-import { IQuickSearch } from '../../../core/dist/model/quick-search/IQuickSearch';
+import { IQuickSearch } from '@kix/core/dist/model/quick-search/IQuickSearch';
 
 const host = {
     debug: true
