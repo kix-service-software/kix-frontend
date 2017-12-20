@@ -26,7 +26,8 @@ export class CustomerQuickSearchExtension implements IQuickSearchExtension<Ticke
                     filter: {
                         Customer: {
                             OR: [
-                                { Field: "CustomerCompanyName", Operator: "LIKE", Value: searchValue }
+                                { Field: "CustomerCompanyName", Operator: "LIKE", Value: searchValue },
+                                { Field: "CustomerID", Operator: "LIKE", Value: searchValue }
                             ]
                         }
                     }
