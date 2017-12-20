@@ -1,4 +1,5 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
 
 class WidgetComponent {
 
@@ -9,13 +10,16 @@ class WidgetComponent {
             minimized: false,
             configChanged: false,
             instanceId: null,
-            configurationTagId: null
+            configurationTagId: null,
+            explorer: false
         };
     }
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.state.configurationTagId = input.configurationTagId;
+        this.state.explorer = input.explorer;
+        this.state.minimized = input.minimized;
     }
 
     public onMount(): void {
@@ -23,13 +27,21 @@ class WidgetComponent {
     }
 
     private minimizeWidget(): void {
-        this.state.minimized = !this.state.minimized;
-        // TODO: bessere Lösung finden, ob Content fertig gerendert wurde nach aufklappen
-        // ggf. also nicht state.minimized übergeben, sondern einen "marko-fertig-gerendert" Status
-        // onUpdate der Eltern-Componente triggert nicht immer -.-
-        setTimeout(() => {
-            (this as any).emit('minimizeChanged', this.state.minimized);
-        }, 200);
+        if (this.state.explorer) {
+            ContextStore.getInstance().toggleExplorer();
+        } else {
+            this.state.minimized = !this.state.minimized;
+            // TODO: bessere Lösung finden, ob Content fertig gerendert wurde nach aufklappen
+            // ggf. also nicht state.minimized übergeben, sondern einen "marko-fertig-gerendert" Status
+            // onUpdate der Eltern-Componente triggert nicht immer -.-
+            setTimeout(() => {
+                (this as any).emit('minimizeChanged', this.state.minimized);
+            }, 200);
+        }
+    }
+
+    private minimizeExplorer(): void {
+        ContextStore.getInstance().toggleExplorerBar();
     }
 
     private showConfiguration(): void {

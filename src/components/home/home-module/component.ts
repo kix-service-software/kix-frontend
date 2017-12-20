@@ -23,7 +23,7 @@ class HomeComponent {
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
-    public stateChanged(): void {
+    private stateChanged(): void {
         const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
         if (dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.contentRows;

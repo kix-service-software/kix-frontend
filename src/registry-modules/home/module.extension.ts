@@ -43,7 +43,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: null
+                    icon: null,
+                    contextDependent: false
                 }
             },
             {
@@ -62,7 +63,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: null
+                    icon: null,
+                    contextDependent: false
                 }
             },
             {
@@ -74,7 +76,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     settings: {},
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: null
+                    icon: null,
+                    contextDependent: false
                 },
             },
             {
@@ -99,7 +102,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.LARGE,
-                    icon: null
+                    icon: null,
+                    contextDependent: false
                 },
             },
             {
@@ -131,7 +135,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.LARGE,
-                    icon: null
+                    icon: null,
+                    contextDependent: false
                 }
             }
         ];
@@ -147,7 +152,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: 'note'
+                    icon: 'note',
+                    contextDependent: false
                 },
             },
             {
@@ -161,7 +167,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     },
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: 'note'
+                    icon: 'note',
+                    contextDependent: false
                 },
             },
             {
@@ -174,7 +181,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     show: true,
                     size: WidgetSize.SMALL,
                     // TODO: richtiges Icon angeben
-                    icon: 'minus'
+                    icon: 'minus',
+                    contextDependent: false
                 }
             }
         ];
