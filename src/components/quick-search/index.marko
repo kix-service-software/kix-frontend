@@ -1,6 +1,6 @@
 <select.quick-search-select on-change('quickSearchChanged')>
     <for(quickSearch in state.quickSearches)>
-        <option value=quickSearch.id selected=(state.quickSearchId === quickSearch.id)>${quickSearch.name}</option>
+        <option value=quickSearch.id selected=(state.currentQuickSearch.id === quickSearch.id)>${quickSearch.name}</option>
     </for>
 </select>
 <span.quick-search-input>

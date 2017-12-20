@@ -10,7 +10,7 @@ export class TicketQuickSearchExtension implements IQuickSearchExtension<Ticket>
     public id: string = 'ticket';
 
     public getQuickSearch(): IQuickSearch {
-        return new TicketQuickSearch(this.id, 'Ticket', 'kix-icon-dropdown-ticket');
+        return new TicketQuickSearch(this.id, 'Ticket', 'kix-icon-dropdown-ticket', 'tickets', 'TicketID', ['Title']);
     }
 
     public execute(token: string, searchValue: string): Promise<Ticket[]> {

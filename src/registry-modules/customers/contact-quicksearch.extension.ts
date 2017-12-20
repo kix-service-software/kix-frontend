@@ -10,7 +10,10 @@ export class CustomerUserQuickSearchExtension implements IQuickSearchExtension<T
     public id: string = 'contact';
 
     public getQuickSearch(): IQuickSearch {
-        return new ContactQuickSearch(this.id, 'Ansprechpartner', 'kix-icon-dropdown-customer-user');
+        return new ContactQuickSearch(
+            this.id, 'Ansprechpartner', 'kix-icon-dropdown-customer-user', 'customers',
+            'ContactID', ['UserFirstname', 'UserLastname', 'UserEmail']
+        );
     }
 
     public execute(token: string, searchValue: string): Promise<any[]> {

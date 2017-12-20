@@ -10,7 +10,9 @@ export class CustomerQuickSearchExtension implements IQuickSearchExtension<Ticke
     public id: string = 'customer';
 
     public getQuickSearch(): IQuickSearch {
-        return new CustomerQuickSearch(this.id, 'Kunde', 'kix-icon-dropdown-customer');
+        return new CustomerQuickSearch(
+            this.id, 'Kunde', 'kix-icon-dropdown-customer', 'customers', 'CustomerID', ['CustomerCompanyName']
+        );
     }
 
     public execute(token: string, searchValue: string): Promise<any[]> {

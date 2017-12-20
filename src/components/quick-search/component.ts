@@ -1,33 +1,28 @@
 import { QuickSearchStore } from '@kix/core/dist/browser/quick-search/QuickSearchStore';
 import { ComponentRouterStore } from "@kix/core/dist/browser/router/ComponentRouterStore";
+import { QuickSearchComponentState } from './QuickSearchComponentState';
 
 export class QuickSearchComponent {
 
-    private state: any;
+    private state: QuickSearchComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            quickSearchId: 'ticket',
-            searchValue: '',
-            suggestions: [],
-            searching: false,
-            showSuggestions: false,
-            quickSearches: []
-        };
+        this.state = new QuickSearchComponentState();
     }
 
     public onMount(): void {
         QuickSearchStore.getInstance().addStateListener(this.quickSearchStateChanged.bind(this));
-        this.state.quickSearches = QuickSearchStore.getInstance().getQuickSearches();
     }
 
     private quickSearchStateChanged(): void {
         this.state.quickSearches = QuickSearchStore.getInstance().getQuickSearches();
+        if (this.state.quickSearches.length && !this.state.currentQuickSearch) {
+            this.state.currentQuickSearch = this.state.quickSearches[0];
+        }
 
         const result = QuickSearchStore.getInstance().getQuickSearchResult();
         if (result) {
-            // TODO: mapping object attributes from IQuickSearch
-            this.state.suggestions = result.map((r) => [r['TicketID'], r['Title']]);
+            this.state.suggestions = this.buildSuggestionsList(result);
             this.state.searching = false;
             this.state.showSuggestions = true;
         }
@@ -35,8 +30,21 @@ export class QuickSearchComponent {
         (this as any).setStateDirty("quickSearches");
     }
 
+    private buildSuggestionsList(result: any[]): Array<[string, string]> {
+        return result.map((r) => {
+            const quickSearch = this.state.currentQuickSearch;
+            const id = r[quickSearch.objectIdProperty];
+            const displayText =
+                quickSearch.displayProperties
+                    .map((dp) => r[dp])
+                    .join(" ");
+            return [id, displayText];
+        }) as Array<[string, string]>;
+    }
+
     private quickSearchChanged(event: any): void {
-        this.state.quickSearchId = event.target.value;
+        const quickSearch = this.state.quickSearches.find((qs) => qs.id === event.target.value);
+        this.state.currentQuickSearch = quickSearch;
     }
 
     private searchValueChanged(event: any): void {
@@ -45,7 +53,7 @@ export class QuickSearchComponent {
 
     private searchClicked(): void {
         if (!this.state.searching) {
-            QuickSearchStore.getInstance().executeQuickSearch(this.state.quickSearchId, this.state.searchValue);
+            QuickSearchStore.getInstance().executeQuickSearch(this.state.currentQuickSearch.id, this.state.searchValue);
             this.state.searching = true;
             this.state.showSuggestions = false;
         }
@@ -59,8 +67,12 @@ export class QuickSearchComponent {
 
     private navigate(objectId: string): void {
         this.state.showSuggestions = false;
+
+        const data = {};
+        data[this.state.currentQuickSearch.objectIdProperty] = objectId;
+
         ComponentRouterStore.getInstance().navigate(
-            'base-router', 'ticket-details', { ticketId: objectId }, true, objectId
+            'base-router', this.state.currentQuickSearch.objectComponent, data, true, objectId
         );
     }
 
