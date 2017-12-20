@@ -1,5 +1,4 @@
 import {
-
     CreateArticle,
     CreateTicket,
 } from '@kix/core/dist/api';
@@ -19,11 +18,13 @@ import {
     TicketProperty,
     LoadTicketDetailsRequest,
     LoadTicketDetailsResponse,
-    TicketDetails
+    TicketDetails,
+    QuickSearchRequest
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/TicketService';
+import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
 
 export class TicketCommunicator extends KIXCommunicator {
 
