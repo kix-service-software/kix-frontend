@@ -6,7 +6,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 class ChartWidgetComponent {
 
     private state: ChartComponentState;
-    private componentInititalized: boolean = false;
+    private chartFactory: ChartFactory;
 
     public onCreate(input: any): void {
         this.state = new ChartComponentState();
@@ -19,28 +19,39 @@ class ChartWidgetComponent {
     public onMount(): void {
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        if (this.state.widgetConfiguration && this.state.widgetConfiguration.settings) {
+            this.chartFactory = new ChartFactory(
+                'svg_' + this.state.instanceId,
+                this.state.widgetConfiguration.settings);
 
-        this.drawChart();
+            this.createChart();
+        }
     }
 
-    public showConfigurationClicked(): void {
+    private showConfigurationClicked(): void {
         ApplicationStore.getInstance().toggleDialog('chart-configuration');
     }
 
-    public saveConfiguration(): void {
+    private saveConfiguration(): void {
         this.cancelConfiguration();
-        this.drawChart();
+        this.createChart();
     }
 
-    public cancelConfiguration(): void {
+    private cancelConfiguration(): void {
         this.state.showConfiguration = false;
     }
 
-    private drawChart(): void {
-        const element = document.getElementById(this.state.svgId);
-        if (element && this.state.widgetConfiguration) {
+    private changeStateIsDrawn(minimized): void {
+        if (!minimized) {
+            this.createChart(true);
+        }
+    }
+
+    private createChart(force: boolean = false): void {
+        const element = document.getElementById('svg_' + this.state.instanceId);
+        if (this.chartFactory && element) {
             element.innerHTML = '';
-            ChartFactory.createChart(this.state.svgId, this.state.widgetConfiguration.settings);
+            this.chartFactory.createChart(force);
         }
     }
 }
