@@ -12,3 +12,4 @@ export { UserService } from './UserService';
 export { ValidObjectService } from './ValidObjectService';
 export { RoleService } from './RoleService';
 export { DynamicFieldService } from './DynamicFieldService';
+export { CustomerService } from './CustomerService';

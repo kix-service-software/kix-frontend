@@ -66,7 +66,7 @@ export abstract class ObjectService<T> {
      *
      * @return a Promise which resolves the response from the API
      */
-    protected getObject<R>(token: string, objectId: number, query?: any): Promise<R> {
+    protected getObject<R>(token: string, objectId: number | string, query?: any): Promise<R> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         return this.getObjectByUri(token, uri, query);
     }
