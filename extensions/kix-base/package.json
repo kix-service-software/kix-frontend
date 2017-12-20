@@ -64,7 +64,7 @@
         "kix:quick-search": {
             "ticket-quick-search": "../../dist/registry-modules/tickets/quicksearch.extension",
             "cutsomer-quick-search": "../../dist/registry-modules/customers/customer-quicksearch.extension",
-            "cutsomer-user-quick-search": "../../dist/registry-modules/customers/customer-user-quicksearch.extension"
+            "contact-quick-search": "../../dist/registry-modules/customers/contact-quicksearch.extension"
         }
     }
 }

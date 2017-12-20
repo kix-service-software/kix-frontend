@@ -1,6 +1,6 @@
 import { IQuickSearch } from "@kix/core/dist/model/";
 
-export class CustomerUserQuickSearch implements IQuickSearch {
+export class ContactQuickSearch implements IQuickSearch {
 
     public constructor(
         public id: string,
