@@ -24,7 +24,7 @@ import {
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/TicketService';
-import { SearchOperator } from '../../../core/dist/browser/SearchOperator';
+import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
 
 export class TicketCommunicator extends KIXCommunicator {
 
