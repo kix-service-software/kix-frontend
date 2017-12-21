@@ -1,5 +1,5 @@
 <widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable
-    on-minimizeChanged('changeStateIsDrawn')>
+    on-minimizeChanged('redrawChart')>
     <@icon/>
     <@title>
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>

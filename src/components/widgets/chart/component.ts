@@ -22,9 +22,11 @@ class ChartWidgetComponent {
         if (this.state.widgetConfiguration && this.state.widgetConfiguration.settings) {
             this.chartFactory = new ChartFactory(
                 'svg_' + this.state.instanceId,
-                this.state.widgetConfiguration.settings);
+                this.state.widgetConfiguration.settings,
+                this.state.widgetConfiguration.contextDependent || false,
+            );
 
-            this.createChart();
+            this.drawChart();
         }
     }
 
@@ -34,24 +36,30 @@ class ChartWidgetComponent {
 
     private saveConfiguration(): void {
         this.cancelConfiguration();
-        this.createChart();
+        if (this.chartFactory) {
+            this.chartFactory.updateConfig(
+                this.state.widgetConfiguration.settings,
+                this.state.widgetConfiguration.contextDependent || false
+            );
+            this.drawChart();
+        }
     }
 
     private cancelConfiguration(): void {
         this.state.showConfiguration = false;
     }
 
-    private changeStateIsDrawn(minimized): void {
+    private redrawChart(minimized: boolean = false): void {
         if (!minimized) {
-            this.createChart(true);
+            this.drawChart();
         }
     }
 
-    private createChart(force: boolean = false): void {
+    private drawChart(): void {
         const element = document.getElementById('svg_' + this.state.instanceId);
         if (this.chartFactory && element) {
             element.innerHTML = '';
-            this.chartFactory.createChart(force);
+            this.chartFactory.drawChart();
         }
     }
 }
