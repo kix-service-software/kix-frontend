@@ -1,7 +1,6 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
 import { ContextStore } from "@kix/core/dist/browser/context/ContextStore";
-import { inspect } from "util";
 
 class ExplorerbarComponent {
 

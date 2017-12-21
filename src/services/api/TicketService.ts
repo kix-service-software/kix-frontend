@@ -73,11 +73,12 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     public async getTickets(
         token: string, properties: string[], limit: number,
-        filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+        filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>,
+        OR_SEARCH: boolean = false
     ): Promise<AbstractTicket[]> {
 
         const ticketProperties = this.getTicketProperties(properties).join(',');
-        const ticketFilter = this.prepareTicketFilter(filter);
+        const ticketFilter = this.prepareTicketFilter(filter, OR_SEARCH);
         const query = new TicketQuery(ticketProperties, ticketFilter);
 
         const response = await this.getObjects<TicketsResponse>(token, limit, null, null, query);
@@ -192,12 +193,13 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     }
 
     private prepareTicketFilter(
-        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>,
+        OR_SEARCH
     ): string {
         let filter = "";
         if (ticketFilter && ticketFilter.length) {
             const filterObject = {
-                Ticket: this.prepareFilterOperations(ticketFilter)
+                Ticket: this.prepareFilterOperations(ticketFilter, OR_SEARCH)
             };
 
             filter = JSON.stringify(filterObject);
@@ -206,7 +208,8 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     }
 
     private prepareFilterOperations(
-        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>
+        ticketFilter: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>,
+        OR_SEARCH: boolean
     ): any {
         const filterObject = {};
         const filterOperations = [];
@@ -234,7 +237,11 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
             }
         }
 
-        filterObject['AND'] = filterOperations;
+        if (OR_SEARCH) {
+            filterObject['OR'] = filterOperations;
+        } else {
+            filterObject['AND'] = filterOperations;
+        }
 
         return filterObject;
     }
