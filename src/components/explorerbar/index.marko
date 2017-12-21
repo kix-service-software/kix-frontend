@@ -2,13 +2,18 @@
     <div class="explorerbar">
         <for(widget in state.configuredWidgets)>
             <if(component.isExplorerBarExpanded())>
-                <div>
+                <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
                     <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
                         minimizable: false,
                         minimized: component.isExplorerMinimized(widget.instanceId),
                         explorer: true
                     }) key=widget.instanceId/>
+                    <if(component.isConfigMode())>
+                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+                            <div.widget-overlay-content/>
+                        </div>
+                    </if>
                 </div>
             </if>
             <else>

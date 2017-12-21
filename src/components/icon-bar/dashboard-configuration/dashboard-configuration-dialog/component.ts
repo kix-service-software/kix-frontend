@@ -22,17 +22,7 @@ class DashboardConfigurationDialog {
 
     public onCreate(input: any): void {
         this.state = new DashboardConfigurationDialogComponentState(
-            [
-                // TODO: aktuell nur Beispiel
-                {
-                    instanceId: '20171114000011', widgetId: 'explorer-widget', label: 'Queues',
-                    required: true, active: true, id: 'explorer-widget-1'
-                },
-                {
-                    instanceId: '20171114000012', widgetId: 'explorer-widget', label: 'Service',
-                    required: false, active: true, id: 'explorer-widget-2'
-                }
-            ],
+            [],
             [
                 new SelectWithPropertiesProperty('active', 'Anzeigen', 'checkbox')
             ],
@@ -67,30 +57,68 @@ class DashboardConfigurationDialog {
 
     private prepareFirstLists(): void {
         const widgetDescriptorList = DashboardStore.getInstance().getAvailableWidgets();
-        widgetDescriptorList.forEach((wd) => {
-            const listId = wd.widgetId + '-' + Math.floor((Math.random() * 1000000));
-            const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
-            if (wd.isContentWidget) {
-                // TODO: handle required
-                // if (wd.required) {
-                //     this.state.contentSecondList.push(listElement);
-                // } else {
-                this.state.contentFirstList.push(listElement);
-                // }
-            }
-            if (wd.isSidebarWidget) {
-                // TODO: handle required
-                // if (wd.required) {
-                //     this.state.sidebarSecondList.push(listElement);
-                // } else {
-                this.state.sidebarFirstList.push(listElement);
-                // }
-            }
-            this.state.widgetDescriptorList.push({ listId, descriptor: wd });
+        let explorerInstanceIds = [];
+        this.state.dashboardConfig.explorerRows.forEach((row) => {
+            explorerInstanceIds = [...explorerInstanceIds, ...row];
         });
+
+        widgetDescriptorList.forEach((wd) => {
+            if (wd.isExplorerWidget) {
+                this.prepareExplorerList(wd, explorerInstanceIds);
+            } else {
+                const listId = wd.widgetId + '-' + Math.floor((Math.random() * 1000000));
+                const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
+
+                if (wd.isContentWidget) {
+                    // TODO: handle required
+                    // if (wd.required) {
+                    //     this.state.contentSecondList.push(listElement);
+                    // } else {
+                    this.state.contentFirstList.push(listElement);
+                    // }
+                }
+                if (wd.isSidebarWidget) {
+                    // TODO: handle required
+                    // if (wd.required) {
+                    //     this.state.sidebarSecondList.push(listElement);
+                    // } else {
+                    this.state.sidebarFirstList.push(listElement);
+                    // }
+                }
+                this.state.widgetDescriptorList.push({ listId, descriptor: wd });
+            }
+        });
+        this.state.explorerList = this.state.explorerList.sort(this.sortList);
         this.state.contentFirstList = this.state.contentFirstList.sort(this.sortList);
         this.state.sidebarFirstList = this.state.sidebarFirstList.sort(this.sortList);
+    }
+
+    private prepareExplorerList(explorerDescriptor, explorerInstanceIds): void {
+        const configuredExplorer = this.state.dashboardConfig.explorerConfiguredWidgets.find(
+            (ce) => ce.configuration.widgetId === explorerDescriptor.widgetId
+        );
+        let listElement: SelectWithPropertiesListElement;
+        if (configuredExplorer) {
+            listElement = {
+                id: configuredExplorer.instanceId,
+                label: configuredExplorer.configuration.title,
+                properties: {
+                    active: explorerInstanceIds.some((wiId) => wiId === configuredExplorer.instanceId)
+                },
+                selected: false
+            };
+        } else {
+            listElement = {
+                id: explorerDescriptor.widgetId + '-' + Math.floor((Math.random() * 1000000)),
+                label: explorerDescriptor.configuration.title,
+                properties: {
+                    active: true
+                },
+                selected: false
+            };
+        }
+        this.state.explorerList.push(listElement);
     }
 
     private prepareSecondLists(): void {
@@ -112,13 +140,14 @@ class DashboardConfigurationDialog {
             instanceIds = [...instanceIds, ...row];
         });
         configuredWidgets.forEach((configuredWidget: ConfiguredWidget) => {
-            const listElement = {
+            const listElement: SelectWithPropertiesListElement = {
                 id: configuredWidget.instanceId,
                 label: configuredWidget.configuration.title,
                 properties: {
                     active: instanceIds.some((wiId) => wiId === configuredWidget.instanceId),
                     size: configuredWidget.configuration.size
-                }
+                },
+                selected: false
             };
             targetList.push(listElement);
         });
@@ -236,6 +265,11 @@ class DashboardConfigurationDialog {
     }
 
     private saveConfiguration(): void {
+        this.state.explorerList.forEach((le) => {
+            // TODO: dürfen alle explorer entfernt werden (nicht aktiv sein)? -> ggf. Sonderbehandlung
+            this.updateRows(le, this.state.dashboardConfig.explorerRows);
+            this.updateConfiguredWidgets(le, this.state.dashboardConfig.explorerConfiguredWidgets);
+        });
         this.state.contentSecondList.forEach((le) => {
             this.updateRows(le, this.state.dashboardConfig.contentRows);
             this.updateConfiguredWidgets(le, this.state.dashboardConfig.contentConfiguredWidgets);

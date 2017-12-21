@@ -54,6 +54,14 @@ class ExplorerbarComponent {
     private toggleExplorerBar(): void {
         ContextStore.getInstance().toggleExplorerBar();
     }
+
+    private isConfigMode(): boolean {
+        return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private isConfigDialogShown(): boolean {
+        return ApplicationStore.getInstance().isShowDialog();
+    }
 }
 
 module.exports = ExplorerbarComponent;
