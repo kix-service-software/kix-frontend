@@ -41,7 +41,7 @@ export class ServiceExplorerComponent {
     }
 
     private queueClicked(serviceId: number): void {
-        // TODO: Constant enum for ObjectType Queue
+        // TODO: Constant enum for ObjectType Service
         const contextFilter = new ContextFilter('Service', TicketProperty.SERVICE_ID, serviceId);
         ContextStore.getInstance().provideObjectFilter(contextFilter);
     }
