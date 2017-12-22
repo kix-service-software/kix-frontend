@@ -88,7 +88,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         ];
 
         const explorerRows: string[][] = [
-            ['20171211155412']
+            ['20171211155412'],
+            ['20171215093654']
         ];
 
         const explorerConfiguredWidgets: ConfiguredWidget[] = [
@@ -104,6 +105,19 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     icon: null,
                     contextDependent: false
                 },
+            },
+            {
+                instanceId: '20171215093654',
+                configuration: {
+                    widgetId: 'ticket-service-explorer',
+                    title: "Übersicht Services",
+                    actions: [],
+                    settings: {},
+                    show: true,
+                    size: WidgetSize.SMALL,
+                    icon: null,
+                    contextDependent: false
+                }
             }
         ];
 
