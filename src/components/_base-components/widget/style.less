@@ -44,17 +44,6 @@
         overflow: hidden;
         box-sizing: border-box;
     }
-    /** .config-mode is from .drag-widget */
-    .config-mode & {
-        .widget-header {
-            color: @config-color;
-            background-color: @secondary-0;
-            .header-right span {
-                z-index: 1;
-                position: relative;
-            }
-        }
-    }
 }
 
 .size1of1 .widget-content {
@@ -67,4 +56,13 @@
     & [class*=" kix-icon-"] {
         display: none;
     }
-} 
+}
+
+.config-mode .widget .widget-header {
+    color: @config-color;
+    background-color: @secondary-0;
+    .header-right span {
+        z-index: 1;
+        position: relative;
+    }
+}

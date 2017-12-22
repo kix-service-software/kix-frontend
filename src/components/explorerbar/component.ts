@@ -62,6 +62,10 @@ class ExplorerbarComponent {
     private isConfigDialogShown(): boolean {
         return ApplicationStore.getInstance().isShowDialog();
     }
+
+    private explorerAvailable(instanceId: string): boolean {
+        return this.state.rows.some((r) => r === instanceId);
+    }
 }
 
 module.exports = ExplorerbarComponent;

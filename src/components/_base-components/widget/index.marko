@@ -12,7 +12,9 @@
             </h3>
         </span>
         <span>
-            <include(input.filter)/>
+            <if(!component.isConfigMode())>
+                <include(input.filter)/>
+            </if>
         </span>
         <span.header-right>
             <if(component.isConfigMode())>

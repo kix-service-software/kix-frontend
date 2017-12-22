@@ -109,14 +109,19 @@ class DashboardConfigurationDialog {
                 selected: false
             };
         } else {
+            const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
             listElement = {
-                id: explorerDescriptor.widgetId + '-' + Math.floor((Math.random() * 1000000)),
+                id: newInstanceId,
                 label: explorerDescriptor.configuration.title,
                 properties: {
                     active: true
                 },
                 selected: false
             };
+            this.state.dashboardConfig.explorerConfiguredWidgets.push({
+                instanceId: newInstanceId,
+                configuration: { ...explorerDescriptor.configuration }
+            });
         }
         this.state.explorerList.push(listElement);
     }
