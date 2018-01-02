@@ -8,6 +8,8 @@ export enum LoginTranslationId {
 
     PASSWORD = "LOGIN:PASSWORD",
 
-    LOGOUT = "LOGIN:LOGOUT"
+    LOGOUT = "LOGIN:LOGOUT",
+
+    LOGIN_ERROR = "LOGIN:ERROR"
 
 }
