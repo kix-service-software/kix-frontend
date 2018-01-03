@@ -9,6 +9,7 @@ import {
     IDynamicFieldService,
     IGroupService,
     IHttpService,
+    ILinkService,
     ILoggingService,
     IMarkoService,
     IPluginService,
@@ -44,6 +45,7 @@ import {
     DynamicFieldService,
     GroupService,
     HttpService,
+    LinkService,
     LoggingService,
     MarkoService,
     PluginService,
@@ -114,6 +116,7 @@ export class ServiceContainer {
         this.container.bind<IContactService>('IContactService').to(ContactService);
         this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
         this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
+        this.container.bind<ILinkService>("ILinkService").to(LinkService);
     }
 
     private async bindRouters(): Promise<void> {

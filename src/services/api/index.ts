@@ -16,3 +16,4 @@ export { CustomerService } from './CustomerService';
 export { ContactService } from './ContactService';
 export { SignatureService } from './SignatureService';
 export { SalutationService } from './SalutationService';
+export { LinkService } from './LinkService';
