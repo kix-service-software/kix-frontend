@@ -1,12 +1,7 @@
 .ticket-table-wrapper {
     height: 350px;
     overflow-y: auto;
-    // position: absolute;
     width: 100%;
-    // top: 0;
-    // right: 0;
-    // bottom: 0;
-    // left: 0;
 }
 
 .ticket-table {
@@ -25,7 +20,9 @@
 
     th, 
     td {
+        color: #5b5b5b;
         font-size: .875em;
+        font-weight: 400;
         &.select-all-rows,
         &.select-row,
         &.PriorityID,
@@ -38,6 +35,18 @@
     thead,
     tfoot {
         background-color: #e2e2e2;
+        height: 2em;
+        vertical-align: middle;
+        line-height: 2em;
+        .sortable {
+            display: inline-block;
+            margin-left: .25em;
+            font-size: .625em;
+            color: #9b9d9d;
+            span {
+                cursor: pointer;
+            }
+        }
     }
 
     tfoot {

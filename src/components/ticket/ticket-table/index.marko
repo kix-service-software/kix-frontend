@@ -3,21 +3,29 @@
     <table.ticket-table>
         <thead>
             <tr>
-                <th.select-all-rows>
-                    <a href="#">alle</a>
-                </th>
+                <th.select-all-rows>alle</th>
                 <for(property in state.properties)>
-                    <th class=property[0]>${property[1]}</th>
+                    <th class=property[0]>
+                        ${property[1]}
+                        <span.sortable>
+                            <span.kix-icon-sort-up/>
+                            <span.kix-icon-sort-down/>
+                        </span>
+                    </th>
                 </for>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th.select-all>
-                    <a href="#">alle</a>
-                </th>
+                <th.select-all>alle</th>
                 <for(property in state.properties)>
-                    <th class=property[0]>${property[1]}</th>
+                    <th class=property[0]>
+                        ${property[1]}
+                        <span.sortable>
+                            <span.kix-icon-sort-up/>
+                            <span.kix-icon-sort-down/>
+                        </span>
+                    </th>
                 </for>
             </tr>
         </tfoot>
