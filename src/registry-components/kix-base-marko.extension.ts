@@ -20,6 +20,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getTicketDependencies(): string[] {
         return [
             'ticket/ticket-queue-explorer',
+            'ticket/ticket-service-explorer',
             'ticket/ticket-module',
             'ticket/ticket-details',
             'ticket/ticket-search/ticket-search-result',
@@ -65,7 +66,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-info-widget', 'ticket/ticket-info-widget'],
             ['ticket-info-configuration', 'ticket/ticket-info-widget/ticket-info-configuration'],
             ['ticket-creation-dialog', 'ticket/ticket-creation-dialog'],
-            ['ticket-queue-explorer', 'ticket/ticket-queue-explorer']
+            ['ticket-queue-explorer', 'ticket/ticket-queue-explorer'],
+            ['ticket-service-explorer', 'ticket/ticket-service-explorer']
         ];
     }
 

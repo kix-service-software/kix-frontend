@@ -1,16 +1,28 @@
 <if(state.rows.length)>
     <div.explorerbar class=(component.isExplorerBarExpanded() ? "" : "collapsed")>
         <for(widget in state.configuredWidgets)>
-            <if(component.isExplorerBarExpanded())>
-                <div>
-                    <include(component.getWidgetTemplate(widget.instanceId), {
-                        instanceId: widget.instanceId,
-                        minimizable: false,
-                        minimized: component.isExplorerMinimized(widget.instanceId),
-                        explorer: true
-                    }) key=widget.instanceId/>
-                </div>
+            <!-- TODO: das folgende if verursacht wieder ein "parentNode" bzw. "currentNode is null" Fehler -->
+            <if(component.explorerAvailable(widget.instanceId))>
+                <if(component.isExplorerBarExpanded())>
+                    <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
+                        <include(component.getWidgetTemplate(widget.instanceId), {
+                            instanceId: widget.instanceId,
+                            minimizable: false,
+                            minimized: component.isExplorerMinimized(widget.instanceId),
+                            explorer: true
+                        }) key=widget.instanceId/>
+                        <if(component.isConfigMode())>
+                            <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+                                <div.widget-overlay-content/>
+                            </div>
+                        </if>
+                    </div>
+                </if>
+                <else>
+                    <div.collapsed-explorer on-click('toggleExplorerBar')>${widget.configuration.title}</div>
+                </else>
             </if>
+<<<<<<< HEAD
             <else>
                 <div.explorer>
                     <span.header-left>
@@ -21,6 +33,8 @@
                     </span>
                 </div>
             </else>
+=======
+>>>>>>> origin/209-konfigurationmodus-explorer
         </for>
     </div>
 </if>

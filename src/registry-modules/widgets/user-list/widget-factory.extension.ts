@@ -4,8 +4,9 @@ import { UserListSettings } from './../../../components/widgets/user-list/model/
 import { UserListWidget } from './UserListWidget';
 
 export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebar: boolean = false;
+    public isSidebarWidget: boolean = false;
     public isContentWidget: boolean = true;
+    public isExplorerWidget: boolean = false;
     public widgetId: string = "user-list-widget";
 
     public createWidget(): IWidget {

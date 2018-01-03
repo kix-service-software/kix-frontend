@@ -1,23 +1,23 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
-import { QueueExplorer } from './QueueExplorer';
+import { ServiceExplorer } from './ServiceExplorer';
 
-export class QueueExplorerWidgetFactoryExtension implements IWidgetFactoryExtension {
+export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExtension {
     public isSidebarWidget: boolean = false;
     public isContentWidget: boolean = false;
     public isExplorerWidget: boolean = true;
-    public widgetId: string = "ticket-queue-explorer";
+    public widgetId: string = "ticket-service-explorer";
 
     public createWidget(): IWidget {
-        return new QueueExplorer(this.widgetId);
+        return new ServiceExplorer(this.widgetId);
     }
 
     public getDefaultConfiguration(): any {
         // TODO: Titel übersetzen
-        return new WidgetConfiguration(this.widgetId, 'Übersicht Queues', [], {}, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, true, WidgetSize.SMALL);
     }
 }
 
 module.exports = (data, host, options) => {
-    return new QueueExplorerWidgetFactoryExtension();
+    return new ServiceExplorerWidgetFactoryExtension();
 };

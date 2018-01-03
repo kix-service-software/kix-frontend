@@ -1,0 +1,24 @@
+<widget instanceId=state.instanceId configurationTagId="" minimizable=true explorer=input.explorer
+    minimized=input.minimized>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <ul.service-list>
+            <for(service in state.service)>
+                <li.service-list-entry on-click('serviceClicked', service.ServiceID)>
+                    <ticket-property-label ticketDataId="ticket-table-data" property="ServiceID" value=service.ServiceID/>
+                </li>
+            </for>
+        </ul>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>
