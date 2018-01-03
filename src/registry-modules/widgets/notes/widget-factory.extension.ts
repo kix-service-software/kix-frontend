@@ -5,8 +5,9 @@ import { NotesWidget } from './NotesSidebar';
 import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebar: boolean = true;
+    public isSidebarWidget: boolean = true;
     public isContentWidget: boolean = false;
+    public isExplorerWidget: boolean = false;
     public widgetId: string = "notes-widget";
 
     public createWidget(): IWidget {

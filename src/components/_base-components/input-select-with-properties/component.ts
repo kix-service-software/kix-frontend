@@ -1,5 +1,4 @@
 import { SelectWithPropertiesComponentState } from "./model/SelectWithPropertiesComponentState";
-import { truncate } from "fs";
 
 class SelectWithProperties {
 

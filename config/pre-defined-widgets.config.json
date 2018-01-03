@@ -4,6 +4,7 @@
             "widgetId": "user-list-widget",
             "isContentWidget": true,
             "isSidebarWidget": false,
+            "isExplorerWidget": false,
             "required": false,
             "configuration": {
                 "title": "User-List vom Admin",
@@ -53,6 +54,7 @@
             "widgetId": "chart-widget",
             "isContentWidget": true,
             "isSidebarWidget": false,
+            "isExplorerWidget": false,
             "required": false,
             "configuration": {
                 "title": "1 Monat Statistik",
@@ -69,6 +71,7 @@
             "widgetId": "notes-widget",
             "isContentWidget": false,
             "isSidebarWidget": true,
+            "isExplorerWidget": false,
             "required": true,
             "configuration": {
                 "title": "Admininfos",

@@ -4,8 +4,9 @@ import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { ChartSettings } from '@kix/core/dist/browser/model/charts';
 
 export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebar: boolean = false;
+    public isSidebarWidget: boolean = false;
     public isContentWidget: boolean = true;
+    public isExplorerWidget: boolean = false;
     public widgetId: string = "chart-widget";
 
     public createWidget(): IWidget {
