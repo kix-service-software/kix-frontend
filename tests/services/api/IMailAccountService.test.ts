@@ -44,6 +44,24 @@ describe('MailAccount Service', () => {
         expect(mailAccountService).not.undefined;
     });
 
+    describe('Create a valid request to retrieve mail account types', () => {
+
+        before(() => {
+            nockScope
+                .get(resourcePath + '/types')
+                .reply(200, {
+                    MailAccountType: []
+                });
+        });
+
+        it('should return a list of link types.', async () => {
+            const mailAccountTypes = await mailAccountService.getMailAccountTypes('')
+            expect(mailAccountTypes).not.undefined;
+            expect(mailAccountTypes).be.an('array');
+        });
+
+    });
+
     describe('Create a valid request to retrieve a mailAccount.', () => {
 
         before(() => {
