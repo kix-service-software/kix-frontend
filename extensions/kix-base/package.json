@@ -58,7 +58,8 @@
             "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
             "ticket-list": "../../dist/registry-modules/widgets/ticket-list/widget-factory.extension",
             "ticket-info": "../../dist/registry-modules/widgets/ticket-info/widget-factory.extension",
-            "queue-explorer": "../../dist/registry-modules/widgets/queue-explorer/widget-factory.extension"
+            "queue-explorer": "../../dist/registry-modules/widgets/queue-explorer/widget-factory.extension",
+            "service-explorer": "../../dist/registry-modules/widgets/service-explorer/widget-factory.extension"
         },
         "kix:action": {},
         "kix:quick-search": {

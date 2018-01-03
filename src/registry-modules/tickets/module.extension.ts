@@ -35,7 +35,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         ]
                     },
                     show: true,
-                    size: "large",
+                    size: WidgetSize.LARGE,
                     icon: null,
                     contextDependent: true
                 }
@@ -50,7 +50,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         chartType: "pie"
                     },
                     show: true,
-                    size: "small",
+                    size: WidgetSize.SMALL,
                     icon: null,
                     contextDependent: true
                 }
@@ -65,7 +65,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         chartType: "bar"
                     },
                     show: true,
-                    size: "small",
+                    size: WidgetSize.SMALL,
                     icon: null,
                     contextDependent: true
                 }
@@ -80,7 +80,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         chartType: "stacked-bar"
                     },
                     show: true,
-                    size: "small",
+                    size: WidgetSize.SMALL,
                     icon: null,
                     contextDependent: true
                 }
@@ -102,22 +102,22 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     settings: {},
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: 'note',
+                    icon: null,
                     contextDependent: false
                 },
             },
             {
                 instanceId: '20171215093654',
                 configuration: {
-                    widgetId: 'ticket-queue-explorer',
-                    title: "Übersicht Queues",
+                    widgetId: 'ticket-service-explorer',
+                    title: "Übersicht Services",
                     actions: [],
                     settings: {},
                     show: true,
                     size: WidgetSize.SMALL,
-                    icon: 'note',
+                    icon: null,
                     contextDependent: false
-                },
+                }
             }
         ];
 
@@ -136,7 +136,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         notes: "Ticketnotizen"
                     },
                     show: true,
-                    size: "small",
+                    size: WidgetSize.SMALL,
                     icon: "note"
                 }
             }

@@ -46,6 +46,18 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
     }
 
     /**
+     * @description ASYNC - returns all explorer widget descriptors based on a context
+     *
+     * @param {string} contexId id of the context (dashboard)
+     *
+     * @return promise of WidgetDescriptor[]
+     */
+    public async getExplorerWidgets(contextId: string): Promise<WidgetDescriptor[]> {
+        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
+        return allWidgets.filter((wd) => wd.isExplorerWidget);
+    }
+
+    /**
      * @description ASYNC - returns all widget descriptors based on a context
      *
      * @param {string} contexId id of the context (dashboard)
@@ -59,7 +71,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
 
         const preDefinedWidgetDescriptors: WidgetDescriptor[] = preDefinedWidgetsConfiguration[contextId] || [];
         const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
-            wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebar
+            wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebarWidget, wf.isExplorerWidget
         ));
 
         return [...preDefinedWidgetDescriptors, ...widgetDescriptors];

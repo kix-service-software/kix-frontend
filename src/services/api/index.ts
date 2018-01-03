@@ -14,3 +14,4 @@ export { RoleService } from './RoleService';
 export { DynamicFieldService } from './DynamicFieldService';
 export { CustomerService } from './CustomerService';
 export { ContactService } from './ContactService';
+export { SignatureService } from './SignatureService';

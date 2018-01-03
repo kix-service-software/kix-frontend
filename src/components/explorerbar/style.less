@@ -1,11 +1,13 @@
 .explorerbar {
     float: left;
-    width: 200px;
-    overflow: hidden;
+    padding: 5px 0 0 5px;
     div {
+        margin-top: 10px;
+        &:first-of-type {
+            margin-top: 0;
+        }
         .widget {
-            width: 195px;
-            margin-top: 10px;
+            width: 192px;
             .widget-content {
                 height: unset;
                 min-height: 192px;
@@ -15,14 +17,49 @@
             }
         }
     }
-}
-
-.collapsed-explorer {
-    margin-bottom: 192px;
-    margin-top: 15px;
-    width: 192px;
-    border: 1px solid;
-    padding: 2px;
-    transform: rotate(270deg);
-    transform-origin: 96px 96px;
+    &.collapsed {
+        width: 38px;
+        .explorer {
+            .color-theme-3;
+            position: relative;
+            border-radius: 3px;
+            box-shadow: 0 0 2px 0 #e2e2e2;
+            box-sizing: border-box;
+            margin-bottom: 184px;
+            width: 192px;
+            height: 2em;
+            background-color: #e2e2e2;
+            border: 0 none;
+            transform: rotate(270deg);
+            transform-origin: 96px 96px;
+            overflow: hidden;
+            .header-left {
+                display: inline-block;
+                float: left;
+                line-height: 2.5em;
+                font-size: .75em;
+                margin-right: 5px;
+                padding: 2px 1em 2px;
+                h3 {
+                    margin-bottom: 0;
+                    font-weight: 400;
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        margin-right: .5em;
+                    }
+                }
+            }
+            .header-right {
+                display: inline-block;
+                float: right;
+                width: 2em;
+                text-align: center;
+                background-color: #c4c5c5;
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    line-height: 2em;
+                }
+            }
+        }
+    }
 }
