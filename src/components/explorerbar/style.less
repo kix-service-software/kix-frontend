@@ -17,54 +17,6 @@
             }
         }
     }
-<<<<<<< HEAD
-}
-
-.collapsed-explorer {
-    margin-bottom: 192px;
-    margin-top: 15px;
-    width: 192px;
-    border: 1px solid;
-    padding: 2px;
-    transform: rotate(270deg);
-    transform-origin: 96px 96px;
-}
-
-// TODO: remove - erstmal notwendig, bis draggable-container ggf. auch hier enthalten ist
-// ansonsten in default verschieben?
-.explorerbar {
-    >div {
-        &.config-mode:not(.config-dialog-shown) {
-            z-index: 100;
-        }
-        position: relative;
-        .widget-overlay {
-            cursor: ns-resize;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            border-radius: 3px;
-            border: 1px solid @secondary-0;
-            border-top: none;
-            .widget-overlay-content {
-                position: absolute;
-                opacity: 0.2;
-                top: 2em;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                background-color: @config-color;
-                box-sizing: border-box;
-            }
-        }
-        .drag-element {
-            opacity: 0.7;
-        }
-        .drop-element {
-            background-color: @tertiary-3;
-=======
     &.collapsed {
         width: 38px;
         .explorer {
@@ -104,11 +56,10 @@
                 text-align: center;
                 background-color: #c4c5c5;
                 [class^="kix-icon-"],
-                    [class*=" kix-icon-"] {
-                        line-height: 2em;
-                    }
+                [class*=" kix-icon-"] {
+                    line-height: 2em;
+                }
             }
->>>>>>> origin/rel-18_FEATURE
         }
     }
 }
