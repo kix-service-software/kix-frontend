@@ -6,6 +6,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         return [
             ...this.getTicketDependencies(),
             ...this.getFaqDependencies(),
+            'quick-search',
             '_base-components/dialog-creation/dialog-creation-container',
             'cmdb/cmdb-module',
             'customers/customers-module',

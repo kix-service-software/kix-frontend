@@ -1,0 +1,22 @@
+<select.quick-search-select on-change('quickSearchChanged')>
+    <for(quickSearch in state.quickSearches)>
+        <option value=quickSearch.id selected=(state.currentQuickSearch.id === quickSearch.id)>${quickSearch.name}</option>
+    </for>
+</select>
+<span.quick-search-input>
+    <input on-click('searchInputClicked') disabled=state.searching type="text" placeholder="| Schnellsuche"
+        value=state.searchValue on-keyup('searchValueChanged')/>
+    <span.kix-icon-search-quick title="Suchen" on-click('searchClicked')/>
+</span>
+<if(state.searching)>
+    <div.search-info>
+        <span>Suche läuft</span>
+    </div>
+</if>
+<else-if(state.suggestions.length && state.showSuggestions)>
+    <ul.suggestion-list>
+        <for(suggestion in state.suggestions)>
+            <li on-click('navigate', suggestion[0])>${suggestion[1]}</li>
+        </for>
+    </ul>
+</else-if>
