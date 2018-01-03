@@ -15,6 +15,7 @@ import {
     IQueueService,
     IRoleService,
     ISocketCommunicationService,
+    ISalutationService,
     IServiceService,
     ISignatureService,
     ITicketPriorityService,
@@ -49,6 +50,7 @@ import {
     QueueService,
     RoleService,
     SocketCommunicationService,
+    SalutationService,
     ServiceService,
     SignatureService,
     TicketPriorityService,
@@ -111,6 +113,7 @@ export class ServiceContainer {
         this.container.bind<ICustomerService>('ICustomerService').to(CustomerService);
         this.container.bind<IContactService>('IContactService').to(ContactService);
         this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
+        this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
     }
 
     private async bindRouters(): Promise<void> {
