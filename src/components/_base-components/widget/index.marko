@@ -32,12 +32,7 @@
                         <include(input.actions)/>
                     </if>
                     <if(input.minimizable || typeof input.minimizable === 'undefined')>
-                        <if(!state.minimized)>
-                            <span class="kix-icon-close-up" on-click('minimizeWidget')/>
-                        </if>
-                        <if(state.minimized)>
-                            <span class="kix-icon-open-down" on-click('minimizeWidget')/>
-                        </if>
+                        <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
                     </if>
                 </div>
             </else>

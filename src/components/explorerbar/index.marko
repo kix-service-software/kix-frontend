@@ -1,5 +1,5 @@
 <if(state.rows.length)>
-    <div class="explorerbar">
+    <div.explorerbar class=(component.isExplorerBarExpanded() ? "" : "collapsed")>
         <for(widget in state.configuredWidgets)>
             <if(component.isExplorerBarExpanded())>
                 <div>
@@ -12,7 +12,14 @@
                 </div>
             </if>
             <else>
-                <div.collapsed-explorer on-click('toggleExplorerBar')>${widget.configuration.title}</div>
+                <div.explorer>
+                    <span.header-left>
+                        <h3>${widget.configuration.title}</h3>
+                    </span>
+                    <span.header-right>
+                        <span.kix-icon-open-down on-click('toggleExplorerBar')/>
+                    </span>
+                </div>
             </else>
         </for>
     </div>

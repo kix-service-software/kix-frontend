@@ -1,7 +1,7 @@
 .widget {
     position: relative;
     border-radius: 3px;
-    box-shadow: 0 0 2px 0 @secondary-1;
+    box-shadow: 0 0 2px 0 #e2e2e2;
     box-sizing: border-box;
     .widget-header {
         .color-theme-3;
@@ -18,7 +18,7 @@
         .header-left {
             display: inline-block;
             float: left;
-            line-height: 2em;
+            line-height: 2.25em;
             margin-right: 5px;
             h3 {
                 margin-bottom: 0;
@@ -40,7 +40,6 @@
         padding: .5em 1em;
         border-bottom-right-radius: 3px;
         border-bottom-left-radius: 3px;
-        height: 192px;
         overflow: hidden;
         box-sizing: border-box;
     }
@@ -55,6 +54,11 @@
             }
         }
     }
+}
+
+.size1of3 .widget {
+    height: 192px;
+    overflow: hidden;
 }
 
 .size1of1 .widget-content {

@@ -13,7 +13,7 @@
                     <if(state.error)>
                         <div class="message message-error">
                             <span.kix-icon-exclamation/>
-                            ${state.error}
+                            ${component.getTranslation(component.translationIds.ERROR)}
                         </div>
                     </if>
                     <else-if(state.logout)>
