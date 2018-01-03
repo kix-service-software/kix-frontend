@@ -1,5 +1,5 @@
 <if(state.rows.length)>
-    <div class="explorerbar">
+    <div.explorerbar class=(component.isExplorerBarExpanded() ? "" : "collapsed")>
         <for(widget in state.configuredWidgets)>
             <!-- TODO: das folgende if verursacht wieder ein "parentNode" bzw. "currentNode is null" Fehler -->
             <if(component.explorerAvailable(widget.instanceId))>
@@ -22,6 +22,16 @@
                     <div.collapsed-explorer on-click('toggleExplorerBar')>${widget.configuration.title}</div>
                 </else>
             </if>
+            <else>
+                <div.explorer>
+                    <span.header-left>
+                        <h3>${widget.configuration.title}</h3>
+                    </span>
+                    <span.header-right>
+                        <span.kix-icon-open-down on-click('toggleExplorerBar')/>
+                    </span>
+                </div>
+            </else>
         </for>
     </div>
 </if>
