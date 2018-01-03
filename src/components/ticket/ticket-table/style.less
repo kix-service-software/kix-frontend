@@ -1,5 +1,65 @@
+.ticket-table-wrapper {
+    height: 350px;
+    overflow-y: auto;
+    width: 100%;
+}
+
 .ticket-table {
     width: 100%;
+    a {
+        color: #5b5b5b;
+        text-decoration: none;
+        :visited,
+        :active,
+        :hover,
+        :focus {
+            color: #5b5b5b;
+            text-decoration: none;
+        }
+    }
+
+    th, 
+    td {
+        color: #5b5b5b;
+        font-size: .875em;
+        font-weight: 400;
+        &.select-all-rows,
+        &.select-row,
+        &.PriorityID,
+        &.StateID,
+        &.QueueID {
+            text-align: center
+        }
+    }
+
+    thead,
+    tfoot {
+        background-color: #e2e2e2;
+        height: 2em;
+        vertical-align: middle;
+        line-height: 2em;
+        .sortable {
+            display: inline-block;
+            margin-left: .25em;
+            font-size: .625em;
+            color: #9b9d9d;
+            span {
+                cursor: pointer;
+            }
+        }
+    }
+
+    tfoot {
+        top: auto;
+        bottom: 0;
+    }
+
+
+    tbody {
+        tr:nth-of-type(2n) {
+            background-color: #f5f5f5;
+        }
+    }
 }
 
 button {
