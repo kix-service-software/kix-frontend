@@ -1,33 +1,47 @@
-<div>
-    <span>angezeigte Tickets: ${state.displayLimit}</span>
+<div.ticket-table-wrapper>
+    <!-- <span>angezeigte Tickets: ${state.displayLimit}</span> -->
     <table.ticket-table>
-        <tr>
-            <th>
-                <a href="#">alle</a>
-            </th>
-            <for(property in state.properties)>
-                <th>${property[1]}</th>
-            </for>
-        </tr>
-        <if(state.tickets && state.tickets.length)>
-            <for(let i =0; i< state.displayLimit; i++)>
-                $ let ticket = state.tickets[i];
-                <if(ticket)>
-                    <tr>
-                        <td>
-                            <input type="checkbox"/>
-                        </td>
-                        <for(property in state.properties)>
-                            <td>
-                                <a href="tickets/${ticket.TicketID}" on-click('ticketClicked', ticket.TicketID)>
-                                    <ticket-property-label ticketDataId="ticket-table-data" property=property[0] value=ticket[property[0]]/>
-                                </a>
+        <thead>
+            <tr>
+                <th.select-all-rows>
+                    <a href="#">alle</a>
+                </th>
+                <for(property in state.properties)>
+                    <th class=property[0]>${property[1]}</th>
+                </for>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th.select-all>
+                    <a href="#">alle</a>
+                </th>
+                <for(property in state.properties)>
+                    <th class=property[0]>${property[1]}</th>
+                </for>
+            </tr>
+        </tfoot>
+        <tbody>
+            <if(state.tickets && state.tickets.length)>
+                <for(let i =0; i< state.displayLimit; i++)>
+                    $ let ticket = state.tickets[i];
+                    <if(ticket)>
+                        <tr>
+                            <td.select-row>
+                                <input type="checkbox"/>
                             </td>
-                        </for>
-                    </tr>
-                </if>
-            </for>
-        </if>
+                            <for(property in state.properties)>
+                                <td class=property[0]>
+                                    <a href="tickets/${ticket.TicketID}" on-click('ticketClicked', ticket.TicketID)>
+                                        <ticket-property-label ticketDataId="ticket-table-data" property=property[0] value=ticket[property[0]]/>
+                                    </a>
+                                </td>
+                            </for>
+                        </tr>
+                    </if>
+                </for>
+            </if>
+        </tbody>
     </table>
-    <button on-click('showMore') disabled=(state.displayLimit >= state.tickets.length)>10 mehr ...</button>
+    <!-- <button on-click('showMore') disabled=(state.displayLimit >= state.tickets.length)>10 mehr ...</button> -->
 </div>
