@@ -23,22 +23,10 @@
     </label>
     <label.config-label>
         Spalten
-        <select size=10>
-            <option value="TicketNumber">Ticketnummer</option>
-            <option value="Title">Titel</option>
-            <option value="State">State</option>
-            <option value="Priority">Priority</option>
-            <option value="Queue">Queue</option>
-            <option value="Owner">Owner</option>
-            <option value="Type">Type</option>
-            <option value="SLA">SLA</option>
-            <option value="Service">Service</option>
-            <option value="Responsible">Responsible</option>
-            <option value="Age">Age</option>
-            <option value="Created">Created</option>
-            <option value="CreateBy">CreateBy</option>
-            <option value="Changed">Changed</option>
-            <option value="ChangeBy">ChangeBy</option>
+        <select multiple size=10 on-change('propertyChanged')>
+            <for(property in state.properties)>
+                <option value=property[0] selected=component.isPropertySelected(property[0])>${property[1]}</option>
+            </for>
         </select>
     </label>
     <label.config-label>
