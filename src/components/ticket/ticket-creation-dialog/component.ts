@@ -31,13 +31,8 @@ class TicketCreationDialogComponent {
 
         if (existingState && !confirm(questionString)) {
             ClientStorageHandler.deleteState(TicketService.TICKET_CREATION_STATE_ID);
-            TicketService.getInstance().resetTicketCreation(ComponentId.TICKET_CREATION_ID).then(() => {
-                TicketService.getInstance().loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
-            });
-        } else {
-            TicketService.getInstance().loadTicketData(ComponentId.TICKET_CREATION_TICKET_DATA_ID);
+            TicketService.getInstance().resetTicketCreation(ComponentId.TICKET_CREATION_ID);
         }
-
     }
 
     public onInput(input: any) {

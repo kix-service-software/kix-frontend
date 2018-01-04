@@ -1,4 +1,4 @@
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { TicketService, TicketUtil } from '@kix/core/dist/browser/ticket';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
@@ -16,9 +16,6 @@ export class TicketTableComponent {
 
     public onMount(): void {
         TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
-        if (!TicketService.getInstance().getTicketData('ticket-table-data')) {
-            TicketService.getInstance().loadTicketData('ticket-table-data');
-        }
     }
 
     public async onInput(input: any): Promise<void> {
@@ -32,7 +29,7 @@ export class TicketTableComponent {
     }
 
     private ticketStateChanged(): void {
-        if (TicketService.getInstance().getTicketData('ticket-table-data')) {
+        if (TicketService.getInstance().getTicketData()) {
             (this as any).setStateDirty('properties');
         }
     }
@@ -53,12 +50,14 @@ export class TicketTableComponent {
         ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
     }
 
-    private sortUp(property: string): void {
-        this.state.tickets = TicketService.getInstance().sortTickets(SortOrder.UP, this.state.tickets, property);
+    private sortUp(property: TicketProperty): void {
+        this.state.tickets = TicketUtil.sortTickets(SortOrder.UP, this.state.tickets, property);
+        (this as any).setStateDirty('tickets');
     }
 
-    private sortDown(property: string): void {
-        this.state.tickets = TicketService.getInstance().sortTickets(SortOrder.DOWN, this.state.tickets, property);
+    private sortDown(property: TicketProperty): void {
+        this.state.tickets = TicketUtil.sortTickets(SortOrder.DOWN, this.state.tickets, property);
+        (this as any).setStateDirty('tickets');
     }
 }
 

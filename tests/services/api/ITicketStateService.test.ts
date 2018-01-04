@@ -4,9 +4,9 @@ import { container } from '../../../src/Container';
 import {
     HttpError,
     TicketStateResponse,
-    TicketStatesResponse,
-    SortOrder
+    TicketStatesResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { TicketState } from '@kix/core/dist/model';
 import { IConfigurationService, ITicketStateService } from '@kix/core/dist/services';

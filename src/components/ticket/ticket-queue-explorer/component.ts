@@ -28,7 +28,7 @@ export class QueueExplorerComponent {
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketService.getInstance().getTicketData('ticket-table-data');
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.queues) {
             this.state.queues = ticketData.queues;
         } else {

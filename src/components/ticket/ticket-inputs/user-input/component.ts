@@ -39,7 +39,7 @@ export class UserInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.users) {
             this.state.users = ticketData.users;
             if (this.state.userId) {

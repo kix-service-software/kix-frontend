@@ -8,9 +8,9 @@ import {
     CreateTicketTypeRequest,
     CreateTicketTypeResponse,
     UpdateTicketTypeRequest,
-    UpdateTicketTypeResponse,
-    SortOrder
+    UpdateTicketTypeResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { TicketType } from '@kix/core/dist/model';
 import { ITicketTypeService, IConfigurationService } from '@kix/core/dist/services';

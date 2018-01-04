@@ -1,6 +1,5 @@
 /* tslint:disable no-var-requires no-unused-expression max-line-length */
 import {
-    SortOrder,
     UsersResponse,
     UserResponse,
     CreateUserResponse,
@@ -10,6 +9,7 @@ import {
     HttpError,
 
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { TicketType, User, UserLogin } from '@kix/core/dist/model';
 import { IConfigurationService, IUserService } from '@kix/core/dist/services';

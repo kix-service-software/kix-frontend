@@ -10,9 +10,9 @@ import {
     CreateSalutationResponse,
     UpdateSalutation,
     UpdateSalutationRequest,
-    UpdateSalutationResponse,
-    SortOrder
+    UpdateSalutationResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Salutation } from '@kix/core/dist/model';
 import { ISalutationService, IConfigurationService } from '@kix/core/dist/services';

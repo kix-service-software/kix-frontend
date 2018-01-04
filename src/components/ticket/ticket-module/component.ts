@@ -21,8 +21,6 @@ class TicketsComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().loadTicketData('ticket-table-data');
-
         DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
         DashboardStore.getInstance().loadDashboardConfiguration();
 

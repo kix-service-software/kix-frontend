@@ -28,7 +28,7 @@ export class ServiceExplorerComponent {
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketService.getInstance().getTicketData('ticket-table-data');
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.services) {
             this.state.services = ticketData.services;
         } else {

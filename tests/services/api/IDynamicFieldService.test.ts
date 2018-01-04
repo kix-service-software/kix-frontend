@@ -10,9 +10,9 @@ import {
     CreateDynamicFieldResponse,
     UpdateDynamicField,
     UpdateDynamicFieldRequest,
-    UpdateDynamicFieldResponse,
-    SortOrder
+    UpdateDynamicFieldResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { DynamicField } from '@kix/core/dist/model/';
 import { IDynamicFieldService, IConfigurationService } from '@kix/core/dist/services';

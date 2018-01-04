@@ -32,7 +32,7 @@ export class StateInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData) {
             this.state.states = ticketData.states;
         }

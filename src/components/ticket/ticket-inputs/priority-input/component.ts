@@ -32,7 +32,7 @@ export class PriorityInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData) {
             this.state.priorities = ticketData.priorities;
         }

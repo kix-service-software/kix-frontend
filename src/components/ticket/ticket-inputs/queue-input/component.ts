@@ -32,7 +32,7 @@ export class QueueInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData) {
             this.state.queues = ticketData.queues;
         }

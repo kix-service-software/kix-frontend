@@ -9,9 +9,9 @@ import {
     CreateGroupRequest,
     CreateGroupResponse,
     UpdateGroupRequest,
-    UpdateGroupResponse,
-    SortOrder
+    UpdateGroupResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Group } from '@kix/core/dist/model';
 import { IGroupService, IConfigurationService } from '@kix/core/dist/services';

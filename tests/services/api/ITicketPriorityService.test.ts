@@ -10,9 +10,9 @@ import {
     CreateTicketPriorityResponse,
     UpdateTicketPriority,
     UpdateTicketPriorityRequest,
-    UpdateTicketPriorityResponse,
-    SortOrder
+    UpdateTicketPriorityResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { TicketPriority } from '@kix/core/dist/model';
 import { ITicketPriorityService, IConfigurationService } from '@kix/core/dist/services';

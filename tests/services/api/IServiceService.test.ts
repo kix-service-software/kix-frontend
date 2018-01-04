@@ -10,9 +10,9 @@ import {
     CreateServiceResponse,
     UpdateService,
     UpdateServiceRequest,
-    UpdateServiceResponse,
-    SortOrder
+    UpdateServiceResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Service } from '@kix/core/dist/model';
 import { IServiceService, IConfigurationService } from '@kix/core/dist/services';
