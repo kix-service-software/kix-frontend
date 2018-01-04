@@ -11,6 +11,7 @@ import {
     IHttpService,
     ILinkService,
     ILoggingService,
+    IMailAccountService,
     IMarkoService,
     IPluginService,
     IQueueService,
@@ -47,6 +48,7 @@ import {
     HttpService,
     LinkService,
     LoggingService,
+    MailAccountService,
     MarkoService,
     PluginService,
     QueueService,
@@ -117,6 +119,7 @@ export class ServiceContainer {
         this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
         this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
         this.container.bind<ILinkService>("ILinkService").to(LinkService);
+        this.container.bind<IMailAccountService>("IMailAccountService").to(MailAccountService);
     }
 
     private async bindRouters(): Promise<void> {

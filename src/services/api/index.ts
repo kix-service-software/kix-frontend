@@ -17,3 +17,4 @@ export { ContactService } from './ContactService';
 export { SignatureService } from './SignatureService';
 export { SalutationService } from './SalutationService';
 export { LinkService } from './LinkService';
+export { MailAccountService } from './MailAccountService';
