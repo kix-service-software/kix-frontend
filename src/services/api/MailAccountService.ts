@@ -16,7 +16,7 @@ import {
 
 export class MailAccountService extends ObjectService<MailAccount> implements IMailAccountService {
 
-    protected RESOURCE_URI: string = "mailAccounts";
+    protected RESOURCE_URI: string = "mailaccounts";
 
     public async getMailAccounts(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
