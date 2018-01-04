@@ -23,7 +23,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const resourcePath = "/mailAccounts";
+const resourcePath = "/mailaccounts";
 
 describe('MailAccount Service', () => {
     let nockScope;
