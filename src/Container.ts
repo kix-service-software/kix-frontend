@@ -1,30 +1,18 @@
 import 'reflect-metadata';
 
 import {
-    IArticleTypeService,
-    IAuthenticationService,
-    IConfigurationService,
-    IContactService,
-    ICustomerService,
+    IArticleTypeService, IAuthenticationService,
+    IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
-    IGroupService,
+    IGeneralCatalogService, IGroupService,
     IHttpService,
-    ILinkService,
-    ILoggingService,
-    IMailAccountService,
-    IMarkoService,
+    ILinkService, ILoggingService,
+    IMailAccountService, IMarkoService,
     IPluginService,
     IQueueService,
     IRoleService,
-    ISocketCommunicationService,
-    ISalutationService,
-    IServiceService,
-    ISignatureService,
-    ITicketPriorityService,
-    ITicketService,
-    ITicketStateService,
-    ITicketTypeService,
-    ITranslationService,
+    ISocketCommunicationService, ISalutationService, IServiceService, ISignatureService,
+    ITicketPriorityService, ITicketService, ITicketStateService, ITicketTypeService, ITranslationService,
     IUserService,
     IValidObjectService,
     IWidgetRepositoryService
@@ -38,30 +26,18 @@ import { Container } from 'inversify';
 import { ApplicationRouter, AuthenticationRouter } from './routes/';
 import { Server } from './Server';
 import {
-    ArticleTypeService,
-    AuthenticationService,
-    ConfigurationService,
-    ContactService,
-    CustomerService,
+    ArticleTypeService, AuthenticationService,
+    ConfigurationService, ContactService, CustomerService,
     DynamicFieldService,
-    GroupService,
+    GeneralCatalogService, GroupService,
     HttpService,
-    LinkService,
-    LoggingService,
-    MailAccountService,
-    MarkoService,
+    LinkService, LoggingService,
+    MailAccountService, MarkoService,
     PluginService,
     QueueService,
     RoleService,
-    SocketCommunicationService,
-    SalutationService,
-    ServiceService,
-    SignatureService,
-    TicketPriorityService,
-    TicketService,
-    TicketStateService,
-    TicketTypeService,
-    TranslationService,
+    SocketCommunicationService, SalutationService, ServiceService, SignatureService,
+    TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
     UserService,
     ValidObjectService,
     WidgetRepositoryService
@@ -93,33 +69,34 @@ export class ServiceContainer {
     }
 
     private bindServices(): void {
-        this.container.bind<ILoggingService>('ILoggingService').to(LoggingService);
-        this.container.bind<IConfigurationService>('IConfigurationService').to(ConfigurationService);
-        this.container.bind<IPluginService>('IPluginService').to(PluginService);
-        this.container.bind<ISocketCommunicationService>('ISocketCommunicationService').to(SocketCommunicationService);
-        this.container.bind<IMarkoService>('IMarkoService').to(MarkoService);
-        this.container.bind<IHttpService>('IHttpService').to(HttpService);
+        this.container.bind<IArticleTypeService>('IArticleTypeService').to(ArticleTypeService);
         this.container.bind<IAuthenticationService>('IAuthenticationService').to(AuthenticationService);
-        this.container.bind<IUserService>('IUserService').to(UserService);
+        this.container.bind<IConfigurationService>('IConfigurationService').to(ConfigurationService);
+        this.container.bind<IContactService>('IContactService').to(ContactService);
+        this.container.bind<ICustomerService>('ICustomerService').to(CustomerService);
+        this.container.bind<IDynamicFieldService>('IDynamicFieldService').to(DynamicFieldService);
+        this.container.bind<IGeneralCatalogService>("IGeneralCatalogService").to(GeneralCatalogService);
+        this.container.bind<IGroupService>('IGroupService').to(GroupService);
+        this.container.bind<IHttpService>('IHttpService').to(HttpService);
+        this.container.bind<ILinkService>("ILinkService").to(LinkService);
+        this.container.bind<ILoggingService>('ILoggingService').to(LoggingService);
+        this.container.bind<IMailAccountService>("IMailAccountService").to(MailAccountService);
+        this.container.bind<IMarkoService>('IMarkoService').to(MarkoService);
+        this.container.bind<IPluginService>('IPluginService').to(PluginService);
+        this.container.bind<IQueueService>('IQueueService').to(QueueService);
+        this.container.bind<IRoleService>('IRoleService').to(RoleService);
+        this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
+        this.container.bind<IServiceService>('IServiceService').to(ServiceService);
+        this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
+        this.container.bind<ISocketCommunicationService>('ISocketCommunicationService').to(SocketCommunicationService);
         this.container.bind<ITicketTypeService>('ITicketTypeService').to(TicketTypeService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);
         this.container.bind<ITicketPriorityService>('ITicketPriorityService').to(TicketPriorityService);
-        this.container.bind<IValidObjectService>('IValidObjectService').to(ValidObjectService);
         this.container.bind<ITicketStateService>('ITicketStateService').to(TicketStateService);
         this.container.bind<ITranslationService>('ITranslationService').to(TranslationService);
-        this.container.bind<IGroupService>('IGroupService').to(GroupService);
-        this.container.bind<IArticleTypeService>('IArticleTypeService').to(ArticleTypeService);
-        this.container.bind<IRoleService>('IRoleService').to(RoleService);
-        this.container.bind<IQueueService>('IQueueService').to(QueueService);
-        this.container.bind<IServiceService>('IServiceService').to(ServiceService);
+        this.container.bind<IUserService>('IUserService').to(UserService);
+        this.container.bind<IValidObjectService>('IValidObjectService').to(ValidObjectService);
         this.container.bind<IWidgetRepositoryService>('IWidgetRepositoryService').to(WidgetRepositoryService);
-        this.container.bind<IDynamicFieldService>('IDynamicFieldService').to(DynamicFieldService);
-        this.container.bind<ICustomerService>('ICustomerService').to(CustomerService);
-        this.container.bind<IContactService>('IContactService').to(ContactService);
-        this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
-        this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
-        this.container.bind<ILinkService>("ILinkService").to(LinkService);
-        this.container.bind<IMailAccountService>("IMailAccountService").to(MailAccountService);
     }
 
     private async bindRouters(): Promise<void> {
