@@ -1,4 +1,4 @@
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 
 export class QueueInputComponent {
 
@@ -15,7 +15,7 @@ export class QueueInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.queueId = Number(input.value);
-        TicketStore.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
@@ -32,7 +32,7 @@ export class QueueInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketStore.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData(this.state.ticketDataId);
         if (ticketData) {
             this.state.queues = ticketData.queues;
         }

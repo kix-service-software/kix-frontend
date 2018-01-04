@@ -10,9 +10,9 @@ import {
     ContactSourcesResponse,
     UpdateContact,
     UpdateContactResponse,
-    UpdateContactRequest,
-    SortOrder
+    UpdateContactRequest
 } from "@kix/core/dist/api/";
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class ContactService extends ObjectService<Contact> implements IContactService {
 

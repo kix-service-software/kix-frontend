@@ -7,9 +7,9 @@ import {
     CreateLinkRequest,
     LinksResponse,
     LinkResponse,
-    LinkTypesResponse,
-    SortOrder
+    LinkTypesResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class LinkService extends ObjectService<Link> implements ILinkService {
 

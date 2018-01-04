@@ -1,4 +1,4 @@
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { TicketProperty, TicketState } from '@kix/core/dist/model/';
 
 export class TicketStringLabelComponent {
@@ -22,7 +22,7 @@ export class TicketStringLabelComponent {
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         this.setDisplayValue();
     }
 
@@ -31,7 +31,7 @@ export class TicketStringLabelComponent {
     }
 
     private setDisplayValue(): void {
-        const data = TicketStore.getInstance().getTicketData(this.state.ticketDataId);
+        const data = TicketService.getInstance().getTicketData(this.state.ticketDataId);
         let value = this.state.value;
         const property = this.state.property;
         if (data) {

@@ -1,25 +1,23 @@
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
+import { TicketTableComponentState } from './TicketTableComponentState';
 
 export class TicketTableComponent {
 
-    private state: any;
+    private state: TicketTableComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            tickets: [],
-            properties: [],
-            displayLimit: 10
-        };
+        this.state = new TicketTableComponentState();
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
-        if (!TicketStore.getInstance().getTicketData('ticket-table-data')) {
-            TicketStore.getInstance().loadTicketData('ticket-table-data');
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        if (!TicketService.getInstance().getTicketData('ticket-table-data')) {
+            TicketService.getInstance().loadTicketData('ticket-table-data');
         }
     }
 
@@ -34,7 +32,7 @@ export class TicketTableComponent {
     }
 
     private ticketStateChanged(): void {
-        if (TicketStore.getInstance().getTicketData('ticket-table-data')) {
+        if (TicketService.getInstance().getTicketData('ticket-table-data')) {
             (this as any).setStateDirty('properties');
         }
     }
@@ -53,6 +51,14 @@ export class TicketTableComponent {
         }
         ClientStorageHandler.setContextId('tickets');
         ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
+    }
+
+    private sortUp(property: string): void {
+        this.state.tickets = TicketService.getInstance().sortTickets(SortOrder.UP, this.state.tickets, property);
+    }
+
+    private sortDown(property: string): void {
+        this.state.tickets = TicketService.getInstance().sortTickets(SortOrder.DOWN, this.state.tickets, property);
     }
 }
 

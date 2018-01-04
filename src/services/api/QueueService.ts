@@ -1,9 +1,9 @@
 import {
-    SortOrder,
     QueuesResponse, QueueResponse,
     CreateQueue, CreateQueueRequest, CreateQueueResponse,
     UpdateQueue, UpdateQueueRequest, UpdateQueueResponse
 } from "@kix/core/dist/api";
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { IQueueService } from '@kix/core/dist/services';
 import { Queue } from '@kix/core/dist/model';

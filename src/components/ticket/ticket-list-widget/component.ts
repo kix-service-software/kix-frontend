@@ -1,5 +1,5 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
 import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
@@ -21,7 +21,7 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
@@ -32,7 +32,7 @@ class TicketListWidgetComponent {
     }
 
     private ticketStateChanged(): void {
-        const tickets = TicketStore.getInstance().getTicketsSearchResult(this.state.instanceId);
+        const tickets = TicketService.getInstance().getTicketsSearchResult(this.state.instanceId);
         if (tickets) {
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
@@ -52,7 +52,7 @@ class TicketListWidgetComponent {
             if (settings.properties.findIndex((p) => p === TicketProperty.QUEUE_ID) < 0) {
                 settings.properties.push(TicketProperty.QUEUE_ID);
             }
-            TicketStore.getInstance().searchTickets(this.state.instanceId, settings.limit, settings.properties);
+            TicketService.getInstance().searchTickets(this.state.instanceId, settings.limit, settings.properties);
         }
     }
 

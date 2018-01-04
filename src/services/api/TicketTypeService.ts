@@ -5,9 +5,9 @@ import {
     UpdateTicketTypeResponse,
     TicketTypeResponse,
     TicketTypesResponse,
-    SortOrder,
     Query
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { ITicketTypeService } from '@kix/core/dist/services';
 import { TicketType } from '@kix/core/dist/model';

@@ -7,11 +7,11 @@ import {
     CreateSignatureRequest,
     SignaturesResponse,
     SignatureResponse,
-    SortOrder,
     UpdateSignature,
     UpdateSignatureResponse,
     UpdateSignatureRequest
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SignatureService extends ObjectService<Signature> implements ISignatureService {
 

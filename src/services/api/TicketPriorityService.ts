@@ -7,9 +7,9 @@ import {
     UpdateTicketPriorityResponse,
     TicketPriorityResponse,
     TicketPrioritiesResponse,
-    SortOrder,
     Query
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { ITicketPriorityService } from '@kix/core/dist/services';
 import { TicketPriority } from '@kix/core/dist/model';
