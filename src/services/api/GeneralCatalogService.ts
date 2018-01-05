@@ -7,7 +7,6 @@ import {
     CreateGeneralCatalogItemRequest,
     GeneralCatalogItemsResponse,
     GeneralCatalogItemResponse,
-    SortOrder,
     UpdateGeneralCatalogItem,
     UpdateGeneralCatalogItemResponse,
     UpdateGeneralCatalogItemRequest,
@@ -15,6 +14,7 @@ import {
     UpdateGeneralCatalogClassRequest,
     UpdateGeneralCatalogClassResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class GeneralCatalogService extends ObjectService<GeneralCatalogItem> implements IGeneralCatalogService {
 

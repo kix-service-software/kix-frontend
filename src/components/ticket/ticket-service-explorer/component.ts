@@ -1,5 +1,5 @@
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
 import { ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 
@@ -23,12 +23,12 @@ export class ServiceExplorerComponent {
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketStore.getInstance().getTicketData('ticket-table-data');
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.services) {
             this.state.services = ticketData.services;
         } else {

@@ -1,4 +1,5 @@
-import { TicketStateResponse, TicketStatesResponse, SortOrder, Query } from '@kix/core/dist/api';
+import { TicketStateResponse, TicketStatesResponse, Query } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { ITicketStateService } from '@kix/core/dist/services';
 import { TicketState } from '@kix/core/dist/model';

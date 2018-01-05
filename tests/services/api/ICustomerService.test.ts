@@ -10,9 +10,9 @@ import {
     CreateCustomerResponse,
     UpdateCustomer,
     UpdateCustomerRequest,
-    UpdateCustomerResponse,
-    SortOrder
+    UpdateCustomerResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Customer } from '@kix/core/dist/model';
 import { ICustomerService, IConfigurationService } from '@kix/core/dist/services';

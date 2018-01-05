@@ -10,9 +10,9 @@ import {
     CreateMailAccountResponse,
     UpdateMailAccount,
     UpdateMailAccountRequest,
-    UpdateMailAccountResponse,
-    SortOrder
+    UpdateMailAccountResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { MailAccount } from '@kix/core/dist/model';
 import { IMailAccountService, IConfigurationService } from '@kix/core/dist/services';

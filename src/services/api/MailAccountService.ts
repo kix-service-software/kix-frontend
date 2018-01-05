@@ -8,11 +8,11 @@ import {
     MailAccountsResponse,
     MailAccountResponse,
     MailAccountTypesResponse,
-    SortOrder,
     UpdateMailAccount,
     UpdateMailAccountResponse,
     UpdateMailAccountRequest
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class MailAccountService extends ObjectService<MailAccount> implements IMailAccountService {
 

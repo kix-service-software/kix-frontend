@@ -8,8 +8,8 @@
                     <th class=property[0]>
                         ${property[1]}
                         <span.sortable>
-                            <span.kix-icon-sort-up/>
-                            <span.kix-icon-sort-down/>
+                            <span.kix-icon-sort-up on-click('sortUp', property[0])/>
+                            <span.kix-icon-sort-down on-click('sortDown', property[0])/>
                         </span>
                     </th>
                 </for>

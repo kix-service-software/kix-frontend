@@ -4,9 +4,9 @@ import { container } from '../../../src/Container';
 import {
     HttpError,
     ValidObjectResponse,
-    ValidObjectsResponse,
-    SortOrder
+    ValidObjectsResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { ValidObject } from '@kix/core/dist/model';
 import { IValidObjectService, IConfigurationService } from '@kix/core/dist/services';

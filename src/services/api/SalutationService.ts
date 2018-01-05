@@ -7,11 +7,11 @@ import {
     CreateSalutationRequest,
     SalutationsResponse,
     SalutationResponse,
-    SortOrder,
     UpdateSalutation,
     UpdateSalutationResponse,
     UpdateSalutationRequest
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SalutationService extends ObjectService<Salutation> implements ISalutationService {
 

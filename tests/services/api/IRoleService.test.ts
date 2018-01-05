@@ -5,10 +5,10 @@ import {
     HttpError,
     RoleResponse,
     RolesResponse,
-    SortOrder,
     UpdateRoleRequest,
     UpdateRoleResponse,
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Role } from '@kix/core/dist/model';
 import { IConfigurationService, IRoleService } from '@kix/core/dist/services';

@@ -4,10 +4,10 @@ import {
     UpdateUserRequest,
     UpdateUserResponse,
     UsersResponse,
-    SortOrder,
     Query,
     UserResponse,
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { IUserService } from '@kix/core/dist/services';
 import { User } from '@kix/core/dist/model';

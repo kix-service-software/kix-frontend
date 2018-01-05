@@ -12,9 +12,9 @@ import {
     UpdateGeneralCatalogItemRequest,
     UpdateGeneralCatalogItemResponse,
     UpdateGeneralCatalogClassRequest,
-    UpdateGeneralCatalogClassResponse,
-    SortOrder
+    UpdateGeneralCatalogClassResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { GeneralCatalogItem } from '@kix/core/dist/model';
 import { IGeneralCatalogService, IConfigurationService } from '@kix/core/dist/services';

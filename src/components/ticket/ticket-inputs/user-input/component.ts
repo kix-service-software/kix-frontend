@@ -1,4 +1,4 @@
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
+import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { User } from '@kix/core/dist/model/';
 
 export class UserInputComponent {
@@ -18,7 +18,7 @@ export class UserInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.userId = Number(input.value);
-        TicketStore.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
@@ -39,7 +39,7 @@ export class UserInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = TicketStore.getInstance().getTicketData(this.state.ticketDataId);
+        const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.users) {
             this.state.users = ticketData.users;
             if (this.state.userId) {

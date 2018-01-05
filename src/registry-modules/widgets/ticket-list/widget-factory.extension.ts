@@ -14,7 +14,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        const config = {
+        const settings = {
             limit: 10,
             displayLimit: 10,
             showTotalCount: true,
@@ -29,7 +29,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
             ]
         };
 
-        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], config, true, WidgetSize.LARGE);
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], settings, true, WidgetSize.LARGE);
     }
 
 }

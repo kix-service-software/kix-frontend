@@ -10,9 +10,9 @@ import {
     CreateSignatureResponse,
     UpdateSignature,
     UpdateSignatureRequest,
-    UpdateSignatureResponse,
-    SortOrder
+    UpdateSignatureResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Signature } from '@kix/core/dist/model';
 import { ISignatureService, IConfigurationService } from '@kix/core/dist/services';

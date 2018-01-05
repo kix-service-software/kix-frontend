@@ -7,10 +7,10 @@ import {
     CreateGroupRequest,
     GroupsResponse,
     GroupResponse,
-    SortOrder,
     UpdateGroupResponse,
     UpdateGroupRequest
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class GroupService extends ObjectService<Group> implements IGroupService {
 
