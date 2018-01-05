@@ -2,7 +2,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketUtil } from '@kix/core/dist/browser/ticket/';
 import { TicketProperty } from '@kix/core/dist/model/';
-import { TranslationHandler } from '../../../../../../core/dist/browser/TranslationHandler';
+import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketListConfigurationComponentState } from './TicketListConfigurationComponentState';
 
 class TicketListConfigurationComponent {
