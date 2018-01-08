@@ -7,6 +7,7 @@ import {
     CreateGroupRequest,
     GroupsResponse,
     GroupResponse,
+    UpdateGroup,
     UpdateGroupResponse,
     UpdateGroupRequest
 } from '@kix/core/dist/api';
@@ -48,7 +49,7 @@ export class GroupService extends ObjectService<Group> implements IGroupService 
     ): Promise<number> {
         const uri = this.buildUri(this.RESOURCE_URI, groupId);
         const response = await this.updateObject<UpdateGroupResponse, UpdateGroupRequest>(
-            token, uri, new UpdateGroupRequest(name, comment, validId)
+            token, uri, new UpdateGroupRequest(new UpdateGroup(name, comment, validId))
         );
 
         return response.GroupID;

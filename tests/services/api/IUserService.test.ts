@@ -2,8 +2,10 @@
 import {
     UsersResponse,
     UserResponse,
+    CreateUser,
     CreateUserResponse,
     CreateUserRequest,
+    UpdateUser,
     UpdateUserRequest,
     UpdateUserResponse,
     HttpError,
@@ -183,7 +185,9 @@ describe('User Service', () => {
 
             before(() => {
                 nockScope
-                    .post('/users', new CreateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    .post('/users', new CreateUserRequest(
+                        new CreateUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    )
                     .reply(200, buildCreateUserResponse(123456));
             });
 
@@ -198,7 +202,9 @@ describe('User Service', () => {
 
             before(() => {
                 nockScope
-                    .post('/users', new CreateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    .post('/users', new CreateUserRequest(
+                        new CreateUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title'))
+                    )
                     .reply(400, {});
             });
 
@@ -221,7 +227,9 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .patch('/users/123456',
-                    new UpdateUserRequest('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                    new UpdateUserRequest(
+                        new UpdateUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                    )
                     .reply(200, buildUpdateUserResponse(123456));
             });
 
@@ -257,7 +265,9 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .patch('/users/123456',
-                    new UpdateUserRequest('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                    new UpdateUserRequest(
+                        new UpdateUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                    )
                     .reply(400, {});
             });
 
