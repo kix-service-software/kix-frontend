@@ -10,9 +10,9 @@ import {
     CreateContactResponse,
     UpdateContact,
     UpdateContactRequest,
-    UpdateContactResponse,
-    SortOrder
+    UpdateContactResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Contact } from '@kix/core/dist/model';
 import { IContactService, IConfigurationService } from '@kix/core/dist/services';

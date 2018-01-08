@@ -36,6 +36,13 @@
             }
         },
         {
+            "id": "LOGIN:ERROR",
+            "defaultValue": "Login fehlgeschlagen - Bitte prüfen Sie Ihre Anmeldedaten!",
+            "translationValues": {
+                "en": "Login failed. Please check your credentials!"
+            }
+        },
+        {
             "id": "PERSONAL-SETTINGS:TOOLBAR",
             "defaultValue": "Persönliche Einstellungen",
             "translationValues": {

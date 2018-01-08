@@ -1,4 +1,4 @@
-import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
+import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 
 export class TicketSearchResultComponent {
 
@@ -16,16 +16,16 @@ export class TicketSearchResultComponent {
     }
 
     public onMount(): void {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
     }
 
     private ticketStateChanged(): void {
-        const result = TicketStore.getInstance().getTicketsSearchResult('ticket-search');
+        const result = TicketService.getInstance().getTicketsSearchResult('ticket-search');
         if (result) {
             this.state.tickets = result;
         }
 
-        const properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
+        const properties = TicketService.getInstance().getTicketsSearchProperties('ticket-search');
         this.state.properties = properties ? properties : [];
     }
 

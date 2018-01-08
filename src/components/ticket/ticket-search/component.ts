@@ -1,7 +1,7 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
-import { TicketStore } from "@kix/core/dist/browser/ticket/TicketStore";
+import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 
 class TicketSearchComponent {
 
@@ -15,7 +15,7 @@ class TicketSearchComponent {
     }
 
     public async onMount(): Promise<void> {
-        TicketStore.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
         const th = await TranslationHandler.getInstance();
         this.state.ticketProperties = Object.keys(TicketProperty).map(
@@ -41,11 +41,11 @@ class TicketSearchComponent {
         for (const selectedProperty of event.target.selectedOptions) {
             selectedProperties.push(selectedProperty.value);
         }
-        TicketStore.getInstance().prepareSearchProperties('ticket-search', selectedProperties);
+        TicketService.getInstance().prepareSearchProperties('ticket-search', selectedProperties);
     }
 
     private ticketStateChanged(): void {
-        const properties = TicketStore.getInstance().getTicketsSearchProperties('ticket-search');
+        const properties = TicketService.getInstance().getTicketsSearchProperties('ticket-search');
         this.state.properties = properties ? properties : [];
     }
 

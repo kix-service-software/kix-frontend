@@ -4,8 +4,9 @@ import { TicketListWidget } from './TicketListWidget';
 import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebar: boolean = false;
+    public isSidebarWidget: boolean = false;
     public isContentWidget: boolean = true;
+    public isExplorerWidget: boolean = false;
     public widgetId: string = "ticket-list-widget";
 
     public createWidget(): IWidget {
@@ -13,7 +14,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
     }
 
     public getDefaultConfiguration(): any {
-        const config = {
+        const settings = {
             limit: 10,
             displayLimit: 10,
             showTotalCount: true,
@@ -28,7 +29,7 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
             ]
         };
 
-        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], config, true, WidgetSize.LARGE);
+        return new WidgetConfiguration(this.widgetId, 'Ticket-Liste', [], settings, true, WidgetSize.LARGE);
     }
 
 }

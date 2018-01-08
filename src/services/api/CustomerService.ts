@@ -10,9 +10,9 @@ import {
     CustomerSourcesResponse,
     UpdateCustomer,
     UpdateCustomerResponse,
-    UpdateCustomerRequest,
-    SortOrder
+    UpdateCustomerRequest
 } from "@kix/core/dist/api/";
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class CustomerService extends ObjectService<Customer> implements ICustomerService {
 

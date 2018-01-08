@@ -1,5 +1,3 @@
-import { TicketStore } from '@kix/core/dist/browser/ticket/TicketStore';
-
 export class TicketPriorityLabelComponent {
 
     private state: {};

@@ -1,8 +1,9 @@
 import {
-    SortOrder, ServicesResponse, ServiceResponse,
+    ServicesResponse, ServiceResponse,
     CreateService, CreateServiceRequest, CreateServiceResponse,
     UpdateService, UpdateServiceRequest, UpdateServiceResponse
 } from "@kix/core/dist/api";
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { IServiceService } from '@kix/core/dist/services';
 import { Service } from '@kix/core/dist/model';

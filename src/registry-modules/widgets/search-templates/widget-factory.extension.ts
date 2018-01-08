@@ -3,8 +3,9 @@ import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class SearchTemplatesWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebar: boolean = false;
+    public isSidebarWidget: boolean = false;
     public isContentWidget: boolean = true;
+    public isExplorerWidget: boolean = false;
     public widgetId: string = "search-templates-widget";
 
     public createWidget(): IWidget {

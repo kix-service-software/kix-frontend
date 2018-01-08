@@ -8,12 +8,12 @@ import {
     CreateTicketRequest,
     CreateTicketResponse,
     HttpError,
-    SortOrder,
     TicketResponse,
     UpdateTicket,
     UpdateTicketRequest,
     UpdateTicketResponse
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { Article, Ticket } from '@kix/core/dist/model';
 import { IConfigurationService, ITicketService } from '@kix/core/dist/services';

@@ -12,7 +12,9 @@
             </h3>
         </span>
         <span>
-            <include(input.filter)/>
+            <if(!component.isConfigMode())>
+                <include(input.filter)/>
+            </if>
         </span>
         <span.header-right>
             <if(component.isConfigMode())>
@@ -32,12 +34,7 @@
                         <include(input.actions)/>
                     </if>
                     <if(input.minimizable || typeof input.minimizable === 'undefined')>
-                        <if(!state.minimized)>
-                            <span class="kix-icon-close-up" on-click('minimizeWidget')/>
-                        </if>
-                        <if(state.minimized)>
-                            <span class="kix-icon-open-down" on-click('minimizeWidget')/>
-                        </if>
+                        <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
                     </if>
                 </div>
             </else>

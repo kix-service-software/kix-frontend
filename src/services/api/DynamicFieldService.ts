@@ -12,9 +12,9 @@ import {
     DynamicFieldObjectsResponse,
     UpdateDynamicField,
     UpdateDynamicFieldResponse,
-    UpdateDynamicFieldRequest,
-    SortOrder
+    UpdateDynamicFieldRequest
 } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class DynamicFieldService extends ObjectService<DynamicField> implements IDynamicFieldService {
 

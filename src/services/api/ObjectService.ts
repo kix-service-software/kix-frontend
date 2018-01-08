@@ -1,5 +1,6 @@
 import { IHttpService } from '@kix/core/dist/services';
-import { Query, SortOrder } from '@kix/core/dist/api';
+import { Query } from '@kix/core/dist/api';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { inject, injectable } from 'inversify';
 

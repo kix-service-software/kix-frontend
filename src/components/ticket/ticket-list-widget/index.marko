@@ -5,7 +5,7 @@
     <@title>
         <if(state.widgetConfiguration)>
             ${state.widgetConfiguration.title}
-            <if(state.widgetConfiguration.settings.showTotalCount)>(${state.tickets.length})</if>
+            <if(state.widgetConfiguration.settings.showTotalCount)>&nbsp;Gesamt: ${state.tickets.length}</if>
         </if>
     </@title>
     <@content>
@@ -16,7 +16,7 @@
         </if>
     </@content>
     <@filter>
-        <input type="text" on-change("filterChanged") value=state.filterValue placeholder="Filtern in Vorlage"/>
+        <input type="text" on-change("filterChanged") value=state.filterValue placeholder="Filtern in Liste"/>
         <span.kix-icon-filter on-click('filter')/>
     </@filter>
     <@actions/>
