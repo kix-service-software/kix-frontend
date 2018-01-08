@@ -375,25 +375,35 @@
     width: 93.75%;
 }
 
-.unit-space > div,
-.unit-space > dl,
-.unit-space > fieldset,
-.unit-space > form,
-.unit-space > h1,
-.unit-space > h2,
-.unit-space > h3,
-.unit-space > h4,
-.unit-space > h5,
-.unit-space > h6,
-.unit-space > hr,
-.unit-space > img,
-.unit-space > ol,
-.unit-space > p,
-.unit-space > table,
-.unit-space > ul,
-.lineSpace {
-    margin-left: 12px;
-    margin-right: 12px;
+// .unit-space > div,
+// .unit-space > dl,
+// .unit-space > fieldset,
+// .unit-space > form,
+// .unit-space > h1,
+// .unit-space > h2,
+// .unit-space > h3,
+// .unit-space > h4,
+// .unit-space > h5,
+// .unit-space > h6,
+// .unit-space > hr,
+// .unit-space > img,
+// .unit-space > ol,
+// .unit-space > p,
+// .unit-space > table,
+// .unit-space > ul,
+// .lineSpace {
+//     margin-left: 12px;
+//     margin-right: 12px;
+// }
+
+.unit-space {
+    padding: 0 .75em;
+    &:first-of-type {
+        margin-left: -.75em;
+    }
+    &:last-of-type {
+        margin-right: -.75em;
+    }
 }
 
 .unit-space .spaceReset {
@@ -401,7 +411,8 @@
 }
 .line,
 .line-space {
-    margin-bottom: 24px;
+    margin-bottom: 1.5em;
+    margin-right: -1.5em;
 }
 
 .line > .unit-space:first-of-type > div {

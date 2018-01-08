@@ -4,6 +4,7 @@ import {
     CreateRoleResponse,
     RoleResponse,
     RolesResponse,
+    UpdateRole,
     UpdateRoleRequest,
     UpdateRoleResponse,
 } from '@kix/core/dist/api';
@@ -50,7 +51,7 @@ export class RoleService extends ObjectService<Role> implements IRoleService {
     ): Promise<number> {
         const uri = this.buildUri(this.RESOURCE_URI, roleId);
         const response = await this.updateObject<UpdateRoleResponse, UpdateRoleRequest>(
-            token, uri, new UpdateRoleRequest(name, comment, validId)
+            token, uri, new UpdateRoleRequest(new UpdateRole(name, comment, validId))
         );
 
         return response.RoleID;

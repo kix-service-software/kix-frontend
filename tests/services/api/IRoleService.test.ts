@@ -5,6 +5,7 @@ import {
     HttpError,
     RoleResponse,
     RolesResponse,
+    UpdateRole,
     UpdateRoleRequest,
     UpdateRoleResponse,
 } from '@kix/core/dist/api';
@@ -225,7 +226,7 @@ describe('Role Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateRoleRequest('role', 'comment', 1))
+                    new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
                     .reply(200, buildUpdateRoleResponse(123456));
             });
 
@@ -240,7 +241,7 @@ describe('Role Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateRoleRequest('role', 'comment', 1))
+                    new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
                     .reply(400, {});
             });
 
