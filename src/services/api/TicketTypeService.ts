@@ -3,6 +3,7 @@ import {
     CreateTicketTypeResponse,
     UpdateTicketTypeRequest,
     UpdateTicketTypeResponse,
+    UpdateTicketType,
     TicketTypeResponse,
     TicketTypesResponse,
     Query
@@ -48,7 +49,7 @@ export class TicketTypeService extends ObjectService<TicketType> implements ITic
     public async updateTicketType(token: string, ticketTypeId: number, name: string, validId: any): Promise<number> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketTypeId);
         const response = await this.updateObject<UpdateTicketTypeResponse, UpdateTicketTypeRequest>(
-            token, uri, new UpdateTicketTypeRequest(name, validId)
+            token, uri, new UpdateTicketTypeRequest(new UpdateTicketType(name, validId))
         );
 
         return response.TypeID;

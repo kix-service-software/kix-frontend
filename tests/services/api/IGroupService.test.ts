@@ -8,6 +8,7 @@ import {
     CreateGroup,
     CreateGroupRequest,
     CreateGroupResponse,
+    UpdateGroup,
     UpdateGroupRequest,
     UpdateGroupResponse
 } from '@kix/core/dist/api';
@@ -225,7 +226,7 @@ describe('Group Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGroupRequest('group', 'comment', 1))
+                    new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
                     .reply(200, buildUpdateGroupResponse(123456));
             });
 
@@ -240,7 +241,7 @@ describe('Group Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGroupRequest('group', 'comment', 1))
+                    new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
                     .reply(400, {});
             });
 

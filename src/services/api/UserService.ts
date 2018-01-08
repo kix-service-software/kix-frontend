@@ -1,6 +1,8 @@
 import {
+    CreateUser,
     CreateUserRequest,
     CreateUserResponse,
+    UpdateUser,
     UpdateUserRequest,
     UpdateUserResponse,
     UsersResponse,
@@ -51,7 +53,8 @@ export class UserService extends ObjectService<User> implements IUserService {
         token: string, login: string, firstName: string, lastName: string,
         email: string, password: string, phone: string, title: string): Promise<number> {
 
-        const createUserRequest = new CreateUserRequest(login, firstName, lastName, email, password, phone, title);
+        const createUser = new CreateUser(login, firstName, lastName, email, password, phone, title);
+        const createUserRequest = new CreateUserRequest(createUser);
 
         const response = await this.createObject<CreateUserResponse, CreateUserRequest>(
             token, this.RESOURCE_URI, createUserRequest
@@ -64,8 +67,8 @@ export class UserService extends ObjectService<User> implements IUserService {
         token: string, userId: number, login: string, firstName: string, lastName: string,
         email: string, password: string, phone: string, title: string, valid: number): Promise<number> {
 
-        const updateUserRequest = new UpdateUserRequest(
-            login, firstName, lastName, email, password, phone, title, valid);
+        const updateUser = new UpdateUser(login, firstName, lastName, email, password, phone, title, valid);
+        const updateUserRequest = new UpdateUserRequest(updateUser);
 
         const uri = this.buildUri(this.RESOURCE_URI, userId);
         const response = await this.updateObject<UpdateUserResponse, UpdateUserRequest>(
