@@ -47,7 +47,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     title: "Prioritäten",
                     actions: [],
                     settings: {
-                        chartType: "pie"
+                        chartType: "pie",
+                        templateId: 'ticket-dashboard-priorities',
+                        attributes: ['PriorityID'],
+                        showLegend: true,
+                        showAxes: true,
+                        showValues: true
                     },
                     show: true,
                     size: WidgetSize.SMALL,
@@ -62,7 +67,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     title: "Ticketstatus",
                     actions: [],
                     settings: {
-                        chartType: "bar"
+                        chartType: "bar",
+                        templateId: 'ticket-dashboard-states',
+                        attributes: ['StateID'],
+                        showLegend: true,
+                        showAxes: true,
+                        showValues: true
                     },
                     show: true,
                     size: WidgetSize.SMALL,
@@ -77,7 +87,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     title: "7 Tage Statistik",
                     actions: [],
                     settings: {
-                        chartType: "stacked-bar"
+                        chartType: "stacked-bar",
+                        templateId: 'home-dashboard-7days',
+                        attributes: [],
+                        showLegend: true,
+                        showAxes: true,
+                        showValues: true
                     },
                     show: true,
                     size: WidgetSize.SMALL,

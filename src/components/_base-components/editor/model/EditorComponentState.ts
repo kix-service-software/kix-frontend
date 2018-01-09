@@ -2,8 +2,6 @@ export class EditorComponentState {
 
     public id: string;
     public value: string = '';
-    public inline: boolean = false;
-    public readOnly: boolean = false;
     public config: object = {};
 
     /**
@@ -14,13 +12,31 @@ export class EditorComponentState {
      * @param resizeDir optional - direction for resizing, possible are 'both', 'vertical' and 'horizontal',
      *                  default: 'vertical'
      */
-    public constructor(inline?: boolean, readOnly?: boolean, resize?: boolean, resizeDir?: string) {
+    public constructor(
+        public inline: boolean = false,
+        public simple: boolean = false,
+        public readOnly: boolean = false,
+        resize?: boolean,
+        resizeDir?: string
+    ) {
         this.id = 'editor-' + Date.now();
-        this.inline = inline || false;
-        this.readOnly = readOnly || false;
 
         let toolbar = [];
-        if (this.inline) {
+        if (this.simple) {
+            toolbar = [
+                {
+                    name: 'basicstyles', items: [
+                        'Bold', 'Italic'
+                    ]
+                },
+                {
+                    name: 'paragraph', items: [
+                        'NumberedList', 'BulletedList', 'Outdent', 'Indent'
+                    ]
+                }
+            ];
+
+        } else if (this.inline) {
             toolbar = [
                 {
                     name: 'basicstyles', items: [

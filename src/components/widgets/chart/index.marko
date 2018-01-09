@@ -1,12 +1,12 @@
-<widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable>
+<widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable
+    on-minimizeChanged('redrawChart')>
     <@icon/>
     <@title>
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <div.chart>
-            <svg id=state.svgId height="100%" width="100%"/>
-        </div>
+        <!-- TODO: richtige Größen bestimmen (100% geht sehr wahrscheinlich nicht) -->
+        <svg id=("svg_" + state.instanceId) height="150" width="100%"/>
     </@content>
     <@filter>
         <span/>

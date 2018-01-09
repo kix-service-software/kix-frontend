@@ -34,7 +34,12 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     title: 'Chart',
                     actions: [],
                     settings: {
-                        chartType: 'bar'
+                        chartType: 'bar',
+                        templateId: 'home-dashboard-priorities',
+                        attributes: ['PriorityID'],
+                        showLegend: true,
+                        showAxes: true,
+                        showValues: true
                     },
                     show: true,
                     size: WidgetSize.SMALL,
@@ -49,7 +54,12 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     title: 'Chart 2',
                     actions: [],
                     settings: {
-                        chartType: 'pie'
+                        chartType: 'pie',
+                        templateId: 'home-dashboard-states',
+                        attributes: ['StateID'],
+                        showLegend: true,
+                        showAxes: true,
+                        showValues: true
                     },
                     show: true,
                     size: WidgetSize.SMALL,

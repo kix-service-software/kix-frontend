@@ -9,6 +9,7 @@ class EditorComponent {
     public onCreate(input: any): void {
         this.state = new EditorComponentState(
             input.inline,
+            input.simple,
             input.readOnly,
             input.resize,
             input.resizeDir
