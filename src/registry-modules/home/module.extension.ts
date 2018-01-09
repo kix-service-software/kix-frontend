@@ -35,7 +35,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     actions: [],
                     settings: {
                         chartType: 'bar',
-                        templateId: 'test-template-name',
+                        templateId: 'home-dashboard-priorities',
                         attributes: ['PriorityID'],
                         showLegend: true,
                         showAxes: true,
@@ -55,7 +55,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     actions: [],
                     settings: {
                         chartType: 'pie',
-                        templateId: 'test-template-name2',
+                        templateId: 'home-dashboard-states',
                         attributes: ['StateID'],
                         showLegend: true,
                         showAxes: true,
