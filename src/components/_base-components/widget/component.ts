@@ -31,6 +31,12 @@ class WidgetComponent {
             ContextStore.getInstance().toggleExplorer();
         } else {
             this.state.minimized = !this.state.minimized;
+            // TODO: bessere Lösung finden, ob Content fertig gerendert wurde nach aufklappen
+            // ggf. also nicht state.minimized übergeben, sondern einen "marko-fertig-gerendert" Status
+            // onUpdate der Eltern-Componente triggert nicht immer -.-
+            setTimeout(() => {
+                (this as any).emit('minimizeChanged', this.state.minimized);
+            }, 200);
         }
     }
 
@@ -45,7 +51,7 @@ class WidgetComponent {
     }
 
     private resetConfiguration(): void {
-        // TODO: hol alten stand aus browser "cache" und überschreib neue konfiguration
+        // TODO: hol alten Stand aus Browser "cache" und überschreib neue Konfiguration
         this.state.configChanged = false;
     }
 
