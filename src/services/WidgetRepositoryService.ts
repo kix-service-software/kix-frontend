@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 
-import { WidgetDescriptor } from '@kix/core/dist/model';
+import { WidgetDescriptor, WidgetType } from '@kix/core/dist/model';
 import {
     IPluginService,
     IConfigurationService,
@@ -25,36 +25,13 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
      * @description ASYNC - returns all content widget descriptors based on a context
      *
      * @param {string} contexId id of the context (dashboard)
+     * @param {WidgetType} type the type of the widget
      *
      * @return promise of WidgetDescriptor[]
      */
-    public async getContentWidgets(contextId: string): Promise<WidgetDescriptor[]> {
+    public async getWidgets(contextId: string, type: WidgetType): Promise<WidgetDescriptor[]> {
         const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isContentWidget);
-    }
-
-    /**
-     * @description ASYNC - returns all sidebar widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getSidebarWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isSidebarWidget);
-    }
-
-    /**
-     * @description ASYNC - returns all explorer widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getExplorerWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isExplorerWidget);
+        return allWidgets.filter((wd) => (wd.type & type));
     }
 
     /**
@@ -71,7 +48,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
 
         const preDefinedWidgetDescriptors: WidgetDescriptor[] = preDefinedWidgetsConfiguration[contextId] || [];
         const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
-            wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebarWidget, wf.isExplorerWidget
+            wf.widgetId, wf.getDefaultConfiguration(), wf.type
         ));
 
         return [...preDefinedWidgetDescriptors, ...widgetDescriptors];

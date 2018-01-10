@@ -101,7 +101,7 @@ gulp.task('test', () => {
         .pipe(mocha({
             reporter: 'spec',
             compilers: 'ts:ts-node/register',
-            timeout: '10000'
+            timeout: '15000'
         }));
 });
 

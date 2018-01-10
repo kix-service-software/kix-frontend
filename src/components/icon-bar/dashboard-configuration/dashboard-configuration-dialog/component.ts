@@ -10,7 +10,8 @@ import {
     ConfiguredWidget,
     DashboardConfiguration,
     WidgetDescriptor,
-    WidgetSize
+    WidgetSize,
+    WidgetType
 } from '@kix/core/dist/model';
 import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 
@@ -64,13 +65,13 @@ class DashboardConfigurationDialog {
         });
 
         widgetDescriptorList.forEach((wd) => {
-            if (wd.isExplorerWidget) {
+            if (wd.type & WidgetType.EXPLORER) {
                 this.prepareExplorerList(wd, explorerInstanceIds);
             } else {
                 const listId = wd.widgetId + '-' + Math.floor((Math.random() * 1000000));
                 const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
-                if (wd.isContentWidget) {
+                if (wd.type & WidgetType.CONTENT) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.contentSecondList.push(listElement);
@@ -78,7 +79,7 @@ class DashboardConfigurationDialog {
                     this.state.contentFirstList.push(listElement);
                     // }
                 }
-                if (wd.isSidebarWidget) {
+                if (wd.type & WidgetType.SIDEBAR) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.sidebarSecondList.push(listElement);
