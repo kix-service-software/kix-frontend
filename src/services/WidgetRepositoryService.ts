@@ -25,6 +25,7 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
      * @description ASYNC - returns all content widget descriptors based on a context
      *
      * @param {string} contexId id of the context (dashboard)
+     * @param {WidgetType} type the type of the widget
      *
      * @return promise of WidgetDescriptor[]
      */
