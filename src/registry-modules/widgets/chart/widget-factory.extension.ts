@@ -16,7 +16,7 @@ export class ChartWidgetFactoryExtension implements IWidgetFactoryExtension {
     public getDefaultConfiguration(): WidgetConfiguration {
         // TODO: ggf. enum nutzen, statt direkt 'pie' anzugeben
         const chartConfig = new ChartSettings('pie');
-        return new WidgetConfiguration(this.widgetId, "Chart", [], chartConfig, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, "Chart", [], chartConfig, this.type, true, WidgetSize.SMALL);
     }
 }
 

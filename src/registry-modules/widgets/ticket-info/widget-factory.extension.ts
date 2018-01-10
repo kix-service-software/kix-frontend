@@ -6,15 +6,16 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public widgetId: string = "ticket-info-widget";
 
-    public type: WidgetType = WidgetType.CONTENT;
+    public type: WidgetType = WidgetType.LANE_TAB;
 
     public createWidget(): IWidget {
         return new TicketInfoWidget(this.widgetId);
     }
 
     public getDefaultConfiguration(): any {
-        // TODO: richtiges Icon geben lassen, sobald Widget "definiert" wurde
-        return new WidgetConfiguration(this.widgetId, 'Ticket-Info', [], {}, true, WidgetSize.SMALL, 'minus');
+        return new WidgetConfiguration(
+            this.widgetId, 'Ticket-Info', [], {}, this.type, true, WidgetSize.SMALL, 'minus'
+        );
     }
 
 }

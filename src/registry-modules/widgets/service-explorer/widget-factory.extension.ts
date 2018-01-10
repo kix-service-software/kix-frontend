@@ -14,7 +14,7 @@ export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExte
 
     public getDefaultConfiguration(): any {
         // TODO: Titel übersetzen
-        return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, this.type, true, WidgetSize.SMALL);
     }
 }
 

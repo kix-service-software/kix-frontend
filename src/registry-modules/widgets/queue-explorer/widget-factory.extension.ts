@@ -14,7 +14,7 @@ export class QueueExplorerWidgetFactoryExtension implements IWidgetFactoryExtens
 
     public getDefaultConfiguration(): any {
         // TODO: Titel übersetzen
-        return new WidgetConfiguration(this.widgetId, 'Übersicht Queues', [], {}, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(this.widgetId, 'Übersicht Queues', [], {}, this.type, true, WidgetSize.SMALL);
     }
 }
 
