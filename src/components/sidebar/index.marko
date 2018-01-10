@@ -15,10 +15,10 @@
         </div>
     </if>
 </div>
-<if(component.hasSidebarsToShow())>
+<if(component.hasSidebarsToShow() || component.isConfigMode())>
     <div.sidebar>
         <for(widget in state.configuredWidgets)>
-            <if(widget.configuration.show && component.sidebarAvailable(widget.instanceId))>
+            <if(component.showSidebar(widget))>
                 <!-- 
                 TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
                 sobald das include auch ohne root-Element funktioniert. In der style.less
@@ -31,11 +31,6 @@
                         instanceId: widget.instanceId,
                         minimizable: false
                     }) key=widget.instanceId/>
-                    <if(component.isConfigMode())>
-                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
-                            <div.widget-overlay-content/>
-                        </div>
-                    </if>
                 </div>
             </if>
         </for>

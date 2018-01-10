@@ -6,11 +6,6 @@
                     draggable=(state.dndState.enabled ? "true" : "false") data-id=widgetInstanceId
                     on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
                     <include(component.getWidgetTemplate(widgetInstanceId ), {instanceId: widgetInstanceId})/>
-                    <if(component.isConfigMode())>
-                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
-                            <div.widget-overlay-content/>
-                        </div>
-                    </if>
                 </div>
             </for>
         </div>

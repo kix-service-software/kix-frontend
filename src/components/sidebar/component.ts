@@ -65,6 +65,16 @@ class SidebarComponent {
         return this.state.rows.some((r) => r === instanceId);
     }
 
+    private showSidebar(widget: ConfiguredWidget): boolean {
+        return (
+            (
+                this.isConfigMode() ||
+                widget.configuration.show
+            ) &&
+            this.sidebarAvailable(widget.instanceId)
+        );
+    }
+
     private getWidgetTemplate(instanceId: string): any {
         return DashboardStore.getInstance().getWidgetTemplate(instanceId);
     }

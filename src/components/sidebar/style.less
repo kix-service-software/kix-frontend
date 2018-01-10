@@ -76,28 +76,10 @@
     >div {
         &.config-mode:not(.config-dialog-shown) {
             z-index: 100;
+            position: relative;
         }
-        position: relative;
         .widget-overlay {
             cursor: ns-resize;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            border-radius: 3px;
-            border: 1px solid @secondary-0;
-            border-top: none;
-            .widget-overlay-content {
-                position: absolute;
-                opacity: 0.2;
-                top: 2em;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                background-color: @config-color;
-                box-sizing: border-box;
-            }
         }
         .drag-element {
             opacity: 0.7;
