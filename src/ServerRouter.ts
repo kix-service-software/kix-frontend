@@ -20,7 +20,6 @@ export class ServerRouter {
             this.expressRouter.use(router.getBaseRoute(), router.getRouter());
 
             router.setAppTemplate(require('./components/_app'));
-            router.setBaseTemplate(require('./components/_base-template/index.marko'));
         }
     }
 }

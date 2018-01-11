@@ -19,13 +19,7 @@
     <div.sidebar>
         <for(widget in state.configuredWidgets)>
             <if(component.showSidebar(widget))>
-                <!-- 
-                TODO: Durch Marko-Bug hier leider unnötiges div. Wieder zu entfernen,
-                sobald das include auch ohne root-Element funktioniert. In der style.less
-                ist dann ".sidebar > div" auch wieder durch ".sidebar > .widget" zu erstetzen!
-                siehe Issue #151
-                nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))
-                -->
+                <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
                 <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
                     <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
