@@ -64,7 +64,7 @@ class WidgetComponent {
     }
 
     private isInputDefined(input: any): boolean {
-        return input && (Object.keys(input).length > 0);
+        return input && Boolean(Object.keys(input).length);
     }
 
 }
