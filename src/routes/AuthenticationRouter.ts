@@ -23,7 +23,6 @@ export class AuthenticationRouter extends KIXRouter {
 
         res.marko(template, {
             login: true,
-            logout,
             data: {
                 frontendSocketUrl: this.getServerUrl(),
                 logout
