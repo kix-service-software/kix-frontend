@@ -1,5 +1,5 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class WidgetComponent {
 
@@ -28,14 +28,14 @@ class WidgetComponent {
 
     private minimizeWidget(): void {
         if (this.state.explorer) {
-            ContextStore.getInstance().toggleExplorer();
+            ContextService.getInstance().toggleExplorer();
         } else {
             this.state.minimized = !this.state.minimized;
         }
     }
 
     private minimizeExplorer(): void {
-        ContextStore.getInstance().toggleExplorerBar();
+        ContextService.getInstance().toggleExplorerBar();
     }
 
     private showConfiguration(): void {

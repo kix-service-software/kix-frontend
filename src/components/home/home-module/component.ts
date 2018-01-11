@@ -1,9 +1,10 @@
 import { HomeComponentState } from './model/HomeComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { DashboardConfiguration } from '@kix/core/dist/model/';
+import { Context, DashboardConfiguration } from '@kix/core/dist/model/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class HomeComponent {
 
@@ -15,19 +16,19 @@ class HomeComponent {
 
     public onMount(): void {
         DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        DashboardStore.getInstance().loadDashboardConfiguration();
+        DashboardStore.getInstance().loadDashboardConfiguration('home');
 
-        const contextId = ClientStorageHandler.getContextId();
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard');
+            new BreadcrumbDetails('home', null, null, 'Home-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
-    private stateChanged(): void {
+    private stateChanged(id: string): void {
         const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
+        if (id === 'home' && dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.contentRows;
             this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
+            ContextService.getInstance().provideContext(new Context('home'), 'home', true);
         }
     }
 }

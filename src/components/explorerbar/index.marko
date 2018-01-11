@@ -1,11 +1,10 @@
-<if(state.rows.length)>
+<if(state.explorer.length)>
     <div.explorerbar class=(component.isExplorerBarExpanded() || component.isConfigMode() ? "" : "collapsed")>
-        <for(widget in state.configuredWidgets)>
-            <!-- TODO: das folgende if verursacht wieder ein "parentNode" bzw. "currentNode is null" Fehler -->
+        <for(widget in state.explorer)>
             <if(component.explorerAvailable(widget.instanceId))>
                 <if(component.isExplorerBarExpanded() || component.isConfigMode())>
                     <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-                        <include(component.getWidgetTemplate(widget.instanceId), {
+                        <include(component.getWidgetTemplate(widget.configuration.widgetId), {
                             instanceId: widget.instanceId,
                             minimizable: false,
                             minimized: component.isExplorerMinimized(widget.instanceId),

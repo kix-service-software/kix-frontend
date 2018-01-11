@@ -3,8 +3,9 @@ import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
+import { Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class TicketDetailsComponent {
 
@@ -25,8 +26,8 @@ export class TicketDetailsComponent {
     }
 
     public onMount(): void {
-        ClientStorageHandler.setContextId(TicketDetailsComponent.MODULE_ID);
         this.setBreadcrumbDetails();
+
         TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 
@@ -34,10 +35,14 @@ export class TicketDetailsComponent {
         DashboardStore.getInstance().loadDashboardConfiguration(TicketDetailsComponent.MODULE_ID);
     }
 
-    private dashboardStateChanged(): void {
+    private dashboardStateChanged(id: string): void {
         const dashboardConfiguration: DashboardConfiguration =
             DashboardStore.getInstance().getDashboardConfiguration(TicketDetailsComponent.MODULE_ID);
-        if (dashboardConfiguration && dashboardConfiguration.contextId === TicketDetailsComponent.MODULE_ID) {
+
+        if (id === TicketDetailsComponent.MODULE_ID &&
+            dashboardConfiguration &&
+            dashboardConfiguration.contextId === TicketDetailsComponent.MODULE_ID) {
+
             this.state.lanes = dashboardConfiguration.contentConfiguredWidgets
                 .filter((ccw) => (ccw.configuration.type & WidgetType.LANE) === WidgetType.LANE);
 
@@ -47,6 +52,18 @@ export class TicketDetailsComponent {
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
             }
+
+            const explorerList = [];
+            for (const explorerId of dashboardConfiguration.explorerRows.map((r) => r[0])) {
+                const explorer =
+                    dashboardConfiguration.explorerConfiguredWidgets.find((e) => e.instanceId === explorerId);
+                if (explorer) {
+                    explorerList.push(explorer);
+                }
+            }
+
+            const context = new Context('ticket-details', new Map(), new Map(), explorerList);
+            ContextService.getInstance().provideContext(context);
         }
     }
 

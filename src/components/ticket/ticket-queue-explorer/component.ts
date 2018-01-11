@@ -1,7 +1,7 @@
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
-import { ContextFilter, TicketProperty } from '@kix/core/dist/model/';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ObjectType, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 
 export class QueueExplorerComponent {
 
@@ -41,9 +41,10 @@ export class QueueExplorerComponent {
     }
 
     private queueClicked(queueId: number): void {
-        // TODO: Constant enum for ObjectType Queue
-        const contextFilter = new ContextFilter('Queue', TicketProperty.QUEUE_ID, queueId);
-        ContextStore.getInstance().provideObjectFilter(contextFilter);
+        const contextFilter =
+            new ContextFilter('queue-explorer', 'queue-explorer', ObjectType.QUEUE, TicketProperty.QUEUE_ID, queueId);
+
+        ContextService.getInstance().provideContextFilter(contextFilter);
     }
 
 }

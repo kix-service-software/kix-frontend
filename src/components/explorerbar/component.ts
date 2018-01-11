@@ -1,6 +1,7 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
-import { ContextStore } from "@kix/core/dist/browser/context/ContextStore";
+import { ContextService } from "@kix/core/dist/browser/context/ContextService";
+import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 
 class ExplorerbarComponent {
 
@@ -8,51 +9,37 @@ class ExplorerbarComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            rows: [],
-            configuredWidgets: []
+            explorer: []
         };
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        ContextStore.getInstance().addStateListener(this.contextStateChanged.bind(this));
-        this.dashboardStateChanged();
-    }
-
-    private dashboardStateChanged(): void {
-        const explorerConfiguration = DashboardStore.getInstance().getDashboardExplorers();
-
-        if (explorerConfiguration && explorerConfiguration.length) {
-            this.state.rows = explorerConfiguration[0];
-            this.state.configuredWidgets = explorerConfiguration[1];
-
-            ContextStore.getInstance().provideExplorer(this.state.rows);
-        } else {
-            ContextStore.getInstance().provideExplorer([]);
-            this.state.rows = [];
-            this.state.configuredWidgets = [];
-        }
+        ContextService.getInstance().addContextListener(this.contextStateChanged.bind(this));
     }
 
     private contextStateChanged(): void {
-        (this as any).setStateDirty('rows');
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            this.state.explorer = context.explorerWidgets;
+        }
     }
 
-    private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
+    private getWidgetTemplate(explorerId: string): any {
+        return ClientStorageHandler.getComponentTemplate(explorerId);
     }
 
     private isExplorerBarExpanded(instanceId: string): boolean {
-        return ContextStore.getInstance().getExplorerBarExpandedState();
+        const context = ContextService.getInstance().getActiveContext();
+        return context.explorerBarExpanded;
     }
 
     private isExplorerMinimized(instanceId: string): boolean {
-        return ContextStore.getInstance().getExplorerExpandedState(instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        return context.isExplorerExpanded(instanceId);
     }
 
     private toggleExplorerBar(): void {
-        ContextStore.getInstance().toggleExplorerBar();
+        ContextService.getInstance().toggleExplorerBar();
     }
 
     private isConfigMode(): boolean {
@@ -64,7 +51,7 @@ class ExplorerbarComponent {
     }
 
     private explorerAvailable(instanceId: string): boolean {
-        return this.state.rows.some((r) => r === instanceId);
+        return this.state.explorer.some((r) => r.instanceId === instanceId);
     }
 }
 

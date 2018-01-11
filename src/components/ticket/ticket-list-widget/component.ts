@@ -1,8 +1,8 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
+import { ObjectType, Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class TicketListWidgetComponent {
 
@@ -26,7 +26,7 @@ class TicketListWidgetComponent {
         this.state.widgetConfiguration =
             DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
 
-        ContextStore.getInstance().addStateListener(this.filter.bind(this));
+        ContextService.getInstance().addContextListener(this.filter.bind(this));
 
         this.loadTickets();
     }
@@ -63,11 +63,12 @@ class TicketListWidgetComponent {
     private filter(): void {
         let usedContextFilter = false;
         if (this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent) {
-            const contextFilter = ContextStore.getInstance().getContextFilter();
-            // TODO: use enum for objectType
-            if (contextFilter && contextFilter.objectType === 'Queue' && contextFilter.objectValue) {
+            const contextFilter = ContextService.getInstance().getContextFilter(ObjectType.QUEUE);
+
+            if (contextFilter && contextFilter.objectValue) {
                 this.state.filteredTickets =
                     this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
+
                 usedContextFilter = true;
             }
         }
