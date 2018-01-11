@@ -25,8 +25,6 @@ class ChartWidgetComponent {
                 this.state.widgetConfiguration.settings,
                 this.state.widgetConfiguration.contextDependent || false,
             );
-
-            this.drawChart();
         }
     }
 
@@ -47,12 +45,6 @@ class ChartWidgetComponent {
 
     private cancelConfiguration(): void {
         this.state.showConfiguration = false;
-    }
-
-    private redrawChart(minimized: boolean = false): void {
-        if (!minimized) {
-            this.drawChart();
-        }
     }
 
     private drawChart(): void {

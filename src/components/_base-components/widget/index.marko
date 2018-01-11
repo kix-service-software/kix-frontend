@@ -47,4 +47,9 @@
             <include(input.content)/>
         </div>
     </if>
+    <if(component.isConfigMode() && !input.noConfigOverlay)>
+        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
+            <div.widget-overlay-content/>
+        </div>
+    </if>
 </div>

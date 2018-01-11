@@ -4,14 +4,14 @@
 </div>
 <if(state.translations && state.showDashboardConfigurationWidget)>
     <div.dashboard-configuration-widget>
-        <widget minimizable=false>
+        <widget minimizable=false noConfigOverlay=true>
             <@title>
                 <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
             </@title>
             <@content>
                 <if(component.isConfigMode())>
                     <h4>Home Dashboard</h4>
-                    <!-- TODO: get real dashboard name (home, ticket, ...) and its translation, maybe from parent (input.name) -->
+                    <!-- TODO: korrekten Dashboard-Namen (home, ticket, ...) und dessen Übersetzung bestimmen, ggf. von Eltern-Komponente (input.name) -->
                     <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
                     ${component.getTranslation(component.translationIds.DESCRIPTION)}
                     <button on-click('openDashboardConfigurationDialog')>

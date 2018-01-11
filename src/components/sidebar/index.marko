@@ -15,21 +15,16 @@
         </div>
     </if>
 </div>
-<if(component.hasSidebarsToShow())>
+<if(component.hasSidebarsToShow() || component.isConfigMode())>
     <div.sidebar>
         <for(widget in state.configuredWidgets)>
-            <if(widget.configuration.show && component.sidebarAvailable(widget.instanceId))>
-                <!-- nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget)) -->
+            <if(component.showSidebar(widget))>
+                <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
                 <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
                     <include(component.getWidgetTemplate(widget.instanceId), {
                         instanceId: widget.instanceId,
                         minimizable: false
                     }) key=widget.instanceId/>
-                    <if(component.isConfigMode())>
-                        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
-                            <div.widget-overlay-content/>
-                        </div>
-                    </if>
                 </div>
             </if>
         </for>
