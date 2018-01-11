@@ -18,7 +18,7 @@ class BaseTemplateComponent {
         this.state = new BaseTemplateComponentState(input.contextId, input.objectId, input.tagLib);
     }
 
-    public async onMount(): Promise<void> {
+    public onMount(): void {
         ClientStorageHandler.setTagLib(this.state.tagLib);
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
 
