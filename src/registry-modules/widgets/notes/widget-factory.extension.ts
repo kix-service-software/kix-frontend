@@ -2,13 +2,13 @@ import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
 import { NotesSettings } from './../../../components/widgets/notes/model/NotesSettings';
 import { NotesWidget } from './NotesSidebar';
-import { IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
+import { WidgetType, IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 
 export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
-    public isSidebarWidget: boolean = true;
-    public isContentWidget: boolean = false;
-    public isExplorerWidget: boolean = false;
+
     public widgetId: string = "notes-widget";
+
+    public type: WidgetType = WidgetType.SIDEBAR;
 
     public createWidget(): IWidget {
         return new NotesWidget(this.widgetId);
