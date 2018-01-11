@@ -1,4 +1,4 @@
-import { ClientStorageHandler } from "../../../../../core/dist/browser/ClientStorageHandler";
+import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 
 class KIXHeaderComponent {
 
@@ -7,6 +7,7 @@ class KIXHeaderComponent {
     public onCreate(input: any): void {
         this.state = {};
     }
+
     private logout(): void {
         ClientStorageHandler.destroyToken();
     }
