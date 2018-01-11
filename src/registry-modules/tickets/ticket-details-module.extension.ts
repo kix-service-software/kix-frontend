@@ -1,7 +1,7 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { DashboardConfiguration, ConfiguredWidget, WidgetSize } from '@kix/core/dist/model/';
-import { WidgetType } from '../../../../core/dist/model/widget/WidgetType';
-import { WidgetConfiguration } from '../../../../core/dist/model/widget/WidgetConfiguration';
+import {
+    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
+} from '@kix/core/dist/model/';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 

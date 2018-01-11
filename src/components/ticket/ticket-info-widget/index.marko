@@ -4,7 +4,9 @@
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>Ticketinformationen</@title>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
     <@content>
         <if(state.ticket)>
             <label.detail-label>
