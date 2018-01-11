@@ -63,6 +63,14 @@ class WidgetComponent {
         return ApplicationStore.getInstance().isConfigurationMode();
     }
 
+    private hasFilter(filter: any): boolean {
+        return this.isInputDefined(filter) && !this.isConfigMode();
+    }
+
+    private isInputDefined(input: any): boolean {
+        return input && Boolean(Object.keys(input).length);
+    }
+
 }
 
 module.exports = WidgetComponent;

@@ -1,7 +1,67 @@
+.ticket-details {
+    padding: 0;
+    margin-left: 232px;
+    .widget {
+        margin-top: 24px;
+        .lane-widget {
+            width: 96%;
+            left: 2%;
+            position: relative;
+            ul.tab-list {
+                list-style: none;
+                display: table;
+                height: auto;
+                li {
+                    float: left;
+                    background-color: #fff;
+                    color: @tertiary-5;
+                    border: 1px solid @tertiary-5;
+                    border-radius: 5px;
+                    border-bottom: 0;
+                    margin-right: 5px;
+                    padding: 3px;
+                }
+            }
+            .tab-widget {
+                margin-top: 0;
+                .widget {
+                    margin: 0;
+                    min-height: 192px;
+                }
+                .widget-header {
+                    height: 0;
+                    .header-right {
+                        top: 50%;
+                        right: 0;
+                        position: absolute;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ticket-action-list {
+    list-style: none;
+    display: table;
+    margin-bottom: 24px;
+    li {
+        float: left;
+        padding: 5px;
+        background-color: lightgray;
+    }
+}
+
 .detail-label {
     color: #000;
     display: block;
     margin: 5px;
+    float: left;
+    font-weight: bold;
+    width: 45%;
+    span {
+        font-weight: 100;
+    }
 }
 
 .article-table {
