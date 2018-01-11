@@ -65,13 +65,13 @@ class DashboardConfigurationDialog {
         });
 
         widgetDescriptorList.forEach((wd) => {
-            if (wd.type & WidgetType.EXPLORER) {
+            if ((wd.type & WidgetType.EXPLORER) === WidgetType.EXPLORER) {
                 this.prepareExplorerList(wd, explorerInstanceIds);
             } else {
                 const listId = wd.widgetId + '-' + Math.floor((Math.random() * 1000000));
                 const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
-                if (wd.type & WidgetType.CONTENT) {
+                if ((wd.type & WidgetType.CONTENT) === WidgetType.CONTENT) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.contentSecondList.push(listElement);
@@ -79,7 +79,7 @@ class DashboardConfigurationDialog {
                     this.state.contentFirstList.push(listElement);
                     // }
                 }
-                if (wd.type & WidgetType.SIDEBAR) {
+                if ((wd.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.sidebarSecondList.push(listElement);

@@ -8,11 +8,13 @@
                 <else-if(input.icon && Object.keys(input.icon).length)>
                     <include(input.icon)/>
                 </else-if>
-                <include(input.title)/>
+                <if(component.isInputDefined(input.title))>
+                    <include(input.title)/>
+                </if>
             </h3>
         </span>
         <span>
-            <if(!component.isConfigMode())>
+            <if(component.hasFilter(input.filter))>
                 <include(input.filter)/>
             </if>
         </span>
@@ -30,7 +32,7 @@
                     interessanter weise gehen hier auch nicht mehrere if nebeneinander bzw. if - else-if Konstrukte...
                 -->
                 <div>
-                    <if(input.actions && Object.keys(input.actions).length)>
+                    <if(component.isInputDefined(input.actions))>
                         <include(input.actions)/>
                     </if>
                     <if(input.minimizable || typeof input.minimizable === 'undefined')>
@@ -40,7 +42,7 @@
             </else>
         </span>
     </div>
-    <if(!state.minimized)>
+    <if(!state.minimized && component.isInputDefined(input.content))>
         <div.widget-content>
             <include(input.content)/>
         </div>
