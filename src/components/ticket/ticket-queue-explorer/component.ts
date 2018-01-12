@@ -23,11 +23,6 @@ export class QueueExplorerComponent {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener('queue-explorer', this.ticketStateChanged.bind(this));
-        this.ticketStateChanged();
-    }
-
-    private ticketStateChanged(): void {
         const ticketData = TicketService.getInstance().getTicketData();
         if (ticketData && ticketData.queues) {
             this.state.queues = ticketData.queues;

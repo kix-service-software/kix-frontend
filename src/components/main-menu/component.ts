@@ -4,7 +4,7 @@ import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { ContextService } from '../../../../core/dist/browser/context/ContextService';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class KIXMenuComponent {
 

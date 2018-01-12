@@ -1,10 +1,15 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { ObjectType, Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
+import {
+    TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
+} from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ITicketServiceListener } from '@kix/core/dist/browser/ticket/ITicketServiceListener';
+import { IContextServiceListener } from '@kix/core/dist/browser/context/IContextServiceListener';
+import { TicketData } from '@kix/core/dist/browser/ticket/TicketData';
 
-class TicketListWidgetComponent {
+class TicketListWidgetComponent implements ITicketServiceListener, IContextServiceListener {
 
     public state: TicketListComponentState;
 
@@ -21,25 +26,40 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.state.instanceId, this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this);
         DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
 
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        ContextService.getInstance().addContextListener(this.filter.bind(this));
+        ContextService.getInstance().addStateListener(this);
 
         this.loadTickets();
     }
 
-    private ticketStateChanged(id: string): void {
-        if (id === this.state.instanceId) {
-            const tickets = TicketService.getInstance().getTicketsSearchResult(this.state.instanceId);
-            if (tickets) {
-                this.state.tickets = tickets;
-                this.state.filteredTickets = tickets;
-            }
+    public contextChanged(context: Context): void {
+        //
+    }
+
+    public contextFilterChanged(contextFilter: ContextFilter) {
+        if (contextFilter) {
+            this.filter(contextFilter);
         }
+    }
+
+    public ticketDataLoaded(requestId: string, ticketData: TicketData): void {
+        //
+    }
+
+    public ticketSearchFinished(requestId: string, tickets: Ticket[]) {
+        if (requestId === this.state.instanceId && tickets) {
+            this.state.tickets = tickets;
+            this.state.filteredTickets = tickets;
+        }
+    }
+
+    public ticketDetailsLoaded(ticketId: any, ticketDetails: TicketDetails) {
+        //
     }
 
     private dashboardStoreChanged(): void {
@@ -63,18 +83,20 @@ class TicketListWidgetComponent {
         this.state.filterValue = event.target.value;
     }
 
-    private filter(): void {
+    private filter(contextFilter: ContextFilter): void {
         let usedContextFilter = false;
-        if (this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent) {
-            const contextFilter = ContextService.getInstance().getContextFilter(ObjectType.QUEUE);
+        if (
+            this.state.widgetConfiguration &&
+            this.state.widgetConfiguration.contextDependent &&
+            contextFilter.objectType === ObjectType.QUEUE &&
+            contextFilter.objectValue
+        ) {
+            this.state.filteredTickets =
+                this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
 
-            if (contextFilter && contextFilter.objectValue) {
-                this.state.filteredTickets =
-                    this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
-
-                usedContextFilter = true;
-            }
+            usedContextFilter = true;
         }
+
 
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
             const searchValue = this.state.filterValue.toLocaleLowerCase();

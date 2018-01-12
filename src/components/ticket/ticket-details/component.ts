@@ -1,13 +1,14 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { TicketData, TicketService } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
+import { TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ITicketServiceListener } from '@kix/core/dist/browser/ticket/ITicketServiceListener';
 
-export class TicketDetailsComponent {
+export class TicketDetailsComponent implements ITicketServiceListener {
 
     private state: any;
 
@@ -28,9 +29,7 @@ export class TicketDetailsComponent {
     public onMount(): void {
         this.setBreadcrumbDetails();
 
-        TicketService.getInstance().addStateListener(
-            this.state.ticketId, this.ticketStateChanged.bind(this)
-        );
+        TicketService.getInstance().addStateListener(this);
 
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 
@@ -58,14 +57,19 @@ export class TicketDetailsComponent {
         }
     }
 
-    private ticketStateChanged(id: string): void {
-        if (id === this.state.ticketId) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails) {
-                this.state.ticket = ticketDetails.ticket;
-                this.state.articles = ticketDetails.articles;
-                this.setBreadcrumbDetails();
-            }
+    public ticketDataLoaded(requestId: string, ticketData: TicketData): void {
+        //
+    }
+
+    public ticketSearchFinished(requestId: string, tickets: Ticket[]) {
+        //
+    }
+
+    public ticketDetailsLoaded(ticketId: any, ticketDetails: TicketDetails) {
+        if (ticketDetails.ticketId === this.state.ticketId && ticketDetails) {
+            this.state.ticket = ticketDetails.ticket;
+            this.state.articles = ticketDetails.articles;
+            this.setBreadcrumbDetails();
         }
     }
 

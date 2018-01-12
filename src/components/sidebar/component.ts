@@ -1,11 +1,12 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
+import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { IContextServiceListener } from '@kix/core/dist/browser/context/IContextServiceListener';
 
-class SidebarComponent {
+class SidebarComponent implements IContextServiceListener {
 
     private state: SidebarComponentState;
 
@@ -23,15 +24,10 @@ class SidebarComponent {
 
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-        ContextService.getInstance().addContextListener(this.contextStateChanged.bind(this));
+        ContextService.getInstance().addStateListener(this);
     }
 
-    private applicationStateChanged(): void {
-        //
-    }
-
-    private contextStateChanged(): void {
-        const context = ContextService.getInstance().getActiveContext();
+    public contextChanged(context: Context): void {
         this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
         if (context && context.dashboardConfiguration) {
             let rows = [];
@@ -40,6 +36,14 @@ class SidebarComponent {
             }
             this.state.rows = rows;
         }
+    }
+
+    public contextFilterChanged(contextFilter: ContextFilter) {
+        //
+    }
+
+    private applicationStateChanged(): void {
+        //
     }
 
     private toggleSidebarWidget(instanceId: string): void {

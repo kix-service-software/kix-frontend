@@ -15,7 +15,7 @@ export class StateInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.stateId = input.value;
-        TicketService.getInstance().addStateListener('state-input', this.ticketDataStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('state-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {

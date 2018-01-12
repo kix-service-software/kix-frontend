@@ -2,9 +2,10 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
 import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
-import { ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
+import { ContextFilter, Context, ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
+import { IContextServiceListener } from "@kix/core/dist/browser/context/IContextServiceListener";
 
-class ExplorerbarComponent {
+class ExplorerbarComponent implements IContextServiceListener {
 
     private state: any;
 
@@ -15,14 +16,17 @@ class ExplorerbarComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addContextListener(this.contextStateChanged.bind(this));
+        ContextService.getInstance().addStateListener(this);
     }
 
-    private contextStateChanged(): void {
-        const context = ContextService.getInstance().getActiveContext();
+    public contextChanged(context: Context): void {
         if (context) {
             this.state.explorer = context.getWidgets(WidgetType.EXPLORER);
         }
+    }
+
+    public contextFilterChanged(contextFilter: ContextFilter) {
+        throw new Error("Method not implemented.");
     }
 
     private getWidgetTemplate(widget: ConfiguredWidget): any {

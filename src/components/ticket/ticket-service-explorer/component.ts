@@ -23,7 +23,7 @@ export class ServiceExplorerComponent {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener('service-explorer', this.ticketStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('service-explorer', this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 

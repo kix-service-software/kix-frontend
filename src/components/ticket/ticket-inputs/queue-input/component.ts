@@ -15,7 +15,7 @@ export class QueueInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.queueId = Number(input.value);
-        TicketService.getInstance().addStateListener('queue-input', this.ticketDataStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('queue-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {

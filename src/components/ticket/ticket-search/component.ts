@@ -15,7 +15,7 @@ class TicketSearchComponent {
     }
 
     public async onMount(): Promise<void> {
-        TicketService.getInstance().addStateListener('ticket-search', this.ticketStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('ticket-search', this.ticketStateChanged.bind(this));
 
         const th = await TranslationHandler.getInstance();
         this.state.ticketProperties = Object.keys(TicketProperty).map(

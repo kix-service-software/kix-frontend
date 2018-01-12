@@ -16,7 +16,7 @@ export class TicketSearchResultComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener('ticket-search-result', this.ticketStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('ticket-search-result', this.ticketStateChanged.bind(this));
     }
 
     private ticketStateChanged(): void {

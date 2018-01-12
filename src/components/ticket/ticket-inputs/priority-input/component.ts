@@ -15,7 +15,7 @@ export class PriorityInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.priorityId = Number(input.value);
-        TicketService.getInstance().addStateListener('priority-input', this.ticketDataStateChanged.bind(this));
+        // TicketService.getInstance().addStateListener('priority-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
