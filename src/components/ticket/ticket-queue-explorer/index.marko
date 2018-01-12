@@ -9,12 +9,99 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <ul.queue-list>
+        <ul.tree-list>
             <for(queue in state.queues)>
-                <li.queue-list-entry on-click('queueClicked', queue.QueueID)>
-                    <ticket-property-label ticketDataId="ticket-table-data" property="QueueID" value=queue.QueueID/>
+                <li.tree-node on-click('queueClicked', queue.QueueID)>
+                    <span.subtree-icon.kix-icon-plus/>
+                    <span title="${queue.Name}">${queue.Name}</span>
                 </li>
             </for>
+            <li.tree-node>
+                <span.subtree-icon/>
+                <span title="--------------">--------------</span>
+            </li>
+            <li.tree-node>
+                <span.subtree-icon/>
+                <span title="Level0 1 (45|41|2)">
+                    Level0 1 (<span.total>45</span>|<span.unlocked>41</span>|<span.escalated>2</span>)
+                </span>
+            </li>
+            <li.tree-node>
+                <span.subtree-icon/>
+                <span title="Level0 2 (12|12)">
+                    Level0 2 (<span.total>12</span>|<span.unlocked>12</span>)
+                </span>
+            </li>
+            <li.tree-node>
+                <span.subtree-icon/>
+                <span title="Level0 3 (45|45)">
+                    Level0 3 (<span.total>45</span>|<span.unlocked>45</span>)
+                </span>
+            </li>
+            <li.tree-node>
+                <span.subtree-icon.kix-icon-minus/>
+                <span title="Level0 4 (1154|953|17)">
+                    Level0 4 (<span.total>1154</span>|<span.unlocked>953</span>|<span.escalated>17</span>)
+                </span>
+                <ul.sub-tree-list>
+                    <li.tree-node>
+                        <span.subtree-icon.kix-icon-minus/>
+                        <span title="Level1 1 (980|932|2)">
+                            Level1 1 (<span.total>980</span>|<span.unlocked>932</span>|<span.escalated>2</span>)
+                        </span>
+                        <ul.sub-tree-list>
+                            <li.tree-node>
+                                <span.subtree-icon/>
+                                <span title="Level2 1 (19|1)">
+                                    Level2 1 (<span.total>19</span>|<span.unlocked>1</span>)
+                                </span>
+                            </li>
+                            <li.tree-node>
+                                <span.subtree-icon/>
+                                <span title="Level2 2 (155|154|100)">
+                                    Level2 2 (<span.total>155</span>|<span.unlocked>154</span>|<span.escalated>
+                                        100
+                                    </span>)
+                                </span>
+                            </li>
+                            <li.tree-node>
+                                <span.subtree-icon.kix-icon-minus/>
+                                <span title="Level2 3 (15|15|1)">
+                                    Level2 3 (<span.total>15</span>|<span.unlocked>15</span>|<span.escalated>1</span>)
+                                </span>
+                                <ul.sub-tree-list>
+                                    <li.tree-node>
+                                        <span.subtree-icon/>
+                                        <span title="Level3 1 (19|1)">
+                                            Level3 1 (<span.total>19</span>|<span.unlocked>1</span>)
+                                        </span>
+                                    </li>
+                                    <li.tree-node>
+                                        <span.subtree-icon/>
+                                        <span title="Level3 2 (155|154|100)">
+                                            Level3 2 (<span.total>155</span>|<span.unlocked>154</span>|<span.escalated>
+                                                100
+                                            </span>)
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li.tree-node>
+                                <span.subtree-icon.kix-icon-plus/>
+                                <span title="Level2 3 (15|15|1)">
+                                    Level2 3 (<span.total>15</span>|<span.unlocked>15</span>|<span.escalated>1</span>)
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li.tree-node>
+                        <span.subtree-icon/>
+                        <span title="Level1 2 (37|15|9)">
+                            Level1 2 (<span.total>37</span>|<span.unlocked>15</span>|<span.escalated>9</span>)
+                        </span>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </@content>
     <@filter>
