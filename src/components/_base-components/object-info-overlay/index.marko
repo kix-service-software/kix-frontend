@@ -1,0 +1,14 @@
+<span.object-info-overlay-icon.kix-icon-icircle class=(state.show ? "overlay-shown" : "") on-click('showOverlay')/>
+<if(state.show)>
+    <div.object-info-overlay>
+        <widget minimizable=false noConfigOverlay=true isNotConfigurable=true>
+            <@title>
+                <include(input.title)/>
+            </@title>
+            <@content>
+                <include(input.content)/>
+            </@content>
+        </widget>
+        <span.kix-icon-close on-click('closeOverlay')/>
+    </div>
+</if>

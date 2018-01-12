@@ -11,10 +11,18 @@
         <if(state.ticket)>
             <label.detail-label>
                 Kunde:
+                <object-info-overlay>
+                    <@title>Kundeninfo</@title>
+                    <@content>Fülltext für Kunde</@content>
+                </object-info-overlay>
                 <ticket-property-label ticketDataId="ticket-table-data" property="CustomerID" value=state.ticket.CustomerID/>
             </label>
             <label.detail-label>
                 Ansprechpartner:
+                <object-info-overlay>
+                    <@title>Ansprechpartnerinfo</@title>
+                    <@content>Fülltext für Ansprechpartner</@content>
+                </object-info-overlay>
                 <ticket-property-label ticketDataId="ticket-table-data" property="CustomerUserID" value=state.ticket.CustomerUserID/>
             </label>
             <label.detail-label>

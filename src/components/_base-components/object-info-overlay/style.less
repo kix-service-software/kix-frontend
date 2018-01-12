@@ -1,0 +1,29 @@
+.object-info-overlay-icon {
+    color: @secondary-0;
+    font-size: 0.625rem;
+    &.overlay-shown {
+        color: @tertiary-1;
+    }
+}
+
+.object-info-overlay {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    .widget {
+        .widget-header {
+            height: 2rem !important; // TODO: andere Lösung finden, ist drin, weil Widget-Header in den Lanes in der Detailsansicht ausgeblendet werden
+            background-color: @tertiary-1;
+        }
+        .widget-content {
+            border: 1px solid @tertiary-1;
+            height: 100px;
+        }
+    }
+    .kix-icon-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.5rem;
+    }
+}
