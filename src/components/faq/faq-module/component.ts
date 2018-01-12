@@ -1,8 +1,9 @@
 import { FaqComponentState } from './model/FaqComponentState';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { Context } from '@kix/core/dist/model';
 
 class FAQComponent {
 
@@ -16,9 +17,11 @@ class FAQComponent {
 
     public onMount(): void {
         DashboardStore.getInstance().loadDashboardConfiguration();
-        const contextId = ClientStorageHandler.getContextId();
+
+        ContextService.getInstance().provideContext(new Context('faq'), 'faq', true);
+
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'FAQ-Dashboard');
+            new BreadcrumbDetails('faq', null, null, 'FAQ-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 }

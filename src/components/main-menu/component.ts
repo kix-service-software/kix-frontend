@@ -4,6 +4,7 @@ import { MainMenuState } from './store/';
 import { MAIN_MENU_INITIALIZE } from './store/actions';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ContextService } from '../../../../core/dist/browser/context/ContextService';
 
 class KIXMenuComponent {
 
@@ -28,7 +29,7 @@ class KIXMenuComponent {
             this.state.secondaryMenuEntries = reduxState.secondaryMenuEntries;
             this.state.showText = reduxState.showText;
 
-            const contextId = ClientStorageHandler.getContextId();
+            const contextId = ContextService.getInstance().getActiveContextId();
             for (const entry of this.state.primaryMenuEntries) {
                 entry.active = entry.contextId === contextId;
             }
@@ -45,7 +46,6 @@ class KIXMenuComponent {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ClientStorageHandler.setContextId(contextId);
         ComponentRouterStore.getInstance().navigate('base-router', contextId, {}, true);
     }
 
