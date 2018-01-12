@@ -7,7 +7,7 @@ import { TreeNode } from '@kix/core/dist/browser/model';
 
 export class QueueExplorerComponent {
 
-    private state: any;
+    private state: TicketQueueExplorerComponentState;
 
     public onCreate(input: any): void {
         this.state = new TicketQueueExplorerComponentState();

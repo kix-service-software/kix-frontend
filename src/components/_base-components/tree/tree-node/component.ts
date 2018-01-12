@@ -3,7 +3,7 @@ import { TreeNodeComponentState } from './model/TreeNodeComponentState';
 
 class TreeNodeComponent {
 
-    private state: any;
+    private state: TreeNodeComponentState;
 
     public onCreate(input: any): void {
         this.state = new TreeNodeComponentState(input.node);
