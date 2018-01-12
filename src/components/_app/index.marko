@@ -13,9 +13,12 @@
         </for>
     </head>
     <body>
-        <if(data.template)>
-            <include(data.template, data.data)/>
+        <if(input.login)>
+            <_login/>
         </if>
+        <else>
+            <_base-template contextId=input.data.contextId objectId=input.data.objectId tagLib=input.data.tagLib/>
+        </else>
         <script src="/static/js/socket.io.js"/>
         <!-- TODO: temporary - maybe without versions -->
         <script src="/static/js/thirdparty/d3-4.10.2/d3.min.js"/>
