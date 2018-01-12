@@ -96,7 +96,7 @@ export class TicketCommunicator extends KIXCommunicator {
             });
 
             const response = new TicketLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, queues, [], [], users
+                [], ticketStates, ticketTypes, ticketPriorities, queues, [], [], [], users
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
