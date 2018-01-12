@@ -1,21 +1,16 @@
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
-import { ContextFilter, TicketProperty } from '@kix/core/dist/model/';
-import { Queue } from '@kix/core/dist/model/Queue';
-import { TreeNode } from '../../_base-components/tree/tree-node/model/TreeNode';
+import { ContextFilter, Queue, TicketProperty } from '@kix/core/dist/model';
+import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
+import { TreeNode } from '@kix/core/dist/browser/model';
 
 export class QueueExplorerComponent {
 
     private state: any;
 
     public onCreate(input: any): void {
-        this.state = {
-            instanceId: null,
-            widgetConfiguration: null,
-            queues: [],
-            tree: []
-        };
+        this.state = new TicketQueueExplorerComponentState();
     }
 
     public onInput(input: any): void {
@@ -33,88 +28,31 @@ export class QueueExplorerComponent {
 
     private ticketStateChanged(): void {
         const ticketData = TicketService.getInstance().getTicketData();
-        console.log(ticketData);
-        const fakeQueuesHierarchy = [
-            { QueueID: 1 },
-            { QueueID: 2 },
-            { QueueID: 3 },
-            { QueueID: 4 },
-            {
-                QueueID: 407,
-                SubQueues: [
-                    {
-                        QueueID: 408,
-                        SubQueues: [
-                            {
-                                QueueID: 409,
-                                SubQueues: [
-                                    {
-                                        QueueID: 410
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        QueueID: 411,
-                        SubQueues: [
-                            {
-                                QueueID: 412,
-                                SubQueues: [
-                                    {
-                                        QueueID: 413
-                                    },
-                                    {
-                                        QueueID: 414,
-                                        SubQueues: [
-                                            {
-                                                QueueID: 415
-                                            },
-                                            {
-                                                QueueID: 416
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-        if (ticketData) {
-            ticketData.queuesHierarchy = fakeQueuesHierarchy;
-        }
-        if (ticketData && ticketData.queues && ticketData.queuesHierarchy) {
-            this.state.queues = ticketData.queues;
+        if (ticketData && ticketData.queuesHierarchy) {
             this.state.tree = this.prepareTree(ticketData.queuesHierarchy);
-            console.log(this.state.tree);
         } else {
-            this.state.queues = [];
             this.state.tree = [];
         }
     }
 
-    // TODO: hierarchy eigentlich vom Typ Queue[]? aber SubQueues ist da nicht enthalten
-    private prepareTree(hierarchy: any[]): any[] {
-        const tree = [];
-        hierarchy.forEach((queue: any) => {
-            const queueObject = this.state.queues.find((q) => q.QueueID === queue.QueueID);
-            if (queueObject && queueObject.hasOwnProperty('Name')) {
+    private prepareTree(hierarchy: Queue[]): TreeNode[] {
+        const nodes = [];
+        hierarchy.forEach((queue: Queue) => {
+            if (queue.hasOwnProperty('Name')) {
                 let subNodes = [];
                 if (queue.hasOwnProperty('SubQueues')) {
                     subNodes = this.prepareTree(queue.SubQueues);
                 }
-                const groupElement = new TreeNode(
+                const treeNode = new TreeNode(
                     queue.QueueID,
-                    queueObject.Name,
+                    queue.Name,
                     subNodes,
                     [] // TODO: Ticketanzahlen ermitteln, falls aktiviert
                 );
-                tree.push(groupElement);
+                nodes.push(treeNode);
             }
         });
-        return tree;
+        return nodes;
     }
 
     private isConfigMode(): boolean {
@@ -126,7 +64,6 @@ export class QueueExplorerComponent {
         const contextFilter = new ContextFilter('Queue', TicketProperty.QUEUE_ID, queueId);
         ContextStore.getInstance().provideObjectFilter(contextFilter);
     }
-
 }
 
 module.exports = QueueExplorerComponent;

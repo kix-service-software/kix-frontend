@@ -96,9 +96,10 @@ export class TicketCommunicator extends KIXCommunicator {
             });
 
             const queuesHierarchy = await this.queueService.getQueues(data.token, null, null, null, {
-                fields: 'Queue.QueueID',
-                // include: 'SubQueues',
-                // expand: 'SubQueues'
+                fields: 'Queue.QueueID,Queue.Name',
+                include: 'SubQueues',
+                expand: 'SubQueues',
+                filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
             });
 
             const response = new TicketLoadDataResponse(
@@ -119,5 +120,4 @@ export class TicketCommunicator extends KIXCommunicator {
             client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
         });
     }
-
 }

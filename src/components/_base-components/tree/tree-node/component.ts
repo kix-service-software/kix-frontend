@@ -1,4 +1,4 @@
-import { TreeNode } from './model/TreeNode';
+import { TreeNode } from '@kix/core/dist/browser/model';
 import { TreeNodeComponentState } from './model/TreeNodeComponentState';
 
 class TreeNodeComponent {
@@ -22,7 +22,7 @@ class TreeNodeComponent {
     }
 
     private nodeClicked(id: any): void {
-        (this as any).emit('elementClicked', id);
+        (this as any).emit('nodeClicked', id);
     }
 
 }

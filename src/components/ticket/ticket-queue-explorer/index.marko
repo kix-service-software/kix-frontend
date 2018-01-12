@@ -9,14 +9,7 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <tree tree=state.tree on-nodeClick('queueClicked')/>
-        <!-- <ul.queue-list>
-            <for(queue in state.queues)>
-                <li.queue-list-entry on-click('queueClicked', queue.QueueID)>
-                    <ticket-property-label ticketDataId="ticket-table-data" property="QueueID" value=queue.QueueID/>
-                </li>
-            </for>
-        </ul> -->
+        <tree tree=state.tree on-nodeClicked('queueClicked')/>
     </@content>
     <@filter>
         <span/>
