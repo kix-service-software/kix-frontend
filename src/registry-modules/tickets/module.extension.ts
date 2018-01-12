@@ -1,5 +1,7 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ConfiguredWidget, WidgetSize } from '@kix/core/dist/model/';
+import {
+    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
+} from '@kix/core/dist/model/';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -8,144 +10,93 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): any {
+
+        const ticketListWidget =
+            new ConfiguredWidget("ticket-module-ticket-list", new WidgetConfiguration(
+                "ticket-list-widget", "Tickets", [], {
+                    limit: 500,
+                    displayLimit: 50,
+                    showTotalCount: true,
+                    properties: ["TicketNumber", "PriorityID", "StateID", "TypeID", "Title", "Created", "Age"]
+                },
+                WidgetType.CONTENT, true, WidgetSize.LARGE, null, true)
+            );
+
+        const chart1 =
+            new ConfiguredWidget("ticket-module-chart1", new WidgetConfiguration(
+                "chart-widget", "Prioritäten", [], {
+                    chartType: "pie",
+                    templateId: 'ticket-dashboard-priorities',
+                    attributes: ['PriorityID'],
+                    showLegend: true,
+                    showAxes: true,
+                    showValues: true
+                },
+                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+            );
+
+        const chart2 =
+            new ConfiguredWidget("ticket-module-chart2", new WidgetConfiguration(
+                "chart-widget", "Ticketstatus", [], {
+                    chartType: "bar",
+                    templateId: 'ticket-dashboard-states',
+                    attributes: ['StateID'],
+                    showLegend: true,
+                    showAxes: true,
+                    showValues: true
+                },
+                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+            );
+
+        const chart3 =
+            new ConfiguredWidget("ticket-module-chart3", new WidgetConfiguration(
+                "chart-widget", "7 Tage Statistik", [], {
+                    chartType: "stacked-bar",
+                    templateId: 'home-dashboard-7days',
+                    attributes: [],
+                    showLegend: true,
+                    showAxes: true,
+                    showValues: true
+                },
+                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+            );
+
         const contentRows = [
             ["ticket-module-chart1", "ticket-module-chart2", "ticket-module-chart3"],
             ["ticket-module-ticket-list"]
         ];
+        const contentConfiguredWidgets = [ticketListWidget, chart1, chart2, chart3];
 
-        const contentConfiguredWidgets = [
-            {
-                instanceId: "ticket-module-ticket-list",
-                configuration: {
-                    widgetId: "ticket-list-widget",
-                    title: "Tickets",
-                    actions: [],
-                    settings: {
-                        limit: 500,
-                        displayLimit: 50,
-                        showTotalCount: true,
-                        properties: [
-                            "TicketNumber",
-                            "PriorityID",
-                            "StateID",
-                            "TypeID",
-                            "Title",
-                            "Created",
-                            "Age"
-                        ]
-                    },
-                    show: true,
-                    size: WidgetSize.LARGE,
-                    icon: null,
-                    contextDependent: true
-                }
-            },
-            {
-                instanceId: "ticket-module-chart1",
-                configuration: {
-                    widgetId: "chart-widget",
-                    title: "Prioritäten",
-                    actions: [],
-                    settings: {
-                        chartType: "pie"
-                    },
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: null,
-                    contextDependent: true
-                }
-            },
-            {
-                instanceId: "ticket-module-chart2",
-                configuration: {
-                    widgetId: "chart-widget",
-                    title: "Ticketstatus",
-                    actions: [],
-                    settings: {
-                        chartType: "bar"
-                    },
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: null,
-                    contextDependent: true
-                }
-            },
-            {
-                instanceId: "ticket-module-chart3",
-                configuration: {
-                    widgetId: "chart-widget",
-                    title: "7 Tage Statistik",
-                    actions: [],
-                    settings: {
-                        chartType: "stacked-bar"
-                    },
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: null,
-                    contextDependent: true
-                }
-            }
-        ];
 
-        const explorerRows: string[][] = [
-            ['20171211155412'],
-            ['20171215093654']
-        ];
+        const queueExplorer =
+            new ConfiguredWidget("20171211155412", new WidgetConfiguration(
+                "ticket-queue-explorer", "Übersicht Queues", [], {},
+                WidgetType.EXPLORER, true, WidgetSize.SMALL, null, false)
+            );
+        const servicesExplorer =
+            new ConfiguredWidget("20171215093654", new WidgetConfiguration(
+                "ticket-service-explorer", "Übersicht Services", [], {},
+                WidgetType.EXPLORER, true, WidgetSize.SMALL, null, false)
+            );
 
-        const explorerConfiguredWidgets: ConfiguredWidget[] = [
-            {
-                instanceId: '20171211155412',
-                configuration: {
-                    widgetId: 'ticket-queue-explorer',
-                    title: "Übersicht Queues",
-                    actions: [],
-                    settings: {},
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: null,
-                    contextDependent: false
-                },
-            },
-            {
-                instanceId: '20171215093654',
-                configuration: {
-                    widgetId: 'ticket-service-explorer',
-                    title: "Übersicht Services",
-                    actions: [],
-                    settings: {},
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: null,
-                    contextDependent: false
-                }
-            }
-        ];
+        const explorerRows: string[][] = [['20171211155412'], ['20171215093654']];
+        const explorerConfiguredWidgets: ConfiguredWidget[] = [queueExplorer, servicesExplorer];
 
-        const sidebarRows = [
-            ["ticket-module-notes"]
-        ];
+        const notesWidget =
+            new ConfiguredWidget(
+                "ticket-module-notes",
+                new WidgetConfiguration(
+                    "notes-widget", "Notizen", [], { notes: "Ticketnotizen" },
+                    WidgetType.SIDEBAR, true, WidgetSize.SMALL, "note", false
+                )
+            );
+        const sidebarRows = [["ticket-module-notes"]];
+        const sidebarConfiguredWidgets: ConfiguredWidget[] = [notesWidget];
 
-        const sidebarConfiguredWidgets = [
-            {
-                instanceId: "ticket-module-notes",
-                configuration: {
-                    widgetId: "notes-widget",
-                    title: "Notizen",
-                    actions: [],
-                    settings: {
-                        notes: "Ticketnotizen"
-                    },
-                    show: true,
-                    size: WidgetSize.SMALL,
-                    icon: "note"
-                }
-            }
-        ];
-
-        return {
-            contentRows, sidebarRows, explorerRows,
-            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets
-        };
+        return new DashboardConfiguration(
+            this.getModuleId(), contentRows, sidebarRows, explorerRows,
+            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, []
+        );
     }
 
 }

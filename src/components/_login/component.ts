@@ -26,7 +26,6 @@ class LoginFormComponent {
 
 
     public onCreate(input: any): void {
-        console.log('OnCreate Login!');
         this.state = new LoginComponentState();
         this.frontendUrl = input.frontendUrl;
         this.translationIds = LoginTranslationId;
@@ -43,7 +42,6 @@ class LoginFormComponent {
     }
 
     public async onMount(): Promise<void> {
-        console.log('Mount Login!');
         this.store = require('./store/');
         this.store.subscribe(this.stateChanged.bind(this));
         this.store.dispatch(LOGIN_INITIALIZE());

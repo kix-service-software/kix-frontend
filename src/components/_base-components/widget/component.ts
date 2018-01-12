@@ -39,13 +39,15 @@ class WidgetComponent {
     }
 
     private showConfiguration(): void {
-        ApplicationStore.getInstance().toggleDialog(
-            this.state.configurationTagId, { instanceId: this.state.instanceId }
-        );
+        if (this.state.configurationTagId) {
+            ApplicationStore.getInstance().toggleDialog(
+                this.state.configurationTagId, { instanceId: this.state.instanceId }
+            );
+        }
     }
 
     private resetConfiguration(): void {
-        // TODO: hol alten stand aus browser "cache" und überschreib neue konfiguration
+        // TODO: hol alten Stand aus Browser "cache" und überschreib neue Konfiguration
         this.state.configChanged = false;
     }
 
@@ -55,6 +57,14 @@ class WidgetComponent {
 
     private isConfigMode(): boolean {
         return ApplicationStore.getInstance().isConfigurationMode();
+    }
+
+    private hasFilter(filter: any): boolean {
+        return this.isInputDefined(filter) && !this.isConfigMode();
+    }
+
+    private isInputDefined(input: any): boolean {
+        return input && Boolean(Object.keys(input).length);
     }
 
 }

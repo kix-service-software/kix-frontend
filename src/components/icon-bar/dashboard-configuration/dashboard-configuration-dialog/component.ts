@@ -10,7 +10,8 @@ import {
     ConfiguredWidget,
     DashboardConfiguration,
     WidgetDescriptor,
-    WidgetSize
+    WidgetSize,
+    WidgetType
 } from '@kix/core/dist/model';
 import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 
@@ -64,13 +65,13 @@ class DashboardConfigurationDialog {
         });
 
         widgetDescriptorList.forEach((wd) => {
-            if (wd.isExplorerWidget) {
+            if ((wd.type & WidgetType.EXPLORER) === WidgetType.EXPLORER) {
                 this.prepareExplorerList(wd, explorerInstanceIds);
             } else {
                 const listId = wd.widgetId + '-' + Math.floor((Math.random() * 1000000));
                 const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
-                if (wd.isContentWidget) {
+                if ((wd.type & WidgetType.CONTENT) === WidgetType.CONTENT) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.contentSecondList.push(listElement);
@@ -78,7 +79,7 @@ class DashboardConfigurationDialog {
                     this.state.contentFirstList.push(listElement);
                     // }
                 }
-                if (wd.isSidebarWidget) {
+                if ((wd.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
                     // TODO: handle required
                     // if (wd.required) {
                     //     this.state.sidebarSecondList.push(listElement);
@@ -100,24 +101,24 @@ class DashboardConfigurationDialog {
         );
         let listElement: SelectWithPropertiesListElement;
         if (configuredExplorer) {
-            listElement = {
-                id: configuredExplorer.instanceId,
-                label: configuredExplorer.configuration.title,
-                properties: {
+            listElement = new SelectWithPropertiesListElement(
+                configuredExplorer.instanceId,
+                configuredExplorer.configuration.title,
+                {
                     active: explorerInstanceIds.some((wiId) => wiId === configuredExplorer.instanceId)
                 },
-                selected: false
-            };
+                false
+            );
         } else {
             const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
-            listElement = {
-                id: newInstanceId,
-                label: explorerDescriptor.configuration.title,
-                properties: {
+            listElement = new SelectWithPropertiesListElement(
+                newInstanceId,
+                explorerDescriptor.configuration.title,
+                {
                     active: true
                 },
-                selected: false
-            };
+                false
+            );
             this.state.dashboardConfig.explorerConfiguredWidgets.push({
                 instanceId: newInstanceId,
                 configuration: { ...explorerDescriptor.configuration }
@@ -145,15 +146,15 @@ class DashboardConfigurationDialog {
             instanceIds = [...instanceIds, ...row];
         });
         configuredWidgets.forEach((configuredWidget: ConfiguredWidget) => {
-            const listElement: SelectWithPropertiesListElement = {
-                id: configuredWidget.instanceId,
-                label: configuredWidget.configuration.title,
-                properties: {
+            const listElement = new SelectWithPropertiesListElement(
+                configuredWidget.instanceId,
+                configuredWidget.configuration.title,
+                {
                     active: instanceIds.some((wiId) => wiId === configuredWidget.instanceId),
                     size: configuredWidget.configuration.size
                 },
-                selected: false
-            };
+                false
+            );
             targetList.push(listElement);
         });
         targetList = targetList.sort(this.sortList);

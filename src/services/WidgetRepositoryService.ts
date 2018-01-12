@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 
-import { WidgetDescriptor } from '@kix/core/dist/model';
+import { WidgetDescriptor, WidgetType } from '@kix/core/dist/model';
 import {
     IPluginService,
     IConfigurationService,
@@ -21,59 +21,22 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
         this.pluginService = pluginService;
     }
 
-    /**
-     * @description ASYNC - returns all content widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getContentWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isContentWidget);
-    }
-
-    /**
-     * @description ASYNC - returns all sidebar widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getSidebarWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isSidebarWidget);
-    }
-
-    /**
-     * @description ASYNC - returns all explorer widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getExplorerWidgets(contextId: string): Promise<WidgetDescriptor[]> {
-        const allWidgets: WidgetDescriptor[] = await this.getAvailableWidgets(contextId);
-        return allWidgets.filter((wd) => wd.isExplorerWidget);
-    }
-
-    /**
-     * @description ASYNC - returns all widget descriptors based on a context
-     *
-     * @param {string} contexId id of the context (dashboard)
-     *
-     * @return promise of WidgetDescriptor[]
-     */
-    public async getAvailableWidgets(contextId: string): Promise<WidgetDescriptor[]> {
+    public async getAvailableWidgets(contextId: string, widgetType?: WidgetType): Promise<WidgetDescriptor[]> {
         const preDefinedWidgetsConfiguration: any
             = await this.configurationService.getPreDefinedWidgetConfiguration();
         const widgetFactories = await this.pluginService.getWidgetFactories();
 
         const preDefinedWidgetDescriptors: WidgetDescriptor[] = preDefinedWidgetsConfiguration[contextId] || [];
+
         const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
-            wf.widgetId, wf.getDefaultConfiguration(), wf.isContentWidget, wf.isSidebarWidget, wf.isExplorerWidget
+            wf.widgetId, wf.getDefaultConfiguration(), wf.type
         ));
 
-        return [...preDefinedWidgetDescriptors, ...widgetDescriptors];
+        let widgets = [...preDefinedWidgetDescriptors, ...widgetDescriptors];
+        if (widgetType) {
+            widgets = widgets.filter((wd) => (wd.type & widgetType) === widgetType);
+        }
+
+        return widgets;
     }
 }
