@@ -15,7 +15,9 @@ export class TicketTableComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(
+            TicketService.TICKET_DATA_REQUEST_ID, this.ticketStateChanged.bind(this)
+        );
     }
 
     public async onInput(input: any): Promise<void> {
@@ -28,9 +30,11 @@ export class TicketTableComponent {
         this.state.displayLimit = input.displayLimit;
     }
 
-    private ticketStateChanged(): void {
-        if (TicketService.getInstance().getTicketData()) {
-            (this as any).setStateDirty('properties');
+    private ticketStateChanged(id: string): void {
+        if (id === TicketService.TICKET_DATA_REQUEST_ID) {
+            if (TicketService.getInstance().getTicketData()) {
+                (this as any).setStateDirty('properties');
+            }
         }
     }
 

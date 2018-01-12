@@ -20,10 +20,10 @@ export class QueueExplorerComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener('queue-explorer', this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 

@@ -21,27 +21,30 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.state.instanceId, this.ticketStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         ContextService.getInstance().addContextListener(this.filter.bind(this));
 
         this.loadTickets();
     }
 
-    private ticketStateChanged(): void {
-        const tickets = TicketService.getInstance().getTicketsSearchResult(this.state.instanceId);
-        if (tickets) {
-            this.state.tickets = tickets;
-            this.state.filteredTickets = tickets;
+    private ticketStateChanged(id: string): void {
+        if (id === this.state.instanceId) {
+            const tickets = TicketService.getInstance().getTicketsSearchResult(this.state.instanceId);
+            if (tickets) {
+                this.state.tickets = tickets;
+                this.state.filteredTickets = tickets;
+            }
         }
     }
 
     private dashboardStoreChanged(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.loadTickets();
     }

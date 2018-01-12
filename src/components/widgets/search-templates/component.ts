@@ -1,6 +1,7 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { SearchTemplatesComponentState } from './model/SearchTemplatesComponentState';
+import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 
 class SearchTemplatesWidgetComponent {
 
@@ -15,8 +16,8 @@ class SearchTemplatesWidgetComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
     private newClicked(event): void {

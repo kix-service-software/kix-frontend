@@ -1,7 +1,9 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { ConfiguredWidget, DashboardConfiguration } from '@kix/core/dist/model';
+import { ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class SidebarComponent {
 
@@ -20,26 +22,19 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        this.dashboardStateChanged();
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        ContextService.getInstance().addContextListener(this.contextStateChanged.bind(this));
     }
 
-    private dashboardStateChanged(): void {
-        let sidebarConfiguration = null;
+    private applicationStateChanged(): void {
+        //
+    }
 
-        if (this.state.context === "dialog") {
-            sidebarConfiguration = DashboardStore.getInstance().getDialogSidebars();
-        } else {
-            sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
-        }
-
-        if (sidebarConfiguration && sidebarConfiguration.length) {
-            this.state.rows = sidebarConfiguration[0];
-            this.state.configuredWidgets = sidebarConfiguration[1];
-        } else {
-            this.state.rows = [];
-            this.state.configuredWidgets = [];
+    private contextStateChanged(): void {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
+        if (context && context.dashboardConfiguration) {
+            this.state.rows = context.dashboardConfiguration.sidebarRows[0];
         }
     }
 
@@ -62,7 +57,7 @@ class SidebarComponent {
     }
 
     private sidebarAvailable(instanceId: string): boolean {
-        return this.state.rows.some((r) => r === instanceId);
+        return this.state.rows ? this.state.rows.some((r) => r === instanceId) : false;
     }
 
     private showSidebar(widget: ConfiguredWidget): boolean {
@@ -76,7 +71,8 @@ class SidebarComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
     private isConfigMode(): boolean {

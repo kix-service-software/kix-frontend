@@ -22,7 +22,7 @@ export class TicketStringLabelComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener('ticket-string-label', this.ticketStateChanged.bind(this));
         this.setDisplayValue();
     }
 

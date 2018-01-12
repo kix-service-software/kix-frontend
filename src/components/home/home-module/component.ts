@@ -24,11 +24,13 @@ class HomeComponent {
     }
 
     private stateChanged(id: string): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
+        const dashboardConfiguration: DashboardConfiguration =
+            DashboardStore.getInstance().getDashboardConfiguration('home');
+
         if (id === 'home' && dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.contentRows;
             this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
-            ContextService.getInstance().provideContext(new Context('home'), 'home', true);
+            ContextService.getInstance().provideContext(new Context('home', dashboardConfiguration), 'home', true);
         }
     }
 }

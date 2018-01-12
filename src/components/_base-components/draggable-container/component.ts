@@ -2,6 +2,8 @@ import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class DraggableContainerComponent {
 
@@ -23,7 +25,9 @@ class DraggableContainerComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const configuration = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        return configuration ? ClientStorageHandler.getComponentTemplate(configuration.widgetId) : undefined;
     }
 
     private dragStart(event): void {

@@ -43,14 +43,7 @@ class TicketsComponent {
         if (id === 'tickets' && dashboardConfiguration) {
             this.state.rows = dashboardConfiguration.contentRows;
 
-            const explorerList = [];
-            for (const explorerId of dashboardConfiguration.explorerRows.map((r) => r[0])) {
-                const explorer =
-                    dashboardConfiguration.explorerConfiguredWidgets.find((e) => e.instanceId === explorerId);
-                explorerList.push(explorer);
-            }
-
-            const context = new Context('tickets', new Map(), new Map(), explorerList);
+            const context = new Context('tickets', dashboardConfiguration, new Map(), new Map(), );
             ContextService.getInstance().provideContext(context, 'tickets');
         }
     }

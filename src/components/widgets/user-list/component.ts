@@ -6,6 +6,7 @@ import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore'
 import { UserStore } from '@kix/core/dist/browser/user/UserStore';
 import { User, LoadUsersRequest } from '@kix/core/dist/model/';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class UserListWidgetComponent {
 
@@ -24,8 +25,10 @@ class UserListWidgetComponent {
     public onMount(): void {
         UserStore.getInstance().addStateListener(this.userStateChanged.bind(this));
         DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         this.loadUser();
     }
 
@@ -37,7 +40,8 @@ class UserListWidgetComponent {
     }
 
     private dashboardStoreChanged(): void {
-        this.state.widgetConfiguration = DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         (this as any).setStateDirty('widgetConfiguration');
     }
 

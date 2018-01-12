@@ -2,6 +2,7 @@ import { ChartFactory } from '@kix/core/dist/browser/model/charts';
 import { ChartComponentState } from './model/ChartComponentState';
 import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class ChartWidgetComponent {
 
@@ -17,8 +18,9 @@ class ChartWidgetComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         if (this.state.widgetConfiguration && this.state.widgetConfiguration.settings) {
             this.chartFactory = new ChartFactory(
                 'svg_' + this.state.instanceId,

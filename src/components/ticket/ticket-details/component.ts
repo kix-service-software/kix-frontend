@@ -28,7 +28,10 @@ export class TicketDetailsComponent {
     public onMount(): void {
         this.setBreadcrumbDetails();
 
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(
+            this.state.ticketId, this.ticketStateChanged.bind(this)
+        );
+
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 
         DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
@@ -43,36 +46,26 @@ export class TicketDetailsComponent {
             dashboardConfiguration &&
             dashboardConfiguration.contextId === TicketDetailsComponent.MODULE_ID) {
 
-            this.state.lanes = dashboardConfiguration.contentConfiguredWidgets
-                .filter((ccw) => (ccw.configuration.type & WidgetType.LANE) === WidgetType.LANE);
+            const context = new Context('ticket-details', dashboardConfiguration, new Map(), new Map(), );
+            ContextService.getInstance().provideContext(context);
 
-            this.state.tabs = dashboardConfiguration.contentConfiguredWidgets
-                .filter((ccw) => (ccw.configuration.type & WidgetType.LANE_TAB) === WidgetType.LANE_TAB);
+            this.state.lanes = context.getWidgets(WidgetType.LANE);
+            this.state.tabs = context.getWidgets(WidgetType.LANE_TAB);
 
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
             }
-
-            const explorerList = [];
-            for (const explorerId of dashboardConfiguration.explorerRows.map((r) => r[0])) {
-                const explorer =
-                    dashboardConfiguration.explorerConfiguredWidgets.find((e) => e.instanceId === explorerId);
-                if (explorer) {
-                    explorerList.push(explorer);
-                }
-            }
-
-            const context = new Context('ticket-details', new Map(), new Map(), explorerList);
-            ContextService.getInstance().provideContext(context);
         }
     }
 
-    private ticketStateChanged(): void {
-        const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-        if (ticketDetails) {
-            this.state.ticket = ticketDetails.ticket;
-            this.state.articles = ticketDetails.articles;
-            this.setBreadcrumbDetails();
+    private ticketStateChanged(id: string): void {
+        if (id === this.state.ticketId) {
+            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
+            if (ticketDetails) {
+                this.state.ticket = ticketDetails.ticket;
+                this.state.articles = ticketDetails.articles;
+                this.setBreadcrumbDetails();
+            }
         }
     }
 
@@ -87,7 +80,8 @@ export class TicketDetailsComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId, TicketDetailsComponent.MODULE_ID);
+        const context = ContextService.getInstance().getActiveContext();
+        return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
     private tabClicked(tabId: string): void {

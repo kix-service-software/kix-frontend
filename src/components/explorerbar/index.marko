@@ -4,7 +4,7 @@
             <if(component.explorerAvailable(widget.instanceId))>
                 <if(component.isExplorerBarExpanded() || component.isConfigMode())>
                     <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-                        <include(component.getWidgetTemplate(widget.configuration.widgetId), {
+                        <include(component.getWidgetTemplate(widget), {
                             instanceId: widget.instanceId,
                             minimizable: false,
                             minimized: component.isExplorerMinimized(widget.instanceId),

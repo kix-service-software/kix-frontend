@@ -2,6 +2,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
 import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
+import { ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
 
 class ExplorerbarComponent {
 
@@ -20,12 +21,12 @@ class ExplorerbarComponent {
     private contextStateChanged(): void {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            this.state.explorer = context.explorerWidgets;
+            this.state.explorer = context.getWidgets(WidgetType.EXPLORER);
         }
     }
 
-    private getWidgetTemplate(explorerId: string): any {
-        return ClientStorageHandler.getComponentTemplate(explorerId);
+    private getWidgetTemplate(widget: ConfiguredWidget): any {
+        return ClientStorageHandler.getComponentTemplate(widget.configuration.widgetId);
     }
 
     private isExplorerBarExpanded(instanceId: string): boolean {

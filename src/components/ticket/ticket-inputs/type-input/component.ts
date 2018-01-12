@@ -15,7 +15,7 @@ export class TypeInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.typeId = Number(input.value);
-        TicketService.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
+        TicketService.getInstance().addStateListener('type-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
