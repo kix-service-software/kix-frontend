@@ -34,7 +34,11 @@ class SidebarComponent {
         const context = ContextService.getInstance().getActiveContext();
         this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
         if (context && context.dashboardConfiguration) {
-            this.state.rows = context.dashboardConfiguration.sidebarRows[0];
+            let rows = [];
+            for (const row of context.dashboardConfiguration.sidebarRows) {
+                rows = [...rows, ...row];
+            }
+            this.state.rows = rows;
         }
     }
 
