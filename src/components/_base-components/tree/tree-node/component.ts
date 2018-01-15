@@ -24,14 +24,8 @@ class TreeNodeComponent {
     private getTitle(): string {
         let title = this.state.node.label;
         if (this.hasProperties()) {
-            title += ' (';
-            this.state.node.properties.forEach((prop, index) => {
-                if (index !== 0) {
-                    title += '|';
-                }
-                title += prop.value;
-            });
-            title += ')';
+            const values = this.state.node.properties.map((prop) => prop.value);
+            title += ' (' + values.join('|') + ')';
         }
         return title;
     }
