@@ -4,9 +4,9 @@ import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, Widge
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { IContextServiceListener } from '@kix/core/dist/browser/context/IContextServiceListener';
+import { AbstractServiceListener } from '@kix/core/dist/browser/AbstractServiceListener';
 
-class SidebarComponent implements IContextServiceListener {
+class SidebarComponent extends AbstractServiceListener {
 
     private state: SidebarComponentState;
 
@@ -36,10 +36,6 @@ class SidebarComponent implements IContextServiceListener {
             }
             this.state.rows = rows;
         }
-    }
-
-    public contextFilterChanged(contextFilter: ContextFilter) {
-        //
     }
 
     private applicationStateChanged(): void {

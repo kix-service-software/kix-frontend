@@ -5,11 +5,10 @@ import {
     TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { ITicketServiceListener } from '@kix/core/dist/browser/ticket/ITicketServiceListener';
-import { IContextServiceListener } from '@kix/core/dist/browser/context/IContextServiceListener';
+import { AbstractServiceListener } from '@kix/core/dist/browser/AbstractServiceListener';
 import { TicketData } from '@kix/core/dist/browser/ticket/TicketData';
 
-class TicketListWidgetComponent implements ITicketServiceListener, IContextServiceListener {
+class TicketListWidgetComponent extends AbstractServiceListener {
 
     public state: TicketListComponentState;
 
@@ -37,18 +36,10 @@ class TicketListWidgetComponent implements ITicketServiceListener, IContextServi
         this.loadTickets();
     }
 
-    public contextChanged(context: Context): void {
-        //
-    }
-
     public contextFilterChanged(contextFilter: ContextFilter) {
         if (contextFilter) {
             this.filter(contextFilter);
         }
-    }
-
-    public ticketDataLoaded(requestId: string, ticketData: TicketData): void {
-        //
     }
 
     public ticketSearchFinished(requestId: string, tickets: Ticket[]) {
@@ -56,10 +47,6 @@ class TicketListWidgetComponent implements ITicketServiceListener, IContextServi
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
         }
-    }
-
-    public ticketDetailsLoaded(ticketId: any, ticketDetails: TicketDetails) {
-        //
     }
 
     private dashboardStoreChanged(): void {

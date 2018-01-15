@@ -3,9 +3,9 @@ import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore"
 import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ContextFilter, Context, ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
-import { IContextServiceListener } from "@kix/core/dist/browser/context/IContextServiceListener";
+import { AbstractServiceListener } from "@kix/core/dist/browser/AbstractServiceListener";
 
-class ExplorerbarComponent implements IContextServiceListener {
+class ExplorerbarComponent extends AbstractServiceListener {
 
     private state: any;
 

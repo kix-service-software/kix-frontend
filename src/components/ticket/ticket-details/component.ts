@@ -6,9 +6,9 @@ import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore'
 import { TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { ITicketServiceListener } from '@kix/core/dist/browser/ticket/ITicketServiceListener';
+import { AbstractServiceListener } from '@kix/core/dist/browser/AbstractServiceListener';
 
-export class TicketDetailsComponent implements ITicketServiceListener {
+export class TicketDetailsComponent extends AbstractServiceListener {
 
     private state: any;
 
@@ -55,14 +55,6 @@ export class TicketDetailsComponent implements ITicketServiceListener {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
             }
         }
-    }
-
-    public ticketDataLoaded(requestId: string, ticketData: TicketData): void {
-        //
-    }
-
-    public ticketSearchFinished(requestId: string, tickets: Ticket[]) {
-        //
     }
 
     public ticketDetailsLoaded(ticketId: any, ticketDetails: TicketDetails) {
