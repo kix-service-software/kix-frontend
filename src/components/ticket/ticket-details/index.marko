@@ -41,7 +41,9 @@
                             <@content>
                                 <ul.tab-list>
                                     <for(tab in state.tabs)>
-                                        <li.active on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
+                                        <li class=(state.activeTabId === tab.instanceId ? "active" : "") on-click('tabClicked', tab.instanceId)>
+                                            ${tab.configuration.title}
+                                        </li>
                                     </for>
                                 </ul>
                                 <if(state.activeTabId)>
@@ -68,6 +70,7 @@
                             <@actions/>
                         </widget>
                     </li>
+                    <include('./demo.marko')/>
                     <for(lane in state.lanes)>
                         <li.lane>
                             <include(component.getWidgetTemplate(lane.instanceId), {instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
