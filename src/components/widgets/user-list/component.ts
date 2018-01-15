@@ -2,11 +2,10 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 
 import { UserListComponentState } from './model/UserListComponentState';
 
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { UserStore } from '@kix/core/dist/browser/user/UserStore';
 import { User, LoadUsersRequest } from '@kix/core/dist/model/';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 
 class UserListWidgetComponent {
 
@@ -24,9 +23,9 @@ class UserListWidgetComponent {
 
     public onMount(): void {
         UserStore.getInstance().addStateListener(this.userStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.loadUser();
@@ -39,10 +38,13 @@ class UserListWidgetComponent {
         }
     }
 
-    private dashboardStoreChanged(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        (this as any).setStateDirty('widgetConfiguration');
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (type === ContextNotification.CONTEXT_UPDATED) {
+            const context = ContextService.getInstance().getContext();
+            this.state.widgetConfiguration =
+                context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+            (this as any).setStateDirty('widgetConfiguration');
+        }
     }
 
     private loadUser(): void {

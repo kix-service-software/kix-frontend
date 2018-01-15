@@ -1,7 +1,6 @@
 import { SearchComponentState } from './model/SearchComponentState';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { Context } from '@kix/core/dist/model';
 
@@ -16,8 +15,6 @@ class SearchComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().loadDashboardConfiguration();
-
         ContextService.getInstance().provideContext(new Context('search'), 'search', true);
 
         const breadcrumbDetails =

@@ -1,4 +1,4 @@
-import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
+import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 
 class UserListConfigurationComponent {
@@ -17,7 +17,7 @@ class UserListConfigurationComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         this.state.configuration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
@@ -26,7 +26,7 @@ class UserListConfigurationComponent {
     }
 
     private saveConfiguration(): void {
-        DashboardStore.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
     }
 
 }

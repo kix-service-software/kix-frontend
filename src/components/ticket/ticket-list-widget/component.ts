@@ -1,14 +1,12 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import {
     TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
-import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { AbstractServiceListener } from '@kix/core/dist/browser/AbstractServiceListener';
-import { TicketData } from '@kix/core/dist/browser/ticket/TicketData';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { TicketService, TicketData, TicketNotification } from '@kix/core/dist/browser/ticket/';
 
-class TicketListWidgetComponent extends AbstractServiceListener {
+class TicketListWidgetComponent {
 
     public state: TicketListComponentState;
 
@@ -25,35 +23,35 @@ class TicketListWidgetComponent extends AbstractServiceListener {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this);
-        DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketServiceNotified.bind(this));
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
-        ContextService.getInstance().addStateListener(this);
 
         this.loadTickets();
     }
 
-    public contextFilterChanged(contextFilter: ContextFilter) {
-        if (contextFilter) {
-            this.filter(contextFilter);
+    public contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
+        if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
+            const contextFilter: ContextFilter = args[0];
+            if (contextFilter) {
+                this.filter(contextFilter);
+            }
+        } else if (type === ContextNotification.CONTEXT_UPDATED) {
+            const context = ContextService.getInstance().getContext();
+            this.state.widgetConfiguration =
+                context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+            this.loadTickets();
         }
     }
 
-    public ticketSearchFinished(requestId: string, tickets: Ticket[]) {
+    public ticketServiceNotified(requestId: string, type: TicketNotification, ...args) {
+        const tickets: Ticket[] = args[0];
         if (requestId === this.state.instanceId && tickets) {
             this.state.tickets = tickets;
             this.state.filteredTickets = tickets;
         }
-    }
-
-    private dashboardStoreChanged(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
-        this.loadTickets();
     }
 
     private loadTickets(): void {

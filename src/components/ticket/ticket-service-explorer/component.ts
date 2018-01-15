@@ -1,4 +1,3 @@
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ObjectType, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
@@ -20,10 +19,9 @@ export class ServiceExplorerComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        // TicketService.getInstance().addStateListener('service-explorer', this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 

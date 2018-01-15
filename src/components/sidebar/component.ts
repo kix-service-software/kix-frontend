@@ -1,12 +1,11 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { AbstractServiceListener } from '@kix/core/dist/browser/AbstractServiceListener';
 
-class SidebarComponent extends AbstractServiceListener {
+class SidebarComponent {
 
     private state: SidebarComponentState;
 
@@ -24,17 +23,25 @@ class SidebarComponent extends AbstractServiceListener {
 
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-        ContextService.getInstance().addStateListener(this);
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
     }
 
-    public contextChanged(context: Context): void {
-        this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
-        if (context && context.dashboardConfiguration) {
-            let rows = [];
-            for (const row of context.dashboardConfiguration.sidebarRows) {
-                rows = [...rows, ...row];
+    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (
+            type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED &&
+            id === ContextService.getInstance().getActiveContextId()
+        ) {
+            const context: Context = ContextService.getInstance().getContext();
+            this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
+            if (context && context.dashboardConfiguration) {
+                let rows = [];
+                for (const row of context.dashboardConfiguration.sidebarRows) {
+                    rows = [...rows, ...row];
+                }
+                this.state.rows = rows;
+            } else {
+                this.state.rows = [];
             }
-            this.state.rows = rows;
         }
     }
 
@@ -50,7 +57,7 @@ class SidebarComponent extends AbstractServiceListener {
             if (configuredWidget) {
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
 
-                DashboardStore.getInstance().saveWidgetConfiguration(
+                DashboardService.getInstance().saveWidgetConfiguration(
                     configuredWidget.instanceId,
                     configuredWidget.configuration,
                 );
@@ -75,7 +82,7 @@ class SidebarComponent extends AbstractServiceListener {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
@@ -88,7 +95,9 @@ class SidebarComponent extends AbstractServiceListener {
     }
 
     private hasSidebarsToShow(): boolean {
-        return this.state.configuredWidgets.some((w) => w.configuration.show);
+        return this.state.rows &&
+            this.state.rows.length &&
+            this.state.configuredWidgets.some((w) => w.configuration.show);
     }
 }
 

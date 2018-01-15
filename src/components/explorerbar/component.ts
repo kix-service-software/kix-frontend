@@ -1,11 +1,10 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
-import { DashboardStore } from "@kix/core/dist/browser/dashboard/DashboardStore";
-import { ContextService } from "@kix/core/dist/browser/context/ContextService";
+import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ContextFilter, Context, ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
-import { AbstractServiceListener } from "@kix/core/dist/browser/AbstractServiceListener";
+import { DashboardConfiguration } from "../../../../core/dist/model/dashboard/DashboardConfiguration";
 
-class ExplorerbarComponent extends AbstractServiceListener {
+class ExplorerbarComponent {
 
     private state: any;
 
@@ -16,17 +15,17 @@ class ExplorerbarComponent extends AbstractServiceListener {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this);
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
     }
 
-    public contextChanged(context: Context): void {
-        if (context) {
-            this.state.explorer = context.getWidgets(WidgetType.EXPLORER);
+    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (
+            type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED &&
+            id === ContextService.getInstance().getActiveContextId()
+        ) {
+            const context = ContextService.getInstance().getContext();
+            this.state.explorer = context ? context.getWidgets(WidgetType.EXPLORER) : [];
         }
-    }
-
-    public contextFilterChanged(contextFilter: ContextFilter) {
-        throw new Error("Method not implemented.");
     }
 
     private getWidgetTemplate(widget: ConfiguredWidget): any {
@@ -34,12 +33,12 @@ class ExplorerbarComponent extends AbstractServiceListener {
     }
 
     private isExplorerBarExpanded(instanceId: string): boolean {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         return context.explorerBarExpanded;
     }
 
     private isExplorerMinimized(instanceId: string): boolean {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         return context.isExplorerExpanded(instanceId);
     }
 

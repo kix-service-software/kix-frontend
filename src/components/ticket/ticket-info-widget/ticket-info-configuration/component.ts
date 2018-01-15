@@ -1,4 +1,3 @@
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class TicketInfoConfigurationComponent {
@@ -17,7 +16,7 @@ export class TicketInfoConfigurationComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getContext();
         this.state.configuration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
