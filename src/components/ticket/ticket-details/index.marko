@@ -44,37 +44,9 @@
                                         <li.active on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
                                     </for>
                                 </ul>
-                                <!-- <if(state.activeTabId)>
-                                    <div.tab>
-                                        <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
-                                    </div>
-                                </if> -->
                                 <if(state.activeTabId)>
                                     <div.tab-content>
-                                        <!-- <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/> -->
-                                        <widget instanceId=state.activeTabId minimizable=false>
-                                            <@icon/>
-                                            <@title/>
-                                            <@content>example</@content>
-                                            <@filter/>
-                                            <@actions/>
-                                            <@contentActions>
-                                                <ul.content-actions>
-                                                    <li>
-                                                        <span.kix-icon-pencil/>
-                                                    </li>
-                                                    <li>
-                                                        <span.kix-icon-pencil/>
-                                                    </li>
-                                                    <li>
-                                                        <span.kix-icon-pencil/>
-                                                    </li>
-                                                    <li>
-                                                        <span.kix-icon-pencil/>
-                                                    </li>
-                                                </ul>
-                                            </@contentActions>
-                                        </widget>
+                                        <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
                                     </div>
                                 </if>
                             </@content>
@@ -84,25 +56,23 @@
                         </widget>
                     </li>
                     <li.lane.minimized>
-                        <widget>
+                        <widget instanceId=Date.now() minimizable=true minimized=true>
                             <@icon/>
-                            <@title>Lane 2</@title>
-                            <@content>example</@content>
+                            <@title>Beschreibung & Anmerkungen</@title>
+                            <@content>
+                                <if(state.articles && state.articles.length)>
+                                    <span>${state.articles[0].Body}</span>
+                                </if>
+                            </@content>
                             <@filter/>
                             <@actions/>
-                            <@contentActions/>
                         </widget>
                     </li>
-                    <li.lane.minimized>
-                        <widget>
-                            <@icon/>
-                            <@title>Lane 3</@title>
-                            <@content>example</@content>
-                            <@filter/>
-                            <@actions/>
-                            <@contentActions/>
-                        </widget>
-                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane.minimized>
+                            <include(component.getWidgetTemplate(lane.instanceId), {instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
+                        </li>
+                    </for>
                 </ul>
                 <!--
                 Hier das Beispiel, wie die Tabs befüllt und dargestellt werden
@@ -144,51 +114,51 @@
             <@filter/>
             <@actions/>
         </widget>
-    </if>
-    <!-- <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
-        <@icon/>
-        <@title>
-            <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
-        </@title>
-        <@content>
-            <if(state.articles)>
-                <table.article-table>
-                    <tr>
-                        <th>alle</th>
-                        <th>Nr.</th>
-                        <th>Sender</th>
-                        <th>Type</th>
-                        <th>von</th>
-                        <th>Betreff</th>
-                        <th>erstellt</th>
-                        <th>Anlage</th>
-                    </tr>
-                    <for(article in state.articles  | status-var=loop)>
+        <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+            <@icon/>
+            <@title>
+                <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
+            </@title>
+            <@content>
+                <if(state.articles)>
+                    <table.article-table>
                         <tr>
-                            <td>
-                                <input type="checkbox"/>
-                            </td>
-                            <td>${loop.getLength() - loop.getIndex()}</td>
-                            <td>${article.SenderTypeID}</td>
-                            <td>${article.ArticleTypeID}</td>
-                            <td>${article.From}</td>
-                            <td>${article.Subject}</td>
-                            <td>${article.IncomingTime}</td>
-                            <if(article.Attachments)>
-                                <td>${article.Attachments.length}</td>
-                            </if>
-                            <else>
-                                <td>-</td>
-                            </else>
+                            <th>alle</th>
+                            <th>Nr.</th>
+                            <th>Sender</th>
+                            <th>Type</th>
+                            <th>von</th>
+                            <th>Betreff</th>
+                            <th>erstellt</th>
+                            <th>Anlage</th>
                         </tr>
-                    </for>
-                </table>
-            </if>
-        </@content>
-        <@filter>
-            <input type="text" placeholder="Filtern in Liste"/>
-            <span.kix-icon-filter/>
-        </@filter>
-        <@actions/>
-    </widget> -->
+                        <for(article in state.articles  | status-var=loop)>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"/>
+                                </td>
+                                <td>${loop.getLength() - loop.getIndex()}</td>
+                                <td>${article.SenderTypeID}</td>
+                                <td>${article.ArticleTypeID}</td>
+                                <td>${article.From}</td>
+                                <td>${article.Subject}</td>
+                                <td>${article.IncomingTime}</td>
+                                <if(article.Attachments)>
+                                    <td>${article.Attachments.length}</td>
+                                </if>
+                                <else>
+                                    <td>-</td>
+                                </else>
+                            </tr>
+                        </for>
+                    </table>
+                </if>
+            </@content>
+            <@filter>
+                <input type="text" placeholder="Filtern in Liste"/>
+                <span.kix-icon-filter/>
+            </@filter>
+            <@actions/>
+        </widget>
+    </if>
 </div>
