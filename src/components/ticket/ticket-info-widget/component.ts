@@ -8,6 +8,7 @@ class TicketInfoWidgetComponent {
     public onCreate(input: any): void {
         this.state = new TicketInfoComponentState();
     }
+
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.state.ticketId = input.ticketId;
@@ -21,6 +22,10 @@ class TicketInfoWidgetComponent {
 
     private ticketStateChanged(): void {
         this.getTicket();
+        console.log('contact.................');
+        console.log(this.state.contact);
+        console.log('customer.................');
+        console.log(this.state.customer);
     }
 
     private getTicket(): void {
@@ -28,6 +33,8 @@ class TicketInfoWidgetComponent {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails) {
                 this.state.ticket = ticketDetails.ticket;
+                this.state.contact = ticketDetails.contact;
+                this.state.customer = ticketDetails.customer;
             }
         }
     }

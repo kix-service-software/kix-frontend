@@ -12,7 +12,9 @@ import {
     ITicketStateService,
     ITicketTypeService,
     ITicketPriorityService,
-    IWidgetRepositoryService
+    IWidgetRepositoryService,
+    ICustomerService,
+    IContactService
 } from "@kix/core/dist/services";
 import { SocketEvent } from '@kix/core/dist/model';
 import { ICommunicator, IServerConfiguration } from '@kix/core/dist/common';
@@ -26,6 +28,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject("ILoggingService") protected loggingService: ILoggingService,
         @inject("IPluginService") protected pluginService: IPluginService,
         @inject("IUserService") protected userService: IUserService,
+        @inject("ICustomerService") protected customerService: ICustomerService,
+        @inject("IContactService") protected contactService: IContactService,
         @inject("ITranslationService") protected translationService: ITranslationService,
         @inject("ITicketService") protected ticketService: ITicketService,
         @inject("ITicketStateService") protected ticketStateService: ITicketStateService,

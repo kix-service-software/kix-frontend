@@ -4,6 +4,8 @@ import {
 } from '@kix/core/dist/api';
 
 import {
+    Contact,
+    Customer,
     Ticket,
     SocketEvent,
     SearchTicketsRequest,
@@ -106,8 +108,22 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const ticket = await this.ticketService.getTicket(data.token, data.ticketId, false);
             const articles = await this.ticketService.getArticles(data.token, data.ticketId);
+            const contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
+                return undefined;
+            });
+            const customer = await this.customerService.getCustomer(
+                data.token, ticket.CustomerID.toString()
+            ).catch((error) => {
+                return undefined;
+            });
 
-            const ticketDetails = new TicketDetails(data.ticketId, (ticket as Ticket), articles);
+            const ticketDetails = new TicketDetails(
+                data.ticketId,
+                (ticket as Ticket),
+                articles,
+                (contact as Contact),
+                (customer as Customer)
+            );
 
             const response = new LoadTicketDetailsResponse(ticketDetails);
             client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
