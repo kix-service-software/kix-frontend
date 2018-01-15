@@ -23,7 +23,6 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketServiceNotified.bind(this));
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
 
         const context = ContextService.getInstance().getContext();
@@ -43,14 +42,12 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
             this.loadTickets();
-        }
-    }
-
-    public ticketServiceNotified(requestId: string, type: TicketNotification, ...args) {
-        const tickets: Ticket[] = args[0];
-        if (requestId === this.state.instanceId && tickets) {
-            this.state.tickets = tickets;
-            this.state.filteredTickets = tickets;
+        } else if (type === ContextNotification.OBJECTS_UPDATED) {
+            const tickets: Ticket[] = args[0];
+            if (requestId === this.state.instanceId && tickets) {
+                this.state.tickets = tickets;
+                this.state.filteredTickets = tickets;
+            }
         }
     }
 
