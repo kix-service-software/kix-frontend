@@ -1,5 +1,6 @@
 {
     "tags-dir": [
-        "./dialog-creation"
+        "./dialog-creation",
+        "./tree"
     ]
 }
