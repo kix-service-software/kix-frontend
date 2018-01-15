@@ -1,23 +1,25 @@
-<if(state.node)>
+<li.tree-node class=(input.active ? "active" : "")>
     <if(component.hasSubNodes())>
-        <span.tree-group>
-            <span on-click('toggleExpand')>
-                <if(state.expanded)>-</if>
-                <else>+</else>
-            </span>
-            <span on-click('nodeClicked', state.node.id)>${state.node.label}</span>
-            <if(state.expanded)>
-                <ul.tree-node-list>
-                    <for(subNode in state.node.subNodes)>
-                        <li.tree-node>
-                            <tree-node node=subNode on-nodeClicked('nodeClicked')/>
-                        </li>
-                    </for>
-                </ul>
-            </if>
-        </span>
+        <span.subtree-icon class=(state.expanded ? "kix-icon-minus" : "kix-icon-plus") on-click('toggleExpand')/>
     </if>
     <else>
-        <span.tree-leaf on-click('nodeClicked', state.node.id)>${state.node.label}</span>
+        <span.subtree-icon/>
     </else>
-</if>
+    <span title=component.getTitle() on-click('nodeClicked', state.node.id, (component.hasSubNodes() ? true : false))>
+        ${state.node.label}
+        <!-- TODO: ggf. in eigene Komponente auslagern -->
+        <if(component.hasProperties())>
+            &nbsp;(<for(prop in state.node.properties | status-var=loop)>
+                <if(loop.getIndex() != 0 )>|</if>
+                <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
+            </for>)
+        </if>
+    </span>
+    <if(component.SubNodesExpanded())>
+        <ul.sub-tree-list>
+            <for(subNode in state.node.subNodes)>
+                <tree-node node=subNode on-nodeClicked('nodeClicked')/>
+            </for>
+        </ul>
+    </if>
+</li>

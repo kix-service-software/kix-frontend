@@ -3,7 +3,7 @@ import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
 import { ContextFilter, Queue, TicketProperty } from '@kix/core/dist/model';
 import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
-import { TreeNode } from '@kix/core/dist/browser/model';
+import { TreeNode, TreeNodeProperty } from '@kix/core/dist/browser/model';
 
 export class QueueExplorerComponent {
 
@@ -47,7 +47,12 @@ export class QueueExplorerComponent {
                     queue.QueueID,
                     queue.Name,
                     subNodes,
-                    [] // TODO: Ticketanzahlen ermitteln, falls aktiviert
+                    // TODO: Ticketanzahlen ermitteln, falls aktiviert und 0 (bei 'escalated') rausfiltern
+                    [
+                        new TreeNodeProperty(Math.floor(Math.random() * 100), 'total'),
+                        new TreeNodeProperty(Math.floor(Math.random() * 100), 'unlocked'),
+                        new TreeNodeProperty(Math.floor(Math.random() * 100), 'escalated', 'escalated'),
+                    ]
                 );
                 nodes.push(treeNode);
             }
@@ -59,7 +64,8 @@ export class QueueExplorerComponent {
         return true;
     }
 
-    private queueClicked(queueId: number): void {
+    private queueClicked(queueId: number, test: boolean): void {
+        console.log(queueId + ' --- ' + test);
         // TODO: Constant enum for ObjectType Queue
         const contextFilter = new ContextFilter('Queue', TicketProperty.QUEUE_ID, queueId);
         ContextStore.getInstance().provideObjectFilter(contextFilter);
