@@ -55,7 +55,7 @@
                             <@contentActions/>
                         </widget>
                     </li>
-                    <li.lane.minimized>
+                    <li.lane>
                         <widget instanceId=Date.now() minimizable=true minimized=true>
                             <@icon/>
                             <@title>Beschreibung & Anmerkungen</@title>
@@ -69,7 +69,7 @@
                         </widget>
                     </li>
                     <for(lane in state.lanes)>
-                        <li.lane.minimized>
+                        <li.lane>
                             <include(component.getWidgetTemplate(lane.instanceId), {instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
                         </li>
                     </for>

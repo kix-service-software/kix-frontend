@@ -1,4 +1,4 @@
-<div.widget>
+<div.widget class=(state.minimized ? "minimized" : "")>
     <div.widget-header.clearfix>
         <span.header-left>
             <h3>
@@ -43,7 +43,7 @@
         </span>
     </div>
     <if(!state.minimized && component.isInputDefined(input.content))>
-        <div.widget-content>
+        <div.widget-content.clearfix>
             <if(component.isInputDefined(input.contentActions))>
                 <include(input.contentActions)/>
             </if>

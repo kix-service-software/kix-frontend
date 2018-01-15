@@ -45,54 +45,69 @@
             .lane {
                 margin-bottom: .5em;
                 &.tabs {
-                    margin-bottom: -.75em;
-                    .widget-header {
-                        .header-left {
-                            display: none;
-                        }
+                    > .widget {
+                        margin-bottom: -.75em;
                     }
-                    .widget-content {
-                        position: relative;
-                        top: -1.25em;
-                        border: 0 none;
-                        background-color: transparent;
-                        .tab-list {
-                            list-style: none;
-                            position: relative;
-                            height: 1.25em;
-                            li {
-                                position: relative;
-                                display: inline-block;
-                                font-size: .75em;
-                                background-color: #72bedc;
-                                color: #00385d;
-                                border: 1px solid #0a7cb3;
-                                border-top-left-radius: 3px;
-                                border-top-right-radius: 3px;
-                                border-bottom: 0 none;
-                                margin-right: .5em;
-                                padding: 3px .5em 5px .5em;
-                                font-weight: 600;
-                                height: 1em;
-                                &.active {
-                                    z-index: 5;
-                                    background-color: #ffffff;
-                                    color: @tertiary-5;
+                    .widget {
+                        .widget-header {
+                            .header-left {
+                                display: none;
+                            }
+                            .header-right {
+                                line-height: 1em;
+                            }
+                        }
+                        &.minimized {
+                            margin-bottom: .25em;
+                            .widget-header {
+                                .header-left {
+                                    display: inline-block;
                                 }
                             }
                         }
-                        .tab-content {
-                            border: 1px solid #0a7cb3;
-                            border-bottom-left-radius: 3px;
-                            border-bottom-right-radius: 3px;
-                            background-color: #ffffff;
-                            .widget {
-                                .widget-header {
-                                    display: none;
+                        .widget-content {
+                            position: relative;
+                            top: -1.25em;
+                            border: 0 none;
+                            background-color: transparent;
+                            .tab-list {
+                                list-style: none;
+                                position: relative;
+                                height: 1.25em;
+                                li {
+                                    position: relative;
+                                    display: inline-block;
+                                    font-size: .75em;
+                                    background-color: #72bedc;
+                                    color: #00385d;
+                                    border: 1px solid #0a7cb3;
+                                    border-top-left-radius: 3px;
+                                    border-top-right-radius: 3px;
+                                    border-bottom: 0 none;
+                                    margin-right: .5em;
+                                    padding: 3px .5em 5px .5em;
+                                    font-weight: 600;
+                                    height: 1em;
+                                    &.active {
+                                        z-index: 5;
+                                        background-color: #ffffff;
+                                        color: @tertiary-5;
+                                    }
                                 }
-                                .widget-content {
-                                    margin: 0;
-                                    top: auto;
+                            }
+                            .tab-content {
+                                border: 1px solid #0a7cb3;
+                                border-bottom-left-radius: 3px;
+                                border-bottom-right-radius: 3px;
+                                background-color: #ffffff;
+                                .widget {
+                                    .widget-header {
+                                        display: none;
+                                    }
+                                    .widget-content {
+                                        margin: 0;
+                                        top: auto;
+                                    }
                                 }
                             }
                         }
@@ -111,6 +126,7 @@
                             font-weight: 600;
                             font-size: .875em;
                             padding-top: 5px;
+                            line-height: 1em;
                         }
                     }
                 }
@@ -139,7 +155,7 @@
                         }
                     }
                 }
-                &.minimized {
+                & .widget.minimized {
                     .widget-header {
                         margin-left: 5em;
                         color: #5b5b5b;
@@ -202,9 +218,9 @@
     color: #000;
     display: block;
     margin: 5px;
-    float: left;
+    // float: left;
     font-weight: bold;
-    width: 45%;
+    // width: 45%;
     span {
         font-weight: 100;
     }
