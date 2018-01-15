@@ -4,14 +4,37 @@
             <@icon/>
             <@title>T#${state.ticket.TicketNumber} - ${state.ticket.Title}</@title>
             <@content>
-                <ul.ticket-action-list>
-                    <li.ticket-action>Bearbeiten</li>
-                    <li.ticket-action>Zusammenfassen</li>
-                    <li.ticket-action>Verknüpfen</li>
-                    <li.ticket-action>Entsperren</li>
+                <ul.action-list>
+                    <li>
+                        <span.kix-icon-ticket-edit/>Bearbeiten
+                    </li>
+                    <li>
+                        <span.kix-icon-arrow-sumup/>Zusammenfassen
+                    </li>
+                    <li>
+                        <span.kix-icon-link/>Verknüpfen
+                    </li>
+                    <li>
+                        <span.kix-icon-lock-open/>Entsperren
+                    </li>
+                    <li>
+                        <span.kix-icon-eye/>Beobachten
+                    </li>
+                    <li>
+                        <span.kix-icon-maintain-record/>Wartungsdoku
+                    </li>
+                    <li>
+                        <span.kix-icon-fire-add/>Flächenstörung
+                    </li>
+                    <li>
+                        <span.kix-icon-warnsign/>Spam
+                    </li>
+                    <li>
+                        <span.kix-icon-ticket-print/>Drucken
+                    </li>
                 </ul>
                 <div.lane-widget>
-                    <widget instanbceId=Date.now() minimizable=true>
+                    <widget instanceId=Date.now() minimizable=true>
                         <@icon/>
                         <@title/>
                         <@content>

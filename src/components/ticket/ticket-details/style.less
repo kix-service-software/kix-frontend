@@ -1,12 +1,47 @@
+.explorerbar.collapsed ~ .ticket-details {
+    margin-left: 64px;
+}
+
 .ticket-details {
-    padding: 0;
     margin-left: 232px;
     .widget {
-        margin-top: 24px;
+        margin-top: 1.5em;
+        box-shadow: none;
+        &:first-of-type {
+            margin-top: 0;
+        }
+        .widget-content {
+            background-color: transparent;
+        }
+        .action-list {
+            display: block;
+            list-style: none;
+            margin-bottom: 1.5em;
+            background-color: #e2e2e2;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            color: #5b5b5b;
+            li {
+                cursor: pointer;
+                display: inline-block;
+                padding: .5em .5em 2px;
+                margin: 0 .5em;
+                min-width: 50px;
+                font-size: .875em;
+                &:first-of-type {
+                    margin-left: 0;
+                }
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    margin-right: .25em;
+                }
+            }
+        }
         .lane-widget {
-            width: 96%;
-            left: 2%;
-            position: relative;
+            // width: 96%;
+            // left: 2%;
+            // position: relative;
+            margin: 0 2em;
             ul.tab-list {
                 list-style: none;
                 display: table;
@@ -41,16 +76,7 @@
     }
 }
 
-.ticket-action-list {
-    list-style: none;
-    display: table;
-    margin-bottom: 24px;
-    li {
-        float: left;
-        padding: 5px;
-        background-color: lightgray;
-    }
-}
+
 
 .detail-label {
     color: #000;
