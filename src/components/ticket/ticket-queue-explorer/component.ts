@@ -64,8 +64,7 @@ export class QueueExplorerComponent {
         return true;
     }
 
-    private queueClicked(queueId: number, test: boolean): void {
-        console.log(queueId + ' --- ' + test);
+    private queueClicked(queueId: number): void {
         // TODO: Constant enum for ObjectType Queue
         const contextFilter = new ContextFilter('Queue', TicketProperty.QUEUE_ID, queueId);
         ContextStore.getInstance().provideObjectFilter(contextFilter);
