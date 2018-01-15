@@ -33,22 +33,95 @@
                         <span.kix-icon-ticket-print/>Drucken
                     </li>
                 </ul>
-                <div.lane-widget>
+                <ul.lane-list>
+                    <li.lane.tabs class=(state.minimized ? "minimized" : "")>
+                        <widget instanceId=state.instanceId minimizable=input.minimizable>
+                            <@icon/>
+                            <@title>Ticketinformationen</@title>
+                            <@content>
+                                <ul.tab-list>
+                                    <for(tab in state.tabs)>
+                                        <li.active on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
+                                    </for>
+                                </ul>
+                                <!-- <if(state.activeTabId)>
+                                    <div.tab>
+                                        <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
+                                    </div>
+                                </if> -->
+                                <if(state.activeTabId)>
+                                    <div.tab-content>
+                                        <!-- <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/> -->
+                                        <widget instanceId=state.activeTabId minimizable=false>
+                                            <@icon/>
+                                            <@title/>
+                                            <@content>example</@content>
+                                            <@filter/>
+                                            <@actions/>
+                                            <@contentActions>
+                                                <ul.content-actions>
+                                                    <li>
+                                                        <span.kix-icon-pencil/>
+                                                    </li>
+                                                    <li>
+                                                        <span.kix-icon-pencil/>
+                                                    </li>
+                                                    <li>
+                                                        <span.kix-icon-pencil/>
+                                                    </li>
+                                                    <li>
+                                                        <span.kix-icon-pencil/>
+                                                    </li>
+                                                </ul>
+                                            </@contentActions>
+                                        </widget>
+                                    </div>
+                                </if>
+                            </@content>
+                            <@filter/>
+                            <@actions/>
+                            <@contentActions/>
+                        </widget>
+                    </li>
+                    <li.lane.minimized>
+                        <widget>
+                            <@icon/>
+                            <@title>Lane 2</@title>
+                            <@content>example</@content>
+                            <@filter/>
+                            <@actions/>
+                            <@contentActions/>
+                        </widget>
+                    </li>
+                    <li.lane.minimized>
+                        <widget>
+                            <@icon/>
+                            <@title>Lane 3</@title>
+                            <@content>example</@content>
+                            <@filter/>
+                            <@actions/>
+                            <@contentActions/>
+                        </widget>
+                    </li>
+                </ul>
+                <!--
+                Hier das Beispiel, wie die Tabs befüllt und dargestellt werden
+                    <ul.tab-list>
+                        <for(tab in state.tabs)>
+                            <li.active on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
+                        </for>
+                    </ul>
+                    <if(state.activeTabId)>
+                        <div.tab-content>
+                            content
+                        </div>
+                    </if>
+                -->
+                <!-- <div.lane-widget>
                     <widget instanceId=Date.now() minimizable=true>
                         <@icon/>
                         <@title/>
-                        <@content>
-                            <ul.tab-list>
-                                <for(tab in state.tabs)>
-                                    <li on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
-                                </for>
-                            </ul>
-                            <if(state.activeTabId)>
-                                <div.tab-widget>
-                                    <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
-                                </div>
-                            </if>
-                        </@content>
+                        <@content/>
                         <@filter/>
                         <@actions/>
                     </widget>
@@ -66,13 +139,13 @@
                         <@filter/>
                         <@actions/>
                     </widget>
-                </div>
+                </div> -->
             </@content>
             <@filter/>
             <@actions/>
         </widget>
     </if>
-    <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+    <!-- <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
         <@icon/>
         <@title>
             <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
@@ -117,5 +190,5 @@
             <span.kix-icon-filter/>
         </@filter>
         <@actions/>
-    </widget>
+    </widget> -->
 </div>

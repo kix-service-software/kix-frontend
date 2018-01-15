@@ -44,6 +44,9 @@
     </div>
     <if(!state.minimized && component.isInputDefined(input.content))>
         <div.widget-content>
+            <if(component.isInputDefined(input.contentActions))>
+                <include(input.contentActions)/>
+            </if>
             <include(input.content)/>
         </div>
     </if>

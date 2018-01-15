@@ -21,10 +21,11 @@
             border-bottom-left-radius: 3px;
             border-bottom-right-radius: 3px;
             color: #5b5b5b;
+            height: 2em;
             li {
                 cursor: pointer;
                 display: inline-block;
-                padding: .5em .5em 2px;
+                padding: .5em .5em 0;
                 margin: 0 .5em;
                 min-width: 50px;
                 font-size: .875em;
@@ -33,7 +34,126 @@
                 }
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
+                    font-size: 1.25em;
                     margin-right: .25em;
+                }
+            }
+        }
+        .lane-list {
+            list-style: none;
+            margin-bottom: 1.5em;
+            .lane {
+                margin-bottom: .5em;
+                &.tabs {
+                    margin-bottom: -.75em;
+                    .widget-header {
+                        .header-left {
+                            display: none;
+                        }
+                    }
+                    .widget-content {
+                        position: relative;
+                        top: -1.25em;
+                        border: 0 none;
+                        background-color: transparent;
+                        .tab-list {
+                            list-style: none;
+                            position: relative;
+                            height: 1.25em;
+                            li {
+                                position: relative;
+                                display: inline-block;
+                                font-size: .75em;
+                                background-color: #72bedc;
+                                color: #00385d;
+                                border: 1px solid #0a7cb3;
+                                border-top-left-radius: 3px;
+                                border-top-right-radius: 3px;
+                                border-bottom: 0 none;
+                                margin-right: .5em;
+                                padding: 3px .5em 5px .5em;
+                                font-weight: 600;
+                                height: 1em;
+                                &.active {
+                                    z-index: 5;
+                                    background-color: #ffffff;
+                                    color: @tertiary-5;
+                                }
+                            }
+                        }
+                        .tab-content {
+                            border: 1px solid #0a7cb3;
+                            border-bottom-left-radius: 3px;
+                            border-bottom-right-radius: 3px;
+                            background-color: #ffffff;
+                            .widget {
+                                .widget-header {
+                                    display: none;
+                                }
+                                .widget-content {
+                                    margin: 0;
+                                    top: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .widget-header {
+                    padding: 0 .5em;
+                    color: #ffffff;
+                    background-color: #007faf;
+                    border-radius: 3px;
+                    height: 1.5em;
+                    line-height: 1em;
+                    .header-left {
+                        h3 {
+                            margin-bottom: 0;
+                            font-weight: 600;
+                            font-size: .875em;
+                            padding-top: 5px;
+                        }
+                    }
+                }
+                .widget-content {
+                    margin: 0 1.75em;
+                    border: 1px solid #0a7cb3;
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
+                    background-color: #ffffff;
+                    overflow: visible;
+                    min-height: 10em;
+                    .content-actions {
+                        list-style: none;
+                        position: relative;
+                        float: right;
+                        width: 1.5em;
+                        right: -1.5em;
+                        li {
+                            border: 1px solid #0a7cb3;
+                            border-top-right-radius: 3px;
+                            border-bottom-right-radius: 3px;
+                            border-left: 0 none;
+                            margin: 2px 0;
+                            height: 1.5em;
+                            color: #0a7cb3;
+                        }
+                    }
+                }
+                &.minimized {
+                    .widget-header {
+                        margin-left: 5em;
+                        color: #5b5b5b;
+                        background-color: #eaebeb;
+                        .header-left {
+                            line-height: 1em;
+                        }
+                        .header-right {
+                            line-height: 1.5em;
+                        }
+                    }
+                    .widget-content {
+                        display: none;
+                    }
                 }
             }
         }
