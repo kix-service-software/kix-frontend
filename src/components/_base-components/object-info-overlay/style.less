@@ -8,16 +8,17 @@
 
 .object-info-overlay {
     position: absolute;
-    top: 45%;
     left: 45%;
     .widget {
         .widget-header {
             height: 2rem !important; // TODO: andere Lösung finden, ist drin, weil Widget-Header in den Lanes in der Detailsansicht ausgeblendet werden
             background-color: @tertiary-1;
+            color: @secondary-6
         }
         .widget-content {
             border: 1px solid @tertiary-1;
             height: 100px;
+            font-weight: normal !important; // TODO: andere Lösung finden, ist drin, weil .detail-label "font-size: bold" festlegt
         }
     }
     .kix-icon-close {

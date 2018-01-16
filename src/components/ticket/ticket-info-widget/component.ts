@@ -22,10 +22,6 @@ class TicketInfoWidgetComponent {
 
     private ticketStateChanged(): void {
         this.getTicket();
-        console.log('contact.................');
-        console.log(this.state.contact);
-        console.log('customer.................');
-        console.log(this.state.customer);
     }
 
     private getTicket(): void {
