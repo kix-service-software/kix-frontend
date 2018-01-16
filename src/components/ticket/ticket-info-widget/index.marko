@@ -11,10 +11,50 @@
         <if(state.ticket)>
             <label.detail-label>
                 Kunde:
+                <!-- TODO: Sidebar "Kundeninfos" verwenden (tagId übergeben)-->
+                <object-info-overlay>
+                    <@title>Kundeninfo</@title>
+                    <@content>
+                        <div>${state.customer.CustomerID}</div>
+                        <div>${state.customer.CustomerCompanyName}</div>
+                        <div>
+                            <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
+                        </div>
+                        <div>
+                            <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
+                        </div>
+                        <div>
+                            <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
+                        </div>
+                    </@content>
+                </object-info-overlay>
                 <ticket-property-label ticketDataId="ticket-table-data" property="CustomerID" value=state.ticket.CustomerID/>
             </label>
             <label.detail-label>
                 Ansprechpartner:
+                <!-- TODO: Sidebar "Kontaktinfos" verwenden (tagId übergeben)-->
+                <object-info-overlay>
+                    <@title>Ansprechpartnerinfo</@title>
+                    <@content>
+                        <div>${state.contact.UserLogin}</div>
+                        <div>${state.contact.UserFirstname} ${state.contact.UserLastname}</div>
+                        <div>
+                            <strong>Straße:</strong> ${state.contact.UserStreet}
+                        </div>
+                        <div>
+                            <strong>Stadt:</strong> ${state.contact.UserCity}
+                        </div>
+                        <div>
+                            <strong>Land:</strong> ${state.contact.UserCountry}
+                        </div>
+                        <div>
+                            <strong>Telefon:</strong> ${state.contact.UserPhone}
+                        </div>
+                        <div>
+                            <strong>E-Mail:</strong> ${state.contact.UserEmail}
+                        </div>
+                    </@content>
+                </object-info-overlay>
                 <ticket-property-label ticketDataId="ticket-table-data" property="CustomerUserID" value=state.ticket.CustomerUserID/>
             </label>
             <label.detail-label>
