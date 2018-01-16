@@ -6,19 +6,32 @@
     }
 }
 
+// TODO: Großteil der Angaben hinfällig (!important), wenn Overlay nicht innerhalb einer "Lane" wäre
 .object-info-overlay {
     position: absolute;
     left: 45%;
     .widget {
         .widget-header {
-            height: 2rem !important; // TODO: andere Lösung finden, ist drin, weil Widget-Header in den Lanes in der Detailsansicht ausgeblendet werden
-            background-color: @tertiary-1;
-            color: @secondary-6
+            display: block !important;
+            height: 2rem !important;
+            background-color: @tertiary-1 !important;
+            color: @secondary-6 !important;
+            border-bottom-right-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+            .header-left {
+                display: block !important;
+                h3 {
+                    font-weight: 400 !important;
+                    font-size: 1rem !important;
+                    padding: 0 !important;
+                    line-height: 2.25rem !important;
+                }
+            }
         }
         .widget-content {
-            border: 1px solid @tertiary-1;
-            height: 100px;
-            font-weight: normal !important; // TODO: andere Lösung finden, ist drin, weil .detail-label "font-size: bold" festlegt
+            border: 1px solid @tertiary-1 !important;
+            background-color: @secondary-6 !important;
+            font-weight: normal !important;
         }
     }
     .kix-icon-close {
