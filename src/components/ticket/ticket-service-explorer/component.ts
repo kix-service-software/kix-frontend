@@ -26,7 +26,7 @@ export class ServiceExplorerComponent {
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData && ticketData.services) {
             this.state.services = ticketData.services;
         } else {

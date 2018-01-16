@@ -42,7 +42,7 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
             this.loadTickets();
-        } else if (type === ContextNotification.OBJECTS_UPDATED) {
+        } else if (type === ContextNotification.OBJECT_LIST_UPDATED) {
             const tickets: Ticket[] = args[0];
             if (requestId === this.state.instanceId && tickets) {
                 this.state.tickets = tickets;

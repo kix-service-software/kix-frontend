@@ -1,4 +1,5 @@
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class StateInputComponent {
 
@@ -15,7 +16,6 @@ export class StateInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.stateId = input.value;
-        // TicketService.getInstance().addStateListener('state-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
@@ -27,12 +27,8 @@ export class StateInputComponent {
         (this as any).emit('valueChanged', this.state.stateId);
     }
 
-    private ticketDataStateChanged(): void {
-        this.setStoreData();
-    }
-
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData) {
             this.state.states = ticketData.states;
         }

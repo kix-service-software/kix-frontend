@@ -1,5 +1,6 @@
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { User } from '@kix/core/dist/model/';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class UserInputComponent {
 
@@ -18,7 +19,6 @@ export class UserInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.userId = Number(input.value);
-        // TicketService.getInstance().addStateListener('user-input', this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
@@ -34,12 +34,8 @@ export class UserInputComponent {
         }
     }
 
-    private ticketDataStateChanged(): void {
-        this.setStoreData();
-    }
-
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData && ticketData.users) {
             this.state.users = ticketData.users;
             if (this.state.userId) {
