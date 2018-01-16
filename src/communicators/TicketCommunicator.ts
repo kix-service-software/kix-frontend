@@ -97,8 +97,15 @@ export class TicketCommunicator extends KIXCommunicator {
                 fields: 'Queue.QueueID,Queue.Name'
             });
 
+            const queuesHierarchy = await this.queueService.getQueues(data.token, null, null, null, {
+                fields: 'Queue.QueueID,Queue.Name',
+                include: 'SubQueues',
+                expand: 'SubQueues',
+                filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
+            });
+
             const response = new TicketLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, queues, [], [], [], users
+                [], ticketStates, ticketTypes, ticketPriorities, queues, queuesHierarchy, [], [], users
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
@@ -129,5 +136,4 @@ export class TicketCommunicator extends KIXCommunicator {
             client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
         });
     }
-
 }
