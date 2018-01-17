@@ -68,7 +68,7 @@ class SidebarComponent {
     }
 
     private sidebarAvailable(instanceId: string): boolean {
-        return this.state.rows ? this.state.rows.some((r) => r === instanceId) : false;
+        return this.state.rows && this.state.rows.some((r) => r === instanceId);
     }
 
     private showSidebar(widget: ConfiguredWidget): boolean {

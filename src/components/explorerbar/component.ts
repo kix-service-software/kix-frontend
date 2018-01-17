@@ -2,7 +2,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ContextFilter, Context, ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
-import { DashboardConfiguration } from "../../../../core/dist/model/dashboard/DashboardConfiguration";
+import { DashboardConfiguration } from "@kix/core/dist/model/dashboard/DashboardConfiguration";
 
 class ExplorerbarComponent {
 

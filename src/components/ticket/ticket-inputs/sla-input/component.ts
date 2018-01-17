@@ -1,7 +1,7 @@
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
-export class ServiceInputComponent {
+export class SLAInputComponent {
 
     private state: any;
 
@@ -36,4 +36,4 @@ export class ServiceInputComponent {
 
 }
 
-module.exports = ServiceInputComponent;
+module.exports = SLAInputComponent;
