@@ -1,0 +1,29 @@
+<widget instanceId=state.instanceId minimizable=input.minimizable>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <table>
+            <tr>
+                <th>Datum</th>
+                <th>Typ</th>
+                <th>Blubb</th>
+            </tr>
+            <!-- Iteration -->
+            <tr>
+                <td/>
+                <td/>
+                <td/>
+            </tr>
+        </table>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
+    <@actions/>
+</widget>

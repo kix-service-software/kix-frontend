@@ -57,10 +57,10 @@
             "search-templates": "../../dist/registry-modules/widgets/search-templates/widget-factory.extension",
             "user-list": "../../dist/registry-modules/widgets/user-list/widget-factory.extension",
             "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
-            "ticket-list": "../../dist/registry-modules/widgets/ticket-list/widget-factory.extension",
-            "ticket-info": "../../dist/registry-modules/widgets/ticket-info/widget-factory.extension",
-            "queue-explorer": "../../dist/registry-modules/widgets/queue-explorer/widget-factory.extension",
-            "service-explorer": "../../dist/registry-modules/widgets/service-explorer/widget-factory.extension"
+            "ticket-list-widget": "../../dist/registry-modules/tickets/ticket-list-widget/widget-factory.extension",
+            "ticket-info-widget": "../../dist/registry-modules/tickets/ticket-info-widget/widget-factory.extension",
+            "queue-explorer": "../../dist/registry-modules/tickets/queue-explorer/widget-factory.extension",
+            "service-explorer": "../../dist/registry-modules/tickets/service-explorer/widget-factory.extension"
         },
         "kix:action": {},
         "kix:quick-search": {
