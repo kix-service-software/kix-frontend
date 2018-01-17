@@ -2,10 +2,10 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 
 import { UserListComponentState } from './model/UserListComponentState';
 
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { UserStore } from '@kix/core/dist/browser/user/UserStore';
+import { UserService } from '@kix/core/dist/browser/user/UserService';
 import { User, LoadUsersRequest } from '@kix/core/dist/model/';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 
 class UserListWidgetComponent {
 
@@ -22,28 +22,29 @@ class UserListWidgetComponent {
     }
 
     public onMount(): void {
-        UserStore.getInstance().addStateListener(this.userStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         this.loadUser();
     }
 
-    private userStateChanged(): void {
-        const users: User[] = UserStore.getInstance().getUsers(this.state.instanceId);
-        if (users) {
-            this.state.users = users;
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (type === ContextNotification.CONTEXT_UPDATED) {
+            const context = ContextService.getInstance().getContext();
+            this.state.widgetConfiguration =
+                context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+            (this as any).setStateDirty('widgetConfiguration');
+        } else if (type === ContextNotification.OBJECT_LIST_UPDATED && id === this.state.instanceId) {
+            const users: User[] = args[0];
+            this.state.users = users ? users : [];
         }
-    }
-
-    private dashboardStoreChanged(): void {
-        this.state.widgetConfiguration = DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
-        (this as any).setStateDirty('widgetConfiguration');
     }
 
     private loadUser(): void {
         const settings = this.state.widgetConfiguration.settings;
-        UserStore.getInstance().loadUser(this.state.instanceId, settings.properties, settings.limit);
+        UserService.getInstance().loadUser(this.state.instanceId, settings.properties, settings.limit);
     }
 }
 

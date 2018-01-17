@@ -2,7 +2,6 @@ import { TicketService, TicketUtil } from '@kix/core/dist/browser/ticket';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 import { TicketTableComponentState } from './TicketTableComponentState';
 
@@ -15,7 +14,7 @@ export class TicketTableComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        //
     }
 
     public async onInput(input: any): Promise<void> {
@@ -28,11 +27,13 @@ export class TicketTableComponent {
         this.state.displayLimit = input.displayLimit;
     }
 
-    private ticketStateChanged(): void {
-        if (TicketService.getInstance().getTicketData()) {
-            (this as any).setStateDirty('properties');
-        }
-    }
+    // private ticketStateChanged(id: string): void {
+    //     if (id === TicketService.TICKET_DATA_REQUEST_ID) {
+    //         if (TicketService.getInstance().getTicketData()) {
+    //             (this as any).setStateDirty('properties');
+    //         }
+    //     }
+    // }
 
     private showMore(): void {
         let limit = this.state.displayLimit + 10;
@@ -46,7 +47,6 @@ export class TicketTableComponent {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ClientStorageHandler.setContextId('tickets');
         ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
     }
 

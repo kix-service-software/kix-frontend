@@ -1,7 +1,6 @@
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
-import { ContextFilter, TicketProperty } from '@kix/core/dist/model/';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ObjectType, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 
 export class ServiceExplorerComponent {
 
@@ -20,15 +19,14 @@ export class ServiceExplorerComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData && ticketData.services) {
             this.state.services = ticketData.services;
         } else {
@@ -41,9 +39,11 @@ export class ServiceExplorerComponent {
     }
 
     private queueClicked(serviceId: number): void {
-        // TODO: Constant enum for ObjectType Service
-        const contextFilter = new ContextFilter('Service', TicketProperty.SERVICE_ID, serviceId);
-        ContextStore.getInstance().provideObjectFilter(contextFilter);
+        const contextFilter = new ContextFilter(
+            'service-explorer', 'service-explorer', ObjectType.SERVICE, TicketProperty.SERVICE_ID, serviceId
+        );
+
+        ContextService.getInstance().provideContextFilter(contextFilter);
     }
 
 }

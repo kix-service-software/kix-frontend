@@ -1,9 +1,9 @@
 import { HomeComponentState } from './model/HomeComponentState';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { DashboardConfiguration } from '@kix/core/dist/model/';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { Context, DashboardConfiguration } from '@kix/core/dist/model/';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class HomeComponent {
 
@@ -14,20 +14,25 @@ class HomeComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        DashboardStore.getInstance().loadDashboardConfiguration();
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ContextService.getInstance().provideContext(
+            new Context(HomeComponentState.MODULE_ID), HomeComponentState.MODULE_ID, true
+        );
 
-        const contextId = ClientStorageHandler.getContextId();
+        DashboardService.getInstance().loadDashboardConfiguration(HomeComponentState.MODULE_ID);
+
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Home-Dashboard');
+            new BreadcrumbDetails(HomeComponentState.MODULE_ID, null, null, 'Home-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
-    private stateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
-            this.state.rows = dashboardConfiguration.contentRows;
-            this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
+    private contextServiceNotified(id: string, type: ContextNotification, ...args: any[]): void {
+        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === HomeComponentState.MODULE_ID) {
+            const dashboardConfiguration: DashboardConfiguration = args[0];
+            if (dashboardConfiguration) {
+                this.state.rows = dashboardConfiguration.contentRows;
+                this.state.configuredWidgets = dashboardConfiguration.contentConfiguredWidgets;
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 import { CustomersComponentState } from './model/CustomersComponentState';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { Context } from '@kix/core/dist/model';
 
 class CustomersComponent {
 
@@ -15,10 +15,10 @@ class CustomersComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().loadDashboardConfiguration();
-        const contextId = ClientStorageHandler.getContextId();
+        ContextService.getInstance().provideContext(new Context('customers'), 'customers', true);
+
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Customer-Dashboard');
+            new BreadcrumbDetails('customers', null, null, 'Customer-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 

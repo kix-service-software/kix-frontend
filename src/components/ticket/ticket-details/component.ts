@@ -1,10 +1,11 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { TicketData, TicketService, TicketNotification } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
+import { TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 export class TicketDetailsComponent {
 
@@ -17,32 +18,30 @@ export class TicketDetailsComponent {
     }
 
     public onInput(input: any): void {
-        this.state = {
-            ticketId: input.ticketId
-        };
-
+        this.state.ticketId = input.ticketId;
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
     }
 
     public onMount(): void {
-        ClientStorageHandler.setContextId(TicketDetailsComponent.MODULE_ID);
         this.setBreadcrumbDetails();
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
+
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 
-        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        DashboardStore.getInstance().loadDashboardConfiguration(TicketDetailsComponent.MODULE_ID);
+        const context = new Context('ticket-details');
+        ContextService.getInstance().provideContext(context, 'ticket-details', true);
+
+        DashboardService.getInstance().loadDashboardConfiguration('ticket-details');
     }
 
-    private dashboardStateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration =
-            DashboardStore.getInstance().getDashboardConfiguration(TicketDetailsComponent.MODULE_ID);
-        if (dashboardConfiguration && dashboardConfiguration.contextId === TicketDetailsComponent.MODULE_ID) {
-            this.state.lanes = dashboardConfiguration.contentConfiguredWidgets
-                .filter((ccw) => (ccw.configuration.type & WidgetType.LANE) === WidgetType.LANE);
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsComponent.MODULE_ID) {
+            const context = ContextService.getInstance().getContext(TicketDetailsComponent.MODULE_ID);
 
-            this.state.tabs = dashboardConfiguration.contentConfiguredWidgets
-                .filter((ccw) => (ccw.configuration.type & WidgetType.LANE_TAB) === WidgetType.LANE_TAB);
+            this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
+            this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
 
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
@@ -50,12 +49,14 @@ export class TicketDetailsComponent {
         }
     }
 
-    private ticketStateChanged(): void {
-        const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-        if (ticketDetails) {
-            this.state.ticket = ticketDetails.ticket;
-            this.state.articles = ticketDetails.articles;
-            this.setBreadcrumbDetails();
+    public ticketServiceNotified(id: string, type: TicketNotification, ...args) {
+        if (type === TicketNotification.TICKET_DETAILS_LOADED) {
+            const ticketDetails: TicketDetails = args[0];
+            if (ticketDetails.ticketId === this.state.ticketId && ticketDetails) {
+                this.state.ticket = ticketDetails.ticket;
+                this.state.articles = ticketDetails.articles;
+                this.setBreadcrumbDetails();
+            }
         }
     }
 
@@ -70,7 +71,8 @@ export class TicketDetailsComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId, TicketDetailsComponent.MODULE_ID);
+        const context = ContextService.getInstance().getContext();
+        return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
     private tabClicked(tabId: string): void {
