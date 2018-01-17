@@ -1,4 +1,4 @@
-export class NewTicketActionComponent {
+export class LinkTicketActionComponent {
 
     private doAction(): void {
         alert('Verknüpfen ...');
@@ -6,4 +6,4 @@ export class NewTicketActionComponent {
 
 }
 
-module.exports = NewTicketActionComponent;
+module.exports = LinkTicketActionComponent;

@@ -32,7 +32,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/widgets/ticket-info-widget',
             'ticket/widgets/ticket-history-widget',
             'ticket/widgets/ticket-info-widget/ticket-info-configuration',
-            'ticket/dialogs/ticket-creation-dialog',
             'ticket/widgets/ticket-description-widget',
             'ticket/actions/edit-ticket-action',
             'ticket/actions/link-ticket-action',
@@ -41,7 +40,11 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/actions/new-ticket-action',
             'ticket/actions/print-ticket-action',
             'ticket/actions/spam-ticket-action',
-            'ticket/actions/watch-ticket-action'
+            'ticket/actions/watch-ticket-action',
+            'ticket/dialogs/ticket-creation-dialog',
+            'ticket/dialogs/merge-ticket-dialog',
+            'ticket/dialogs/edit-ticket-dialog',
+            'ticket/dialogs/link-ticket-dialog',
         ];
     }
 
@@ -85,7 +88,10 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
 
         const dialogs: Array<[string, string]> = [
-            ['ticket-creation-dialog', 'ticket/dialogs/ticket-creation-dialog']
+            ['ticket-creation-dialog', 'ticket/dialogs/ticket-creation-dialog'],
+            ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
+            ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
+            ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog']
         ];
 
         const actions: Array<[string, string]> = [

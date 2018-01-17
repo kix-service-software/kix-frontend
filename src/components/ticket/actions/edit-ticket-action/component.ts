@@ -1,9 +1,11 @@
-export class NewTicketActionComponent {
+import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+
+export class EditTicketActionComponent {
 
     private doAction(): void {
-        alert('Bearbeiten ...');
+        ApplicationStore.getInstance().toggleDialog('edit-ticket-dialog');
     }
 
 }
 
-module.exports = NewTicketActionComponent;
+module.exports = EditTicketActionComponent;

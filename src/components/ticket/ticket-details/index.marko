@@ -7,7 +7,7 @@
                 <ul.action-list>
                     <for(action in state.ticketActions)>
                         <li>
-                            <include(component.getTemplate(action))/>
+                            <include(component.getTemplate(action), { ticketId: state.ticketId })/>
                         </li>
                     </for>
                 </ul>
@@ -45,7 +45,7 @@
             <@filter/>
             <@actions>
                 <for(action in state.generalActions)>
-                    <include(component.getTemplate(action))/>
+                    <include(component.getTemplate(action), { ticketId: state.ticketId })/>
                 </for>
             </@actions>
         </widget>

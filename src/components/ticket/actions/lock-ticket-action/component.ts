@@ -1,4 +1,4 @@
-export class NewTicketActionComponent {
+export class LockTicketActionComponent {
 
     private doAction(): void {
         alert('Sperren ...');
@@ -6,4 +6,4 @@ export class NewTicketActionComponent {
 
 }
 
-module.exports = NewTicketActionComponent;
+module.exports = LockTicketActionComponent;

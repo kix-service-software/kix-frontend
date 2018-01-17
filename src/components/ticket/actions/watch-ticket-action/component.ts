@@ -1,4 +1,4 @@
-export class NewTicketActionComponent {
+export class SpamTicketActionComponent {
 
     private doAction(): void {
         alert('Beobachten ...');
@@ -6,4 +6,4 @@ export class NewTicketActionComponent {
 
 }
 
-module.exports = NewTicketActionComponent;
+module.exports = SpamTicketActionComponent;

@@ -1,4 +1,4 @@
-export class NewTicketActionComponent {
+export class PrintTicketActionComponent {
 
     private doAction(): void {
         alert('Drucken ...');
@@ -6,4 +6,4 @@ export class NewTicketActionComponent {
 
 }
 
-module.exports = NewTicketActionComponent;
+module.exports = PrintTicketActionComponent;
