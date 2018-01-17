@@ -20,7 +20,7 @@ export class QueueExplorerComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addServiceListener(this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 

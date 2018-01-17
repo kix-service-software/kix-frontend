@@ -20,12 +20,12 @@ class ExplorerbarComponent {
 
     public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
         if (id === ContextService.getInstance().getActiveContextId()) {
-            if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED) {
+            if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED ||
+                type === ContextNotification.CONTEXT_CHANGED) {
                 const context = ContextService.getInstance().getContext();
                 this.state.explorer = context ? context.getWidgets(WidgetType.EXPLORER) : [];
-            } else if (
-                type === ContextNotification.EXPLORER_TOGGLED || type === ContextNotification.EXPLORER_BAR_TOGGLED
-            ) {
+            } else if (type === ContextNotification.EXPLORER_TOGGLED ||
+                type === ContextNotification.EXPLORER_BAR_TOGGLED) {
                 (this as any).setStateDirty('explorer');
             }
         }

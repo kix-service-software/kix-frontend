@@ -26,7 +26,7 @@ export class TicketDetailsComponent {
         this.setBreadcrumbDetails();
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        TicketService.getInstance().addStateListener(this.ticketServiceNotified.bind(this));
+        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 

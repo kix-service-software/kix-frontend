@@ -24,7 +24,7 @@ class TicketCreationDialogComponent {
         this.state = new TicketCreationDialogState();
         const existingState = ClientStorageHandler.loadState(TicketService.TICKET_CREATION_STATE_ID);
 
-        // TicketService.getInstance().addStateListener('ticket-creation', this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
         const translationHandler = await TranslationHandler.getInstance();
         const questionString = translationHandler.getTranslation(TranslationId.LOAD_DRAFT_QUESTION);
