@@ -1,18 +1,14 @@
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import { TicketService } from "@kix/core/dist/browser/ticket";
 import { TicketHistory } from "@kix/core/dist/model/ticket/TicketHistory";
+import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 
 class TicketHistoryWidgetComponent {
 
-    private state: any;
+    private state: TicketHistoryComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            instanceId: null,
-            ticketId: null,
-            widgetConfiguration: null,
-            history: []
-        };
+        this.state = new TicketHistoryComponentState();
     }
 
     public onInput(input: any): void {
@@ -27,7 +23,7 @@ class TicketHistoryWidgetComponent {
         this.getTicket();
     }
 
-    private contextNotified(id: string, type: ContextNotification, ...args): void {
+    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
         }
