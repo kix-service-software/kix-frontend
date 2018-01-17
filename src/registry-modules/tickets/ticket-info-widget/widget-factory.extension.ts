@@ -14,7 +14,7 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Ticket-Info', [], {}, this.type, true, WidgetSize.SMALL, 'minus'
+            this.widgetId, 'Ticket-Info', [], {}, this.type, true, WidgetSize.BOTH, 'minus'
         );
     }
 

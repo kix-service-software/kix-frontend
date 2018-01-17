@@ -70,10 +70,9 @@
                             <@actions/>
                         </widget>
                     </li>
-                    <include('./demo.marko')/>
                     <for(lane in state.lanes)>
                         <li.lane>
-                            <include(component.getWidgetTemplate(lane.instanceId), {instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
                         </li>
                     </for>
                 </ul>
