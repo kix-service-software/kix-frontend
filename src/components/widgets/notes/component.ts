@@ -1,6 +1,7 @@
 import { NotesComponentState } from './model/NotesComponentState';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class NotesWidgetComponent {
 
@@ -17,8 +18,8 @@ class NotesWidgetComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
     public showConfigurationClicked(): void {
@@ -35,7 +36,7 @@ class NotesWidgetComponent {
 
     public valueChanged(newValue: string): void {
         this.state.widgetConfiguration.settings.notes = newValue;
-        DashboardStore.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     public toggleEditMode(): void {

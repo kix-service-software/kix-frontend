@@ -1,7 +1,6 @@
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
-import { ContextFilter, Queue, TicketProperty } from '@kix/core/dist/model';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ObjectType, Queue, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
 import { TreeNode, TreeNodeProperty } from '@kix/core/dist/browser/model';
 
@@ -18,16 +17,15 @@ export class QueueExplorerComponent {
     }
 
     public onMount(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
-
+        TicketService.getInstance().addServiceListener(this.ticketStateChanged.bind(this));
         this.ticketStateChanged();
     }
 
     private ticketStateChanged(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData && ticketData.queuesHierarchy) {
             this.state.tree = this.prepareTree(ticketData.queuesHierarchy);
         } else {
@@ -65,9 +63,10 @@ export class QueueExplorerComponent {
     }
 
     private queueClicked(queueId: number): void {
-        // TODO: Constant enum for ObjectType Queue
-        const contextFilter = new ContextFilter('Queue', TicketProperty.QUEUE_ID, queueId);
-        ContextStore.getInstance().provideObjectFilter(contextFilter);
+        const contextFilter =
+            new ContextFilter('queue-explorer', 'queue-explorer', ObjectType.QUEUE, TicketProperty.QUEUE_ID, queueId);
+
+        ContextService.getInstance().provideContextFilter(contextFilter);
     }
 }
 

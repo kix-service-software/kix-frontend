@@ -1,8 +1,8 @@
 import { SearchComponentState } from './model/SearchComponentState';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { Context } from '@kix/core/dist/model';
 
 class SearchComponent {
 
@@ -15,10 +15,10 @@ class SearchComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().loadDashboardConfiguration();
-        const contextId = ClientStorageHandler.getContextId();
+        ContextService.getInstance().provideContext(new Context('search'), 'search', true);
+
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Search-Dashboard');
+            new BreadcrumbDetails('search', null, null, 'Search-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 

@@ -16,7 +16,7 @@ class TicketInfoWidgetComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
+        // TicketService.getInstance().addServiceListener(this.state.instanceId, this.ticketStateChanged.bind(this));
         this.getTicket();
     }
 

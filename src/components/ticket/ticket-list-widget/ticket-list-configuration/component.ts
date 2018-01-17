@@ -1,9 +1,10 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { TicketUtil } from '@kix/core/dist/browser/ticket/';
 import { TicketProperty } from '@kix/core/dist/model/';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketListConfigurationComponentState } from './TicketListConfigurationComponentState';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class TicketListConfigurationComponent {
 
@@ -18,7 +19,9 @@ class TicketListConfigurationComponent {
     }
 
     public async onMount(): Promise<void> {
-        this.state.configuration = DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+        this.state.configuration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         const th = await TranslationHandler.getInstance();
         for (const property of TicketUtil.getDisplayProperties()) {
             this.state.properties.push([property, th.getTranslation(property)]);
@@ -51,7 +54,7 @@ class TicketListConfigurationComponent {
     }
 
     private saveConfiguration(): void {
-        DashboardStore.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
         ApplicationStore.getInstance().toggleDialog();
     }
 

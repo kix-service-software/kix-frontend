@@ -1,5 +1,6 @@
 import { WidgetComponentState } from '@kix/core/dist/browser/model';
 import { Ticket } from '@kix/core/dist/model';
+import { ContextFilter } from '@kix/core/dist/model/';
 
 export class TicketListComponentState extends WidgetComponentState {
 
@@ -8,5 +9,7 @@ export class TicketListComponentState extends WidgetComponentState {
     public filteredTickets: Ticket[] = [];
 
     public filterValue: string = null;
+
+    public contextFilter: ContextFilter = null;
 
 }

@@ -1,6 +1,7 @@
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
-export class ServiceInputComponent {
+export class SLAInputComponent {
 
     private state: any;
 
@@ -15,7 +16,6 @@ export class ServiceInputComponent {
     public onInput(input: any): void {
         this.state.ticketDataId = input.ticketDataId;
         this.state.slaId = Number(input.value);
-        TicketService.getInstance().addStateListener(this.ticketDataStateChanged.bind(this));
     }
 
     public onMount(): void {
@@ -27,12 +27,8 @@ export class ServiceInputComponent {
         (this as any).emit('valueChanged', this.state.slaId);
     }
 
-    private ticketDataStateChanged(): void {
-        this.setStoreData();
-    }
-
     private setStoreData(): void {
-        const ticketData = TicketService.getInstance().getTicketData();
+        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
         if (ticketData) {
             this.state.slas = ticketData.slas;
         }
@@ -40,4 +36,4 @@ export class ServiceInputComponent {
 
 }
 
-module.exports = ServiceInputComponent;
+module.exports = SLAInputComponent;

@@ -2,9 +2,10 @@ import { TicketsComponentState } from './model/TicketsComponentState';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router/';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { DashboardConfiguration } from '@kix/core/dist/model/dashboard/DashboardConfiguration';
+import { Context, DashboardConfiguration } from '@kix/core/dist/model/';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class TicketsComponent {
 
@@ -21,12 +22,15 @@ class TicketsComponent {
     }
 
     public onMount(): void {
-        DashboardStore.getInstance().addStateListener(this.stateChanged.bind(this));
-        DashboardStore.getInstance().loadDashboardConfiguration();
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ContextService.getInstance().provideContext(
+            new Context(TicketsComponentState.MODULE_ID), TicketsComponentState.MODULE_ID, true
+        );
 
-        const contextId = ClientStorageHandler.getContextId();
+        DashboardService.getInstance().loadDashboardConfiguration(TicketsComponentState.MODULE_ID);
+
         const breadcrumbDetails =
-            new BreadcrumbDetails(contextId, null, null, 'Ticket-Dashboard');
+            new BreadcrumbDetails(TicketsComponentState.MODULE_ID, null, null, 'Ticket-Dashboard');
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
 
         if (this.state.ticketId) {
@@ -36,10 +40,10 @@ class TicketsComponent {
         }
     }
 
-    private stateChanged(): void {
-        const dashboardConfiguration: DashboardConfiguration = DashboardStore.getInstance().getDashboardConfiguration();
-        if (dashboardConfiguration) {
-            this.state.rows = dashboardConfiguration.contentRows;
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (id === TicketsComponentState.MODULE_ID && type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED) {
+            const dashboardConfiguration: DashboardConfiguration = args[0];
+            this.state.rows = dashboardConfiguration ? dashboardConfiguration.contentRows : [];
         }
     }
 }

@@ -1,8 +1,10 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { Ticket, TicketState, TicketProperty } from '@kix/core/dist/model/';
-import { ContextStore } from '@kix/core/dist/browser/context/ContextStore';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import {
+    TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
+} from '@kix/core/dist/model/';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { TicketService, TicketData, TicketNotification } from '@kix/core/dist/browser/ticket/';
 
 class TicketListWidgetComponent {
 
@@ -21,29 +23,36 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStoreChanged.bind(this));
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
 
-        ContextStore.getInstance().addStateListener(this.filter.bind(this));
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.loadTickets();
     }
 
-    private ticketStateChanged(): void {
-        const tickets = TicketService.getInstance().getTicketsSearchResult(this.state.instanceId);
-        if (tickets) {
-            this.state.tickets = tickets;
-            this.state.filteredTickets = tickets;
+    public contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
+        if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
+            const contextFilter: ContextFilter = args[0];
+            if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
+                this.state.contextFilter = contextFilter;
+                this.filter();
+            } else {
+                this.state.contextFilter = null;
+            }
+        } else if (type === ContextNotification.CONTEXT_UPDATED) {
+            const context = ContextService.getInstance().getContext();
+            this.state.widgetConfiguration =
+                context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+            this.loadTickets();
+        } else if (type === ContextNotification.OBJECT_LIST_UPDATED) {
+            const tickets: Ticket[] = args[0];
+            if (requestId === this.state.instanceId && tickets) {
+                this.state.tickets = tickets;
+                this.state.filteredTickets = tickets;
+                this.filter();
+            }
         }
-    }
-
-    private dashboardStoreChanged(): void {
-        this.state.widgetConfiguration =
-            DashboardStore.getInstance().getWidgetConfiguration(this.state.instanceId);
-
-        this.loadTickets();
     }
 
     private loadTickets(): void {
@@ -62,15 +71,16 @@ class TicketListWidgetComponent {
 
     private filter(): void {
         let usedContextFilter = false;
-        if (this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent) {
-            const contextFilter = ContextStore.getInstance().getContextFilter();
-            // TODO: use enum for objectType
-            if (contextFilter && contextFilter.objectType === 'Queue' && contextFilter.objectValue) {
-                this.state.filteredTickets =
-                    this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
-                usedContextFilter = true;
-            }
+        if (
+            this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
+            this.state.contextFilter
+        ) {
+            this.state.filteredTickets =
+                this.state.tickets.filter((t) => t.QueueID === this.state.contextFilter.objectValue);
+
+            usedContextFilter = true;
         }
+
 
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
             const searchValue = this.state.filterValue.toLocaleLowerCase();

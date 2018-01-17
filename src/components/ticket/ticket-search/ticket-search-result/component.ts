@@ -1,4 +1,5 @@
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
+import { ContextNotification, ContextService } from "@kix/core/dist/browser/context";
 
 export class TicketSearchResultComponent {
 
@@ -16,15 +17,17 @@ export class TicketSearchResultComponent {
     }
 
     public onMount(): void {
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
         TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
     }
 
-    private ticketStateChanged(): void {
-        const result = TicketService.getInstance().getTicketsSearchResult('ticket-search');
-        if (result) {
-            this.state.tickets = result;
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (id === 'ticket-search') {
+            this.state.tickets = args[0];
         }
+    }
 
+    private ticketStateChanged(): void {
         const properties = TicketService.getInstance().getTicketsSearchProperties('ticket-search');
         this.state.properties = properties ? properties : [];
     }

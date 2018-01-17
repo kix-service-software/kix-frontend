@@ -33,7 +33,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-queue-explorer", "Übersicht Queues", [], {},
                 WidgetType.EXPLORER, true, WidgetSize.SMALL, null, false)
             );
-        const explorerRows: string[][] = [['20171211155412'], ['20171215093654']];
+        const explorerRows: string[][] = [['20171211155412']];
         const explorerConfiguredWidgets: ConfiguredWidget[] = [queueExplorer];
 
         // Sidebars

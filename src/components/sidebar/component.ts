@@ -1,7 +1,9 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
-import { ConfiguredWidget, DashboardConfiguration } from '@kix/core/dist/model';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class SidebarComponent {
 
@@ -20,27 +22,31 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        DashboardStore.getInstance().addStateListener(this.dashboardStateChanged.bind(this));
-        this.dashboardStateChanged();
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
     }
 
-    private dashboardStateChanged(): void {
-        let sidebarConfiguration = null;
-
-        if (this.state.context === "dialog") {
-            sidebarConfiguration = DashboardStore.getInstance().getDialogSidebars();
-        } else {
-            sidebarConfiguration = DashboardStore.getInstance().getDashboardSidebars();
+    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (
+            type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED &&
+            id === ContextService.getInstance().getActiveContextId()
+        ) {
+            const context: Context = ContextService.getInstance().getContext();
+            this.state.configuredWidgets = context ? context.getWidgets(WidgetType.SIDEBAR) : [];
+            if (context && context.dashboardConfiguration) {
+                let rows = [];
+                for (const row of context.dashboardConfiguration.sidebarRows) {
+                    rows = [...rows, ...row];
+                }
+                this.state.rows = rows;
+            } else {
+                this.state.rows = [];
+            }
         }
+    }
 
-        if (sidebarConfiguration && sidebarConfiguration.length) {
-            this.state.rows = sidebarConfiguration[0];
-            this.state.configuredWidgets = sidebarConfiguration[1];
-        } else {
-            this.state.rows = [];
-            this.state.configuredWidgets = [];
-        }
+    private applicationStateChanged(): void {
+        //
     }
 
     private toggleSidebarWidget(instanceId: string): void {
@@ -51,7 +57,7 @@ class SidebarComponent {
             if (configuredWidget) {
                 configuredWidget.configuration.show = !configuredWidget.configuration.show;
 
-                DashboardStore.getInstance().saveWidgetConfiguration(
+                DashboardService.getInstance().saveWidgetConfiguration(
                     configuredWidget.instanceId,
                     configuredWidget.configuration,
                 );
@@ -62,7 +68,7 @@ class SidebarComponent {
     }
 
     private sidebarAvailable(instanceId: string): boolean {
-        return this.state.rows.some((r) => r === instanceId);
+        return this.state.rows && this.state.rows.some((r) => r === instanceId);
     }
 
     private showSidebar(widget: ConfiguredWidget): boolean {
@@ -76,7 +82,8 @@ class SidebarComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        return DashboardStore.getInstance().getWidgetTemplate(instanceId);
+        const context = ContextService.getInstance().getContext();
+        return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
     private isConfigMode(): boolean {
@@ -88,7 +95,9 @@ class SidebarComponent {
     }
 
     private hasSidebarsToShow(): boolean {
-        return this.state.configuredWidgets.some((w) => w.configuration.show);
+        return this.state.rows &&
+            this.state.rows.length &&
+            this.state.configuredWidgets.some((w) => w.configuration.show);
     }
 }
 

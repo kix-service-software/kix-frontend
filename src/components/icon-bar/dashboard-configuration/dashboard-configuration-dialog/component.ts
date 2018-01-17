@@ -1,6 +1,5 @@
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { DashboardStore } from '@kix/core/dist/browser/dashboard/DashboardStore';
 import {
     SelectWithFilterListElement,
     SelectWithPropertiesListElement,
@@ -14,6 +13,8 @@ import {
     WidgetType
 } from '@kix/core/dist/model';
 import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
+import { ContextService } from '@kix/core/dist/browser/context/';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class DashboardConfigurationDialog {
 
@@ -46,18 +47,15 @@ class DashboardConfigurationDialog {
     }
 
     public async onMount(): Promise<void> {
-        await DashboardStore.getInstance().loadDashboardConfiguration();
-        this.state.dashboardConfig = DashboardStore.getInstance().getDashboardConfiguration();
+        const context = ContextService.getInstance().getContext();
+        this.state.dashboardConfig = context ? context.dashboardConfiguration : undefined;
 
         this.prepareFirstLists();
         this.prepareSecondLists();
-
-        const translationHandler = await TranslationHandler.getInstance();
-        // this.state.translations = translationHandler.getTranslations([]);
     }
 
     private prepareFirstLists(): void {
-        const widgetDescriptorList = DashboardStore.getInstance().getAvailableWidgets();
+        const widgetDescriptorList = DashboardService.getInstance().getAvailableWidgets();
 
         let explorerInstanceIds = [];
         this.state.dashboardConfig.explorerRows.forEach((row) => {
@@ -284,7 +282,8 @@ class DashboardConfigurationDialog {
             this.updateRows(le, this.state.dashboardConfig.sidebarRows);
             this.updateConfiguredWidgets(le, this.state.dashboardConfig.sidebarConfiguredWidgets);
         });
-        DashboardStore.getInstance().saveDashboardConfiguration(this.state.dashboardConfig);
+
+        DashboardService.getInstance().saveDashboardConfiguration(this.state.dashboardConfig);
         ApplicationStore.getInstance().toggleDialog();
     }
 

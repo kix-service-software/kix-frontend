@@ -88,11 +88,11 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 "notes-widget", "Notes", [], {
                     notes: 'Test <strong style="color:red">123</strong>'
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, 'note', false)
+                WidgetType.SIDEBAR, true, WidgetSize.SMALL, 'note', false)
             );
         const notes2 =
             new ConfiguredWidget("20170915094112", new WidgetConfiguration(
-                "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.CONTENT, true, WidgetSize.SMALL, 'note', false)
+                "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.SIDEBAR, true, WidgetSize.SMALL, 'note', false)
             );
         const sidebarRows: string[][] = [['20170915101514'], ['20170915094112'], ['20170915085411']];
         const sidebarConfiguredWidgets: ConfiguredWidget[] = [notes, notes2];
