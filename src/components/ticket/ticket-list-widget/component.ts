@@ -34,8 +34,11 @@ class TicketListWidgetComponent {
     public contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
         if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
             const contextFilter: ContextFilter = args[0];
-            if (contextFilter) {
-                this.filter(contextFilter);
+            if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
+                this.state.contextFilter = contextFilter;
+                this.filter();
+            } else {
+                this.state.contextFilter = null;
             }
         } else if (type === ContextNotification.CONTEXT_UPDATED) {
             const context = ContextService.getInstance().getContext();
@@ -47,6 +50,7 @@ class TicketListWidgetComponent {
             if (requestId === this.state.instanceId && tickets) {
                 this.state.tickets = tickets;
                 this.state.filteredTickets = tickets;
+                this.filter();
             }
         }
     }
@@ -65,16 +69,14 @@ class TicketListWidgetComponent {
         this.state.filterValue = event.target.value;
     }
 
-    private filter(contextFilter: ContextFilter): void {
+    private filter(): void {
         let usedContextFilter = false;
         if (
-            this.state.widgetConfiguration &&
-            this.state.widgetConfiguration.contextDependent &&
-            contextFilter.objectType === ObjectType.QUEUE &&
-            contextFilter.objectValue
+            this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
+            this.state.contextFilter
         ) {
             this.state.filteredTickets =
-                this.state.tickets.filter((t) => t.QueueID === contextFilter.objectValue);
+                this.state.tickets.filter((t) => t.QueueID === this.state.contextFilter.objectValue);
 
             usedContextFilter = true;
         }
