@@ -30,7 +30,7 @@ export class TicketDetailsComponent {
 
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
 
-        const context = new Context('ticket-details');
+        const context = new Context('ticket-details', 'tickets/' + this.state.ticketId);
         ContextService.getInstance().provideContext(context, 'ticket-details', true);
 
         DashboardService.getInstance().loadDashboardConfiguration('ticket-details');

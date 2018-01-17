@@ -16,7 +16,7 @@ class HomeComponent {
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
         ContextService.getInstance().provideContext(
-            new Context(HomeComponentState.MODULE_ID), HomeComponentState.MODULE_ID, true
+            new Context(HomeComponentState.MODULE_ID, 'home'), HomeComponentState.MODULE_ID, true
         );
 
         DashboardService.getInstance().loadDashboardConfiguration(HomeComponentState.MODULE_ID);

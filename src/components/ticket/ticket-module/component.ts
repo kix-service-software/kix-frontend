@@ -24,7 +24,7 @@ class TicketsComponent {
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
         ContextService.getInstance().provideContext(
-            new Context(TicketsComponentState.MODULE_ID), TicketsComponentState.MODULE_ID, true
+            new Context(TicketsComponentState.MODULE_ID, 'tickets'), TicketsComponentState.MODULE_ID, true
         );
 
         DashboardService.getInstance().loadDashboardConfiguration(TicketsComponentState.MODULE_ID);
@@ -35,7 +35,7 @@ class TicketsComponent {
 
         if (this.state.ticketId) {
             ComponentRouterStore.getInstance().navigate(
-                'base-router', 'ticket-details', { ticketId: this.state.ticketId }, true, this.state.ticketId
+                'base-router', 'ticket-details', { ticketId: this.state.ticketId }, this.state.ticketId
             );
         }
     }

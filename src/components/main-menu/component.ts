@@ -46,7 +46,7 @@ class KIXMenuComponent {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ComponentRouterStore.getInstance().navigate('base-router', contextId, {}, true);
+        ComponentRouterStore.getInstance().navigate('base-router', contextId, {});
     }
 
 }

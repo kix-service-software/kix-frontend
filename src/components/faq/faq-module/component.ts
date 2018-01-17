@@ -15,7 +15,7 @@ class FAQComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('faq'), 'faq', true);
+        ContextService.getInstance().provideContext(new Context('faq', 'faq'), 'faq', true);
 
         const breadcrumbDetails =
             new BreadcrumbDetails('faq', null, null, 'FAQ-Dashboard');

@@ -35,7 +35,7 @@ class BaseTemplateComponent {
 
         if (this.state.contextId) {
             ComponentRouterStore.getInstance().navigate(
-                'base-router', this.state.contextId, { objectId: this.state.objectId }, true, this.state.objectId
+                'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
             );
         }
     }

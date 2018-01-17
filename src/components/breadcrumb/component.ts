@@ -20,13 +20,6 @@ class BreadcrumbComponent {
         this.state.breadcrumbDetails = ComponentRouterStore.getInstance().getBreadcrumbDetails();
     }
 
-    private navigate(event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-        ComponentRouterStore.getInstance().navigate('base-router', this.state.breadcrumbDetails.contextId, {}, true);
-    }
-
 }
 
 module.exports = BreadcrumbComponent;
