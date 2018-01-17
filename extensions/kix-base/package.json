@@ -59,6 +59,7 @@
             "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
             "ticket-list-widget": "../../dist/registry-modules/tickets/ticket-list-widget/widget-factory.extension",
             "ticket-info-widget": "../../dist/registry-modules/tickets/ticket-info-widget/widget-factory.extension",
+            "ticket-description-widget": "../../dist/registry-modules/tickets/ticket-description-widget/widget-factory.extension",
             "queue-explorer": "../../dist/registry-modules/tickets/queue-explorer/widget-factory.extension",
             "service-explorer": "../../dist/registry-modules/tickets/service-explorer/widget-factory.extension"
         },
