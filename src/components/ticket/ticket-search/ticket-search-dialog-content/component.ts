@@ -14,7 +14,7 @@ export class TicketSearchDialogComponent {
     }
 
     public async onMount(): Promise<void> {
-        // TicketService.getInstance().addStateListener('ticket-search-dialog', this.ticketStateChanged.bind(this));
+        TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
         this.ticketStateChanged();
 
