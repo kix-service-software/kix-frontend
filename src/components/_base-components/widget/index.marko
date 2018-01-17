@@ -19,7 +19,7 @@
             </if>
         </span>
         <span.header-right>
-            <if(component.isConfigMode())>
+            <if(component.isConfigMode() && !input.isNotConfigurable)>
                 <if(state.configChanged)>
                     <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
                 </if>
