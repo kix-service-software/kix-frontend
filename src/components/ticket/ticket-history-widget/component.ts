@@ -1,3 +1,5 @@
+import { ContextService } from "@kix/core/dist/browser/context/ContextService";
+
 class TicketHistoryWidgetComponent {
 
     private state: any;
@@ -5,7 +7,8 @@ class TicketHistoryWidgetComponent {
     public onCreate(input: any): void {
         this.state = {
             instanceId: null,
-            ticketId: null
+            ticketId: null,
+            widgetConfiguration: null
         };
     }
 
@@ -15,7 +18,8 @@ class TicketHistoryWidgetComponent {
     }
 
     public onMount(): void {
-        // TODO: Load Configuration
+        const context = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
 }
