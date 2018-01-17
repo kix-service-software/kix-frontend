@@ -1,5 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
+    TicketDetailsDashboardConfiguration,
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
 } from '@kix/core/dist/model/';
 
@@ -55,9 +56,17 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const sidebarRows = [];
         const sidebarConfiguredWidgets: ConfiguredWidget[] = [];
 
-        return new DashboardConfiguration(
+        // actions
+        const generalActions = ['new-ticket-action'];
+        const ticketActions = [
+            'edit-ticket-action', 'merge-ticket-action', 'link-ticket-action',
+            'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
+            'print-ticket-action',
+        ];
+        return new TicketDetailsDashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, explorerRows,
-            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, []
+            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, [],
+            generalActions, ticketActions
         );
     }
 

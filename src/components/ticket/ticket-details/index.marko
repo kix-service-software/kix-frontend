@@ -5,33 +5,11 @@
             <@title>T#${state.ticket.TicketNumber} - ${state.ticket.Title}</@title>
             <@content>
                 <ul.action-list>
-                    <li>
-                        <span.kix-icon-ticket-edit/>Bearbeiten
-                    </li>
-                    <li>
-                        <span.kix-icon-arrow-sumup/>Zusammenfassen
-                    </li>
-                    <li>
-                        <span.kix-icon-link/>Verknüpfen
-                    </li>
-                    <li>
-                        <span.kix-icon-lock-open/>Entsperren
-                    </li>
-                    <li>
-                        <span.kix-icon-eye/>Beobachten
-                    </li>
-                    <li>
-                        <span.kix-icon-maintain-record/>Wartungsdoku
-                    </li>
-                    <li>
-                        <span.kix-icon-fire-add/>Flächenstörung
-                    </li>
-                    <li>
-                        <span.kix-icon-warnsign/>Spam
-                    </li>
-                    <li>
-                        <span.kix-icon-ticket-print/>Drucken
-                    </li>
+                    <for(action in state.ticketActions)>
+                        <li>
+                            <include(component.getTemplate(action))/>
+                        </li>
+                    </for>
                 </ul>
                 <ul.lane-list>
                     <li.lane.tabs class=(state.minimized ? "minimized" : "")>
@@ -63,45 +41,13 @@
                         </li>
                     </for>
                 </ul>
-                <!--
-                Hier das Beispiel, wie die Tabs befüllt und dargestellt werden
-                    <ul.tab-list>
-                        <for(tab in state.tabs)>
-                            <li.active on-click('tabClicked', tab.instanceId)>${tab.configuration.title}</li>
-                        </for>
-                    </ul>
-                    <if(state.activeTabId)>
-                        <div.tab-content>
-                            content
-                        </div>
-                    </if>
-                -->
-                <!-- <div.lane-widget>
-                    <widget instanceId=Date.now() minimizable=true>
-                        <@icon/>
-                        <@title/>
-                        <@content/>
-                        <@filter/>
-                        <@actions/>
-                    </widget>
-                    <for(lane in state.lanes)>
-                        <include(component.getWidgetTemplate(lane.instanceId), {instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
-                    </for>
-                    <widget instanceId=Date.now() minimizable=true minimized=true>
-                        <@icon/>
-                        <@title>Beschreibung & Anmerkungen</@title>
-                        <@content>
-                            <if(state.articles && state.articles.length)>
-                                <span>${state.articles[0].Body}</span>
-                            </if>
-                        </@content>
-                        <@filter/>
-                        <@actions/>
-                    </widget>
-                </div> -->
             </@content>
             <@filter/>
-            <@actions/>
+            <@actions>
+                <for(action in state.generalActions)>
+                    <include(component.getTemplate(action))/>
+                </for>
+            </@actions>
         </widget>
         <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
             <@icon/>

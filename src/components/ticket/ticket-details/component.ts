@@ -2,7 +2,9 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { TicketData, TicketService, TicketNotification } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration } from '@kix/core/dist/model';
+import {
+    TicketDetailsDashboardConfiguration, TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration
+} from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -40,11 +42,17 @@ export class TicketDetailsComponent {
         if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsComponent.MODULE_ID) {
             const context = ContextService.getInstance().getContext(TicketDetailsComponent.MODULE_ID);
 
-            this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
-            this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
+            const config = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
 
-            if (!this.state.activeTabId && this.state.tabs.length) {
-                this.state.activeTabId = this.state.tabs[0].instanceId;
+            if (config) {
+                this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
+                this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
+                this.state.generalActions = config.generalActions;
+                this.state.ticketActions = config.ticketActions;
+
+                if (!this.state.activeTabId && this.state.tabs.length) {
+                    this.state.activeTabId = this.state.tabs[0].instanceId;
+                }
             }
         }
     }
@@ -77,6 +85,10 @@ export class TicketDetailsComponent {
 
     private tabClicked(tabId: string): void {
         this.state.activeTabId = tabId;
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 
 }
