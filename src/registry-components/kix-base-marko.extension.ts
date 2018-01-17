@@ -32,7 +32,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-info-widget',
             'ticket/ticket-history-widget',
             'ticket/ticket-info-widget/ticket-info-configuration',
-            'ticket/ticket-creation-dialog'
+            'ticket/ticket-creation-dialog',
+            'ticket/ticket-description-widget'
         ];
     }
 
@@ -79,7 +80,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
                 'ticket-service-explorer-configuration',
                 'ticket/ticket-service-explorer/ticket-service-explorer-configuration'
             ],
-            ['ticket-history-widget', 'ticket/ticket-history-widget']
+            ['ticket-history-widget', 'ticket/ticket-history-widget'],
+            ['ticket-description-widget', 'ticket/ticket-description-widget']
         ];
     }
 
