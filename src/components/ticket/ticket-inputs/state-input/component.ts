@@ -1,4 +1,4 @@
-import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
+import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class StateInputComponent {
@@ -28,7 +28,7 @@ export class StateInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = ContextService.getInstance().getObject(TicketService.TICKET_DATA_ID);
+        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
         if (ticketData) {
             this.state.states = ticketData.states;
         }

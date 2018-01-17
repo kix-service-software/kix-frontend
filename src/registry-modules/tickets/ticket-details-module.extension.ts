@@ -21,6 +21,11 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-history-widget", "Historie", [], {},
                 WidgetType.LANE, true, WidgetSize.BOTH, null, false)
             );
+        const descriptionLane =
+            new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
+                "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
+                WidgetType.LANE, true, WidgetSize.BOTH, null, false)
+            );
         const notesWidget =
             new ConfiguredWidget(
                 "ticket-module-notes",
@@ -29,8 +34,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     WidgetType.SIDEBAR | WidgetType.LANE_TAB, true, WidgetSize.SMALL, "note", false
                 )
             );
-        const contentRows = [["ticket-information-lane", "ticket-module-notes", "ticket-history-widget"]];
-        const contentConfiguredWidgets: ConfiguredWidget[] = [ticketInfoLane, notesWidget, ticketHistoryLane];
+        const contentRows = [
+            ["ticket-information-lane", "ticket-module-notes", "ticket-history-widget", "ticket-description-widget"]
+        ];
+
+        const contentConfiguredWidgets: ConfiguredWidget[] = [
+            ticketInfoLane, notesWidget, descriptionLane, ticketHistoryLane
+        ];
 
         // Explorer
         const queueExplorer =

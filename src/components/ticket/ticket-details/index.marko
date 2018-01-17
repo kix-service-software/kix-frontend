@@ -57,19 +57,6 @@
                             <@contentActions/>
                         </widget>
                     </li>
-                    <li.lane>
-                        <widget instanceId=Date.now() minimizable=true minimized=true>
-                            <@icon/>
-                            <@title>Beschreibung & Anmerkungen</@title>
-                            <@content>
-                                <if(state.articles && state.articles.length)>
-                                    <span>${state.articles[0].Body}</span>
-                                </if>
-                            </@content>
-                            <@filter/>
-                            <@actions/>
-                        </widget>
-                    </li>
                     <for(lane in state.lanes)>
                         <li.lane>
                             <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>

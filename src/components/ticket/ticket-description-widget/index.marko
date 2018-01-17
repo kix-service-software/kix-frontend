@@ -1,0 +1,34 @@
+<widget instanceId=Date.now() minimizable=true minimized=true>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <div.description-container>
+            <label.label>
+                <b>Anlagen:</b>
+                <a href="#">(${state.attachments.length})</a>
+            </label>
+            <label.label>
+                <b>Beschreibung:</b>
+                <p>${state.description}</p>
+            </label>
+            <label.label>
+                <b>Anmerkung:</b>
+                <p>...</p>
+            </label>
+        </div>
+    </@content>
+    <@filter/>
+    <@actions/>
+    <@contentActions>
+        <ul.content-actions>
+            <li>
+                <span.kix-icon-edit on-click('edit')/>
+            </li>
+            <li>
+                <span.kix-icon-print on-click('print')/>
+            </li>
+        </ul>
+    </@contentActions>
+</widget>
