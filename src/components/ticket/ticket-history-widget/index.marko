@@ -1,4 +1,4 @@
-<widget instanceId=state.instanceId minimizable=input.minimizable>
+<widget instanceId=state.instanceId minimizable=input.minimizable minimized=input.minimized>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
@@ -8,22 +8,54 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <table>
-            <tr>
-                <th>Datum</th>
-                <th>Typ</th>
-                <th>Blubb</th>
-            </tr>
-            <!-- Iteration -->
-            <tr>
-                <td/>
-                <td/>
-                <td/>
-            </tr>
-        </table>
+        <div.history-container>
+            <table.history-table>
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Erstellt durch</th>
+                        <th>Aktion</th>
+                        <th>Artikel</th>
+                        <th>Status</th>
+                        <th>Typ</th>
+                        <th>Queue</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <for(entry in state.history)>
+                        <tr>
+                            <td>${entry.CreateTime}</td>
+                            <td>
+                                <ticket-property-label property="UserID" value=entry.CreateBy/>
+                            </td>
+                            <td>${entry.HistoryType}</td>
+                            <td>${entry.ArticleID}</td>
+                            <td>
+                                <ticket-property-label property="StateID" value=entry.StateID/>
+                            </td>
+                            <td>
+                                <ticket-property-label property="TypeID" value=entry.TypeID/>
+                            </td>
+                            <td>
+                                <ticket-property-label property="QueueID" value=entry.QueueID/>
+                            </td>
+                            <td>${entry.Name}</td>
+                        </tr>
+                    </for>
+                </tbody>
+            </table>
+        </div>
     </@content>
     <@filter>
         <span/>
     </@filter>
     <@actions/>
+    <@contentActions>
+        <ul.content-actions>
+            <li>
+                <span.kix-icon-print on-click('print')/>
+            </li>
+        </ul>
+    </@contentActions>
 </widget>

@@ -124,12 +124,15 @@ export class TicketCommunicator extends KIXCommunicator {
                 return undefined;
             });
 
+            const history = await this.ticketService.getTicketHistory(data.token, data.ticketId);
+
             const ticketDetails = new TicketDetails(
                 data.ticketId,
                 (ticket as Ticket),
                 articles,
                 (contact as Contact),
-                (customer as Customer)
+                (customer as Customer),
+                history
             );
 
             const response = new LoadTicketDetailsResponse(ticketDetails);
