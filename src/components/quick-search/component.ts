@@ -72,7 +72,7 @@ export class QuickSearchComponent {
         data[this.state.currentQuickSearch.objectIdProperty] = objectId;
 
         ComponentRouterStore.getInstance().navigate(
-            'base-router', this.state.currentQuickSearch.objectComponent, data, true, objectId
+            'base-router', this.state.currentQuickSearch.objectComponent, data, objectId
         );
     }
 

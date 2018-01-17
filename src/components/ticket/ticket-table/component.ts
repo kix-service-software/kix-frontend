@@ -47,7 +47,7 @@ export class TicketTableComponent {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, true, ticketId);
+        ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, ticketId);
     }
 
     private sortUp(property: TicketProperty): void {

@@ -7,10 +7,6 @@
             <span.kix-icon-home/>
         </else>
         <span>
-            <!--  // TODO: Wenn Breadcrumb definitiv KEIN Link sein soll, dann Link und navigate-Logik entfernen!
-            <a href="/${state.breadcrumbDetails.contextId}" on-click('navigate')>
-                ${state.breadcrumbDetails.componentDisplayText}
-            </a> -->
             ${state.breadcrumbDetails.componentDisplayText}
             <if(state.breadcrumbDetails.parameterDisplayText)>${' '}| ${state.breadcrumbDetails.parameterDisplayText}</if>
         </span>

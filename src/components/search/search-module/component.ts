@@ -15,7 +15,7 @@ class SearchComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('search'), 'search', true);
+        ContextService.getInstance().provideContext(new Context('search', 'search'), 'search', true);
 
         const breadcrumbDetails =
             new BreadcrumbDetails('search', null, null, 'Search-Dashboard');
