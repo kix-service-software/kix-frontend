@@ -210,18 +210,23 @@
             }
         }
     }
-    .article-table-widget > .widget {
+    .article-table-widget>.widget {
         background-color: #ffffff;
-        > .widget-header {
+        >.widget-header {
             background-color: #035580;
             color: #ffffff;
+            >.header-right {
+                label {
+                    margin-right: 15px;
+                    font-size: 0.875em
+                }
+            }
         }
         .article-table-wrapper {
             max-height: 350px;
             overflow-y: auto;
             width: 100%;
         }
-        
         .article-table {
             width: 100%;
             a {
@@ -247,6 +252,7 @@
                 &.QueueID {
                     text-align: center
                 }
+                .article-content {}
             }
             thead {
                 background-color: #0a7cb3;

@@ -56,10 +56,19 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
             'print-ticket-action',
         ];
+
+        const generalArticleActions = [
+            'new-email-article-action', 'new-note-article-action',
+            'call-outgoing-article-action', 'call-incoming-article-action'
+        ];
+        const articleActions = [
+            'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
+        ];
+
         return new TicketDetailsDashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, explorerRows,
             contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, [],
-            generalActions, ticketActions
+            generalActions, ticketActions, generalArticleActions, articleActions
         );
     }
 

@@ -41,6 +41,14 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/actions/print-ticket-action',
             'ticket/actions/spam-ticket-action',
             'ticket/actions/watch-ticket-action',
+            'ticket/actions/attachment-download-article-action',
+            'ticket/actions/call-incoming-article-action',
+            'ticket/actions/call-outgoing-article-action',
+            'ticket/actions/delete-article-action',
+            'ticket/actions/edit-article-action',
+            'ticket/actions/new-email-article-action',
+            'ticket/actions/new-note-article-action',
+            'ticket/actions/print-article-action',
             'ticket/dialogs/ticket-creation-dialog',
             'ticket/dialogs/merge-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
@@ -109,6 +117,14 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['print-ticket-action', 'ticket/actions/print-ticket-action'],
             ['spam-ticket-action', 'ticket/actions/spam-ticket-action'],
             ['watch-ticket-action', 'ticket/actions/watch-ticket-action'],
+            ['attachment-download-article-action', 'ticket/actions/attachment-download-article-action'],
+            ['call-incoming-article-action', 'ticket/actions/call-incoming-article-action'],
+            ['call-outgoing-article-action', 'ticket/actions/call-outgoing-article-action'],
+            ['delete-article-action', 'ticket/actions/delete-article-action'],
+            ['edit-article-action', 'ticket/actions/edit-article-action'],
+            ['new-email-article-action', 'ticket/actions/new-email-article-action'],
+            ['new-note-article-action', 'ticket/actions/new-note-article-action'],
+            ['print-article-action', 'ticket/actions/print-article-action']
         ];
 
         return [

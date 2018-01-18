@@ -10,7 +10,10 @@ export class TicketDetailsComponentState {
         public tabs: ConfiguredWidget[] = [],
         public activeTabId: string = null,
         public generalActions: string[] = [],
-        public ticketActions: string[] = []
+        public ticketActions: string[] = [],
+        public generalArticleActions: string[] = [],
+        public articleActions: string[] = [],
+        public expandedArticles: number[] = []
     ) { }
 
 }
