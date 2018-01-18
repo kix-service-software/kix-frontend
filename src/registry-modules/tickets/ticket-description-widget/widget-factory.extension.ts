@@ -1,16 +1,11 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
-import { TicketDescriptionWidget } from './TicketDescriptionWidget';
 
 export class TicketDescriptionWidgetFactoryExtension implements IWidgetFactoryExtension {
 
     public widgetId: string = "ticket-history-widget";
 
     public type: WidgetType = WidgetType.LANE;
-
-    public createWidget(): IWidget {
-        return new TicketDescriptionWidget(this.widgetId);
-    }
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(

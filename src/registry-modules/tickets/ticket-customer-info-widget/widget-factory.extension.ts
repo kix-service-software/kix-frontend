@@ -3,13 +3,13 @@ import { WidgetType, IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/
 
 export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension {
 
-    public widgetId: string = "ticket-info-widget";
+    public widgetId: string = "ticket-customer-info-widget";
 
-    public type: WidgetType = WidgetType.LANE_TAB;
+    public type: WidgetType = WidgetType.SIDEBAR;
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Ticket-Info', [], {}, this.type, true, WidgetSize.BOTH, 'minus'
+            this.widgetId, 'Kundeninformation', [], {}, this.type, true, WidgetSize.BOTH, 'customers'
         );
     }
 
