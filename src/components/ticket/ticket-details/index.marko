@@ -57,6 +57,11 @@
                 <@title>
                     <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
                 </@title>
+                <@actions>
+                    <for(action in state.generalArticleActions)>
+                        <include(component.getTemplate(action), { ticketId: state.ticketId })/>
+                    </for>
+                </@actions>
                 <@content>
                     <div.article-table-wrapper>
                         <if(state.articles)>
@@ -93,9 +98,33 @@
                                                 <td>-</td>
                                             </else>
                                             <td>
-                                                <span.kix-icon-open-down/>
+                                                <span.kix-icon-open-down on-click('toggleArticle', article.ArticleID)/>
                                             </td>
                                         </tr>
+                                        <if(component.isArticleExpanded(article.ArticleID))>
+                                            <tr>
+                                                <td.article-content colspan=8>
+                                                    <widget minimizable=false>
+                                                        <@icon/>
+                                                        <@title/>
+                                                        <@content>
+                                                            <ticket-article-content article=article/>
+                                                        </@content>
+                                                        <@filter/>
+                                                        <@actions/>
+                                                        <@contentActions>
+                                                            <ul.action-list>
+                                                                <for(action in state.articleActions)>
+                                                                    <li>
+                                                                        <include(component.getTemplate(action), { article: article })/>
+                                                                    </li>
+                                                                </for>
+                                                            </ul>
+                                                        </@contentActions>
+                                                    </widget>
+                                                </td>
+                                            </tr>
+                                        </if>
                                     </for>
                                 </tbody>
                             </table>
@@ -106,7 +135,6 @@
                     <input type="text" placeholder="Filtern in Liste"/>
                     <span.kix-icon-filter/>
                 </@filter>
-                <@actions/>
             </widget>
         </div>
     </if>

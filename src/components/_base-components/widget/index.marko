@@ -1,6 +1,6 @@
 <div.widget class=(state.minimized ? "minimized" : "")>
-    <div.widget-header.clearfix on-click('minimizeWidget')>
-        <span.header-left>
+    <div.widget-header.clearfix>
+        <span.header-left on-click('minimizeWidget')>
             <h3>
                 <if(input.explorer)>
                     <span.kix-icon-close-left on-click('minimizeExplorer')/>
@@ -30,7 +30,7 @@
                     <include(input.actions)/>
                 </if>
                 <if(state.minimizable)>
-                    <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up")/>
+                    <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
                 </if>
             </else>
         </span>
