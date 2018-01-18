@@ -103,51 +103,63 @@
             <@filter/>
             <@actions/>
         </widget>
-        <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
-            <@icon/>
-            <@title>
-                <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
-            </@title>
-            <@content>
-                <if(state.articles)>
-                    <table.article-table>
-                        <tr>
-                            <th>alle</th>
-                            <th>Nr.</th>
-                            <th>Sender</th>
-                            <th>Type</th>
-                            <th>von</th>
-                            <th>Betreff</th>
-                            <th>erstellt</th>
-                            <th>Anlage</th>
-                        </tr>
-                        <for(article in state.articles  | status-var=loop)>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"/>
-                                </td>
-                                <td>${loop.getLength() - loop.getIndex()}</td>
-                                <td>${article.SenderTypeID}</td>
-                                <td>${article.ArticleTypeID}</td>
-                                <td>${article.From}</td>
-                                <td>${article.Subject}</td>
-                                <td>${article.IncomingTime}</td>
-                                <if(article.Attachments)>
-                                    <td>${article.Attachments.length}</td>
-                                </if>
-                                <else>
-                                    <td>-</td>
-                                </else>
-                            </tr>
-                        </for>
-                    </table>
-                </if>
-            </@content>
-            <@filter>
-                <input type="text" placeholder="Filtern in Liste"/>
-                <span.kix-icon-filter/>
-            </@filter>
-            <@actions/>
-        </widget>
+        <div.article-table-widget>
+            <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+                <@icon/>
+                <@title>
+                    <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
+                </@title>
+                <@content>
+                    <div.article-table-wrapper>
+                        <if(state.articles)>
+                            <table.article-table>
+                                <thead>
+                                    <tr>
+                                        <th>alle</th>
+                                        <th>Nr.</th>
+                                        <th>Sender</th>
+                                        <th>Type</th>
+                                        <th>von</th>
+                                        <th>Betreff</th>
+                                        <th>erstellt</th>
+                                        <th>Anlage</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <for(article in state.articles  | status-var=loop)>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"/>
+                                            </td>
+                                            <td>${loop.getLength() - loop.getIndex()}</td>
+                                            <td>${article.SenderTypeID}</td>
+                                            <td>${article.ArticleTypeID}</td>
+                                            <td>${article.From}</td>
+                                            <td>${article.Subject}</td>
+                                            <td>${article.IncomingTime}</td>
+                                            <if(article.Attachments)>
+                                                <td>${article.Attachments.length}</td>
+                                            </if>
+                                            <else>
+                                                <td>-</td>
+                                            </else>
+                                            <td>
+                                                <span.kix-icon-open-down/>
+                                            </td>
+                                        </tr>
+                                    </for>
+                                </tbody>
+                            </table>
+                        </if>
+                    </div>
+                </@content>
+                <@filter>
+                    <input type="text" placeholder="Filtern in Liste"/>
+                    <span.kix-icon-filter/>
+                </@filter>
+                <@actions/>
+            </widget>
+        </div>
     </if>
 </div>
