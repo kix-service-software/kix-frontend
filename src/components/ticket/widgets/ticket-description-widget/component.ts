@@ -12,7 +12,7 @@ class TicketDescriptionWIdgetComponent {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.ticketId = input.ticketId;
+        this.state.ticketId = Number(input.ticketId);
     }
 
     public onMount(): void {

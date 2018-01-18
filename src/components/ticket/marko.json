@@ -1,6 +1,7 @@
 {
     "tags-dir": [
         "./ticket-inputs",
-        "./ticket-labels"
+        "./ticket-labels",
+        "./actions"
     ]
 }

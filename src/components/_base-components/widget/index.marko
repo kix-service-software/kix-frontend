@@ -1,5 +1,5 @@
 <div.widget class=(state.minimized ? "minimized" : "")>
-    <div.widget-header.clearfix>
+    <div.widget-header.clearfix on-click('minimizeWidget')>
         <span.header-left>
             <h3>
                 <if(input.explorer)>
@@ -26,30 +26,23 @@
                 <span.kix-icon-gear on-click('showConfiguration')/>
             </if>
             <else>
-                <!-- 
-                    TODO: Durch Marko-Bug kein if innerhalb if/else möglich, deshalb wieder "unnützes" div 
-                    wahrscheinlich selbes Problem wie in Issue #151
-                    interessanter weise gehen hier auch nicht mehrere if nebeneinander bzw. if - else-if Konstrukte...
-                -->
-                <div>
-                    <if(component.isInputDefined(input.actions))>
-                        <include(input.actions)/>
-                    </if>
-                    <if(input.minimizable || typeof input.minimizable === 'undefined')>
-                        <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
-                    </if>
-                </div>
+                <if(component.isInputDefined(input.actions))>
+                    <include(input.actions)/>
+                </if>
+                <if(state.minimizable)>
+                    <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up")/>
+                </if>
             </else>
         </span>
     </div>
-    <if(!state.minimized && component.isInputDefined(input.content))>
-        <div.widget-content.clearfix>
-            <if(component.isInputDefined(input.contentActions))>
-                <include(input.contentActions)/>
-            </if>
+    <div.widget-content.clearfix>
+        <if(component.isInputDefined(input.contentActions))>
+            <include(input.contentActions)/>
+        </if>
+        <if(!state.minimized && component.isInputDefined(input.content))>
             <include(input.content)/>
-        </div>
-    </if>
+        </if>
+    </div>
     <if(component.isConfigMode() && !input.noConfigOverlay)>
         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
             <div.widget-overlay-content/>

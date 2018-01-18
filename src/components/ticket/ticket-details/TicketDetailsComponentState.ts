@@ -8,7 +8,9 @@ export class TicketDetailsComponentState {
         public articles: Article[] = [],
         public lanes: ConfiguredWidget[] = [],
         public tabs: ConfiguredWidget[] = [],
-        public activeTabId: string = null
+        public activeTabId: string = null,
+        public generalActions: string[] = [],
+        public ticketActions: string[] = []
     ) { }
 
 }
