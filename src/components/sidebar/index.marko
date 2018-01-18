@@ -21,10 +21,7 @@
             <if(component.showSidebar(widget))>
                 <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
                 <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-                    <include(component.getWidgetTemplate(widget.instanceId), {
-                        instanceId: widget.instanceId,
-                        minimizable: false
-                    }) key=widget.instanceId/>
+                    <include(component.getWidgetTemplate(widget.instanceId), { instanceId: widget.instanceId, minimizable: false })/>
                 </div>
             </if>
         </for>

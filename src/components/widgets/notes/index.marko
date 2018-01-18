@@ -10,7 +10,8 @@
     <@content>
         <if(state.widgetConfiguration)>
             <if(state.editMode)>
-                <editor inline=true simple=true resize=false value=state.widgetConfiguration.settings.notes on-valueChanged('valueChanged')/>
+                <editor inline=true simple=true resize=false value=state.widgetConfiguration.settings.notes
+                    on-valueChanged('valueChanged')/>
             </if>
             <else>
                 <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
