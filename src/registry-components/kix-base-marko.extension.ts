@@ -19,21 +19,35 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getTicketDependencies(): string[] {
         return [
-            'ticket/ticket-queue-explorer',
-            'ticket/ticket-queue-explorer/ticket-queue-explorer-configuration',
-            'ticket/ticket-service-explorer',
-            'ticket/ticket-service-explorer/ticket-service-explorer-configuration',
+            'ticket/explorer/ticket-queue-explorer',
+            'ticket/explorer/ticket-queue-explorer/ticket-queue-explorer-configuration',
+            'ticket/explorer/ticket-service-explorer',
+            'ticket/explorer/ticket-service-explorer/ticket-service-explorer-configuration',
             'ticket/ticket-module',
             'ticket/ticket-details',
             'ticket/ticket-search/ticket-search-result',
             'ticket/ticket-search/ticket-search-dialog-content',
-            'ticket/ticket-list-widget',
-            'ticket/ticket-list-widget/ticket-list-configuration',
-            'ticket/ticket-info-widget',
-            'ticket/ticket-history-widget',
-            'ticket/ticket-info-widget/ticket-info-configuration',
-            'ticket/ticket-creation-dialog',
-            'ticket/ticket-description-widget'
+            'ticket/widgets/ticket-list-widget',
+            'ticket/widgets/ticket-list-widget/ticket-list-configuration',
+            'ticket/widgets/ticket-info-widget',
+            'ticket/widgets/ticket-history-widget',
+            'ticket/widgets/ticket-info-widget/ticket-info-configuration',
+            'ticket/widgets/ticket-description-widget',
+            'ticket/actions/edit-ticket-action',
+            'ticket/actions/link-ticket-action',
+            'ticket/actions/lock-ticket-action',
+            'ticket/actions/merge-ticket-action',
+            'ticket/actions/new-ticket-action',
+            'ticket/actions/print-ticket-action',
+            'ticket/actions/spam-ticket-action',
+            'ticket/actions/watch-ticket-action',
+            'ticket/dialogs/ticket-creation-dialog',
+            'ticket/dialogs/merge-ticket-dialog',
+            'ticket/dialogs/edit-ticket-dialog',
+            'ticket/dialogs/link-ticket-dialog',
+            'ticket/dialogs/lock-ticket-dialog',
+            'ticket/dialogs/spam-ticket-dialog',
+            'ticket/dialogs/watch-ticket-dialog',
         ];
     }
 
@@ -58,30 +72,55 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
     }
 
+    // tslint:disable:max-line-length
     private getTicketComponentTags(): Array<[string, string]> {
+        const widgets: Array<[string, string]> = [
+            ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
+            ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
+            ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
+            ['ticket-info-configuration', 'ticket/widgets/ticket-info-widget/ticket-info-configuration'],
+            ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],
+            ['ticket-description-widget', 'ticket/widgets/ticket-description-widget']
+        ];
+
+        const explorer: Array<[string, string]> = [
+            ['ticket-queue-explorer', 'ticket/explorer/ticket-queue-explorer'],
+            ['ticket-queue-explorer-configuration', 'ticket/explorer/ticket-queue-explorer/ticket-queue-explorer-configuration'],
+            ['ticket-service-explorer', 'ticket/explorer/ticket-service-explorer'],
+            ['ticket-service-explorer-configuration', 'ticket/explorer/ticket-service-explorer/ticket-service-explorer-configuration'],
+        ];
+
+        const dialogs: Array<[string, string]> = [
+            ['ticket-creation-dialog', 'ticket/dialogs/ticket-creation-dialog'],
+            ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
+            ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
+            ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog'],
+            ['lock-ticket-dialog', 'ticket/dialogs/lock-ticket-dialog'],
+            ['spam-ticket-dialog', 'ticket/dialogs/spam-ticket-dialog'],
+            ['watch-ticket-dialog', 'ticket/dialogs/watch-ticket-dialog']
+        ];
+
+        const actions: Array<[string, string]> = [
+            ['edit-ticket-action', 'ticket/actions/edit-ticket-action'],
+            ['link-ticket-action', 'ticket/actions/link-ticket-action'],
+            ['lock-ticket-action', 'ticket/actions/lock-ticket-action'],
+            ['merge-ticket-action', 'ticket/actions/merge-ticket-action'],
+            ['new-ticket-action', 'ticket/actions/new-ticket-action'],
+            ['print-ticket-action', 'ticket/actions/print-ticket-action'],
+            ['spam-ticket-action', 'ticket/actions/spam-ticket-action'],
+            ['watch-ticket-action', 'ticket/actions/watch-ticket-action'],
+        ];
+
         return [
             ['tickets', 'ticket/ticket-module'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
             ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content'],
-            ['ticket-list-widget', 'ticket/ticket-list-widget'],
-            ['ticket-list-configuration', 'ticket/ticket-list-widget/ticket-list-configuration'],
-            ['ticket-info-widget', 'ticket/ticket-info-widget'],
-            ['ticket-info-configuration', 'ticket/ticket-info-widget/ticket-info-configuration'],
-            ['ticket-creation-dialog', 'ticket/ticket-creation-dialog'],
-            ['ticket-queue-explorer', 'ticket/ticket-queue-explorer'],
-            [
-                'ticket-queue-explorer-configuration',
-                'ticket/ticket-queue-explorer/ticket-queue-explorer-configuration'
-            ],
-            ['ticket-service-explorer', 'ticket/ticket-service-explorer'],
-            [
-                'ticket-service-explorer-configuration',
-                'ticket/ticket-service-explorer/ticket-service-explorer-configuration'
-            ],
-            ['ticket-history-widget', 'ticket/ticket-history-widget'],
-            ['ticket-description-widget', 'ticket/ticket-description-widget']
+            ...widgets,
+            ...explorer,
+            ...dialogs,
+            ...actions
         ];
     }
 

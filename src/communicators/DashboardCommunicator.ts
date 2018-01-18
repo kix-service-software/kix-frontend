@@ -36,7 +36,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
-        let configuration: any = await this.configurationService
+        let configuration: DashboardConfiguration = await this.configurationService
             .getModuleConfiguration(data.contextId, userId);
 
         if (!configuration) {
@@ -50,18 +50,10 @@ export class DashboardCommunicator extends KIXCommunicator {
 
         const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
 
-        const response = new LoadDashboardResponse(
-            new DashboardConfiguration(
-                data.contextId,
-                configuration.contentRows,
-                configuration.sidebarRows,
-                configuration.explorerRows,
-                configuration.contentConfiguredWidgets,
-                configuration.sidebarConfiguredWidgets,
-                configuration.explorerConfiguredWidgets,
-                availableWidgets
-            )
-        );
+        configuration.contextId = data.contextId;
+        configuration.availableWidgets = availableWidgets;
+
+        const response = new LoadDashboardResponse(configuration);
         this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
     }
 

@@ -1,5 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
+    TicketDetailsDashboardConfiguration,
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
 } from '@kix/core/dist/model/';
 
@@ -26,20 +27,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
                 WidgetType.LANE, true, WidgetSize.BOTH, null, false)
             );
-        const notesWidget =
-            new ConfiguredWidget(
-                "ticket-module-notes",
-                new WidgetConfiguration(
-                    "notes-widget", "Ticketnotizen", [], { notes: "Ticketnotizen" },
-                    WidgetType.SIDEBAR | WidgetType.LANE_TAB, true, WidgetSize.SMALL, "note", false
-                )
-            );
+
         const contentRows = [
-            ["ticket-information-lane", "ticket-module-notes", "ticket-history-widget", "ticket-description-widget"]
+            ["ticket-information-lane", "ticket-history-widget", "ticket-description-widget"]
         ];
 
         const contentConfiguredWidgets: ConfiguredWidget[] = [
-            ticketInfoLane, notesWidget, descriptionLane, ticketHistoryLane
+            ticketInfoLane, descriptionLane, ticketHistoryLane
         ];
 
         // Explorer
@@ -55,9 +49,17 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const sidebarRows = [];
         const sidebarConfiguredWidgets: ConfiguredWidget[] = [];
 
-        return new DashboardConfiguration(
+        // actions
+        const generalActions = ['new-ticket-action'];
+        const ticketActions = [
+            'edit-ticket-action', 'merge-ticket-action', 'link-ticket-action',
+            'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
+            'print-ticket-action',
+        ];
+        return new TicketDetailsDashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, explorerRows,
-            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, []
+            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, [],
+            generalActions, ticketActions
         );
     }
 

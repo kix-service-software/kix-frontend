@@ -8,6 +8,7 @@ class WidgetComponent {
     public onCreate(input: any): void {
         this.state = {
             minimized: false,
+            minimizable: true,
             configChanged: false,
             instanceId: null,
             configurationTagId: null,
@@ -20,6 +21,7 @@ class WidgetComponent {
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
         this.state.minimized = input.minimized;
+        this.state.minimizable = input.minimizable !== undefined ? input.minimizable : true;
     }
 
     public onMount(): void {
@@ -27,10 +29,12 @@ class WidgetComponent {
     }
 
     private minimizeWidget(): void {
-        if (this.state.explorer) {
-            ContextService.getInstance().toggleExplorer();
-        } else {
-            this.state.minimized = !this.state.minimized;
+        if (this.state.minimizable) {
+            if (this.state.explorer) {
+                ContextService.getInstance().toggleExplorer();
+            } else {
+                this.state.minimized = !this.state.minimized;
+            }
         }
     }
 
