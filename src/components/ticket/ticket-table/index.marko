@@ -15,20 +15,6 @@
                 </for>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <th.select-all>alle</th>
-                <for(property in state.properties)>
-                    <th class=property[0]>
-                        ${property[1]}
-                        <span.sortable>
-                            <span.kix-icon-sort-up/>
-                            <span.kix-icon-sort-down/>
-                        </span>
-                    </th>
-                </for>
-            </tr>
-        </tfoot>
         <tbody>
             <if(state.tickets && state.tickets.length)>
                 <for(let i =0; i< state.displayLimit; i++)>
