@@ -57,8 +57,7 @@ export class ConfigurationService implements IConfigurationService {
         return this.preDefinedWidgetConfiguration || {};
     }
 
-    public async getModuleConfiguration(
-        contextId: string, userId: number): Promise<any> {
+    public getModuleConfiguration(contextId: string, userId: number): any {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);
@@ -76,8 +75,8 @@ export class ConfigurationService implements IConfigurationService {
         return this.saveConfigurationFile(__dirname + '/' + filePath, configuration);
     }
 
-    public async getComponentConfiguration(
-        contextId: string, componentId: string, userId: number): Promise<any> {
+    public getComponentConfiguration(
+        contextId: string, componentId: string, userId: number): any {
 
         const moduleConfiguration = this.getModuleConfiguration(contextId, userId);
 
@@ -85,7 +84,7 @@ export class ConfigurationService implements IConfigurationService {
             componentId = contextId;
         }
 
-        return moduleConfiguration[componentId];
+        return moduleConfiguration ? moduleConfiguration[componentId] : undefined;
     }
 
     public async saveComponentConfiguration(
