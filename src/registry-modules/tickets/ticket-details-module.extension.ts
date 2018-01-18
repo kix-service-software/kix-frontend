@@ -46,8 +46,18 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const explorerConfiguredWidgets: ConfiguredWidget[] = [queueExplorer];
 
         // Sidebars
-        const sidebarRows = [];
-        const sidebarConfiguredWidgets: ConfiguredWidget[] = [];
+        const customerInfo =
+            new ConfiguredWidget("20180116143215", new WidgetConfiguration(
+                "ticket-customer-info-widget", "Kundeninfo", [], {},
+                WidgetType.SIDEBAR, true, WidgetSize.BOTH, null, false)
+            );
+        const contactInfo =
+            new ConfiguredWidget("20180116143216", new WidgetConfiguration(
+                "ticket-contact-info-widget", "Kontaktinfo", [], {},
+                WidgetType.SIDEBAR, true, WidgetSize.BOTH, null, false)
+            );
+        const sidebarRows = [['20180116143215'], ['20180116143216']];
+        const sidebarConfiguredWidgets: ConfiguredWidget[] = [customerInfo, contactInfo];
 
         // actions
         const generalActions = ['new-ticket-action'];

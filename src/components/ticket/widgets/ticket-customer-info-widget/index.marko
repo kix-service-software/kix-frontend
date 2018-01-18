@@ -1,0 +1,24 @@
+<widget instanceId=input.instanceId minimizable=input.minimizable>
+    <@icon/>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@content>
+        <if(state.customer)>
+            <div>${state.customer.CustomerID}</div>
+            <div>${state.customer.CustomerCompanyName}</div>
+            <div>
+                <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
+            </div>
+            <div>
+                <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
+            </div>
+            <div>
+                <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
+            </div>
+        </if>
+    </@content>
+    <@filter/>
+    <@actions/>
+    <@contentActions/>
+</widget>
