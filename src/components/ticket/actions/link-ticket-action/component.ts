@@ -1,7 +1,9 @@
+import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+
 export class LinkTicketActionComponent {
 
     private doAction(): void {
-        alert('Verknüpfen ...');
+        ApplicationStore.getInstance().toggleDialog('link-ticket-dialog');
     }
 
 }

@@ -11,7 +11,7 @@ import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardServ
 
 export class TicketDetailsComponent {
 
-    private state: any;
+    private state: TicketDetailsComponentState;
 
     private static MODULE_ID: string = 'ticket-details';
 
@@ -20,7 +20,7 @@ export class TicketDetailsComponent {
     }
 
     public onInput(input: any): void {
-        this.state.ticketId = input.ticketId;
+        this.state.ticketId = Number(input.ticketId);
         TicketService.getInstance().loadTicketDetails(this.state.ticketId);
     }
 
@@ -73,7 +73,8 @@ export class TicketDetailsComponent {
         const value = this.state.ticket ? this.state.ticket.TicketNumber : this.state.ticketId;
 
         const breadcrumbDetails = new BreadcrumbDetails(
-            'tickets', TicketDetailsComponent.MODULE_ID, this.state.ticketId, 'Ticket-Dashboard', '#' + value, null
+            'tickets', TicketDetailsComponent.MODULE_ID, this.state.ticketId.toString(),
+            'Ticket-Dashboard', '#' + value, null
         );
 
         ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);

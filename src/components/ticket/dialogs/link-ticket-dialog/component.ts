@@ -15,7 +15,7 @@ class LinkTicketDialogComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext();
         if (context && context.contextObjectId) {
-            this.state.ticket = TicketService.getInstance().getTicketDetails(Number(context.contextObjectId)).ticket;
+            this.state.ticket = TicketService.getInstance().getTicketDetails(context.contextObjectId).ticket;
         }
     }
 

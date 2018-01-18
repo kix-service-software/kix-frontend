@@ -2,7 +2,7 @@ import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 import { Ticket } from "@kix/core/dist/model/ticket/Ticket";
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 
-class MergeTicketDialogComponent {
+class WatchTicketDialogComponent {
 
     private state: any;
 
@@ -21,4 +21,4 @@ class MergeTicketDialogComponent {
 
 }
 
-module.exports = MergeTicketDialogComponent;
+module.exports = WatchTicketDialogComponent;

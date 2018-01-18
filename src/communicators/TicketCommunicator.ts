@@ -127,7 +127,7 @@ export class TicketCommunicator extends KIXCommunicator {
             const history = await this.ticketService.getTicketHistory(data.token, data.ticketId);
 
             const ticketDetails = new TicketDetails(
-                data.ticketId,
+                Number(data.ticketId),
                 (ticket as Ticket),
                 articles,
                 (contact as Contact),

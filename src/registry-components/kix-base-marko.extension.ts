@@ -45,6 +45,9 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/merge-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
             'ticket/dialogs/link-ticket-dialog',
+            'ticket/dialogs/lock-ticket-dialog',
+            'ticket/dialogs/spam-ticket-dialog',
+            'ticket/dialogs/watch-ticket-dialog',
         ];
     }
 
@@ -91,7 +94,10 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-creation-dialog', 'ticket/dialogs/ticket-creation-dialog'],
             ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
             ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
-            ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog']
+            ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog'],
+            ['lock-ticket-dialog', 'ticket/dialogs/lock-ticket-dialog'],
+            ['spam-ticket-dialog', 'ticket/dialogs/spam-ticket-dialog'],
+            ['watch-ticket-dialog', 'ticket/dialogs/watch-ticket-dialog']
         ];
 
         const actions: Array<[string, string]> = [
