@@ -23,7 +23,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const resourcePath = "/textModules";
+const resourcePath = "/textmodules";
 
 describe('TextModule Service', () => {
     let nockScope;
