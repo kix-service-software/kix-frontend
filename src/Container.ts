@@ -38,11 +38,8 @@ import {
     PluginService,
     QueueService,
     RoleService,
-<<<<<<< HEAD
-    SocketCommunicationService, SalutationService, ServiceService, SignatureService, StandardAttachmentService,
-=======
-    SalutationService, SearchProfileService, ServiceService, SignatureService, SocketCommunicationService,
->>>>>>> origin/rel-18_FEATURE
+    SalutationService, SearchProfileService, ServiceService, SignatureService,
+    StandardAttachmentService, SocketCommunicationService,
     TextModuleService, TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
     UserService,
     ValidObjectService,
