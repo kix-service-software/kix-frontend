@@ -58,6 +58,21 @@ describe('User Service', () => {
 
     describe("User Assigned Roles Tests", () => {
 
+        describe("Get assinged roles for current user.", () => {
+
+            before(() => {
+                nockScope
+                    .get('/user/roleids')
+                    .reply(200, { RoleID: [] });
+            });
+
+            it("Should return a list of role ids.", async () => {
+                const roleIds: number[] = await userService.getUserAssignedRoles('');
+                expect(roleIds).not.undefined;
+                expect(roleIds).an('array');
+            });
+
+        });
 
         describe("Get assigned roles from user", () => {
             before(() => {

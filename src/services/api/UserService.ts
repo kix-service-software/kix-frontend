@@ -79,9 +79,14 @@ export class UserService extends ObjectService<User> implements IUserService {
         return response.UserID;
     }
 
+    public async getUserAssignedRoles(token: string): Promise<number[]> {
+        const uri = this.buildUri('user', 'roleids');
+        const response = await this.httpService.get<UserAssignedRolesResponse>(uri, {}, token);
+        return response ? response.RoleID : [];
+    }
+
     public async getAssignedRoles(token: string, userId: number): Promise<number[]> {
         const uri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-
         const response = await this.httpService.get<UserAssignedRolesResponse>(uri, {}, token);
         return response ? response.RoleID : [];
     }
