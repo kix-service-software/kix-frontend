@@ -13,6 +13,7 @@ export { RoleService } from './RoleService';
 export { SalutationService } from './SalutationService';
 export { ServiceService } from './ServiceService';
 export { SignatureService } from './SignatureService';
+export { TextModuleService } from './TextModuleService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
 export { TicketStateService } from './TicketStateService';

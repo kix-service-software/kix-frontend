@@ -194,7 +194,7 @@ describe('Ticket Service', () => {
 
         describe("Get Articles", () => {
 
-            describe("Create a valid request to recieve articles.", () => {
+            describe("Create a valid request to retrieve articles.", () => {
 
                 before(() => {
                     nockScope
@@ -212,7 +212,7 @@ describe('Ticket Service', () => {
                 });
             });
 
-            describe("Create a valid request to recieve a specific article.", () => {
+            describe("Create a valid request to retrieve a specific article.", () => {
                 before(() => {
                     nockScope
                         .get(resourcePath + '/12345/articles/54321')
@@ -253,7 +253,7 @@ describe('Ticket Service', () => {
             });
         });
 
-        describe('Create a valid request to recieve attachments from article', () => {
+        describe('Create a valid request to retrieve attachments from article', () => {
             before(() => {
                 nockScope
                     .get(resourcePath + '/12345/articles/1234/attachments')
@@ -271,7 +271,7 @@ describe('Ticket Service', () => {
             });
         });
 
-        describe('Create a valid request to recieve a specific attachment from article', () => {
+        describe('Create a valid request to retrieve a specific attachment from article', () => {
             before(() => {
                 nockScope
                     .get(resourcePath + '/12345/articles/1234/attachments/9876')
