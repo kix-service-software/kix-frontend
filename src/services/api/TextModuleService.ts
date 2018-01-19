@@ -7,12 +7,12 @@ import {
     CreateTextModuleRequest,
     TextModulesResponse,
     TextModuleResponse,
+    TextModuleCategoriesResponse,
     UpdateTextModule,
     UpdateTextModuleResponse,
     UpdateTextModuleRequest
 } from '@kix/core/dist/api';
 import { SortOrder } from '@kix/core/dist/browser/SortOrder';
-import { TextModuleCategoriesResponse } from '../../../../core/dist/api/textmodules/TextModuleCategoriesResponse';
 
 export class TextModuleService extends ObjectService<TextModule> implements ITextModuleService {
 
