@@ -14,6 +14,7 @@ export { SalutationService } from './SalutationService';
 export { SearchProfileService } from './SearchProfileService';
 export { ServiceService } from './ServiceService';
 export { SignatureService } from './SignatureService';
+export { StandardAttachmentService } from './StandardAttachmentService';
 export { TextModuleService } from './TextModuleService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
