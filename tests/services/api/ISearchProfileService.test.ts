@@ -44,7 +44,7 @@ describe('SearchProfile Service', () => {
         expect(searchProfileService).not.undefined;
     });
 
-    describe("Create a valid request to retrieve textmodule categories", () => {
+    describe("Create a valid request to retrieve searchprofile categories", () => {
         before(() => {
             nockScope
                 .get(resourcePath + '/categories')
