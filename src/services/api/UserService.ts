@@ -6,6 +6,7 @@ import {
     UpdateUserRequest,
     UpdateUserResponse,
     UsersResponse,
+    UserAssignedRolesResponse,
     Query,
     UserResponse,
 } from '@kix/core/dist/api';
@@ -76,6 +77,23 @@ export class UserService extends ObjectService<User> implements IUserService {
         );
 
         return response.UserID;
+    }
+
+    public async getAssignedRoles(token: string, userId: number): Promise<number[]> {
+        const uri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
+
+        const response = await this.httpService.get<UserAssignedRolesResponse>(uri, {}, token);
+        return response ? response.RoleID : [];
+    }
+
+    public async assignRole(token: string, userId: number, roleId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
+        await this.httpService.post<void>(uri, { RoleID: roleId }, token);
+    }
+
+    public async removeAssignedRole(token: string, userId: number, roleId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, userId, 'roleids', roleId);
+        await this.httpService.delete<void>(uri, token);
     }
 
 }
