@@ -154,7 +154,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -171,7 +171,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -207,7 +207,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

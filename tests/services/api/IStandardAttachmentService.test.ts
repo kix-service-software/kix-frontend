@@ -112,7 +112,7 @@ describe('StandardAttachment Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of standardAttachments witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of standardAttachments which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('StandardAttachment Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of standardAttachments witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of standardAttachments which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('StandardAttachment Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of standardAttachments witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of standardAttachments which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

@@ -112,7 +112,7 @@ describe('Queue Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of queues witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of queues which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('Queue Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of queues witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of queues which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('Queue Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of queues witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of queues which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

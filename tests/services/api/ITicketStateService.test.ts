@@ -106,7 +106,7 @@ describe('Ticket State Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of ticket states witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of ticket states which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -123,7 +123,7 @@ describe('Ticket State Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of ticket states witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of ticket states which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -159,7 +159,7 @@ describe('Ticket State Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of ticket states witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of ticket states which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

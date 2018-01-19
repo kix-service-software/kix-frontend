@@ -112,7 +112,7 @@ describe('Ticket Priority Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of ticket prioritys witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of ticket prioritys which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('Ticket Priority Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of ticket prioritys witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of ticket prioritys which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('Ticket Priority Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of ticket prioritys witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of ticket prioritys which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

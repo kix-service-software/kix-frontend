@@ -126,7 +126,7 @@ describe('TextModule Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of textModules witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of textModules which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -143,7 +143,7 @@ describe('TextModule Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of textModules witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of textModules which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -179,7 +179,7 @@ describe('TextModule Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of textModules witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of textModules which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

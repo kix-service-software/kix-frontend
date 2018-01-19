@@ -166,7 +166,7 @@ describe('User Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of users which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -183,7 +183,7 @@ describe('User Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted of users which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -219,7 +219,7 @@ describe('User Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of users witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of users which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

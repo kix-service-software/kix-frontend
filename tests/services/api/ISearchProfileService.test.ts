@@ -126,7 +126,7 @@ describe('SearchProfile Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of searchProfiles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of searchProfiles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -143,7 +143,7 @@ describe('SearchProfile Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of searchProfiles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limeted list of searchProfiles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -179,7 +179,7 @@ describe('SearchProfile Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of searchProfiles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of searchProfiles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
