@@ -4,6 +4,7 @@ import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty } from "@kix/core/dist/model/";
 import { TicketSearchState } from './TicketSearchState';
 import { SearchOperator } from "@kix/core/dist/browser/SearchOperator";
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 export class TicketSearchDialogComponent {
 
@@ -36,7 +37,7 @@ export class TicketSearchDialogComponent {
     }
 
     private addSearchAttribute(event: any): void {
-        const attributeId = 'attribute-' + Date.now();
+        const attributeId = IdService.generateDateBasedId('attribute-');
         const attribute: [string, TicketProperty, SearchOperator, any] = [attributeId, null, null, null];
 
         TicketService.getInstance().prepareSearch('ticket-search', attribute);

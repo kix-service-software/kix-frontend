@@ -15,6 +15,7 @@ import {
 import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class DashboardConfigurationDialog {
 
@@ -108,7 +109,7 @@ class DashboardConfigurationDialog {
                 false
             );
         } else {
-            const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
+            const newInstanceId = IdService.generateDateBasedRandomId();
             listElement = new SelectWithPropertiesListElement(
                 newInstanceId,
                 explorerDescriptor.configuration.title,
@@ -200,7 +201,7 @@ class DashboardConfigurationDialog {
             if (le.selected) {
                 le.selected = false;
                 const descListElement = this.state.widgetDescriptorList.find((wdle) => wdle.listId === le.id);
-                const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
+                const newInstanceId = IdService.generateDateBasedRandomId();
                 const newSecondListElement = new SelectWithPropertiesListElement(
                     newInstanceId,
                     le.label,
