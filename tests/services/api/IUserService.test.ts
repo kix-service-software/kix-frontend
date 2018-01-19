@@ -56,6 +56,63 @@ describe('User Service', () => {
         });
     });
 
+    describe("User Assigned Roles Tests", () => {
+
+        describe("Get assinged roles for current user.", () => {
+
+            before(() => {
+                nockScope
+                    .get('/user/roleids')
+                    .reply(200, { RoleID: [] });
+            });
+
+            it("Should return a list of role ids.", async () => {
+                const roleIds: number[] = await userService.getUserAssignedRoles('');
+                expect(roleIds).not.undefined;
+                expect(roleIds).an('array');
+            });
+
+        });
+
+        describe("Get assigned roles from user", () => {
+            before(() => {
+                nockScope
+                    .get('/users/123456/roleids')
+                    .reply(200, { RoleID: [] });
+            });
+
+            it("Should return a list of role ids.", async () => {
+                const roleIds: number[] = await userService.getAssignedRoles('', 123456);
+                expect(roleIds).not.undefined;
+                expect(roleIds).an('array');
+            });
+        });
+
+        describe("Assign a role to a user", () => {
+            before(() => {
+                nockScope
+                    .post('/users/123456/roleids')
+                    .reply(201, {});
+            });
+
+            it("Should create a valid request to assign a role to a user.", async () => {
+                await userService.assignRole('', 123456, 123);
+            });
+        });
+
+        describe("Remove a assinged Role", () => {
+            before(() => {
+                nockScope
+                    .delete('/users/123456/roleids/123')
+                    .reply(201, {});
+            });
+
+            it("Should create a valid request to remove assigned role from user", async () => {
+                await userService.removeAssignedRole('', 123456, 123);
+            });
+        });
+    });
+
     describe('Get multiple users', () => {
         describe('Create a valid request to retrieve all users.', () => {
 
@@ -304,6 +361,7 @@ describe('User Service', () => {
         });
 
     });
+
 });
 
 function buildUserResponse(): UserResponse {

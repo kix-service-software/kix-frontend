@@ -7,6 +7,7 @@ import {
     UpdateRole,
     UpdateRoleRequest,
     UpdateRoleResponse,
+    RoleAssignedUsersResponse
 } from '@kix/core/dist/api';
 import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
@@ -60,6 +61,23 @@ export class RoleService extends ObjectService<Role> implements IRoleService {
     public async deleteRole(token: string, roleId: number): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, roleId);
         await this.deleteObject<void>(token, uri);
+    }
+
+    public async getAssignedUsers(token: string, roleId: number): Promise<number[]> {
+        const uri = this.buildUri(this.RESOURCE_URI, roleId, 'userids');
+
+        const response = await this.httpService.get<RoleAssignedUsersResponse>(uri, {}, token);
+        return response ? response.UserID : [];
+    }
+
+    public async assignUser(token: string, roleId: number, userId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, roleId, 'userids');
+        await this.httpService.post<void>(uri, { UserId: userId }, token);
+    }
+
+    public async removeAssignedUser(token: string, roleId: number, userId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, roleId, 'userids', userId);
+        await this.httpService.delete<void>(uri, token);
     }
 
 }
