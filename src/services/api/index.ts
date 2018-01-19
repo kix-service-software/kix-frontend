@@ -11,6 +11,7 @@ export { MailAccountService } from './MailAccountService';
 export { QueueService } from './QueueService';
 export { RoleService } from './RoleService';
 export { SalutationService } from './SalutationService';
+export { SearchProfileService } from './SearchProfileService';
 export { ServiceService } from './ServiceService';
 export { SignatureService } from './SignatureService';
 export { TextModuleService } from './TextModuleService';
