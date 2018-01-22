@@ -144,7 +144,7 @@ describe('Link Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of links which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of links which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -162,7 +162,7 @@ describe('Link Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of links', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of links', () => {
 
             before(() => {
                 nockScope

@@ -129,7 +129,7 @@ describe('Group Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of groups which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of groups which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('Group Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of groups', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of groups', () => {
 
             before(() => {
                 nockScope

@@ -147,7 +147,7 @@ describe('MailAccount Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of mailAccounts which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of mailAccounts which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('MailAccount Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of mailAccounts', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of mailAccounts', () => {
 
             before(() => {
                 nockScope
