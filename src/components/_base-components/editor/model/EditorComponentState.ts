@@ -1,3 +1,5 @@
+import { IdService } from '@kix/core/dist/browser/IdService';
+
 export class EditorComponentState {
 
     public id: string;
@@ -19,7 +21,7 @@ export class EditorComponentState {
         resize?: boolean,
         resizeDir?: string
     ) {
-        this.id = 'editor-' + Date.now();
+        this.id = IdService.generateDateBasedId('editor-');
 
         let toolbar = [];
         if (this.simple) {

@@ -1,6 +1,7 @@
 import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
 import { User } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 export class UserInputComponent {
 
@@ -12,7 +13,7 @@ export class UserInputComponent {
             users: [],
             userId: null,
             value: null,
-            dataListId: 'user-input-' + Date.now()
+            dataListId: IdService.generateDateBasedId('user-input-')
         };
     }
 

@@ -129,7 +129,7 @@ describe('Contact Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of contacts which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of contacts which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('Contact Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of contacts', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of contacts', () => {
 
             before(() => {
                 nockScope

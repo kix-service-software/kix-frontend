@@ -183,7 +183,7 @@ describe('User Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted of users which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited of users which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -201,7 +201,7 @@ describe('User Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted of users', () => {
+        describe('Create a valid request to retrieve a limited, sorted of users', () => {
 
             before(() => {
                 nockScope

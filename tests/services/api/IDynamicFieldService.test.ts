@@ -129,7 +129,7 @@ describe('DynamicField Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of dynamicFields which where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of dynamicFields which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('DynamicField Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of dynamicFields', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of dynamicFields', () => {
 
             before(() => {
                 nockScope

@@ -1,6 +1,6 @@
 <div.ticket-details>
     <if(state.ticket)>
-        <widget instanceId=Date.now() minimizable=true>
+        <widget minimizable=true>
             <@icon/>
             <@title>T#${state.ticket.TicketNumber} - ${state.ticket.Title}</@title>
             <@actions>
@@ -20,7 +20,7 @@
             <@content>
                 <ul.lane-list>
                     <li.lane.tabs>
-                        <widget instanceId=state.instanceId minimized=false>
+                        <widget minimized=false>
                             <@icon/>
                             <@title>Ticketinformationen</@title>
                             <@content>
@@ -52,7 +52,7 @@
             <@filter/>
         </widget>
         <div.article-table-widget>
-            <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+            <widget configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
                 <@icon/>
                 <@title>
                     <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
