@@ -1,5 +1,6 @@
 export { ArticleTypeService } from './ArticleTypeService';
 export { AuthenticationService } from './AuthenticationService';
+export { ClientRegistrationService } from './ClientRegistrationService';
 export { ContactService } from './ContactService';
 export { CustomerService } from './CustomerService';
 export { DynamicFieldService } from './DynamicFieldService';

@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import {
     IArticleTypeService, IAuthenticationService,
-    IConfigurationService, IContactService, ICustomerService,
+    IClientRegistrationService, IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
     IGeneralCatalogService, IGroupService,
     IHttpService,
@@ -29,7 +29,7 @@ import { ApplicationRouter, AuthenticationRouter } from './routes/';
 import { Server } from './Server';
 import {
     ArticleTypeService, AuthenticationService,
-    ConfigurationService, ContactService, CustomerService,
+    ClientRegistrationService, ConfigurationService, ContactService, CustomerService,
     DynamicFieldService,
     GeneralCatalogService, GroupService,
     HttpService,
@@ -74,6 +74,7 @@ export class ServiceContainer {
     private bindServices(): void {
         this.container.bind<IArticleTypeService>('IArticleTypeService').to(ArticleTypeService);
         this.container.bind<IAuthenticationService>('IAuthenticationService').to(AuthenticationService);
+        this.container.bind<IClientRegistrationService>('IClientRegistrationService').to(ClientRegistrationService);
         this.container.bind<IConfigurationService>('IConfigurationService').to(ConfigurationService);
         this.container.bind<IContactService>('IContactService').to(ContactService);
         this.container.bind<ICustomerService>('ICustomerService').to(CustomerService);
