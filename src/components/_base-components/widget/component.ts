@@ -1,19 +1,13 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 
 class WidgetComponent {
 
-    private state: any;
+    private state: BaseWidgetComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            minimized: false,
-            minimizable: true,
-            configChanged: false,
-            instanceId: null,
-            configurationTagId: null,
-            explorer: false
-        };
+        this.state = new BaseWidgetComponentState();
     }
 
     public onInput(input: any): void {
@@ -51,7 +45,6 @@ class WidgetComponent {
     }
 
     private resetConfiguration(): void {
-        // TODO: hol alten Stand aus Browser "cache" und überschreib neue Konfiguration
         this.state.configChanged = false;
     }
 

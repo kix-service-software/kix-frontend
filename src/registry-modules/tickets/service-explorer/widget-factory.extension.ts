@@ -8,9 +8,9 @@ export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExte
     public type: WidgetType = WidgetType.EXPLORER;
 
     public getDefaultConfiguration(): any {
-        // TODO: Titel übersetzen
         return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, this.type, true, WidgetSize.SMALL);
     }
+
 }
 
 module.exports = (data, host, options) => {

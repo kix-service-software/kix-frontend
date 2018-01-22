@@ -124,24 +124,19 @@ export class LoggingService implements ILoggingService {
                 ]
             });
 
-            // TODO: if error messages should also be in a single file
-            // add error if necessary
-            const useError: boolean = true;
-            if (useError) {
-                this.kixLogger.add((require('winston-daily-rotate-file')), {
-                    level: 'error',
-                    name: 'error-file',
-                    filename: logDirectory + '/kix-error.log',
-                    humanReadableUnhandledException: true,
-                    handleExceptions: true,
-                    json: false,
-                    maxsize: 100000000,
-                    prepend: true,
-                    timestamp: () => {
-                        return new Date().toString();
-                    }
-                });
-            }
+            this.kixLogger.add((require('winston-daily-rotate-file')), {
+                level: 'error',
+                name: 'error-file',
+                filename: logDirectory + '/kix-error.log',
+                humanReadableUnhandledException: true,
+                handleExceptions: true,
+                json: false,
+                maxsize: 100000000,
+                prepend: true,
+                timestamp: () => {
+                    return new Date().toString();
+                }
+            });
         }
     }
 

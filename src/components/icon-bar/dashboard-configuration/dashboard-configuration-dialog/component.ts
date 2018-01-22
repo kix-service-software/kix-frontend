@@ -70,20 +70,10 @@ class DashboardConfigurationDialog {
                 const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
                 if ((wd.type & WidgetType.CONTENT) === WidgetType.CONTENT) {
-                    // TODO: handle required
-                    // if (wd.required) {
-                    //     this.state.contentSecondList.push(listElement);
-                    // } else {
                     this.state.contentFirstList.push(listElement);
-                    // }
                 }
                 if ((wd.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
-                    // TODO: handle required
-                    // if (wd.required) {
-                    //     this.state.sidebarSecondList.push(listElement);
-                    // } else {
                     this.state.sidebarFirstList.push(listElement);
-                    // }
                 }
                 this.state.widgetDescriptorList.push({ listId, descriptor: wd });
             }
@@ -270,7 +260,6 @@ class DashboardConfigurationDialog {
 
     private saveConfiguration(): void {
         this.state.explorerList.forEach((le) => {
-            // TODO: dürfen alle explorer entfernt werden (nicht aktiv sein)? -> ggf. Sonderbehandlung
             this.updateRows(le, this.state.dashboardConfig.explorerRows);
             this.updateConfiguredWidgets(le, this.state.dashboardConfig.explorerConfiguredWidgets);
         });
@@ -294,7 +283,6 @@ class DashboardConfigurationDialog {
         if (
             listElement.properties.active && !contained
         ) {
-            // TODO: bessere Handhabung beim Einfügen (bei "small" ggf. bestehende (letzte) rows auffüllen)
             rows.push([listElement.id]);
         } else if (
             !listElement.properties.active && contained
@@ -312,11 +300,6 @@ class DashboardConfigurationDialog {
             configuredWidget.configuration.size = listElement.properties.size;
         }
     }
-
-    // private getTranslation(id: ConfigurationWidgetTranslationId): string {
-    //     return (this.state.translations && this.state.translations[id]) ?
-    // this.state.translations[id] : id.toString();
-    // }
 }
 
 module.exports = DashboardConfigurationDialog;
