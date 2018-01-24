@@ -16,6 +16,7 @@ export { SearchProfileService } from './SearchProfileService';
 export { ServiceService } from './ServiceService';
 export { SignatureService } from './SignatureService';
 export { StandardAttachmentService } from './StandardAttachmentService';
+export { SysConfigService } from './SysConfigService';
 export { TextModuleService } from './TextModuleService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
