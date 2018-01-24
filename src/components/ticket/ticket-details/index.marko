@@ -33,7 +33,8 @@
                                 </ul>
                                 <div.tab-content>
                                     <if(state.activeTabId)>
-                                        <include(component.getWidgetTemplate(state.activeTabId), {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
+                                        <include(component.getWidgetTemplate(state.activeTabId), 
+                                            {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
                                     </if>
                                 </div>
                             </@content>

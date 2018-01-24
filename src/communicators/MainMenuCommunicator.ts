@@ -69,7 +69,6 @@ export class MainMenuCommunicator extends KIXCommunicator {
         return configuration;
     }
 
-    // TODO: translate comment
     /**
      * Als erstes wird geprüft ob es zu jeder {@link MenuEntryConfiguration} eine passende Extension gibt.
      * Wenn nicht wird die {@link MenuEntryConfiguration} herausgefiltert.

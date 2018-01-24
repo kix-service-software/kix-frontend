@@ -16,7 +16,6 @@ class ChartConfigurationComponent {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
 
-        // TODO: get types with function (including types from extensions)
         this.state.types = {
             'pie': 'Pie chart',
             'bar': 'Bar chart',

@@ -3,7 +3,6 @@ import { ILoggingService } from '@kix/core/dist/services';
 
 function log(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>): any {
     const orgMethod = descriptor.value;
-    // TODO: replace container.get with @inject within a constructor
     const loggingService = container.getDIContainer().get<ILoggingService>("ILoggingService");
     descriptor.value = function () {
         loggingService.info(target.constructor.name + ' => ' + propertyName, arguments);

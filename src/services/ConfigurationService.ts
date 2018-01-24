@@ -22,7 +22,6 @@ export class ConfigurationService implements IConfigurationService {
     public constructor() {
         let lassoConfig = this.getConfigurationFilePath('lasso.dev');
 
-        // TODO: split server.config to prod and dev?
         const serverConfig = this.getConfigurationFilePath('server');
 
         if (this.isProductionMode()) {
