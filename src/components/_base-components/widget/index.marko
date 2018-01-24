@@ -1,13 +1,13 @@
 <div.widget class=(state.minimized ? "minimized" : "")>
     <div.widget-header.clearfix>
         <span.header-left on-click('minimizeWidget')>
+            <if(input.explorer)>
+                <span.kix-icon-close-left on-click('minimizeExplorer')/>
+            </if>
+            <else-if(input.icon && Object.keys(input.icon).length)>
+                <include(input.icon)/>
+            </else-if>
             <h3>
-                <if(input.explorer)>
-                    <span.kix-icon-close-left on-click('minimizeExplorer')/>
-                </if>
-                <else-if(input.icon && Object.keys(input.icon).length)>
-                    <include(input.icon)/>
-                </else-if>
                 <if(component.isInputDefined(input.title))>
                     <include(input.title)/>
                 </if>

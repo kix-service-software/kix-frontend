@@ -19,7 +19,7 @@
             </@contentActions>
             <@content>
                 <ul.lane-list>
-                    <li.lane.tabs>
+                    <li.lane.tabs.clearfix>
                         <widget instanceId=state.instanceId minimized=false>
                             <@icon/>
                             <@title>Ticketinformationen</@title>
@@ -43,7 +43,7 @@
                         </widget>
                     </li>
                     <for(lane in state.lanes)>
-                        <li.lane>
+                        <li.lane.clearfix>
                             <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
                         </li>
                     </for>
@@ -68,7 +68,7 @@
                             <table.article-table>
                                 <thead>
                                     <tr>
-                                        <th>alle</th>
+                                        <th.select-all-rows>alle</th>
                                         <th>Nr.</th>
                                         <th>Sender</th>
                                         <th>Type</th>
@@ -81,8 +81,8 @@
                                 </thead>
                                 <tbody>
                                     <for(article in state.articles  | status-var=loop)>
-                                        <tr>
-                                            <td>
+                                        <tr class=(component.isArticleExpanded(article.ArticleID) ? "expanded" : "")>
+                                            <td.select-row>
                                                 <input type="checkbox"/>
                                             </td>
                                             <td>${loop.getLength() - loop.getIndex()}</td>
@@ -103,7 +103,7 @@
                                         </tr>
                                         <if(component.isArticleExpanded(article.ArticleID))>
                                             <tr>
-                                                <td.article-content colspan=8>
+                                                <td.article-content colspan=9>
                                                     <widget minimizable=false>
                                                         <@icon/>
                                                         <@title/>
@@ -113,7 +113,7 @@
                                                         <@filter/>
                                                         <@actions/>
                                                         <@contentActions>
-                                                            <ul.action-list>
+                                                            <ul.content-actions>
                                                                 <for(action in state.articleActions)>
                                                                     <li>
                                                                         <include(component.getTemplate(action), { article: article })/>
