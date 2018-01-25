@@ -15,6 +15,7 @@ import {
 import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class DashboardConfigurationDialog {
 
@@ -70,20 +71,10 @@ class DashboardConfigurationDialog {
                 const listElement = new SelectWithFilterListElement(listId, wd.configuration.title);
 
                 if ((wd.type & WidgetType.CONTENT) === WidgetType.CONTENT) {
-                    // TODO: handle required
-                    // if (wd.required) {
-                    //     this.state.contentSecondList.push(listElement);
-                    // } else {
                     this.state.contentFirstList.push(listElement);
-                    // }
                 }
                 if ((wd.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
-                    // TODO: handle required
-                    // if (wd.required) {
-                    //     this.state.sidebarSecondList.push(listElement);
-                    // } else {
                     this.state.sidebarFirstList.push(listElement);
-                    // }
                 }
                 this.state.widgetDescriptorList.push({ listId, descriptor: wd });
             }
@@ -108,7 +99,7 @@ class DashboardConfigurationDialog {
                 false
             );
         } else {
-            const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
+            const newInstanceId = IdService.generateDateBasedRandomId();
             listElement = new SelectWithPropertiesListElement(
                 newInstanceId,
                 explorerDescriptor.configuration.title,
@@ -200,7 +191,7 @@ class DashboardConfigurationDialog {
             if (le.selected) {
                 le.selected = false;
                 const descListElement = this.state.widgetDescriptorList.find((wdle) => wdle.listId === le.id);
-                const newInstanceId = (Date.now() + Math.floor((Math.random() * 100000))).toString();
+                const newInstanceId = IdService.generateDateBasedRandomId();
                 const newSecondListElement = new SelectWithPropertiesListElement(
                     newInstanceId,
                     le.label,
@@ -270,7 +261,6 @@ class DashboardConfigurationDialog {
 
     private saveConfiguration(): void {
         this.state.explorerList.forEach((le) => {
-            // TODO: dürfen alle explorer entfernt werden (nicht aktiv sein)? -> ggf. Sonderbehandlung
             this.updateRows(le, this.state.dashboardConfig.explorerRows);
             this.updateConfiguredWidgets(le, this.state.dashboardConfig.explorerConfiguredWidgets);
         });
@@ -294,7 +284,6 @@ class DashboardConfigurationDialog {
         if (
             listElement.properties.active && !contained
         ) {
-            // TODO: bessere Handhabung beim Einfügen (bei "small" ggf. bestehende (letzte) rows auffüllen)
             rows.push([listElement.id]);
         } else if (
             !listElement.properties.active && contained
@@ -312,11 +301,6 @@ class DashboardConfigurationDialog {
             configuredWidget.configuration.size = listElement.properties.size;
         }
     }
-
-    // private getTranslation(id: ConfigurationWidgetTranslationId): string {
-    //     return (this.state.translations && this.state.translations[id]) ?
-    // this.state.translations[id] : id.toString();
-    // }
 }
 
 module.exports = DashboardConfigurationDialog;

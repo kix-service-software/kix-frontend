@@ -148,7 +148,7 @@ describe('General Catalog Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of catalogItems witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of catalogItems which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('General Catalog Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of catalogItems witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of catalogItems which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -183,7 +183,7 @@ describe('General Catalog Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of catalogItems', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of catalogItems', () => {
 
             before(() => {
                 nockScope
@@ -201,7 +201,7 @@ describe('General Catalog Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of catalogItems witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of catalogItems which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

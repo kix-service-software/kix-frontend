@@ -112,7 +112,7 @@ describe('Signature Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of signatures witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of signatures which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('Signature Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of signatures witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of signatures which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('Signature Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of signatures', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of signatures', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('Signature Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of signatures witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of signatures which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

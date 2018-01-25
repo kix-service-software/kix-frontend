@@ -106,7 +106,7 @@ describe('Valid Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of ValidObjects witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of ValidObjects which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -123,7 +123,7 @@ describe('Valid Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of ValidObjects witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of ValidObjects which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -141,7 +141,7 @@ describe('Valid Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of ValidObjects', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of ValidObjects', () => {
 
             before(() => {
                 nockScope
@@ -159,7 +159,7 @@ describe('Valid Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of ValidObjects witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of ValidObjects which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

@@ -59,6 +59,48 @@ describe('Role Service', () => {
         });
     });
 
+    describe("Roles Assigned Users", () => {
+
+        describe("Get assigned users from role", () => {
+            before(() => {
+                nockScope
+                    .get('/roles/123456/userids')
+                    .reply(200, { UserID: [] });
+            });
+
+            it("Should return a list of user ids.", async () => {
+                const roleIds: number[] = await roleService.getAssignedUsers('', 123456);
+                expect(roleIds).not.undefined;
+                expect(roleIds).an('array');
+            });
+        });
+
+        describe("Assign a user to a role", () => {
+            before(() => {
+                nockScope
+                    .post('/roles/123456/userids')
+                    .reply(201, {});
+            });
+
+            it("Should create a valid request to assign a user to a role.", async () => {
+                await roleService.assignUser('', 123456, 123);
+            });
+        });
+
+        describe("Remove a assinged user", () => {
+            before(() => {
+                nockScope
+                    .delete('/roles/123456/userids/123')
+                    .reply(201, {});
+            });
+
+            it("Should create a valid request to remove assigned user from role", async () => {
+                await roleService.removeAssignedUser('', 123456, 123);
+            });
+        });
+
+    });
+
     describe('Get multiple roles', () => {
         describe('Create a valid request to retrieve all roles.', () => {
 
@@ -112,7 +154,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +171,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +189,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of roles', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of roles', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +207,7 @@ describe('Role Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of roles witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of roles which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

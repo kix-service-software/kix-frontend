@@ -1,6 +1,5 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
-import { ServiceExplorer } from './ServiceExplorer';
 
 export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -8,14 +7,10 @@ export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExte
 
     public type: WidgetType = WidgetType.EXPLORER;
 
-    public createWidget(): IWidget {
-        return new ServiceExplorer(this.widgetId);
-    }
-
     public getDefaultConfiguration(): any {
-        // TODO: Titel übersetzen
         return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, this.type, true, WidgetSize.SMALL);
     }
+
 }
 
 module.exports = (data, host, options) => {

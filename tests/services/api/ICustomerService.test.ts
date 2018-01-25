@@ -112,7 +112,7 @@ describe('Customer Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of customers witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of customers which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('Customer Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of customers witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of customers which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('Customer Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of customers', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of customers', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('Customer Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of customers witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of customers which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

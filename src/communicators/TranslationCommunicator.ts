@@ -17,19 +17,20 @@ export class TranslationCommunicator extends KIXCommunicator {
 
     private registerUsersEvents(client: SocketIO.Socket): void {
         client.on(TranslationEvent.LOAD_TRANSLATIONS, async (data: LoadTranslationRequest) => {
-            // TODO: Get language shortcut from personal settings of user. Token is optional.
-            // TODO: If no token then use default language setting.
+            // TODO: Get default language.
+            const language = 'de';
+            if (data.token) {
+                // TODO: Get language shortcut from personal settings of user.
+            }
 
             let translations = {};
             if (!data.ids || data.ids.length === 0) {
-                translations = this.translationService.getAllTranslations("de");
-
+                translations = this.translationService.getAllTranslations(language);
             } else {
-                translations = this.translationService.getTranslations(data.ids, "de");
+                translations = this.translationService.getTranslations(data.ids, language);
             }
 
             client.emit(TranslationEvent.TRANSLATIONS_LOADED, new LoadTranslationResponse(translations));
-
         });
     }
 

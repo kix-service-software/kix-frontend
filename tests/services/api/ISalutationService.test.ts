@@ -112,7 +112,7 @@ describe('Salutation Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of salutations witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of salutations which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -129,7 +129,7 @@ describe('Salutation Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of salutations witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of salutations which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -147,7 +147,7 @@ describe('Salutation Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of salutations', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of salutations', () => {
 
             before(() => {
                 nockScope
@@ -165,7 +165,7 @@ describe('Salutation Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of salutations witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of salutations which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

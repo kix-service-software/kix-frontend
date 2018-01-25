@@ -33,6 +33,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/widgets/ticket-history-widget',
             'ticket/widgets/ticket-info-widget/ticket-info-configuration',
             'ticket/widgets/ticket-description-widget',
+            'ticket/widgets/ticket-customer-info-widget',
+            'ticket/widgets/ticket-contact-info-widget',
             'ticket/actions/edit-ticket-action',
             'ticket/actions/link-ticket-action',
             'ticket/actions/lock-ticket-action',
@@ -88,7 +90,9 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
             ['ticket-info-configuration', 'ticket/widgets/ticket-info-widget/ticket-info-configuration'],
             ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],
-            ['ticket-description-widget', 'ticket/widgets/ticket-description-widget']
+            ['ticket-description-widget', 'ticket/widgets/ticket-description-widget'],
+            ['ticket-customer-info-widget', 'ticket/widgets/ticket-customer-info-widget'],
+            ['ticket-contact-info-widget', 'ticket/widgets/ticket-contact-info-widget']
         ];
 
         const explorer: Array<[string, string]> = [

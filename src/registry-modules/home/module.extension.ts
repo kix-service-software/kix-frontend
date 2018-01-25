@@ -75,7 +75,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
             );
 
-        // TODO: aus einer config auslesen, oder wirklich DashboardConfiguration zurückgeben
         const contentRows: string[][] = [
             ['20170920072542', '20170920084512', '20170920113214'], ['20170920101621'], ['20170920093015']
         ];

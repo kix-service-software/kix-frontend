@@ -111,7 +111,7 @@ describe('Ticket Type Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a list of ticket types witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a list of ticket types which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -128,7 +128,7 @@ describe('Ticket Type Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted list of ticket types witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a limited list of ticket types which where changed after defined date.', () => {
 
             before(() => {
                 nockScope
@@ -146,7 +146,7 @@ describe('Ticket Type Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a limeted, sorted list of ticket types', () => {
+        describe('Create a valid request to retrieve a limited, sorted list of ticket types', () => {
 
             before(() => {
                 nockScope
@@ -164,7 +164,7 @@ describe('Ticket Type Service', () => {
             });
         });
 
-        describe('Create a valid request to retrieve a sorted list of ticket types witch where changed after defined date.', () => {
+        describe('Create a valid request to retrieve a sorted list of ticket types which where changed after defined date.', () => {
 
             before(() => {
                 nockScope

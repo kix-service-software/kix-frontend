@@ -1,5 +1,6 @@
 export { ArticleTypeService } from './ArticleTypeService';
 export { AuthenticationService } from './AuthenticationService';
+export { ClientRegistrationService } from './ClientRegistrationService';
 export { ContactService } from './ContactService';
 export { CustomerService } from './CustomerService';
 export { DynamicFieldService } from './DynamicFieldService';
@@ -11,8 +12,11 @@ export { MailAccountService } from './MailAccountService';
 export { QueueService } from './QueueService';
 export { RoleService } from './RoleService';
 export { SalutationService } from './SalutationService';
+export { SearchProfileService } from './SearchProfileService';
 export { ServiceService } from './ServiceService';
 export { SignatureService } from './SignatureService';
+export { StandardAttachmentService } from './StandardAttachmentService';
+export { TextModuleService } from './TextModuleService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketService } from './TicketService';
 export { TicketStateService } from './TicketStateService';

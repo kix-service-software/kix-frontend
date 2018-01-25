@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import {
     IArticleTypeService, IAuthenticationService,
-    IConfigurationService, IContactService, ICustomerService,
+    IClientRegistrationService, IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
     IGeneralCatalogService, IGroupService,
     IHttpService,
@@ -11,8 +11,10 @@ import {
     IPluginService,
     IQueueService,
     IRoleService,
-    ISocketCommunicationService, ISalutationService, IServiceService, ISignatureService,
-    ITicketPriorityService, ITicketService, ITicketStateService, ITicketTypeService, ITranslationService,
+    ISalutationService, ISearchProfileService, IServiceService, ISignatureService,
+    ISocketCommunicationService, IStandardAttachmentService,
+    ITextModuleService, ITicketPriorityService, ITicketService, ITicketStateService,
+    ITicketTypeService, ITranslationService,
     IUserService,
     IValidObjectService,
     IWidgetRepositoryService
@@ -27,7 +29,7 @@ import { ApplicationRouter, AuthenticationRouter } from './routes/';
 import { Server } from './Server';
 import {
     ArticleTypeService, AuthenticationService,
-    ConfigurationService, ContactService, CustomerService,
+    ClientRegistrationService, ConfigurationService, ContactService, CustomerService,
     DynamicFieldService,
     GeneralCatalogService, GroupService,
     HttpService,
@@ -36,8 +38,9 @@ import {
     PluginService,
     QueueService,
     RoleService,
-    SocketCommunicationService, SalutationService, ServiceService, SignatureService,
-    TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
+    SalutationService, SearchProfileService, ServiceService, SignatureService,
+    StandardAttachmentService, SocketCommunicationService,
+    TextModuleService, TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
     UserService,
     ValidObjectService,
     WidgetRepositoryService
@@ -71,6 +74,7 @@ export class ServiceContainer {
     private bindServices(): void {
         this.container.bind<IArticleTypeService>('IArticleTypeService').to(ArticleTypeService);
         this.container.bind<IAuthenticationService>('IAuthenticationService').to(AuthenticationService);
+        this.container.bind<IClientRegistrationService>('IClientRegistrationService').to(ClientRegistrationService);
         this.container.bind<IConfigurationService>('IConfigurationService').to(ConfigurationService);
         this.container.bind<IContactService>('IContactService').to(ContactService);
         this.container.bind<ICustomerService>('ICustomerService').to(CustomerService);
@@ -86,9 +90,12 @@ export class ServiceContainer {
         this.container.bind<IQueueService>('IQueueService').to(QueueService);
         this.container.bind<IRoleService>('IRoleService').to(RoleService);
         this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
+        this.container.bind<ISearchProfileService>('ISearchProfileService').to(SearchProfileService);
         this.container.bind<IServiceService>('IServiceService').to(ServiceService);
         this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
         this.container.bind<ISocketCommunicationService>('ISocketCommunicationService').to(SocketCommunicationService);
+        this.container.bind<IStandardAttachmentService>('IStandardAttachmentService').to(StandardAttachmentService);
+        this.container.bind<ITextModuleService>('ITextModuleService').to(TextModuleService);
         this.container.bind<ITicketTypeService>('ITicketTypeService').to(TicketTypeService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);
         this.container.bind<ITicketPriorityService>('ITicketPriorityService').to(TicketPriorityService);
