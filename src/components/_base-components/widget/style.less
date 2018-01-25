@@ -7,32 +7,34 @@
         .color-theme-3;
         box-sizing: border-box;
         padding: 0 .5em;
-        height: 2em;
+        height: 32px;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
         overflow: hidden;
-        [class^="kix-icon-"],
-        [class*=" kix-icon-"] {
-            vertical-align: middle;
-        }
         .header-left {
             display: inline-block;
             float: left;
-            line-height: 2.25em;
+            line-height: 32px;
             margin-right: 5px;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                margin-right: .5em;
+                
+            }
             h3 {
+                display: inline-block;
                 margin-bottom: 0;
                 font-weight: 400;
-                [class^="kix-icon-"],
-                [class*=" kix-icon-"] {
-                    margin-right: .5em;
-                }
             }
         }
         .header-right {
             display: inline-block;
             float: right;
-            line-height: 2em;
+            line-height: 32px;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                vertical-align: middle;
+            }
         }
         input[type=text] {
             margin-top: 6px;
@@ -46,6 +48,41 @@
         border-bottom-left-radius: 3px;
         overflow: hidden;
         box-sizing: border-box;
+        height: 100%;
+        .content-actions {
+            list-style: none;
+            position: absolute;
+            float: right;
+            width: 2em;
+            right: -2em;
+            top: 0;
+            li {
+                border: 1px solid #0a7cb3;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+                border-left: 0 none;
+                margin: 2px 0 2px 1px;
+                height: 2em;
+                color: #0a7cb3;
+                background-color: #ffffff;
+                text-align: center;
+                box-sizing: border-box;
+                padding-top: 3px;
+                &:first-of-type {
+                    margin-top: .5em;
+                }
+                &:last-of-type {
+                    margin-bottom: .5em;
+                }
+                label {
+                    display: none;
+                }
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    font-size: 1.25em;
+                }
+            }
+        }
     }
     .widget-overlay {
         position: absolute;
