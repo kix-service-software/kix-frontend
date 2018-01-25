@@ -38,6 +38,40 @@ describe('Ticket State Service', () => {
         expect(ticketStateService).not.undefined;
     });
 
+    describe('Ticket State Types', () => {
+        describe('Create a valid request to retrieve ticket state types', () => {
+            before(() => {
+                nockScope
+                    .get('/statetypes')
+                    .reply(200, { StateType: [] });
+            });
+
+            it('should return a list of ticket state types.', async () => {
+                const stateTypes = await ticketStateService.getTicketStateTypes('');
+                expect(stateTypes).not.undefined;
+                expect(stateTypes).an('array');
+            });
+        });
+
+        describe('Create a valid request to retrieve a specific ticket state type', () => {
+            before(() => {
+                nockScope
+                    .get('/statetypes/123456')
+                    .reply(200, {
+                        StateType: {
+                            ID: 123456
+                        }
+                    });
+            });
+
+            it('should return a ticket state type with the correct id.', async () => {
+                const type = await ticketStateService.getTicketStateType('', 123456);
+                expect(type).not.undefined;
+                expect(type.ID).equals(123456);
+            });
+        });
+    });
+
     describe('Create a valid request to retrieve a ticket state.', () => {
 
         before(() => {

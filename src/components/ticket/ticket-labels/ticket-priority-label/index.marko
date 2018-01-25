@@ -1,4 +1,4 @@
-<label>
-    ${state.displayValue}
-    <span class="priority-label-${state.priorityId}-style-a">${state.priorityId}</span>
-</label>
+<if(input.showLabel)>
+    <span>${state.label}:${state.displayValue}</span>
+</if>
+<span class="priority-label-${state.priorityId}-style-a">${state.priorityId}</span>

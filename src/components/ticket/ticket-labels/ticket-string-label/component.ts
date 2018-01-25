@@ -11,7 +11,8 @@ export class TicketStringLabelComponent {
             value: null,
             displayValue: null,
             ticketId: null,
-            property: null
+            property: null,
+            label: null
         };
     }
 
@@ -43,6 +44,7 @@ export class TicketStringLabelComponent {
     }
 
     private setDisplayValue(): void {
+        this.state.label = TicketUtil.getPropertyLabelName(this.state.property);
         this.state.displayValue =
             TicketUtil.getPropertyDisplayName(this.state.property, this.state.value, this.state.ticketId);
     }

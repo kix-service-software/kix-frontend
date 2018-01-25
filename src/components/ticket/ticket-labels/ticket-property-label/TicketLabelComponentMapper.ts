@@ -19,6 +19,22 @@ export class TicketLabelComponentMapper {
                 component = require('../ticket-priority-label');
                 break;
 
+            case TicketProperty.STATE_ID:
+                component = require('../ticket-state-label');
+                break;
+
+            case TicketProperty.AGE:
+                component = require('../ticket-age-label');
+                break;
+
+            case TicketProperty.CUSTOMER_ID:
+                component = require('../ticket-customer-label');
+                break;
+
+            case TicketProperty.CUSTOMER_USER_ID:
+                component = require('../ticket-contact-label');
+                break;
+
             default:
                 component = require('../ticket-string-label');
         }

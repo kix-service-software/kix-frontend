@@ -28,8 +28,6 @@ class TicketInfoWidgetComponent {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails) {
                 this.state.ticket = ticketDetails.ticket;
-                this.state.contact = ticketDetails.contact;
-                this.state.customer = ticketDetails.customer;
             }
         }
     }

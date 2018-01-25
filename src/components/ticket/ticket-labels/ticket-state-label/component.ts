@@ -1,22 +1,24 @@
 import { TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
+import { TicketData } from "@kix/core/dist/browser/ticket/TicketData";
 
-export class TicketPriorityLabelComponent {
+export class TicketStateLabelComponent {
 
     private state: any;
 
     public onCreate(input: any): void {
         this.state = {
-            priorityId: input.value,
+            stateId: input.value,
             displayValue: null,
-            label: null
+            label: null,
+            pending: false
         };
     }
 
     public onInput(input: any): void {
         this.state = {
-            priorityId: input.value,
+            stateId: input.value,
             ticketId: input.ticketId
         };
     }
@@ -33,10 +35,11 @@ export class TicketPriorityLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.PRIORITY_ID);
+        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.STATE_ID);
         this.state.displayValue =
-            TicketUtil.getPropertyDisplayName(TicketProperty.PRIORITY_ID, this.state.priorityId, this.state.ticketId);
+            TicketUtil.getPropertyDisplayName(TicketProperty.STATE_ID, this.state.stateId, this.state.ticketId);
+        this.state.pending = TicketUtil.isPendingState(this.state.stateId);
     }
 }
 
-module.exports = TicketPriorityLabelComponent;
+module.exports = TicketStateLabelComponent;

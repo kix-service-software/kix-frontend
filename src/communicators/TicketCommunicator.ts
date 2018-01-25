@@ -104,13 +104,19 @@ export class TicketCommunicator extends KIXCommunicator {
                 filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
             });
 
+            const services = await this.serviceService.getServices(data.token, null, null, null, {
+                fields: 'Service.ServiceID,Service.Name'
+            });
+
+            const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
+
             const ticketHookConfig = await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Hook');
             const ticketHookDividerConfig =
                 await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::HookDivider');
 
             const response = new TicketLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, queues, queuesHierarchy, [], [], users,
-                ticketHookConfig.Data, ticketHookDividerConfig.Data
+                [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
+                services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);

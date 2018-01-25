@@ -5,9 +5,6 @@ export class TicketInfoComponentState extends WidgetComponentState {
 
     public ticket: Ticket = null;
 
-    public contact: Contact = null;
-    public customer: Customer = null;
-
     public ticketId: number = null;
 
 }
