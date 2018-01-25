@@ -1,4 +1,4 @@
-import { TicketUtil, TicketService } from '@kix/core/dist/browser/ticket';
+import { TicketUtil, TicketService, TicketNotification } from '@kix/core/dist/browser/ticket';
 import { TicketProperty, TicketState } from '@kix/core/dist/model/';
 import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
 
@@ -10,20 +10,23 @@ export class TicketStringLabelComponent {
         this.state = {
             value: null,
             displayValue: null,
-            ticketDataId: null,
+            ticketId: null,
             property: null
         };
     }
 
     public onInput(input: any): void {
         this.state.value = input.value;
-        this.state.ticketDataId = input.ticketDataId;
+        this.state.ticketId = Number(input.ticketId);
         this.state.property = input.property;
         this.setDisplayValue();
     }
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
+        if (this.state.ticketId) {
+            TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
+        }
         this.setDisplayValue();
     }
 
@@ -33,8 +36,15 @@ export class TicketStringLabelComponent {
         }
     }
 
+    private ticketServiceNotified(id: string, type: TicketNotification, ...args): void {
+        if (id === this.state.ticketId && TicketNotification.TICKET_DETAILS_LOADED) {
+            this.setDisplayValue();
+        }
+    }
+
     private setDisplayValue(): void {
-        this.state.displayValue = TicketUtil.getPropertyDisplayName(this.state.property, this.state.value);
+        this.state.displayValue =
+            TicketUtil.getPropertyDisplayName(this.state.property, this.state.value, this.state.ticketId);
     }
 
 }
