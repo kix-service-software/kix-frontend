@@ -1,6 +1,7 @@
 .back {
-    height: 1em;
-    margin-bottom: 1em;
+    height: 16px;
+    margin-bottom: 16px;
+    line-height: 16px;
     > div {
         .color-theme-9;
         padding: 0 .5em;
@@ -9,14 +10,17 @@
         display: inline-block;
         min-width: 120px;
         box-sizing: border-box;
-        height: 1em;
+        height: 100%;
         overflow: hidden;
-        line-height: 1em;
         cursor: pointer;
         & span {
-            font-size: .75em;
             vertical-align: middle;
-            margin-right: .25em;
+            margin-right: .5em;
+            padding-top: 2px;
+            &[class^="kix-icon-"],
+            &[class*=" kix-icon-"] {
+                padding-top: 0;
+            }
         }
     }
 }
