@@ -2,7 +2,7 @@
     <if(state.ticket)>
         <widget minimizable=true>
             <@icon/>
-            <@title>T#${state.ticket.TicketNumber} - ${state.ticket.Title}</@title>
+            <@title>${component.getTitle()}</@title>
             <@actions>
                 <for(action in state.generalActions)>
                     <include(component.getTemplate(action), { ticketId: state.ticketId })/>
