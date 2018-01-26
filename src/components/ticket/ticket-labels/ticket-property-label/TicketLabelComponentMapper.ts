@@ -1,4 +1,5 @@
 import { TicketProperty } from '@kix/core/dist/model';
+import { TicketPriority } from '@kix/core/dist/model/ticket/TicketPriority';
 
 export class TicketLabelComponentMapper {
     private static INSTANCE: TicketLabelComponentMapper;
@@ -33,6 +34,10 @@ export class TicketLabelComponentMapper {
 
             case TicketProperty.CUSTOMER_USER_ID:
                 component = require('../ticket-contact-label');
+                break;
+
+            case TicketProperty.PENDING_TIME:
+                component = require('../ticket-pending-time-label');
                 break;
 
             default:

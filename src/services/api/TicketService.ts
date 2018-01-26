@@ -52,7 +52,9 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     protected RESOURCE_URI: string = "tickets";
 
     public async getTicket(token: string, ticketId: number, expandArticles: boolean = true): Promise<AbstractTicket> {
-        let query = {};
+        let query: any = {
+            fields: 'Ticket.*'
+        };
 
         if (expandArticles) {
             query = {
@@ -61,14 +63,11 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
                 expand: 'Ticket.Articles'
             };
 
-            const response = await this.getObject<ExpandedTicketResponse>(
-                token, ticketId, query
-            );
-            return response.Ticket;
-        } else {
-            const response = await this.getObject<TicketResponse>(token, ticketId);
-            return response.Ticket;
+
         }
+
+        const response = await this.getObject<ExpandedTicketResponse>(token, ticketId, query);
+        return response.Ticket;
     }
 
     public async getTickets(

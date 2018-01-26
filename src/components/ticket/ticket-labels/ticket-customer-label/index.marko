@@ -1,24 +1,24 @@
 <if(input.showLabel)>
-    <span>
-        ${state.label}
-        <if(state.customer)>
-            <object-info-overlay>
-                <@title>Kundeninfo</@title>
-                <@content>
-                    <div>${state.customer.CustomerID}</div>
-                    <div>${state.customer.CustomerCompanyName}</div>
-                    <div>
-                        <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
-                    </div>
-                    <div>
-                        <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
-                    </div>
-                    <div>
-                        <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
-                    </div>
-                </@content>
-            </object-info-overlay>
-        </if>:
-    </span>
+    <span>${state.label}:</span>
 </if>
-<span>${state.displayValue}</span>
+<span>
+    <if(state.customer)>
+        <object-info-overlay>
+            <@title>Kundeninfo</@title>
+            <@content>
+                <div>${state.customer.CustomerID}</div>
+                <div>${state.customer.CustomerCompanyName}</div>
+                <div>
+                    <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
+                </div>
+                <div>
+                    <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
+                </div>
+                <div>
+                    <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
+                </div>
+            </@content>
+        </object-info-overlay>
+    </if>
+    ${state.displayValue}
+</span>

@@ -17,7 +17,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const resourcePath = "/statetypes";
+const resourcePath = "/ticketstates";
 
 describe('Ticket State Service', () => {
     let nockScope;
@@ -214,15 +214,15 @@ describe('Ticket State Service', () => {
 
 function buildTicketStateResponse(id: number): TicketStateResponse {
     const response = new TicketStateResponse();
-    response.StateType = new TicketState();
-    response.StateType.ID = id;
+    response.TicketState = new TicketState();
+    response.TicketState.ID = id;
     return response;
 }
 
 function buildTicketStatesResponse(ticketStateCount: number): TicketStatesResponse {
     const response = new TicketStatesResponse();
     for (let i = 0; i < ticketStateCount; i++) {
-        response.StateType.push(new TicketState());
+        response.TicketState.push(new TicketState());
     }
     return response;
 }

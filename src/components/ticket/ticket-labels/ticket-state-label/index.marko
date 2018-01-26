@@ -2,3 +2,8 @@
     <span>${state.label}:</span>
 </if>
 <span>${state.displayValue}</span>
+<if(input.showLabel && state.pending)>
+    <p>
+        <ticket-property-label property="PendingTime" value=state.pendingTime/>
+    </p>
+</if>

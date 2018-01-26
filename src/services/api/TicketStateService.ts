@@ -10,7 +10,7 @@ import { ObjectService } from './ObjectService';
 
 export class TicketStateService extends ObjectService<TicketState> implements ITicketStateService {
 
-    protected RESOURCE_URI: string = "statetypes";
+    protected RESOURCE_URI: string = "ticketstates";
 
     public async getTicketStates(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
@@ -20,7 +20,7 @@ export class TicketStateService extends ObjectService<TicketState> implements IT
             token, limit, order, changedAfter, query
         );
 
-        return response.StateType;
+        return response.TicketState;
     }
 
     public async getTicketState(token: string, ticketStateId: number, query?: any): Promise<TicketState> {
@@ -28,16 +28,18 @@ export class TicketStateService extends ObjectService<TicketState> implements IT
             token, ticketStateId, query
         );
 
-        return response.StateType;
+        return response.TicketState;
     }
 
     public async getTicketStateTypes(token: string, query?: any): Promise<StateType[]> {
-        const response = await this.getObjects<TicketStateTypesResponse>(token, null, null, null, query);
+        const uri = this.buildUri('statetypes');
+        const response = await this.getObjectByUri<TicketStateTypesResponse>(token, uri, query);
         return response.StateType;
     }
 
     public async getTicketStateType(token: string, stateTypeId: number, query?: any): Promise<StateType> {
-        const response = await this.getObject<TicketStateTypeResponse>(token, stateTypeId, query);
+        const uri = this.buildUri('statetypes', stateTypeId);
+        const response = await this.getObjectByUri<TicketStateTypeResponse>(token, uri, query);
         return response.StateType;
     }
 

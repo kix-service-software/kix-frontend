@@ -48,6 +48,11 @@
             <label.detail-label>
                 <ticket-property-label property="StateID" value=state.ticket.StateID/>
             </label>
+            <if(state.isPending)>
+                <label.detail-label>
+                    <ticket-property-label property="PendingTime" value=state.ticket.PendingTime/>
+                </label>
+            </if>
         </if>
     </@content>
     <@filter>

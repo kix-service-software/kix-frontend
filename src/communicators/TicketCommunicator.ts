@@ -77,7 +77,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
         client.on(TicketCreationEvent.LOAD_TICKET_DATA, async (data: TicketLoadDataRequest) => {
             const ticketStates = await this.ticketStateService.getTicketStates(data.token, null, null, null, {
-                fields: 'TicketState.ID,TicketState.Name'
+                fields: 'TicketState.ID,TicketState.Name,TicketState.TypeID'
             });
 
             const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token, null, null, null, {

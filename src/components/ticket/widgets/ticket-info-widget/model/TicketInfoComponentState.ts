@@ -7,4 +7,6 @@ export class TicketInfoComponentState extends WidgetComponentState {
 
     public ticketId: number = null;
 
+    public isPending: boolean = false;
+
 }
