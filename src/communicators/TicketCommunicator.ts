@@ -77,7 +77,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
         client.on(TicketCreationEvent.LOAD_TICKET_DATA, async (data: TicketLoadDataRequest) => {
             const ticketStates = await this.ticketStateService.getTicketStates(data.token, null, null, null, {
-                fields: 'TicketState.ID,TicketState.Name'
+                fields: 'TicketState.ID,TicketState.Name,TicketState.TypeID'
             });
 
             const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token, null, null, null, {
@@ -104,13 +104,28 @@ export class TicketCommunicator extends KIXCommunicator {
                 filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
             });
 
+            const services = await this.serviceService.getServices(data.token, null, null, null, {
+                fields: 'Service.ServiceID,Service.Name'
+            });
+
+            const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
+
             const ticketHookConfig = await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Hook');
             const ticketHookDividerConfig =
                 await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::HookDivider');
 
+            const timeAccountConfig =
+                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::AccountTime');
+            const isAccountTimeEnabled = (timeAccountConfig.Data && timeAccountConfig.Data === '1');
+
+            const timeAccountUnitConfig =
+                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::TimeUnits');
+            const timeAccountUnit = timeAccountUnitConfig.Data;
+
             const response = new TicketLoadDataResponse(
-                [], ticketStates, ticketTypes, ticketPriorities, queues, queuesHierarchy, [], [], users,
-                ticketHookConfig.Data, ticketHookDividerConfig.Data
+                [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
+                services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
+                isAccountTimeEnabled, timeAccountUnit
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
@@ -118,7 +133,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
         client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
 
-            const ticket = await this.ticketService.getTicket(data.token, data.ticketId, false);
+            const ticket = await this.ticketService.getTicket(data.token, data.ticketId);
             const articles = await this.ticketService.getArticles(data.token, data.ticketId);
             const contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
                 return undefined;
