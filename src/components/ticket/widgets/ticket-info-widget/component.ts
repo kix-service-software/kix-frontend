@@ -30,6 +30,7 @@ class TicketInfoWidgetComponent {
             if (ticketDetails) {
                 this.state.ticket = ticketDetails.ticket;
                 this.state.isPending = TicketUtil.isPendingState(this.state.ticket.StateID);
+                this.state.isAccountTimeEnabled = TicketUtil.isAccountTimeEnabled();
             }
         }
     }

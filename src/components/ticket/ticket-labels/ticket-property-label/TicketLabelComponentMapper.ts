@@ -40,6 +40,10 @@ export class TicketLabelComponentMapper {
                 component = require('../ticket-pending-time-label');
                 break;
 
+            case TicketProperty.TIME_UNITS:
+                component = require('../ticket-time-units-label');
+                break;
+
             default:
                 component = require('../ticket-string-label');
         }

@@ -114,9 +114,18 @@ export class TicketCommunicator extends KIXCommunicator {
             const ticketHookDividerConfig =
                 await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::HookDivider');
 
+            const timeAccountConfig =
+                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::AccountTime');
+            const isAccountTimeEnabled = (timeAccountConfig.Data && timeAccountConfig.Data === '1');
+
+            const timeAccountUnitConfig =
+                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::TimeUnits');
+            const timeAccountUnit = timeAccountUnitConfig.Data;
+
             const response = new TicketLoadDataResponse(
                 [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
-                services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data
+                services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
+                isAccountTimeEnabled, timeAccountUnit
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
@@ -124,7 +133,7 @@ export class TicketCommunicator extends KIXCommunicator {
 
         client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
 
-            const ticket = await this.ticketService.getTicket(data.token, data.ticketId, false);
+            const ticket = await this.ticketService.getTicket(data.token, data.ticketId);
             const articles = await this.ticketService.getArticles(data.token, data.ticketId);
             const contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
                 return undefined;

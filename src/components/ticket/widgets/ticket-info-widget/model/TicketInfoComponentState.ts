@@ -9,4 +9,6 @@ export class TicketInfoComponentState extends WidgetComponentState {
 
     public isPending: boolean = false;
 
+    public isAccountTimeEnabled: boolean = false;
+
 }

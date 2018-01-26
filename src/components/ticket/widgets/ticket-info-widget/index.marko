@@ -45,6 +45,11 @@
             <label.detail-label>
                 <ticket-property-label property="OwnerID" value=state.ticket.OwnerID/>
             </label>
+            <if(state.isAccountTimeEnabled)>
+                <label.detail-label>
+                    <ticket-property-label property="TimeUnits" value=state.ticket.TimeUnits/>
+                </label>
+            </if>
             <label.detail-label>
                 <ticket-property-label property="StateID" value=state.ticket.StateID/>
             </label>
