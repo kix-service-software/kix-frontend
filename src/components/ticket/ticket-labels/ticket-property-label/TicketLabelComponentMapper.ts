@@ -44,6 +44,10 @@ export class TicketLabelComponentMapper {
                 component = require('../ticket-time-units-label');
                 break;
 
+            case TicketProperty.DYNAMIC_FIELD:
+                component = require('../ticket-dynamic-field-label');
+                break;
+
             default:
                 component = require('../ticket-string-label');
         }

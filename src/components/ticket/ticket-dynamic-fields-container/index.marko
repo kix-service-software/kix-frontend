@@ -1,0 +1,58 @@
+<div.dynamic-fields-group-container>
+    <widget minimized=false>
+        <@icon/>
+        <@title>Default</@title>
+        <@content>
+            <for(df in state.dynamicFields)>
+                <label.df-label>
+                    <ticket-property-label ticketId=state.ticketID property="DynamicField" value=df.Name/>
+                </label>
+            </for>
+        </@content>
+        <@filter/>
+        <@actions/>
+        <@contentActions/>
+    </widget>
+    <widget minimized=true>
+        <@icon/>
+        <@title>ITSM Felder</@title>
+        <@content>
+            <for(df in state.dynamicFields)>
+                <label.df-label>
+                    <ticket-property-label ticketId=state.ticketID property="DynamicField" value=df.Name/>
+                </label>
+            </for>
+        </@content>
+        <@filter/>
+        <@actions/>
+        <@contentActions/>
+    </widget>
+    <widget minimized=true>
+        <@icon/>
+        <@title>Kosten</@title>
+        <@content>
+            <for(df in state.dynamicFields)>
+                <label.df-label>
+                    <ticket-property-label ticketId=state.ticketID property="DynamicField" value=df.Name/>
+                </label>
+            </for>
+        </@content>
+        <@filter/>
+        <@actions/>
+        <@contentActions/>
+    </widget>
+    <widget minimized=true>
+        <@icon/>
+        <@title>Projektinformationen</@title>
+        <@content>
+            <for(df in state.dynamicFields)>
+                <label.df-label>
+                    <ticket-property-label ticketId=state.ticketID property="DynamicField" value=df.Name/>
+                </label>
+            </for>
+        </@content>
+        <@filter/>
+        <@actions/>
+        <@contentActions/>
+    </widget>
+</div>

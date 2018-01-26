@@ -27,13 +27,23 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
                 WidgetType.LANE, true, WidgetSize.BOTH, null, false)
             );
+        const dynamicFieldsLane =
+            new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
+                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {},
+                WidgetType.LANE, true, WidgetSize.BOTH, null, false)
+            );
 
         const contentRows = [
-            ["ticket-information-lane", "ticket-history-widget", "ticket-description-widget"]
+            [
+                "ticket-information-lane",
+                "ticket-history-widget",
+                "ticket-description-widget",
+                "ticket-dynamic-field-widget"
+            ]
         ];
 
         const contentConfiguredWidgets: ConfiguredWidget[] = [
-            ticketInfoLane, descriptionLane, ticketHistoryLane
+            ticketInfoLane, descriptionLane, dynamicFieldsLane, ticketHistoryLane
         ];
 
         // Explorer
