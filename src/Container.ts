@@ -11,7 +11,7 @@ import {
     IPluginService,
     IQueueService,
     IRoleService,
-    ISalutationService, ISearchProfileService, IServiceService, ISignatureService,
+    ISalutationService, ISearchProfileService, IServiceService, ISignatureService, ISysConfigService,
     ISocketCommunicationService, IStandardAttachmentService,
     ITextModuleService, ITicketPriorityService, ITicketService, ITicketStateService,
     ITicketTypeService, ITranslationService,
@@ -38,7 +38,7 @@ import {
     PluginService,
     QueueService,
     RoleService,
-    SalutationService, SearchProfileService, ServiceService, SignatureService,
+    SalutationService, SearchProfileService, ServiceService, SignatureService, SysConfigService,
     StandardAttachmentService, SocketCommunicationService,
     TextModuleService, TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
     UserService,
@@ -95,6 +95,7 @@ export class ServiceContainer {
         this.container.bind<ISignatureService>('ISignatureService').to(SignatureService);
         this.container.bind<ISocketCommunicationService>('ISocketCommunicationService').to(SocketCommunicationService);
         this.container.bind<IStandardAttachmentService>('IStandardAttachmentService').to(StandardAttachmentService);
+        this.container.bind<ISysConfigService>('ISysConfigService').to(SysConfigService);
         this.container.bind<ITextModuleService>('ITextModuleService').to(TextModuleService);
         this.container.bind<ITicketTypeService>('ITicketTypeService').to(TicketTypeService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);

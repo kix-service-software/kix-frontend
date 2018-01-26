@@ -37,6 +37,8 @@ export class TicketDetailsComponent {
         ContextService.getInstance().provideContext(context, 'ticket-details', true);
 
         DashboardService.getInstance().loadDashboardConfiguration('ticket-details');
+
+        this.setTicketHookInfo();
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -57,6 +59,16 @@ export class TicketDetailsComponent {
                     this.state.activeTabId = this.state.tabs[0].instanceId;
                 }
             }
+        } else if (type === ContextNotification.OBJECT_UPDATED && id === TicketService.TICKET_DATA_ID) {
+            this.setTicketHookInfo();
+        }
+    }
+
+    private setTicketHookInfo(): void {
+        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
+        if (ticketData) {
+            this.state.ticketHook = ticketData.ticketHook;
+            this.state.ticketHookDivider = ticketData.ticketHookDivider;
         }
     }
 
@@ -106,6 +118,11 @@ export class TicketDetailsComponent {
 
     private isArticleExpanded(articleId: number): boolean {
         return this.state.expandedArticles.some((a) => a === articleId);
+    }
+
+    private getTitle(): string {
+        const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + this.state.ticket.TicketNumber;
+        return titlePrefix + " - " + this.state.ticket.Title;
     }
 
 }

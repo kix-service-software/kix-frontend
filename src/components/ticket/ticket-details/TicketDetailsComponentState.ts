@@ -13,7 +13,9 @@ export class TicketDetailsComponentState {
         public ticketActions: string[] = [],
         public generalArticleActions: string[] = [],
         public articleActions: string[] = [],
-        public expandedArticles: number[] = []
+        public expandedArticles: number[] = [],
+        public ticketHook: string = '',
+        public ticketHookDivider: string = ''
     ) { }
 
 }
