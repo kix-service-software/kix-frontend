@@ -8,7 +8,7 @@ export class TicketStateLabelComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            stateId: input.value,
+            value: input.value,
             displayValue: null,
             label: null,
             ticketId: null
@@ -17,7 +17,7 @@ export class TicketStateLabelComponent {
 
     public onInput(input: any): void {
         this.state = {
-            stateId: input.value,
+            value: input.value,
             ticketId: Number(input.ticketId)
         };
     }
