@@ -25,9 +25,9 @@
             li {
                 cursor: pointer;
                 display: inline-block;
-                padding: .5em .5em 0;
-                margin: 0 .5em;
-                min-width: 50px;
+                padding: .25em .875em;
+                box-sizing: border-box;
+                width: 110px; // TODO ggf. max-width, je nachdem was definiert wird
                 line-height: 32px;
                 &:first-of-type {
                     margin-left: 0;
@@ -191,12 +191,12 @@
             }
         }
     }
-    .article-table-widget > .widget {
+    .article-table-widget>.widget {
         background-color: #ffffff;
-        > .widget-header {
+        >.widget-header {
             background-color: #035580;
             color: #ffffff;
-            > .header-right {
+            >.header-right {
                 label {
                     margin-right: 15px;
                 }
@@ -232,10 +232,10 @@
                     }
                     &.article-content {
                         .widget {
-                            > .widget-header {
+                            >.widget-header {
                                 display: none;
                             }
-                            > .widget-content {
+                            >.widget-content {
                                 margin: 0 2.25em .5em;
                                 padding: 1em;
                                 overflow: visible;
@@ -272,7 +272,7 @@
                         }
                         &.expanded {
                             background-color: #b6d6e8;
-                            + tr {
+                            +tr {
                                 background-color: #ffffff;
                             }
                         }

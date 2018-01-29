@@ -1,9 +1,11 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ActionListComponentState } from './model/ActionListComponentState';
+import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 
 export class ActionListComponent {
 
     private state: ActionListComponentState;
+    private resizeTimeout: any = null;
 
     private static MODULE_ID: string = 'ticket-details';
 
@@ -12,9 +14,8 @@ export class ActionListComponent {
     }
 
     public onInput(input: any): void {
-        this.state.list = [...input.list, ...input.list];
-        this.state.expansionList = input.list;
-
+        this.state.initList = [...input.list, ...input.list];
+        this.prepareLists();
     }
 
     public onMount(): void {
@@ -25,18 +26,39 @@ export class ActionListComponent {
                 this.state.showExpansionList = false;
             }
         }, false);
-        console.log((this as any).getEl('action-container').style.width);
-        console.log((this as any).getEl('action-container').style.offsetWidth);
-        console.log((this as any).getEl('action-container').clientWidth);
-        console.log((this as any).getEl('action-container').scrollWidth);
-        console.log((this as any).getEl('action-container').clientHeight);
-        console.log((this as any).getEl('action-container').scrollHeight);
-        console.log((this as any).getEl('action-list').style.width);
-        console.log((this as any).getEl('action-list').style.offsetWidth);
-        console.log((this as any).getEl('action-list').clientWidth);
-        console.log((this as any).getEl('action-list').scrollWidth);
-        console.log((this as any).getEl('action-list').clientHeight);
-        console.log((this as any).getEl('action-list').scrollHeight);
+        this.prepareLists();
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        window.addEventListener("resize", this.resizeThrottler.bind(this), false);
+    }
+
+    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (
+            type === ContextNotification.EXPLORER_BAR_TOGGLED ||
+            type === ContextNotification.SIDEBAR_BAR_TOGGLED
+        ) {
+            setTimeout(() => {
+                this.prepareLists();
+            }, 50);
+        }
+    }
+
+    private resizeThrottler() {
+        if (!this.resizeTimeout) {
+            this.resizeTimeout = setTimeout(() => {
+                this.resizeTimeout = null;
+                this.prepareLists();
+            }, 66);
+        }
+    }
+
+    private prepareLists() {
+        this.state.listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
+        if (this.state.listWidth > 0) {
+            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer
+            const maxActions = Math.floor((this.state.listWidth - 100) / 110);
+            this.state.rowList = this.state.initList.slice(0, maxActions);
+            this.state.expansionList = this.state.initList.slice(maxActions);
+        }
     }
 
     private getTemplate(componentId: string): any {
