@@ -1,4 +1,12 @@
-<if(input.showLabel)>
-    <span>${state.label}</span>
-</if>
-<span>${state.displayValue}</span>
+<key-value-pair showKey=input.showLabel>
+    <@key>${state.label}</@key>
+    <@info>
+        <object-info-overlay>
+            <@title>${state.label}</@title>
+            <@content>
+                <span>Beschreibung des Feldes ...</span>
+            </@content>
+        </object-info-overlay>
+    </@info>
+    <@value>${state.displayValue}</@value>
+</key-value-pair>

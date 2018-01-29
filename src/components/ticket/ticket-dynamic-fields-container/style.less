@@ -10,14 +10,36 @@
         .widget-content {
             background-color: #eee !important;
             border: 1px solid #e2e2e2 !important;
+            .field-container {
+                overflow: auto;
+                max-height: 178px;
+                ul {
+                    list-style: none;
+                    li.df-field {
+                        display: block;
+                        .key-value-pair {
+                            .key {
+                                font-weight: bold;
+                                width: 200px;
+                                float: left;
+                                text-align: right;
+                            }
+                            .info {
+                                width: 25px;
+                                float: left;
+                                padding-left: 5px;
+                                padding-right: 10px;
+                                text-align: center;
+                            }
+                            .value {}
+                        }
+                    }
+                }
+            }
         }
         &.minimized {
             margin-top: 0;
             margin-bottom: 0;
         }
     }
-}
-
-.df-label {
-    display: block;
 }
