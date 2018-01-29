@@ -1,0 +1,21 @@
+<ul class=input.listClass key="action-list">
+    <for(element in state.list)>
+        <li>
+            <include(component.getTemplate(element)) on-update('checkLength')/>
+        </li>
+    </for>
+    <if(state.expansionList && state.expansionList.length > 0)>
+        <li.expansion-list-toggle on-click('toggleExpansionList')>
+            <span.kix-icon>...</span>
+        </li>
+    </if>
+</ul>
+<if(state.showExpansionList)>
+    <div.expansion-list>
+        <for(element in state.expansionList)>
+            <li>
+                <include(component.getTemplate(element))/>
+            </li>
+        </for>
+    </div>
+</if>

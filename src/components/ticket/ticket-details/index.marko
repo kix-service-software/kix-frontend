@@ -9,13 +9,14 @@
                 </for>
             </@actions>
             <@contentActions>
-                <ul.action-list>
+                <action-list listClass="action-list" list=state.ticketActions/>
+                <!-- <ul.action-list>
                     <for(action in state.ticketActions)>
                         <li>
                             <include(component.getTemplate(action), { ticketId: state.ticketId })/>
                         </li>
                     </for>
-                </ul>
+                </ul> -->
             </@contentActions>
             <@content>
                 <ul.lane-list>
