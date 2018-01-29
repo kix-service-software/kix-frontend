@@ -6,7 +6,7 @@ export class TicketHistoryComponentState {
 
     public ticketId: number = null;
 
-    public widgetConfiguration: WidgetConfiguration = null;
+    public widgetConfiguration: WidgetConfiguration<any> = null;
 
     public history: TicketHistory[] = [];
 

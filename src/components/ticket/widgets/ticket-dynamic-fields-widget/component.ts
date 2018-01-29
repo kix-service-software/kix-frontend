@@ -1,18 +1,15 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { DynamicFieldsSettings } from './DynamicFieldsSettings';
+import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
 
 class TicketDescriptionWIdgetComponent {
 
-    private state: any;
+    private state: DynamicFieldWidgetComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            instanceId: null,
-            ticketId: null,
-            widgetConfiguration: null,
-            dynamicFields: []
-        };
+        this.state = new DynamicFieldWidgetComponentState();
     }
 
     public onInput(input: any): void {
@@ -23,7 +20,12 @@ class TicketDescriptionWIdgetComponent {
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        this.state.widgetConfiguration = context
+            ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)
+            : undefined;
+
+        this.state.configuredDynamicFields = this.state.widgetConfiguration.settings.dynamicFields;
         this.setDynamicFields();
     }
 
@@ -38,13 +40,18 @@ class TicketDescriptionWIdgetComponent {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails && ticketDetails.ticket) {
                 this.state.dynamicFields = ticketDetails.ticket.DynamicFields;
+                this.state.filteredDynamicFields = this.state.dynamicFields
+                    .filter((df) => this.state.configuredDynamicFields.some((cd) => cd === df.Name));
             }
         }
     }
 
     private expandWidget(): void {
         ApplicationStore.getInstance().toggleDialog(
-            'ticket-dynamic-fields-container', { dynamicFields: this.state.dynamicFields }
+            'ticket-dynamic-fields-container', {
+                dynamicFields: this.state.dynamicFields,
+                ticketId: this.state.ticketId
+            }
         );
     }
 

@@ -29,7 +29,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             );
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {},
+                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {
+                    dynamicFields: [
+                        'AcknowledgeName', 'KIX18DynamicField1', 'SysMonXAddress',
+                        'SysMonXAlias', 'SysMonXHost', 'SysMonXService'
+                    ]
+                },
                 WidgetType.LANE, true, WidgetSize.BOTH, null, false)
             );
 
@@ -42,7 +47,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             ]
         ];
 
-        const contentConfiguredWidgets: ConfiguredWidget[] = [
+        const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
             ticketInfoLane, descriptionLane, dynamicFieldsLane, ticketHistoryLane
         ];
 
@@ -53,7 +58,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 WidgetType.EXPLORER, true, WidgetSize.SMALL, null, false)
             );
         const explorerRows: string[][] = [['20171211155412']];
-        const explorerConfiguredWidgets: ConfiguredWidget[] = [queueExplorer];
+        const explorerConfiguredWidgets: Array<ConfiguredWidget<any>> = [queueExplorer];
 
         // Sidebars
         const customerInfo =
@@ -67,7 +72,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 WidgetType.SIDEBAR, true, WidgetSize.BOTH, null, false)
             );
         const sidebarRows = [['20180116143215'], ['20180116143216']];
-        const sidebarConfiguredWidgets: ConfiguredWidget[] = [customerInfo, contactInfo];
+        const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [customerInfo, contactInfo];
 
         // actions
         const generalActions = ['new-ticket-action'];
