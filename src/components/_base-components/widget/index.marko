@@ -1,24 +1,6 @@
 <div.widget class=(state.minimized ? "minimized" : "")>
     <div.widget-header.clearfix>
-        <span.header-left on-click('minimizeWidget')>
-            <if(input.explorer)>
-                <span.kix-icon-close-left on-click('minimizeExplorer')/>
-            </if>
-            <else-if(input.icon && Object.keys(input.icon).length)>
-                <include(input.icon)/>
-            </else-if>
-            <h3>
-                <if(component.isInputDefined(input.title))>
-                    <include(input.title)/>
-                </if>
-            </h3>
-        </span>
-        <span>
-            <if(component.hasFilter(input.filter))>
-                <include(input.filter)/>
-            </if>
-        </span>
-        <span.header-right>
+        <span.header-right.clearfix>
             <if(component.isConfigMode() && !input.isNotConfigurable)>
                 <if(state.configChanged)>
                     <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
@@ -33,6 +15,24 @@
                     <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
                 </if>
             </else>
+        </span>
+        <span.header-left on-click('minimizeWidget')>
+            <if(input.explorer)>
+                <span.kix-icon-close-left on-click('minimizeExplorer')/>
+            </if>
+            <else-if(input.icon && Object.keys(input.icon).length)>
+                <include(input.icon)/>
+            </else-if>
+            <h3>
+                <if(component.isInputDefined(input.title))>
+                    <include(input.title)/>
+                </if>
+            </h3>
+            <span>
+                <if(component.hasFilter(input.filter))>
+                    <include(input.filter)/>
+                </if>
+            </span>
         </span>
     </div>
     <div.widget-content.clearfix>
