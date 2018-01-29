@@ -53,7 +53,6 @@ export class ActionListComponent {
 
     private prepareLists() {
         this.state.listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
-        console.log(this.state.listWidth);
         if (this.state.listWidth > 0) {
             // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer (... + margin/padding)
             const maxActions = Math.floor((this.state.listWidth - 100) / 110);
