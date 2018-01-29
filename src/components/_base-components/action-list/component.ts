@@ -14,7 +14,7 @@ export class ActionListComponent {
     }
 
     public onInput(input: any): void {
-        this.state.initList = [...input.list, ...input.list];
+        this.state.initList = input.list;
         this.prepareLists();
     }
 
@@ -28,7 +28,7 @@ export class ActionListComponent {
         }, false);
         this.prepareLists();
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        window.addEventListener("resize", this.resizeThrottler.bind(this), false);
+        window.addEventListener("resize", this.windowResizeThrottler.bind(this), false);
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -42,7 +42,7 @@ export class ActionListComponent {
         }
     }
 
-    private resizeThrottler() {
+    private windowResizeThrottler() {
         if (!this.resizeTimeout) {
             this.resizeTimeout = setTimeout(() => {
                 this.resizeTimeout = null;
@@ -53,8 +53,9 @@ export class ActionListComponent {
 
     private prepareLists() {
         this.state.listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
+        console.log(this.state.listWidth);
         if (this.state.listWidth > 0) {
-            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer
+            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer (... + margin/padding)
             const maxActions = Math.floor((this.state.listWidth - 100) / 110);
             this.state.rowList = this.state.initList.slice(0, maxActions);
             this.state.expansionList = this.state.initList.slice(maxActions);

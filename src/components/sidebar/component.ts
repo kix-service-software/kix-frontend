@@ -67,7 +67,6 @@ class SidebarComponent {
 
                 (this as any).setStateDirty('configuredWidgets');
             }
-
             if (this.state.sidebarBarExpanded && !this.hasSidebarsToShow()) {
                 this.state.sidebarBarExpanded = false;
                 ContextService.getInstance().toggleSidebarBar(this.state.sidebarBarExpanded);
