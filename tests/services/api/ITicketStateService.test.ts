@@ -17,7 +17,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const resourcePath = "/statetypes";
+const resourcePath = "/ticketstates";
 
 describe('Ticket State Service', () => {
     let nockScope;
@@ -36,6 +36,40 @@ describe('Ticket State Service', () => {
 
     it('service instance is registered in container.', () => {
         expect(ticketStateService).not.undefined;
+    });
+
+    describe('Ticket State Types', () => {
+        describe('Create a valid request to retrieve ticket state types', () => {
+            before(() => {
+                nockScope
+                    .get('/statetypes')
+                    .reply(200, { StateType: [] });
+            });
+
+            it('should return a list of ticket state types.', async () => {
+                const stateTypes = await ticketStateService.getTicketStateTypes('');
+                expect(stateTypes).not.undefined;
+                expect(stateTypes).an('array');
+            });
+        });
+
+        describe('Create a valid request to retrieve a specific ticket state type', () => {
+            before(() => {
+                nockScope
+                    .get('/statetypes/123456')
+                    .reply(200, {
+                        StateType: {
+                            ID: 123456
+                        }
+                    });
+            });
+
+            it('should return a ticket state type with the correct id.', async () => {
+                const type = await ticketStateService.getTicketStateType('', 123456);
+                expect(type).not.undefined;
+                expect(type.ID).equals(123456);
+            });
+        });
     });
 
     describe('Create a valid request to retrieve a ticket state.', () => {
@@ -180,15 +214,15 @@ describe('Ticket State Service', () => {
 
 function buildTicketStateResponse(id: number): TicketStateResponse {
     const response = new TicketStateResponse();
-    response.StateType = new TicketState();
-    response.StateType.ID = id;
+    response.TicketState = new TicketState();
+    response.TicketState.ID = id;
     return response;
 }
 
 function buildTicketStatesResponse(ticketStateCount: number): TicketStatesResponse {
     const response = new TicketStatesResponse();
     for (let i = 0; i < ticketStateCount; i++) {
-        response.StateType.push(new TicketState());
+        response.TicketState.push(new TicketState());
     }
     return response;
 }
