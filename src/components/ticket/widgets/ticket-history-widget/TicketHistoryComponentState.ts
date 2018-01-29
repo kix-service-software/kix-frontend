@@ -10,4 +10,8 @@ export class TicketHistoryComponentState {
 
     public history: TicketHistory[] = [];
 
+    public filteredHistory: TicketHistory[] = [];
+
+    public filterValue: string = '';
+
 }

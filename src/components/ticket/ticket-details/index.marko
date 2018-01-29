@@ -45,7 +45,7 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix>
-                            <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID}) on-expandArticle('expandArticle')/>
                         </li>
                     </for>
                 </ul>
@@ -82,7 +82,7 @@
                                 </thead>
                                 <tbody>
                                     <for(article in state.articles  | status-var=loop)>
-                                        <tr class=(component.isArticleExpanded(article.ArticleID) ? "expanded" : "")>
+                                        <tr id=article.ArticleID class=(component.isArticleExpanded(article.ArticleID) ? "expanded" : "")>
                                             <td.select-row>
                                                 <input type="checkbox"/>
                                             </td>
