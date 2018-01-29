@@ -21,12 +21,13 @@ export class WidgetRepositoryService implements IWidgetRepositoryService {
         this.pluginService = pluginService;
     }
 
-    public async getAvailableWidgets(contextId: string, widgetType?: WidgetType): Promise<WidgetDescriptor[]> {
-        const preDefinedWidgetsConfiguration: any
-            = await this.configurationService.getPreDefinedWidgetConfiguration();
-        const widgetFactories = await this.pluginService.getWidgetFactories();
+    public async getAvailableWidgets<T>(
+        contextId: string, widgetType?: WidgetType
+    ): Promise<Array<WidgetDescriptor<T>>> {
 
-        const preDefinedWidgetDescriptors: WidgetDescriptor[] = preDefinedWidgetsConfiguration[contextId] || [];
+        const preDefinedWidgetDescriptors
+            = await this.configurationService.getPreDefinedWidgetConfiguration(contextId);
+        const widgetFactories = await this.pluginService.getWidgetFactories();
 
         const widgetDescriptors = widgetFactories.map((wf) => new WidgetDescriptor(
             wf.widgetId, wf.getDefaultConfiguration(), wf.type

@@ -10,12 +10,21 @@
         &:first-of-type {
             margin-top: 0;
         }
+        .widget-header {
+            h3 {
+                max-width: 75%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
         .widget-content {
             background-color: transparent;
         }
         .action-list {
             display: block;
             list-style: none;
+            padding: 0 .5em 0 1em;
             margin-bottom: 1.5em;
             background-color: #e2e2e2;
             border-bottom-left-radius: 3px;
@@ -24,13 +33,16 @@
             height: 32px;
             li {
                 cursor: pointer;
-                display: inline-block;
-                padding: .25em .875em;
-                box-sizing: border-box;
-                width: 110px; // TODO ggf. max-width, je nachdem was definiert wird
+                display: inline-block; // padding: .25em .875em;
+                // box-sizing: border-box;
+                // width: 110px; // TODO ggf. max-width, je nachdem was definiert wird
+                padding: 0 .5em 0;
+                margin: 0 .5em;
+                min-width: 50px;
                 line-height: 32px;
                 &:first-of-type {
                     margin-left: 0;
+                    padding-left: 0;
                 }
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {

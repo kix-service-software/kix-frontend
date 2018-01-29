@@ -1,0 +1,17 @@
+<div.key-value-pair>
+    <if(state.showKey && input.key)>
+        <div.key>
+            <include(input.key)/>
+        </div>
+    </if>
+    <if(state.showInfo && input.info)>
+        <div.info>
+            <include(input.info)/>
+        </div>
+    </if>
+    <if(state.showValue && input.value)>
+        <div.value>
+            <include(input.value)/>
+        </div>
+    </if>
+</div>

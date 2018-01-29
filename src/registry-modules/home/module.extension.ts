@@ -78,7 +78,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const contentRows: string[][] = [
             ['20170920072542', '20170920084512', '20170920113214'], ['20170920101621'], ['20170920093015']
         ];
-        const contentConfiguredWidgets: ConfiguredWidget[] =
+        const contentConfiguredWidgets: Array<ConfiguredWidget<any>> =
             [chart1, chart2, searchTemplateWidget, ticketListWidget, userListWidget];
 
 
@@ -94,7 +94,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.SIDEBAR, true, WidgetSize.SMALL, 'note', false)
             );
         const sidebarRows: string[][] = [['20170915101514'], ['20170915094112'], ['20170915085411']];
-        const sidebarConfiguredWidgets: ConfiguredWidget[] = [notes, notes2];
+        const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notes, notes2];
 
         return new DashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, [],
