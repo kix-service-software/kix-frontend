@@ -80,7 +80,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             );
 
         const explorerRows: string[][] = [['20171211155412'], ['20171215093654']];
-        const explorerConfiguredWidgets: ConfiguredWidget[] = [queueExplorer, servicesExplorer];
+        const explorerConfiguredWidgets: Array<ConfiguredWidget<any>> = [queueExplorer, servicesExplorer];
 
         const notesWidget =
             new ConfiguredWidget(
@@ -91,7 +91,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 )
             );
         const sidebarRows = [["ticket-module-notes"]];
-        const sidebarConfiguredWidgets: ConfiguredWidget[] = [notesWidget];
+        const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notesWidget];
 
         return new DashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, explorerRows,

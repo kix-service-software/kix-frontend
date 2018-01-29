@@ -14,7 +14,7 @@ export class NotesWidgetFactoryExtension implements IWidgetFactoryExtension {
         return new NotesWidget(this.widgetId);
     }
 
-    public getDefaultConfiguration(): WidgetConfiguration {
+    public getDefaultConfiguration(): WidgetConfiguration<NotesSettings> {
         return new WidgetConfiguration(
             this.widgetId, "Notes", [], new NotesSettings(), this.type, true, WidgetSize.SMALL, 'note'
         );

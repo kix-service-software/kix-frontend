@@ -1,4 +1,7 @@
-<if(input.showLabel)>
-    <span>${state.label}:</span>
-</if>
-<span>${state.displayValue}</span>
+<key-value-pair showKey=input.showLabel>
+    <@key>${state.label}</@key>
+    <@info>
+        <span/>
+    </@info>
+    <@value>${state.displayValue}</@value>
+</key-value-pair>

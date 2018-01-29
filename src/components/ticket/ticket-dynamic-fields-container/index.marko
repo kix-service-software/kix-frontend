@@ -1,0 +1,20 @@
+<div.dynamic-fields-group-container>
+    <widget minimized=false>
+        <@icon/>
+        <@title>Default</@title>
+        <@content>
+            <div.field-container>
+                <ul>
+                    <for(df in state.dynamicFields)>
+                        <li.df-field>
+                            <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.Name/>
+                        </li>
+                    </for>
+                </ul>
+            </div>
+        </@content>
+        <@filter/>
+        <@actions/>
+        <@contentActions/>
+    </widget>
+</div>

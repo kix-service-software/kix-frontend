@@ -1,9 +1,11 @@
-<if(input.showLabel)>
-    <span>${state.label}:</span>
-</if>
-<span>${state.displayValue}</span>
-<if(input.showLabel && state.pending)>
-    <p>
-        <ticket-property-label property="PendingTime" value=state.pendingTime/>
-    </p>
-</if>
+<key-value-pair showKey=input.showLabel>
+    <@key>${state.label}</@key>
+    <@info><span/></@info>
+    <@value>
+        ${state.displayValue}<if(input.showLabel && state.pending)>
+            <p>
+                <ticket-property-label property="PendingTime" value=state.pendingTime/>
+            </p>
+        </if>
+    </@value>
+</key-value-pair>

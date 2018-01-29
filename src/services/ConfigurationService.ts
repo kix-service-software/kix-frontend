@@ -1,6 +1,6 @@
 import { IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import { Environment, IServerConfiguration } from '@kix/core/dist/common';
-import { TranslationConfiguration } from '@kix/core/dist/model';
+import { TranslationConfiguration, WidgetDescriptor } from '@kix/core/dist/model';
 
 import { injectable, inject } from 'inversify';
 
@@ -52,8 +52,10 @@ export class ConfigurationService implements IConfigurationService {
         return this.translationConfiguration;
     }
 
-    public getPreDefinedWidgetConfiguration(): any {
-        return this.preDefinedWidgetConfiguration || {};
+    public getPreDefinedWidgetConfiguration<T = any>(contextId: string): Array<WidgetDescriptor<T>> {
+        return this.preDefinedWidgetConfiguration && this.preDefinedWidgetConfiguration[contextId]
+            ? this.preDefinedWidgetConfiguration[contextId]
+            : [];
     }
 
     public getModuleConfiguration(contextId: string, userId: number): any {
