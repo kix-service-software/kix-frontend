@@ -6,20 +6,18 @@
     .widget-header {
         .color-theme-3;
         box-sizing: border-box;
-        padding: 0 .5em;
+        padding: 0 .5em 0 1em;
         height: 32px;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
         overflow: hidden;
         .header-left {
-            display: inline-block;
-            float: left;
             line-height: 32px;
             margin-right: 5px;
+            overflow: hidden;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 margin-right: .5em;
-                
             }
             h3 {
                 display: inline-block;
@@ -31,9 +29,30 @@
             display: inline-block;
             float: right;
             line-height: 32px;
+            .action {
+                float: left;
+                margin-right: .5em;
+                cursor: pointer;
+                &:last-of-type {
+                    margin-right: 0;
+                }
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    font-size: 1.25em;
+                    width: auto;
+                    margin: 0 .125em;
+                    line-height: 29px;
+                }
+            }
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 vertical-align: middle;
+                display: inline-block;
+                width: 2em;
+                height: 32px;
+                line-height: 32px;
+                text-align: center;
+                cursor: pointer;
             }
         }
         input[type=text] {
@@ -42,8 +61,7 @@
     }
     .widget-content {
         position: relative;
-        .color-theme-4;
-        // padding: .5em 1em;
+        .color-theme-4; // padding: .5em 1em;
         border-bottom-right-radius: 3px;
         border-bottom-left-radius: 3px;
         overflow: hidden;
