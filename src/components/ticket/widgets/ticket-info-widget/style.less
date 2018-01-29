@@ -1,7 +1,61 @@
-.widget {
-    .widget-content {
-        .key-value-pair {
-            display: block;
+.content {
+    .ticket-details {
+        .widget {
+            .widget-content {
+                .information-list {
+                    list-style: none;
+                    li {
+                        display: block;
+                        width: 240px;
+                        float: left;
+                        &:nth-of-type(2n+1) {
+                            clear: none;
+                        }
+                        &:nth-of-type(3n+1) {
+                            clear: left;
+                        }
+                        .key-value-pair {
+                            line-height: 1.5em;
+                            .key {
+                                min-width: 100px;
+                                font-weight: 600;
+                                display: inline-block;
+                            }
+                            .info>span {
+                                display: inline-block;
+                                width: 1em;
+                                margin-right: .5em;
+                            }
+                            .value {
+                                display: inline-block;
+                                width: 100px;
+                                height: 1.5em;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                vertical-align: middle;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.sidebar+.content {
+    .explorerbar+.ticket-details {
+        .widget-content {
+            .information-list {
+                li {
+                    &:nth-of-type(3n+1) {
+                        clear: none;
+                    }
+                    &:nth-of-type(2n+1) {
+                        clear: left;
+                    }
+                }
+            }
         }
     }
 }

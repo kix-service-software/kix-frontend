@@ -1,13 +1,11 @@
 <key-value-pair showKey=input.showLabel>
     <@key>${state.label}</@key>
-    <@info>
-        <span/>
-    </@info>
     <@value>
-        ${state.displayValue}<if(input.showLabel && state.pending)>
-            <p>
+        <span.text>${state.displayValue}</span>
+        <if(input.showLabel && state.pending)>
+            <span.text>
                 <ticket-property-label property="PendingTime" value=state.pendingTime/>
-            </p>
+            </span>
         </if>
     </@value>
 </key-value-pair>
