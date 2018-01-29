@@ -14,7 +14,7 @@ export class ActionListComponent {
     }
 
     public onInput(input: any): void {
-        this.state.initList = input.list;
+        this.state.actionList = input.list;
         this.prepareLists();
     }
 
@@ -23,7 +23,7 @@ export class ActionListComponent {
             if (this.state.keepShow) {
                 this.state.keepShow = false;
             } else {
-                this.state.showExpansionList = false;
+                this.state.showListExpansion = false;
             }
         }, false);
         this.prepareLists();
@@ -56,8 +56,8 @@ export class ActionListComponent {
         if (this.state.listWidth > 0) {
             // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer (... + margin/padding)
             const maxActions = Math.floor((this.state.listWidth - 100) / 110);
-            this.state.rowList = this.state.initList.slice(0, maxActions);
-            this.state.expansionList = this.state.initList.slice(maxActions);
+            this.state.listDefault = this.state.actionList.slice(0, maxActions);
+            this.state.listExpansion = this.state.actionList.slice(maxActions);
         }
     }
 
@@ -65,8 +65,8 @@ export class ActionListComponent {
         return ClientStorageHandler.getComponentTemplate(componentId);
     }
 
-    private toggleExpansionList(): any {
-        this.state.showExpansionList = !this.state.showExpansionList;
+    private toggleListExpansion(): any {
+        this.state.showListExpansion = !this.state.showListExpansion;
         this.state.keepShow = !this.state.keepShow;
     }
 }

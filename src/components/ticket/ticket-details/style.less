@@ -32,7 +32,20 @@
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
                 color: @secondary-0;
-                &.action-list-row {
+                li {
+                    cursor: pointer;
+                    display: inline-block;
+                    padding: 0 .5em 0;
+                    margin: 0 .5em;
+                    box-sizing: border-box;
+                    text-overflow: ellipsis;
+                    line-height: 32px;
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        margin-right: .25em;
+                    }
+                }
+                &.action-list-default {
                     margin-bottom: 1.5em;
                     padding: 0 .5em 0 1em;
                     height: 32px;
@@ -79,19 +92,6 @@
                         &:last-of-type {
                             border-bottom: none;
                         }
-                    }
-                }
-                li {
-                    cursor: pointer;
-                    display: inline-block;
-                    padding: 0 .5em 0;
-                    margin: 0 .5em;
-                    box-sizing: border-box;
-                    text-overflow: ellipsis;
-                    line-height: 32px;
-                    [class^="kix-icon-"],
-                    [class*=" kix-icon-"] {
-                        margin-right: .25em;
                     }
                 }
             }

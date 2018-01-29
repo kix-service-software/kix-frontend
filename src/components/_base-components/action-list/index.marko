@@ -1,20 +1,20 @@
 <div.action-list>
-    <ul.action-list-row key="action-list">
-        <for(element in state.rowList)>
+    <ul.action-list-default key="action-list">
+        <for(element in state.listDefault)>
             <li>
                 <include(component.getTemplate(element))/>
             </li>
         </for>
-        <if(state.expansionList && state.expansionList.length > 0)>
-            <li.list-expansion-toggle class=(state.showExpansionList ? "active" : "")>
-                <span.kix-icon on-click('toggleExpansionList')>...</span>
+        <if(state.listExpansion && state.listExpansion.length > 0)>
+            <li.list-expansion-toggle class=(state.showListExpansion ? "active" : "")>
+                <span.kix-icon on-click('toggleListExpansion')>...</span>
             </li>
         </if>
     </ul>
-    <if(state.showExpansionList)>
+    <if(state.showListExpansion)>
         <div.action-list-expansion-container>
             <ul.action-list-expansion>
-                <for(element in state.expansionList)>
+                <for(element in state.listExpansion)>
                     <li>
                         <include(component.getTemplate(element))/>
                     </li>
