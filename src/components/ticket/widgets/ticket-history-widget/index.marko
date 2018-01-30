@@ -8,43 +8,67 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <div.history-container>
-            <table.history-table>
-                <thead>
-                    <tr>
-                        <th>Datum</th>
-                        <th>Erstellt durch</th>
-                        <th>Aktion</th>
-                        <th>Artikel</th>
-                        <th>Status</th>
-                        <th>Typ</th>
-                        <th>Queue</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <for(entry in state.history)>
+        <div.history-content>
+            <div.history-filter>
+                <span.header>Änderungsverlauf</span>
+                <input type="text" placeholder="| Filtern in Liste" on-change('filterValueChanged')/>
+                <span.kix-icon-filter on-click('filterHistory')/>
+            </div>
+            <div.history-container>
+                <table.history-table>
+                    <thead>
                         <tr>
-                            <td>${entry.CreateTime}</td>
-                            <td>
-                                <ticket-property-label property="UserID" value=entry.CreateBy/>
-                            </td>
-                            <td>${entry.HistoryType}</td>
-                            <td>${entry.ArticleID}</td>
-                            <td>
-                                <ticket-property-label property="StateID" value=entry.StateID/>
-                            </td>
-                            <td>
-                                <ticket-property-label property="TypeID" value=entry.TypeID/>
-                            </td>
-                            <td>
-                                <ticket-property-label property="QueueID" value=entry.QueueID/>
-                            </td>
-                            <td>${entry.Name}</td>
+                            <th>
+                                Aktion
+                                <span.sortable>
+                                    <span.kix-icon-sort-up on-click('sortUp', 'HistoryType')/>
+                                    <span.kix-icon-sort-down on-click('sortDown', 'HistoryType')/>
+                                </span>
+                            </th>
+                            <th>
+                                Kommentar
+                                <span.sortable>
+                                    <span.kix-icon-sort-up on-click('sortUp', 'Name')/>
+                                    <span.kix-icon-sort-down on-click('sortDown', 'Name')/>
+                                </span>
+                            </th>
+                            <th>Inhalt</th>
+                            <th>
+                                Benutzer
+                                <span.sortable>
+                                    <span.kix-icon-sort-up on-click('sortUp', 'CreateBy')/>
+                                    <span.kix-icon-sort-down on-click('sortDown', 'CreateBy')/>
+                                </span>
+                            </th>
+                            <th>
+                                Erstellt am
+                                <span.sortable>
+                                    <span.kix-icon-sort-up on-click('sortUp', 'CreateTime')/>
+                                    <span.kix-icon-sort-down on-click('sortDown', 'CreateTime')/>
+                                </span>
+                            </th>
                         </tr>
-                    </for>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <for(entry in state.filteredHistory)>
+                            <tr>
+                                <td>| ${entry.HistoryType}</td>
+                                <td>| ${entry.Name}</td>
+                                <td>
+                                    <if(entry.ArticleID === 0)>| -</if>
+                                    <else>
+                                        <a.article-link on-click('navigateToArticle', entry.ArticleID)>| Zum Artikel</a>
+                                    </else>
+                                </td>
+                                <td>
+                                    <ticket-property-label property="UserID" value=entry.CreateBy/>
+                                </td>
+                                <td>| ${component.getDateTimeString(entry.CreateTime)}</td>
+                            </tr>
+                        </for>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </@content>
     <@filter>
