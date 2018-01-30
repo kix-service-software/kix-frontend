@@ -45,7 +45,6 @@
     "@types/chai-as-promised": "7.1.0",
     "@types/mocha": "2.2.44",
     "@types/node": "8.0.50",
-    "@types/request-promise": "4.1.39",
     "@types/socket.io": "1.4.31",
     "babel-minify": "0.2.0",
     "babel-plugin-transform-class": "0.3.0",
