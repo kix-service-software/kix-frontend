@@ -1,0 +1,25 @@
+<div.action-list>
+    <ul.action-list-default key="action-list">
+        <for(element in state.listDefault)>
+            <li>
+                <include(component.getTemplate(element))/>
+            </li>
+        </for>
+        <if(state.listExpansion && state.listExpansion.length > 0)>
+            <li.list-expansion-toggle class=(state.showListExpansion ? "active" : "")>
+                <span.kix-icon on-click('toggleListExpansion')>...</span>
+            </li>
+        </if>
+    </ul>
+    <if(state.showListExpansion)>
+        <div.action-list-expansion-container>
+            <ul.action-list-expansion>
+                <for(element in state.listExpansion)>
+                    <li>
+                        <include(component.getTemplate(element))/>
+                    </li>
+                </for>
+            </ul>
+        </div>
+    </if>
+</div>

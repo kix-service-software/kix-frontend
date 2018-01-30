@@ -9,13 +9,7 @@
                 </for>
             </@actions>
             <@contentActions>
-                <ul.action-list>
-                    <for(action in state.ticketActions)>
-                        <li>
-                            <include(component.getTemplate(action), { ticketId: state.ticketId })/>
-                        </li>
-                    </for>
-                </ul>
+                <action-list list=state.ticketActions/>
             </@contentActions>
             <@content>
                 <ul.lane-list>

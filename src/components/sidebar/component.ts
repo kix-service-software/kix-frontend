@@ -42,6 +42,9 @@ class SidebarComponent {
             } else {
                 this.state.rows = [];
             }
+            if (this.hasSidebarsToShow()) {
+                this.state.sidebarBarExpanded = true;
+            }
         }
     }
 
@@ -63,6 +66,13 @@ class SidebarComponent {
                 );
 
                 (this as any).setStateDirty('configuredWidgets');
+            }
+            if (this.state.sidebarBarExpanded && !this.hasSidebarsToShow()) {
+                this.state.sidebarBarExpanded = false;
+                ContextService.getInstance().toggleSidebarBar(this.state.sidebarBarExpanded);
+            } else if (!this.state.sidebarBarExpanded && this.hasSidebarsToShow()) {
+                this.state.sidebarBarExpanded = true;
+                ContextService.getInstance().toggleSidebarBar(this.state.sidebarBarExpanded);
             }
         }
     }
