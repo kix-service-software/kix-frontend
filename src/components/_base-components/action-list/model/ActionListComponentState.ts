@@ -7,7 +7,6 @@ export class ActionListComponentState {
         public listDefault: string[] = [],
         public listExpansion: string[] = [],
         public showListExpansion: boolean = false,
-        public keepShow: boolean = false,
-        public listWidth: number = 0
+        public keepShow: boolean = false
     ) { }
 }

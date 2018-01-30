@@ -52,10 +52,10 @@ export class ActionListComponent {
     }
 
     private prepareLists() {
-        this.state.listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
-        if (this.state.listWidth > 0) {
-            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 100px Puffer (... + margin/padding)
-            const maxActions = Math.floor((this.state.listWidth - 100) / 110);
+        const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
+        if (listWidth > 0) {
+            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 50px Puffer (... + margin/padding)
+            const maxActions = Math.floor((listWidth - 50) / 110);
             this.state.listDefault = this.state.actionList.slice(0, maxActions);
             this.state.listExpansion = this.state.actionList.slice(maxActions);
         }

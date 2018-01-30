@@ -44,6 +44,8 @@ class SidebarComponent {
             }
             if (this.hasSidebarsToShow()) {
                 this.state.sidebarBarExpanded = true;
+            } else {
+                this.state.sidebarBarExpanded = false;
             }
         }
     }
