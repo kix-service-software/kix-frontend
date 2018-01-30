@@ -111,7 +111,14 @@ export class TicketDetailsComponent {
         const index = this.state.expandedArticles.findIndex((a) => a === articleId);
         if (index >= 0) {
             this.state.expandedArticles.splice(index, 1);
+            this.state.expandedArticles = [...this.state.expandedArticles];
         } else {
+            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
+        }
+    }
+
+    private expandArticle(articleId: number): void {
+        if (!this.state.expandedArticles.some((a) => a === articleId)) {
             this.state.expandedArticles = [...this.state.expandedArticles, articleId];
         }
     }

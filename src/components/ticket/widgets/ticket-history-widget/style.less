@@ -1,54 +1,82 @@
-div.history-container {
-    height: 178px;
-    overflow: auto;
-    .history-table {
-        width: 100%;
-        a {
+.history-content {
+    padding: .5em 2em 1em;
+    .history-filter {
+        margin-bottom: .5em;
+        .header {
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 2em;
+        }
+        input[type=text] {
+            border: 1px solid #bcbcbc;
+            margin-right: .5em;
+        }
+        span[class^="kix-icon-"],
+        span[class*=" kix-icon-"] {
             color: #5b5b5b;
-            text-decoration: none;
-             :visited,
-             :active,
-             :hover,
-             :focus {
+            font-size: 1.25em;
+        }
+    }
+    .history-container {
+        height: 178px;
+        overflow: auto;
+        padding: 0 1.5em;
+        .history-table {
+            width: 100%;
+            a {
                 color: #5b5b5b;
                 text-decoration: none;
-            }
-        }
-        th,
-        td {
-            color: #5b5b5b;
-            font-size: .875em;
-            font-weight: 400;
-            &.select-all-rows,
-            &.select-row,
-            &.PriorityID,
-            &.StateID,
-            &.QueueID {
-                text-align: center
-            }
-        }
-        thead {
-            background-color: #e2e2e2;
-            height: 2em;
-            vertical-align: middle;
-            line-height: 2em;
-            .sortable {
-                display: inline-block;
-                margin-left: .25em;
-                font-size: .625em;
-                color: #9b9d9d;
-                span {
-                    cursor: pointer;
+                 :visited,
+                 :active,
+                 :hover,
+                 :focus {
+                    color: #5b5b5b;
+                    text-decoration: none;
                 }
             }
-        }
-        tfoot {
-            top: auto;
-            bottom: 0;
-        }
-        tbody {
-            tr:nth-of-type(2n) {
-                background-color: #f5f5f5;
+            th,
+            td {
+                color: #5b5b5b;
+                font-weight: 400;
+                padding: 0 .5em;
+                &.select-all-rows,
+                &.select-row,
+                &.PriorityID,
+                &.StateID,
+                &.QueueID {
+                    text-align: center
+                }
+            }
+            thead {
+                background-color: #e2e2e2;
+                height: 2em;
+                vertical-align: middle;
+                line-height: 2em;
+                th {
+                    color: #000000;
+                    font-weight: 600;
+                    .sortable {
+                        display: inline-block;
+                        margin-left: .25em;
+                        font-size: .625em; // color: #9b9d9d;
+                        span {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            tfoot {
+                top: auto;
+                bottom: 0;
+            }
+            tbody {
+                tr:nth-of-type(2n) {
+                    background-color: #f5f5f5;
+                }
+                .article-link {
+                    cursor: pointer;
+                    color: @primary-0;
+                }
             }
         }
     }
