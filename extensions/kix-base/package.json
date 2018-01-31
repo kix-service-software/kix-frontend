@@ -27,7 +27,8 @@
             "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
             "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
-            "quick-search-communicator": "../../dist/communicators/extensions/QuickSearchCommunicator.extension"
+            "quick-search-communicator": "../../dist/communicators/extensions/QuickSearchCommunicator.extension",
+            "icon-communicator": "../../dist/communicators/extensions/IconCommunicator.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"

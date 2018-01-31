@@ -3,6 +3,7 @@ import {
     IAuthenticationService,
     IConfigurationService, IContactService, ICustomerService,
     ILoggingService,
+    IObjectIconService,
     IPluginService,
     IQueueService,
     IServiceService, ISysConfigService,
@@ -32,7 +33,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IQueueService') protected queueService: IQueueService,
         @inject('IServiceService') protected serviceService: IServiceService,
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
-        @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService
+        @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
+        @inject('IObjectIconService') protected objectIconService: IObjectIconService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

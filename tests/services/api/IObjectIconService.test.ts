@@ -3,7 +3,8 @@ import { container } from '../../../src/Container';
 
 import {
     HttpError,
-    ObjectIconResponse
+    ObjectIconResponse,
+    ObjectIconsResponse
 } from '@kix/core/dist/api';
 import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
@@ -60,7 +61,7 @@ describe('ObjectIcon Service', () => {
                         }
                     }
                 })
-                .reply(200, buildObjectIconeResponse(123456));
+                .reply(200, buildObjectIconResponse(123456));
         });
 
         it('should return a objectIcon.', async () => {
@@ -88,9 +89,11 @@ describe('ObjectIcon Service', () => {
 
 });
 
-function buildObjectIconeResponse(id: number): ObjectIconResponse {
-    const response = new ObjectIconResponse();
-    response.ObjectIcon = new ObjectIcon();
-    response.ObjectIcon.ID = id;
+function buildObjectIconResponse(id: number): ObjectIconsResponse {
+    const response = new ObjectIconsResponse();
+    response.ObjectIcon = [];
+    const icon = new ObjectIcon();
+    icon.ID = id;
+    response.ObjectIcon.push(icon);
     return response;
 }
