@@ -1,4 +1,4 @@
-<widget instanceId=state.instanceId minimizable=input.minimizable minimized=input.minimized>
+<widget instanceId=state.instanceId>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
@@ -11,7 +11,7 @@
         <div.history-content>
             <div.history-filter>
                 <span.header>Änderungsverlauf</span>
-                <input type="text" placeholder="| Filtern in Liste" on-change('filterValueChanged')/>
+                <input type="text" placeholder="| Filtern in Liste" value=state.filterValue on-change('filterValueChanged')/>
                 <span.kix-icon-filter on-click('filterHistory')/>
             </div>
             <div.history-container>

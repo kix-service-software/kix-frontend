@@ -14,12 +14,15 @@ class WidgetComponent {
         this.state.instanceId = input.instanceId;
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
-        this.state.minimized = input.minimized;
-        this.state.minimizable = input.minimizable !== undefined ? input.minimizable : true;
     }
 
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
+        if (config) {
+            this.state.minimizable = config.minimizable;
+            this.state.minimized = config.minimized;
+        }
     }
 
     private minimizeWidget(): void {

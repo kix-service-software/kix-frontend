@@ -9,7 +9,7 @@ export class TicketDescriptionWidgetFactoryExtension implements IWidgetFactoryEx
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Ticket-Description', [], {}, this.type, true, WidgetSize.BOTH, 'minus'
+            this.widgetId, 'Ticket-Description', [], {}, this.type, false, true, true, WidgetSize.BOTH, 'minus'
         );
     }
 
