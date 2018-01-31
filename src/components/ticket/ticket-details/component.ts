@@ -30,37 +30,42 @@ export class TicketDetailsComponent {
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
-        TicketService.getInstance().loadTicketDetails(this.state.ticketId);
-
         const contextURL = 'tickets/' + this.state.ticketId;
-        const context = new Context('ticket-details', contextURL, this.state.ticketId);
-        ContextService.getInstance().provideContext(context, 'ticket-details', true);
+        const context = new Context(TicketDetailsComponent.MODULE_ID, contextURL, this.state.ticketId);
+        ContextService.getInstance().provideContext(context, TicketDetailsComponent.MODULE_ID, true);
 
-        DashboardService.getInstance().loadDashboardConfiguration('ticket-details');
+        DashboardService.getInstance().loadDashboardConfiguration(TicketDetailsComponent.MODULE_ID).then(() => {
+            this.setConfiguration();
+        });
 
-        this.setTicketHookInfo();
+        TicketService.getInstance().loadTicketDetails(this.state.ticketId).then(() => {
+            this.setTicketHookInfo();
+        });
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
         if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsComponent.MODULE_ID) {
-            const context = ContextService.getInstance().getContext(TicketDetailsComponent.MODULE_ID);
-
-            const config = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
-
-            if (config) {
-                this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
-                this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
-                this.state.generalActions = config.generalActions;
-                this.state.ticketActions = config.ticketActions;
-                this.state.generalArticleActions = config.generalArticleActions;
-                this.state.articleActions = config.articleActions;
-
-                if (!this.state.activeTabId && this.state.tabs.length) {
-                    this.state.activeTabId = this.state.tabs[0].instanceId;
-                }
-            }
+            this.setConfiguration();
         } else if (type === ContextNotification.OBJECT_UPDATED && id === TicketService.TICKET_DATA_ID) {
             this.setTicketHookInfo();
+        }
+    }
+
+    private setConfiguration(): void {
+        const context = ContextService.getInstance().getContext(TicketDetailsComponent.MODULE_ID);
+        const config = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
+
+        if (config) {
+            this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
+            this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
+            this.state.generalActions = config.generalActions;
+            this.state.ticketActions = config.ticketActions;
+            this.state.generalArticleActions = config.generalArticleActions;
+            this.state.articleActions = config.articleActions;
+
+            if (!this.state.activeTabId && this.state.tabs.length) {
+                this.state.activeTabId = this.state.tabs[0].instanceId;
+            }
         }
     }
 
