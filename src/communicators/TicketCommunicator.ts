@@ -105,7 +105,8 @@ export class TicketCommunicator extends KIXCommunicator {
             });
 
             const services = await this.serviceService.getServices(data.token, null, null, null, {
-                fields: 'Service.ServiceID,Service.Name'
+                fields: 'Service.ServiceID,Service.Name',
+                include: 'IncidentState'
             });
 
             const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
