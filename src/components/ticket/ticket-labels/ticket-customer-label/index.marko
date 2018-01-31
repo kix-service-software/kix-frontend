@@ -2,7 +2,7 @@
     <@key>${state.label}</@key>
     <@info>
         <if(state.customer)>
-            <object-info-overlay>
+            <overlay-info-icon>
                 <@title>Kundeninfo</@title>
                 <@content>
                     <div>${state.customer.CustomerID}</div>
@@ -17,7 +17,7 @@
                         <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
                     </div>
                 </@content>
-            </object-info-overlay>
+            </overlay-info-icon>
         </if>
     </@info>
     <@value>

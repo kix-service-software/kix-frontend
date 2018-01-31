@@ -54,7 +54,7 @@ class ExplorerbarComponent {
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowDialog();
+        return ApplicationStore.getInstance().isShowMainDialog();
     }
 
     private explorerAvailable(instanceId: string): boolean {

@@ -47,7 +47,7 @@ class TicketDescriptionWIdgetComponent {
     }
 
     private expandWidget(): void {
-        ApplicationStore.getInstance().toggleDialog(
+        ApplicationStore.getInstance().toggleMainDialog(
             'ticket-dynamic-fields-container', {
                 dynamicFields: this.state.dynamicFields,
                 ticketId: this.state.ticketId

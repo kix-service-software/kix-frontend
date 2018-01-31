@@ -38,7 +38,7 @@ class WidgetComponent {
 
     private showConfiguration(): void {
         if (this.state.configurationTagId) {
-            ApplicationStore.getInstance().toggleDialog(
+            ApplicationStore.getInstance().toggleMainDialog(
                 this.state.configurationTagId, { instanceId: this.state.instanceId }
             );
         }

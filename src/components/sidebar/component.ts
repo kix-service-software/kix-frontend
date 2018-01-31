@@ -103,7 +103,7 @@ class SidebarComponent {
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowDialog();
+        return ApplicationStore.getInstance().isShowMainDialog();
     }
 
     private hasSidebarsToShow(): boolean {

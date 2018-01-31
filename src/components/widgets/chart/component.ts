@@ -30,7 +30,7 @@ class ChartWidgetComponent {
     }
 
     private showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog('chart-configuration');
+        ApplicationStore.getInstance().toggleMainDialog('chart-configuration');
     }
 
     private saveConfiguration(): void {

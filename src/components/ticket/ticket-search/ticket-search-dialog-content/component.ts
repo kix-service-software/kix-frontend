@@ -62,7 +62,7 @@ export class TicketSearchDialogComponent {
         TicketService.getInstance().searchTickets('ticket-search', this.state.limit, this.state.properties).then(() => {
             this.state.searching = false;
             this.state.error = null;
-            ApplicationStore.getInstance().toggleDialog();
+            ApplicationStore.getInstance().toggleMainDialog();
         }).catch(() => {
             this.state.error = TicketService.getInstance().getTicketsSearchError('ticket-search');
             this.state.searching = false;

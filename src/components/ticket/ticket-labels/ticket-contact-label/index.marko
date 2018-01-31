@@ -2,7 +2,7 @@
     <@key>${state.label}</@key>
     <@info>
         <if(state.contact)>
-            <object-info-overlay>
+            <overlay-info-icon>
                 <@title>Ansprechpartnerinfo</@title>
                 <@content>
                     <div>${state.contact.UserLogin}</div>
@@ -23,7 +23,7 @@
                         <strong>E-Mail:</strong> ${state.contact.UserEmail}
                     </div>
                 </@content>
-            </object-info-overlay>
+            </overlay-info-icon>
         </if>
     </@info>
     <@value>
