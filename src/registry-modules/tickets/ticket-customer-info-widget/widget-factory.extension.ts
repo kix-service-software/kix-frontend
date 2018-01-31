@@ -9,7 +9,7 @@ export class TicketInfoWidgetFactoryExtension implements IWidgetFactoryExtension
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Kundeninformation', [], {}, this.type, true, WidgetSize.BOTH, 'customers'
+            this.widgetId, 'Kundeninformation', [], {}, this.type, false, true, true, WidgetSize.BOTH, 'customers'
         );
     }
 

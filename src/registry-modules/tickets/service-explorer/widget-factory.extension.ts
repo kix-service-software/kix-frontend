@@ -8,7 +8,9 @@ export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExte
     public type: WidgetType = WidgetType.EXPLORER;
 
     public getDefaultConfiguration(): any {
-        return new WidgetConfiguration(this.widgetId, 'Übersicht Services', [], {}, this.type, true, WidgetSize.SMALL);
+        return new WidgetConfiguration(
+            this.widgetId, 'Übersicht Services', [], {}, this.type, false, true, true, WidgetSize.SMALL
+        );
     }
 
 }

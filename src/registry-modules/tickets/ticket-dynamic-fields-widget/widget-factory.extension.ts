@@ -9,7 +9,7 @@ export class TicketDynamicFieldsWidgetFactoryExtension implements IWidgetFactory
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Ticket-Dynamic-Fields', [], {}, this.type, true, WidgetSize.BOTH, 'minus'
+            this.widgetId, 'Ticket-Dynamic-Fields', [], {}, this.type, true, true, true, WidgetSize.BOTH, 'minus'
         );
     }
 
