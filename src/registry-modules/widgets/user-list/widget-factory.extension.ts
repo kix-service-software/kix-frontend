@@ -21,7 +21,7 @@ export class UserlistWidgetFactoryExtension implements IWidgetFactoryExtension {
         userListConfiguration.properties.push(new UIProperty("UserEmail", "Email"));
 
         return new WidgetConfiguration(
-            this.widgetId, "User-List", [], userListConfiguration, this.type, true, WidgetSize.LARGE
+            this.widgetId, "User-List", [], userListConfiguration, this.type, false, true, true, WidgetSize.LARGE
         );
     }
 

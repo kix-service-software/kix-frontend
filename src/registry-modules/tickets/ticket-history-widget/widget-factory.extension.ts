@@ -9,7 +9,7 @@ export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtens
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Ticket-History', [], {}, this.type, true, WidgetSize.BOTH, 'minus'
+            this.widgetId, 'Ticket-History', [], {}, this.type, false, true, true, WidgetSize.BOTH, 'minus'
         );
     }
 
