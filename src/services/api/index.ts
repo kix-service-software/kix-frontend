@@ -9,6 +9,7 @@ export { GroupService } from './GroupService';
 export { HttpService } from './HttpService';
 export { LinkService } from './LinkService';
 export { MailAccountService } from './MailAccountService';
+export { ObjectIconService } from './ObjectIconService';
 export { QueueService } from './QueueService';
 export { RoleService } from './RoleService';
 export { SalutationService } from './SalutationService';
