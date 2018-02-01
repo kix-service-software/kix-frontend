@@ -1,7 +1,6 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { TicketService } from '@kix/core/dist/browser/ticket';
-import { TicketData } from '../../../../../../modules/core/dist/browser/ticket/TicketData';
+import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
 
 class TicketDescriptionWIdgetComponent {
 
@@ -40,7 +39,6 @@ class TicketDescriptionWIdgetComponent {
                 this.state.attachments = article.Attachments ? article.Attachments : [];
                 this.state.description = article.Body;
             }
-            console.log(ticketDetails);
         }
     }
 
