@@ -14,7 +14,7 @@ import {
     IRoleService,
     ISalutationService, ISearchProfileService, IServiceService, ISignatureService, ISysConfigService,
     ISocketCommunicationService, IStandardAttachmentService,
-    ITextModuleService, ITicketPriorityService, ITicketService, ITicketStateService,
+    ITextModuleService, ITicketLockService, ITicketPriorityService, ITicketService, ITicketStateService,
     ITicketTypeService, ITranslationService,
     IUserService,
     IValidObjectService,
@@ -42,7 +42,8 @@ import {
     RoleService,
     SalutationService, SearchProfileService, ServiceService, SignatureService, SysConfigService,
     StandardAttachmentService, SocketCommunicationService,
-    TextModuleService, TicketPriorityService, TicketService, TicketStateService, TicketTypeService, TranslationService,
+    TextModuleService, TicketLockService, TicketPriorityService, TicketService, TicketStateService,
+    TicketTypeService, TranslationService,
     UserService,
     ValidObjectService,
     WidgetRepositoryService
@@ -100,6 +101,7 @@ export class ServiceContainer {
         this.container.bind<IStandardAttachmentService>('IStandardAttachmentService').to(StandardAttachmentService);
         this.container.bind<ISysConfigService>('ISysConfigService').to(SysConfigService);
         this.container.bind<ITextModuleService>('ITextModuleService').to(TextModuleService);
+        this.container.bind<ITicketLockService>('ITicketLockService').to(TicketLockService);
         this.container.bind<ITicketTypeService>('ITicketTypeService').to(TicketTypeService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);
         this.container.bind<ITicketPriorityService>('ITicketPriorityService').to(TicketPriorityService);

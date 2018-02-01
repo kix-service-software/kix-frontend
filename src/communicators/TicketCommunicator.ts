@@ -123,10 +123,12 @@ export class TicketCommunicator extends KIXCommunicator {
                 await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::TimeUnits');
             const timeAccountUnit = timeAccountUnitConfig.Data;
 
+            const ticketLocks = await this.ticketLockService.getLocks(data.token);
+
             const response = new TicketLoadDataResponse(
                 [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
                 services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
-                isAccountTimeEnabled, timeAccountUnit
+                isAccountTimeEnabled, timeAccountUnit, ticketLocks
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);

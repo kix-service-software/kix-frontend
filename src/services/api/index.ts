@@ -8,6 +8,7 @@ export { GeneralCatalogService } from './GeneralCatalogService';
 export { GroupService } from './GroupService';
 export { HttpService } from './HttpService';
 export { LinkService } from './LinkService';
+export { TicketLockService } from './TicketLockService';
 export { MailAccountService } from './MailAccountService';
 export { ObjectIconService } from './ObjectIconService';
 export { QueueService } from './QueueService';
