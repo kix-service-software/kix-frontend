@@ -1,6 +1,7 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
 
 class OverlayInfoIconComponent {
 
@@ -11,8 +12,11 @@ class OverlayInfoIconComponent {
     }
 
     public onInput(input: any): void {
-        this.state.title = input.title;
-        this.state.content = input.content;
+        this.state.overlayWidgetData = new InfoOverlayWidgetData(
+            input.widgetIcon,
+            input.title,
+            input.content
+        );
     }
 
     public onMount(): void {
@@ -31,8 +35,7 @@ class OverlayInfoIconComponent {
         }
         ApplicationStore.getInstance().toggleInfoOverlay(
             this.state.id,
-            this.state.title,
-            this.state.content,
+            this.state.overlayWidgetData,
             position
         );
     }

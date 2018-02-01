@@ -20,8 +20,8 @@ class ObjectInfoOverlayComponent {
 
     private positionOverlay(): void {
         const self = (this as any).getEl('overlay');
-        console.log(this.state.position);
         if (self) {
+            // TODO: wenn gefordert: umpositionieren, wenn außerhalb vom "bildschirm"
             if (this.state.position && this.state.position[0]) {
                 // TODO: +10 vermutet, laut Preview-Screen
                 self.style.left = (this.state.position[0] + 10) + 'px';
@@ -38,7 +38,6 @@ class ObjectInfoOverlayComponent {
     }
 
     private closeOverlay() {
-        console.log('close');
         ApplicationStore.getInstance().toggleInfoOverlay();
     }
 }

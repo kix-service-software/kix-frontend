@@ -10,8 +10,9 @@ export class BaseTemplateComponentState {
         public showMainDialog: boolean = false,
         public mainDialogTemplate: any = null,
         public mainDialogInput: any = null,
+        public infoOverlayIcon: any = null,
         public infoOverlayTitle: string = "",
-        public infoOverlayContent: any = "",
+        public infoOverlayContent: any = null,
         public infoOverlayPosition: [number, number] = null
     ) { }
 

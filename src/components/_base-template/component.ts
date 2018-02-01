@@ -60,9 +60,10 @@ class BaseTemplateComponent {
         if (this.state.showInfoOverlay) {
             const currentInfoOverlay = ApplicationStore.getInstance().getCurrentInfoOverlay();
             if (currentInfoOverlay[0]) {
-                this.state.infoOverlayTitle = currentInfoOverlay[0];
-                this.state.infoOverlayContent = currentInfoOverlay[1];
-                this.state.infoOverlayPosition = currentInfoOverlay[2];
+                this.state.infoOverlayIcon = currentInfoOverlay[0].icon;
+                this.state.infoOverlayTitle = currentInfoOverlay[0].title;
+                this.state.infoOverlayContent = currentInfoOverlay[0].content;
+                this.state.infoOverlayPosition = currentInfoOverlay[1];
             }
         }
     }

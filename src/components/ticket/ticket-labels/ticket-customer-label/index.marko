@@ -4,18 +4,11 @@
         <if(state.customer)>
             <overlay-info-icon>
                 <@title>Kundeninfo</@title>
+                <@widgetIcon>
+                    <span.kix-icon-man/>
+                </@widgetIcon>
                 <@content>
-                    <div>${state.customer.CustomerID}</div>
-                    <div>${state.customer.CustomerCompanyName}</div>
-                    <div>
-                        <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
-                    </div>
-                    <div>
-                        <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
-                    </div>
-                    <div>
-                        <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
-                    </div>
+                    <customer-info customer=state.customer/>
                 </@content>
             </overlay-info-icon>
         </if>
