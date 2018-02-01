@@ -7,7 +7,8 @@ import {
     IPluginService,
     IQueueService,
     IServiceService, ISysConfigService,
-    ITicketPriorityService, ITicketService, ITicketStateService, ITicketTypeService, ITranslationService,
+    ITicketLockService, ITicketPriorityService, ITicketService, ITicketStateService, ITicketTypeService,
+    ITranslationService,
     IUserService,
     IWidgetRepositoryService,
 } from '@kix/core/dist/services';
@@ -34,7 +35,8 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IServiceService') protected serviceService: IServiceService,
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
         @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
-        @inject('IObjectIconService') protected objectIconService: IObjectIconService
+        @inject('IObjectIconService') protected objectIconService: IObjectIconService,
+        @inject('ITicketLockService') protected ticketLockService: ITicketLockService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;
