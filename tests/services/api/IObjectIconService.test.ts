@@ -44,25 +44,22 @@ describe('ObjectIcon Service', () => {
             nockScope
                 .get(resourcePath)
                 .query({
-                    filter: {
-                        "ObjectIcon": {
-                            "AND": [
-                                {
-                                    "Field": "Object",
-                                    "Operator": "EQ",
-                                    "Value": "ObjectType"
-                                },
-                                {
-                                    "Field": "ObjectID",
-                                    "Operator": "EQ",
-                                    "Value": "ObjectId"
-                                }
-                            ]
-                        }
-                    }
+                    filter: createFilter()
                 })
                 .reply(200, buildObjectIconResponse(123456));
         });
+
+        function createFilter(): string {
+            const filter = {
+                "ObjectIcon": {
+                    "AND": [
+                        { "Field": "Object", "Operator": "EQ", "Value": "ObjectType" },
+                        { "Field": "ObjectID", "Operator": "EQ", "Value": "ObjectId" }
+                    ]
+                }
+            }
+            return JSON.stringify(filter);
+        }
 
         it('should return a objectIcon.', async () => {
             const objectIcon: ObjectIcon = await objectIconService.getObjectIcon('', 'ObjectType', 'ObjectId')

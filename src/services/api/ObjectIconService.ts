@@ -20,17 +20,22 @@ export class ObjectIconService extends ObjectService<ObjectIcon> implements IObj
     ): Promise<ObjectIcon> {
         const uri = this.buildUri(this.RESOURCE_URI);
         const response = await this.httpService.get<ObjectIconsResponse>(uri, {
-            filter: {
-                ObjectIcon: {
-                    AND: [
-                        { Field: "Object", Operator: "EQ", Value: objectType },
-                        { Field: "ObjectID", Operator: "EQ", Value: objectId }
-                    ]
-                }
-            }
+            filter: this.createFilter(objectType, objectId)
         }, token);
 
         return response.ObjectIcon && response.ObjectIcon.length ? response.ObjectIcon[0] : undefined;
+    }
+
+    private createFilter(objectType: string, objectId: number | string): string {
+        const filter = {
+            ObjectIcon: {
+                AND: [
+                    { Field: "Object", Operator: "EQ", Value: objectType },
+                    { Field: "ObjectID", Operator: "EQ", Value: objectId.toString() }
+                ]
+            }
+        };
+        return JSON.stringify(filter);
     }
 
 }
