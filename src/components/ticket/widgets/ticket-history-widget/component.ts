@@ -76,7 +76,7 @@ class TicketHistoryWidgetComponent {
     }
 
     private print(): void {
-        ApplicationStore.getInstance().toggleDialog();
+        ApplicationStore.getInstance().toggleMainDialog();
     }
 
 }
