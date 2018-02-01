@@ -45,13 +45,26 @@ class BaseTemplateComponent {
     }
 
     private applicationStateChanged(): void {
-        this.state.showOverlay = ApplicationStore.getInstance().isShowOverlay();
-        this.state.showDialog = ApplicationStore.getInstance().isShowDialog();
+        this.state.showShieldOverlay = ApplicationStore.getInstance().isShowShieldOverlay();
+        this.state.showInfoOverlay = ApplicationStore.getInstance().isShowInfoOverlay();
+        this.state.showMainDialog = ApplicationStore.getInstance().isShowMainDialog();
 
-        const currentDialog = ApplicationStore.getInstance().getCurrentDialog();
-        if (currentDialog[0]) {
-            this.state.dialogTemplate = ClientStorageHandler.getComponentTemplate(currentDialog[0]);
-            this.state.dialogInput = currentDialog[1];
+        if (this.state.showMainDialog) {
+            const currentMainDialog = ApplicationStore.getInstance().getCurrentMainDialog();
+            if (currentMainDialog[0]) {
+                this.state.mainDialogTemplate = ClientStorageHandler.getComponentTemplate(currentMainDialog[0]);
+                this.state.mainDialogInput = currentMainDialog[1];
+            }
+        }
+
+        if (this.state.showInfoOverlay) {
+            const currentInfoOverlay = ApplicationStore.getInstance().getCurrentInfoOverlay();
+            if (currentInfoOverlay[0]) {
+                this.state.infoOverlayIcon = currentInfoOverlay[0].icon;
+                this.state.infoOverlayTitle = currentInfoOverlay[0].title;
+                this.state.infoOverlayContent = currentInfoOverlay[0].content;
+                this.state.infoOverlayPosition = currentInfoOverlay[1];
+            }
         }
     }
 }

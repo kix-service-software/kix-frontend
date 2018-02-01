@@ -3,7 +3,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class EditArticleActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleDialog('new-email-article-dialog');
+        ApplicationStore.getInstance().toggleMainDialog('new-email-article-dialog');
     }
 
 }

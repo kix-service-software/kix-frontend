@@ -1,0 +1,19 @@
+<if(state.contact)>
+    <div>${state.contact.UserLogin}</div>
+    <div>${state.contact.UserFirstname} ${state.contact.UserLastname}</div>
+    <div>
+        <strong>Straße:</strong> ${state.contact.UserStreet}
+    </div>
+    <div>
+        <strong>Stadt:</strong> ${state.contact.UserCity}
+    </div>
+    <div>
+        <strong>Land:</strong> ${state.contact.UserCountry}
+    </div>
+    <div>
+        <strong>Telefon:</strong> ${state.contact.UserPhone}
+    </div>
+    <div>
+        <strong>E-Mail:</strong> ${state.contact.UserEmail}
+    </div>
+</if>

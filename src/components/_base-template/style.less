@@ -1,16 +1,26 @@
 .wrapper {
-    > section {
-        margin-top: 112px; 
+    >section {
+        margin-top: 112px;
         padding: 0 72px 0 104px;
         position: relative;
-        > .content {
-            > header {
+        >.content {
+            >header {
                 padding: 0;
                 margin-bottom: 2em;
             }
         }
-        > .sidebar + .content {
+        >.sidebar+.content {
             margin-right: 232px;
         }
+    }
+    .main-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: @secondary-6;
+        opacity: 0.8;
+        width: 100%;
+        height: 100%;
+        z-index: 99;
     }
 }

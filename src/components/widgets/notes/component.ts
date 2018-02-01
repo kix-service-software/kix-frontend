@@ -23,7 +23,7 @@ class NotesWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog('notes-configuration');
+        ApplicationStore.getInstance().toggleMainDialog('notes-configuration');
     }
 
     public saveConfiguration(): void {

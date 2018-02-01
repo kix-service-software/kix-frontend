@@ -256,7 +256,7 @@ class DashboardConfigurationDialog {
     }
 
     private cancel(): void {
-        ApplicationStore.getInstance().toggleDialog();
+        ApplicationStore.getInstance().toggleMainDialog();
     }
 
     private saveConfiguration(): void {
@@ -274,7 +274,7 @@ class DashboardConfigurationDialog {
         });
 
         DashboardService.getInstance().saveDashboardConfiguration(this.state.dashboardConfig);
-        ApplicationStore.getInstance().toggleDialog();
+        ApplicationStore.getInstance().toggleMainDialog();
     }
 
     private updateRows(listElement: SelectWithPropertiesListElement, rows: string[][]): void {

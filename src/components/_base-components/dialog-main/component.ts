@@ -3,7 +3,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 export class MainDialogComponent {
 
     private closeDialog(): void {
-        ApplicationStore.getInstance().toggleDialog();
+        ApplicationStore.getInstance().toggleMainDialog();
     }
 }
 

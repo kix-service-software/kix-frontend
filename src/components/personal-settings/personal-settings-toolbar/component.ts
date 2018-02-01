@@ -9,7 +9,7 @@ class PersonalSettingsToolbarComponent {
     }
 
     public openPersonalSettings(): void {
-        ApplicationStore.getInstance().toggleDialog('personal-settings-container');
+        ApplicationStore.getInstance().toggleMainDialog('personal-settings-container');
     }
 
 }

@@ -3,7 +3,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class NewTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleDialog('dialog-creation-container');
+        ApplicationStore.getInstance().toggleMainDialog('dialog-creation-container');
     }
 
 }

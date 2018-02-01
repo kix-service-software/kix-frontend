@@ -9,7 +9,7 @@ class CreateObjectToolbarComponent {
     }
 
     public openCreateObjectDialog(): void {
-        ApplicationStore.getInstance().toggleDialog('dialog-creation-container');
+        ApplicationStore.getInstance().toggleMainDialog('dialog-creation-container');
     }
 
 }

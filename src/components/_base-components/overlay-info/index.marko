@@ -1,0 +1,14 @@
+<div.object-info-overlay key="overlay">
+    <widget instanceId="info-overlay" noConfigOverlay=true isNotConfigurable=true>
+        <@icon>
+            <include(input.icon)/>
+        </@icon>
+        <@title>
+            <include(input.title)/>
+        </@title>
+        <@content>
+            <include(input.content)/>
+        </@content>
+    </widget>
+    <span.kix-icon-close on-click('closeOverlay')/>
+</div>

@@ -3,7 +3,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class MergeTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleDialog('merge-ticket-dialog');
+        ApplicationStore.getInstance().toggleMainDialog('merge-ticket-dialog');
     }
 
 }

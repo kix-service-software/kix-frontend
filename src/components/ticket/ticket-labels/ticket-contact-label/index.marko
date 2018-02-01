@@ -2,28 +2,15 @@
     <@key>${state.label}</@key>
     <@info>
         <if(state.contact)>
-            <object-info-overlay>
+            <overlay-info-icon>
                 <@title>Ansprechpartnerinfo</@title>
+                <@widgetIcon>
+                    <span.kix-icon-man/>
+                </@widgetIcon>
                 <@content>
-                    <div>${state.contact.UserLogin}</div>
-                    <div>${state.contact.UserFirstname} ${state.contact.UserLastname}</div>
-                    <div>
-                        <strong>Straße:</strong> ${state.contact.UserStreet}
-                    </div>
-                    <div>
-                        <strong>Stadt:</strong> ${state.contact.UserCity}
-                    </div>
-                    <div>
-                        <strong>Land:</strong> ${state.contact.UserCountry}
-                    </div>
-                    <div>
-                        <strong>Telefon:</strong> ${state.contact.UserPhone}
-                    </div>
-                    <div>
-                        <strong>E-Mail:</strong> ${state.contact.UserEmail}
-                    </div>
+                    <contact-info contact=state.contact/>
                 </@content>
-            </object-info-overlay>
+            </overlay-info-icon>
         </if>
     </@info>
     <@value>

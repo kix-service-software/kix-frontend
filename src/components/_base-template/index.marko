@@ -13,18 +13,34 @@
         </section>
     </section>
     <kix-footer/>
-    <if(state.showOverlay)>
-        <main-overlay/>
+    <if(state.showShieldOverlay)>
+        <div.main-overlay/>
     </if>
-    <if(state.showDialog)>
+    <if(state.showMainDialog)>
         <!-- div zwecks Marko Bug #920 -->
         <div>
             <dialog-main>
                 <@title>Dialogtitel</@title>
                 <@content>
-                    <include(state.dialogTemplate, state.dialogInput)/>
+                    <include(state.mainDialogTemplate, state.mainDialogInput)/>
                 </@content>
             </dialog-main>
+        </div>
+    </if>
+    <if(state.showInfoOverlay)>
+        <!-- div zwecks Marko Bug #920 -->
+        <div>
+            <overlay-info position=state.infoOverlayPosition>
+                <@icon>
+                    <include(state.infoOverlayIcon)/>
+                </@icon>
+                <@title>
+                    <include(state.infoOverlayTitle)/>
+                </@title>
+                <@content>
+                    <include(state.infoOverlayContent)/>
+                </@content>
+            </overlay-info>
         </div>
     </if>
 </div>

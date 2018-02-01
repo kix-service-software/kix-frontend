@@ -132,7 +132,7 @@ class DraggableContainerComponent {
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowDialog();
+        return ApplicationStore.getInstance().isShowMainDialog();
     }
 }
 

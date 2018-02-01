@@ -3,7 +3,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class PrintArticleActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleDialog('delete-article-dialog');
+        ApplicationStore.getInstance().toggleMainDialog('delete-article-dialog');
     }
 
 }

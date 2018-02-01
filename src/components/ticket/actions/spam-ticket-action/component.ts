@@ -3,7 +3,7 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class SpamTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleDialog('spam-ticket-dialog');
+        ApplicationStore.getInstance().toggleMainDialog('spam-ticket-dialog');
     }
 
 }

@@ -32,7 +32,7 @@ class SearchTemplatesWidgetComponent {
     }
 
     private showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleDialog('search-templates-configuration');
+        ApplicationStore.getInstance().toggleMainDialog('search-templates-configuration');
     }
 
     private saveConfiguration(): void {

@@ -55,7 +55,7 @@ class TicketListConfigurationComponent {
 
     private saveConfiguration(): void {
         DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
-        ApplicationStore.getInstance().toggleDialog();
+        ApplicationStore.getInstance().toggleMainDialog();
     }
 
 }

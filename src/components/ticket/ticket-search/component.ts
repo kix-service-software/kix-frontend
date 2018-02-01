@@ -27,7 +27,7 @@ class TicketSearchComponent {
     }
 
     private openSearchDialog(): void {
-        ApplicationStore.getInstance().toggleDialog(
+        ApplicationStore.getInstance().toggleMainDialog(
             'ticket-search-dialog-content', { properties: this.state.properties }
         );
     }

@@ -40,7 +40,7 @@ class DashboardConfigurationWidget {
 
     private openDashboardConfigurationDialog(): void {
         this.toggleDashboardConfigurationWidget();
-        ApplicationStore.getInstance().toggleDialog(
+        ApplicationStore.getInstance().toggleMainDialog(
             'dashboard-configuration-dialog',
             { title: 'Dashboard Config - Paltzhalter-Titel' }
         );
@@ -59,7 +59,7 @@ class DashboardConfigurationWidget {
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowDialog();
+        return ApplicationStore.getInstance().isShowMainDialog();
     }
 }
 
