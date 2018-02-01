@@ -38,17 +38,24 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
 
+        // info-overlay
+        const infoOverlay =
+            new ConfiguredWidget("info-overlay", new WidgetConfiguration(
+                "info-overlay-widget", "", [], {},
+                WidgetType.CONTENT, false, false, true, WidgetSize.BOTH, null, false)
+            );
+
         const contentRows = [
             [
                 "ticket-information-lane",
                 "ticket-history-widget",
                 "ticket-description-widget",
-                "ticket-dynamic-field-widget"
+                "ticket-dynamic-field-widget",
             ]
         ];
 
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
-            ticketInfoLane, descriptionLane, dynamicFieldsLane, ticketHistoryLane
+            ticketInfoLane, descriptionLane, dynamicFieldsLane, ticketHistoryLane, infoOverlay
         ];
 
         // Explorer
