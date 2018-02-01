@@ -26,6 +26,8 @@ class IconComponent {
         const icon = await IconService.getInstance().getIcon(this.state.object, this.state.objectId);
         if (icon.ContentType === 'image/svg') {
             this.state.base64 = true;
+        } else if (icon.ContentType === 'text') {
+            this.state.base64 = false;
         }
 
         this.state.content = icon.Content;
