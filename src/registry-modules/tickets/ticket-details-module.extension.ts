@@ -30,15 +30,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {
-                    dynamicFields: [
-                        'AcknowledgeName', 'KIX18DynamicField1', 'SysMonXAddress',
-                        'SysMonXAlias', 'SysMonXHost', 'SysMonXService'
-                    ]
+                    dynamicFields: [16, 2526, 13, 14, 11, 12]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
 
         // info-overlay
+        // TODO: eigener Widget-Typ
         const infoOverlay =
             new ConfiguredWidget("info-overlay", new WidgetConfiguration(
                 "info-overlay-widget", "", [], {},

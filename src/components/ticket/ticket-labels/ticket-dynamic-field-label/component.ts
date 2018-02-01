@@ -8,7 +8,7 @@ export class TicketPriorityLabelComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            fieldName: input.value,
+            fieldId: input.value,
             displayValue: null,
             label: null
         };
@@ -16,7 +16,7 @@ export class TicketPriorityLabelComponent {
 
     public onInput(input: any): void {
         this.state = {
-            fieldName: input.value,
+            fieldId: input.value,
             ticketId: Number(input.ticketId)
         };
     }
@@ -43,9 +43,9 @@ export class TicketPriorityLabelComponent {
         this.state.label = this.state.fieldName;
         const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
         if (ticketDetails && ticketDetails.ticket) {
-            const field = ticketDetails.ticket.DynamicFields.find((df) => df.Name === this.state.fieldName);
+            const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
             if (field) {
-                this.state.displayValue = field.Value;
+                this.state.displayValue = field.DisplayValue;
             }
         }
     }

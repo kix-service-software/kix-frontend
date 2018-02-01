@@ -1,6 +1,7 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
+import { TicketData } from '../../../../../../modules/core/dist/browser/ticket/TicketData';
 
 class TicketDescriptionWIdgetComponent {
 
@@ -20,11 +21,14 @@ class TicketDescriptionWIdgetComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getTicketDescription();
+        this.getTicketNotes();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicketDescription();
+        } else if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
+            this.getTicketNotes();
         }
     }
 
@@ -35,6 +39,22 @@ class TicketDescriptionWIdgetComponent {
                 const article = ticketDetails.articles[0];
                 this.state.attachments = article.Attachments ? article.Attachments : [];
                 this.state.description = article.Body;
+            }
+            console.log(ticketDetails);
+        }
+    }
+
+    private getTicketNotes(): void {
+        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
+        if (ticketData) {
+            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
+            if (ticketDetails && ticketDetails.ticket) {
+                const ticketNotesDF = ticketDetails.ticket.DynamicFields.find(
+                    (df) => df.ID === ticketData.ticketNotesDFId
+                );
+                if (ticketNotesDF) {
+                    this.state.ticketNotes = ticketNotesDF.DisplayValue;
+                }
             }
         }
     }

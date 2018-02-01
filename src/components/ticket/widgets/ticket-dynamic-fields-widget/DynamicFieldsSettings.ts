@@ -1,5 +1,5 @@
 export class DynamicFieldsSettings {
 
-    public dynamicFields: string[] = [];
+    public dynamicFields: number[] = [];
 
 }

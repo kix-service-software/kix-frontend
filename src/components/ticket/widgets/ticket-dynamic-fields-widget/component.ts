@@ -41,7 +41,7 @@ class TicketDescriptionWIdgetComponent {
             if (ticketDetails && ticketDetails.ticket) {
                 this.state.dynamicFields = ticketDetails.ticket.DynamicFields;
                 this.state.filteredDynamicFields = this.state.dynamicFields
-                    .filter((df) => this.state.configuredDynamicFields.some((cd) => cd === df.Name));
+                    .filter((df) => this.state.configuredDynamicFields.some((cdf) => cdf === df.ID));
             }
         }
     }
