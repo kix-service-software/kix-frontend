@@ -24,13 +24,18 @@ class IconComponent {
 
     private async setIcon(): Promise<void> {
         const icon = await IconService.getInstance().getIcon(this.state.object, this.state.objectId);
-        if (icon.ContentType === 'image/svg') {
-            this.state.base64 = true;
-        } else if (icon.ContentType === 'text') {
+        if (icon) {
+            if (icon.ContentType === 'image/svg') {
+                this.state.base64 = true;
+            } else if (icon.ContentType === 'text') {
+                this.state.base64 = false;
+            }
+            this.state.content = icon.Content;
+        } else {
             this.state.base64 = false;
+            this.state.content = 'kix-icon-minus';
         }
 
-        this.state.content = icon.Content;
     }
 
 }
