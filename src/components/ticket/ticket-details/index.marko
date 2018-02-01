@@ -14,7 +14,7 @@
             <@content>
                 <ul.lane-list>
                     <li.lane.tabs.clearfix>
-                        <widget minimized=false>
+                        <widget>
                             <@icon/>
                             <@title>Ticketinformationen</@title>
                             <@content>
@@ -27,8 +27,7 @@
                                 </ul>
                                 <div.tab-content>
                                     <if(state.activeTabId)>
-                                        <include(component.getWidgetTemplate(state.activeTabId), 
-                                            {minimizable: false, instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
+                                        <include(component.getWidgetTemplate(state.activeTabId), {instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
                                     </if>
                                 </div>
                             </@content>
@@ -39,7 +38,7 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix>
-                            <include(component.getWidgetTemplate(lane.instanceId), { minimized: true, instanceId: lane.instanceId, ticketId: state.ticket.TicketID}) on-expandArticle('expandArticle')/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticket.TicketID}) on-expandArticle('expandArticle')/>
                         </li>
                     </for>
                 </ul>
@@ -47,7 +46,7 @@
             <@filter/>
         </widget>
         <div.article-table-widget>
-            <widget configurationTagId="ticket-info-configuration" minimizable=input.minimizable>
+            <widget configurationTagId="ticket-info-configuration">
                 <@icon/>
                 <@title>
                     <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
@@ -99,7 +98,7 @@
                                         <if(component.isArticleExpanded(article.ArticleID))>
                                             <tr>
                                                 <td.article-content colspan=9>
-                                                    <widget minimizable=false>
+                                                    <widget>
                                                         <@icon/>
                                                         <@title/>
                                                         <@content>

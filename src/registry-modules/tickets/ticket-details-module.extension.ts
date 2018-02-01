@@ -15,17 +15,17 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const ticketInfoLane =
             new ConfiguredWidget("ticket-information-lane", new WidgetConfiguration(
                 "ticket-info-widget", "Ticketinformationen", [], {},
-                WidgetType.LANE_TAB, true, WidgetSize.SMALL, null, false)
+                WidgetType.LANE_TAB, false, true, true, WidgetSize.SMALL, null, false)
             );
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
                 "ticket-history-widget", "Historie", [], {},
-                WidgetType.LANE, true, WidgetSize.BOTH, null, false)
+                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
                 "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
-                WidgetType.LANE, true, WidgetSize.BOTH, null, false)
+                WidgetType.LANE, false, true, true, WidgetSize.BOTH, null, false)
             );
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
@@ -35,7 +35,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         'SysMonXAlias', 'SysMonXHost', 'SysMonXService'
                     ]
                 },
-                WidgetType.LANE, true, WidgetSize.BOTH, null, false)
+                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
 
         const contentRows = [
@@ -55,7 +55,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const queueExplorer =
             new ConfiguredWidget("20171211155412", new WidgetConfiguration(
                 "ticket-queue-explorer", "Übersicht Queues", [], {},
-                WidgetType.EXPLORER, true, WidgetSize.SMALL, null, false)
+                WidgetType.EXPLORER, false, true, true, WidgetSize.SMALL, null, false)
             );
         const explorerRows: string[][] = [['20171211155412']];
         const explorerConfiguredWidgets: Array<ConfiguredWidget<any>> = [queueExplorer];
@@ -64,12 +64,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const customerInfo =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
                 "ticket-customer-info-widget", "Kundeninfo", [], {},
-                WidgetType.SIDEBAR, true, WidgetSize.BOTH, null, false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, null, false)
             );
         const contactInfo =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
                 "ticket-contact-info-widget", "Kontaktinfo", [], {},
-                WidgetType.SIDEBAR, true, WidgetSize.BOTH, null, false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, null, false)
             );
         const sidebarRows = [['20180116143215'], ['20180116143216']];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [customerInfo, contactInfo];

@@ -21,7 +21,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     showAxes: true,
                     showValues: true
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
         const chart2 =
             new ConfiguredWidget("20170920084512", new WidgetConfiguration(
@@ -33,7 +33,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     showAxes: true,
                     showValues: true
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
         const searchTemplateWidget =
             new ConfiguredWidget("20170920113214", new WidgetConfiguration(
@@ -47,7 +47,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     icon: null,
                     contextDependent: false
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
 
         const ticketListWidget =
@@ -58,7 +58,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     showTotalCount: true,
                     properties: ['TicketNumber', 'PriorityID', 'StateID', 'TypeID', 'Title', 'Created', 'Age']
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
 
         const userListWidget =
@@ -72,7 +72,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     ],
                     limit: 10
                 },
-                WidgetType.CONTENT, true, WidgetSize.SMALL, null, true)
+                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
 
         const contentRows: string[][] = [
@@ -87,11 +87,14 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 "notes-widget", "Notes", [], {
                     notes: 'Test <strong style="color:red">123</strong>'
                 },
-                WidgetType.SIDEBAR, true, WidgetSize.SMALL, 'note', false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.SMALL, 'note', false)
             );
         const notes2 =
-            new ConfiguredWidget("20170915094112", new WidgetConfiguration(
-                "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.SIDEBAR, true, WidgetSize.SMALL, 'note', false)
+            new ConfiguredWidget("20170915094112",
+                new WidgetConfiguration(
+                    "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.SIDEBAR,
+                    false, false, true, WidgetSize.SMALL, 'note', false
+                )
             );
         const sidebarRows: string[][] = [['20170915101514'], ['20170915094112'], ['20170915085411']];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notes, notes2];

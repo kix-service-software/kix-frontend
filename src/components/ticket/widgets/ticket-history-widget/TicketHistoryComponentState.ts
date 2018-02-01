@@ -1,12 +1,9 @@
 import { TicketHistory, WidgetConfiguration } from '@kix/core/dist/model';
+import { WidgetComponentState } from '@kix/core/dist/browser/model/';
 
-export class TicketHistoryComponentState {
-
-    public instanceId: string = null;
+export class TicketHistoryComponentState extends WidgetComponentState {
 
     public ticketId: number = null;
-
-    public widgetConfiguration: WidgetConfiguration<any> = null;
 
     public history: TicketHistory[] = [];
 
