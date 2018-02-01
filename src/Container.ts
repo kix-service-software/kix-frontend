@@ -8,6 +8,7 @@ import {
     IHttpService,
     ILinkService, ILoggingService,
     IMailAccountService, IMarkoService,
+    IObjectIconService,
     IPluginService,
     IQueueService,
     IRoleService,
@@ -35,6 +36,7 @@ import {
     HttpService,
     LinkService, LoggingService,
     MailAccountService, MarkoService,
+    ObjectIconService,
     PluginService,
     QueueService,
     RoleService,
@@ -86,6 +88,7 @@ export class ServiceContainer {
         this.container.bind<ILoggingService>('ILoggingService').to(LoggingService);
         this.container.bind<IMailAccountService>("IMailAccountService").to(MailAccountService);
         this.container.bind<IMarkoService>('IMarkoService').to(MarkoService);
+        this.container.bind<IObjectIconService>('IObjectIconService').to(ObjectIconService);
         this.container.bind<IPluginService>('IPluginService').to(PluginService);
         this.container.bind<IQueueService>('IQueueService').to(QueueService);
         this.container.bind<IRoleService>('IRoleService').to(RoleService);
