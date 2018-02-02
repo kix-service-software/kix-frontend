@@ -5,24 +5,28 @@
     </@title>
     <@content>
         <div.description-container>
-            <label.label>
-                <b>Anlagen:</b>
-                <ul>
-                    <for(attachment in state.attachments)>
-                        <li>
-                            <a href="#">(${attachment.Filename})</a>
-                        </li>
-                    </for>
-                </ul>
-            </label>
-            <label.label>
-                <b>Beschreibung:</b>
-                <p>${state.description}</p>
-            </label>
-            <label.label>
-                <b>Anmerkung:</b>
-                <p>...</p>
-            </label>
+            <widget>
+                <@title>Beschreibung:</@title>
+                <@content>
+                    <div>${state.description}</div>
+                    <div>
+                        <b>Anlagen:</b>
+                        <ul>
+                            <for(attachment in state.attachments)>
+                                <li>
+                                    <a href="#">(${attachment.Filename})</a>
+                                </li>
+                            </for>
+                        </ul>
+                    </div>
+                </@content>
+            </widget>
+            <widget>
+                <@title>Anmerkung:</@title>
+                <@content>
+                    <div>${state.ticketNotes}</div>
+                </@content>
+            </widget>
         </div>
     </@content>
     <@filter/>

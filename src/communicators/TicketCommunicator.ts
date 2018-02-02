@@ -109,6 +109,15 @@ export class TicketCommunicator extends KIXCommunicator {
                 include: 'IncidentState'
             });
 
+            let ticketNotesDFId: number;
+            const ticketNotesDFList = await this.dynamicFieldService.getDynamicFields(data.token, null, null, null, {
+                fields: 'DynamicField.ID',
+                filter: '{"DynamicField": {"AND": [{"Field": "Name", "Operator": "EQ", "Value": "TicketNotes"}]}}'
+            });
+            if (ticketNotesDFList && ticketNotesDFList.length) {
+                ticketNotesDFId = ticketNotesDFList[0].ID;
+            }
+
             const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
 
             const ticketHookConfig = await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Hook');
@@ -128,7 +137,7 @@ export class TicketCommunicator extends KIXCommunicator {
             const response = new TicketLoadDataResponse(
                 [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
                 services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
-                isAccountTimeEnabled, timeAccountUnit, ticketLocks
+                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);

@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import {
     IAuthenticationService,
     IConfigurationService, IContactService, ICustomerService,
+    IDynamicFieldService,
     ILoggingService,
     IObjectIconService,
     IPluginService,
@@ -33,6 +34,7 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('ITicketPriorityService') protected ticketPriorityService: ITicketPriorityService,
         @inject('IQueueService') protected queueService: IQueueService,
         @inject('IServiceService') protected serviceService: IServiceService,
+        @inject('IDynamicFieldService') protected dynamicFieldService: IDynamicFieldService,
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
         @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,

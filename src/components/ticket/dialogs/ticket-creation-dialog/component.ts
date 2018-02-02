@@ -53,7 +53,8 @@ class TicketCreationDialogComponent {
         if (data) {
             if (property.startsWith('DynamicField_')) {
                 const dynamicFieldName = property.substr('DynamicField_'.length + 1, property.length);
-                const dynamicField = data.dynamicFields.find((df) => df.Name === dynamicFieldName);
+                // FIXME: mit df.ID ersetzen
+                const dynamicField = data.dynamicFields.find((df) => df.Value === dynamicFieldName);
                 if (dynamicField) {
                     value = dynamicField.Value;
                 }

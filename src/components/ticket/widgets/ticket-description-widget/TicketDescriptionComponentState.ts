@@ -1,14 +1,13 @@
 import { Attachment, WidgetConfiguration } from '@kix/core/dist/model';
+import { WidgetComponentState } from '@kix/core/dist/browser/model';
 
-export class TicketDescriptionComponentState {
-
-    public instanceId: string = null;
+export class TicketDescriptionComponentState extends WidgetComponentState {
 
     public ticketId: number = null;
 
-    public widgetConfiguration: WidgetConfiguration = null;
-
     public description: string = null;
+
+    public ticketNotes: string = null;
 
     public attachments: Attachment[] = [];
 }

@@ -8,7 +8,7 @@ export class DynamicFieldWidgetComponentState {
         public instanceId: string = null,
         public ticketId: number = null,
         public widgetConfiguration: WidgetConfiguration<DynamicFieldsSettings> = null,
-        public configuredDynamicFields: string[] = [],
+        public configuredDynamicFields: number[] = [],
         public filteredDynamicFields: DynamicField[] = [],
         public dynamicFields: DynamicField[] = []
     ) { }
