@@ -38,7 +38,9 @@ class TicketDescriptionWIdgetComponent {
             if (ticketDetails && ticketDetails.articles && ticketDetails.articles.length) {
                 const article = ticketDetails.articles[0];
                 this.state.firstArticleId = article.ArticleID;
-                this.state.attachments = article.Attachments ? article.Attachments : [];
+                this.state.attachments = article.Attachments
+                    ? article.Attachments.filter((a) => a.Disposition !== 'inline')
+                    : [];
                 this.state.description = article.Body;
             }
         }
@@ -65,6 +67,10 @@ class TicketDescriptionWIdgetComponent {
 
     private edit(): void {
         alert('Bearbeiten ...');
+    }
+
+    private maximize(): void {
+        alert('Großansicht ...');
     }
 }
 

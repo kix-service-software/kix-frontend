@@ -9,7 +9,7 @@
                 <@title>Beschreibung:</@title>
                 <@content>
                     <div>${state.description}</div>
-                    <div>
+                    <div.attachment-list>
                         <b>Anlagen:</b>
                         <ul>
                             <for(attachment in state.attachments)>
@@ -38,6 +38,9 @@
             </li>
             <li>
                 <span.kix-icon-edit on-click('edit')/>
+            </li>
+            <li>
+                <span.kix-icon-arrow-fullscreen on-click('maximize')/>
             </li>
         </ul>
     </@contentActions>

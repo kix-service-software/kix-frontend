@@ -1,8 +1,10 @@
-<icon object="Filetype" objectId=state.extension/>
+<if(state.progress)>
+    <span.kix-icon-time-wait/>
+</if>
+<else>
+    <icon object="Filetype" objectId=state.extension/>
+</else>
 <span.attachment-link class=(state.progress ? "inactive-link" : "") on-click('download')>
     ${state.attachment.Filename}
 </span>
 <span>(${state.attachment.Filesize})</span>
-<if(state.progress)>
-    <span.kix-icon-time-wait/>
-</if>
