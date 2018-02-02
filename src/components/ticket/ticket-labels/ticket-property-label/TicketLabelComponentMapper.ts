@@ -52,6 +52,10 @@ export class TicketLabelComponentMapper {
                 component = require('../ticket-lock-label');
                 break;
 
+            case TicketProperty.SERVICE_ID:
+                component = require('../ticket-service-label');
+                break;
+
             default:
                 component = require('../ticket-string-label');
         }
