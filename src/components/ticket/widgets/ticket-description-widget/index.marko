@@ -14,7 +14,7 @@
                         <ul>
                             <for(attachment in state.attachments)>
                                 <li>
-                                    <a href="#" on-click('download', 1)>(${attachment.Filename})</a>
+                                    <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticleId attachment=attachment/>
                                 </li>
                             </for>
                         </ul>

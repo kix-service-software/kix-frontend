@@ -37,22 +37,11 @@ class TicketDescriptionWIdgetComponent {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails && ticketDetails.articles && ticketDetails.articles.length) {
                 const article = ticketDetails.articles[0];
+                this.state.firstArticleId = article.ArticleID;
                 this.state.attachments = article.Attachments ? article.Attachments : [];
                 this.state.description = article.Body;
             }
         }
-    }
-
-    private async getAttachmentContent(articleId: number, attachmentId: number): Promise<Attachment> {
-        const attachment = await TicketService.getInstance().loadArticleAttachment(
-            this.state.ticketId, articleId, attachmentId
-        );
-        return attachment;
-    }
-
-    private async download(attachmentId: number): Promise<void> {
-        const attachment = await this.getAttachmentContent(412768, attachmentId);
-        console.log(attachment.Content);
     }
 
     private getTicketNotes(): void {

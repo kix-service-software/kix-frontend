@@ -5,6 +5,8 @@ export class TicketDescriptionComponentState extends WidgetComponentState {
 
     public ticketId: number = null;
 
+    public firstArticleId: number = null;
+
     public description: string = null;
 
     public ticketNotes: string = null;
