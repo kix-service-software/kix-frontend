@@ -1,25 +1,29 @@
 import { Attachment } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
+import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
 
 declare var window: any;
 
 class ArticleAttachmentComponent {
 
-    private state: any;
+    private state: ArticleAttachmentComponentState;
 
     public onCreate(): void {
-        this.state = {
-            ticketId: null,
-            articleId: null,
-            attachment: null,
-            progress: false
-        };
+        this.state = new ArticleAttachmentComponentState();
     }
 
     public onInput(input: any): void {
         this.state.ticketId = input.ticketId;
         this.state.articleId = input.articleId;
         this.state.attachment = input.attachment;
+
+        if (this.state.attachment) {
+            const fileName = this.state.attachment.Filename;
+            const idx = fileName.lastIndexOf('.');
+            if (idx >= 0) {
+                this.state.extension = fileName.substring(idx + 1, fileName.length);
+            }
+        }
     }
 
     private async download(): Promise<void> {
