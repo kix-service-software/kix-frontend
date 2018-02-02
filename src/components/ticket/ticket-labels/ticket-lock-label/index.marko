@@ -1,0 +1,9 @@
+<key-value-pair showKey=input.showLabel>
+    <@key>${state.label}</@key>
+    <@value>
+        <if(input.showLabel)>
+            <span.text>${state.displayValue}</span>
+        </if>
+        <icon object="TicketLock" objectId=state.lockId/>
+    </@value>
+</key-value-pair>

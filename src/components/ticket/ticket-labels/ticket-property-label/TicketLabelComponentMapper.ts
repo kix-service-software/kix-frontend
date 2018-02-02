@@ -48,6 +48,10 @@ export class TicketLabelComponentMapper {
                 component = require('../ticket-dynamic-field-label');
                 break;
 
+            case TicketProperty.LOCK_ID:
+                component = require('../ticket-lock-label');
+                break;
+
             default:
                 component = require('../ticket-string-label');
         }

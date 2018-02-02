@@ -27,11 +27,12 @@ export class ObjectIconService extends ObjectService<ObjectIcon> implements IObj
     }
 
     private createFilter(objectType: string, objectId: number | string): string {
+        const id = objectId ? objectId.toString() : '';
         const filter = {
             ObjectIcon: {
                 AND: [
                     { Field: "Object", Operator: "EQ", Value: objectType },
-                    { Field: "ObjectID", Operator: "EQ", Value: objectId.toString() }
+                    { Field: "ObjectID", Operator: "EQ", Value: id }
                 ]
             }
         };
