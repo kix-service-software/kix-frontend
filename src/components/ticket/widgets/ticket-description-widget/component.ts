@@ -20,30 +20,28 @@ class TicketDescriptionWIdgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.getTicketDescription();
+        this.getFirstArticle();
         this.getTicketNotes();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.getTicketDescription();
+            this.getFirstArticle();
         } else if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicketNotes();
         }
     }
 
-    private getTicketDescription(): void {
+    private async getFirstArticle(): Promise<void> {
         if (this.state.ticketId) {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails && ticketDetails.articles && ticketDetails.articles.length) {
-                const article = ticketDetails.articles[0];
-                this.state.attachments = article.Attachments ? article.Attachments : [];
-                this.state.description = article.Body;
+                this.state.firstArticle = ticketDetails.articles[0];
             }
         }
     }
 
-    private async getAttachmentContent(articleId: number, attachmentId: number): Promise<Attachment> {
+    private async loadArticleAttachment(articleId: number, attachmentId: number): Promise<Attachment> {
         const attachment = await TicketService.getInstance().loadArticleAttachment(
             this.state.ticketId, articleId, attachmentId
         );
@@ -51,7 +49,7 @@ class TicketDescriptionWIdgetComponent {
     }
 
     private async download(attachmentId: number): Promise<void> {
-        const attachment = await this.getAttachmentContent(412768, attachmentId);
+        const attachment = await this.loadArticleAttachment(412768, attachmentId);
         console.log(attachment.Content);
     }
 
