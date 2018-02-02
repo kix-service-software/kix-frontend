@@ -1,0 +1,9 @@
+<if(state.serviceId)>
+    <key-value-pair showKey=input.showLabel>
+        <@key>${state.label}</@key>
+        <@value>
+            <span.text>${state.displayValue}</span>
+            <icon object="IncidentState" objectId=state.incidentStateId/>
+        </@value>
+    </key-value-pair>
+</if>

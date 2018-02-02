@@ -27,14 +27,6 @@ export class TicketTableComponent {
         this.state.displayLimit = input.displayLimit;
     }
 
-    // private ticketStateChanged(id: string): void {
-    //     if (id === TicketService.TICKET_DATA_REQUEST_ID) {
-    //         if (TicketService.getInstance().getTicketData()) {
-    //             (this as any).setStateDirty('properties');
-    //         }
-    //     }
-    // }
-
     private showMore(): void {
         let limit = this.state.displayLimit + 10;
         if (limit >= this.state.tickets.length) {
