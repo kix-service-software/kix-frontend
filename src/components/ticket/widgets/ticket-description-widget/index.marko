@@ -14,7 +14,7 @@
                         <ul>
                             <for(attachment in state.attachments)>
                                 <li>
-                                    <a href="#">(${attachment.Filename})</a>
+                                    <a href="#" on-click('download', 1)>(${attachment.Filename})</a>
                                 </li>
                             </for>
                         </ul>

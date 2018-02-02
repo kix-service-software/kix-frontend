@@ -1,6 +1,7 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
+import { Attachment } from '@kix/core/dist/model/';
 
 class TicketDescriptionWIdgetComponent {
 
@@ -40,6 +41,18 @@ class TicketDescriptionWIdgetComponent {
                 this.state.description = article.Body;
             }
         }
+    }
+
+    private async getAttachmentContent(articleId: number, attachmentId: number): Promise<Attachment> {
+        const attachment = await TicketService.getInstance().loadArticleAttachment(
+            this.state.ticketId, articleId, attachmentId
+        );
+        return attachment;
+    }
+
+    private async download(attachmentId: number): Promise<void> {
+        const attachment = await this.getAttachmentContent(412768, attachmentId);
+        console.log(attachment.Content);
     }
 
     private getTicketNotes(): void {
