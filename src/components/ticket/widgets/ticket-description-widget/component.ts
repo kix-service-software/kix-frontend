@@ -20,28 +20,26 @@ class TicketDescriptionWIdgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.getTicketDescription();
+        this.getFirstArticle();
         this.getTicketNotes();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.getTicketDescription();
+            this.getFirstArticle();
         } else if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicketNotes();
         }
     }
 
-    private getTicketDescription(): void {
+    private async getFirstArticle(): Promise<void> {
         if (this.state.ticketId) {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails && ticketDetails.articles && ticketDetails.articles.length) {
-                const article = ticketDetails.articles[0];
-                this.state.firstArticleId = article.ArticleID;
-                this.state.attachments = article.Attachments
-                    ? article.Attachments.filter((a) => a.Disposition !== 'inline')
+                this.state.firstArticle = ticketDetails.articles[0];
+                this.state.attachments = this.state.firstArticle.Attachments
+                    ? this.state.firstArticle.Attachments.filter((a) => a.Disposition !== 'inline')
                     : [];
-                this.state.description = article.Body;
             }
         }
     }
