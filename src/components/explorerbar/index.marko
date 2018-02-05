@@ -1,5 +1,5 @@
 <if(state.explorer.length)>
-    <div.explorerbar class=(component.isExplorerBarExpanded() || component.isConfigMode() ? "" : "collapsed")>
+    <div.explorerbar class=(component.isExplorerBarExpanded() || component.isConfigMode() ? "expanded" : "collapsed")>
         <for(widget in state.explorer)>
             <if(component.explorerAvailable(widget.instanceId))>
                 <if(component.isExplorerBarExpanded() || component.isConfigMode())>

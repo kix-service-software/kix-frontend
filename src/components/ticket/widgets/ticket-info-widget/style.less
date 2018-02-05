@@ -14,44 +14,45 @@
                         textarea {
                             border: 1px solid #b5b5b5;
                             border-radius: 3px;
-                            min-height: 90px;
-                            min-width: 250px;
+                            height: 130px;
+                            width: 140px;
                         }
                     }
                 }
                 .information-list {
                     list-style: none;
+                    margin-right: 165px;
                     li {
                         display: block;
-                        width: 240px;
+                        width: 33.333%;
                         float: left;
-                        &:nth-of-type(2n+1) {
-                            clear: none;
-                        }
-                        &:nth-of-type(3n+1) {
-                            clear: left;
-                        }
                         .key-value-pair {
                             line-height: 1.5em;
                             .key {
-                                min-width: 100px;
+                                width: 40%;
                                 font-weight: 600;
                                 display: inline-block;
                             }
-                            .info>span {
+                            .info {
                                 display: inline-block;
                                 width: 1em;
-                                margin-right: .5em;
                             }
                             .value {
                                 display: inline-block;
-                                width: 100px;
+                                width: 50%;
                                 height: 1.5em;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
                                 vertical-align: middle;
                             }
+                        }
+                        @media only screen and (max-device-width: 1280px) {
+                            width: auto;
+                            float: none;
+                        }
+                        @media only screen and (min-device-width: 1280px) and (max-device-width: 1560px) {
+                            width: 50%;
                         }
                     }
                 }
@@ -60,17 +61,17 @@
     }
 }
 
-.sidebar+.content {
-    .explorerbar+.ticket-details {
-        .widget-content {
-            .information-list {
-                li {
-                    &:nth-of-type(3n+1) {
-                        clear: none;
-                    }
-                    &:nth-of-type(2n+1) {
-                        clear: left;
-                    }
+
+/**
+ * Explorer collapsed and Sidebar visible
+ */
+
+.sidebar+.content .explorerbar.collapsed+.ticket-details {
+    .widget-content {
+        .information-list {
+            li {
+                @media only screen and (min-device-width: 1280px) and (max-device-width: 1350px) {
+                    width: 50%;
                 }
             }
         }
