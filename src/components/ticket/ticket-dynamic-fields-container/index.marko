@@ -1,13 +1,13 @@
-<div.dynamic-fields-group-container>
+<div.dynamic-fields-group>
     <for(displayGroup in state.displayGroups)>
-        <widget minimized=false>
+        <widget>
             <@icon/>
             <@title>${displayGroup.Name}</@title>
             <@content>
                 <div.field-container>
                     <ul>
                         <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
-                            <li.df-field>
+                            <li.dynamic-field>
                                 <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
                             </li>
                         </for>

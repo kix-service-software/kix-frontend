@@ -27,6 +27,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
                 WidgetType.LANE, false, true, true, WidgetSize.BOTH, null, false)
             );
+        const processLane =
+            new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
+                "ticket-dynamic-fields-widget", "Prozessinformationen", [], {
+                    dynamicFields: [16, 2526, 13, 14, 11, 12]
+                },
+                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+            );
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {
@@ -46,14 +53,15 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const contentRows = [
             [
                 "ticket-information-lane",
-                "ticket-history-widget",
-                "ticket-description-widget",
-                "ticket-dynamic-field-widget",
+                "ticket-history-lane",
+                "ticket-description-lane",
+                "ticket-dynamic-fields-lane",
+                "ticket-process-lane",
             ]
         ];
 
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
-            ticketInfoLane, descriptionLane, dynamicFieldsLane, ticketHistoryLane, infoOverlay
+            ticketInfoLane, descriptionLane, processLane, dynamicFieldsLane, ticketHistoryLane, infoOverlay
         ];
 
         // Explorer

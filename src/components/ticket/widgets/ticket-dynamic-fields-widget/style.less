@@ -1,3 +1,70 @@
-df-container {
+.ticket-details .widget .lane-list .lane .widget .dynamic-fields-container {
+    position: relative;
     height: 178px;
+    overflow: auto;
+    padding: .5em .5em .5em 1.5em;
+    box-sizing: border-box;
+    .dynamic-fields-group>.widget {
+        margin: 0 0 .5em;
+        &.minimized .widget-header {
+            margin-left: 0;
+        }
+        .widget-header {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .widget-content {
+            border: 0 none;
+            padding: 0;
+            min-height: auto;
+            .field-container {
+                overflow: auto;
+                max-height: 178px;
+                background-color: #f5f5f5;
+                border-radius: 5px;
+                padding: .5em;
+                ul {
+                    list-style: none;
+                    li.dynamic-field {
+                        min-height: 2em;
+                        display: block;
+                        .key-value-pair {
+                            .key {
+                                width: 160px;
+                                text-align: right;
+                                margin-right: .5em;
+                                display: inline-block;
+                            }
+                            .info {
+                                width: 1.5em;
+                                margin-right: .5em;
+                                text-align: center;
+                                .overlay-info-icon {
+                                    color: #000000;
+                                }
+                            }
+                            .value {
+                                min-width: 20px;
+                                height: 100%;
+                                box-sizing: border-box;
+                                border: 1px solid #f7f7f7;
+                                border-radius: 3px;
+                                background-color: #fefefe;
+                                padding: 0 1em;
+                                display: inline-block;
+                                margin-right: .5em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.minimized {
+            margin-top: 0;
+            margin-bottom: 0;
+            .widget-header {
+                border-bottom: 1px solid lightgray;
+            }
+        }
+    }
 }

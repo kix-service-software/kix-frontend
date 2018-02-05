@@ -108,7 +108,10 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     public async getArticles(token: string, ticketId: number): Promise<Article[]> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES);
-        const response = await this.getObjectByUri<ArticlesResponse>(token, uri);
+        const response = await this.getObjectByUri<ArticlesResponse>(token, uri, {
+            expand: "Attachments",
+            include: "Attachments"
+        });
         return response.Article;
     }
 
@@ -132,7 +135,9 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
             this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, attachmentId
         );
 
-        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri);
+        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
+            include: "Content"
+        });
         return response.Attachment;
     }
 

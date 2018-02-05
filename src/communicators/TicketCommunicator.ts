@@ -21,7 +21,9 @@ import {
     LoadTicketDetailsRequest,
     LoadTicketDetailsResponse,
     TicketDetails,
-    QuickSearchRequest
+    QuickSearchRequest,
+    LoadArticleAttachmentResponse,
+    LoadArticleAttachmentRequest
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -180,6 +182,15 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const response = new LoadTicketDetailsResponse(ticketDetails);
             client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
+        });
+
+        client.on(TicketEvent.LOAD_ARTICLE_ATTACHMENT, async (data: LoadArticleAttachmentRequest) => {
+            const attachemnt = await this.ticketService.getArticleAttachment(
+                data.token, data.ticketId, data.articleId, data.attachmentId
+            );
+
+            const response = new LoadArticleAttachmentResponse(attachemnt);
+            client.emit(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
         });
     }
 }

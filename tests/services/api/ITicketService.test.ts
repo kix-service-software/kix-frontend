@@ -198,6 +198,10 @@ describe('Ticket Service', () => {
                 before(() => {
                     nockScope
                         .get(resourcePath + '/12345/articles')
+                        .query({
+                            expand: "Attachments",
+                            include: "Attachments"
+                        })
                         .reply(200, {
                             Article: [{ ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }, { ArticleID: 0 }]
                         });
@@ -256,9 +260,7 @@ describe('Ticket Service', () => {
             before(() => {
                 nockScope
                     .get(resourcePath + '/12345/articles/1234/attachments')
-                    .reply(200, {
-                        Attachment: [{ AttachmentID: 0 }, { AttachmentID: 0 }, { AttachmentID: 0 }]
-                    });
+                    .reply(200, { Attachment: [] });
             });
 
             it('should return a list with attachments', async () => {
@@ -266,7 +268,6 @@ describe('Ticket Service', () => {
 
                 expect(response).not.undefined;
                 expect(response).an('array');
-                expect(response).not.empty;
             });
         });
 
@@ -274,8 +275,9 @@ describe('Ticket Service', () => {
             before(() => {
                 nockScope
                     .get(resourcePath + '/12345/articles/1234/attachments/9876')
+                    .query({ include: "Content" })
                     .reply(200, {
-                        Attachment: { AttachmentID: 9876 }
+                        Attachment: { ID: 9876 }
                     });
             });
 
@@ -283,7 +285,7 @@ describe('Ticket Service', () => {
                 const response = await ticketService.getArticleAttachment('', 12345, 1234, 9876);
 
                 expect(response).not.undefined;
-                expect(response.AttachmentID).equals(9876);
+                expect(response.ID).equals(9876);
             });
         });
 

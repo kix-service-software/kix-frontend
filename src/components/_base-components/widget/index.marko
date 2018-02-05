@@ -16,14 +16,14 @@
                 </if>
             </else>
         </span>
-        <span.header-left on-click('minimizeWidget')>
+        <span.header-left>
             <if(input.explorer)>
                 <span.kix-icon-close-left on-click('minimizeExplorer')/>
             </if>
             <else-if(input.icon && Object.keys(input.icon).length)>
                 <include(input.icon)/>
             </else-if>
-            <h3>
+            <h3 on-click('minimizeWidget')>
                 <if(component.isInputDefined(input.title))>
                     <include(input.title)/>
                 </if>
