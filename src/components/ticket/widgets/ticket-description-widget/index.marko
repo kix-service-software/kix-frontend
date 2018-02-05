@@ -6,23 +6,29 @@
     <@content>
         <div.description-container>
             <widget>
-                <@title>Beschreibung:</@title>
+                <@title>Beschreibung</@title>
                 <@content>
-                    <ticket-article-content ticketId=state.ticketId article=state.firstArticle/>
                     <div.attachment-list>
-                        <b>Anlagen:</b>
-                        <ul>
-                            <for(attachment in state.attachments)>
-                                <li>
-                                    <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticleId attachment=attachment/>
-                                </li>
-                            </for>
-                        </ul>
+                        <div.description-attachments>
+                            <b>Anlagen:</b>
+                            <ul>
+                                <for(attachment in state.attachments)>
+                                    <li>
+                                        <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticleId attachment=attachment/>
+                                    </li>
+                                </for>
+                            </ul>
+                        </div>
+                    </div>
+                    <div.description-text-wrapper>
+                        <div.description-text>
+                            <ticket-article-content ticketId=state.ticketId article=state.firstArticle/>
+                        </div>
                     </div>
                 </@content>
             </widget>
             <widget>
-                <@title>Anmerkung:</@title>
+                <@title>Anmerkungen</@title>
                 <@content>
                     <div>${state.ticketNotes}</div>
                 </@content>
