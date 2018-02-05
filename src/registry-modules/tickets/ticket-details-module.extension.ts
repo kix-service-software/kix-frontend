@@ -53,10 +53,10 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const contentRows = [
             [
                 "ticket-information-lane",
-                "ticket-history-widget",
-                "ticket-description-widget",
+                "ticket-history-lane",
+                "ticket-description-lane",
                 "ticket-dynamic-fields-lane",
-                "ticket-dynamic-field-widget",
+                "ticket-process-lane",
             ]
         ];
 
