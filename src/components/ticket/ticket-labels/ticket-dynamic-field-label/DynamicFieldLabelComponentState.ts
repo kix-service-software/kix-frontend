@@ -1,4 +1,3 @@
-import { GeneralCatalogItem } from '@kix/core/dist/model';
 import { DynamicField } from '@kix/core/dist/model/dynamic-field/DynamicField';
 
 export class DynamicFieldLabelComponentState {
