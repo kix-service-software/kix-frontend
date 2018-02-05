@@ -8,17 +8,15 @@
             <widget>
                 <@title>Beschreibung</@title>
                 <@content>
-                    <div.attachment-list>
-                        <div.description-attachments>
-                            <b>Anlagen:</b>
-                            <ul>
-                                <for(attachment in state.attachments)>
-                                    <li>
-                                        <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticleId attachment=attachment/>
-                                    </li>
-                                </for>
-                            </ul>
-                        </div>
+                    <div.description-attachments>
+                        <b>Anlagen:</b>
+                        <ul>
+                            <for(attachment in state.attachments)>
+                                <li>
+                                    <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticleId attachment=attachment/>
+                                </li>
+                            </for>
+                        </ul>
                     </div>
                     <div.description-text-wrapper>
                         <div.description-text>
