@@ -29,8 +29,7 @@ class ArticleAttachmentComponent {
     private async download(): Promise<void> {
         if (!this.state.progress) {
             this.state.progress = true;
-            // const attachment = await this.loadArticleAttachment(412768, this.state.attachment.AttachmentID);
-            const attachment = await this.loadArticleAttachment(412768, 1);
+            const attachment = await this.loadArticleAttachment(412768, this.state.attachment.ID);
             this.state.progress = false;
 
             const blobUrl = URL.createObjectURL(attachment.Content);

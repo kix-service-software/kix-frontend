@@ -28,14 +28,13 @@ class TicketArticleContentComponent {
             if (htmlBodyAttachmentIndex > -1) {
                 const htmlBodyAttachment = attachments[htmlBodyAttachmentIndex];
 
-                // FIXME: AttachmentID aus dem htmlBodyAttachment verwenden
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
-                    this.state.ticketId, this.state.article.ArticleID, 1
+                    this.state.ticketId, this.state.article.ArticleID, htmlBodyAttachment.ID
                 );
 
                 if (AttachmentWithContent) {
                     this.state.isContentHTML = true;
-                    this.state.content = AttachmentWithContent.Content;
+                    this.state.content = atob(AttachmentWithContent.Content);
                 }
             }
         }
