@@ -4,9 +4,11 @@
             <include(input.key)/>
         </span>
     </if>
-    <if(state.showInfo && input.info)>
+    <if(state.showInfo)>
         <span.info>
-            <include(input.info)/>
+            <if(input.info)>
+                <include(input.info)/>
+            </if>
         </span>
     </if>
     <if(state.showValue && input.value)>
