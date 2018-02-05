@@ -1,4 +1,4 @@
-<div.dynamic-fields-group-container>
+<div.dynamic-fields-group>
     <widget minimized=false>
         <@icon/>
         <@title>Default</@title>
@@ -6,7 +6,7 @@
             <div.field-container>
                 <ul>
                     <for(df in state.dynamicFields)>
-                        <li.df-field>
+                        <li.dynamic-field>
                             <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
                         </li>
                     </for>
