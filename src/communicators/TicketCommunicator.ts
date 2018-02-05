@@ -124,6 +124,11 @@ export class TicketCommunicator extends KIXCommunicator {
                 include: 'Config'
             });
 
+            const dFDisplayGroups = await this.generalCatalogService.getItems(data.token, null, null, null, {
+                filter: '{"GeneralCatalogItem": {"AND": [{"Field": "Class", "Operator": "EQ", '
+                    + '"Value": "DynamicField::DisplayGroup"}]}}',
+            });
+
             const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
 
             const ticketHookConfig = await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Hook');
@@ -143,7 +148,7 @@ export class TicketCommunicator extends KIXCommunicator {
             const response = new TicketLoadDataResponse(
                 [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
                 services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
-                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs
+                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs, dFDisplayGroups
             );
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);

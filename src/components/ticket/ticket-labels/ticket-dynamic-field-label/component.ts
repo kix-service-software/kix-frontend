@@ -9,8 +9,9 @@ export class TicketPriorityLabelComponent {
     public onCreate(input: any): void {
         this.state = {
             fieldId: input.value,
-            displayValue: null,
-            label: null
+            field: null,
+            value: null,
+            displayValue: null
         };
     }
 
@@ -42,14 +43,14 @@ export class TicketPriorityLabelComponent {
     private setDisplayValue(): void {
         const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
         if (ticketData) {
-            const dynamicField = ticketData.ticketDfs.find((df) => df.ID === this.state.fieldId);
-            if (dynamicField) {
-                this.state.label = dynamicField.Label;
-
+            this.state.field = ticketData.dynamicFields.find((df) => df.ID === this.state.fieldId);
+            if (this.state.field) {
                 const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
                 if (ticketDetails && ticketDetails.ticket) {
                     const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
                     if (field) {
+                        this.state.value = field.Value;
+                        // TODO: Array-Behandlung sollte im Backend passieren
                         this.state.displayValue = field.DisplayValue;
                     }
                 }
