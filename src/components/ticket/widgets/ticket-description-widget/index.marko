@@ -6,10 +6,9 @@
     <@content>
         <div.description-container>
             <widget>
-                <@title>Beschreibung:</@title>
+                <@title>Beschreibung</@title>
                 <@content>
-                    <div>${state.description}</div>
-                    <div>
+                    <div.description-attachments>
                         <b>Anlagen:</b>
                         <ul>
                             <for(attachment in state.attachments)>
@@ -19,10 +18,13 @@
                             </for>
                         </ul>
                     </div>
+                    <div.description-text-wrapper>
+                        <div.description-text>${state.description}</div>
+                    </div>
                 </@content>
             </widget>
             <widget>
-                <@title>Anmerkung:</@title>
+                <@title>Anmerkungen</@title>
                 <@content>
                     <div>${state.ticketNotes}</div>
                 </@content>
