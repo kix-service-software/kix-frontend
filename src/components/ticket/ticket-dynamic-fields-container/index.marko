@@ -1,20 +1,22 @@
 <div.dynamic-fields-group>
-    <widget minimized=false>
-        <@icon/>
-        <@title>Default</@title>
-        <@content>
-            <div.field-container>
-                <ul>
-                    <for(df in state.dynamicFields)>
-                        <li.dynamic-field>
-                            <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
-                        </li>
-                    </for>
-                </ul>
-            </div>
-        </@content>
-        <@filter/>
-        <@actions/>
-        <@contentActions/>
-    </widget>
+    <for(displayGroup in state.displayGroups)>
+        <widget>
+            <@icon/>
+            <@title>${displayGroup.Name}</@title>
+            <@content>
+                <div.field-container>
+                    <ul>
+                        <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
+                            <li.dynamic-field>
+                                <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
+                            </li>
+                        </for>
+                    </ul>
+                </div>
+            </@content>
+            <@filter/>
+            <@actions/>
+            <@contentActions/>
+        </widget>
+    </for>
 </div>
