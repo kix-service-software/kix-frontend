@@ -27,14 +27,20 @@ class ArticleAttachmentComponent {
     }
 
     private async download(): Promise<void> {
-        if (!this.state.progress) {
+        if (!this.state.progress && this.state.articleId && this.state.attachment) {
             this.state.progress = true;
-            const attachment = await this.loadArticleAttachment(412768, this.state.attachment.ID);
+            const attachment = await this.loadArticleAttachment(this.state.articleId, this.state.attachment.ID);
             this.state.progress = false;
 
-            const blobUrl = URL.createObjectURL(attachment.Content);
+            const blob = this.b64toBlob(attachment.Content, attachment.ContentType);
+            const objectURL = URL.createObjectURL(blob);
 
-            window.location = blobUrl;
+            const a = window.document.createElement('a');
+            a.href = objectURL;
+            a.download = attachment.Filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     }
 
@@ -45,6 +51,25 @@ class ArticleAttachmentComponent {
         return attachment;
     }
 
+    private b64toBlob(b64Data: string, contentType: string = '', sliceSize: number = 512) {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    }
 }
 
 module.exports = ArticleAttachmentComponent;
