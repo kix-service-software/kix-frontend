@@ -1,9 +1,47 @@
-div.description-container {
-    position: relative;
-    height: 178px;
-    overflow: auto;
-    .label {
-        padding: 5px;
-        display: block;
+.ticket-details .widget .lane-list .lane>.widget {
+    .description-container {
+        position: relative;
+        height: 10em;
+        height: 178px;
+        overflow: auto;
+        padding: .5em .5em .5em 1.5em;
+        box-sizing: border-box;
+        &>.widget {
+            margin: 0;
+            &.minimized .widget-header {
+                margin-left: 0;
+            }
+            .widget-header {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .widget-content {
+                border: 0 none;
+                padding: 0;
+                min-height: auto;
+                .description-attachments {
+                    float: right;
+                    max-height: 105px;
+                    width: 170px;
+                    padding: 0 1em;
+                    box-sizing: border-box;
+                    ul {
+                        padding-left: 1em;
+                    }
+                }
+                .description-text-wrapper {
+                    margin-right: 175px;
+                    .description-text {
+                        border-color: #eeeeee;
+                        border-radius: 5px;
+                        background-color: #f5f5f5;
+                        padding: 1em .75em;
+                        height: 100px;
+                        overflow: auto;
+                        box-sizing: border-box;
+                    }
+                }
+            }
+        }
     }
 }
