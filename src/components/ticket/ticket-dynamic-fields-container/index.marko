@@ -1,22 +1,27 @@
 <div.dynamic-fields-group>
-    <for(displayGroup in state.displayGroups)>
-        <widget>
-            <@icon/>
-            <@title>${displayGroup.Name}</@title>
-            <@content>
-                <div.field-container>
-                    <ul>
-                        <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
-                            <li.dynamic-field>
-                                <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
-                            </li>
-                        </for>
-                    </ul>
-                </div>
-            </@content>
-            <@filter/>
-            <@actions/>
-            <@contentActions/>
-        </widget>
-    </for>
+    <if(state.displayGroups && state.displayGroups.length)>
+        <for(displayGroup in state.displayGroups)>
+            <widget>
+                <@icon/>
+                <@title>${displayGroup.Name}</@title>
+                <@content>
+                    <div.field-container>
+                        <ul>
+                            <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
+                                <li.dynamic-field>
+                                    <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
+                                </li>
+                            </for>
+                        </ul>
+                    </div>
+                </@content>
+                <@filter/>
+                <@actions/>
+                <@contentActions/>
+            </widget>
+        </for>
+    </if>
+    <else>
+        <span>Es sind keine dynamischen Felder zur Ansicht konfiguriert.</span>
+    </else>
 </div>

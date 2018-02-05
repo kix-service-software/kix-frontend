@@ -31,9 +31,8 @@ class DynamicFieldsContainerComponent {
         const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
         if (ticketData) {
             this.state.dynamicFields = ticketData.dynamicFields;
-            this.state.displayGroups = ticketData.dynamicFieldGroups.filter((dfg) =>
-                this.state.dynamicFields.some((df) => df.DisplayGroupID === dfg.ItemID)
-            );
+            this.state.displayGroups = ticketData.dynamicFieldGroups
+                .filter((dfg) => this.getDFsOfGroup(dfg.ItemID).length);
         }
     }
 
