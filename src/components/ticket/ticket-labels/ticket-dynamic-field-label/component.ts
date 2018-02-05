@@ -1,25 +1,19 @@
 import { TicketData, TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
+import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
 
 export class TicketPriorityLabelComponent {
 
-    private state: any;
+    private state: DynamicFieldLabelComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            fieldId: input.value,
-            field: null,
-            value: null,
-            displayValue: null
-        };
+        this.state = new DynamicFieldLabelComponentState();
     }
 
     public onInput(input: any): void {
-        this.state = {
-            fieldId: input.value,
-            ticketId: Number(input.ticketId)
-        };
+        this.state.fieldId = Number(input.value);
+        this.state.ticketId = Number(input.ticketId);
     }
 
     public onMount(): void {
@@ -28,7 +22,7 @@ export class TicketPriorityLabelComponent {
         this.setDisplayValue();
     }
 
-    private ticketServiceNotified(id: string, type: TicketNotification, ...args): void {
+    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
         if (id === this.state.ticketId && type === TicketNotification.TICKET_DETAILS_LOADED) {
             this.setDisplayValue();
         }
@@ -50,7 +44,6 @@ export class TicketPriorityLabelComponent {
                     const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
                     if (field) {
                         this.state.value = field.Value;
-                        // TODO: Array-Behandlung sollte im Backend passieren
                         this.state.displayValue = field.DisplayValue;
                     }
                 }
