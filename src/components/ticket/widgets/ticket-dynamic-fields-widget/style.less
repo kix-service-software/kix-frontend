@@ -1,3 +1,28 @@
-df-container {
+.ticket-details .widget .lane-list .lane .widget .dynamic-fields-container {
+    position: relative;
     height: 178px;
+    overflow: auto;
+    padding: .5em .5em .5em 1.5em;
+    box-sizing: border-box;
+    .widget {
+        &.minimized .widget-header {
+            margin-left: 0;
+        }
+        .widget-header {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .widget-content {
+            border: 0 none;
+            padding: 0;
+            min-height: auto;
+        }
+        &.minimized {
+            margin-top: 0;
+            margin-bottom: 0;
+            .widget-header {
+                border-bottom: 1px solid lightgray;
+            }
+        }
+    }
 }

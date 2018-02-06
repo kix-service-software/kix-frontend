@@ -35,7 +35,7 @@ export class TicketStateLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.STATE_ID);
+        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.SERVICE_ID);
         this.state.displayValue =
             TicketUtil.getPropertyDisplayName(TicketProperty.SERVICE_ID, this.state.serviceId, this.state.ticketId);
 

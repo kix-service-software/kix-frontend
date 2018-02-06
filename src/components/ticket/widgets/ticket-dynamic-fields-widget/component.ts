@@ -40,8 +40,13 @@ class TicketDescriptionWIdgetComponent {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
             if (ticketDetails && ticketDetails.ticket) {
                 this.state.dynamicFields = ticketDetails.ticket.DynamicFields;
-                this.state.filteredDynamicFields = this.state.dynamicFields
-                    .filter((df) => this.state.configuredDynamicFields.some((cdf) => cdf === df.ID));
+                this.state.filteredDynamicFields = [];
+                this.state.configuredDynamicFields.forEach((dfId) => {
+                    const ticketDf = this.state.dynamicFields.find((df) => df.ID === dfId);
+                    if (ticketDf) {
+                        this.state.filteredDynamicFields.push(ticketDf);
+                    }
+                });
             }
         }
     }
