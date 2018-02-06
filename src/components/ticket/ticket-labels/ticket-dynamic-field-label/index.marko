@@ -1,14 +1,20 @@
-<key-value-pair showKey=input.showLabel>
-    <@key>${state.label}</@key>
-    <@info>
-        <overlay-info-icon>
-            <@title>${state.label}</@title>
-            <@content>
-                <span>Beschreibung des Feldes ...</span>
-            </@content>
-        </overlay-info-icon>
-    </@info>
-    <@value>
-        <span.text>${state.displayValue}</span>
-    </@value>
-</key-value-pair>
+<if(state.field)>
+    <key-value-pair showKey=input.showLabel>
+        <@key>${state.field.Label}</@key>
+        <@value>
+            <if(state.field.FieldType === "Checkbox")>
+                <span.text>
+                    <input type="checkbox" checked=state.displayValue value=state.Value readonly="readonly" disabled="disabled"/>
+                </span>
+            </if>
+            <else-if(Array.isArray(state.displayValue))>
+                <for(value in state.displayValue)>
+                    <span.text>${value}</span>
+                </for>
+            </else-if>
+            <else>
+                <span.text>${state.displayValue}</span>
+            </else>
+        </@value>
+    </key-value-pair>
+</if>

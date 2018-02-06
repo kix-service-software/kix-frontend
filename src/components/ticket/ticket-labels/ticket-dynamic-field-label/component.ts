@@ -1,24 +1,19 @@
-import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketData, TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
+import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
 
 export class TicketPriorityLabelComponent {
 
-    private state: any;
+    private state: DynamicFieldLabelComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            fieldId: input.value,
-            displayValue: null,
-            label: null
-        };
+        this.state = new DynamicFieldLabelComponentState();
     }
 
     public onInput(input: any): void {
-        this.state = {
-            fieldId: input.value,
-            ticketId: Number(input.ticketId)
-        };
+        this.state.fieldId = Number(input.value);
+        this.state.ticketId = Number(input.ticketId);
     }
 
     public onMount(): void {
@@ -27,7 +22,7 @@ export class TicketPriorityLabelComponent {
         this.setDisplayValue();
     }
 
-    private ticketServiceNotified(id: string, type: TicketNotification, ...args): void {
+    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
         if (id === this.state.ticketId && type === TicketNotification.TICKET_DETAILS_LOADED) {
             this.setDisplayValue();
         }
@@ -40,12 +35,18 @@ export class TicketPriorityLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = this.state.fieldName;
-        const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-        if (ticketDetails && ticketDetails.ticket) {
-            const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
-            if (field) {
-                this.state.displayValue = field.DisplayValue;
+        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
+        if (ticketData) {
+            this.state.field = ticketData.dynamicFields.find((df) => df.ID === this.state.fieldId);
+            if (this.state.field) {
+                const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
+                if (ticketDetails && ticketDetails.ticket) {
+                    const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
+                    if (field) {
+                        this.state.value = field.Value;
+                        this.state.displayValue = field.DisplayValue;
+                    }
+                }
             }
         }
     }
