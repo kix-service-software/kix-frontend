@@ -4,7 +4,7 @@
 </div>
 <if(state.translations && state.showDashboardConfigurationWidget)>
     <div.dashboard-configuration-widget>
-        <widget minimizable=false noConfigOverlay=true>
+        <widget minimizable=false hasConfigOverlay=false>
             <@title>
                 <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
             </@title>
