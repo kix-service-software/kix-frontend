@@ -208,8 +208,8 @@ describe('Link Service', () => {
             });
 
             it('should return a the id of the new link.', async () => {
-                const userId = await linkService.createLink('', new CreateLink('', '', '', '', ''));
-                expect(userId).equal(123456);
+                const linkId = await linkService.createLink('', new CreateLink('', '', '', '', ''));
+                expect(linkId).equal(123456);
             });
 
         });
