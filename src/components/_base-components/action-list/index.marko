@@ -1,13 +1,13 @@
-<div.action-list>
-    <ul.action-list-default key="action-list">
+<div.action-list-wrapper>
+    <ul.action-list key="action-list">
         <for(element in state.listDefault)>
             <li>
                 <include(component.getTemplate(element))/>
             </li>
         </for>
         <if(state.listExpansion && state.listExpansion.length > 0)>
-            <li.list-expansion-toggle class=(state.showListExpansion ? "active" : "")>
-                <span.kix-icon on-click('toggleListExpansion')>...</span>
+            <li.list-button class=(state.showListExpansion ? "active" : "")>
+                <span.kix-icon-dots on-click('toggleListExpansion')/>
             </li>
         </if>
     </ul>

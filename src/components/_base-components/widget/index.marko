@@ -12,7 +12,15 @@
                     <include(input.actions)/>
                 </if>
                 <if(state.minimizable)>
-                    <span class=(state.minimized ? "kix-icon-open-down" : "kix-icon-close-up") on-click('minimizeWidget')/>
+                    <if(state.minimized)>
+                        <span.kix-icon-sort-down on-click('minimizeWidget')/>
+                    </if>
+                    <else>
+                        <span.kix-icon-triangle-up on-click('minimizeWidget')>
+                            <span.path1/>
+                            <span.path2/>
+                        </span>
+                    </else>
                 </if>
             </else>
         </span>

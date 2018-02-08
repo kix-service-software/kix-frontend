@@ -24,7 +24,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             );
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
-                "ticket-description-widget", "Beschreibung & Anmerkung", [], {},
+                "ticket-description-widget", "Beschreibung & Anmerkungen", [], {},
                 WidgetType.LANE, false, true, true, WidgetSize.BOTH, null, false)
             );
         const processLane =
