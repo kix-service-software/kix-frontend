@@ -34,6 +34,15 @@ class TicketInfoWidgetComponent {
             }
         }
     }
+
+    private print(): void {
+        alert('Drucken ...');
+    }
+
+    private edit(): void {
+        alert('Bearbeiten ...');
+    }
+
 }
 
 module.exports = TicketInfoWidgetComponent;
