@@ -14,6 +14,7 @@ class WidgetComponent {
         this.state.instanceId = input.instanceId;
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
+        this.state.hasConfigOverlay = input.hasConfigOverlay !== undefined ? input.hasConfigOverlay : false;
     }
 
     public onMount(): void {
@@ -65,6 +66,10 @@ class WidgetComponent {
 
     private isInputDefined(input: any): boolean {
         return input && Boolean(Object.keys(input).length);
+    }
+
+    private hasConfigurationOverlay(): boolean {
+        return this.isConfigMode() && this.state.hasConfigOverlay && this.state.configurationTagId !== undefined;
     }
 
 }

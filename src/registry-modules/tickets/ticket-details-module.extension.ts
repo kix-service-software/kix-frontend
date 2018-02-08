@@ -37,7 +37,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {
-                    dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537]
+                    dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );

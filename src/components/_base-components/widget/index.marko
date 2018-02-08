@@ -28,7 +28,7 @@
             <if(input.explorer)>
                 <span.kix-icon-close-left on-click('minimizeExplorer')/>
             </if>
-            <else-if(input.icon && Object.keys(input.icon).length)>
+            <else-if(component.isInputDefined(input.icon))>
                 <include(input.icon)/>
             </else-if>
             <h3 on-click('minimizeWidget')>
@@ -51,7 +51,7 @@
             <include(input.content)/>
         </if>
     </div>
-    <if(component.isConfigMode() && !input.noConfigOverlay)>
+    <if(component.hasConfigurationOverlay())>
         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
             <div.widget-overlay-content/>
         </div>

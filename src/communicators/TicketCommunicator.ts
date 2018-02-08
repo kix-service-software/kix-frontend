@@ -29,6 +29,7 @@ import {
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/TicketService';
 import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
+import { TicketData } from '@kix/core/dist/browser/ticket/';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -147,11 +148,13 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const ticketLocks = await this.ticketLockService.getLocks(data.token);
 
-            const response = new TicketLoadDataResponse(
-                [], ticketStates, stateTypes, ticketTypes, ticketPriorities, queues, queuesHierarchy,
-                services, [], users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
+            const ticketData = new TicketData(
+                [], services, [], ticketPriorities, ticketTypes, ticketStates, stateTypes,
+                queues, queuesHierarchy, users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
                 isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs, dFDisplayGroups
             );
+
+            const response = new TicketLoadDataResponse(ticketData);
 
             client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
         });
@@ -171,13 +174,24 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const history = await this.ticketService.getTicketHistory(data.token, data.ticketId);
 
+            const sourceLinks = await this.linkService.getLinks(data.token, null, null, null, {
+                filter: '{"Link": {"AND": [{"Field": "SourceKey", "Operator": "EQ", "Value": "' + data.ticketId + '"},'
+                    + '{"Field": "SourceObject", "Operator": "EQ", "Value": "Ticket"}]}}'
+            });
+            const targetLinks = await this.linkService.getLinks(data.token, null, null, null, {
+                filter: '{"Link": {"AND": [{"Field": "TargetKey", "Operator": "EQ", "Value": "' + data.ticketId + '"},'
+                    + '{"Field": "TargetObject", "Operator": "EQ", "Value": "Ticket"}]}}'
+            });
+            const links = [...sourceLinks, ...targetLinks];
+
             const ticketDetails = new TicketDetails(
                 Number(data.ticketId),
                 (ticket as Ticket),
                 articles,
                 (contact as Contact),
                 (customer as Customer),
-                history
+                history,
+                links
             );
 
             const response = new LoadTicketDetailsResponse(ticketDetails);

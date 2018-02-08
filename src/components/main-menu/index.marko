@@ -2,7 +2,7 @@
     <ul.main-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
-                <a href=menuEntry.contextId on-click('menuClicked', menuEntry.contextId)>
+                <a href="/${menuEntry.contextId}" on-click('menuClicked', menuEntry.contextId)>
                     <span class="hover-label">${menuEntry.text}</span>
                     <span class="label-wrapper">
                         <span class="kix-icon-${menuEntry.icon}"/>
@@ -17,7 +17,7 @@
     <ul.user-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.secondaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
-                <a href=menuEntry.contextId on-click('menuClicked', menuEntry.contextId)>
+                <a href="/${menuEntry.contextId}" on-click('menuClicked', menuEntry.contextId)>
                     <span class="menu-item-wrapper cf">
                         <span class="hover-label">${menuEntry.text}</span>
                         <span class="label-wrapper">
