@@ -18,29 +18,35 @@
                 <table.history-table>
                     <thead>
                         <tr>
-                            <th>
+                            <th.action>
                                 Aktion
                                 <span.sortable>
                                     <span.kix-icon-sort-up on-click('sortUp', 'HistoryType')/>
                                     <span.kix-icon-sort-down on-click('sortDown', 'HistoryType')/>
                                 </span>
                             </th>
-                            <th>
+                            <th.comment>
                                 Kommentar
                                 <span.sortable>
                                     <span.kix-icon-sort-up on-click('sortUp', 'Name')/>
                                     <span.kix-icon-sort-down on-click('sortDown', 'Name')/>
                                 </span>
                             </th>
-                            <th>Inhalt</th>
-                            <th>
+                            <th.article-id>
+                                Inhalt
+                                <span.sortable>
+                                    <span.kix-icon-sort-up on-click('sortUp', 'ArticleID')/>
+                                    <span.kix-icon-sort-down on-click('sortDown', 'ArticleID')/>
+                                </span>
+                            </th>
+                            <th.user>
                                 Benutzer
                                 <span.sortable>
                                     <span.kix-icon-sort-up on-click('sortUp', 'CreateBy')/>
                                     <span.kix-icon-sort-down on-click('sortDown', 'CreateBy')/>
                                 </span>
                             </th>
-                            <th>
+                            <th.created>
                                 Erstellt am
                                 <span.sortable>
                                     <span.kix-icon-sort-up on-click('sortUp', 'CreateTime')/>
@@ -52,18 +58,18 @@
                     <tbody>
                         <for(entry in state.filteredHistory)>
                             <tr>
-                                <td>| ${entry.HistoryType}</td>
-                                <td>| ${entry.Name}</td>
-                                <td>
+                                <td.action>| ${entry.HistoryType}</td>
+                                <td.comment>| ${entry.Name}</td>
+                                <td.article-id>
                                     <if(entry.ArticleID === 0)>| -</if>
                                     <else>
                                         <a.article-link on-click('navigateToArticle', entry.ArticleID)>| Zum Artikel</a>
                                     </else>
                                 </td>
-                                <td>
-                                    <ticket-property-label property="UserID" value=entry.CreateBy/>
+                                <td.user>
+                                    <ticket-property-label property="UserID" value=entry.CreateBy showLabel=false/>
                                 </td>
-                                <td>| ${component.getDateTimeString(entry.CreateTime)}</td>
+                                <td.created>| ${component.getDateTimeString(entry.CreateTime)}</td>
                             </tr>
                         </for>
                     </tbody>

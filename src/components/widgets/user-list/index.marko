@@ -4,22 +4,7 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <if(state.widgetConfiguration)>
-            <table.user-table>
-                <tr>
-                    <for(property in state.widgetConfiguration.settings.properties)>
-                        <th>${property.displayName}</th>
-                    </for>
-                </tr>
-                <for(user in state.users)>
-                    <tr>
-                        <for(property in state.widgetConfiguration.settings.properties)>
-                            <td>${user[property.name]}</td>
-                        </for>
-                    </tr>
-                </for>
-            </table>
-        </if>
+        <standard-table/>
     </@content>
     <@filter>
         <span/>
