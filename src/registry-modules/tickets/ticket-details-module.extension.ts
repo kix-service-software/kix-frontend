@@ -41,6 +41,11 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
+        const linkedObjectsLane =
+            new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
+                "ticket-linked-objects-widget", "Verknüpfte Objekte", [], {},
+                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+            );
 
         // info-overlay
         // TODO: eigener Widget-Typ
@@ -57,11 +62,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-description-lane",
                 "ticket-dynamic-fields-lane",
                 "ticket-process-lane",
+                "ticket-linked-objects-lane"
             ]
         ];
 
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
-            ticketInfoLane, descriptionLane, processLane, dynamicFieldsLane, ticketHistoryLane, infoOverlay
+            ticketInfoLane, descriptionLane, linkedObjectsLane, processLane,
+            dynamicFieldsLane, ticketHistoryLane, infoOverlay
         ];
 
         // Explorer

@@ -3,7 +3,7 @@ import { ContextService, ContextNotification } from '@kix/core/dist/browser/cont
 import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
 import { Attachment } from '@kix/core/dist/model/';
 
-class TicketDescriptionWIdgetComponent {
+class TicketDescriptionWidgetComponent {
 
     private state: TicketDescriptionComponentState;
 
@@ -72,4 +72,4 @@ class TicketDescriptionWIdgetComponent {
     }
 }
 
-module.exports = TicketDescriptionWIdgetComponent;
+module.exports = TicketDescriptionWidgetComponent;

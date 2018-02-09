@@ -1,0 +1,88 @@
+// TODO: @uboehm: CSS aus "dynamic fields lane" für gruppen
+.ticket-details .widget .lane-list .lane .widget .linked-objects-container {
+    position: relative;
+    height: 178px;
+    overflow: auto;
+    padding: .5em .5em .5em 1.5em;
+    box-sizing: border-box;
+    .widget {
+        &.minimized .widget-header {
+            margin-left: 0;
+        }
+        .widget-header {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .widget-content {
+            border: 0 none;
+            padding: 0;
+            min-height: auto; // TODO: @uboehm: CSS aus "history lane" für tabelle
+            .linked-object-table-container {
+                height: 178px;
+                overflow: auto;
+                padding: 0 1.5em;
+                .linked-object-table {
+                    width: 100%;
+                    a {
+                        color: #5b5b5b;
+                        text-decoration: none;
+                         :visited,
+                         :active,
+                         :hover,
+                         :focus {
+                            color: #5b5b5b;
+                            text-decoration: none;
+                        }
+                    }
+                    th,
+                    td {
+                        color: #5b5b5b;
+                        font-weight: 400;
+                        padding: 0 .5em;
+                        &.select-all-rows,
+                        &.select-row,
+                        &.PriorityID,
+                        &.StateID,
+                        &.QueueID {
+                            text-align: center
+                        }
+                    }
+                    thead {
+                        background-color: #e2e2e2;
+                        height: 2em;
+                        vertical-align: middle;
+                        line-height: 2em;
+                        th {
+                            color: #000000;
+                            font-weight: 600;
+                            .sortable {
+                                display: inline-block;
+                                margin-left: .25em;
+                                font-size: .625em; // color: #9b9d9d;
+                                span {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                    tfoot {
+                        top: auto;
+                        bottom: 0;
+                    }
+                    tbody {
+                        tr:nth-of-type(2n) {
+                            background-color: #f5f5f5;
+                        }
+                    }
+                }
+            }
+        }
+        &.minimized {
+            margin-top: 0;
+            margin-bottom: 0;
+            .widget-header {
+                border-bottom: 1px solid lightgray;
+            }
+        }
+    }
+}

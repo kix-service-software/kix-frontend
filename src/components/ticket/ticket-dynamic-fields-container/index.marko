@@ -1,6 +1,6 @@
-<div.dynamic-fields-group>
-    <if(state.displayGroups && state.displayGroups.length)>
-        <for(displayGroup in state.displayGroups)>
+<if(state.displayGroups && state.displayGroups.length)>
+    <for(displayGroup in state.displayGroups)>
+        <div.dynamic-fields-group>
             <widget>
                 <@icon/>
                 <@title>${displayGroup.Name}</@title>
@@ -19,9 +19,9 @@
                 <@actions/>
                 <@contentActions/>
             </widget>
-        </for>
-    </if>
-    <else>
-        <span>Es sind keine dynamischen Felder zur Ansicht konfiguriert.</span>
-    </else>
-</div>
+        </div>
+    </for>
+</if>
+<else>
+    <span>Es sind keine dynamischen Felder zur Ansicht konfiguriert.</span>
+</else>
