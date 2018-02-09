@@ -148,10 +148,13 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const ticketLocks = await this.ticketLockService.getLocks(data.token);
 
+            const linkTypes = await this.linkService.getLinkTypes(data.token);
+
             const ticketData = new TicketData(
                 [], services, [], ticketPriorities, ticketTypes, ticketStates, stateTypes,
                 queues, queuesHierarchy, users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
-                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs, dFDisplayGroups
+                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs, dFDisplayGroups,
+                linkTypes
             );
 
             const response = new TicketLoadDataResponse(ticketData);
@@ -174,24 +177,13 @@ export class TicketCommunicator extends KIXCommunicator {
 
             const history = await this.ticketService.getTicketHistory(data.token, data.ticketId);
 
-            const sourceLinks = await this.linkService.getLinks(data.token, null, null, null, {
-                filter: '{"Link": {"AND": [{"Field": "SourceKey", "Operator": "EQ", "Value": "' + data.ticketId + '"},'
-                    + '{"Field": "SourceObject", "Operator": "EQ", "Value": "Ticket"}]}}'
-            });
-            const targetLinks = await this.linkService.getLinks(data.token, null, null, null, {
-                filter: '{"Link": {"AND": [{"Field": "TargetKey", "Operator": "EQ", "Value": "' + data.ticketId + '"},'
-                    + '{"Field": "TargetObject", "Operator": "EQ", "Value": "Ticket"}]}}'
-            });
-            const links = [...sourceLinks, ...targetLinks];
-
             const ticketDetails = new TicketDetails(
                 Number(data.ticketId),
                 (ticket as Ticket),
                 articles,
                 (contact as Contact),
                 (customer as Customer),
-                history,
-                links
+                history
             );
 
             const response = new LoadTicketDetailsResponse(ticketDetails);

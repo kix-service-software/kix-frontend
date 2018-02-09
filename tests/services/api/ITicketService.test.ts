@@ -54,7 +54,8 @@ describe('Ticket Service', () => {
                 .get(resourcePath + '/12345')
                 .query({
                     fields: 'Ticket.*',
-                    include: 'TimeUnits,DynamicFields'
+                    include: 'TimeUnits,DynamicFields,Links',
+                    expand: 'Links'
                 })
                 .reply(200, buildTicketResponse(12345));
         });

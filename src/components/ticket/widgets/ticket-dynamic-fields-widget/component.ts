@@ -4,7 +4,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
 
-class TicketDescriptionWIdgetComponent {
+class DynamicFieldWidgetComponent {
 
     private state: DynamicFieldWidgetComponentState;
 
@@ -69,4 +69,4 @@ class TicketDescriptionWIdgetComponent {
     }
 }
 
-module.exports = TicketDescriptionWIdgetComponent;
+module.exports = DynamicFieldWidgetComponent;
