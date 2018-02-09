@@ -27,14 +27,6 @@ export class TicketTableComponent {
         this.state.displayLimit = input.displayLimit;
     }
 
-    private showMore(): void {
-        let limit = this.state.displayLimit + 10;
-        if (limit >= this.state.tickets.length) {
-            limit = this.state.tickets.length;
-        }
-        this.state.displayLimit = limit;
-    }
-
     private ticketClicked(ticketId: string, event: any): void {
         if (event.preventDefault) {
             event.preventDefault();

@@ -4,7 +4,17 @@ import {
     TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { TicketService, TicketData, TicketNotification } from '@kix/core/dist/browser/ticket/';
+import {
+    TicketData,
+    TicketNotification,
+    TicketService,
+    TicketTableContentProvider,
+    TicketTableLabelProvider,
+    TicketTableSelectionListener,
+    TicketUtil
+} from '@kix/core/dist/browser/ticket/';
+import { StandardTableConfiguration } from '@kix/core/dist/browser';
+import { StandardTableColumn } from '../../../../../../core/dist/browser/standard-table/StandardTableColumn';
 
 class TicketListWidgetComponent {
 
@@ -24,14 +34,13 @@ class TicketListWidgetComponent {
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        this.loadTickets();
+        this.setTableConfiguration();
     }
 
-    public contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
+    private contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
         if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
             const contextFilter: ContextFilter = args[0];
             if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
@@ -44,7 +53,7 @@ class TicketListWidgetComponent {
             const context = ContextService.getInstance().getContext();
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-            this.loadTickets();
+            this.setTableConfiguration();
         } else if (type === ContextNotification.OBJECT_LIST_UPDATED) {
             const tickets: Ticket[] = args[0];
             if (requestId === this.state.instanceId && tickets) {
@@ -55,13 +64,35 @@ class TicketListWidgetComponent {
         }
     }
 
-    private loadTickets(): void {
+    private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const settings = this.state.widgetConfiguration.settings;
-            if (settings.properties.findIndex((p) => p === TicketProperty.QUEUE_ID) < 0) {
-                settings.properties.push(TicketProperty.QUEUE_ID);
+            const labelProvider = new TicketTableLabelProvider();
+
+            const columnConfig: StandardTableColumn[] = [];
+            for (const prop of this.state.widgetConfiguration.settings.properties) {
+                if (prop === TicketProperty.PRIORITY_ID) {
+                    columnConfig.push(new StandardTableColumn(prop, 'Priority', false, true));
+                } else if (prop === TicketProperty.STATE_ID) {
+                    columnConfig.push(new StandardTableColumn(prop, 'TicketState', false, true));
+                } else if (prop === TicketProperty.SERVICE_ID) {
+                    columnConfig.push(new StandardTableColumn(prop, 'IncidentState', true, true));
+                } else if (prop === TicketProperty.LOCK_ID) {
+                    columnConfig.push(new StandardTableColumn(prop, 'TicketLock', false, true));
+                } else {
+                    columnConfig.push(new StandardTableColumn(prop, '', true, false));
+                }
             }
-            TicketService.getInstance().searchTickets(this.state.instanceId, settings.limit, settings.properties);
+
+            const contentProvider = new TicketTableContentProvider(
+                this.state.instanceId,
+                this.state.widgetConfiguration.settings.displayLimit,
+                columnConfig
+            );
+            const selectionListener = new TicketTableSelectionListener();
+
+            this.state.tableConfiguration = new StandardTableConfiguration(
+                labelProvider, contentProvider, selectionListener, true, true
+            );
         }
     }
 

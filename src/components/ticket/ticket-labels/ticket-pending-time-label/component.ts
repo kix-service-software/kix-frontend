@@ -42,7 +42,7 @@ export class TicketStateLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.PENDING_TIME);
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.PENDING_TIME);
         this.state.displayValue = TicketUtil.getDateTimeString(this.state.pendingTime);
         this.state.isPendingReached = TicketUtil.isPendingReached(this.state.pendingTime);
     }

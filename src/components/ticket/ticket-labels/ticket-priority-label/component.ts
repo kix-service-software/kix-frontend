@@ -33,9 +33,9 @@ export class TicketPriorityLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.PRIORITY_ID);
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.PRIORITY_ID);
         this.state.displayValue =
-            TicketUtil.getPropertyDisplayName(TicketProperty.PRIORITY_ID, this.state.priorityId, this.state.ticketId);
+            TicketUtil.getPropertyValue(TicketProperty.PRIORITY_ID, this.state.priorityId, this.state.ticketId);
     }
 }
 

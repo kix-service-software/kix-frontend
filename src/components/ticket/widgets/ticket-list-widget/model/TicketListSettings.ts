@@ -1,3 +1,5 @@
+import { TicketProperty } from "@kix/core/dist/model";
+
 export class TicketListSettings {
 
     public limit: number;
@@ -6,6 +8,6 @@ export class TicketListSettings {
 
     public showTotalCount: boolean;
 
-    public properties: string[];
+    public properties: TicketProperty[];
 
 }

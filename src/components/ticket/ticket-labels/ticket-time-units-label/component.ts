@@ -34,7 +34,7 @@ export class TicketStateLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.TIME_UNITS);
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.TIME_UNITS);
         this.state.displayValue = this.state.value + ' ' + TicketUtil.getTimeAccountUnit();
     }
 }

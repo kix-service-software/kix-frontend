@@ -43,8 +43,8 @@ export class TicketContactLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.CUSTOMER_USER_ID);
-        this.state.displayValue = TicketUtil.getPropertyDisplayName(
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.CUSTOMER_USER_ID);
+        this.state.displayValue = TicketUtil.getPropertyValue(
             TicketProperty.CUSTOMER_USER_ID, this.state.customerUserId, this.state.ticketId
         );
 

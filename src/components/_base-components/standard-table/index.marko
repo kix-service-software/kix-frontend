@@ -1,39 +1,46 @@
-<div.standard-table-wrapper>
-    <div.standard-table>
-        <div.row.header-row>
-            <if(state.tableConfiguration.rowSelectionEnabled)>
-                <div.table-cell.table-header-cell.fixed>
-                    <input type="checkbox"/>
-                </div>
-            </if>
-            <for(column in state.columns)>
-                <div.table-cell.table-header-cell data-id=column>
-                    ${column}
-                    <div.move-point on-mousedown('mousedown', column)/>
-                </div>
-            </for>
-            <if(state.tableConfiguration.toggleRowEnabled)>
-                <div.table-cell.table-header-cell.fixed>
-                    <span.kix-icon-sort-down/>
-                </div>
-            </if>
-        </div>
-        <for(row in state.rows)>
-            <div.row>
+<if(state.tableConfiguration)>
+    <div.standard-table-wrapper>
+        <div.standard-table>
+            <div.row.header-row>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
-                    <div.table-cell.fixed>
+                    <div.table-cell.table-header-cell.fixed>
                         <input type="checkbox"/>
                     </div>
                 </if>
-                <for(column in state.columns)>
-                    <div.table-cell>Value</div>
+                <for(column in component.getColumnIds())>
+                    <div.table-cell.table-header-cell data-id=column>
+                        ${component.getColumnTitle(column)}
+                        <div.move-point on-mousedown('mousedown', column)/>
+                    </div>
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
-                    <div.table-cell.fixed>
+                    <div.table-cell.table-header-cell.fixed>
                         <span.kix-icon-sort-down/>
                     </div>
                 </if>
             </div>
-        </for>
+            <for(row in component.getRows())>
+                <div.row>
+                    <if(state.tableConfiguration.rowSelectionEnabled)>
+                        <div.table-cell.fixed>
+                            <input type="checkbox"/>
+                        </div>
+                    </if>
+                    <for(column in component.getColumnIds())>
+                        <div.table-cell>
+                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
+                            <if(component.getColumnConfiguration(column).hasIcon)>
+                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            </if>
+                        </div>
+                    </for>
+                    <if(state.tableConfiguration.toggleRowEnabled)>
+                        <div.table-cell.fixed>
+                            <span.kix-icon-sort-down/>
+                        </div>
+                    </if>
+                </div>
+            </for>
+        </div>
     </div>
-</div>
+</if>

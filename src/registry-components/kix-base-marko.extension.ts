@@ -81,7 +81,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['home', 'home/home-module'],
             ['reports', 'reports/reports-module'],
             ['search', 'search/search-module'],
-            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog']
+            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog'],
+            ['icon', '_base-components/icon']
         ];
     }
 
@@ -143,6 +144,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
             ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content'],
+            ['ticket-property-label', 'ticket/ticket-labels/ticket-property-label'],
             ...widgets,
             ...explorer,
             ...dialogs,

@@ -35,9 +35,9 @@ export class TicketStateLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.SERVICE_ID);
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.SERVICE_ID);
         this.state.displayValue =
-            TicketUtil.getPropertyDisplayName(TicketProperty.SERVICE_ID, this.state.serviceId, this.state.ticketId);
+            TicketUtil.getPropertyValue(TicketProperty.SERVICE_ID, this.state.serviceId, this.state.ticketId);
 
         const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
         if (ticketData) {

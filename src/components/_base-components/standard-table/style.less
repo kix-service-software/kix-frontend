@@ -14,10 +14,12 @@
             height: 100%;
             text-align: center;
             line-height: @header-height;
-            min-width: @cell-min-width;
+            width: @cell-min-width;
             display: inline-block;
             vertical-align: top;
-            white-space: normal;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             border-right: 1px solid darkgray;
             position: relative;
             background-color: #ffffff;
@@ -34,6 +36,7 @@
         .row {
             display: block;
             white-space: nowrap;
+            height: 30px;
             &.header-row {
                 position: relative;
                 z-index: 2;

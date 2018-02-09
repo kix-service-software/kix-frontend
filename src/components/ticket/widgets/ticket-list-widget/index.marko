@@ -9,10 +9,8 @@
         </if>
     </@title>
     <@content>
-        <if(state.widgetConfiguration)>
-            <ticket-table displayLimit=state.widgetConfiguration.settings.displayLimit tickets=state.filteredTickets
-                properties=state.widgetConfiguration.settings.properties
-                contextDependent=state.widgetConfiguration.contextDependent/>
+        <if(state.tableConfiguration)>
+            <standard-table tableConfiguration=state.tableConfiguration/>
         </if>
     </@content>
     <@filter>

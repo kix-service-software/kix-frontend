@@ -7,8 +7,6 @@ export class StandardTableComponentState<T = any> {
 
     public resizeSettings: ResizeSettings = new ResizeSettings();
 
-    public columns: string[] = [];
-
     public rows: T[] = [];
 
 }

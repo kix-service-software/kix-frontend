@@ -34,7 +34,7 @@ export class TicketAgeLabelComponent {
     }
 
     private setDisplayValue(): void {
-        this.state.label = TicketUtil.getPropertyLabelName(TicketProperty.AGE);
+        this.state.label = TicketUtil.getPropertyName(TicketProperty.AGE);
         this.state.displayValue = TicketUtil.calculateAge(this.state.age);
     }
 }
