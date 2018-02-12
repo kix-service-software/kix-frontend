@@ -34,10 +34,10 @@
                     </if>
                     <for(columnId in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(column).isObjectProperty)>
-                                <object-property-label object=row property=column hasLabel=false
-                                    hasText=component.getColumnConfiguration(column).hasText
-                                    hasIcon=component.getColumnConfiguration(column).hasIcon/>
+                            <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                <object-property-label object=row property=columnId hasLabel=false
+                                    hasText=component.getColumnConfiguration(columnId).hasText
+                                    hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                             </if>
                             <else>
                                 <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
