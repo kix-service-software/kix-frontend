@@ -14,36 +14,38 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         // Content Widgets
         const ticketInfoLane =
             new ConfiguredWidget("ticket-information-lane", new WidgetConfiguration(
-                "ticket-info-widget", "Ticketinformationen", [], {},
+                "ticket-info-widget", "Ticketinformationen", ['print-ticket-action', 'edit-ticket-action'], {},
                 WidgetType.LANE_TAB, false, true, true, WidgetSize.SMALL, null, false)
             );
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
-                "ticket-history-widget", "Historie", [], {},
+                "ticket-history-widget", "Historie", ['print-ticket-action'], {},
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
-                "ticket-description-widget", "Beschreibung & Anmerkungen", [], {},
+                "ticket-description-widget", "Beschreibung & Anmerkungen",
+                ['print-ticket-action', 'edit-ticket-action'], {},
                 WidgetType.LANE, false, true, true, WidgetSize.BOTH, null, false)
             );
         const processLane =
             new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Prozessinformationen", [], {
+                "ticket-dynamic-fields-widget", "Prozessinformationen", ['print-ticket-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder", [], {
+                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder",
+                ['print-ticket-action', 'edit-ticket-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
-                "ticket-linked-objects-widget", "Verknüpfte Objekte", [], {},
+                "ticket-linked-objects-widget", "Verknüpfte Objekte", ['print-ticket-action', 'edit-ticket-action'], {},
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
 

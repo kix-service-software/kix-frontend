@@ -1,4 +1,9 @@
-<div.action on-click('doAction')>
-    <span.kix-icon-print/>
-    <span>Drucken</span>
-</div>
+<if(input.short)>
+    <span.kix-icon-print on-click('doAction')/>
+</if>
+<else>
+    <div.action on-click('doAction')>
+        <span.kix-icon-print/>
+        <span>Drucken</span>
+    </div>
+</else>
