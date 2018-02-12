@@ -83,9 +83,13 @@
     <@actions/>
     <@contentActions>
         <ul.content-actions>
-            <li>
-                <span.kix-icon-print on-click('print')/>
-            </li>
+            <if(state.widgetConfiguration)>
+                <for(action in state.widgetConfiguration.actions)>
+                    <li>
+                        <include(component.getTemplate(action)) short=true/>
+                    </li>
+                </for>
+            </if>
         </ul>
     </@contentActions>
 </widget>
