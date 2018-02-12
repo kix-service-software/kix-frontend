@@ -1,0 +1,19 @@
+<if(state.object)>
+    <if(component.isTicket())>
+        <ticket-property-label ticket=state.object property=state.property hasLabel=state.hasLabel hasText=state.hasText
+            hasIcon=state.hasIcon/>
+    </if>
+    <else>
+        <key-value-pair showKey=state.hasLabel>
+            <@key>${state.property}</@key>
+            <@value>
+                <if(state.hasText)>
+                    <span.text>${component.getValue()}</span>
+                </if>
+                <if(state.hasIcon)>
+                    <icon object=state.property objectId=component.getValue()/>
+                </if>
+            </@value>
+        </key-value-pair>
+    </else>
+</if>

@@ -1,9 +1,11 @@
-<key-value-pair showKey=input.showLabel>
+<key-value-pair showKey=input.hasLabel>
     <@key>${state.label}</@key>
     <@value>
-        <if(input.showLabel)>
+        <if(input.hasText)>
             <span.text>${state.displayValue}</span>
         </if>
-        <icon object="TicketState" objectId=state.stateId/>
+        <if(input.hasIcon)>
+            <icon object="TicketState" objectId=state.stateId/>
+        </if>
     </@value>
 </key-value-pair>
