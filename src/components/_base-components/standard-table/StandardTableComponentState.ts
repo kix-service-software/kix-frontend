@@ -9,8 +9,4 @@ export class StandardTableComponentState<T = any> {
 
     public rows: T[] = [];
 
-    public selectedRows: T[] = [];
-
-    public checkAll: boolean = false;
-
 }
