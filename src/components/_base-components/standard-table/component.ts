@@ -33,41 +33,44 @@ class StandardTableComponent<T> {
     }
 
     private initTableScrollRange(): void {
-        const table = (this as any).getEl('standard-table');
-        const header = (this as any).getEl('header-row');
-        const fixedLeftHeader = (this as any).getEl('fixed-left-header');
-        const fixedRightHeader = (this as any).getEl('fixed-right-header');
-        const fixedLeftColumns = (this as any).getEls('fixed-left-column');
-        const fixedRightColumns = (this as any).getEls('fixed-right-column');
-        const scrollbars = (this as any).getEls('scrollbar-column');
-        const subRows = (this as any).getEls('sub-row-wrapper');
-        if (table) {
-            table.addEventListener('ps-scroll-y', () => {
-                header.style.top = table.scrollTop + 'px';
-            });
+        setTimeout(() => {
+            const table = (this as any).getEl('standard-table');
+            const header = (this as any).getEl('header-row');
+            const fixedLeftHeader = (this as any).getEl('fixed-left-header');
+            const fixedRightHeader = (this as any).getEl('fixed-right-header');
 
-            // linke, rechte Spalte und geöffnete Zeile fixieren
-            table.addEventListener('ps-scroll-x', () => {
-                fixedLeftHeader.style.left = table.scrollLeft + 'px';
-                for (const leftCol of fixedLeftColumns) {
-                    leftCol.style.left = table.scrollLeft + 'px';
-                }
+            const fixedLeftColumns: any = document.querySelectorAll("[data-id='fixed-left-column']");
+            const fixedRightColumns: any = document.querySelectorAll("[data-id='fixed-right-column']");
+            const scrollbars: any = document.querySelectorAll("[data-id='scrollbar-column']");
+            const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
 
-                fixedRightHeader.style.right = ((table.scrollLeft + 24) * -1) + 'px';
-                for (const rightCol of fixedRightColumns) {
-                    rightCol.style.right = ((table.scrollLeft + 24) * -1) + 'px';
-                }
+            if (table) {
+                table.addEventListener('ps-scroll-y', () => {
+                    header.style.top = table.scrollTop + 'px';
+                });
 
-                for (const sb of scrollbars) {
-                    // 24 == 2em == Breite der Scrollbarspalte
-                    sb.style.right = (table.scrollLeft * -1) + 'px';
-                }
+                // linke, rechte Spalte und geöffnete Zeile fixieren
+                table.addEventListener('ps-scroll-x', () => {
+                    fixedLeftHeader.style.left = table.scrollLeft + 'px';
+                    fixedLeftColumns.forEach((element: any) => {
+                        element.style.left = table.scrollLeft + 'px';
+                    });
 
-                for (const row of subRows) {
-                    row.style.left = table.scrollLeft + 'px';
-                }
-            });
-        }
+                    fixedRightHeader.style.right = ((table.scrollLeft + 24) * -1) + 'px';
+                    fixedRightColumns.forEach((element: any) => {
+                        element.style.right = ((table.scrollLeft + 24) * -1) + 'px';
+                    });
+
+                    scrollbars.forEach((element: any) => {
+                        element.style.right = (table.scrollLeft * -1) + 'px';
+                    });
+
+                    subRows.forEach((element: any) => {
+                        element.style.left = table.scrollLeft + 'px';
+                    });
+                });
+            }
+        }, 500);
     }
 
     private getRows(): T[] {

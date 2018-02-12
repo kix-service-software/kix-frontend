@@ -29,7 +29,7 @@
             <for(row in component.getRows())>
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed.fixed-left key="fixed-left-column[]">
+                        <div.table-cell.fixed.fixed-left data-id="fixed-left-column">
                             <input type="checkbox"/>
                         </div>
                     </if>
@@ -43,11 +43,11 @@
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
-                        <div.table-cell.fixed.fixed-right.toggle-row-column key="fixed-right-column[]">
+                        <div.table-cell.fixed.fixed-right.toggle-row-column data-id="fixed-right-column">
                             <span.kix-icon-sort-down/>
                         </div>
                     </if>
-                    <div.table-cell.fixed.fixed-right.scrollbar-column key="scrollbar-column[]">&nbsp;</div>
+                    <div.table-cell.fixed.fixed-right.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
             </for>
             <for(row in component.getRows())>
