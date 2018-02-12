@@ -1,6 +1,7 @@
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTableConfiguration, StandardTableColumn } from '@kix/core/dist/browser';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 class StandardTableComponent<T> {
 
@@ -71,6 +72,14 @@ class StandardTableComponent<T> {
 
     private mouseup(): void {
         this.state.resizeSettings.resizeColumn = undefined;
+    }
+
+    private sortUp(columnId: string): void {
+        this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
+    }
+
+    private sortDown(columnId: string): void {
+        this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
     }
 
 

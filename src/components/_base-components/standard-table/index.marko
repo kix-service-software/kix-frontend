@@ -7,10 +7,16 @@
                         <input type="checkbox"/>
                     </div>
                 </if>
-                <for(column in component.getColumnIds())>
-                    <div.table-cell.table-header-cell data-id=column>
-                        ${component.getColumnTitle(column)}
-                        <div.move-point on-mousedown('mousedown', column)/>
+                <for(columnId in component.getColumnIds())>
+                    <div.table-cell.table-header-cell data-id=columnId>
+                        ${component.getColumnTitle(columnId)}
+                        <if(component.getColumnConfiguration(columnId).sortable)>
+                            <span.sortable>
+                                <span.kix-icon-sort-up on-click('sortUp', columnId)/>
+                                <span.kix-icon-sort-down on-click('sortDown', columnId)/>
+                            </span>
+                        </if>
+                        <div.move-point on-mousedown('mousedown', columnId)/>
                     </div>
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
@@ -26,11 +32,12 @@
                             <input type="checkbox"/>
                         </div>
                     </if>
-                    <for(column in component.getColumnIds())>
+                    <for(columnId in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
-                            <if(component.getColumnConfiguration(column).hasIcon)>
-                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                            <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                <icon object=component.getColumnConfiguration(columnId).property
+                                    objectId=component.getColumnObjectValue(row, columnId)/>
                             </if>
                         </div>
                     </for>
