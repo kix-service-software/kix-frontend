@@ -82,6 +82,17 @@ class StandardTableComponent<T> {
         this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
     }
 
+    private selectAll(): void {
+        if (this.state.checkAll) {
+            this.state.tableConfiguration.selectionListener.selectionChanged([]);
+        } else {
+            this.state.tableConfiguration.selectionListener.selectionChanged(this.state.rows);
+        }
+    }
+
+    private selectRow(row: any, event: any): void {
+        //
+    }
 
 }
 
