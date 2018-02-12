@@ -3,7 +3,7 @@
         <div.standard-table>
             <div.row.header-row>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
-                    <div.table-cell.table-header-cell.fixed>
+                    <div.table-cell.table-header-cell.fixed.fixed-left>
                         <input type="checkbox"/>
                     </div>
                 </if>
@@ -14,15 +14,16 @@
                     </div>
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
-                    <div.table-cell.table-header-cell.fixed>
+                    <div.table-cell.table-header-cell.fixed.fixed-right.toggle-row-column>
                         <span.kix-icon-sort-down/>
                     </div>
                 </if>
+                <div.table-cell.table-header-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
             </div>
             <for(row in component.getRows())>
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed>
+                        <div.table-cell.fixed.fixed-left>
                             <input type="checkbox"/>
                         </div>
                     </if>
@@ -35,10 +36,57 @@
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
-                        <div.table-cell.fixed>
+                        <div.table-cell.fixed.fixed-right.toggle-row-column>
                             <span.kix-icon-sort-down/>
                         </div>
                     </if>
+                    <div.table-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
+                </div>
+            </for>
+            <for(row in component.getRows())>
+                <div.row>
+                    <if(state.tableConfiguration.rowSelectionEnabled)>
+                        <div.table-cell.fixed.fixed-left>
+                            <input type="checkbox"/>
+                        </div>
+                    </if>
+                    <for(column in component.getColumnIds())>
+                        <div.table-cell>
+                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
+                            <if(component.getColumnConfiguration(column).hasIcon)>
+                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            </if>
+                        </div>
+                    </for>
+                    <if(state.tableConfiguration.toggleRowEnabled)>
+                        <div.table-cell.fixed.fixed-right.toggle-row-column>
+                            <span.kix-icon-sort-down/>
+                        </div>
+                    </if>
+                    <div.table-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
+                </div>
+            </for>
+            <for(row in component.getRows())>
+                <div.row>
+                    <if(state.tableConfiguration.rowSelectionEnabled)>
+                        <div.table-cell.fixed.fixed-left>
+                            <input type="checkbox"/>
+                        </div>
+                    </if>
+                    <for(column in component.getColumnIds())>
+                        <div.table-cell>
+                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
+                            <if(component.getColumnConfiguration(column).hasIcon)>
+                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            </if>
+                        </div>
+                    </for>
+                    <if(state.tableConfiguration.toggleRowEnabled)>
+                        <div.table-cell.fixed.fixed-right.toggle-row-column>
+                            <span.kix-icon-sort-down/>
+                        </div>
+                    </if>
+                    <div.table-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
                 </div>
             </for>
         </div>
