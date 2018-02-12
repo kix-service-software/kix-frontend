@@ -4,6 +4,7 @@ import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { TicketDetails } from '@kix/core/dist/model';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class LinkedObjectsWidgetComponent {
 
@@ -111,6 +112,10 @@ class LinkedObjectsWidgetComponent {
 
     private edit(): void {
         alert('Bearbeiten ...');
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 }
 

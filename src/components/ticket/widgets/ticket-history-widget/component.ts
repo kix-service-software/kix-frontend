@@ -4,6 +4,7 @@ import { TicketUtil, TicketService } from '@kix/core/dist/browser/ticket';
 import { TicketHistory } from '@kix/core/dist/model/ticket/TicketHistory';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class TicketHistoryWidgetComponent {
 
@@ -81,6 +82,10 @@ class TicketHistoryWidgetComponent {
 
     private print(): void {
         ApplicationStore.getInstance().toggleMainDialog();
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 
 }

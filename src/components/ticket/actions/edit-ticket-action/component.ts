@@ -3,7 +3,8 @@ import { ApplicationStore } from "@kix/core/dist/browser/application/Application
 export class EditTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleMainDialog('edit-ticket-dialog');
+        // ApplicationStore.getInstance().toggleMainDialog('edit-ticket-dialog');
+        alert("Bearbeiten ...");
     }
 
 }
