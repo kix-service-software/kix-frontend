@@ -66,9 +66,7 @@
                                         <a.article-link on-click('navigateToArticle', entry.ArticleID)>| Zum Artikel</a>
                                     </else>
                                 </td>
-                                <td.user>
-                                    <ticket-property-label property="UserID" value=entry.CreateBy showLabel=false/>
-                                </td>
+                                <td.user>${component.getUserName(entry.CreateBy)}</td>
                                 <td.created>| ${component.getDateTimeString(entry.CreateTime)}</td>
                             </tr>
                         </for>
