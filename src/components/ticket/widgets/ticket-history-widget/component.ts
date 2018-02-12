@@ -47,6 +47,10 @@ class TicketHistoryWidgetComponent {
         return TicketUtil.getDateTimeString(date);
     }
 
+    private getUserName(value: any): string {
+        return TicketUtil.getPropertyValue("UserID", value, this.state.ticketId);
+    }
+
     private navigateToArticle(articleId: number, event: any): void {
         event.stopPropagation();
 

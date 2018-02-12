@@ -110,8 +110,8 @@ describe('Ticket Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketRequest(
-                        new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
+                        new UpdateTicketRequest(
+                            new UpdateTicket('', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, []))
                     )
                     .reply(200, buildUpdateTicketResponse(123456));
             });
@@ -354,7 +354,7 @@ describe('Ticket Service', () => {
 
 function buildTicketResponse(id: number): TicketResponse {
     const response = new TicketResponse();
-    response.Ticket = new Ticket();
+    response.Ticket = new Ticket(null);
     response.Ticket.TicketID = id;
     return response;
 }

@@ -9,7 +9,7 @@
                         <ul>
                             <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
                                 <li.dynamic-field>
-                                    <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
+                                    <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID hasLabel=true hasText=true/>
                                 </li>
                             </for>
                         </ul>

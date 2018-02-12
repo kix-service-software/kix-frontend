@@ -28,10 +28,17 @@
                     </if>
                     <for(column in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
-                            <if(component.getColumnConfiguration(column).hasIcon)>
-                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            <if(component.getColumnConfiguration(column).isObjectProperty)>
+                                <object-property-label object=row property=column hasLabel=false
+                                    hasText=component.getColumnConfiguration(column).hasText
+                                    hasIcon=component.getColumnConfiguration(column).hasIcon/>
                             </if>
+                            <else>
+                                <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
+                                <if(component.getColumnConfiguration(column).hasIcon)>
+                                    <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                                </if>
+                            </else>
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
