@@ -30,7 +30,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const processLane =
             new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Prozessinformationen", [], {
-                    dynamicFields: [16, 2526, 13, 14, 11, 12]
+                    dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
