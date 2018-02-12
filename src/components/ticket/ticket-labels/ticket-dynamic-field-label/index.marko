@@ -7,6 +7,11 @@
                     <input type="checkbox" checked=state.displayValue value=state.Value readonly="readonly" disabled="disabled"/>
                 </span>
             </if>
+            <else-if(state.field.FieldType === "TextArea")>
+                <span.text>
+                    <textarea rows=3>${state.displayValue}</textarea>
+                </span>
+            </else-if>
             <else-if(Array.isArray(state.displayValue))>
                 <for(value in state.displayValue)>
                     <span.text>${value}</span>
