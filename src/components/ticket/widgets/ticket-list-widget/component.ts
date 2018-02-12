@@ -14,7 +14,7 @@ import {
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
 import { StandardTableConfiguration } from '@kix/core/dist/browser';
-import { StandardTableColumn } from '../../../../../../core/dist/browser/standard-table/StandardTableColumn';
+import { StandardTableColumn } from '@kix/core/dist/browser/standard-table/StandardTableColumn';
 
 class TicketListWidgetComponent {
 
