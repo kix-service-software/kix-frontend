@@ -70,7 +70,11 @@ class StandardTableComponent<T> {
                     });
                 });
             }
-        }, 500);
+        }, 100);
+    }
+
+    public onUpdate(): void {
+        this.initTableScrollRange();
     }
 
     private getRows(): T[] {
