@@ -1,2 +1,4 @@
-<include(component.getLabelComponent(data.property)) showLabel=state.showLabel ticketId=data.ticketId
-    property=data.property value=data.value/>
+<if(state.property && state.ticketId)>
+    <include(component.getLabelComponent(state.property)) hasLabel=state.hasLabel hasText=state.hasText
+        hasIcon=state.hasIcon ticketId=state.ticketId property=state.property value=state.value/>
+</if>

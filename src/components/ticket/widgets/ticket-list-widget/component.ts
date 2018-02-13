@@ -71,15 +71,15 @@ class TicketListWidgetComponent {
             const columnConfig: StandardTableColumn[] = [];
             for (const prop of this.state.widgetConfiguration.settings.properties) {
                 if (prop === TicketProperty.PRIORITY_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'Priority', false, true));
+                    columnConfig.push(new StandardTableColumn(prop, 'Priority', true, false, true));
                 } else if (prop === TicketProperty.STATE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketState', false, true));
+                    columnConfig.push(new StandardTableColumn(prop, 'TicketState', true, false, true));
                 } else if (prop === TicketProperty.SERVICE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'IncidentState', true, true));
+                    columnConfig.push(new StandardTableColumn(prop, 'IncidentState', true, true, true));
                 } else if (prop === TicketProperty.LOCK_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketLock', false, true));
+                    columnConfig.push(new StandardTableColumn(prop, 'TicketLock', true, false, true));
                 } else {
-                    columnConfig.push(new StandardTableColumn(prop, '', true, false));
+                    columnConfig.push(new StandardTableColumn(prop, '', true, true, false));
                 }
             }
 

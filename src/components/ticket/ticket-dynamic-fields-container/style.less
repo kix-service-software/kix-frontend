@@ -27,18 +27,20 @@
                             width: 160px;
                             text-align: right;
                             margin-right: .5em;
-                            display: inline-block;
+                            float: left;
                         }
                         .info {
                             width: 1.5em;
                             margin-right: .5em;
                             text-align: center;
+                            float: left;
                             .overlay-info-icon {
                                 color: #000000;
                             }
                         }
                         .value {
-                            display: inline-block;
+                            display: block;
+                            margin-left: 180px;
                             .text {
                                 min-width: 20px;
                                 height: 100%;
@@ -48,9 +50,16 @@
                                 padding: 0 1em;
                                 margin-right: .5em;
                                 background-color: #fefefe;
-                                display: inline-block;
+                                display: block;
+                                &.multi-text {
+                                    display: inline-block;
+                                }
                                 textarea {
-                                    width: 50%;
+                                    width: 100%;
+                                    border: 0 none;
+                                    height: 70px;
+                                    overflow: auto;
+                                    resize: none;
                                 }
                             }
                         }

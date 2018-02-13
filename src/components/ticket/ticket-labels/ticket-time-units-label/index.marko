@@ -1,6 +1,8 @@
-<key-value-pair showKey=input.showLabel>
+<key-value-pair showKey=input.hasLabel>
     <@key>${state.label}</@key>
     <@value>
-        <span.text>${state.displayValue}</span>
+        <if(input.hasText)>
+            <span.text>${state.displayValue}</span>
+        </if>
     </@value>
 </key-value-pair>
