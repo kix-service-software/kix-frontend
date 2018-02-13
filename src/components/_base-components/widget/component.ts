@@ -19,7 +19,6 @@ class WidgetComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
         const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
         if (config) {
             this.state.minimizable = config.minimizable;
@@ -51,10 +50,6 @@ class WidgetComponent {
 
     private resetConfiguration(): void {
         this.state.configChanged = false;
-    }
-
-    private applicationStateChanged() {
-        (this as any).setStateDirty();
     }
 
     private isConfigMode(): boolean {
