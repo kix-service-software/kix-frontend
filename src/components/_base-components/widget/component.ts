@@ -1,6 +1,7 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class WidgetComponent {
 
@@ -11,7 +12,7 @@ class WidgetComponent {
     }
 
     public onInput(input: any): void {
-        this.state.instanceId = input.instanceId;
+        this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedRandomId();
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
         this.state.hasConfigOverlay = input.hasConfigOverlay !== undefined ? input.hasConfigOverlay : false;
