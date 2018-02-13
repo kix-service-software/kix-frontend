@@ -4,7 +4,7 @@
             <div.row.header-row>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <div.table-cell.table-header-cell.fixed>
-                        <input type="checkbox"/>
+                        <input type="checkbox" on-click('selectAll')/>
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>
@@ -29,7 +29,7 @@
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed>
-                            <input type="checkbox"/>
+                            <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
                         </div>
                     </if>
                     <for(columnId in component.getColumnIds())>
