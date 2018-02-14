@@ -25,39 +25,14 @@
                             <@title>${linkedObjectGroup} (${state.linkedObjects.get(linkedObjectGroup).size})</@title>
                             <@content>
                                 <div.linked-object-table-container>
-                                    <table.linked-object-table>
+                                    <if(state.ticketTableConfiguration)>
+                                        <standard-table tableConfiguration=state.ticketTableConfiguration/>
+                                    </if>
+                                    <!-- <table.linked-object-table>
                                         <thead>
                                             <tr>
                                                 <th.object-hook>
                                                     ${state.ticketData.ticketHook}
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-title>
-                                                    Titel
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-type>
-                                                    Typ
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object.queue>
-                                                    Queue
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-state>
-                                                    Status
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
@@ -85,24 +60,6 @@
                                                     <td.object-hook>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.TicketNumber}</a>
                                                     </td>
-                                                    <td.object-title>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.Title}</a>
-                                                    </td>
-                                                    <td.object-type>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="TypeID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
-                                                    <td.object-queue>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="QueueID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
-                                                    <td.object-state>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="StateID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
                                                     <td.object-created>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
                                                             ${component.getDateTimeString(object.Created)}
@@ -116,7 +73,7 @@
                                                 </tr>
                                             </for>
                                         </tbody>
-                                    </table>
+                                    </table> -->
                                 </div>
                             </@content>
                             <@filter/>
