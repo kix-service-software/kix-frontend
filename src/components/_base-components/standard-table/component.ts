@@ -109,7 +109,7 @@ class StandardTableComponent<T> {
         let spacerHeight = 0;
         const remainder = this.state.tableConfiguration.contentProvider.getLimit() - this.getRows().length;
         if (remainder > 0) {
-            spacerHeight = remainder * this.state.tableConfiguration.type;
+            spacerHeight = remainder * this.state.tableConfiguration.rowHeight;
         }
         return spacerHeight + 'px';
     }
