@@ -21,7 +21,9 @@
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
                     <div.table-cell.table-header-cell.fixed>
-                        <span.kix-icon-sort-down/>
+                        <!-- TODO: nur zum testen um "on-click" erweitert -->
+                        <!-- <span.kix-icon-sort-down/> -->
+                        <span.kix-icon-sort-down on-click('loadMore')/>
                     </div>
                 </if>
             </div>
@@ -55,6 +57,7 @@
                     </if>
                 </div>
             </for>
+            <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
         </div>
     </div>
 </if>

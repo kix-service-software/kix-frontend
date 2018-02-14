@@ -101,6 +101,18 @@ class StandardTableComponent<T> {
         this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
     }
 
+    private loadMore(): void {
+        this.state.tableConfiguration.contentProvider.increaseDisplayLimit();
+    }
+
+    public getSpacerHeight(): string {
+        let spacerHeight = 0;
+        const remainder = this.state.tableConfiguration.contentProvider.getLimit() - this.getRows().length;
+        if (remainder > 0) {
+            spacerHeight = remainder * this.state.tableConfiguration.type;
+        }
+        return spacerHeight + 'px';
+    }
 }
 
 module.exports = StandardTableComponent;
