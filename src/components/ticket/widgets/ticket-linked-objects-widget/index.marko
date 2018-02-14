@@ -28,52 +28,6 @@
                                     <if(state.ticketTableConfiguration)>
                                         <standard-table tableConfiguration=state.ticketTableConfiguration/>
                                     </if>
-                                    <!-- <table.linked-object-table>
-                                        <thead>
-                                            <tr>
-                                                <th.object-hook>
-                                                    ${state.ticketData.ticketHook}
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-created>
-                                                    Erstellt
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-link-type>
-                                                    Verknüpft als
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <for(object in Array.from(state.linkedObjects.get(linkedObjectGroup).keys()))>
-                                                <tr>
-                                                    <td.object-hook>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.TicketNumber}</a>
-                                                    </td>
-                                                    <td.object-created>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            ${component.getDateTimeString(object.Created)}
-                                                        </a>
-                                                    </td>
-                                                    <td.object-link-type>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            ${state.linkedObjects.get(linkedObjectGroup).get(object)}
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </for>
-                                        </tbody>
-                                    </table> -->
                                 </div>
                             </@content>
                             <@filter/>

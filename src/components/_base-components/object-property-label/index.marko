@@ -8,10 +8,10 @@
             <@key>${state.property}</@key>
             <@value>
                 <if(state.hasText)>
-                    <span.text>${component.getValue()}</span>
+                    <span.text title=component.getValue()>${component.getValue()}</span>
                 </if>
                 <if(state.hasIcon)>
-                    <icon object=state.property objectId=component.getValue()/>
+                    <icon object=state.property objectId=component.getValue() title=component.getValue()/>
                 </if>
             </@value>
         </key-value-pair>
