@@ -53,12 +53,13 @@ class DynamicFieldWidgetComponent {
     }
 
     private expandWidget(): void {
-        ApplicationStore.getInstance().toggleMainDialog(
-            'ticket-dynamic-fields-container', {
-                dynamicFields: this.state.dynamicFields,
-                ticketId: this.state.ticketId
-            }
-        );
+        // ApplicationStore.getInstance().toggleMainDialog(
+        //     'ticket-dynamic-fields-container', {
+        //         dynamicFields: this.state.dynamicFields,
+        //         ticketId: this.state.ticketId
+        //     }
+        // );
+        alert('Großansicht ...');
     }
 
     private print(): void {

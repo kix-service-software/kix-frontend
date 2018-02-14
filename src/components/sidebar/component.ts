@@ -22,7 +22,6 @@ class SidebarComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
     }
 
@@ -48,10 +47,6 @@ class SidebarComponent {
                 this.state.sidebarBarExpanded = false;
             }
         }
-    }
-
-    private applicationStateChanged(): void {
-        //
     }
 
     private toggleSidebarWidget(instanceId: string): void {
