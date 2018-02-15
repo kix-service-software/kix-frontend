@@ -33,7 +33,7 @@
                         </div>
                     </if>
                     <for(columnId in component.getColumnIds())>
-                        <div.table-cell>
+                        <div.table-cell on-click('rowClicked', row, columnId)>
                             <if(component.getColumnConfiguration(columnId).isObjectProperty)>
                                 <object-property-label object=row property=columnId hasLabel=false
                                     hasText=component.getColumnConfiguration(columnId).hasText
