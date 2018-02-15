@@ -6,6 +6,7 @@ import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 class StandardTableComponent<T> {
 
     private state: StandardTableComponentState;
+    private loadMoreTimeout: any = null;
 
     public onCreate(input: StandardTableInput): void {
         this.state = new StandardTableComponentState();
@@ -102,7 +103,21 @@ class StandardTableComponent<T> {
     }
 
     private loadMore(): void {
-        this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
+        const standardTable = (this as any).getEl('standard-table');
+        if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
+            const checkPos =
+                this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
+                * this.state.tableConfiguration.rowHeight;
+            if (standardTable.scrollTop > checkPos) {
+                this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
+
+                // check after increase if still more have to be loaded
+                this.loadMoreTimeout = setTimeout(() => {
+                    this.loadMoreTimeout = null;
+                    this.loadMore();
+                }, 66);
+            }
+        }
     }
 
     public getRowHeight(): string {

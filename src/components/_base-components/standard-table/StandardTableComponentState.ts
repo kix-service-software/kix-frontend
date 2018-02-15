@@ -8,5 +8,4 @@ export class StandardTableComponentState<T = any> {
     public resizeSettings: ResizeSettings = new ResizeSettings();
 
     public rows: T[] = [];
-
 }
