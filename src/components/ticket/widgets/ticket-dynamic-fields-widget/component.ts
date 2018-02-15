@@ -3,6 +3,7 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class DynamicFieldWidgetComponent {
 
@@ -52,12 +53,13 @@ class DynamicFieldWidgetComponent {
     }
 
     private expandWidget(): void {
-        ApplicationStore.getInstance().toggleMainDialog(
-            'ticket-dynamic-fields-container', {
-                dynamicFields: this.state.dynamicFields,
-                ticketId: this.state.ticketId
-            }
-        );
+        // ApplicationStore.getInstance().toggleMainDialog(
+        //     'ticket-dynamic-fields-container', {
+        //         dynamicFields: this.state.dynamicFields,
+        //         ticketId: this.state.ticketId
+        //     }
+        // );
+        alert('Großansicht ...');
     }
 
     private print(): void {
@@ -66,6 +68,10 @@ class DynamicFieldWidgetComponent {
 
     private edit(): void {
         alert('Bearbeiten ...');
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 }
 

@@ -2,6 +2,7 @@ import { TicketDescriptionComponentState } from './TicketDescriptionComponentSta
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
 import { Attachment } from '@kix/core/dist/model/';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class TicketDescriptionWidgetComponent {
 
@@ -69,6 +70,10 @@ class TicketDescriptionWidgetComponent {
 
     private maximize(): void {
         alert('Großansicht ...');
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 }
 

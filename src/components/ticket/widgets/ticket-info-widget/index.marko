@@ -9,12 +9,13 @@
     </@title>
     <@contentActions>
         <ul.content-actions>
-            <li>
-                <span.kix-icon-print on-click('print')/>
-            </li>
-            <li>
-                <span.kix-icon-edit on-click('edit')/>
-            </li>
+            <if(state.widgetConfiguration)>
+                <for(action in state.widgetConfiguration.actions)>
+                    <li>
+                        <include(component.getTemplate(action)) short=true/>
+                    </li>
+                </for>
+            </if>
         </ul>
     </@contentActions>
     <@content>
@@ -28,52 +29,52 @@
             </div>
             <ul.information-list.clearfix>
                 <li>
-                    <ticket-property-label ticketId=state.ticket.TicketID property="CustomerID" value=state.ticket.CustomerID/>
+                    <ticket-property-label ticket=state.ticket property="CustomerID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="TypeID" value=state.ticket.TypeID/>
+                    <ticket-property-label ticket=state.ticket property="TypeID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="ResponsibleID" value=state.ticket.ResponsibleID/>
+                    <ticket-property-label ticket=state.ticket property="ResponsibleID"/>
                 </li>
                 <li>
-                    <ticket-property-label ticketId=state.ticket.TicketID property="CustomerUserID" value=state.ticket.CustomerUserID/>
+                    <ticket-property-label ticket=state.ticket property="CustomerUserID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="ServiceID" value=state.ticket.ServiceID/>
+                    <ticket-property-label ticket=state.ticket property="ServiceID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="OwnerID" value=state.ticket.OwnerID/>
+                    <ticket-property-label ticket=state.ticket property="OwnerID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="Created" value=state.ticket.Created/>
+                    <ticket-property-label ticket=state.ticket property="Created"/>
                 </li>
                 <li>
-                    <ticket-property-label property="SLAID" value=state.ticket.SLAID/>
+                    <ticket-property-label ticket=state.ticket property="SLAID"/>
                 </li>
                 <if(state.isAccountTimeEnabled)>
                     <li>
-                        <ticket-property-label property="TimeUnits" value=state.ticket.TimeUnits/>
+                        <ticket-property-label ticket=state.ticket property="TimeUnits"/>
                     </li>
                 </if>
                 <li>
-                    <ticket-property-label property="Age" value=state.ticket.Age/>
+                    <ticket-property-label ticket=state.ticket property="Age"/>
                 </li>
                 <li>
-                    <ticket-property-label property="QueueID" value=state.ticket.QueueID/>
+                    <ticket-property-label ticket=state.ticket property="QueueID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="StateID" value=state.ticket.StateID/>
+                    <ticket-property-label ticket=state.ticket property="StateID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="LockID" value=state.ticket.LockID/>
+                    <ticket-property-label ticket=state.ticket property="LockID"/>
                 </li>
                 <li>
-                    <ticket-property-label property="PriorityID" value=state.ticket.PriorityID/>
+                    <ticket-property-label ticket=state.ticket property="PriorityID"/>
                 </li>
                 <if(state.isPending)>
                     <li>
-                        <ticket-property-label property="PendingTime" value=state.ticket.PendingTime/>
+                        <ticket-property-label ticket=state.ticket property="PendingTime"/>
                     </li>
                 </if>
             </ul>

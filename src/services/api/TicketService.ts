@@ -12,7 +12,6 @@ import {
     CreateTicket,
     CreateTicketRequest,
     CreateTicketResponse,
-    ExpandedTicketResponse,
     TicketHistoryItemResponse,
     TicketHistoryResponse,
     TicketResponse,
@@ -25,7 +24,6 @@ import {
 
 import {
     DynamicField,
-    AbstractTicket,
     Article,
     Attachment,
     Ticket,
@@ -51,24 +49,24 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     protected RESOURCE_URI: string = "tickets";
 
-    public async getTicket(token: string, ticketId: number): Promise<AbstractTicket> {
+    public async getTicket(token: string, ticketId: number): Promise<Ticket> {
         const query: any = { fields: 'Ticket.*', include: 'TimeUnits,DynamicFields,Links', expand: 'Links' };
-        const response = await this.getObject<ExpandedTicketResponse>(token, ticketId, query);
-        return response.Ticket;
+        const response = await this.getObject<TicketResponse>(token, ticketId, query);
+        return new Ticket(response.Ticket);
     }
 
     public async getTickets(
         token: string, properties: string[], limit: number,
         filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>,
         OR_SEARCH: boolean = false
-    ): Promise<AbstractTicket[]> {
+    ): Promise<Ticket[]> {
 
         const ticketProperties = this.getTicketProperties(properties).join(',');
         const ticketFilter = this.prepareTicketFilter(filter, OR_SEARCH);
         const query = new TicketQuery(ticketProperties, ticketFilter);
 
         const response = await this.getObjects<TicketsResponse>(token, limit, null, null, query);
-        return response.Ticket;
+        return response.Ticket.map((t) => new Ticket(t));
     }
 
     public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {

@@ -4,7 +4,7 @@
             <div.row.header-row key="header-row">
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <div.table-cell.table-header-cell.fixed.fixed-left key="fixed-left-header">
-                        <input type="checkbox"/>
+                        <input type="checkbox" on-click('selectAll')/>
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>
@@ -30,16 +30,23 @@
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed.fixed-left data-id="fixed-left-column">
-                            <input type="checkbox"/>
+                            <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
                         </div>
                     </if>
                     <for(columnId in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
-                            <if(component.getColumnConfiguration(columnId).hasIcon)>
-                                <icon object=component.getColumnConfiguration(columnId).property
-                                    objectId=component.getColumnObjectValue(row, columnId)/>
+                            <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                <object-property-label object=row property=columnId hasLabel=false
+                                    hasText=component.getColumnConfiguration(columnId).hasText
+                                    hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                             </if>
+                            <else>
+                                <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                    <icon object=component.getColumnConfiguration(columnId).property
+                                        objectId=component.getColumnObjectValue(row, columnId)/>
+                                </if>
+                            </else>
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>

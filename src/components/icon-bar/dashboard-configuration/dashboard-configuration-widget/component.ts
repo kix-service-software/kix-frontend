@@ -16,7 +16,6 @@ class DashboardConfigurationWidget {
     }
 
     public async onMount(input: any): Promise<void> {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
         const translationHandler = await TranslationHandler.getInstance();
         this.state.translations = translationHandler.getTranslations([
             DashboardConfigurationWidgetTranslationId.TITLE,
@@ -48,10 +47,6 @@ class DashboardConfigurationWidget {
 
     private getTranslation(id: DashboardConfigurationWidgetTranslationId): string {
         return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
-    }
-
-    private applicationStateChanged() {
-        (this as any).setStateDirty();
     }
 
     private isConfigMode(): boolean {

@@ -22,23 +22,29 @@
                 li.dynamic-field {
                     min-height: 2em;
                     display: block;
+                    margin-bottom: 4px;
+                    line-height: 2em;
                     .key-value-pair {
                         .key {
                             width: 160px;
                             text-align: right;
                             margin-right: .5em;
-                            display: inline-block;
+                            float: left;
+                            height: 100%;
                         }
                         .info {
                             width: 1.5em;
                             margin-right: .5em;
                             text-align: center;
+                            float: left;
                             .overlay-info-icon {
                                 color: #000000;
                             }
                         }
                         .value {
-                            display: inline-block;
+                            display: block;
+                            margin-left: 180px;
+                            height: 100%;
                             .text {
                                 min-width: 20px;
                                 height: 100%;
@@ -46,9 +52,19 @@
                                 border: 1px solid #f7f7f7;
                                 border-radius: 3px;
                                 padding: 0 1em;
-                                margin-right: .5em;
+                                margin-right: 4px;
                                 background-color: #fefefe;
-                                display: inline-block;
+                                display: block;
+                                &.multi-text {
+                                    display: inline-block;
+                                }
+                                textarea {
+                                    width: 100%;
+                                    height: 70px;
+                                    overflow: auto;
+                                    resize: none;
+                                    padding: .5em 0;
+                                }
                             }
                         }
                     }

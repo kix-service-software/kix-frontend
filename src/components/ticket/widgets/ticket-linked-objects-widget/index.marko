@@ -5,12 +5,13 @@
     </@title>
     <@contentActions>
         <ul.content-actions>
-            <li>
-                <span.kix-icon-print on-click('print')/>
-            </li>
-            <li>
-                <span.kix-icon-edit on-click('edit')/>
-            </li>
+            <if(state.widgetConfiguration)>
+                <for(action in state.widgetConfiguration.actions)>
+                    <li>
+                        <include(component.getTemplate(action)) short=true/>
+                    </li>
+                </for>
+            </if>
         </ul>
     </@contentActions>
     <@content>
@@ -27,49 +28,49 @@
                                     <table.linked-object-table>
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <th.object-hook>
                                                     ${state.ticketData.ticketHook}
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object-title>
                                                     Titel
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object-type>
                                                     Typ
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object.queue>
                                                     Queue
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object-state>
                                                     Status
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object-created>
                                                     Erstellt
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
                                                         <span.kix-icon-sort-down/>
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th.object-link-type>
                                                     Verknüpft als
                                                     <span.sortable>
                                                         <span.kix-icon-sort-up/>
@@ -81,38 +82,35 @@
                                         <tbody>
                                             <for(object in Array.from(state.linkedObjects.get(linkedObjectGroup).keys()))>
                                                 <tr>
-                                                    <td>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>| ${object.TicketNumber}</a>
+                                                    <td.object-hook>
+                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.TicketNumber}</a>
                                                     </td>
-                                                    <td>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>| ${object.Title}</a>
+                                                    <td.object-title>
+                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.Title}</a>
                                                     </td>
-                                                    <td>
+                                                    <td.object-type>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            |
-                                                            <ticket-property-label property="TypeID" value=object.TypeID showLabel=false/>
+                                                            <ticket-property-label ticket=object property="TypeID" hasLabel=false/>
                                                         </a>
                                                     </td>
-                                                    <td>
+                                                    <td.object-queue>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            |
-                                                            <ticket-property-label property="QueueID" value=object.QueueID showLabel=false/>
+                                                            <ticket-property-label ticket=object property="QueueID" hasLabel=false/>
                                                         </a>
                                                     </td>
-                                                    <td>
+                                                    <td.object-state>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            |
-                                                            <ticket-property-label property="StateID" value=object.StateID showLabel=false/>
+                                                            <ticket-property-label ticket=object property="StateID" hasLabel=false/>
                                                         </a>
                                                     </td>
-                                                    <td>
+                                                    <td.object-created>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            | ${component.getDateTimeString(object.Created)}
+                                                            ${component.getDateTimeString(object.Created)}
                                                         </a>
                                                     </td>
-                                                    <td>
+                                                    <td.object-link-type>
                                                         <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            | ${state.linkedObjects.get(linkedObjectGroup).get(object)}
+                                                            ${state.linkedObjects.get(linkedObjectGroup).get(object)}
                                                         </a>
                                                     </td>
                                                 </tr>

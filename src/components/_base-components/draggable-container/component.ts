@@ -19,10 +19,6 @@ class DraggableContainerComponent {
         this.state.dndState.enabled = input.configurationMode;
     }
 
-    public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-    }
-
     private getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getContext();
         const configuration = context ? context.getWidgetConfiguration(instanceId) : undefined;
@@ -121,10 +117,6 @@ class DraggableContainerComponent {
         rows[secondRowIndex][secondWidgetIndex] = firstWidget;
 
         return rows;
-    }
-
-    private applicationStateChanged() {
-        (this as any).setStateDirty();
     }
 
     private isConfigMode(): boolean {
