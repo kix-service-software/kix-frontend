@@ -115,10 +115,10 @@ class StandardTableComponent<T> {
     private loadMore(): void {
         const standardTable = (this as any).getEl('standard-table');
         if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
-            const checkPos =
+            const checkHeight =
                 this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
                 * this.state.tableConfiguration.rowHeight;
-            if (standardTable.scrollTop > checkPos) {
+            if (standardTable.scrollTop > checkHeight) {
                 this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
 
                 // check after increase if still more have to be loaded
@@ -139,7 +139,7 @@ class StandardTableComponent<T> {
             (this.state.tableConfiguration.contentProvider.getDisplayLimit() + 1)
             * this.state.tableConfiguration.rowHeight
             // TODO: richtige Scrollbarhöhe angeben
-            + 10;
+            + 0;
         return height + 'px';
     }
 

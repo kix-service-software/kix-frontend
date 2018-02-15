@@ -23,8 +23,8 @@
                         <@title>${group[0]} (${group[1]})</@title>
                         <@content>
                             <div.linked-object-table-container>
-                                <if(state.ticketTableConfiguration)>
-                                    <standard-table tableConfiguration=state.ticketTableConfiguration/>
+                                <if(group[2])>
+                                    <standard-table tableConfiguration=group[2]/>
                                 </if>
                             </div>
                         </@content>

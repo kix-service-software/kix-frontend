@@ -9,7 +9,7 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { TicketDetails, TicketProperty, Link } from '@kix/core/dist/model';
+import { TicketDetails, TicketProperty, Link, Ticket } from '@kix/core/dist/model';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
@@ -58,15 +58,24 @@ class LinkedObjectsWidgetComponent {
                 });
 
                 if (linkedTickets.length) {
-                    this.setTicketTableConfiguration(linkedTickets);
+                    const ticketTableConfiguration = this.getTicketTableConfiguration(linkedTickets);
                     this.state.linkCount += linkedTickets.length;
-                    this.state.linkedObjectGroups.push(['Ticket', linkedTickets.length]);
+                    this.state.linkedObjectGroups.push(['Ticket', linkedTickets.length, ticketTableConfiguration]);
+
+                    // TODO: wieder entfernen, dient nur zum Zeigen
+                    const ticketTableConfiguration2 = this.getTicketTableConfiguration(
+                        linkedTickets.slice(0, 12).reverse());
+                    this.state.linkCount += 12;
+                    this.state.linkedObjectGroups.push(['Ticket2', 12, ticketTableConfiguration2]);
+                    const ticketTableConfiguration3 = this.getTicketTableConfiguration(linkedTickets.slice(0, 2));
+                    this.state.linkCount += 2;
+                    this.state.linkedObjectGroups.push(['Ticket3', 2, ticketTableConfiguration3]);
                 }
             }
         }
     }
 
-    private setTicketTableConfiguration(linkedTickets: Link[]): void {
+    private getTicketTableConfiguration(linkedTickets: Link[]): StandardTableConfiguration<Ticket> {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
@@ -81,16 +90,17 @@ class LinkedObjectsWidgetComponent {
             ];
 
             const contentProvider = new LinkedTicketTableContentProvider(
-                this.state.instanceId, this.state.ticketId, linkedTickets, columnConfig, 5
+                this.state.instanceId, this.state.ticketId, linkedTickets, columnConfig, 7
             );
 
             const clickListener = new TicketTableClickListener();
 
-            this.state.ticketTableConfiguration = new StandardTableConfiguration(
+            return new StandardTableConfiguration(
                 labelProvider, contentProvider, null, clickListener
             );
         }
     }
+
 
     private getDateTimeString(date: string): string {
         return TicketUtil.getDateTimeString(date);
