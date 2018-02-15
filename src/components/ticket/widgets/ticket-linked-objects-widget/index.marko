@@ -1,7 +1,7 @@
 <widget instanceId=state.instanceId>
     <@icon/>
     <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title} (${state.linkQuantity})</if>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title} (${state.linkCount})</if>
     </@title>
     <@contentActions>
         <ul.content-actions>
@@ -15,26 +15,23 @@
         </ul>
     </@contentActions>
     <@content>
-        <if(state.linkedObjects.size > 0)>
+        <if(state.linkCount > 0)>
             <div.linked-objects-container>
-                <for(linkedObjectGroup in Array.from(state.linkedObjects.keys()))>
-                    <if(state.linkedObjects.get(linkedObjectGroup).size > 0)>
-                        <widget>
-                            <@icon/>
-                            <!-- TODO: richtige Objekt-Bezeichnung bestimmen -->
-                            <@title>${linkedObjectGroup} (${state.linkedObjects.get(linkedObjectGroup).size})</@title>
-                            <@content>
-                                <div.linked-object-table-container>
-                                    <if(state.ticketTableConfiguration)>
-                                        <standard-table tableConfiguration=state.ticketTableConfiguration/>
-                                    </if>
-                                </div>
-                            </@content>
-                            <@filter/>
-                            <@actions/>
-                            <@contentActions/>
-                        </widget>
-                    </if>
+                <for(group in state.linkedObjectGroups)>
+                    <widget>
+                        <@icon/>
+                        <@title>${group[0]} (${group[1]})</@title>
+                        <@content>
+                            <div.linked-object-table-container>
+                                <if(state.ticketTableConfiguration)>
+                                    <standard-table tableConfiguration=state.ticketTableConfiguration/>
+                                </if>
+                            </div>
+                        </@content>
+                        <@filter/>
+                        <@actions/>
+                        <@contentActions/>
+                    </widget>
                 </for>
             </div>
         </if>

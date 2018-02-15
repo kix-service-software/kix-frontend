@@ -7,10 +7,13 @@ import { StandardTableConfiguration } from '@kix/core/dist/browser';
 export class LinkedObjectsWidgetComponentState extends WidgetComponentState<LinkedObjectsSettings> {
 
     public ticketId: number = null;
+
     public ticketDetails: TicketDetails = null;
-    public linkedObjects: Map<string, Map<any, string>> = new Map();
-    public ticketData: TicketData = null;
-    public linkQuantity: number = 0;
+
+    public linkCount: number = 0;
+
     public ticketTableConfiguration: StandardTableConfiguration<Ticket> = null;
+
+    public linkedObjectGroups: Array<[string, number]> = [];
 
 }
