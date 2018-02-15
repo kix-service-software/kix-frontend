@@ -72,10 +72,10 @@ class LinkedObjectsWidgetComponent {
             const columnConfig: StandardTableColumn[] = [
                 new StandardTableColumn('TicketNumber', '', true, true, false),
                 new StandardTableColumn('Title', '', true, true, false),
-                new StandardTableColumn('TypeID', '', true, true, false),
-                new StandardTableColumn('QueueID', '', true, true, false),
+                new StandardTableColumn('TypeID', 'TypeID', true, true, false),
+                new StandardTableColumn('QueueID', 'QueueID', true, true, false),
                 new StandardTableColumn('StateID', 'TicketState', true, false, true),
-                new StandardTableColumn('Created', '', true, true, false),
+                new StandardTableColumn('Created', 'Created', true, true, false),
                 new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false)
             ];
 

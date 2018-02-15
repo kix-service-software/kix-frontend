@@ -39,4 +39,3 @@ class DynamicFieldsContainerComponent {
 }
 
 module.exports = DynamicFieldsContainerComponent;
-ContextService.getInstance().addStateListener(this.contextNotified.bind(this));

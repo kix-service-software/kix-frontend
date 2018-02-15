@@ -2,7 +2,9 @@
     <@key>${state.label}</@key>
     <@value>
         <if(input.hasText)>
-            <span.text class=(state.isPendingReached ? "pending-reached" : "")>${state.displayValue}</span>
+            <span.text title=state.displayValue class=(state.isPendingReached ? "pending-reached" : "")>
+                ${state.displayValue}
+            </span>
         </if>
     </@value>
 </key-value-pair>

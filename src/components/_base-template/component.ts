@@ -21,6 +21,11 @@ class BaseTemplateComponent {
 
         ContextService.getInstance().setObjectData(this.state.objectData).then(() => {
             this.state.initialized = true;
+            if (this.state.contextId) {
+                ComponentRouterStore.getInstance().navigate(
+                    'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
+                );
+            }
         });
 
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
@@ -35,12 +40,6 @@ class BaseTemplateComponent {
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
-
-        if (this.state.contextId) {
-            ComponentRouterStore.getInstance().navigate(
-                'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
-            );
-        }
     }
 
     public toggleConfigurationMode(): void {
