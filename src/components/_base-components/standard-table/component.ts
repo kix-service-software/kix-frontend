@@ -186,11 +186,10 @@ class StandardTableComponent<T> {
     }
 
     public getTableHeight(): string {
-        const height =
-            (this.state.tableConfiguration.contentProvider.getDisplayLimit() + 1)
-            * this.state.tableConfiguration.rowHeight
-            // TODO: richtige Scrollbarhöhe angeben
-            + 0;
+        const minElements =
+            this.getRows().length > this.state.tableConfiguration.contentProvider.getDisplayLimit() ?
+                this.state.tableConfiguration.contentProvider.getDisplayLimit() : this.getRows().length;
+        const height = (minElements + 1) * this.state.tableConfiguration.rowHeight;
         return height + 'px';
     }
 
