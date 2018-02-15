@@ -11,6 +11,7 @@ import {
     TicketTableContentProvider,
     TicketTableLabelProvider,
     TicketTableSelectionListener,
+    TicketTableClickListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
 import { StandardTableConfiguration } from '@kix/core/dist/browser';
@@ -90,10 +91,12 @@ class TicketListWidgetComponent {
                 // this.state.widgetConfiguration.settings.limit,
                 // this.state.widgetConfiguration.settings.displayLimit
             );
+
             const selectionListener = new TicketTableSelectionListener();
+            const clickListener = new TicketTableClickListener();
 
             this.state.tableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, selectionListener, true, true
+                labelProvider, contentProvider, selectionListener, clickListener, true, true
             );
         }
     }

@@ -91,15 +91,25 @@ class StandardTableComponent<T> {
             element.checked = checked;
         });
 
-        if (checked) {
-            this.state.tableConfiguration.selectionListener.selectNone();
-        } else {
-            this.state.tableConfiguration.selectionListener.selectAll();
+        if (this.state.tableConfiguration.selectionListener) {
+            if (checked) {
+                this.state.tableConfiguration.selectionListener.selectNone();
+            } else {
+                this.state.tableConfiguration.selectionListener.selectAll();
+            }
         }
     }
 
     private selectRow(row: any, event: any): void {
-        this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
+        if (this.state.tableConfiguration.selectionListener) {
+            this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
+        }
+    }
+
+    private rowClicked(row: any, columnId: string): void {
+        if (this.state.tableConfiguration.clickListener) {
+            this.state.tableConfiguration.clickListener.rowClicked(row, columnId);
+        }
     }
 
     private loadMore(): void {

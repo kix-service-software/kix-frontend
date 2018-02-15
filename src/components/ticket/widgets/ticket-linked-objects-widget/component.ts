@@ -4,7 +4,8 @@ import {
     TicketUtil,
     TicketService,
     TicketData,
-    TicketTableLabelProvider
+    TicketTableLabelProvider,
+    TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
@@ -83,8 +84,10 @@ class LinkedObjectsWidgetComponent {
                 this.state.instanceId, this.state.ticketId, linkedTickets, columnConfig, 5
             );
 
+            const clickListener = new TicketTableClickListener();
+
             this.state.ticketTableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, null
+                labelProvider, contentProvider, null, clickListener
             );
         }
     }
