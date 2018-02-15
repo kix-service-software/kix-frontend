@@ -1,4 +1,4 @@
-import { TicketData, TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 
@@ -24,14 +24,7 @@ export class TicketStateLabelComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         this.setDisplayValue();
-    }
-
-    private contextNotified(id: string, type: ContextNotification, ...args) {
-        if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.setDisplayValue();
-        }
     }
 
     private setDisplayValue(): void {
@@ -39,9 +32,9 @@ export class TicketStateLabelComponent {
         this.state.displayValue =
             TicketUtil.getPropertyValue(TicketProperty.SERVICE_ID, this.state.serviceId, this.state.ticketId);
 
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            const service = ticketData.services.find((s) => s.ServiceID === this.state.serviceId);
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData) {
+            const service = objectData.services.find((s) => s.ServiceID === this.state.serviceId);
             if (service) {
                 this.state.incidentStateId = service.IncidentState.CurInciStateID;
             }

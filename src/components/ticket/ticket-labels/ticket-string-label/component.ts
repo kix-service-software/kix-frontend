@@ -24,17 +24,10 @@ export class TicketStringLabelComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         if (this.state.ticketId) {
             TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
         }
         this.setDisplayValue();
-    }
-
-    private contextNotified(id: string, type: ContextNotification, ...args) {
-        if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.setDisplayValue();
-        }
     }
 
     private ticketServiceNotified(id: string, type: TicketNotification, ...args): void {

@@ -4,9 +4,7 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
-
-// tslint:disable-next-line:no-var-requires
-require('babel-polyfill');
+import { ContextService } from '@kix/core/dist/browser/context';
 
 declare var io: any;
 
@@ -15,11 +13,16 @@ class BaseTemplateComponent {
     public state: BaseTemplateComponentState;
 
     public onCreate(input: any): void {
-        this.state = new BaseTemplateComponentState(input.contextId, input.objectId, input.tagLib);
+        this.state = new BaseTemplateComponentState(input.contextId, input.objectData, input.objectId, input.tagLib);
     }
 
     public onMount(): void {
         ClientStorageHandler.setTagLib(this.state.tagLib);
+
+        ContextService.getInstance().setObjectData(this.state.objectData).then(() => {
+            this.state.initialized = true;
+        });
+
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
 
         const token = ClientStorageHandler.getToken();

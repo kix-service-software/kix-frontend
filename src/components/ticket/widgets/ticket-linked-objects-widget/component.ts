@@ -3,7 +3,6 @@ import {
     LinkedTicketTableContentProvider,
     TicketUtil,
     TicketService,
-    TicketData,
     TicketTableLabelProvider,
     TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';

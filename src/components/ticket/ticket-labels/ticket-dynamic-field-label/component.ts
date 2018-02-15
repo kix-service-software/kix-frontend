@@ -1,4 +1,4 @@
-import { TicketData, TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
@@ -18,7 +18,6 @@ export class TicketPriorityLabelComponent {
 
     public onMount(): void {
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         this.setDisplayValue();
     }
 
@@ -28,16 +27,10 @@ export class TicketPriorityLabelComponent {
         }
     }
 
-    private contextNotified(id: string, type: ContextNotification, ...args) {
-        if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.setDisplayValue();
-        }
-    }
-
     private setDisplayValue(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            this.state.field = ticketData.dynamicFields.find((df) => df.ID === this.state.fieldId);
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData) {
+            this.state.field = objectData.dynamicFields.find((df) => df.ID === this.state.fieldId);
             if (this.state.field) {
                 const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
                 if (ticketDetails && ticketDetails.ticket) {
