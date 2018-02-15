@@ -5,13 +5,13 @@
             <if(input.hasText)>
                 <if(state.field.FieldType === "Checkbox")>
                     <span.text>
-                        <input type="checkbox" checked=state.displayValue value=state.Value readonly="readonly" disabled="disabled"
-                            title=state.displayValue/>
+                        <input title=state.displayValue type="checkbox" checked=state.displayValue value=state.Value readonly="readonly"
+                            disabled="disabled"/>
                     </span>
                 </if>
                 <else-if(state.field.FieldType === "TextArea")>
-                    <span.text>
-                        <textarea rows=3 title=state.displayValue>${state.displayValue}</textarea>
+                    <span.text title=state.displayValue>
+                        <textarea rows=3>${state.displayValue}</textarea>
                     </span>
                 </else-if>
                 <else-if(Array.isArray(state.displayValue))>

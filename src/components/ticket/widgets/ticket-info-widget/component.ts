@@ -28,8 +28,6 @@ class TicketInfoWidgetComponent {
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
-        } else if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.getTicket();
         }
     }
 

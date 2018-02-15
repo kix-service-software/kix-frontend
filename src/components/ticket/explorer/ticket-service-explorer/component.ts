@@ -1,4 +1,4 @@
-import { TicketData, TicketService } from '@kix/core/dist/browser/ticket';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ObjectType, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 
@@ -26,9 +26,9 @@ export class ServiceExplorerComponent {
     }
 
     private ticketStateChanged(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData && ticketData.services) {
-            this.state.services = ticketData.services;
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData && objectData.services) {
+            this.state.services = objectData.services;
         } else {
             this.state.services = [];
         }

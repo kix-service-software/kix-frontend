@@ -17,8 +17,6 @@ export class TicketCreationDialogState {
 
     public loadData: boolean = false;
 
-    public ticketDataId: string = ComponentId.TICKET_CREATION_TICKET_DATA_ID;
-
     public ticketProperties: string[] = [
         TicketProperty.QUEUE_ID,
         TicketProperty.PRIORITY_ID,

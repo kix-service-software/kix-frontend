@@ -1,4 +1,4 @@
-import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 export class TypeInputComponent {
@@ -7,14 +7,12 @@ export class TypeInputComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            ticketDataId: null,
             types: [],
             typeId: null
         };
     }
 
     public onInput(input: any): void {
-        this.state.ticketDataId = input.ticketDataId;
         this.state.typeId = Number(input.value);
     }
 
@@ -28,9 +26,9 @@ export class TypeInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            this.state.types = ticketData.types;
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData) {
+            this.state.types = objectData.types;
         }
     }
 
