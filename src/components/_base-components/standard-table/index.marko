@@ -1,7 +1,7 @@
 <if(state.tableConfiguration)>
     <div.standard-table-wrapper>
-        <div.standard-table>
-            <div.row.header-row>
+        <div.standard-table style={height: component.getTableHeight()}>
+            <div.row.header-row style={height: component.getRowHeight()}>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <div.table-cell.table-header-cell.fixed>
                         <input type="checkbox" on-click('selectAll')/>
@@ -28,7 +28,7 @@
                 </if>
             </div>
             <for(row in component.getRows())>
-                <div.row>
+                <div.row style={height: component.getRowHeight()}>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed>
                             <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>

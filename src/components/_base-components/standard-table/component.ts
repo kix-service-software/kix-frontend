@@ -102,12 +102,28 @@ class StandardTableComponent<T> {
     }
 
     private loadMore(): void {
-        this.state.tableConfiguration.contentProvider.increaseDisplayLimit();
+        this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
+    }
+
+    public getRowHeight(): string {
+        return this.state.tableConfiguration.rowHeight + 'px';
+    }
+
+    public getTableHeight(): string {
+        const height =
+            (this.state.tableConfiguration.contentProvider.getDisplayLimit() + 1)
+            * this.state.tableConfiguration.rowHeight
+            // TODO: richtige Scrollbarhöhe angeben
+            + 10;
+        return height + 'px';
     }
 
     public getSpacerHeight(): string {
         let spacerHeight = 0;
-        const remainder = this.state.tableConfiguration.contentProvider.getLimit() - this.getRows().length;
+        const remainder =
+            this.state.tableConfiguration.contentProvider.getLimit()
+            - this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
+            - Math.ceil(this.state.tableConfiguration.contentProvider.getDisplayLimit() * 1.5);
         if (remainder > 0) {
             spacerHeight = remainder * this.state.tableConfiguration.rowHeight;
         }

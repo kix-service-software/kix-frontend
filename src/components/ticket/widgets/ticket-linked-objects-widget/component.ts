@@ -138,8 +138,8 @@ class LinkedObjectsWidgetComponent {
             const contentProvider = new LinkedTicketTableContentProvider(
                 this.state.instanceId,
                 Array.from(this.state.linkedObjects.get('Ticket').keys()),
-                5,
-                columnConfig
+                columnConfig,
+                5
             );
 
             this.state.ticketTableConfiguration = new StandardTableConfiguration(
