@@ -7,6 +7,7 @@ import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 class StandardTableComponent<T> {
 
     private state: StandardTableComponentState;
+    private ps: any;
 
     public onCreate(input: StandardTableInput): void {
         this.state = new StandardTableComponentState();
@@ -23,7 +24,7 @@ class StandardTableComponent<T> {
             this.state.tableConfiguration.contentProvider.addListener(() => {
                 (this as any).forceUpdate();
             });
-            const psY = new PerfectScrollbar('.standard-table', {
+            this.ps = new PerfectScrollbar('.standard-table', {
                 minScrollbarLength: 50,
                 wrapperElement: '.standard-table-wrapper'
             });
@@ -65,8 +66,10 @@ class StandardTableComponent<T> {
                     //     element.style.left = table.scrollLeft + 'px';
                     // });
                 });
+
+                this.ps.update();
             }
-        }, 100);
+        }, 250);
     }
 
     public onUpdate(): void {
