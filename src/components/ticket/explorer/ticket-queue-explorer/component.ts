@@ -1,4 +1,4 @@
-import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ObjectType, Queue, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
 import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
@@ -25,9 +25,9 @@ export class QueueExplorerComponent {
     }
 
     private ticketStateChanged(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData && ticketData.queuesHierarchy) {
-            this.state.tree = this.prepareTree(ticketData.queuesHierarchy);
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData && objectData.queuesHierarchy) {
+            this.state.tree = this.prepareTree(objectData.queuesHierarchy);
         } else {
             this.state.tree = [];
         }

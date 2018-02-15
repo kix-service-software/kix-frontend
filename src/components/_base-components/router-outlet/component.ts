@@ -20,6 +20,7 @@ export class RouterOutletComponent {
 
     public onMount(): void {
         ComponentRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
+        this.routerStateChanged();
     }
 
     private routerStateChanged(): void {

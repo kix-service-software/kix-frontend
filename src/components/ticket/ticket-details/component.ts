@@ -1,6 +1,6 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { TicketData, TicketService, TicketNotification } from '@kix/core/dist/browser/ticket/';
+import { TicketService, TicketNotification } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import {
     TicketDetailsDashboardConfiguration, TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration
@@ -46,8 +46,6 @@ export class TicketDetailsComponent {
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
         if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsComponent.MODULE_ID) {
             this.setConfiguration();
-        } else if (type === ContextNotification.OBJECT_UPDATED && id === TicketService.TICKET_DATA_ID) {
-            this.setTicketHookInfo();
         }
     }
 
@@ -70,10 +68,10 @@ export class TicketDetailsComponent {
     }
 
     private setTicketHookInfo(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            this.state.ticketHook = ticketData.ticketHook;
-            this.state.ticketHookDivider = ticketData.ticketHookDivider;
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData) {
+            this.state.ticketHook = objectData.ticketHook;
+            this.state.ticketHookDivider = objectData.ticketHookDivider;
         }
     }
 

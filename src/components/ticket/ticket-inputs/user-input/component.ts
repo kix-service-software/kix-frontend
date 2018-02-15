@@ -1,4 +1,4 @@
-import { TicketService, TicketData } from '@kix/core/dist/browser/ticket';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 import { User } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -9,7 +9,6 @@ export class UserInputComponent {
 
     public onCreate(input: any): void {
         this.state = {
-            ticketDataId: null,
             users: [],
             userId: null,
             value: null,
@@ -18,7 +17,6 @@ export class UserInputComponent {
     }
 
     public onInput(input: any): void {
-        this.state.ticketDataId = input.ticketDataId;
         this.state.userId = Number(input.value);
     }
 
@@ -36,9 +34,9 @@ export class UserInputComponent {
     }
 
     private setStoreData(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData && ticketData.users) {
-            this.state.users = ticketData.users;
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData && objectData.users) {
+            this.state.users = objectData.users;
             if (this.state.userId) {
                 const user = this.state.users.find((u) => u.UserID === this.state.userId);
                 if (user) {

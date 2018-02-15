@@ -5,7 +5,6 @@ import {
 } from '@kix/core/dist/model/';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import {
-    TicketData,
     TicketNotification,
     TicketService,
     TicketTableContentProvider,

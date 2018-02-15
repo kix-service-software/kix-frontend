@@ -1,4 +1,4 @@
-import { TicketData, TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { DynamicField } from "@kix/core/dist/model/ticket/DynamicField";
 import { DynamicFieldContainerComponentState } from './DynamicFieldContainerComponentState';
@@ -17,21 +17,14 @@ class DynamicFieldsContainerComponent {
     }
 
     public onMount(input: any): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         this.setDisplayGroups();
     }
 
-    private contextNotified(id: string, type: ContextNotification, ...args) {
-        if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.setDisplayGroups();
-        }
-    }
-
     private setDisplayGroups(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            this.state.dynamicFields = ticketData.dynamicFields;
-            this.state.displayGroups = ticketData.dynamicFieldGroups
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData) {
+            this.state.dynamicFields = objectData.dynamicFields;
+            this.state.displayGroups = objectData.dynamicFieldGroups
                 .filter((dfg) => this.getDFsOfGroup(dfg.ItemID).length);
         }
     }

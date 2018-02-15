@@ -1,46 +1,48 @@
 <div.wrapper>
-    <kix-header/>
-    <section.clearfix no-update-body>
-        <main-menu/>
-        <sidebar context="dashboard"/>
-        <section.content>
-            <header>
-                <breadcrumb/>
-                <back/>
-            </header>
-            <explorerbar/>
-            <router-outlet id="base-router"/>
+    <if(state.initialized)>
+        <kix-header/>
+        <section.clearfix no-update-body>
+            <main-menu/>
+            <sidebar context="dashboard"/>
+            <section.content>
+                <header>
+                    <breadcrumb/>
+                    <back/>
+                </header>
+                <explorerbar/>
+                <router-outlet id="base-router"/>
+            </section>
         </section>
-    </section>
-    <kix-footer/>
-    <if(state.showShieldOverlay)>
-        <div.main-overlay/>
-    </if>
-    <if(state.showMainDialog)>
-        <!-- div zwecks Marko Bug #920 -->
-        <div>
-            <dialog-main>
-                <@title>Dialogtitel</@title>
-                <@content>
-                    <include(state.mainDialogTemplate, state.mainDialogInput)/>
-                </@content>
-            </dialog-main>
-        </div>
-    </if>
-    <if(state.showInfoOverlay)>
-        <!-- div zwecks Marko Bug #920 -->
-        <div>
-            <overlay-info position=state.infoOverlayPosition>
-                <@icon>
-                    <include(state.infoOverlayIcon)/>
-                </@icon>
-                <@title>
-                    <include(state.infoOverlayTitle)/>
-                </@title>
-                <@content>
-                    <include(state.infoOverlayContent)/>
-                </@content>
-            </overlay-info>
-        </div>
+        <kix-footer/>
+        <if(state.showShieldOverlay)>
+            <div.main-overlay/>
+        </if>
+        <if(state.showMainDialog)>
+            <!-- div zwecks Marko Bug #920 -->
+            <div>
+                <dialog-main>
+                    <@title>Dialogtitel</@title>
+                    <@content>
+                        <include(state.mainDialogTemplate, state.mainDialogInput)/>
+                    </@content>
+                </dialog-main>
+            </div>
+        </if>
+        <if(state.showInfoOverlay)>
+            <!-- div zwecks Marko Bug #920 -->
+            <div>
+                <overlay-info position=state.infoOverlayPosition>
+                    <@icon>
+                        <include(state.infoOverlayIcon)/>
+                    </@icon>
+                    <@title>
+                        <include(state.infoOverlayTitle)/>
+                    </@title>
+                    <@content>
+                        <include(state.infoOverlayContent)/>
+                    </@content>
+                </overlay-info>
+            </div>
+        </if>
     </if>
 </div>

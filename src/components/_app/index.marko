@@ -5,6 +5,7 @@
         <title>KIX 2018</title>
         <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
         <lasso-head/>
+        <link rel="stylesheet" href="/static/thirdparty/perfect-scrollbar/perfect-scrollbar.css"/>
         <if(data.themeCSS)>
             <link rel="stylesheet" href=data.themeCSS/>
         </if>
@@ -17,11 +18,13 @@
             <_login/>
         </if>
         <else>
-            <_base-template contextId=input.data.contextId objectId=input.data.objectId tagLib=input.data.tagLib/>
+            <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
+                tagLib=input.data.tagLib/>
         </else>
         <script src="/static/thirdparty/socket.io.js"/>
         <script src="/static/thirdparty/d3-4.10.2/d3.min.js"/>
         <script src="/static/thirdparty/ckeditor-4.7.3/ckeditor.js"/>
+        <script src="/static/thirdparty/perfect-scrollbar/perfect-scrollbar.min.js"/>
         <lasso-body/>
     </body>
 </html>

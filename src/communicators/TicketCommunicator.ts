@@ -15,8 +15,6 @@ import {
     TicketEvent,
     TicketCreationResponse,
     TicketCreationError,
-    TicketLoadDataRequest,
-    TicketLoadDataResponse,
     TicketProperty,
     LoadTicketDetailsRequest,
     LoadTicketDetailsResponse,
@@ -29,7 +27,6 @@ import {
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/TicketService';
 import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
-import { TicketData } from '@kix/core/dist/browser/ticket/';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -76,90 +73,6 @@ export class TicketCommunicator extends KIXCommunicator {
                     const creationError = new TicketCreationError(error.errorMessage.body);
                     client.emit(TicketCreationEvent.CREATE_TICKET_FAILED, creationError);
                 });
-        });
-
-        client.on(TicketCreationEvent.LOAD_TICKET_DATA, async (data: TicketLoadDataRequest) => {
-            const ticketStates = await this.ticketStateService.getTicketStates(data.token, null, null, null, {
-                fields: 'TicketState.ID,TicketState.Name,TicketState.TypeID'
-            });
-
-            const ticketTypes = await this.ticketTypeService.getTicketTypes(data.token, null, null, null, {
-                fields: 'TicketType.ID,TicketType.Name'
-            });
-
-            const ticketPriorities =
-                await this.ticketPriorityService.getTicketPriorities(data.token, null, null, null, {
-                    fields: 'Priority.ID,Priority.Name'
-                });
-
-            const users = await this.userService.getUsers(data.token, {
-                fields: 'User.UserLogin,User.UserID,User.UserFullname'
-            });
-
-            const queues = await this.queueService.getQueues(data.token, null, null, null, {
-                fields: 'Queue.QueueID,Queue.Name'
-            });
-
-            const queuesHierarchy = await this.queueService.getQueues(data.token, null, null, null, {
-                fields: 'Queue.QueueID,Queue.Name',
-                include: 'SubQueues',
-                expand: 'SubQueues',
-                filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
-            });
-
-            const services = await this.serviceService.getServices(data.token, null, null, null, {
-                fields: 'Service.ServiceID,Service.Name',
-                include: 'IncidentState'
-            });
-
-            let ticketNotesDFId: number;
-            const ticketNotesDFList = await this.dynamicFieldService.getDynamicFields(data.token, null, null, null, {
-                fields: 'DynamicField.ID',
-                filter: '{"DynamicField": {"AND": [{"Field": "Name", "Operator": "EQ", "Value": "TicketNotes"}]}}'
-            });
-            if (ticketNotesDFList && ticketNotesDFList.length) {
-                ticketNotesDFId = ticketNotesDFList[0].ID;
-            }
-
-            const ticketDFs = await this.dynamicFieldService.getDynamicFields(data.token, null, null, null, {
-                fields: 'DynamicField.*',
-                filter: '{"DynamicField": {"AND": [{"Field": "ObjectType", "Operator": "EQ", "Value": "Ticket"}]}}',
-                include: 'Config'
-            });
-
-            const dFDisplayGroups = await this.generalCatalogService.getItems(data.token, null, null, null, {
-                filter: '{"GeneralCatalogItem": {"AND": [{"Field": "Class", "Operator": "EQ", '
-                    + '"Value": "DynamicField::DisplayGroup"}]}}',
-            });
-
-            const stateTypes = await this.ticketStateService.getTicketStateTypes(data.token);
-
-            const ticketHookConfig = await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Hook');
-            const ticketHookDividerConfig =
-                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::HookDivider');
-
-            const timeAccountConfig =
-                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::AccountTime');
-            const isAccountTimeEnabled = (timeAccountConfig.Data && timeAccountConfig.Data === '1');
-
-            const timeAccountUnitConfig =
-                await this.sysConfigService.getSysConfigItem(data.token, 'Ticket::Frontend::TimeUnits');
-            const timeAccountUnit = timeAccountUnitConfig.Data;
-
-            const ticketLocks = await this.ticketLockService.getLocks(data.token);
-
-            const linkTypes = await this.linkService.getLinkTypes(data.token);
-
-            const ticketData = new TicketData(
-                [], services, [], ticketPriorities, ticketTypes, ticketStates, stateTypes,
-                queues, queuesHierarchy, users, ticketHookConfig.Data, ticketHookDividerConfig.Data,
-                isAccountTimeEnabled, timeAccountUnit, ticketNotesDFId, ticketLocks, ticketDFs, dFDisplayGroups,
-                linkTypes
-            );
-
-            const response = new TicketLoadDataResponse(ticketData);
-
-            client.emit(TicketCreationEvent.TICKET_DATA_LOADED, response);
         });
 
         client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
