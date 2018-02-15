@@ -3,7 +3,7 @@
         <div.standard-table key="standard-table">
             <div.row.header-row key="header-row">
                 <if(state.tableConfiguration.rowSelectionEnabled)>
-                    <div.table-cell.table-header-cell.fixed.fixed-left key="fixed-left-header">
+                    <div.table-cell.table-header-cell.fixed.checkbox-column data-id="checkbox-column">
                         <input type="checkbox" on-click('selectAll')/>
                     </div>
                 </if>
@@ -20,16 +20,14 @@
                     </div>
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
-                    <div.table-cell.table-header-cell.fixed.fixed-right.toggle-row-column key="fixed-right-header">
-                        <span.kix-icon-sort-down/>
-                    </div>
+                    <div.table-cell.table-header-cell.fixed.toggle-row-column data-id="toggle-row-column">&nbsp;</div>
                 </if>
-                <div.table-cell.table-header-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
+                <div.table-cell.table-header-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
             </div>
             <for(row in component.getRows())>
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed.fixed-left data-id="fixed-left-column">
+                        <div.table-cell.fixed.checkbox-column data-id="checkbox-column">
                             <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
                         </div>
                     </if>
@@ -50,58 +48,101 @@
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
-                        <div.table-cell.fixed.fixed-right.toggle-row-column data-id="fixed-right-column">
+                        <div.table-cell.fixed.toggle-row-column data-id="toggle-row-column">
                             <span.kix-icon-sort-down/>
                         </div>
                     </if>
-                    <div.table-cell.fixed.fixed-right.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
+                    <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
-            </for>
-            <for(row in component.getRows())>
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed.fixed-left>
-                            <input type="checkbox"/>
+                        <div.table-cell.fixed.checkbox-column data-id="checkbox-column">
+                            <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
                         </div>
                     </if>
-                    <for(column in component.getColumnIds())>
+                    <for(columnId in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
-                            <if(component.getColumnConfiguration(column).hasIcon)>
-                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                <object-property-label object=row property=columnId hasLabel=false
+                                    hasText=component.getColumnConfiguration(columnId).hasText
+                                    hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                             </if>
+                            <else>
+                                <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                    <icon object=component.getColumnConfiguration(columnId).property
+                                        objectId=component.getColumnObjectValue(row, columnId)/>
+                                </if>
+                            </else>
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
-                        <div.table-cell.fixed.fixed-right.toggle-row-column>
+                        <div.table-cell.fixed.toggle-row-column data-id="toggle-row-column">
                             <span.kix-icon-sort-down/>
                         </div>
                     </if>
-                    <div.table-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
+                    <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
-            </for>
-            <for(row in component.getRows())>
+                <!-- remove me START -->
                 <div.row>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed.fixed-left>
-                            <input type="checkbox"/>
+                        <div.table-cell.fixed.checkbox-column data-id="checkbox-column">
+                            <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
                         </div>
                     </if>
-                    <for(column in component.getColumnIds())>
+                    <for(columnId in component.getColumnIds())>
                         <div.table-cell>
-                            <if(component.getColumnConfiguration(column).hasText)>${component.getColumnDisplayText(row, column)}</if>
-                            <if(component.getColumnConfiguration(column).hasIcon)>
-                                <icon object=component.getColumnConfiguration(column).property objectId=component.getColumnObjectValue(row, column)/>
+                            <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                <object-property-label object=row property=columnId hasLabel=false
+                                    hasText=component.getColumnConfiguration(columnId).hasText
+                                    hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                             </if>
+                            <else>
+                                <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                    <icon object=component.getColumnConfiguration(columnId).property
+                                        objectId=component.getColumnObjectValue(row, columnId)/>
+                                </if>
+                            </else>
                         </div>
                     </for>
                     <if(state.tableConfiguration.toggleRowEnabled)>
-                        <div.table-cell.fixed.fixed-right.toggle-row-column>
+                        <div.table-cell.fixed.toggle-row-column data-id="toggle-row-column">
                             <span.kix-icon-sort-down/>
                         </div>
                     </if>
-                    <div.table-cell.fixed.fixed-right.scrollbar-column>&nbsp;</div>
+                    <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
+                <div.row>
+                    <if(state.tableConfiguration.rowSelectionEnabled)>
+                        <div.table-cell.fixed.checkbox-column data-id="checkbox-column">
+                            <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
+                        </div>
+                    </if>
+                    <for(columnId in component.getColumnIds())>
+                        <div.table-cell>
+                            <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                <object-property-label object=row property=columnId hasLabel=false
+                                    hasText=component.getColumnConfiguration(columnId).hasText
+                                    hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
+                            </if>
+                            <else>
+                                <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                    <icon object=component.getColumnConfiguration(columnId).property
+                                        objectId=component.getColumnObjectValue(row, columnId)/>
+                                </if>
+                            </else>
+                        </div>
+                    </for>
+                    <if(state.tableConfiguration.toggleRowEnabled)>
+                        <div.table-cell.fixed.toggle-row-column data-id="toggle-row-column">
+                            <span.kix-icon-sort-down/>
+                        </div>
+                    </if>
+                    <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
+                </div>
+                <!-- remove me ENDE -->
             </for>
         </div>
     </div>

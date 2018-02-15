@@ -36,13 +36,11 @@ class StandardTableComponent<T> {
         setTimeout(() => {
             const table = (this as any).getEl('standard-table');
             const header = (this as any).getEl('header-row');
-            const fixedLeftHeader = (this as any).getEl('fixed-left-header');
-            const fixedRightHeader = (this as any).getEl('fixed-right-header');
-
-            const fixedLeftColumns: any = document.querySelectorAll("[data-id='fixed-left-column']");
-            const fixedRightColumns: any = document.querySelectorAll("[data-id='fixed-right-column']");
-            const scrollbars: any = document.querySelectorAll("[data-id='scrollbar-column']");
-            const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
+            const checkboxColumn: any = document.querySelectorAll("[data-id='checkbox-column']");
+            const toggleRowColumn: any = document.querySelectorAll("[data-id='toggle-row-column']");
+            const scrollbarColumn: any = document.querySelectorAll("[data-id='scrollbar-column']");
+            // TODO: subRows erneut implementieren!
+            // const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
 
             if (table) {
                 table.addEventListener('ps-scroll-y', () => {
@@ -51,23 +49,21 @@ class StandardTableComponent<T> {
 
                 // linke, rechte Spalte und geöffnete Zeile fixieren
                 table.addEventListener('ps-scroll-x', () => {
-                    fixedLeftHeader.style.left = table.scrollLeft + 'px';
-                    fixedLeftColumns.forEach((element: any) => {
+                    const scrollbarColumnPos = (table.scrollLeft * -1);
+                    checkboxColumn.forEach((element: any) => {
                         element.style.left = table.scrollLeft + 'px';
                     });
-
-                    fixedRightHeader.style.right = ((table.scrollLeft + 24) * -1) + 'px';
-                    fixedRightColumns.forEach((element: any) => {
-                        element.style.right = ((table.scrollLeft + 24) * -1) + 'px';
+                    toggleRowColumn.forEach((element: any) => {
+                        element.style.right = (scrollbarColumnPos + 24) + 'px';
+                    });
+                    scrollbarColumn.forEach((element: any) => {
+                        element.style.right = scrollbarColumnPos + 'px';
                     });
 
-                    scrollbars.forEach((element: any) => {
-                        element.style.right = (table.scrollLeft * -1) + 'px';
-                    });
-
-                    subRows.forEach((element: any) => {
-                        element.style.left = table.scrollLeft + 'px';
-                    });
+                    // TODO: subRows erneut implementieren!
+                    // subRows.forEach((element: any) => {
+                    //     element.style.left = table.scrollLeft + 'px';
+                    // });
                 });
             }
         }, 100);
