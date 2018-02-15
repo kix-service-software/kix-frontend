@@ -1,3 +1,4 @@
+declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTableConfiguration, StandardTableColumn } from '@kix/core/dist/browser';
@@ -6,6 +7,7 @@ import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 class StandardTableComponent<T> {
 
     private state: StandardTableComponentState;
+    private ps: any;
 
     public onCreate(input: StandardTableInput): void {
         this.state = new StandardTableComponentState();
@@ -22,7 +24,56 @@ class StandardTableComponent<T> {
             this.state.tableConfiguration.contentProvider.addListener(() => {
                 (this as any).forceUpdate();
             });
+            this.ps = new PerfectScrollbar('.standard-table', {
+                minScrollbarLength: 50,
+                wrapperElement: '.standard-table-wrapper'
+            });
         }
+
+        this.initTableScrollRange();
+    }
+
+    private initTableScrollRange(): void {
+        setTimeout(() => {
+            const table = (this as any).getEl('standard-table');
+            const header = (this as any).getEl('header-row');
+            const checkboxColumn: any = document.querySelectorAll("[data-id='checkbox-column']");
+            const toggleRowColumn: any = document.querySelectorAll("[data-id='toggle-row-column']");
+            const scrollbarColumn: any = document.querySelectorAll("[data-id='scrollbar-column']");
+            // TODO: subRows erneut implementieren!
+            // const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
+
+            if (table) {
+                table.addEventListener('ps-scroll-y', () => {
+                    header.style.top = table.scrollTop + 'px';
+                });
+
+                // linke, rechte Spalte und geöffnete Zeile fixieren
+                table.addEventListener('ps-scroll-x', () => {
+                    const scrollbarColumnPos = (table.scrollLeft * -1);
+                    checkboxColumn.forEach((element: any) => {
+                        element.style.left = table.scrollLeft + 'px';
+                    });
+                    toggleRowColumn.forEach((element: any) => {
+                        element.style.right = (scrollbarColumnPos + 24) + 'px';
+                    });
+                    scrollbarColumn.forEach((element: any) => {
+                        element.style.right = scrollbarColumnPos + 'px';
+                    });
+
+                    // TODO: subRows erneut implementieren!
+                    // subRows.forEach((element: any) => {
+                    //     element.style.left = table.scrollLeft + 'px';
+                    // });
+                });
+
+                this.ps.update();
+            }
+        }, 250);
+    }
+
+    public onUpdate(): void {
+        this.initTableScrollRange();
     }
 
     private getRows(): T[] {

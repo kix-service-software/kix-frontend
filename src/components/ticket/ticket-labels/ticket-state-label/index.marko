@@ -2,10 +2,10 @@
     <@key>${state.label}</@key>
     <@value>
         <if(input.hasText)>
-            <span.text title=state.displayValue>${state.displayValue}</span>
+            <span.text>${state.displayValue}</span>
         </if>
         <if(input.hasIcon)>
-            <icon object="TicketState" objectId=state.stateId title=state.displayValue/>
+            <icon object="TicketState" objectId=state.stateId/>
         </if>
     </@value>
 </key-value-pair>

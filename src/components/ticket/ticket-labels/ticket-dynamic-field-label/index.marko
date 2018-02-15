@@ -5,22 +5,21 @@
             <if(input.hasText)>
                 <if(state.field.FieldType === "Checkbox")>
                     <span.text>
-                        <input type="checkbox" checked=state.displayValue value=state.Value readonly="readonly" disabled="disabled"
-                            title=state.displayValue/>
+                        <input type="checkbox" checked=state.displayValue value=state.Value readonly="readonly" disabled="disabled"/>
                     </span>
                 </if>
                 <else-if(state.field.FieldType === "TextArea")>
                     <span.text>
-                        <textarea rows=3 title=state.displayValue>${state.displayValue}</textarea>
+                        <textarea rows=3>${state.displayValue}</textarea>
                     </span>
                 </else-if>
                 <else-if(Array.isArray(state.displayValue))>
                     <for(value in state.displayValue)>
-                        <span.text.multi-text title=value>${value}</span>
+                        <span.text.multi-text>${value}</span>
                     </for>
                 </else-if>
                 <else>
-                    <span.text title=state.displayValue>${state.displayValue}</span>
+                    <span.text>${state.displayValue}</span>
                 </else>
             </if>
         </@value>
