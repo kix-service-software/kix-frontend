@@ -1,7 +1,7 @@
 <widget instanceId=state.instanceId>
     <@icon/>
     <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title} (${state.linkQuantity})</if>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title} (${state.linkCount})</if>
     </@title>
     <@contentActions>
         <ul.content-actions>
@@ -15,115 +15,23 @@
         </ul>
     </@contentActions>
     <@content>
-        <if(state.linkedObjects.size > 0)>
+        <if(state.linkCount > 0)>
             <div.linked-objects-container>
-                <for(linkedObjectGroup in Array.from(state.linkedObjects.keys()))>
-                    <if(state.linkedObjects.get(linkedObjectGroup).size > 0)>
-                        <widget>
-                            <@icon/>
-                            <!-- TODO: richtige Objekt-Bezeichnung bestimmen -->
-                            <@title>${linkedObjectGroup} (${state.linkedObjects.get(linkedObjectGroup).size})</@title>
-                            <@content>
-                                <div.linked-object-table-container>
-                                    <table.linked-object-table>
-                                        <thead>
-                                            <tr>
-                                                <th.object-hook>
-                                                    ${state.ticketData.ticketHook}
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-title>
-                                                    Titel
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-type>
-                                                    Typ
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object.queue>
-                                                    Queue
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-state>
-                                                    Status
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-created>
-                                                    Erstellt
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                                <th.object-link-type>
-                                                    Verknüpft als
-                                                    <span.sortable>
-                                                        <span.kix-icon-sort-up/>
-                                                        <span.kix-icon-sort-down/>
-                                                    </span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <for(object in Array.from(state.linkedObjects.get(linkedObjectGroup).keys()))>
-                                                <tr>
-                                                    <td.object-hook>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.TicketNumber}</a>
-                                                    </td>
-                                                    <td.object-title>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>${object.Title}</a>
-                                                    </td>
-                                                    <td.object-type>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="TypeID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
-                                                    <td.object-queue>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="QueueID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
-                                                    <td.object-state>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            <ticket-property-label ticket=object property="StateID" hasLabel=false/>
-                                                        </a>
-                                                    </td>
-                                                    <td.object-created>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            ${component.getDateTimeString(object.Created)}
-                                                        </a>
-                                                    </td>
-                                                    <td.object-link-type>
-                                                        <a href="${object.TicketID}" on-click('ticketClicked', object.TicketID)>
-                                                            ${state.linkedObjects.get(linkedObjectGroup).get(object)}
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </for>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </@content>
-                            <@filter/>
-                            <@actions/>
-                            <@contentActions/>
-                        </widget>
-                    </if>
+                <for(group in state.linkedObjectGroups)>
+                    <widget>
+                        <@icon/>
+                        <@title>${group[0]} (${group[1]})</@title>
+                        <@content>
+                            <div.linked-object-table-container>
+                                <if(state.ticketTableConfiguration)>
+                                    <standard-table tableConfiguration=state.ticketTableConfiguration/>
+                                </if>
+                            </div>
+                        </@content>
+                        <@filter/>
+                        <@actions/>
+                        <@contentActions/>
+                    </widget>
                 </for>
             </div>
         </if>

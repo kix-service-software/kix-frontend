@@ -1,10 +1,17 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { TicketUtil, TicketService, TicketData } from '@kix/core/dist/browser/ticket';
+import {
+    LinkedTicketTableContentProvider,
+    TicketUtil,
+    TicketService,
+    TicketData,
+    TicketTableLabelProvider
+} from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { TicketDetails } from '@kix/core/dist/model';
+import { TicketDetails, TicketProperty, Link } from '@kix/core/dist/model';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
 
 class LinkedObjectsWidgetComponent {
 
@@ -27,7 +34,6 @@ class LinkedObjectsWidgetComponent {
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
-        this.setTicketData();
         this.setLinkedObjects();
     }
 
@@ -35,64 +41,52 @@ class LinkedObjectsWidgetComponent {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setLinkedObjects();
         }
-        if (id === TicketService.TICKET_DATA_ID && type === ContextNotification.OBJECT_UPDATED) {
-            this.setTicketData();
-        }
-    }
-
-    private setTicketData(): void {
-        const ticketData = ContextService.getInstance().getObject<TicketData>(TicketService.TICKET_DATA_ID);
-        if (ticketData) {
-            this.state.ticketData = ticketData;
-        }
     }
 
     private setLinkedObjects(): void {
-        this.state.linkQuantity = 0;
+        this.state.linkedObjectGroups = [];
+        this.state.linkCount = 0;
+
         if (this.state.ticketId) {
             this.state.ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (this.state.ticketDetails && this.state.ticketData) {
-                this.state.ticketDetails.ticket.Links.forEach((link) => {
-                    let linkedObjectType;
-                    let linkedObjectKey;
-                    let linkedObjectLinkType;
-                    if (link.SourceObject !== 'Ticket' || link.SourceKey !== this.state.ticketId.toString()) {
-                        linkedObjectKey = link.SourceKey;
-                        linkedObjectType = link.SourceObject;
-                        const linkType = this.state.ticketData.linkTypes.find((lt) => lt.Name === link.Type);
-                        if (linkType) {
-                            linkedObjectLinkType = linkType.SourceName;
-                        }
-                    } else if (link.TargetObject !== 'Ticket' || link.TargetKey !== this.state.ticketId.toString()) {
-                        linkedObjectKey = link.TargetKey;
-                        linkedObjectType = link.TargetObject;
-                        const linkType = this.state.ticketData.linkTypes.find((lt) => lt.Name === link.Type);
-                        if (linkType) {
-                            linkedObjectLinkType = linkType.TargetName;
-                        }
-                    }
-                    if (linkedObjectType && linkedObjectKey && linkedObjectLinkType) {
-                        if (!this.state.linkedObjects.has(linkedObjectType)) {
-                            this.state.linkedObjects.set(linkedObjectType, new Map());
-                        }
-                        if (linkedObjectType === 'Ticket') {
-                            TicketService.getInstance().loadTicketDetails(Number(linkedObjectKey)).then(() => {
-                                const linkedTicket
-                                    = TicketService.getInstance().getTicketDetails(Number(linkedObjectKey));
-                                this.state.linkedObjects.get(linkedObjectType)
-                                    .set(linkedTicket.ticket, linkedObjectLinkType);
-                                this.state.linkQuantity++;
-                                (this as any).setStateDirty("linkedObjects");
-                            });
-                        }
-                    }
+            if (this.state.ticketDetails) {
+
+                const linkedTickets = this.state.ticketDetails.ticket.Links.filter((link) => {
+                    return (link.SourceObject === 'Ticket' && link.SourceKey !== this.state.ticketId.toString()) ||
+                        (link.TargetObject === 'Ticket' && link.TargetKey !== this.state.ticketId.toString());
                 });
+
+                if (linkedTickets.length) {
+                    this.setTicketTableConfiguration(linkedTickets);
+                    this.state.linkCount += linkedTickets.length;
+                    this.state.linkedObjectGroups.push(['Ticket', linkedTickets.length]);
+                }
             }
         }
     }
 
-    private getLinkQuantity(objectGroup: string): number {
-        return this.state.linkedObjects.get(objectGroup) ? this.state.linkedObjects.get(objectGroup).size : 0;
+    private setTicketTableConfiguration(linkedTickets: Link[]): void {
+        if (this.state.widgetConfiguration) {
+            const labelProvider = new TicketTableLabelProvider();
+
+            const columnConfig: StandardTableColumn[] = [
+                new StandardTableColumn('TicketNumber', '', true, true, false),
+                new StandardTableColumn('Title', '', true, true, false),
+                new StandardTableColumn('TypeID', '', true, true, false),
+                new StandardTableColumn('QueueID', '', true, true, false),
+                new StandardTableColumn('StateID', 'TicketState', true, false, true),
+                new StandardTableColumn('Created', '', true, true, false),
+                new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false)
+            ];
+
+            const contentProvider = new LinkedTicketTableContentProvider(
+                this.state.instanceId, this.state.ticketId, linkedTickets, 5, columnConfig
+            );
+
+            this.state.ticketTableConfiguration = new StandardTableConfiguration(
+                labelProvider, contentProvider, null
+            );
+        }
     }
 
     private getDateTimeString(date: string): string {
