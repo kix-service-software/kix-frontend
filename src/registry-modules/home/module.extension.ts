@@ -2,6 +2,7 @@ import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
 } from '@kix/core/dist/model';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -56,7 +57,15 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     limit: 10,
                     displayLimit: 10,
                     showTotalCount: true,
-                    properties: ['TicketNumber', 'PriorityID', 'StateID', 'TypeID', 'Title', 'Created', 'Age']
+                    tableColumns: [
+                        new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 130),
+                        new StandardTableColumn('PriorityID', 'Priority', true, false, true, false, false, 100),
+                        new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
+                        new StandardTableColumn('TypeID', '', true, true, true, true, true, 100),
+                        new StandardTableColumn('Title', '', true, true, false, true, true, 200),
+                        new StandardTableColumn('Created', '', true, true, false, true, true, 100),
+                        new StandardTableColumn('Age', '', true, true, false, true, true, 100),
+                    ]
                 },
                 WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );

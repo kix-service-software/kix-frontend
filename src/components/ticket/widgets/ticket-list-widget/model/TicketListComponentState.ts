@@ -8,10 +8,6 @@ export class TicketListComponentState extends WidgetComponentState<TicketListSet
 
     public tableConfiguration: StandardTableConfiguration<Ticket> = null;
 
-    public tickets: Ticket[] = [];
-
-    public filteredTickets: Ticket[] = [];
-
     public filterValue: string = null;
 
     public contextFilter: ContextFilter = null;

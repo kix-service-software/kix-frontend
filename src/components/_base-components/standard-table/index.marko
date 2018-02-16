@@ -9,12 +9,14 @@
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>
-                    <div.table-cell.table-header-cell data-id=(state.tableId + columnId)>
+                    <div.table-cell.table-header-cell data-id=(state.tableId + columnId) style={width: component.getColumnSize(columnId)}>
                         ${component.getColumnTitle(columnId)}
                         <if(component.getColumnConfiguration(columnId).sortable)>
                             <span.sortable>
-                                <span.kix-icon-sort-up on-click('sortUp', columnId)/>
-                                <span.kix-icon-sort-down on-click('sortDown', columnId)/>
+                                <span.kix-icon-sort-up class=(component.isActiveSort(columnId, "Up") ? "sort-active" : "")
+                                    on-click('sortUp', columnId)/>
+                                <span.kix-icon-sort-down class=(component.isActiveSort(columnId, "Down") ? "sort-active" : "")
+                                    on-click('sortDown', columnId)/>
                             </span>
                         </if>
                         <if(component.getColumnConfiguration(columnId).resizable)>
@@ -38,8 +40,9 @@
                     <div.inner-row-wrapper>
                         <div.closed-row>
                             <for(columnId in component.getColumnIds())>
-                                <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "") on-click('rowClicked', row, columnId)
-                                    data-id=(state.tableId + columnId)>
+                                <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "")
+                                    style={width: component.getColumnSize(columnId)}
+                                    on-click('rowClicked', row, columnId) data-id=(state.tableId + columnId)>
                                     <if(component.getColumnConfiguration(columnId).isObjectProperty)>
                                         <object-property-label object=row property=columnId hasLabel=false
                                             hasText=component.getColumnConfiguration(columnId).hasText
