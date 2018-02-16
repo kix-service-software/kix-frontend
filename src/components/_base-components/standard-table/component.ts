@@ -112,22 +112,33 @@ class StandardTableComponent<T> {
     }
 
     private mousedown(col: string, event: any): void {
-        this.state.resizeSettings.resizeColumn = col;
+        this.state.resizeSettings.columnId = col;
         this.state.resizeSettings.startOffset = event.target.offsetWidth - event.pageX;
     }
 
     private mousemove(event: any): void {
-        if (this.state.resizeSettings.resizeColumn) {
-            const selector = "[data-id='" + this.state.tableId + this.state.resizeSettings.resizeColumn + "']";
+        if (this.state.resizeSettings.columnId) {
+            const selector = "[data-id='" + this.state.tableId + this.state.resizeSettings.columnId + "']";
             const elements: any = document.querySelectorAll(selector);
             elements.forEach((element: any) => {
-                element.style.width = this.state.resizeSettings.startOffset + 150 + event.pageX + 'px';
+                this.state.resizeSettings.currentSize = this.state.resizeSettings.startOffset + 150 + event.pageX;
+                element.style.width = this.state.resizeSettings.currentSize + 'px';
             });
         }
     }
 
     private mouseup(): void {
-        this.state.resizeSettings.resizeColumn = undefined;
+        if (this.state.tableConfiguration && this.state.resizeSettings) {
+            const columnConfig = this.getColumnConfiguration(this.state.resizeSettings.columnId);
+            if (columnConfig) {
+                columnConfig.size = this.state.resizeSettings.currentSize;
+
+                if (this.state.tableConfiguration.configurationListener) {
+                    this.state.tableConfiguration.configurationListener.columnConfigurationChanged(columnConfig);
+                }
+            }
+        }
+        this.state.resizeSettings.columnId = undefined;
     }
 
     private sortUp(columnId: string): void {
@@ -211,6 +222,10 @@ class StandardTableComponent<T> {
 
     private hasClickListener(): boolean {
         return this.state.tableConfiguration.clickListener !== undefined;
+    }
+
+    private getColumnSize(columnId: string): string {
+        return this.getColumnConfiguration(columnId).size + 'px';
     }
 }
 
