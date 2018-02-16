@@ -110,25 +110,16 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
             this.state.contextFilter
         ) {
-            this.state.filteredTickets =
-                this.state.tickets.filter((t) => t.QueueID === this.state.contextFilter.objectValue);
-
+            this.state.tableConfiguration.contentProvider.filterObjectsByProperty(
+                this.state.contextFilter.objectProperty, this.state.contextFilter.objectValue
+            );
             usedContextFilter = true;
         }
 
-
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
-            const searchValue = this.state.filterValue.toLocaleLowerCase();
-
-            const tickets = usedContextFilter ? this.state.filteredTickets : this.state.tickets;
-
-            this.state.filteredTickets = tickets.filter((ticket: Ticket) => {
-                const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
-                const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
-                return foundTitle || foundTicketNumber;
-            });
+            this.state.tableConfiguration.contentProvider.filterObjects(this.state.filterValue);
         } else if (!usedContextFilter) {
-            this.state.filteredTickets = this.state.tickets;
+            this.state.tableConfiguration.contentProvider.resetFilter();
         }
 
         (this as any).setStateDirty('filteredTickets');
