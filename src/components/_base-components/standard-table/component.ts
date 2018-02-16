@@ -235,6 +235,21 @@ class StandardTableComponent<T> {
     private getColumnSize(columnId: string): string {
         return this.getColumnConfiguration(columnId).size + 'px';
     }
+
+    private toggleRow(rowId: number): void {
+        const rowIndex = this.state.toggledRows.findIndex((r) => r === rowId);
+        if (rowIndex === -1) {
+            this.state.toggledRows.push(rowId);
+        } else {
+            this.state.toggledRows.splice(rowIndex, 1);
+        }
+
+        (this as any).forceUpdate();
+    }
+
+    private rowIsToggled(rowId): boolean {
+        return this.state.toggledRows.findIndex((r) => r === rowId) !== -1;
+    }
 }
 
 module.exports = StandardTableComponent;

@@ -29,7 +29,7 @@
                 </if>
                 <div.table-cell.table-header-cell.fixed.scrollbar-column data-id=(state.tableId + "scrollbar-column")>&nbsp;</div>
             </div>
-            <for(row in component.getRows())>
+            <for(row in component.getRows() | status-var=loop)>
                 <!-- Klasse "opened", wenn geöffnet -->
                 <div.row.opened style={minHeight: component.getRowHeight()}>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
@@ -58,14 +58,17 @@
                                 </div>
                             </for>
                             <if(state.tableConfiguration.toggleRowEnabled)>
-                                <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")>
+                                <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
+                                    on-click('toggleRow', loop.getIndex())>
                                     <span.kix-icon-sort-down/>
                                 </div>
                             </if>
                         </div>
-                        <div.opened-row>
-                            <!-- Hier das Widget mit den Inhalten rein --> Test
-                        </div>
+                        <if(component.rowIsToggled(loop.getIndex()))>
+                            <div.opened-row>
+                                <!-- Hier das Widget mit den Inhalten rein --> Test
+                            </div>
+                        </if>
                     </div>
                     <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
