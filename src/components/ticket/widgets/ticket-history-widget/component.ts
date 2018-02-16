@@ -37,16 +37,10 @@ class TicketHistoryWidgetComponent {
         if (this.state.widgetConfiguration) {
             const labelProvider = new HistoryTableLabelProvider();
 
-            const columnConfig: StandardTableColumn[] = [
-                new StandardTableColumn('HistoryType', '', false, true, false),
-                new StandardTableColumn('Name', '', false, true, false),
-                new StandardTableColumn('ArticleID', '', false, true, false),
-                new StandardTableColumn('CreateBy', '', false, true, false),
-                new StandardTableColumn('CreateTime', '', false, true, false)
-            ];
+            const columnConfig: StandardTableColumn[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
             const contentProvider = new HistoryTableContentProvider(
-                this.state.instanceId, this.state.ticketId, columnConfig, 7
+                labelProvider, this.state.instanceId, this.state.ticketId, columnConfig, 7
             );
 
             const clickListener: ITableClickListener<TicketHistory> = {
@@ -72,8 +66,11 @@ class TicketHistoryWidgetComponent {
     }
 
     private filterHistory(): void {
-        // this.state.filteredHistory = TicketUtil.filterTicketHistory(this.state.history, this.state.filterValue);
-        // (this as any).setStateDirty('filteredHistory');
+        if (this.state.filterValue !== null && this.state.filterValue !== "") {
+            this.state.historyTableConfiguration.contentProvider.filterObjects(this.state.filterValue);
+        } else {
+            this.state.historyTableConfiguration.contentProvider.resetFilter();
+        }
     }
 
     private print(): void {

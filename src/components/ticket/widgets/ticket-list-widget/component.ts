@@ -70,7 +70,7 @@ class TicketListWidgetComponent {
 
             const contentProvider = new TicketTableContentProvider(
                 this.state.instanceId,
-                this.state.widgetConfiguration.settings.tableColumns,
+                this.state.widgetConfiguration.settings.tableColumns || [],
                 this.state.widgetConfiguration.settings.limit,
                 this.state.widgetConfiguration.settings.displayLimit
             );
@@ -121,8 +121,6 @@ class TicketListWidgetComponent {
         } else if (!usedContextFilter) {
             this.state.tableConfiguration.contentProvider.resetFilter();
         }
-
-        (this as any).setStateDirty('filteredTickets');
     }
 
 }
