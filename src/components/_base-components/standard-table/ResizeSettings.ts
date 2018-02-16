@@ -2,6 +2,8 @@ export class ResizeSettings {
 
     public startOffset: number;
 
-    public resizeColumn: string;
+    public columnId: string;
+
+    public currentSize: number;
 
 }

@@ -4,7 +4,8 @@ import {
     TicketUtil,
     TicketService,
     TicketTableLabelProvider,
-    TicketTableClickListener
+    TicketTableClickListener,
+    TicketTableConfigurationListener
 } from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
@@ -12,6 +13,7 @@ import { TicketDetails, TicketProperty, Link, Ticket } from '@kix/core/dist/mode
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class LinkedObjectsWidgetComponent {
 
@@ -78,24 +80,37 @@ class LinkedObjectsWidgetComponent {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
-            const columnConfig: StandardTableColumn[] = [
-                new StandardTableColumn('TicketNumber', '', true, true, false),
-                new StandardTableColumn('Title', '', true, true, false),
-                new StandardTableColumn('TypeID', 'TypeID', true, true, false),
-                new StandardTableColumn('QueueID', 'QueueID', true, true, false),
-                new StandardTableColumn('StateID', 'TicketState', true, false, true),
-                new StandardTableColumn('Created', 'Created', true, true, false),
-                new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false)
-            ];
+            const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
+            const columnConfig = groupEntry ? groupEntry[1] : [];
 
             const contentProvider = new LinkedTicketTableContentProvider(
                 this.state.instanceId, this.state.ticketId, linkedTickets, columnConfig, 7
             );
 
             const clickListener = new TicketTableClickListener();
+            const configurationListener: TicketTableConfigurationListener = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
             return new StandardTableConfiguration(
-                labelProvider, contentProvider, null, clickListener
+                labelProvider, contentProvider, null, clickListener, configurationListener
+            );
+        }
+    }
+
+    private columnConfigurationChanged(column: StandardTableColumn): void {
+        const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
+        if (groupEntry) {
+            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.columnId);
+
+            if (index >= 0) {
+                groupEntry[1][index] = column;
+            } else {
+                groupEntry[1].push(column);
+            }
+
+            DashboardService.getInstance().saveWidgetConfiguration(
+                this.state.instanceId, this.state.widgetConfiguration
             );
         }
     }

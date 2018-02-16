@@ -9,7 +9,7 @@
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>
-                    <div.table-cell.table-header-cell data-id=(state.tableId + columnId)>
+                    <div.table-cell.table-header-cell data-id=(state.tableId + columnId) style={width: component.getColumnSize(columnId)}>
                         ${component.getColumnTitle(columnId)}
                         <if(component.getColumnConfiguration(columnId).sortable)>
                             <span.sortable>
@@ -36,7 +36,8 @@
                     </if>
                     <div.inner-row-wrapper>
                         <for(columnId in component.getColumnIds())>
-                            <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "") on-click('rowClicked', row, columnId)
+                            <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "")
+                                style={width: component.getColumnSize(columnId)} on-click('rowClicked', row, columnId)
                                 data-id=(state.tableId + columnId)>
                                 <if(component.getColumnConfiguration(columnId).isObjectProperty)>
                                     <object-property-label object=row property=columnId hasLabel=false
