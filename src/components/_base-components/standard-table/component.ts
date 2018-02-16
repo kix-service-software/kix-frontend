@@ -143,10 +143,18 @@ class StandardTableComponent<T> {
 
     private sortUp(columnId: string): void {
         this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
+        this.state.sortedColumnId = columnId;
+        this.state.sortOrder = SortOrder.UP;
     }
 
     private sortDown(columnId: string): void {
         this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
+        this.state.sortedColumnId = columnId;
+        this.state.sortOrder = SortOrder.DOWN;
+    }
+
+    private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
+        return this.state.sortedColumnId === columnId && this.state.sortOrder === sortOrder;
     }
 
     private selectAll(event): void {
