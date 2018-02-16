@@ -54,13 +54,6 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
             this.setTableConfiguration();
-        } else if (type === ContextNotification.OBJECT_LIST_UPDATED) {
-            const tickets: Ticket[] = args[0];
-            if (requestId === this.state.instanceId && tickets) {
-                this.state.tickets = tickets;
-                this.state.filteredTickets = tickets;
-                this.filter();
-            }
         }
     }
 
@@ -84,6 +77,8 @@ class TicketListWidgetComponent {
             this.state.tableConfiguration = new StandardTableConfiguration(
                 labelProvider, contentProvider, selectionListener, clickListener, configurationListener, true, true
             );
+
+            this.filter();
         }
     }
 
@@ -121,8 +116,6 @@ class TicketListWidgetComponent {
         } else if (!usedContextFilter) {
             this.state.tableConfiguration.contentProvider.resetFilter();
         }
-
-        (this as any).setStateDirty('filteredTickets');
     }
 
 }

@@ -13,8 +13,10 @@
                         ${component.getColumnTitle(columnId)}
                         <if(component.getColumnConfiguration(columnId).sortable)>
                             <span.sortable>
-                                <span.kix-icon-sort-up on-click('sortUp', columnId)/>
-                                <span.kix-icon-sort-down on-click('sortDown', columnId)/>
+                                <span.kix-icon-sort-up class=(component.isActiveSort(columnId, "Up") ? "sort-active" : "")
+                                    on-click('sortUp', columnId)/>
+                                <span.kix-icon-sort-down class=(component.isActiveSort(columnId, "Down") ? "sort-active" : "")
+                                    on-click('sortDown', columnId)/>
                             </span>
                         </if>
                         <if(component.getColumnConfiguration(columnId).resizable)>
