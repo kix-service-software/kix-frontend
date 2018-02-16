@@ -2,7 +2,7 @@
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
         <div.standard-table key=(state.tableId + "standard-table") style={height: component.getTableHeight()}
             on-scroll('loadMore')>
-            <div.row.header-row key="header-row" style={height: component.getRowHeight()}>
+            <div.row.header-row key=(state.tableId + "header-row") style={height: component.getRowHeight()}>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <div.table-cell.table-header-cell.fixed.checkbox-column data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll')/>
