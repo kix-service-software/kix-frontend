@@ -100,7 +100,6 @@ class LinkedObjectsWidgetComponent {
         }
     }
 
-
     private getDateTimeString(date: string): string {
         return TicketUtil.getDateTimeString(date);
     }

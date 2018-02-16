@@ -1,6 +1,5 @@
 <if(state.tableConfiguration)>
     <div.standard-table-wrapper key="standard-table-wrapper">
-        <!-- TODO: on-scroll durch "on-ps-scroll-y" ersetzen bzw. in onMount in der Komponente mit addEventListener -->
         <div.standard-table key="standard-table" style={height: component.getTableHeight()} on-scroll('loadMore')>
             <!-- TODO: statt über style ggf. über Klasse -->
             <div.row.header-row key="header-row" style={height: component.getRowHeight()}>
