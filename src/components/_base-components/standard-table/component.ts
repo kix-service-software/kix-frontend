@@ -168,7 +168,7 @@ class StandardTableComponent<T> {
     }
 
     private loadMore(): void {
-        const standardTable = (this as any).getEl('standard-table');
+        const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
         if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
             const checkHeight =
                 this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
