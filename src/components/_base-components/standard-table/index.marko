@@ -17,7 +17,9 @@
                                 <span.kix-icon-sort-down on-click('sortDown', columnId)/>
                             </span>
                         </if>
-                        <div.move-point on-mousedown('mousedown', columnId)/>
+                        <if(component.getColumnConfiguration(columnId).resizable)>
+                            <div.move-point on-mousedown('mousedown', columnId)/>
+                        </if>
                     </div>
                 </for>
                 <if(state.tableConfiguration.toggleRowEnabled)>
