@@ -16,9 +16,13 @@
             display: block;
             white-space: nowrap;
             background-color: #ffffff; // TODO: height ggf. weg?
-            height: 2em; // border: 1px solid #f5f5f5;
+            // height: 2em; 
+            // border: 1px solid #f5f5f5;
             // border-radius: 3px;
             box-sizing: border-box;
+            .opened-row {
+                display: none;
+            }
             .sub-row-wrapper {
                 display: none;
                 min-height: 80px;
@@ -49,6 +53,14 @@
                 .toggle-row-column {
                     border-top-right-radius: 3px;
                     border-bottom-right-radius: 3px;
+                }
+                &.opened {
+                    .checkbox-column,
+                    .closed-row,
+                    .toggle-row-column {
+                        background-color: #b6d6e8;
+                        color: #096392;
+                    }
                 }
             }
             .table-cell {
@@ -107,6 +119,7 @@
                 margin: 0;
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
+                background-color: lightgray;
                 .table-header-cell {
                     font-weight: bold;
                     background-color: lightgray;
@@ -142,6 +155,26 @@
                         &:active {
                             background-color: grey;
                         }
+                    }
+                }
+            }
+            &.opened {
+                .table-cell.fixed.checkbox-column,
+                .closed-row,
+                .toggle-row-column {
+                    background-color: #b6d6e8;
+                    color: #096392;
+                }
+                .inner-row-wrapper {
+                    background-color: #ffffff;
+                    .opened-row {
+                        display: block;
+                        margin: 0 4em 1em 0;
+                        min-height: 10em;
+                        border: 1px solid #9acae5;
+                        border-bottom-left-radius: 3px;
+                        border-bottom-right-radius: 3px;
+                        padding: 1em 2em;
                     }
                 }
             }
