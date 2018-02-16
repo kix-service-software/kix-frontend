@@ -44,10 +44,15 @@
                                         hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                                 </if>
                                 <else>
-                                    <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                    <!-- TODO: nach Umbau/Bau eines generellen "object-label"s, dann auch hier nutzen -->
+                                    <if(component.getColumnConfiguration(columnId).hasText)>
+                                        <span title=component.getColumnDisplayText(row, columnId)>${component.getColumnDisplayText(row, columnId)}</span>
+                                    </if>
                                     <if(component.getColumnConfiguration(columnId).hasIcon)>
-                                        <icon object=component.getColumnConfiguration(columnId).property
-                                            objectId=component.getColumnObjectValue(row, columnId)/>
+                                        <span title=component.getColumnDisplayText(row, columnId)>
+                                            <icon object=component.getColumnConfiguration(columnId).property
+                                                objectId=component.getColumnObjectValue(row, columnId)/>
+                                        </span>
                                     </if>
                                 </else>
                             </div>

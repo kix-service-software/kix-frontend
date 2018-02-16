@@ -1,10 +1,10 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
-import { TicketUtil, TicketService } from '@kix/core/dist/browser/ticket';
-import { TicketHistory } from '@kix/core/dist/model/ticket/TicketHistory';
+import { HistoryTableLabelProvider, HistoryTableContentProvider } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { StandardTableColumn, StandardTableConfiguration, ITableClickListener } from '@kix/core/dist/browser';
+import { TicketHistory } from '@kix/core/dist/model';
 
 class TicketHistoryWidgetComponent {
 
@@ -17,48 +17,54 @@ class TicketHistoryWidgetComponent {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.state.ticketId = Number(input.ticketId);
+        this.setHistoryTableConfiguration();
     }
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.getTicket();
+        this.setHistoryTableConfiguration();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.getTicket();
+            this.setHistoryTableConfiguration();
         }
     }
 
-    private getTicket(): void {
-        if (this.state.ticketId) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails) {
-                this.state.history = ticketDetails.history.sort(
-                    (a: TicketHistory, b: TicketHistory) => b.CreateTime.localeCompare(a.CreateTime)
-                );
-                this.state.filteredHistory = this.state.history;
-            }
+    private setHistoryTableConfiguration(): void {
+        if (this.state.widgetConfiguration) {
+            const labelProvider = new HistoryTableLabelProvider();
+
+            const columnConfig: StandardTableColumn[] = [
+                new StandardTableColumn('HistoryType', '', false, true, false),
+                new StandardTableColumn('Name', '', false, true, false),
+                new StandardTableColumn('ArticleID', '', false, true, false),
+                new StandardTableColumn('CreateBy', '', false, true, false),
+                new StandardTableColumn('CreateTime', '', false, true, false)
+            ];
+
+            const contentProvider = new HistoryTableContentProvider(
+                this.state.instanceId, this.state.ticketId, columnConfig, 7
+            );
+
+            const clickListener: ITableClickListener<TicketHistory> = {
+                rowClicked: this.navigateToArticle.bind(this)
+            };
+
+            this.state.historyTableConfiguration = new StandardTableConfiguration(
+                labelProvider, contentProvider, null, clickListener
+            );
         }
     }
 
-    private getDateTimeString(date: string): string {
-        return TicketUtil.getDateTimeString(date);
-    }
-
-    private getUserName(value: any): string {
-        return TicketUtil.getPropertyValue("UserID", value, this.state.ticketId);
-    }
-
-    private navigateToArticle(articleId: number, event: any): void {
-        event.stopPropagation();
-
-        (this as any).emit('expandArticle', articleId);
-
-        const articleElement = document.getElementById(articleId.toString());
-        articleElement.scrollIntoView();
+    private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
+        if (columnId === 'ArticleID') {
+            (this as any).emit('expandArticle', historyEntry[columnId]);
+            const articleElement = document.getElementById(historyEntry[columnId].toString());
+            articleElement.scrollIntoView();
+        }
     }
 
     private filterValueChanged(event: any): void {
@@ -66,18 +72,8 @@ class TicketHistoryWidgetComponent {
     }
 
     private filterHistory(): void {
-        this.state.filteredHistory = TicketUtil.filterTicketHistory(this.state.history, this.state.filterValue);
-        (this as any).setStateDirty('filteredHistory');
-    }
-
-    private sortUp(property: string): void {
-        this.state.filteredHistory = TicketUtil.sortTicketHistory(SortOrder.UP, this.state.filteredHistory, property);
-        (this as any).setStateDirty('filteredHistory');
-    }
-
-    private sortDown(property: string): void {
-        this.state.filteredHistory = TicketUtil.sortTicketHistory(SortOrder.DOWN, this.state.filteredHistory, property);
-        (this as any).setStateDirty('filteredHistory');
+        // this.state.filteredHistory = TicketUtil.filterTicketHistory(this.state.history, this.state.filterValue);
+        // (this as any).setStateDirty('filteredHistory');
     }
 
     private print(): void {
