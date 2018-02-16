@@ -3,6 +3,7 @@ import {
     TicketDetailsDashboardConfiguration,
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
 } from '@kix/core/dist/model/';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -45,7 +46,22 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             );
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
-                "ticket-linked-objects-widget", "Verknüpfte Objekte", ['print-ticket-action', 'edit-ticket-action'], {},
+                "ticket-linked-objects-widget", "Verknüpfte Objekte", ['print-ticket-action', 'edit-ticket-action'],
+                {
+                    groups: [
+                        [
+                            "Ticket", [
+                                new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 100),
+                                new StandardTableColumn('Title', '', true, true, false, true, true, 100),
+                                new StandardTableColumn('TypeID', 'TypeID', true, true, false, true, true, 100),
+                                new StandardTableColumn('QueueID', 'QueueID', true, true, false, true, true, 100),
+                                new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
+                                new StandardTableColumn('Created', 'Created', true, true, false, true, true, 100),
+                                new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false, true, true, 100)
+                            ]
+                        ]
+                    ]
+                },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
 
