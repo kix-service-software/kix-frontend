@@ -9,6 +9,9 @@
         position: relative;
         overflow: auto;
         margin-bottom: 2em;
+        .row-link {
+            cursor: pointer;
+        }
         .row {
             display: block;
             white-space: nowrap;
@@ -52,7 +55,6 @@
                 // TODO: line-height ggf. weg bzw. 27/ 32 px?
                 line-height: @header-height;
                 width: @cell-min-width;
-                min-width: 250px;
                 display: inline-block;
                 vertical-align: top;
                 white-space: nowrap;

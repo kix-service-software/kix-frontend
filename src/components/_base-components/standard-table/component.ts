@@ -36,11 +36,15 @@ class StandardTableComponent<T> {
 
     private initTableScrollRange(): void {
         setTimeout(() => {
-            const table = (this as any).getEl('standard-table');
-            const header = (this as any).getEl('header-row');
-            const checkboxColumn: any = document.querySelectorAll("[data-id='checkbox-column']");
-            const toggleRowColumn: any = document.querySelectorAll("[data-id='toggle-row-column']");
-            const scrollbarColumn: any = document.querySelectorAll("[data-id='scrollbar-column']");
+            const table = (this as any).getEl(this.state.tableId + 'standard-table');
+            const header = (this as any).getEl(this.state.tableId + 'header-row');
+            const checkboxColumn: any =
+                document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-column']");
+            const toggleRowColumn: any =
+                document.querySelectorAll("[data-id='" + this.state.tableId + "toggle-row-column']");
+            const scrollbarColumn: any =
+                document.querySelectorAll("[data-id='" + this.state.tableId + "scrollbar-column']");
+
             // TODO: subRows erneut implementieren!
             // const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
 
@@ -114,7 +118,7 @@ class StandardTableComponent<T> {
 
     private mousemove(event: any): void {
         if (this.state.resizeSettings.resizeColumn) {
-            const selector = "[data-id='" + this.state.resizeSettings.resizeColumn + "']";
+            const selector = "[data-id='" + this.state.tableId + this.state.resizeSettings.resizeColumn + "']";
             const elements: any = document.querySelectorAll(selector);
             elements.forEach((element: any) => {
                 element.style.width = this.state.resizeSettings.startOffset + 150 + event.pageX + 'px';
@@ -137,7 +141,7 @@ class StandardTableComponent<T> {
     private selectAll(event): void {
         const checked = event.target.checked;
 
-        const elements: any = document.querySelectorAll("[data-id='checkbox-input'");
+        const elements: any = document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-input'");
         elements.forEach((element: any) => {
             element.checked = checked;
         });
@@ -203,6 +207,10 @@ class StandardTableComponent<T> {
             spacerHeight = remainder * this.state.tableConfiguration.rowHeight;
         }
         return spacerHeight + 'px';
+    }
+
+    private hasClickListener(): boolean {
+        return this.state.tableConfiguration.clickListener !== undefined;
     }
 }
 
