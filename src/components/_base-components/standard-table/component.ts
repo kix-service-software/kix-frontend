@@ -7,6 +7,7 @@ import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 class StandardTableComponent<T> {
 
     private state: StandardTableComponentState;
+    private loadMoreTimeout: any = null;
     private ps: any;
 
     public onCreate(input: StandardTableInput): void {
@@ -162,6 +163,47 @@ class StandardTableComponent<T> {
         }
     }
 
+    private loadMore(): void {
+        const standardTable = (this as any).getEl('standard-table');
+        if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
+            const checkHeight =
+                this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
+                * this.state.tableConfiguration.rowHeight;
+            if (standardTable.scrollTop > checkHeight) {
+                this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
+
+                // check after increase if still more have to be loaded
+                this.loadMoreTimeout = setTimeout(() => {
+                    this.loadMoreTimeout = null;
+                    this.loadMore();
+                }, 66);
+            }
+        }
+    }
+
+    public getRowHeight(): string {
+        return this.state.tableConfiguration.rowHeight + 'px';
+    }
+
+    public getTableHeight(): string {
+        const minElements =
+            this.getRows().length > this.state.tableConfiguration.contentProvider.getDisplayLimit() ?
+                this.state.tableConfiguration.contentProvider.getDisplayLimit() : this.getRows().length;
+        const height = (minElements + 1) * this.state.tableConfiguration.rowHeight;
+        return height + 'px';
+    }
+
+    public getSpacerHeight(): string {
+        let spacerHeight = 0;
+        const remainder =
+            this.state.tableConfiguration.contentProvider.getLimit()
+            - this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
+            - Math.ceil(this.state.tableConfiguration.contentProvider.getDisplayLimit() * 1.5);
+        if (remainder > 0) {
+            spacerHeight = remainder * this.state.tableConfiguration.rowHeight;
+        }
+        return spacerHeight + 'px';
+    }
 }
 
 module.exports = StandardTableComponent;

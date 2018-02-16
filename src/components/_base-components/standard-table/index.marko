@@ -1,7 +1,8 @@
 <if(state.tableConfiguration)>
     <div.standard-table-wrapper key="standard-table-wrapper">
-        <div.standard-table key="standard-table">
-            <div.row.header-row key="header-row">
+        <div.standard-table key="standard-table" style={height: component.getTableHeight()} on-scroll('loadMore')>
+            <!-- TODO: statt über style ggf. über Klasse -->
+            <div.row.header-row key="header-row" style={height: component.getRowHeight()}>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <div.table-cell.table-header-cell.fixed.checkbox-column data-id="checkbox-column">
                         <input type="checkbox" on-click('selectAll')/>
@@ -25,7 +26,7 @@
                 <div.table-cell.table-header-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
             </div>
             <for(row in component.getRows())>
-                <div.row>
+                <div.row style={height: component.getRowHeight()}>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed.checkbox-column.row-column data-id="checkbox-column">
                             <input type="checkbox" on-click('selectRow', row) data-id="checkbox-input"/>
@@ -57,6 +58,7 @@
                     <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
             </for>
+            <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
         </div>
     </div>
 </if>

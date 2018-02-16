@@ -85,8 +85,9 @@ class TicketListWidgetComponent {
 
             const contentProvider = new TicketTableContentProvider(
                 this.state.instanceId,
-                this.state.widgetConfiguration.settings.displayLimit,
-                columnConfig
+                columnConfig,
+                this.state.widgetConfiguration.settings.limit,
+                this.state.widgetConfiguration.settings.displayLimit
             );
 
             const selectionListener = new TicketTableSelectionListener();
