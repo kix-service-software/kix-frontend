@@ -1,4 +1,5 @@
 import { TicketProperty } from "@kix/core/dist/model";
+import { StandardTableColumn } from "@kix/core/dist/browser";
 
 export class TicketListSettings {
 
@@ -8,6 +9,6 @@ export class TicketListSettings {
 
     public showTotalCount: boolean;
 
-    public properties: TicketProperty[];
+    public tableColumns: StandardTableColumn[];
 
 }

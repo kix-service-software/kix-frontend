@@ -11,10 +11,10 @@ import {
     TicketTableLabelProvider,
     TicketTableSelectionListener,
     TicketTableClickListener,
+    TicketTableConfigurationListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
-import { StandardTableConfiguration } from '@kix/core/dist/browser';
-import { StandardTableColumn } from '@kix/core/dist/browser/standard-table/StandardTableColumn';
+import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
 
@@ -68,35 +68,36 @@ class TicketListWidgetComponent {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
-            const columnConfig: StandardTableColumn[] = [];
-            for (const prop of this.state.widgetConfiguration.settings.properties) {
-                if (prop === TicketProperty.PRIORITY_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'Priority', true, false, true, false, false));
-                } else if (prop === TicketProperty.STATE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketState', true, false, true));
-                } else if (prop === TicketProperty.SERVICE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'IncidentState', true, true, true));
-                } else if (prop === TicketProperty.LOCK_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketLock', true, false, true, false, false));
-                } else {
-                    columnConfig.push(new StandardTableColumn(prop, '', true, true, false));
-                }
-            }
-
             const contentProvider = new TicketTableContentProvider(
                 this.state.instanceId,
-                columnConfig,
+                this.state.widgetConfiguration.settings.tableColumns,
                 this.state.widgetConfiguration.settings.limit,
                 this.state.widgetConfiguration.settings.displayLimit
             );
 
             const selectionListener = new TicketTableSelectionListener();
             const clickListener = new TicketTableClickListener();
+            const configurationListener: TicketTableConfigurationListener = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
             this.state.tableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, selectionListener, clickListener, true, true
+                labelProvider, contentProvider, selectionListener, clickListener, configurationListener, true, true
             );
         }
+    }
+
+    private columnConfigurationChanged(column: StandardTableColumn): void {
+        const index =
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+
+        if (index >= 0) {
+            this.state.widgetConfiguration.settings.tableColumns[index] = column;
+        } else {
+            this.state.widgetConfiguration.settings.tableColumns.push(column);
+        }
+
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filterChanged(event): void {

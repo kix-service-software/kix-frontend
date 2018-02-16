@@ -30,7 +30,7 @@ class TicketListConfigurationComponent {
     }
 
     private isPropertySelected(property: string): boolean {
-        return this.state.configuration.settings.properties.findIndex((p) => p === property) > -1;
+        return false; // this.state.configuration.settings.properties.findIndex((p) => p === property) > -1;
     }
 
     private displayLimitChanged(event: any): void {
@@ -42,10 +42,10 @@ class TicketListConfigurationComponent {
     }
 
     private propertyChanged(event: any): void {
-        this.state.configuration.settings.properties = [];
-        for (const selectedProperty of event.target.selectedOptions) {
-            this.state.configuration.settings.properties.push(selectedProperty.value);
-        }
+        // this.state.configuration.settings.properties = [];
+        // for (const selectedProperty of event.target.selectedOptions) {
+        //     this.state.configuration.settings.properties.push(selectedProperty.value);
+        // }
     }
 
     private showTotalCountChanged(event: any): void {
