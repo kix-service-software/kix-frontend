@@ -200,6 +200,8 @@ class StandardTableComponent<T> {
                     this.loadMoreTimeout = null;
                     this.loadMore();
                 }, 66);
+
+                (this as any).setStateDirty();
             }
         }
     }
