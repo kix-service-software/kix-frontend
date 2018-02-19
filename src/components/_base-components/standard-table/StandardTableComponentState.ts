@@ -1,6 +1,7 @@
 import { StandardTableConfiguration } from '@kix/core/dist/browser';
 import { ResizeSettings } from './ResizeSettings';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class StandardTableComponentState<T = any> {
 
@@ -11,4 +12,11 @@ export class StandardTableComponentState<T = any> {
     public rows: T[] = [];
 
     public tableId: string = IdService.generateDateBasedRandomId();
+
+    public sortedColumnId: string = null;
+
+    public sortOrder: SortOrder = null;
+
+    public toggledRows: number[] = [];
+
 }

@@ -11,10 +11,10 @@ import {
     TicketTableLabelProvider,
     TicketTableSelectionListener,
     TicketTableClickListener,
+    TicketTableConfigurationListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
-import { StandardTableConfiguration } from '@kix/core/dist/browser';
-import { StandardTableColumn } from '@kix/core/dist/browser/standard-table/StandardTableColumn';
+import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
 
@@ -54,13 +54,6 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
             this.setTableConfiguration();
-        } else if (type === ContextNotification.OBJECT_LIST_UPDATED) {
-            const tickets: Ticket[] = args[0];
-            if (requestId === this.state.instanceId && tickets) {
-                this.state.tickets = tickets;
-                this.state.filteredTickets = tickets;
-                this.filter();
-            }
         }
     }
 
@@ -68,35 +61,38 @@ class TicketListWidgetComponent {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
-            const columnConfig: StandardTableColumn[] = [];
-            for (const prop of this.state.widgetConfiguration.settings.properties) {
-                if (prop === TicketProperty.PRIORITY_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'Priority', true, false, true, false, false));
-                } else if (prop === TicketProperty.STATE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketState', true, false, true));
-                } else if (prop === TicketProperty.SERVICE_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'IncidentState', true, true, true));
-                } else if (prop === TicketProperty.LOCK_ID) {
-                    columnConfig.push(new StandardTableColumn(prop, 'TicketLock', true, false, true, false, false));
-                } else {
-                    columnConfig.push(new StandardTableColumn(prop, '', true, true, false));
-                }
-            }
-
             const contentProvider = new TicketTableContentProvider(
                 this.state.instanceId,
-                columnConfig,
+                this.state.widgetConfiguration.settings.tableColumns,
                 this.state.widgetConfiguration.settings.limit,
                 this.state.widgetConfiguration.settings.displayLimit
             );
 
             const selectionListener = new TicketTableSelectionListener();
             const clickListener = new TicketTableClickListener();
+            const configurationListener: TicketTableConfigurationListener = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
             this.state.tableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, selectionListener, clickListener, true, true
+                labelProvider, contentProvider, selectionListener, clickListener, configurationListener, true, true
             );
+
+            this.filter();
         }
+    }
+
+    private columnConfigurationChanged(column: StandardTableColumn): void {
+        const index =
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+
+        if (index >= 0) {
+            this.state.widgetConfiguration.settings.tableColumns[index] = column;
+        } else {
+            this.state.widgetConfiguration.settings.tableColumns.push(column);
+        }
+
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filterChanged(event): void {
@@ -109,28 +105,17 @@ class TicketListWidgetComponent {
             this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
             this.state.contextFilter
         ) {
-            this.state.filteredTickets =
-                this.state.tickets.filter((t) => t.QueueID === this.state.contextFilter.objectValue);
-
+            this.state.tableConfiguration.contentProvider.filterObjectsByProperty(
+                this.state.contextFilter.objectProperty, this.state.contextFilter.objectValue
+            );
             usedContextFilter = true;
         }
 
-
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
-            const searchValue = this.state.filterValue.toLocaleLowerCase();
-
-            const tickets = usedContextFilter ? this.state.filteredTickets : this.state.tickets;
-
-            this.state.filteredTickets = tickets.filter((ticket: Ticket) => {
-                const foundTitle = ticket.Title.toLocaleLowerCase().indexOf(searchValue) !== -1;
-                const foundTicketNumber = ticket.TicketNumber.toLocaleLowerCase().indexOf(searchValue) !== -1;
-                return foundTitle || foundTicketNumber;
-            });
+            this.state.tableConfiguration.contentProvider.filterObjects(this.state.filterValue);
         } else if (!usedContextFilter) {
-            this.state.filteredTickets = this.state.tickets;
+            this.state.tableConfiguration.contentProvider.resetFilter();
         }
-
-        (this as any).setStateDirty('filteredTickets');
     }
 
 }
