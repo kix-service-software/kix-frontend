@@ -20,7 +20,16 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             );
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
-                "ticket-history-widget", "Historie", ['print-ticket-action'], {},
+                "ticket-history-widget", "Historie", ['print-ticket-action'],
+                {
+                    tableColumns: [
+                        new StandardTableColumn('HistoryType', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('Name', '', false, true, false, true, true, 200),
+                        new StandardTableColumn('ArticleID', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('CreateBy', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('CreateTime', '', false, true, false, true, true, 100)
+                    ]
+                },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =

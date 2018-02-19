@@ -115,17 +115,6 @@ class LinkedObjectsWidgetComponent {
         }
     }
 
-    private getDateTimeString(date: string): string {
-        return TicketUtil.getDateTimeString(date);
-    }
-
-    private ticketClicked(ticketId: string, event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-        ComponentRouterStore.getInstance().navigate('base-router', 'ticket-details', { ticketId }, ticketId);
-    }
-
     private print(): void {
         alert('Drucken ...');
     }
