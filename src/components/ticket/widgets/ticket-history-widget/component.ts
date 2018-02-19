@@ -54,7 +54,7 @@ class TicketHistoryWidgetComponent {
     }
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
-        if (columnId === 'ArticleID') {
+        if (columnId === 'ArticleID' && historyEntry[columnId]) {
             (this as any).emit('expandArticle', historyEntry[columnId]);
             const articleElement = document.getElementById(historyEntry[columnId].toString());
             articleElement.scrollIntoView();
