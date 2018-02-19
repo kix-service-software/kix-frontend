@@ -29,40 +29,49 @@
                 </if>
                 <div.table-cell.table-header-cell.fixed.scrollbar-column data-id=(state.tableId + "scrollbar-column")>&nbsp;</div>
             </div>
-            <for(row in component.getRows())>
-                <div.row style={height: component.getRowHeight()}>
+            <for(row in component.getRows() | status-var=loop)>
+                <!-- Klasse "opened", wenn geöffnet -->
+                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={minHeight: component.getRowHeight()}>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
                             <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")/>
                         </div>
                     </if>
                     <div.inner-row-wrapper>
-                        <for(columnId in component.getColumnIds())>
-                            <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "")
-                                style={width: component.getColumnSize(columnId)} on-click('rowClicked', row, columnId)
-                                data-id=(state.tableId + columnId)>
-                                <if(component.getColumnConfiguration(columnId).isObjectProperty)>
-                                    <object-property-label object=row property=columnId hasLabel=false
-                                        hasText=component.getColumnConfiguration(columnId).hasText
-                                        hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
-                                </if>
-                                <else>
-                                    <!-- TODO: nach Umbau/Bau eines generellen "object-label"s, dann auch hier nutzen -->
-                                    <if(component.getColumnConfiguration(columnId).hasText)>
-                                        <span title=component.getColumnDisplayText(row, columnId)>${component.getColumnDisplayText(row, columnId)}</span>
+                        <div.closed-row>
+                            <for(columnId in component.getColumnIds())>
+                                <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "")
+                                    style={width: component.getColumnSize(columnId)}
+                                    on-click('rowClicked', row, columnId) data-id=(state.tableId + columnId)>
+                                    <if(component.getColumnConfiguration(columnId).isObjectProperty)>
+                                        <object-property-label object=row property=columnId hasLabel=false
+                                            hasText=component.getColumnConfiguration(columnId).hasText
+                                            hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                                     </if>
-                                    <if(component.getColumnConfiguration(columnId).hasIcon)>
-                                        <span title=component.getColumnDisplayText(row, columnId)>
-                                            <icon object=component.getColumnConfiguration(columnId).property
-                                                objectId=component.getColumnObjectValue(row, columnId)/>
-                                        </span>
-                                    </if>
-                                </else>
-                            </div>
-                        </for>
-                        <if(state.tableConfiguration.toggleRowEnabled)>
-                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")>
-                                <span.kix-icon-sort-down/>
+                                    <else>
+                                        <!-- TODO: nach Umbau/Bau eines generellen "object-label"s, dann auch hier nutzen -->
+                                        <if(component.getColumnConfiguration(columnId).hasText)>
+                                            <span title=component.getColumnDisplayText(row, columnId)>${component.getColumnDisplayText(row, columnId)}</span>
+                                        </if>
+                                        <if(component.getColumnConfiguration(columnId).hasIcon)>
+                                            <span title=component.getColumnDisplayText(row, columnId)>
+                                                <icon object=component.getColumnConfiguration(columnId).property
+                                                    objectId=component.getColumnObjectValue(row, columnId)/>
+                                            </span>
+                                        </if>
+                                    </else>
+                                </div>
+                            </for>
+                            <if(state.tableConfiguration.toggleRowEnabled)>
+                                <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
+                                    on-click('toggleRow', loop.getIndex())>
+                                    <span.kix-icon-sort-down/>
+                                </div>
+                            </if>
+                        </div>
+                        <if(component.rowIsToggled(loop.getIndex()))>
+                            <div.opened-row>
+                                <!-- Hier das Widget mit den Inhalten rein --> Test
                             </div>
                         </if>
                     </div>

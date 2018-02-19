@@ -17,4 +17,6 @@ export class StandardTableComponentState<T = any> {
 
     public sortOrder: SortOrder = null;
 
+    public toggledRows: number[] = [];
+
 }
