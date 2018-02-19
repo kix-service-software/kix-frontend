@@ -30,8 +30,7 @@
                 <div.table-cell.table-header-cell.fixed.scrollbar-column data-id=(state.tableId + "scrollbar-column")>&nbsp;</div>
             </div>
             <for(row in component.getRows() | status-var=loop)>
-                <!-- Klasse "opened", wenn geöffnet -->
-                <div.row.opened style={minHeight: component.getRowHeight()}>
+                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={minHeight: component.getRowHeight()}>
                     <if(state.tableConfiguration.rowSelectionEnabled)>
                         <div.table-cell.fixed.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
                             <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")/>
@@ -49,10 +48,15 @@
                                             hasIcon=component.getColumnConfiguration(columnId).hasIcon/>
                                     </if>
                                     <else>
-                                        <if(component.getColumnConfiguration(columnId).hasText)>${component.getColumnDisplayText(row, columnId)}</if>
+                                        <!-- TODO: nach Umbau/Bau eines generellen "object-label"s, dann auch hier nutzen -->
+                                        <if(component.getColumnConfiguration(columnId).hasText)>
+                                            <span title=component.getColumnDisplayText(row, columnId)>${component.getColumnDisplayText(row, columnId)}</span>
+                                        </if>
                                         <if(component.getColumnConfiguration(columnId).hasIcon)>
-                                            <icon object=component.getColumnConfiguration(columnId).property
-                                                objectId=component.getColumnObjectValue(row, columnId)/>
+                                            <span title=component.getColumnDisplayText(row, columnId)>
+                                                <icon object=component.getColumnConfiguration(columnId).property
+                                                    objectId=component.getColumnObjectValue(row, columnId)/>
+                                            </span>
                                         </if>
                                     </else>
                                 </div>
