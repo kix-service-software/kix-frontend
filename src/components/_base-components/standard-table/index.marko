@@ -1,10 +1,11 @@
 <if(state.tableConfiguration)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
-        <div.standard-table key=(state.tableId + "standard-table") style={height: component.getTableHeight()}
-            on-scroll('loadMore')>
+        <div.standard-table class={"has-checkbox-column": state.tableConfiguration.rowSelectionEnabled ? true : false, "has-toggle-row-column": state.tableConfiguration.toggleRowEnabled ? true : false}
+            key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") style={height: component.getRowHeight()}>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
-                    <div.table-cell.table-header-cell.fixed.checkbox-column data-id=(state.tableId + "checkbox-column")>
+                    <!-- <div.table-cell.table-header-cell.fixed.checkbox-column data-id=(state.tableId + "checkbox-column")> -->
+                    <div.table-cell.table-header-cell.checkbox-column data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll')/>
                     </div>
                 </if>
@@ -27,17 +28,19 @@
                 <if(state.tableConfiguration.toggleRowEnabled)>
                     <div.table-cell.table-header-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
                 </if>
-                <div.table-cell.table-header-cell.fixed.scrollbar-column data-id=(state.tableId + "scrollbar-column")>&nbsp;</div>
+                <!-- <div.table-cell.table-header-cell.fixed.scrollbar-column data-id=(state.tableId + "scrollbar-column")>&nbsp;</div> -->
             </div>
             <for(row in component.getRows() | status-var=loop)>
                 <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={minHeight: component.getRowHeight()}>
-                    <if(state.tableConfiguration.rowSelectionEnabled)>
-                        <div.table-cell.fixed.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
-                            <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")/>
-                        </div>
-                    </if>
+                    <!-- <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div> -->
                     <div.inner-row-wrapper>
                         <div.closed-row>
+                            <if(state.tableConfiguration.rowSelectionEnabled)>
+                                <!-- <div.table-cell.fixed.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")> -->
+                                <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
+                                    <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")/>
+                                </div>
+                            </if>
                             <for(columnId in component.getColumnIds())>
                                 <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "")
                                     style={width: component.getColumnSize(columnId)}
@@ -67,12 +70,13 @@
                             </if>
                         </div>
                         <if(component.rowIsToggled(loop.getIndex()))>
-                            <div.opened-row>
-                                <!-- Hier das Widget mit den Inhalten rein --> Test
+                            <div.opened-row data-id=(state.tableId + "opened-row")>
+                                <div.opened-row-content-wrapper data-id=(state.tableId + "opened-row-content-wrapper")>
+                                    <!-- Hier das Widget mit den Inhalten rein --> Test
+                                </div>
                             </div>
                         </if>
                     </div>
-                    <div.table-cell.fixed.scrollbar-column data-id="scrollbar-column">&nbsp;</div>
                 </div>
             </for>
             <div.row.rowSpacer style={height: component.getSpacerHeight()}/>

@@ -41,15 +41,16 @@ class StandardTableComponent<T> {
         setTimeout(() => {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             const header = (this as any).getEl(this.state.tableId + 'header-row');
-            const checkboxColumn: any =
-                document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-column']");
+            // const checkboxColumn: any =
+            //     document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-column']");
             const toggleRowColumn: any =
                 document.querySelectorAll("[data-id='" + this.state.tableId + "toggle-row-column']");
-            const scrollbarColumn: any =
-                document.querySelectorAll("[data-id='" + this.state.tableId + "scrollbar-column']");
+            // const scrollbarColumn: any =
+            //     document.querySelectorAll("[data-id='" + this.state.tableId + "scrollbar-column']");
 
             // TODO: subRows erneut implementieren!
-            // const subRows: any = document.querySelectorAll("[data-id='sub-row-wrapper']");
+            const openedRows: any =
+                document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
 
             if (table) {
                 table.addEventListener('ps-scroll-y', () => {
@@ -59,20 +60,23 @@ class StandardTableComponent<T> {
                 // linke, rechte Spalte und geöffnete Zeile fixieren
                 table.addEventListener('ps-scroll-x', () => {
                     const scrollbarColumnPos = (table.scrollLeft * -1);
-                    checkboxColumn.forEach((element: any) => {
-                        element.style.left = table.scrollLeft + 'px';
-                    });
-                    toggleRowColumn.forEach((element: any) => {
-                        element.style.right = (scrollbarColumnPos + 24) + 'px';
-                    });
-                    scrollbarColumn.forEach((element: any) => {
-                        element.style.right = scrollbarColumnPos + 'px';
-                    });
-
-                    // TODO: subRows erneut implementieren!
-                    // subRows.forEach((element: any) => {
+                    // checkboxColumn.forEach((element: any) => {
                     //     element.style.left = table.scrollLeft + 'px';
                     // });
+                    // toggleRowColumn.forEach((element: any) => {
+                    //     element.style.right = (scrollbarColumnPos + 24) + 'px';
+                    // });
+                    toggleRowColumn.forEach((element: any) => {
+                        element.style.right = scrollbarColumnPos + 'px';
+                    });
+                    // scrollbarColumn.forEach((element: any) => {
+                    //     element.style.right = scrollbarColumnPos + 'px';
+                    // });
+
+                    // TODO: subRows erneut implementieren!
+                    openedRows.forEach((element: any) => {
+                        element.style.left = table.scrollLeft + 'px';
+                    });
                 });
 
                 this.ps.update();
