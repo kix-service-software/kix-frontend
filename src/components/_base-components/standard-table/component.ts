@@ -25,9 +25,12 @@ class StandardTableComponent<T> {
             this.state.tableConfiguration.contentProvider.addListener(() => {
                 (this as any).forceUpdate();
             });
-            this.ps = new PerfectScrollbar('.standard-table', {
+
+            const table = (this as any).getEl(this.state.tableId + 'standard-table');
+            const wrapperElement = (this as any).getEl(this.state.tableId + 'standard-table-wrapper');
+            this.ps = new PerfectScrollbar(table, {
                 minScrollbarLength: 50,
-                wrapperElement: '.standard-table-wrapper'
+                wrapperElement
             });
         }
 
@@ -204,6 +207,8 @@ class StandardTableComponent<T> {
                     this.loadMoreTimeout = null;
                     this.loadMore();
                 }, 66);
+
+                (this as any).setStateDirty();
             }
         }
     }

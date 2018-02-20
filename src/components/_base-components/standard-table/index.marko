@@ -56,10 +56,8 @@
                                             <span title=component.getColumnDisplayText(row, columnId)>${component.getColumnDisplayText(row, columnId)}</span>
                                         </if>
                                         <if(component.getColumnConfiguration(columnId).hasIcon)>
-                                            <span title=component.getColumnDisplayText(row, columnId)>
-                                                <icon object=component.getColumnConfiguration(columnId).property
-                                                    objectId=component.getColumnObjectValue(row, columnId)/>
-                                            </span>
+                                            <icon title=component.getColumnDisplayText(row, columnId) object=component.getColumnConfiguration(columnId).property
+                                                objectId=component.getColumnObjectValue(row, columnId)/>
                                         </if>
                                     </else>
                                 </div>
