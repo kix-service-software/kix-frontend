@@ -23,6 +23,4 @@ export class StandardTableComponentState<T = any> {
 
     public selectedRows: string[] | number[];
 
-    public allChecked: boolean = false;
-
 }

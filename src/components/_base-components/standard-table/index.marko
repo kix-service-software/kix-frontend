@@ -7,7 +7,7 @@
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <!-- <div.table-cell.table-header-cell.fixed.checkbox-column data-id=(state.tableId + "checkbox-column")> -->
                     <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
-                        <input type="checkbox" on-click('selectAll') checked=state.allChecked/>
+                        <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>

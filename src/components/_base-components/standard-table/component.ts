@@ -175,16 +175,20 @@ class StandardTableComponent<T> {
         return this.state.tableConfiguration.selectionListener.isRowSelected(row);
     }
 
+    private isAllSelected(row): boolean {
+        return this.state.tableConfiguration.selectionListener.isAllSelected();
+    }
+
     private selectAll(event): void {
-        this.state.allChecked = event.target.checked;
+        const checked = event.target.checked;
 
         const elements: any = document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-input'");
         elements.forEach((element: any) => {
-            element.checked = this.state.allChecked;
+            element.checked = checked;
         });
 
         if (this.state.tableConfiguration.selectionListener) {
-            if (this.state.allChecked) {
+            if (checked) {
                 this.state.tableConfiguration.selectionListener.selectAll(
                     this.state.tableConfiguration.contentProvider.getRowObjects(true)
                 );
