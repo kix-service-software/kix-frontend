@@ -21,4 +21,8 @@ export class StandardTableComponentState<T = any> {
 
     public toggledRows: number[] = [];
 
+    public selectedRows: string[] | number[];
+
+    public allChecked: boolean = false;
+
 }

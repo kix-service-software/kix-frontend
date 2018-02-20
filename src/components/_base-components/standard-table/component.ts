@@ -171,19 +171,27 @@ class StandardTableComponent<T> {
         return this.state.sortedColumnId === columnId && this.state.sortOrder === sortOrder;
     }
 
+    private isSelected(row): boolean {
+        return this.state.tableConfiguration.selectionListener.isRowSelected(row);
+    }
+
     private selectAll(event): void {
-        const checked = event.target.checked;
+        this.state.allChecked = event.target.checked;
 
         const elements: any = document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-input'");
         elements.forEach((element: any) => {
-            element.checked = checked;
+            element.checked = this.state.allChecked;
         });
 
         if (this.state.tableConfiguration.selectionListener) {
-            if (checked) {
-                this.state.tableConfiguration.selectionListener.selectNone();
+            if (this.state.allChecked) {
+                this.state.tableConfiguration.selectionListener.selectAll(
+                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
+                );
             } else {
-                this.state.tableConfiguration.selectionListener.selectAll();
+                this.state.tableConfiguration.selectionListener.selectNone(
+                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
+                );
             }
         }
     }
