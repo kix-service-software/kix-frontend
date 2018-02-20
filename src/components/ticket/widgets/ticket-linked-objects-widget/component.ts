@@ -62,15 +62,6 @@ class LinkedObjectsWidgetComponent {
                     const ticketTableConfiguration = this.getTicketTableConfiguration(linkedTickets);
                     this.state.linkCount += linkedTickets.length;
                     this.state.linkedObjectGroups.push(['Ticket', linkedTickets.length, ticketTableConfiguration]);
-
-                    // TODO: wieder entfernen, dient nur zum Zeigen
-                    const ticketTableConfiguration2 = this.getTicketTableConfiguration(
-                        linkedTickets.slice(0, 12).reverse());
-                    this.state.linkCount += 12;
-                    this.state.linkedObjectGroups.push(['Ticket2', 12, ticketTableConfiguration2]);
-                    const ticketTableConfiguration3 = this.getTicketTableConfiguration(linkedTickets.slice(0, 2));
-                    this.state.linkCount += 2;
-                    this.state.linkedObjectGroups.push(['Ticket3', 2, ticketTableConfiguration3]);
                 }
             }
         }

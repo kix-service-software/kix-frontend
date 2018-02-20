@@ -120,15 +120,21 @@ class StandardTableComponent<T> {
 
     private mousedown(col: string, event: any): void {
         this.state.resizeSettings.columnId = col;
-        this.state.resizeSettings.startOffset = event.target.offsetWidth - event.pageX;
+        this.state.resizeSettings.startOffset = event.pageX;
+        this.state.resizeActive = true;
     }
 
     private mousemove(event: any): void {
         if (this.state.resizeSettings.columnId) {
+            const headerColumn = (this as any).getEl(this.state.tableId + this.state.resizeSettings.columnId);
+            this.state.resizeSettings.currentSize
+                = headerColumn.offsetWidth + event.pageX - this.state.resizeSettings.startOffset;
+            this.state.resizeSettings.startOffset = event.pageX;
+            headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
+
             const selector = "[data-id='" + this.state.tableId + this.state.resizeSettings.columnId + "']";
             const elements: any = document.querySelectorAll(selector);
             elements.forEach((element: any) => {
-                this.state.resizeSettings.currentSize = this.state.resizeSettings.startOffset + 150 + event.pageX;
                 element.style.width = this.state.resizeSettings.currentSize + 'px';
             });
         }
@@ -146,6 +152,7 @@ class StandardTableComponent<T> {
             }
         }
         this.state.resizeSettings.columnId = undefined;
+        this.state.resizeActive = false;
     }
 
     private sortUp(columnId: string): void {
