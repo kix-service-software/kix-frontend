@@ -193,9 +193,7 @@ class StandardTableComponent<T> {
                     this.state.tableConfiguration.contentProvider.getRowObjects(true)
                 );
             } else {
-                this.state.tableConfiguration.selectionListener.selectNone(
-                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
-                );
+                this.state.tableConfiguration.selectionListener.selectNone();
             }
         }
     }
