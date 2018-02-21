@@ -171,6 +171,14 @@ class StandardTableComponent<T> {
         return this.state.sortedColumnId === columnId && this.state.sortOrder === sortOrder;
     }
 
+    private isSelected(row): boolean {
+        return this.state.tableConfiguration.selectionListener.isRowSelected(row);
+    }
+
+    private isAllSelected(row): boolean {
+        return this.state.tableConfiguration.selectionListener.isAllSelected();
+    }
+
     private selectAll(event): void {
         const checked = event.target.checked;
 
@@ -181,9 +189,13 @@ class StandardTableComponent<T> {
 
         if (this.state.tableConfiguration.selectionListener) {
             if (checked) {
-                this.state.tableConfiguration.selectionListener.selectNone();
+                this.state.tableConfiguration.selectionListener.selectAll(
+                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
+                );
             } else {
-                this.state.tableConfiguration.selectionListener.selectAll();
+                this.state.tableConfiguration.selectionListener.selectNone(
+                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
+                );
             }
         }
     }
