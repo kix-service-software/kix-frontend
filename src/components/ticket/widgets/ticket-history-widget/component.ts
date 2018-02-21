@@ -5,6 +5,8 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { StandardTableColumn, StandardTableConfiguration, ITableClickListener } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
+import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { ITableConfigurationListener } from '@kix/core/dist/browser/standard-table/ITableConfigurationListener';
 
 class TicketHistoryWidgetComponent {
 
@@ -47,8 +49,12 @@ class TicketHistoryWidgetComponent {
                 rowClicked: this.navigateToArticle.bind(this)
             };
 
+            const configurationListener: ITableConfigurationListener<TicketHistory> = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
+
             this.state.historyTableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, null, clickListener
+                labelProvider, contentProvider, null, clickListener, configurationListener
             );
         }
     }
@@ -59,6 +65,19 @@ class TicketHistoryWidgetComponent {
             const articleElement = document.getElementById(historyEntry[columnId].toString());
             articleElement.scrollIntoView();
         }
+    }
+
+    private columnConfigurationChanged(column: StandardTableColumn): void {
+        const index =
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+
+        if (index >= 0) {
+            this.state.widgetConfiguration.settings.tableColumns[index] = column;
+        } else {
+            this.state.widgetConfiguration.settings.tableColumns.push(column);
+        }
+
+        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filterValueChanged(event: any): void {
