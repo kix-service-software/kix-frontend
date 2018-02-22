@@ -54,8 +54,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const ticketListWidget =
             new ConfiguredWidget("20170920101621", new WidgetConfiguration(
                 "ticket-list-widget", "Ticket-Liste", [], {
-                    limit: 10,
-                    displayLimit: 10,
+                    limit: 500,
+                    displayLimit: 15,
                     showTotalCount: true,
                     tableColumns: [
                         new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 130),
