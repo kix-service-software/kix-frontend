@@ -12,9 +12,8 @@ import {
     UpdateQueueRequest,
     UpdateQueueResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Queue } from '@kix/core/dist/model';
+import { Queue, SortOrder } from '@kix/core/dist/model';
 import { IQueueService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Queue Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateQueueRequest(new UpdateQueue('queue')))
+                        new UpdateQueueRequest(new UpdateQueue('queue')))
                     .reply(200, buildUpdateQueueResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Queue Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateQueueRequest(new UpdateQueue('queue')))
+                        new UpdateQueueRequest(new UpdateQueue('queue')))
                     .reply(400, {});
             });
 

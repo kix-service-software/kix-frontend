@@ -12,9 +12,8 @@ import {
     UpdateContactRequest,
     UpdateContactResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Contact } from '@kix/core/dist/model';
+import { Contact, SortOrder } from '@kix/core/dist/model';
 import { IContactService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Contact Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateContactRequest(new UpdateContact('contact', 'comapny')))
+                        new UpdateContactRequest(new UpdateContact('contact', 'comapny')))
                     .reply(200, buildUpdateContactResponse('123456'));
             });
 
@@ -241,7 +240,7 @@ describe('Contact Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateContactRequest(new UpdateContact('contact', 'company')))
+                        new UpdateContactRequest(new UpdateContact('contact', 'company')))
                     .reply(400, {});
             });
 

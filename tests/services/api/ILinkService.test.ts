@@ -9,9 +9,8 @@ import {
     CreateLinkRequest,
     CreateLinkResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Link } from '@kix/core/dist/model';
+import { Link, SortOrder } from '@kix/core/dist/model';
 import { ILinkService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');

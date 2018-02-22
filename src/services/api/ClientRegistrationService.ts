@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { IClientRegistrationService } from '@kix/core/dist/services';
-import { ClientRegistration } from '@kix/core/dist/model';
+import { ClientRegistration, SortOrder } from '@kix/core/dist/model';
 import {
     CreateClientRegistration,
     CreateClientRegistrationResponse,
@@ -8,7 +8,6 @@ import {
     ClientRegistrationsResponse,
     ClientRegistrationResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class ClientRegistrationService extends ObjectService<ClientRegistration> implements IClientRegistrationService {
 

@@ -12,9 +12,8 @@ import {
     UpdateTicketPriorityRequest,
     UpdateTicketPriorityResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { TicketPriority } from '@kix/core/dist/model';
+import { TicketPriority, SortOrder } from '@kix/core/dist/model';
 import { ITicketPriorityService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Ticket Priority Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketPriorityRequest(new UpdateTicketPriority('ticket-priority', 1)))
+                        new UpdateTicketPriorityRequest(new UpdateTicketPriority('ticket-priority', 1)))
                     .reply(200, buildUpdateUserResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Ticket Priority Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketPriorityRequest(new UpdateTicketPriority('ticket-priority', 1)))
+                        new UpdateTicketPriorityRequest(new UpdateTicketPriority('ticket-priority', 1)))
                     .reply(400, {});
             });
 

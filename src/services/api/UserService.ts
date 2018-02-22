@@ -10,10 +10,9 @@ import {
     Query,
     UserResponse,
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { IUserService } from '@kix/core/dist/services';
-import { User } from '@kix/core/dist/model';
+import { User, SortOrder } from '@kix/core/dist/model';
 
 import { ObjectService } from './ObjectService';
 

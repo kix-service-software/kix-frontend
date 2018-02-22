@@ -6,9 +6,8 @@ import {
     ObjectIconResponse,
     ObjectIconsResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ObjectIcon, SortOrder } from '@kix/core/dist/model';
 import { IObjectIconService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');

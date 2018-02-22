@@ -72,6 +72,11 @@
             "ticket-quick-search": "../../dist/registry-modules/tickets/quicksearch.extension",
             "cutsomer-quick-search": "../../dist/registry-modules/customers/customer-quicksearch.extension",
             "contact-quick-search": "../../dist/registry-modules/customers/contact-quicksearch.extension"
+        },
+        "kix:sorter": {
+            "date": "@kix/core/dist/extensions/sorter/date/sorter.extension",
+            "date-time": "@kix/core/dist/extensions/sorter/date-time/sorter.extension",
+            "number": "@kix/core/dist/extensions/sorter/number/sorter.extension"
         }
     }
 }

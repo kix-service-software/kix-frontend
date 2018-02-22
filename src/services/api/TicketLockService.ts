@@ -1,10 +1,9 @@
 import { ObjectService } from './ObjectService';
 import { ITicketLockService } from '@kix/core/dist/services';
-import { Lock } from '@kix/core/dist/model';
+import { Lock, SortOrder } from '@kix/core/dist/model';
 import {
     LockResponse, LocksResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class TicketLockService extends ObjectService<Lock> implements ITicketLockService {
 

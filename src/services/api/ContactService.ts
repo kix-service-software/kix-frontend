@@ -1,6 +1,6 @@
 import { IContactService } from "@kix/core/dist/services/api/IContactService";
 import { ObjectService } from './ObjectService';
-import { Contact, ContactSource } from "@kix/core/dist/model/";
+import { Contact, ContactSource, SortOrder } from "@kix/core/dist/model/";
 import {
     CreateContact,
     CreateContactRequest,
@@ -12,7 +12,6 @@ import {
     UpdateContactResponse,
     UpdateContactRequest
 } from "@kix/core/dist/api/";
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class ContactService extends ObjectService<Contact> implements IContactService {
 

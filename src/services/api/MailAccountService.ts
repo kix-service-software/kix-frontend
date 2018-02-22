@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { IMailAccountService } from '@kix/core/dist/services';
-import { MailAccount } from '@kix/core/dist/model';
+import { MailAccount, SortOrder } from '@kix/core/dist/model';
 import {
     CreateMailAccount,
     CreateMailAccountResponse,
@@ -12,7 +12,6 @@ import {
     UpdateMailAccountResponse,
     UpdateMailAccountRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class MailAccountService extends ObjectService<MailAccount> implements IMailAccountService {
 

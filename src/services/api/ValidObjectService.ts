@@ -1,7 +1,6 @@
 import { ValidObjectResponse, ValidObjectsResponse, Query } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 import { IValidObjectService } from '@kix/core/dist/services';
-import { ValidObject } from '@kix/core/dist/model';
+import { ValidObject, SortOrder } from '@kix/core/dist/model';
 
 
 import { ObjectService } from './ObjectService';

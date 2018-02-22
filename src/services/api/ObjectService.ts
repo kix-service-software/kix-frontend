@@ -1,6 +1,6 @@
 import { IHttpService } from '@kix/core/dist/services';
 import { Query } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
+import { SortOrder } from '@kix/core/dist/model';
 
 import { inject, injectable } from 'inversify';
 
@@ -21,7 +21,7 @@ export abstract class ObjectService<T> {
      */
     protected abstract RESOURCE_URI: string;
 
-    public constructor( @inject("IHttpService") httpService: IHttpService) {
+    public constructor(@inject("IHttpService") httpService: IHttpService) {
         this.httpService = httpService;
     }
 

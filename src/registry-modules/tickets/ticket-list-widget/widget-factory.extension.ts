@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
-import { IWidget, WidgetConfiguration, WidgetSize, WidgetType } from '@kix/core/dist/model';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { IWidget, WidgetConfiguration, WidgetSize, WidgetType, SortType } from '@kix/core/dist/model';
+import { StandardTableColumn, ColumnDataType } from '@kix/core/dist/browser';
 
 export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -19,8 +19,12 @@ export class TicketlistWidgetFactoryExtension implements IWidgetFactoryExtension
                 new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
                 new StandardTableColumn('TypeID', '', true, true, true, true, true, 100),
                 new StandardTableColumn('Title', '', true, true, false, true, true, 200),
-                new StandardTableColumn('Created', '', true, true, false, true, true, 100),
-                new StandardTableColumn('Age', '', true, true, false, true, true, 100),
+                new StandardTableColumn(
+                    'Created', '', true, true, false, true, true, 100, ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                ),
+                new StandardTableColumn(
+                    'Age', '', true, true, false, true, true, 100, ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                ),
             ]
         };
 

@@ -12,9 +12,8 @@ import {
     UpdateSearchProfileRequest,
     UpdateSearchProfileResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { SearchProfile } from '@kix/core/dist/model';
+import { SearchProfile, SortOrder } from '@kix/core/dist/model';
 import { ISearchProfileService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -245,7 +244,7 @@ describe('SearchProfile Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSearchProfileRequest(new UpdateSearchProfile('searchProfile', 'text')))
+                        new UpdateSearchProfileRequest(new UpdateSearchProfile('searchProfile', 'text')))
                     .reply(200, buildUpdateSearchProfileResponse(123456));
             });
 
@@ -260,7 +259,7 @@ describe('SearchProfile Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSearchProfileRequest(new UpdateSearchProfile('searchProfile', 'text')))
+                        new UpdateSearchProfileRequest(new UpdateSearchProfile('searchProfile', 'text')))
                     .reply(400, {});
             });
 

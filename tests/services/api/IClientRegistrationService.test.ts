@@ -9,9 +9,8 @@ import {
     CreateClientRegistrationRequest,
     CreateClientRegistrationResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { ClientRegistration } from '@kix/core/dist/model';
+import { ClientRegistration, SortOrder } from '@kix/core/dist/model';
 import { IClientRegistrationService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');

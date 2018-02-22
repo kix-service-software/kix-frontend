@@ -5,9 +5,8 @@ import {
     HttpError,
     SysConfigItemResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { SysConfigItem } from '@kix/core/dist/model';
+import { SysConfigItem, SortOrder } from '@kix/core/dist/model';
 import { ISysConfigService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');

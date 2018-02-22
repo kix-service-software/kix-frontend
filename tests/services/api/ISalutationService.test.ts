@@ -12,9 +12,8 @@ import {
     UpdateSalutationRequest,
     UpdateSalutationResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Salutation } from '@kix/core/dist/model';
+import { Salutation, SortOrder } from '@kix/core/dist/model';
 import { ISalutationService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Salutation Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSalutationRequest(new UpdateSalutation('salutation', 'text')))
+                        new UpdateSalutationRequest(new UpdateSalutation('salutation', 'text')))
                     .reply(200, buildUpdateSalutationResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Salutation Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSalutationRequest(new UpdateSalutation('salutation', 'text')))
+                        new UpdateSalutationRequest(new UpdateSalutation('salutation', 'text')))
                     .reply(400, {});
             });
 

@@ -5,9 +5,8 @@ import {
     HttpError,
     LockResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Lock } from '@kix/core/dist/model';
+import { Lock, SortOrder } from '@kix/core/dist/model';
 import { ITicketLockService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');

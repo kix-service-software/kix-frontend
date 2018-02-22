@@ -12,9 +12,8 @@ import {
     UpdateServiceRequest,
     UpdateServiceResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Service } from '@kix/core/dist/model';
+import { Service, SortOrder } from '@kix/core/dist/model';
 import { IServiceService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Service Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateServiceRequest(new UpdateService('service')))
+                        new UpdateServiceRequest(new UpdateService('service')))
                     .reply(200, buildUpdateServiceResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Service Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateServiceRequest(new UpdateService('service')))
+                        new UpdateServiceRequest(new UpdateService('service')))
                     .reply(400, {});
             });
 

@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { ISignatureService } from '@kix/core/dist/services';
-import { Signature } from '@kix/core/dist/model';
+import { Signature, SortOrder } from '@kix/core/dist/model';
 import {
     CreateSignature,
     CreateSignatureResponse,
@@ -11,7 +11,6 @@ import {
     UpdateSignatureResponse,
     UpdateSignatureRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SignatureService extends ObjectService<Signature> implements ISignatureService {
 

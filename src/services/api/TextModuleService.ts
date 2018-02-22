@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { ITextModuleService } from '@kix/core/dist/services';
-import { TextModule } from '@kix/core/dist/model';
+import { TextModule, SortOrder } from '@kix/core/dist/model';
 import {
     CreateTextModule,
     CreateTextModuleResponse,
@@ -12,7 +12,6 @@ import {
     UpdateTextModuleResponse,
     UpdateTextModuleRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class TextModuleService extends ObjectService<TextModule> implements ITextModuleService {
 

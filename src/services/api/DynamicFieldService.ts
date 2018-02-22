@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { IDynamicFieldService } from '@kix/core/dist/services';
-import { DynamicField, DynamicFieldType, DynamicFieldObject } from '@kix/core/dist/model/';
+import { DynamicField, DynamicFieldType, DynamicFieldObject, SortOrder } from '@kix/core/dist/model/';
 import {
     CreateDynamicField,
     CreateDynamicFieldRequest,
@@ -14,7 +14,6 @@ import {
     UpdateDynamicFieldResponse,
     UpdateDynamicFieldRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class DynamicFieldService extends ObjectService<DynamicField> implements IDynamicFieldService {
 

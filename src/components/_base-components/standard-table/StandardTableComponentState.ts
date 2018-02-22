@@ -1,7 +1,7 @@
 import { StandardTableConfiguration } from '@kix/core/dist/browser';
 import { ResizeSettings } from './ResizeSettings';
 import { IdService } from '@kix/core/dist/browser/IdService';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
+import { SortOrder } from '@kix/core/dist/model';
 
 export class StandardTableComponentState<T = any> {
 

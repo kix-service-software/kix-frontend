@@ -2,7 +2,7 @@ import { TicketService, TicketUtil } from '@kix/core/dist/browser/ticket';
 import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty, Ticket } from '@kix/core/dist/model/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
+import { SortOrder } from '@kix/core/dist/model';
 import { TicketTableComponentState } from './TicketTableComponentState';
 
 export class TicketTableComponent {

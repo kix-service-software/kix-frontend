@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { IGeneralCatalogService } from '@kix/core/dist/services';
-import { GeneralCatalogItem } from '@kix/core/dist/model';
+import { GeneralCatalogItem, SortOrder } from '@kix/core/dist/model';
 import {
     CreateGeneralCatalogItem,
     CreateGeneralCatalogItemResponse,
@@ -14,7 +14,6 @@ import {
     UpdateGeneralCatalogClassRequest,
     UpdateGeneralCatalogClassResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class GeneralCatalogService extends ObjectService<GeneralCatalogItem> implements IGeneralCatalogService {
 

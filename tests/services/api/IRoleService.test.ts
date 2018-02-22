@@ -9,9 +9,8 @@ import {
     UpdateRoleRequest,
     UpdateRoleResponse,
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Role } from '@kix/core/dist/model';
+import { Role, SortOrder } from '@kix/core/dist/model';
 import { IConfigurationService, IRoleService } from '@kix/core/dist/services';
 
 import chai = require('chai');
@@ -268,7 +267,7 @@ describe('Role Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
+                        new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
                     .reply(200, buildUpdateRoleResponse(123456));
             });
 
@@ -283,7 +282,7 @@ describe('Role Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
+                        new UpdateRoleRequest(new UpdateRole('role', 'comment', 1)))
                     .reply(400, {});
             });
 

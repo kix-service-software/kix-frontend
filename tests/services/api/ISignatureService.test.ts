@@ -12,9 +12,8 @@ import {
     UpdateSignatureRequest,
     UpdateSignatureResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Signature } from '@kix/core/dist/model';
+import { Signature, SortOrder } from '@kix/core/dist/model';
 import { ISignatureService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Signature Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSignatureRequest(new UpdateSignature('signature', 'text')))
+                        new UpdateSignatureRequest(new UpdateSignature('signature', 'text')))
                     .reply(200, buildUpdateSignatureResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Signature Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateSignatureRequest(new UpdateSignature('signature', 'text')))
+                        new UpdateSignatureRequest(new UpdateSignature('signature', 'text')))
                     .reply(400, {});
             });
 
