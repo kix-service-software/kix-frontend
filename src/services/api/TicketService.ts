@@ -211,10 +211,13 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
                     Type: "numeric"
                 });
             } else if (this.isINSearch(filter[1])) {
+                if (!Array.isArray(filter[2])) {
+                    filter[2] = (filter[2] as string).split(" ");
+                }
                 filterOperations.push({
                     Field: filter[0],
                     Operator: filter[1],
-                    Value: (filter[2] as string).split(" "),
+                    Value: filter[2],
                     Type: "numeric"
                 });
             } else {

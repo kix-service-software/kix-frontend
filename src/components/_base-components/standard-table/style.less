@@ -1,4 +1,4 @@
-@cell-min-width: 150px;
+@cell-min-width: 3em;
 @header-height: 2em;
 .standard-table-wrapper {
     position: relative;
@@ -40,6 +40,7 @@
                 // TODO: line-height ggf. weg bzw. 27/ 32 px?
                 line-height: @header-height;
                 width: @cell-min-width;
+                min-width: @cell-min-width;
                 display: inline-block;
                 vertical-align: top;
                 white-space: nowrap;

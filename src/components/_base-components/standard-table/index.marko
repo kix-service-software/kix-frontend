@@ -2,15 +2,17 @@
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
         <div.standard-table class={"has-checkbox-column": state.tableConfiguration.rowSelectionEnabled ? true : false, "has-toggle-row-column": state.tableConfiguration.toggleRowEnabled ? true : false}
             key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
-            <div.row.header-row key=(state.tableId + "header-row") style={height: component.getRowHeight()}>
+            <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
+                style={height: component.getRowHeight()}>
                 <if(state.tableConfiguration.rowSelectionEnabled)>
                     <!-- <div.table-cell.table-header-cell.fixed.checkbox-column data-id=(state.tableId + "checkbox-column")> -->
-                    <div.table-cell.table-header-cell.checkbox-column data-id=(state.tableId + "checkbox-column")>
-                        <input type="checkbox" on-click('selectAll')/>
+                    <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
+                        <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
                     </div>
                 </if>
                 <for(columnId in component.getColumnIds())>
-                    <div.table-cell.table-header-cell data-id=(state.tableId + columnId) style={width: component.getColumnSize(columnId)}>
+                    <div.table-cell.table-header-cell title=component.getColumnTitle(columnId) key=(state.tableId + columnId)
+                        style={width: component.getColumnSize(columnId)}>
                         ${component.getColumnTitle(columnId)}
                         <if(component.getColumnConfiguration(columnId).sortable)>
                             <span.sortable>
@@ -38,7 +40,8 @@
                             <if(state.tableConfiguration.rowSelectionEnabled)>
                                 <!-- <div.table-cell.fixed.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")> -->
                                 <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
-                                    <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")/>
+                                    <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
+                                        checked=component.isSelected(row)/>
                                 </div>
                             </if>
                             <for(columnId in component.getColumnIds())>

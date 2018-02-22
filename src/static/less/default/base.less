@@ -91,7 +91,7 @@ button {
             background-color: @tertiary-6;
             & [class^="kix-icon-"],
             & [class*=" kix-icon-"] {
-                    color: @tertiary-6;
+                color: @tertiary-6;
             }
         }
         &:hover:after {
@@ -218,4 +218,11 @@ input[type=text] {
     &:hover:before {
         background-color: #fff;
     }
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

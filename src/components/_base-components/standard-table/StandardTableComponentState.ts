@@ -9,6 +9,8 @@ export class StandardTableComponentState<T = any> {
 
     public resizeSettings: ResizeSettings = new ResizeSettings();
 
+    public resizeActive: boolean = false;
+
     public rows: T[] = [];
 
     public tableId: string = IdService.generateDateBasedRandomId();
@@ -18,5 +20,7 @@ export class StandardTableComponentState<T = any> {
     public sortOrder: SortOrder = null;
 
     public toggledRows: number[] = [];
+
+    public selectedRows: string[] | number[];
 
 }
