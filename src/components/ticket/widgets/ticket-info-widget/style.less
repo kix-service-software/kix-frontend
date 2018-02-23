@@ -29,7 +29,7 @@
                         .key-value-pair {
                             line-height: 1.5em;
                             .key {
-                                width: 40%;
+                                width: 45%;
                                 font-weight: 600;
                                 display: inline-block;
                             }
@@ -39,19 +39,26 @@
                             }
                             .value {
                                 display: inline-block;
-                                width: 50%;
+                                width: 45%;
                                 height: 1.5em;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
                                 vertical-align: middle;
                             }
+                            &::after {
+                                clear: none;
+                            }
+                            &::before,
+                            &::after {
+                                display: none;
+                            }
                         }
-                        @media only screen and (max-device-width: 1280px) {
+                        @media only screen and (max-device-width: 1279px) {
                             width: auto;
                             float: none;
                         }
-                        @media only screen and (min-device-width: 1280px) and (max-device-width: 1560px) {
+                        @media only screen and (min-device-width: 1279px) and (max-device-width: 1560px) {
                             width: 50%;
                         }
                     }
