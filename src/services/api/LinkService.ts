@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { ILinkService } from '@kix/core/dist/services';
-import { Link, LinkType } from '@kix/core/dist/model';
+import { Link, LinkType, SortOrder } from '@kix/core/dist/model';
 import {
     CreateLink,
     CreateLinkResponse,
@@ -9,7 +9,6 @@ import {
     LinkResponse,
     LinkTypesResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class LinkService extends ObjectService<Link> implements ILinkService {
 

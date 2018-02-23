@@ -1,10 +1,9 @@
 import {
     TicketStateTypeResponse, TicketStateTypesResponse, TicketStateResponse, TicketStatesResponse, Query
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { ITicketStateService } from '@kix/core/dist/services';
-import { TicketState, StateType } from '@kix/core/dist/model';
+import { TicketState, StateType, SortOrder } from '@kix/core/dist/model';
 
 import { ObjectService } from './ObjectService';
 

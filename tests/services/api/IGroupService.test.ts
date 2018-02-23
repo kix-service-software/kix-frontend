@@ -12,9 +12,8 @@ import {
     UpdateGroupRequest,
     UpdateGroupResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Group } from '@kix/core/dist/model';
+import { Group, SortOrder } from '@kix/core/dist/model';
 import { IGroupService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Group Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
+                        new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
                     .reply(200, buildUpdateGroupResponse(123456));
             });
 
@@ -241,7 +240,7 @@ describe('Group Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
+                        new UpdateGroupRequest(new UpdateGroup('group', 'comment', 1)))
                     .reply(400, {});
             });
 

@@ -1,8 +1,7 @@
 import { ObjectService } from './ObjectService';
-import { ArticleType } from '@kix/core/dist/model';
+import { ArticleType, SortOrder } from '@kix/core/dist/model';
 import { IArticleTypeService } from '@kix/core/dist/services';
 import { ArticleTypeResponse, ArticleTypesResponse } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class ArticleTypeService extends ObjectService<ArticleType> implements IArticleTypeService {
 

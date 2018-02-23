@@ -1,10 +1,9 @@
 import { ObjectService } from './ObjectService';
 import { IObjectIconService } from '@kix/core/dist/services';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ObjectIcon, SortOrder } from '@kix/core/dist/model';
 import {
     ObjectIconResponse, ObjectIconsResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class ObjectIconService extends ObjectService<ObjectIcon> implements IObjectIconService {
 

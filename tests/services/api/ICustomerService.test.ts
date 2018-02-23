@@ -12,9 +12,8 @@ import {
     UpdateCustomerRequest,
     UpdateCustomerResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { Customer } from '@kix/core/dist/model';
+import { Customer, SortOrder } from '@kix/core/dist/model';
 import { ICustomerService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -226,7 +225,7 @@ describe('Customer Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateCustomerRequest(new UpdateCustomer('customer', 'comapny')))
+                        new UpdateCustomerRequest(new UpdateCustomer('customer', 'comapny')))
                     .reply(200, buildUpdateCustomerResponse('123456'));
             });
 
@@ -241,7 +240,7 @@ describe('Customer Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateCustomerRequest(new UpdateCustomer('customer', 'company')))
+                        new UpdateCustomerRequest(new UpdateCustomer('customer', 'company')))
                     .reply(400, {});
             });
 

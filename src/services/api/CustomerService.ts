@@ -1,6 +1,6 @@
 import { ICustomerService } from "@kix/core/dist/services/api/ICustomerService";
 import { ObjectService } from './ObjectService';
-import { Customer, CustomerSource } from "@kix/core/dist/model/";
+import { Customer, CustomerSource, SortOrder } from "@kix/core/dist/model/";
 import {
     CreateCustomer,
     CreateCustomerRequest,
@@ -12,7 +12,6 @@ import {
     UpdateCustomerResponse,
     UpdateCustomerRequest
 } from "@kix/core/dist/api/";
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class CustomerService extends ObjectService<Customer> implements ICustomerService {
 

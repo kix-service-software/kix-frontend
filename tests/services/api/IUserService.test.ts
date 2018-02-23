@@ -11,9 +11,8 @@ import {
     HttpError,
 
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { TicketType, User, UserLogin } from '@kix/core/dist/model';
+import { TicketType, User, UserLogin, SortOrder } from '@kix/core/dist/model';
 import { IConfigurationService, IUserService } from '@kix/core/dist/services';
 
 import { container } from '../../../src/Container';
@@ -284,8 +283,8 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .patch('/users/123456',
-                    new UpdateUserRequest(
-                        new UpdateUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                        new UpdateUserRequest(
+                            new UpdateUser('login', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
                     )
                     .reply(200, buildUpdateUserResponse(123456));
             });
@@ -302,12 +301,12 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .patch('/users/123456',
-                    {
-                        User: {
-                            UserFirstname: 'firstName',
-                            UserLastname: 'lastName'
-                        }
-                    })
+                        {
+                            User: {
+                                UserFirstname: 'firstName',
+                                UserLastname: 'lastName'
+                            }
+                        })
                     .reply(200, buildUpdateUserResponse(123456));
             });
 
@@ -322,8 +321,8 @@ describe('User Service', () => {
             before(() => {
                 nockScope
                     .patch('/users/123456',
-                    new UpdateUserRequest(
-                        new UpdateUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
+                        new UpdateUserRequest(
+                            new UpdateUser('', 'firstName', 'lastName', 'email', 'password', 'phone', 'title', 1))
                     )
                     .reply(400, {});
             });

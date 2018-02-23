@@ -14,9 +14,8 @@ import {
     UpdateGeneralCatalogClassRequest,
     UpdateGeneralCatalogClassResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { GeneralCatalogItem } from '@kix/core/dist/model';
+import { GeneralCatalogItem, SortOrder } from '@kix/core/dist/model';
 import { IGeneralCatalogService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -69,7 +68,7 @@ describe('General Catalog Service', () => {
         before(() => {
             nockScope
                 .patch(resourcePath + '/classes/123456',
-                new UpdateGeneralCatalogClassRequest('654321'))
+                    new UpdateGeneralCatalogClassRequest('654321'))
                 .reply(200, { GeneralCatalogClass: '654321' });
         });
 
@@ -262,7 +261,7 @@ describe('General Catalog Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGeneralCatalogItemRequest(new UpdateGeneralCatalogItem('catalogItem', 'text')))
+                        new UpdateGeneralCatalogItemRequest(new UpdateGeneralCatalogItem('catalogItem', 'text')))
                     .reply(200, buildUpdateGeneralCatalogItemResponse(123456));
             });
 
@@ -277,7 +276,7 @@ describe('General Catalog Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateGeneralCatalogItemRequest(new UpdateGeneralCatalogItem('catalogItem', 'text')))
+                        new UpdateGeneralCatalogItemRequest(new UpdateGeneralCatalogItem('catalogItem', 'text')))
                     .reply(400, {});
             });
 

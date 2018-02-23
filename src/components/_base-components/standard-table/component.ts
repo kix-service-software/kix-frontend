@@ -2,7 +2,7 @@ declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTableConfiguration, StandardTableColumn } from '@kix/core/dist/browser';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
+import { SortOrder } from '@kix/core/dist/model';
 
 class StandardTableComponent<T> {
 
@@ -66,7 +66,16 @@ class StandardTableComponent<T> {
     }
 
     public onUpdate(): void {
-        this.initTableScrollRange();
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        const header = (this as any).getEl(this.state.tableId + 'header-row');
+        if (table && header) {
+            header.style.top = table.scrollTop + 'px';
+            // FIXME: hat hier nix zu suchen, aber ohne geht "loadMore" nicht mehr, warum auch immer...
+            table.addEventListener('ps-scroll-y', () => {
+                header.style.top = table.scrollTop + 'px';
+            });
+        }
+        this.ps.update();
     }
 
     private getRows(): T[] {
@@ -140,12 +149,16 @@ class StandardTableComponent<T> {
         this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
         this.state.sortedColumnId = columnId;
         this.state.sortOrder = SortOrder.UP;
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        table.scrollTop = 0;
     }
 
     private sortDown(columnId: string): void {
         this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
         this.state.sortedColumnId = columnId;
         this.state.sortOrder = SortOrder.DOWN;
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        table.scrollTop = 0;
     }
 
     private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {

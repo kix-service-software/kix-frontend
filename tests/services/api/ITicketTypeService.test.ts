@@ -11,9 +11,8 @@ import {
     UpdateTicketTypeRequest,
     UpdateTicketTypeResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { TicketType } from '@kix/core/dist/model';
+import { TicketType, SortOrder } from '@kix/core/dist/model';
 import { ITicketTypeService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -225,7 +224,7 @@ describe('Ticket Type Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketTypeRequest(new UpdateTicketType('ticket-type', 1)))
+                        new UpdateTicketTypeRequest(new UpdateTicketType('ticket-type', 1)))
                     .reply(200, buildUpdateTicketTypeResponse(123456));
             });
 
@@ -240,7 +239,7 @@ describe('Ticket Type Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTicketTypeRequest(new UpdateTicketType('ticket-type', 1)))
+                        new UpdateTicketTypeRequest(new UpdateTicketType('ticket-type', 1)))
                     .reply(400, {});
             });
 

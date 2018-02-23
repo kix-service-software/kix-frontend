@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { IStandardAttachmentService } from '@kix/core/dist/services';
-import { StandardAttachment } from '@kix/core/dist/model';
+import { StandardAttachment, SortOrder } from '@kix/core/dist/model';
 import {
     CreateStandardAttachment,
     CreateStandardAttachmentResponse,
@@ -11,7 +11,6 @@ import {
     UpdateStandardAttachmentResponse,
     UpdateStandardAttachmentRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class StandardAttachmentService extends ObjectService<StandardAttachment> implements IStandardAttachmentService {
 

@@ -12,9 +12,8 @@ import {
     UpdateTextModuleRequest,
     UpdateTextModuleResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { TextModule } from '@kix/core/dist/model';
+import { TextModule, SortOrder } from '@kix/core/dist/model';
 import { ITextModuleService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -240,7 +239,7 @@ describe('TextModule Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTextModuleRequest(new UpdateTextModule('textModule', 'text')))
+                        new UpdateTextModuleRequest(new UpdateTextModule('textModule', 'text')))
                     .reply(200, buildUpdateTextModuleResponse(123456));
             });
 
@@ -255,7 +254,7 @@ describe('TextModule Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateTextModuleRequest(new UpdateTextModule('textModule', 'text')))
+                        new UpdateTextModuleRequest(new UpdateTextModule('textModule', 'text')))
                     .reply(400, {});
             });
 

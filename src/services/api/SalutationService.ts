@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { ISalutationService } from '@kix/core/dist/services';
-import { Salutation } from '@kix/core/dist/model';
+import { Salutation, SortOrder } from '@kix/core/dist/model';
 import {
     CreateSalutation,
     CreateSalutationResponse,
@@ -11,7 +11,6 @@ import {
     UpdateSalutationResponse,
     UpdateSalutationRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SalutationService extends ObjectService<Salutation> implements ISalutationService {
 

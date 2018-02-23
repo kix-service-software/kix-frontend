@@ -12,9 +12,8 @@ import {
     UpdateMailAccountRequest,
     UpdateMailAccountResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { MailAccount } from '@kix/core/dist/model';
+import { MailAccount, SortOrder } from '@kix/core/dist/model';
 import { IMailAccountService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -244,7 +243,7 @@ describe('MailAccount Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateMailAccountRequest(new UpdateMailAccount('mailAccount', 'text')))
+                        new UpdateMailAccountRequest(new UpdateMailAccount('mailAccount', 'text')))
                     .reply(200, buildUpdateMailAccountResponse(123456));
             });
 
@@ -259,7 +258,7 @@ describe('MailAccount Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateMailAccountRequest(new UpdateMailAccount('mailAccount', 'text')))
+                        new UpdateMailAccountRequest(new UpdateMailAccount('mailAccount', 'text')))
                     .reply(400, {});
             });
 

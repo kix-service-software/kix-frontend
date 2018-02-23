@@ -1,6 +1,6 @@
 import { ObjectService } from './ObjectService';
 import { ISearchProfileService } from '@kix/core/dist/services';
-import { SearchProfile } from '@kix/core/dist/model';
+import { SearchProfile, SortOrder } from '@kix/core/dist/model';
 import {
     CreateSearchProfile,
     CreateSearchProfileResponse,
@@ -12,7 +12,6 @@ import {
     UpdateSearchProfileResponse,
     UpdateSearchProfileRequest
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SearchProfileService extends ObjectService<SearchProfile> implements ISearchProfileService {
 

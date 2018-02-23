@@ -1,10 +1,9 @@
 import { ObjectService } from './ObjectService';
 import { ISysConfigService } from '@kix/core/dist/services';
-import { SysConfigItem } from '@kix/core/dist/model';
+import { SysConfigItem, SortOrder } from '@kix/core/dist/model';
 import {
     SysConfigItemResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 export class SysConfigService extends ObjectService<SysConfigItem> implements ISysConfigService {
 

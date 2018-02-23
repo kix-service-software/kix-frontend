@@ -12,9 +12,8 @@ import {
     UpdateStandardAttachmentRequest,
     UpdateStandardAttachmentResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
-import { StandardAttachment } from '@kix/core/dist/model';
+import { StandardAttachment, SortOrder } from '@kix/core/dist/model';
 import { IStandardAttachmentService, IConfigurationService } from '@kix/core/dist/services';
 
 import chaiAsPromised = require('chai-as-promised');
@@ -231,7 +230,7 @@ describe('StandardAttachment Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateStandardAttachmentRequest(new UpdateStandardAttachment('standardAttachment', 'text')))
+                        new UpdateStandardAttachmentRequest(new UpdateStandardAttachment('standardAttachment', 'text')))
                     .reply(200, buildUpdateStandardAttachmentResponse(123456));
             });
 
@@ -246,7 +245,7 @@ describe('StandardAttachment Service', () => {
             before(() => {
                 nockScope
                     .patch(resourcePath + '/123456',
-                    new UpdateStandardAttachmentRequest(new UpdateStandardAttachment('standardAttachment', 'text')))
+                        new UpdateStandardAttachmentRequest(new UpdateStandardAttachment('standardAttachment', 'text')))
                     .reply(400, {});
             });
 

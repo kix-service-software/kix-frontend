@@ -9,10 +9,9 @@ import {
     UpdateRoleResponse,
     RoleAssignedUsersResponse
 } from '@kix/core/dist/api';
-import { SortOrder } from '@kix/core/dist/browser/SortOrder';
 
 import { IRoleService } from '@kix/core/dist/services';
-import { Role } from '@kix/core/dist/model';
+import { Role, SortOrder } from '@kix/core/dist/model';
 
 import { ObjectService } from './ObjectService';
 
