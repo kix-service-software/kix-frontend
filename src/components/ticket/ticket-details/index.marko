@@ -1,5 +1,8 @@
 <div.ticket-details>
-    <if(state.ticket)>
+    <if(state.loading)>
+        <span>Lade Ticket ...</span>
+    </if>
+    <else-if(state.ticket)>
         <widget minimizable=true>
             <@icon/>
             <@title>${component.getTitle()}</@title>
@@ -131,7 +134,7 @@
                 </@filter>
             </widget>
         </div>
-    </if>
+    </else-if>
     <else>
         <span>Keine Ticketdaten (ID: ${state.ticketId}) verfügbar.</span>
     </else>

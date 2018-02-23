@@ -21,7 +21,7 @@ export class TicketDetailsComponent {
 
     public onInput(input: any): void {
         this.state.ticketId = Number(input.ticketId);
-        TicketService.getInstance().loadTicketDetails(this.state.ticketId);
+        this.loadTicketDetails();
     }
 
     public onMount(): void {
@@ -38,8 +38,14 @@ export class TicketDetailsComponent {
             this.setConfiguration();
         });
 
+        this.loadTicketDetails();
+    }
+
+    private loadTicketDetails(): void {
+        this.state.loading = true;
         TicketService.getInstance().loadTicketDetails(this.state.ticketId).then(() => {
             this.setTicketHookInfo();
+            this.state.loading = false;
         });
     }
 
