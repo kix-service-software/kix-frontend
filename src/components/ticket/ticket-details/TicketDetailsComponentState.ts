@@ -15,7 +15,8 @@ export class TicketDetailsComponentState {
         public articleActions: string[] = [],
         public expandedArticles: number[] = [],
         public ticketHook: string = '',
-        public ticketHookDivider: string = ''
+        public ticketHookDivider: string = '',
+        public loading: boolean = false
     ) { }
 
 }
