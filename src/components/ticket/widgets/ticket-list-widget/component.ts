@@ -63,6 +63,7 @@ class TicketListWidgetComponent {
 
             const contentProvider = new TicketTableContentProvider(
                 this.state.instanceId,
+                labelProvider,
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 this.state.widgetConfiguration.settings.limit,
                 this.state.widgetConfiguration.settings.displayLimit

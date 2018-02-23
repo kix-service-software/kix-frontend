@@ -1,9 +1,9 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     TicketDetailsDashboardConfiguration,
-    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, SortType
+    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, DataType
 } from '@kix/core/dist/model/';
-import { StandardTableColumn, ColumnDataType } from '@kix/core/dist/browser';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -60,7 +60,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     groups: [
                         [
                             "Ticket", [
-                                new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 100),
+                                new StandardTableColumn(
+                                    'TicketNumber', '', true, true, false, true, true, 100, DataType.STRING),
                                 new StandardTableColumn('Title', '', true, true, false, true, true, 100),
                                 new StandardTableColumn('TypeID', 'TypeID', true, true, false, true, true, 100),
                                 new StandardTableColumn('QueueID', 'QueueID', true, true, false, true, true, 100),
@@ -68,7 +69,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                                 new StandardTableColumn(
                                     'Created', 'Created',
                                     true, true, false, true, true, 100,
-                                    ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                                    DataType.DATE_TIME
                                 ),
                                 new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false, true, true, 100)
                             ]

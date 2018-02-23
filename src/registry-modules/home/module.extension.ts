@@ -1,8 +1,8 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, SortType
+    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, DataType
 } from '@kix/core/dist/model';
-import { StandardTableColumn, ColumnDataType } from '@kix/core/dist/browser';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -61,15 +61,16 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 130),
                         new StandardTableColumn('PriorityID', 'Priority', true, false, true, false, false, 100),
                         new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
+                        new StandardTableColumn('QueueID', 'QueueID', true, true, true, true, true, 200),
                         new StandardTableColumn('TypeID', '', true, true, true, true, true, 100),
                         new StandardTableColumn('Title', '', true, true, false, true, true, 200),
                         new StandardTableColumn(
                             'Created', '', true, true, false, true, true, 100,
-                            ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                            DataType.DATE_TIME
                         ),
                         new StandardTableColumn(
                             'Age', '', true, true, false, true, true, 100,
-                            ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                            DataType.DATE_TIME
                         ),
                     ]
                 },

@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
-import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, SortType } from '@kix/core/dist/model';
-import { StandardTableColumn, ColumnDataType } from '@kix/core/dist/browser';
+import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, DataType } from '@kix/core/dist/model';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 import { TicketHistorySettings } from '../../../components/ticket/widgets/ticket-history-widget/TicketHistorySettings';
 
 export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtension {
@@ -17,7 +17,7 @@ export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtens
                 new StandardTableColumn('ArticleID', '', false, true, false, true, true, 100),
                 new StandardTableColumn('CreateBy', '', false, true, false, true, true, 100),
                 new StandardTableColumn(
-                    'CreateTime', '', false, true, false, true, true, 100, ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                    'CreateTime', '', false, true, false, true, true, 100, DataType.DATE_TIME
                 )
             ]
         };

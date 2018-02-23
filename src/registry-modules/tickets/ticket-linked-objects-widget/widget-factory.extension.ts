@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
-import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, SortType } from '@kix/core/dist/model';
-import { StandardTableColumn, ColumnDataType } from '@kix/core/dist/browser';
+import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, DataType } from '@kix/core/dist/model';
+import { StandardTableColumn } from '@kix/core/dist/browser';
 
 export class TicketLinkedObjectsWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -23,7 +23,7 @@ export class TicketLinkedObjectsWidgetFactoryExtension implements IWidgetFactory
                             new StandardTableColumn(
                                 'Created', 'Created',
                                 true, true, false, true, true, 100,
-                                ColumnDataType.DATE_TIME, SortType.DATE_TIME
+                                DataType.DATE_TIME
                             ),
                             new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false, true, true, 100)
                         ]
