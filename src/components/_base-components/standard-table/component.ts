@@ -38,31 +38,33 @@ class StandardTableComponent<T> {
     }
 
     private initTableScrollRange(): void {
-        setTimeout(() => {
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            const header = (this as any).getEl(this.state.tableId + 'header-row');
-            const toggleRowColumn: any =
-                document.querySelectorAll("[data-id='" + this.state.tableId + "toggle-row-column']");
-            const openedRows: any =
-                document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
 
-            if (table) {
-                table.addEventListener('ps-scroll-y', () => {
-                    header.style.top = table.scrollTop + 'px';
-                });
-                table.addEventListener('ps-scroll-x', () => {
-                    const scrollbarColumnPos = (table.scrollLeft * -1);
-                    toggleRowColumn.forEach((element: any) => {
-                        element.style.right = scrollbarColumnPos + 'px';
-                    });
-                    openedRows.forEach((element: any) => {
-                        element.style.left = table.scrollLeft + 'px';
-                    });
+        if (table) {
+
+            table.addEventListener('ps-scroll-y', () => {
+                const header = (this as any).getEl(this.state.tableId + 'header-row');
+                header.style.top = table.scrollTop + 'px';
+            });
+
+            table.addEventListener('ps-scroll-x', () => {
+                const scrollbarColumnPos = (table.scrollLeft * -1);
+
+                const toggleRowColumns: any =
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "toggle-row-column']");
+                toggleRowColumns.forEach((cell: any) => {
+                    cell.style.right = scrollbarColumnPos + 'px';
                 });
 
-                this.ps.update();
-            }
-        }, 250);
+                const openedRows: any =
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
+                openedRows.forEach((cell: any) => {
+                    cell.style.left = table.scrollLeft + 'px';
+                });
+            });
+
+            this.ps.update();
+        }
     }
 
     public onUpdate(): void {
@@ -265,6 +267,17 @@ class StandardTableComponent<T> {
         }
 
         (this as any).forceUpdate();
+
+        setTimeout(() => {
+            const table = (this as any).getEl(this.state.tableId + 'standard-table');
+            if (table) {
+                const openedRows: any =
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
+                openedRows.forEach((cell: any) => {
+                    cell.style.left = table.scrollLeft + 'px';
+                });
+            }
+        }, 50);
     }
 
     private rowIsToggled(rowId): boolean {
