@@ -25,16 +25,16 @@ class DynamicFieldsContainerComponent {
         if (objectData) {
             this.state.dynamicFields = objectData.dynamicFields;
             this.state.displayGroups = objectData.dynamicFieldGroups
-                .filter((dfg) => this.getDFsOfGroup(dfg.ItemID).length);
+                .filter((dfg) => this.getDynamicFields(dfg.ItemID).length);
         }
     }
 
-    private getDFsOfGroup(groupId: number): DynamicField[] {
-        const dFsOfGroup = this.state.ticketDynamicFields.filter((tdf) => {
+    private getDynamicFields(groupId: number): DynamicField[] {
+        const dynamicFields = this.state.ticketDynamicFields.filter((tdf) => {
             const field = this.state.dynamicFields.find((df) => tdf.ID === df.ID);
             return field && field.DisplayGroupID === groupId;
         });
-        return dFsOfGroup;
+        return dynamicFields;
     }
 }
 

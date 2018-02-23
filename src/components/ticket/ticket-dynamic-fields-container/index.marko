@@ -1,4 +1,4 @@
-<if(state.displayGroups && state.displayGroups.length)>
+<if(state.displayGroups)>
     <for(displayGroup in state.displayGroups)>
         <div.dynamic-fields-group>
             <widget>
@@ -7,7 +7,7 @@
                 <@content>
                     <div.field-container>
                         <ul>
-                            <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
+                            <for(df in component.getDynamicFields(displayGroup.ItemID))>
                                 <li.dynamic-field>
                                     <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID hasLabel=true hasText=true/>
                                 </li>
