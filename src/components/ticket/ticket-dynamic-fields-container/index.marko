@@ -1,19 +1,17 @@
-<if(state.displayGroups && state.displayGroups.length)>
+<if(state.displayGroups)>
     <for(displayGroup in state.displayGroups)>
         <div.dynamic-fields-group>
             <widget>
                 <@icon/>
                 <@title>${displayGroup.Name}</@title>
                 <@content>
-                    <div.field-container>
-                        <ul>
-                            <for(df in component.getDFsOfGroup(displayGroup.ItemID))>
-                                <li.dynamic-field>
-                                    <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID hasLabel=true hasText=true/>
-                                </li>
-                            </for>
-                        </ul>
-                    </div>
+                    <ul.field-container>
+                        <for(df in component.getDynamicFields(displayGroup.ItemID))>
+                            <li.dynamic-field>
+                                <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID hasLabel=true hasText=true/>
+                            </li>
+                        </for>
+                    </ul>
                 </@content>
                 <@filter/>
                 <@actions/>
