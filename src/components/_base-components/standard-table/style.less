@@ -17,7 +17,7 @@
             white-space: nowrap;
             background-color: #ffffff; // TODO: height ggf. weg?
             // height: 2em; 
-            // border: 1px solid #f5f5f5;
+            // border: 1px solid @secondary-5;
             // border-radius: 3px;
             box-sizing: border-box;
             .opened-row {
@@ -88,17 +88,18 @@
                 }
             }
             &:nth-of-type(2n) {
+                background-color: @secondary-5;
                 .table-cell {
-                    background-color: #f5f5f5;
+                    background-color: @secondary-5;
                     &.fixed {
                         &.toggle-row-column {
-                            background-color: #f5f5f5;
+                            background-color: @secondary-5;
                         }
                     }
                 } // .checkbox-column,
                 // .toggle-row-column,
                 // .inner-row-wrapper {
-                //     background-color: #f5f5f5;
+                //     background-color: @secondary-5;
                 // }
                 // .checkbox-column {
                 //     border-top-left-radius: 3px;
@@ -223,7 +224,7 @@
     >.ps__rail-y {
         background-color: transparent;
         right: 6px;
-        border: 1px solid #f5f5f5;
+        border: 1px solid @secondary-5;
         border-radius: 3px;
         opacity: 1;
         width: 7px;
@@ -243,7 +244,7 @@
     >.ps__rail-x {
         background-color: transparent;
         bottom: 6px;
-        border: 1px solid #f5f5f5;
+        border: 1px solid @secondary-5;
         border-radius: 3px;
         opacity: 1;
         height: 7px;
