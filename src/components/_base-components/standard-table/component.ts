@@ -16,6 +16,11 @@ class StandardTableComponent<T> {
 
     public onInput(input: StandardTableInput): void {
         this.state.tableConfiguration = input.tableConfiguration;
+        if (this.state.sortOrder && this.state.sortedColumnId) {
+            this.state.tableConfiguration.contentProvider.sortObjects(
+                this.state.sortOrder, this.state.sortedColumnId
+            );
+        }
     }
 
     public onMount(): void {
