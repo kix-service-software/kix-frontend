@@ -78,6 +78,26 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
             );
+        const articleList =
+            new ConfiguredWidget("article-list", new WidgetConfiguration(
+                "article-list-widget", "Artikelübersicht", [
+                    'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
+                ],
+                {
+                    tableColumns: [
+                        new StandardTableColumn('Number', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('SenderTypeID', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('ArticleTypeID', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('From', '', false, true, false, true, true, 100),
+                        new StandardTableColumn('Subject', '', false, true, false, true, true, 100),
+                        new StandardTableColumn(
+                            'IncomingTime', '', false, true, false, true, true, 100, DataType.DATE_TIME
+                        ),
+                        new StandardTableColumn('Attachments', '', false, true, false, true, true, 100),
+                    ]
+                },
+                WidgetType.CONTENT, false, true, true, WidgetSize.LARGE, null, false)
+            );
 
         // info-overlay
         // TODO: eigener Widget-Typ
@@ -100,7 +120,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
             ticketInfoLane, descriptionLane, linkedObjectsLane, processLane,
-            dynamicFieldsLane, ticketHistoryLane, infoOverlay
+            dynamicFieldsLane, ticketHistoryLane, infoOverlay, articleList
         ];
 
         // Explorer
@@ -134,18 +154,10 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             'print-ticket-action',
         ];
 
-        const generalArticleActions = [
-            'new-email-article-action', 'new-note-article-action',
-            'call-outgoing-article-action', 'call-incoming-article-action'
-        ];
-        const articleActions = [
-            'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
-        ];
-
         return new TicketDetailsDashboardConfiguration(
             this.getModuleId(), contentRows, sidebarRows, explorerRows,
             contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, [],
-            generalActions, ticketActions, generalArticleActions, articleActions
+            generalActions, ticketActions
         );
     }
 

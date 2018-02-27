@@ -64,8 +64,6 @@ export class TicketDetailsComponent {
             this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
             this.state.generalActions = config.generalActions;
             this.state.ticketActions = config.ticketActions;
-            this.state.generalArticleActions = config.generalArticleActions;
-            this.state.articleActions = config.articleActions;
 
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
@@ -86,7 +84,6 @@ export class TicketDetailsComponent {
             const ticketDetails: TicketDetails = args[0];
             if (ticketDetails.ticketId === this.state.ticketId && ticketDetails) {
                 this.state.ticket = ticketDetails.ticket;
-                this.state.articles = ticketDetails.articles;
                 this.setBreadcrumbDetails();
             }
         }
@@ -110,30 +107,6 @@ export class TicketDetailsComponent {
 
     private tabClicked(tabId: string): void {
         this.state.activeTabId = tabId;
-    }
-
-    private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
-    }
-
-    private toggleArticle(articleId: number): void {
-        const index = this.state.expandedArticles.findIndex((a) => a === articleId);
-        if (index >= 0) {
-            this.state.expandedArticles.splice(index, 1);
-            this.state.expandedArticles = [...this.state.expandedArticles];
-        } else {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    private expandArticle(articleId: number): void {
-        if (!this.state.expandedArticles.some((a) => a === articleId)) {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    private isArticleExpanded(articleId: number): boolean {
-        return this.state.expandedArticles.some((a) => a === articleId);
     }
 
     private getTitle(): string {

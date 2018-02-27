@@ -41,99 +41,14 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix>
-                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticket.TicketID}) on-expandArticle('expandArticle')/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
                         </li>
                     </for>
                 </ul>
             </@content>
             <@filter/>
         </widget>
-        <div.article-table-widget>
-            <widget configurationTagId="ticket-info-configuration">
-                <@icon/>
-                <@title>
-                    <if(state.articles)>Artikelübersicht (${state.articles.length})</if>
-                </@title>
-                <@actions>
-                    <for(action in state.generalArticleActions)>
-                        <include(component.getTemplate(action), { ticketId: state.ticketId })/>
-                    </for>
-                </@actions>
-                <@content>
-                    <div.article-table-wrapper>
-                        <if(state.articles)>
-                            <table.article-table>
-                                <thead>
-                                    <tr>
-                                        <th.select-all-rows>alle</th>
-                                        <th>Nr.</th>
-                                        <th>Sender</th>
-                                        <th>Type</th>
-                                        <th>von</th>
-                                        <th>Betreff</th>
-                                        <th>erstellt</th>
-                                        <th>Anlage</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <for(article in state.articles  | status-var=loop)>
-                                        <tr id=article.ArticleID class=(component.isArticleExpanded(article.ArticleID) ? "expanded" : "")>
-                                            <td.select-row>
-                                                <input type="checkbox"/>
-                                            </td>
-                                            <td>${loop.getLength() - loop.getIndex()}</td>
-                                            <td>${article.SenderTypeID}</td>
-                                            <td>${article.ArticleTypeID}</td>
-                                            <td>${article.From}</td>
-                                            <td>${article.Subject}</td>
-                                            <td>${article.IncomingTime}</td>
-                                            <if(article.Attachments)>
-                                                <td>${article.Attachments.length}</td>
-                                            </if>
-                                            <else>
-                                                <td>-</td>
-                                            </else>
-                                            <td>
-                                                <span.kix-icon-sort-down on-click('toggleArticle', article.ArticleID)/>
-                                            </td>
-                                        </tr>
-                                        <if(component.isArticleExpanded(article.ArticleID))>
-                                            <tr>
-                                                <td.article-content colspan=9>
-                                                    <widget>
-                                                        <@icon/>
-                                                        <@title/>
-                                                        <@content>
-                                                            <ticket-article-content ticketId=state.ticketId article=article/>
-                                                        </@content>
-                                                        <@filter/>
-                                                        <@actions/>
-                                                        <@contentActions>
-                                                            <ul.content-actions>
-                                                                <for(action in state.articleActions)>
-                                                                    <li>
-                                                                        <include(component.getTemplate(action), { article: article })/>
-                                                                    </li>
-                                                                </for>
-                                                            </ul>
-                                                        </@contentActions>
-                                                    </widget>
-                                                </td>
-                                            </tr>
-                                        </if>
-                                    </for>
-                                </tbody>
-                            </table>
-                        </if>
-                    </div>
-                </@content>
-                <@filter>
-                    <input type="text" placeholder="Filtern in Liste"/>
-                    <span.kix-icon-filter/>
-                </@filter>
-            </widget>
-        </div>
+        <article-list-widget ticketId=state.ticketId/>
     </else-if>
     <else>
         <span>Keine Ticketdaten (ID: ${state.ticketId}) verfügbar.</span>
