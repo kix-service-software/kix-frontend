@@ -153,19 +153,23 @@ class StandardTableComponent<T> {
     }
 
     private sortUp(columnId: string): void {
-        this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
-        this.state.sortedColumnId = columnId;
-        this.state.sortOrder = SortOrder.UP;
-        const table = (this as any).getEl(this.state.tableId + 'standard-table');
-        table.scrollTop = 0;
+        if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.UP) {
+            this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
+            this.state.sortedColumnId = columnId;
+            this.state.sortOrder = SortOrder.UP;
+            const table = (this as any).getEl(this.state.tableId + 'standard-table');
+            table.scrollTop = 0;
+        }
     }
 
     private sortDown(columnId: string): void {
-        this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
-        this.state.sortedColumnId = columnId;
-        this.state.sortOrder = SortOrder.DOWN;
-        const table = (this as any).getEl(this.state.tableId + 'standard-table');
-        table.scrollTop = 0;
+        if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.DOWN) {
+            this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
+            this.state.sortedColumnId = columnId;
+            this.state.sortOrder = SortOrder.DOWN;
+            const table = (this as any).getEl(this.state.tableId + 'standard-table');
+            table.scrollTop = 0;
+        }
     }
 
     private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
