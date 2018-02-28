@@ -11,6 +11,10 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
 
     public getDefaultConfiguration(): any {
         const settings: ArticleListSettings = {
+            generalActions: [
+                'new-email-article-action', 'new-note-article-action',
+                'call-outgoing-article-action', 'call-incoming-article-action'
+            ],
             tableColumns: [
                 new StandardTableColumn('Number', '', false, true, false, true, true, 100),
                 new StandardTableColumn('SenderTypeID', '', false, true, false, true, true, 100),

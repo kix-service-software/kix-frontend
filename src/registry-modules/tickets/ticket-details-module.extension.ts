@@ -84,6 +84,10 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
                 ],
                 {
+                    generalActions: [
+                        'new-email-article-action', 'new-note-article-action',
+                        'call-outgoing-article-action', 'call-incoming-article-action'
+                    ],
                     tableColumns: [
                         new StandardTableColumn('Number', '', false, true, false, true, true, 100),
                         new StandardTableColumn('SenderTypeID', '', false, true, false, true, true, 100),

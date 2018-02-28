@@ -22,6 +22,9 @@ export class ArticleListWidgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration('article-list') : undefined;
+        if (this.state.widgetConfiguration) {
+            this.state.generalArticleActions = this.state.widgetConfiguration.settings.generalActions;
+        }
         this.setArticleTableConfiguration();
     }
 

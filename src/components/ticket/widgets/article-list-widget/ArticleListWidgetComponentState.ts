@@ -15,4 +15,6 @@ export class ArticleListWidgetComponentState extends WidgetComponentState<Articl
 
     public expandedArticles: number[] = [];
 
+    public generalArticleActions: string[] = [];
+
 }
