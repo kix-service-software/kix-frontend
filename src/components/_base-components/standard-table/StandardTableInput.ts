@@ -2,6 +2,6 @@ import { StandardTable } from '@kix/core/dist/browser';
 
 export class StandardTableInput<T = any> {
 
-    public tableConfiguration: StandardTable<T>;
+    public standardTable: StandardTable<T>;
 
 }

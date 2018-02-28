@@ -7,7 +7,7 @@ export class TicketHistoryComponentState extends WidgetComponentState<TicketHist
 
     public ticketId: number = null;
 
-    public historyTableConfiguration: StandardTable<TicketHistory> = null;
+    public standardTable: StandardTable<TicketHistory> = null;
 
     public filterValue: string = '';
 

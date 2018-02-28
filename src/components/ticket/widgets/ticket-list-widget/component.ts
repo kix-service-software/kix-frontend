@@ -16,7 +16,8 @@ import {
 import {
     StandardTableColumn, StandardTable, StandardTableRowHeight,
     ITableConfigurationListener,
-    StandardTableSortLayer
+    StandardTableSortLayer,
+    TableColumn
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
@@ -47,7 +48,7 @@ class TicketListWidgetComponent {
         if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
             const contextFilter: ContextFilter = args[0];
             if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
-                this.state.StatuscontextFilter = contextFilter;
+                this.state.contextFilter = contextFilter;
                 this.filter();
             } else {
                 this.state.contextFilter = null;
@@ -67,7 +68,7 @@ class TicketListWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.tableConfiguration = new StandardTable(
+            this.state.standardTable = new StandardTable(
                 new TicketTableContentProvider(this.state.instanceId, 100),
                 new TicketTableLabelProvider(),
                 [],
@@ -75,6 +76,7 @@ class TicketListWidgetComponent {
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
+                configurationListener,
                 true,
                 true,
                 StandardTableRowHeight.SMALL,
@@ -86,17 +88,17 @@ class TicketListWidgetComponent {
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
 
         if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index] = column;
-        } else {
-            this.state.widgetConfiguration.settings.tableColumns.push(column);
+            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
+            DashboardService.getInstance().saveWidgetConfiguration(
+                this.state.instanceId, this.state.widgetConfiguration
+            );
         }
 
-        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filterChanged(event): void {

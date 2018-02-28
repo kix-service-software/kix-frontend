@@ -11,7 +11,7 @@ import { Link, Ticket } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
     StandardTableColumn, StandardTable,
-    ITableConfigurationListener, StandardTableSortLayer
+    ITableConfigurationListener, StandardTableSortLayer, TableColumn
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -90,25 +90,23 @@ class LinkedObjectsWidgetComponent {
                 [new StandardTableSortLayer()],
                 columnConfig,
                 null,
-                clickListener
+                clickListener,
+                configurationListener,
             );
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
         if (groupEntry) {
-            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.columnId);
+            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.id);
 
             if (index >= 0) {
-                groupEntry[1][index] = column;
-            } else {
-                groupEntry[1].push(column);
+                groupEntry[1][index].size = column.size;
+                DashboardService.getInstance().saveWidgetConfiguration(
+                    this.state.instanceId, this.state.widgetConfiguration
+                );
             }
-
-            DashboardService.getInstance().saveWidgetConfiguration(
-                this.state.instanceId, this.state.widgetConfiguration
-            );
         }
     }
 

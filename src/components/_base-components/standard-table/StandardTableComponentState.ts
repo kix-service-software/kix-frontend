@@ -5,7 +5,7 @@ import { SortOrder } from '@kix/core/dist/model';
 
 export class StandardTableComponentState<T = any> {
 
-    public tableConfiguration: StandardTable<T> = null;
+    public standardTable: StandardTable<T> = null;
 
     public resizeSettings: ResizeSettings = new ResizeSettings();
 

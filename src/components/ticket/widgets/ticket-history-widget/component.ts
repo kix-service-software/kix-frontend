@@ -6,7 +6,8 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 import {
     StandardTableColumn, StandardTable, ITableClickListener,
     ITableConfigurationListener,
-    StandardTableSortLayer
+    StandardTableSortLayer,
+    TableColumn
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -54,14 +55,15 @@ class TicketHistoryWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.historyTableConfiguration = new StandardTable(
+            this.state.standardTable = new StandardTable(
                 contentProvider,
                 labelProvider,
                 [],
                 [new StandardTableSortLayer()],
                 columnConfig,
                 null,
-                clickListener
+                clickListener,
+                configurationListener,
             );
         }
     }
@@ -74,14 +76,12 @@ class TicketHistoryWidgetComponent {
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
 
         if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index] = column;
-        } else {
-            this.state.widgetConfiguration.settings.tableColumns.push(column);
+            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
         }
 
         DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);

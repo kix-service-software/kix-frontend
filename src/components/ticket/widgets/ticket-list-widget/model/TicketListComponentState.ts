@@ -6,7 +6,7 @@ import { StandardTable } from '@kix/core/dist/browser';
 
 export class TicketListComponentState extends WidgetComponentState<TicketListSettings> {
 
-    public tableConfiguration: StandardTable<Ticket> = null;
+    public standardTable: StandardTable<Ticket> = null;
 
     public filterValue: string = null;
 
