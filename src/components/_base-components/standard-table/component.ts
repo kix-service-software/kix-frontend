@@ -28,6 +28,10 @@ class StandardTableComponent<T> {
                 minScrollbarLength: 50,
                 wrapperElement
             });
+
+            this.state.tableConfiguration.setConfigurationListener(() => {
+                (this as any).forceUpdate();
+            });
         }
 
         this.initTableScrollRange();
@@ -145,13 +149,11 @@ class StandardTableComponent<T> {
     }
 
     private isSelected(row): boolean {
-        // return this.state.tableConfiguration.selectionListener.isRowSelected(row);
-        return false;
+        return this.state.tableConfiguration.selectionListener.isRowSelected(row);
     }
 
     private isAllSelected(row): boolean {
-        // return this.state.tableConfiguration.selectionListener.isAllSelected();
-        return false;
+        return this.state.tableConfiguration.selectionListener.isAllSelected();
     }
 
     private selectAll(event): void {
@@ -162,27 +164,27 @@ class StandardTableComponent<T> {
             element.checked = checked;
         });
 
-        // if (this.state.tableConfiguration.selectionListener) {
-        //     if (checked) {
-        //         this.state.tableConfiguration.selectionListener.selectAll(
-        //             this.state.tableConfiguration.contentProvider.getRowObjects(true)
-        //         );
-        //     } else {
-        //         this.state.tableConfiguration.selectionListener.selectNone();
-        //     }
-        // }
+        if (this.state.tableConfiguration.selectionListener) {
+            if (checked) {
+                this.state.tableConfiguration.selectionListener.selectAll(
+                    this.state.tableConfiguration.getRows()
+                );
+            } else {
+                this.state.tableConfiguration.selectionListener.selectNone();
+            }
+        }
     }
 
     private selectRow(row: any, event: any): void {
-        // if (this.state.tableConfiguration.selectionListener) {
-        //     this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
-        // }
+        if (this.state.tableConfiguration.selectionListener) {
+            this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
+        }
     }
 
-    private rowClicked(row: any, columnId: string): void {
-        // if (this.state.tableConfiguration.clickListener) {
-        //     this.state.tableConfiguration.clickListener.rowClicked(row, columnId);
-        // }
+    private rowClicked(row: TableRow, columnId: string): void {
+        if (this.state.tableConfiguration.clickListener) {
+            this.state.tableConfiguration.clickListener.rowClicked(row.object, columnId);
+        }
     }
 
     private loadMore(): void {

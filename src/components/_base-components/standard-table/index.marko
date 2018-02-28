@@ -40,8 +40,8 @@
                                 </div>
                             </if>
                             <for(column in component.getColumns() | status-var=colLoop)>
-                                <div.table-cell.row-column class=(component.hasClickListener() ? "row-link" : "") style={width: column.size}
-                                    on-click('rowClicked', row, column.id) data-id=(state.tableId + column.id)>
+                                <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
+                                    data-id=(state.tableId + column.id)>
                                     <span>${row.displayValues[colLoop.getIndex()]}</span>
                                 </div>
                             </for>

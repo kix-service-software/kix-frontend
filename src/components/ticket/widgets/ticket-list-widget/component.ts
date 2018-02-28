@@ -11,10 +11,12 @@ import {
     TicketTableLabelProvider,
     TicketTableSelectionListener,
     TicketTableClickListener,
-    TicketTableConfigurationListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
-import { StandardTableColumn, StandardTableConfiguration, StandardTableRowHeight } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTableConfiguration, StandardTableRowHeight,
+    ITableConfigurationListener
+} from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
 
@@ -63,16 +65,18 @@ class TicketListWidgetComponent {
             const labelProvider = new TicketTableLabelProvider();
             const contentProvider = new TicketTableContentProvider(this.state.instanceId, 100);
 
-            // const selectionListener = new TicketTableSelectionListener();
-            // const clickListener = new TicketTableClickListener();
-            // const configurationListener: TicketTableConfigurationListener = {
-            //     columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            // };
+            const selectionListener = new TicketTableSelectionListener();
+            const clickListener = new TicketTableClickListener();
+            const configurationListener: ITableConfigurationListener<Ticket> = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
             this.state.tableConfiguration = new StandardTableConfiguration(
                 contentProvider,
                 labelProvider,
                 this.state.widgetConfiguration.settings.tableColumns || [],
+                selectionListener,
+                clickListener,
                 true,
                 true,
                 StandardTableRowHeight.SMALL,

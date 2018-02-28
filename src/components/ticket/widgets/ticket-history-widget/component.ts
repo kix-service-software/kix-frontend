@@ -3,7 +3,10 @@ import { HistoryTableLabelProvider, HistoryTableContentProvider } from '@kix/cor
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { StandardTableColumn, StandardTableConfiguration, ITableClickListener } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTableConfiguration, ITableClickListener,
+    ITableConfigurationListener
+} from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -42,17 +45,20 @@ class TicketHistoryWidgetComponent {
 
             const contentProvider = new HistoryTableContentProvider(this.state.instanceId, this.state.ticketId);
 
-            // const clickListener: ITableClickListener<TicketHistory> = {
-            //     rowClicked: this.navigateToArticle.bind(this)
-            // };
-            // const configurationListener: ITableConfigurationListener<TicketHistory> = {
-            //     columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            // };
+            const clickListener: ITableClickListener<TicketHistory> = {
+                rowClicked: this.navigateToArticle.bind(this)
+            };
+
+            const configurationListener: ITableConfigurationListener<TicketHistory> = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
             this.state.historyTableConfiguration = new StandardTableConfiguration(
                 contentProvider,
                 labelProvider,
-                columnConfig
+                columnConfig,
+                null,
+                clickListener
             );
         }
     }
