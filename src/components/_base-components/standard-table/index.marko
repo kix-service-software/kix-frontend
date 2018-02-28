@@ -42,7 +42,12 @@
                             <for(column in component.getColumns() | status-var=colLoop)>
                                 <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
                                     data-id=(state.tableId + column.id)>
-                                    <span>${row.displayValues[colLoop.getIndex()]}</span>
+                                    <if(column.showIcon)>
+                                        <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
+                                    </if>
+                                    <if(column.showText)>
+                                        <span>${row.displayValues[colLoop.getIndex()]}</span>
+                                    </if>
                                 </div>
                             </for>
                             <if(state.tableConfiguration.toggleRowEnabled)>
