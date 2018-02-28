@@ -17,7 +17,8 @@ import {
     StandardTableColumn, StandardTable, StandardTableRowHeight,
     ITableConfigurationListener,
     StandardTableSortLayer,
-    TableColumn
+    TableColumn,
+    StandardTableFilterLayer
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
@@ -71,7 +72,7 @@ class TicketListWidgetComponent {
             this.state.standardTable = new StandardTable(
                 new TicketTableContentProvider(this.state.instanceId, 100),
                 new TicketTableLabelProvider(),
-                [],
+                [new StandardTableFilterLayer()],
                 [new StandardTableSortLayer()],
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 new TicketTableSelectionListener(),
@@ -106,22 +107,11 @@ class TicketListWidgetComponent {
     }
 
     private filter(): void {
-        // let usedContextFilter = false;
-        // if (
-        //     this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
-        //     this.state.contextFilter
-        // ) {
-        //     this.state.tableConfiguration.contentProvider.filterObjectsByProperty(
-        //         this.state.contextFilter.objectProperty, this.state.contextFilter.objectValue
-        //     );
-        //     usedContextFilter = true;
-        // }
-
-        // if (this.state.filterValue !== null && this.state.filterValue !== "") {
-        //     this.state.tableConfiguration.contentProvider.filterObjects(this.state.filterValue);
-        // } else if (!usedContextFilter) {
-        //     this.state.tableConfiguration.contentProvider.resetFilter();
-        // }
+        if (this.state.filterValue !== null && this.state.filterValue !== "") {
+            this.state.standardTable.setFilterSettings(this.state.filterValue);
+        } else {
+            this.state.standardTable.resetFilter();
+        }
     }
 
 }

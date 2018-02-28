@@ -7,7 +7,8 @@ import {
     StandardTableColumn, StandardTable, ITableClickListener,
     ITableConfigurationListener,
     StandardTableSortLayer,
-    TableColumn
+    TableColumn,
+    StandardTableFilterLayer
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -58,7 +59,7 @@ class TicketHistoryWidgetComponent {
             this.state.standardTable = new StandardTable(
                 contentProvider,
                 labelProvider,
-                [],
+                [new StandardTableFilterLayer()],
                 [new StandardTableSortLayer()],
                 columnConfig,
                 null,
@@ -92,11 +93,11 @@ class TicketHistoryWidgetComponent {
     }
 
     private filterHistory(): void {
-        // if (this.state.filterValue !== null && this.state.filterValue !== "") {
-        //     this.state.historyTableConfiguration.contentProvider.filterObjects(this.state.filterValue);
-        // } else {
-        //     this.state.historyTableConfiguration.contentProvider.resetFilter();
-        // }
+        if (this.state.filterValue !== null && this.state.filterValue !== "") {
+            this.state.standardTable.setFilterSettings(this.state.filterValue);
+        } else {
+            this.state.standardTable.resetFilter();
+        }
     }
 
     private print(): void {
