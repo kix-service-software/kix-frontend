@@ -8,7 +8,7 @@
             <@title>${component.getTitle()}</@title>
             <@actions>
                 <for(action in state.generalActions)>
-                    <include(component.getTemplate(action), { ticketId: state.ticketId })/>
+                    <include(component.getWidgetTemplate(action), { ticketId: state.ticketId })/>
                 </for>
             </@actions>
             <@contentActions>
