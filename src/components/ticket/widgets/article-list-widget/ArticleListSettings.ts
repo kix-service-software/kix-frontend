@@ -4,4 +4,7 @@ export class ArticleListSettings {
 
     public tableColumns: StandardTableColumn[];
 
+    public generalActions: string[];
+
+
 }
