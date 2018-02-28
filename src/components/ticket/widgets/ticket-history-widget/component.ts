@@ -6,7 +6,6 @@ import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandle
 import { StandardTableColumn, StandardTableConfiguration, ITableClickListener } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
-import { ITableConfigurationListener } from '@kix/core/dist/browser/standard-table/ITableConfigurationListener';
 
 class TicketHistoryWidgetComponent {
 
@@ -41,20 +40,19 @@ class TicketHistoryWidgetComponent {
 
             const columnConfig: StandardTableColumn[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const contentProvider = new HistoryTableContentProvider(
-                labelProvider, this.state.instanceId, this.state.ticketId, columnConfig, 7
-            );
+            const contentProvider = new HistoryTableContentProvider(this.state.instanceId, this.state.ticketId);
 
-            const clickListener: ITableClickListener<TicketHistory> = {
-                rowClicked: this.navigateToArticle.bind(this)
-            };
-
-            const configurationListener: ITableConfigurationListener<TicketHistory> = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
+            // const clickListener: ITableClickListener<TicketHistory> = {
+            //     rowClicked: this.navigateToArticle.bind(this)
+            // };
+            // const configurationListener: ITableConfigurationListener<TicketHistory> = {
+            //     columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            // };
 
             this.state.historyTableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, null, clickListener, configurationListener
+                contentProvider,
+                labelProvider,
+                columnConfig
             );
         }
     }
@@ -85,11 +83,11 @@ class TicketHistoryWidgetComponent {
     }
 
     private filterHistory(): void {
-        if (this.state.filterValue !== null && this.state.filterValue !== "") {
-            this.state.historyTableConfiguration.contentProvider.filterObjects(this.state.filterValue);
-        } else {
-            this.state.historyTableConfiguration.contentProvider.resetFilter();
-        }
+        // if (this.state.filterValue !== null && this.state.filterValue !== "") {
+        //     this.state.historyTableConfiguration.contentProvider.filterObjects(this.state.filterValue);
+        // } else {
+        //     this.state.historyTableConfiguration.contentProvider.resetFilter();
+        // }
     }
 
     private print(): void {
