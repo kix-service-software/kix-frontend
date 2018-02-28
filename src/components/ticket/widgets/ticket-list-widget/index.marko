@@ -6,8 +6,8 @@
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
     </@title>
     <@content>
-        <if(state.tableConfiguration)>
-            <standard-table tableConfiguration=state.tableConfiguration/>
+        <if(state.standardTable)>
+            <standard-table standardTable=state.standardTable/>
         </if>
     </@content>
     <@filter>

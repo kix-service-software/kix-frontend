@@ -1,7 +1,7 @@
-import { StandardTableConfiguration } from '@kix/core/dist/browser';
+import { StandardTable } from '@kix/core/dist/browser';
 
 export class StandardTableInput<T = any> {
 
-    public tableConfiguration: StandardTableConfiguration<T>;
+    public standardTable: StandardTable<T>;
 
 }

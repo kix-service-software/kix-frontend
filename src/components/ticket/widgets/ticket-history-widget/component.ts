@@ -3,10 +3,15 @@ import { HistoryTableLabelProvider, HistoryTableContentProvider } from '@kix/cor
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { StandardTableColumn, StandardTableConfiguration, ITableClickListener } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTable, ITableClickListener,
+    ITableConfigurationListener,
+    StandardTableSortLayer,
+    TableColumn,
+    StandardTableFilterLayer
+} from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
-import { ITableConfigurationListener } from '@kix/core/dist/browser/standard-table/ITableConfigurationListener';
 
 class TicketHistoryWidgetComponent {
 
@@ -41,9 +46,7 @@ class TicketHistoryWidgetComponent {
 
             const columnConfig: StandardTableColumn[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const contentProvider = new HistoryTableContentProvider(
-                labelProvider, this.state.instanceId, this.state.ticketId, columnConfig, 7
-            );
+            const contentProvider = new HistoryTableContentProvider(this.state.instanceId, this.state.ticketId);
 
             const clickListener: ITableClickListener<TicketHistory> = {
                 rowClicked: this.navigateToArticle.bind(this)
@@ -53,8 +56,15 @@ class TicketHistoryWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.historyTableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, null, clickListener, configurationListener
+            this.state.standardTable = new StandardTable(
+                contentProvider,
+                labelProvider,
+                [new StandardTableFilterLayer()],
+                [new StandardTableSortLayer()],
+                columnConfig,
+                null,
+                clickListener,
+                configurationListener,
             );
         }
     }
@@ -67,14 +77,12 @@ class TicketHistoryWidgetComponent {
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
 
         if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index] = column;
-        } else {
-            this.state.widgetConfiguration.settings.tableColumns.push(column);
+            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
         }
 
         DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
@@ -86,9 +94,9 @@ class TicketHistoryWidgetComponent {
 
     private filterHistory(): void {
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
-            this.state.historyTableConfiguration.contentProvider.filterObjects(this.state.filterValue);
+            this.state.standardTable.setFilterSettings(this.state.filterValue);
         } else {
-            this.state.historyTableConfiguration.contentProvider.resetFilter();
+            this.state.standardTable.resetFilter();
         }
     }
 

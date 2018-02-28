@@ -1,18 +1,18 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import {
     LinkedTicketTableContentProvider,
-    TicketUtil,
     TicketService,
     TicketTableLabelProvider,
-    TicketTableClickListener,
-    TicketTableConfigurationListener
+    TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { TicketDetails, TicketProperty, Link, Ticket } from '@kix/core/dist/model';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { Link, Ticket } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTable,
+    ITableConfigurationListener, StandardTableSortLayer, TableColumn
+} from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class LinkedObjectsWidgetComponent {
@@ -67,7 +67,7 @@ class LinkedObjectsWidgetComponent {
         }
     }
 
-    private getTicketTableConfiguration(linkedTickets: Link[]): StandardTableConfiguration<Ticket> {
+    private getTicketTableConfiguration(linkedTickets: Link[]): StandardTable<Ticket> {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
@@ -75,34 +75,38 @@ class LinkedObjectsWidgetComponent {
             const columnConfig = groupEntry ? groupEntry[1] : [];
 
             const contentProvider = new LinkedTicketTableContentProvider(
-                this.state.instanceId, this.state.ticketId, linkedTickets, columnConfig, 7
+                this.state.instanceId, this.state.ticketId, linkedTickets
             );
 
             const clickListener = new TicketTableClickListener();
-            const configurationListener: TicketTableConfigurationListener = {
+            const configurationListener: ITableConfigurationListener<Ticket> = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            return new StandardTableConfiguration(
-                labelProvider, contentProvider, null, clickListener, configurationListener
+            return new StandardTable(
+                contentProvider,
+                labelProvider,
+                [],
+                [new StandardTableSortLayer()],
+                columnConfig,
+                null,
+                clickListener,
+                configurationListener,
             );
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
         if (groupEntry) {
-            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.columnId);
+            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.id);
 
             if (index >= 0) {
-                groupEntry[1][index] = column;
-            } else {
-                groupEntry[1].push(column);
+                groupEntry[1][index].size = column.size;
+                DashboardService.getInstance().saveWidgetConfiguration(
+                    this.state.instanceId, this.state.widgetConfiguration
+                );
             }
-
-            DashboardService.getInstance().saveWidgetConfiguration(
-                this.state.instanceId, this.state.widgetConfiguration
-            );
         }
     }
 

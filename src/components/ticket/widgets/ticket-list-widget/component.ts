@@ -11,10 +11,15 @@ import {
     TicketTableLabelProvider,
     TicketTableSelectionListener,
     TicketTableClickListener,
-    TicketTableConfigurationListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
-import { StandardTableColumn, StandardTableConfiguration } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTable, StandardTableRowHeight,
+    ITableConfigurationListener,
+    StandardTableSortLayer,
+    TableColumn,
+    StandardTableFilterLayer
+} from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
 
@@ -59,41 +64,42 @@ class TicketListWidgetComponent {
 
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const labelProvider = new TicketTableLabelProvider();
 
-            const contentProvider = new TicketTableContentProvider(
-                this.state.instanceId,
-                labelProvider,
-                this.state.widgetConfiguration.settings.tableColumns || [],
-                this.state.widgetConfiguration.settings.limit,
-                this.state.widgetConfiguration.settings.displayLimit
-            );
-
-            const selectionListener = new TicketTableSelectionListener();
-            const clickListener = new TicketTableClickListener();
-            const configurationListener: TicketTableConfigurationListener = {
+            const configurationListener: ITableConfigurationListener<Ticket> = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.tableConfiguration = new StandardTableConfiguration(
-                labelProvider, contentProvider, selectionListener, clickListener, configurationListener, true, true
+            this.state.standardTable = new StandardTable(
+                new TicketTableContentProvider(this.state.instanceId, 100),
+                new TicketTableLabelProvider(),
+                [new StandardTableFilterLayer()],
+                [new StandardTableSortLayer()],
+                this.state.widgetConfiguration.settings.tableColumns || [],
+                new TicketTableSelectionListener(),
+                new TicketTableClickListener(),
+                configurationListener,
+                true,
+                true,
+                StandardTableRowHeight.SMALL,
+                100,
+                10
             );
 
             this.filter();
         }
     }
 
-    private columnConfigurationChanged(column: StandardTableColumn): void {
+    private columnConfigurationChanged(column: TableColumn): void {
         const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.columnId);
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
 
         if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index] = column;
-        } else {
-            this.state.widgetConfiguration.settings.tableColumns.push(column);
+            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
+            DashboardService.getInstance().saveWidgetConfiguration(
+                this.state.instanceId, this.state.widgetConfiguration
+            );
         }
 
-        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filterChanged(event): void {
@@ -101,21 +107,10 @@ class TicketListWidgetComponent {
     }
 
     private filter(): void {
-        let usedContextFilter = false;
-        if (
-            this.state.widgetConfiguration && this.state.widgetConfiguration.contextDependent &&
-            this.state.contextFilter
-        ) {
-            this.state.tableConfiguration.contentProvider.filterObjectsByProperty(
-                this.state.contextFilter.objectProperty, this.state.contextFilter.objectValue
-            );
-            usedContextFilter = true;
-        }
-
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
-            this.state.tableConfiguration.contentProvider.filterObjects(this.state.filterValue);
-        } else if (!usedContextFilter) {
-            this.state.tableConfiguration.contentProvider.resetFilter();
+            this.state.standardTable.setFilterSettings(this.state.filterValue);
+        } else {
+            this.state.standardTable.resetFilter();
         }
     }
 

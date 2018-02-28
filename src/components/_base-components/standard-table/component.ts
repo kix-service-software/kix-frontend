@@ -1,7 +1,7 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { StandardTableConfiguration, StandardTableColumn } from '@kix/core/dist/browser';
+import { StandardTable, StandardTableColumn, TableRow, TableColumn } from '@kix/core/dist/browser';
 import { SortOrder } from '@kix/core/dist/model';
 
 class StandardTableComponent<T> {
@@ -15,27 +15,22 @@ class StandardTableComponent<T> {
     }
 
     public onInput(input: StandardTableInput): void {
-        this.state.tableConfiguration = input.tableConfiguration;
-        if (this.state.sortOrder && this.state.sortedColumnId) {
-            this.state.tableConfiguration.contentProvider.sortObjects(
-                this.state.sortOrder, this.state.sortedColumnId
-            );
-        }
+        this.state.standardTable = input.standardTable;
     }
 
     public onMount(): void {
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
-        if (this.state.tableConfiguration) {
-            this.state.tableConfiguration.contentProvider.addListener(() => {
-                (this as any).forceUpdate();
-            });
-
+        if (this.state.standardTable) {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             const wrapperElement = (this as any).getEl(this.state.tableId + 'standard-table-wrapper');
             this.ps = new PerfectScrollbar(table, {
                 minScrollbarLength: 50,
                 wrapperElement
+            });
+
+            this.state.standardTable.setTableListener(() => {
+                (this as any).forceUpdate();
             });
         }
 
@@ -85,34 +80,14 @@ class StandardTableComponent<T> {
         this.ps.update();
     }
 
-    private getRows(): T[] {
-        return this.state.tableConfiguration
-            ? this.state.tableConfiguration.contentProvider.getRowObjects()
+    private getRows(): Array<TableRow<T>> {
+        return this.state.standardTable
+            ? this.state.standardTable.getRows()
             : [];
     }
 
-    private getColumnIds(): string[] {
-        return this.state.tableConfiguration ? this.state.tableConfiguration.contentProvider.getColumnIds() : [];
-    }
-
-    private getColumnConfiguration(columnId: string): StandardTableColumn {
-        return this.state.tableConfiguration.contentProvider.getColumn(columnId);
-    }
-
-    private getColumnTitle(columnId: string): string {
-        return this.state.tableConfiguration
-            ? this.state.tableConfiguration.labelProvider.getColumnTitle(columnId)
-            : columnId;
-    }
-
-    private getColumnObjectValue(object: any, columnId: string): number | string {
-        return this.state.tableConfiguration.labelProvider.getColumnObjectValue(object, columnId);
-    }
-
-    private getColumnDisplayText(rowObject: T, columnId: string): string {
-        return this.state.tableConfiguration
-            ? this.state.tableConfiguration.labelProvider.getColumnValue(rowObject, columnId)
-            : columnId;
+    private getColumns(): TableColumn[] {
+        return this.state.standardTable ? this.state.standardTable.getColumns() : [];
     }
 
     private mousedown(col: string, event: any): void {
@@ -138,13 +113,12 @@ class StandardTableComponent<T> {
     }
 
     private mouseup(): void {
-        if (this.state.tableConfiguration && this.state.resizeSettings) {
-            const columnConfig = this.getColumnConfiguration(this.state.resizeSettings.columnId);
-            if (columnConfig) {
-                columnConfig.size = this.state.resizeSettings.currentSize;
-
-                if (this.state.tableConfiguration.configurationListener) {
-                    this.state.tableConfiguration.configurationListener.columnConfigurationChanged(columnConfig);
+        if (this.state.standardTable && this.state.resizeSettings) {
+            const column = this.getColumns().find((col) => col.id === this.state.resizeSettings.columnId);
+            if (column) {
+                column.size = this.state.resizeSettings.currentSize;
+                if (this.state.standardTable.configurationChangeListener) {
+                    this.state.standardTable.configurationChangeListener.columnConfigurationChanged(column);
                 }
             }
         }
@@ -154,22 +128,25 @@ class StandardTableComponent<T> {
 
     private sortUp(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.UP) {
-            this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.UP, columnId);
+            this.state.standardTable.setSortSettings(columnId, SortOrder.UP);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.UP;
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            table.scrollTop = 0;
+            this.scrollTableToTop();
         }
     }
 
     private sortDown(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.DOWN) {
-            this.state.tableConfiguration.contentProvider.sortObjects(SortOrder.DOWN, columnId);
+            this.state.standardTable.setSortSettings(columnId, SortOrder.DOWN);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.DOWN;
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            table.scrollTop = 0;
+            this.scrollTableToTop();
         }
+    }
+
+    private scrollTableToTop(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        table.scrollTop = 0;
     }
 
     private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
@@ -177,11 +154,11 @@ class StandardTableComponent<T> {
     }
 
     private isSelected(row): boolean {
-        return this.state.tableConfiguration.selectionListener.isRowSelected(row);
+        return this.state.standardTable.selectionListener.isRowSelected(row);
     }
 
     private isAllSelected(row): boolean {
-        return this.state.tableConfiguration.selectionListener.isAllSelected();
+        return this.state.standardTable.selectionListener.isAllSelected();
     }
 
     private selectAll(event): void {
@@ -192,26 +169,26 @@ class StandardTableComponent<T> {
             element.checked = checked;
         });
 
-        if (this.state.tableConfiguration.selectionListener) {
+        if (this.state.standardTable.selectionListener) {
             if (checked) {
-                this.state.tableConfiguration.selectionListener.selectAll(
-                    this.state.tableConfiguration.contentProvider.getRowObjects(true)
+                this.state.standardTable.selectionListener.selectAll(
+                    this.state.standardTable.getRows()
                 );
             } else {
-                this.state.tableConfiguration.selectionListener.selectNone();
+                this.state.standardTable.selectionListener.selectNone();
             }
         }
     }
 
     private selectRow(row: any, event: any): void {
-        if (this.state.tableConfiguration.selectionListener) {
-            this.state.tableConfiguration.selectionListener.selectionChanged(row, event.target.checked);
+        if (this.state.standardTable.selectionListener) {
+            this.state.standardTable.selectionListener.selectionChanged(row, event.target.checked);
         }
     }
 
-    private rowClicked(row: any, columnId: string): void {
-        if (this.state.tableConfiguration.clickListener) {
-            this.state.tableConfiguration.clickListener.rowClicked(row, columnId);
+    private rowClicked(row: TableRow<T>, columnId: string): void {
+        if (this.state.standardTable.clickListener) {
+            this.state.standardTable.clickListener.rowClicked(row.object, columnId);
         }
     }
 
@@ -219,10 +196,10 @@ class StandardTableComponent<T> {
         const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
         if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
             const checkHeight =
-                this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
-                * this.state.tableConfiguration.rowHeight;
+                this.state.standardTable.getCurrentDisplayLimit()
+                * this.state.standardTable.rowHeight;
             if (standardTable.scrollTop > checkHeight) {
-                this.state.tableConfiguration.contentProvider.increaseCurrentDisplayLimit();
+                this.state.standardTable.increaseCurrentDisplayLimit();
 
                 // check after increase if still more have to be loaded
                 this.loadMoreTimeout = setTimeout(() => {
@@ -236,35 +213,32 @@ class StandardTableComponent<T> {
     }
 
     public getRowHeight(): string {
-        return this.state.tableConfiguration.rowHeight + 'px';
+        return this.state.standardTable.rowHeight + 'px';
     }
 
     public getTableHeight(): string {
         const minElements =
-            this.getRows().length > this.state.tableConfiguration.contentProvider.getDisplayLimit() ?
-                this.state.tableConfiguration.contentProvider.getDisplayLimit() : this.getRows().length;
-        const height = (minElements + 1) * this.state.tableConfiguration.rowHeight;
+            this.getRows().length > this.state.standardTable.displayLimit ?
+                this.state.standardTable.displayLimit : this.getRows().length;
+        const height = (minElements + 1) * this.state.standardTable.rowHeight;
         return height + 'px';
     }
 
     public getSpacerHeight(): string {
         let spacerHeight = 0;
         const remainder =
-            this.state.tableConfiguration.contentProvider.getLimit()
-            - this.state.tableConfiguration.contentProvider.getCurrentDisplayLimit()
-            - Math.ceil(this.state.tableConfiguration.contentProvider.getDisplayLimit() * 1.5);
+            this.state.standardTable.limit
+            - this.state.standardTable.displayLimit
+            - Math.ceil(this.state.standardTable.displayLimit * 1.5);
         if (remainder > 0) {
-            spacerHeight = remainder * this.state.tableConfiguration.rowHeight;
+            spacerHeight = remainder * this.state.standardTable.rowHeight;
         }
         return spacerHeight + 'px';
     }
 
-    private hasClickListener(): boolean {
-        return this.state.tableConfiguration.clickListener !== undefined;
-    }
-
     private getColumnSize(columnId: string): string {
-        return this.getColumnConfiguration(columnId).size + 'px';
+        const column = this.getColumns().find((col) => col.id === columnId);
+        return column.size + 'px';
     }
 
     private toggleRow(rowId: number): void {
