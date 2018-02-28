@@ -1,7 +1,7 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { StandardTableConfiguration, StandardTableColumn, TableRow, TableColumn } from '@kix/core/dist/browser';
+import { StandardTable, StandardTableColumn, TableRow, TableColumn } from '@kix/core/dist/browser';
 import { SortOrder } from '@kix/core/dist/model';
 
 class StandardTableComponent<T> {
@@ -80,7 +80,7 @@ class StandardTableComponent<T> {
         this.ps.update();
     }
 
-    private getRows(): TableRow[] {
+    private getRows(): Array<TableRow<T>> {
         return this.state.tableConfiguration
             ? this.state.tableConfiguration.getRows()
             : [];
@@ -128,20 +128,25 @@ class StandardTableComponent<T> {
 
     private sortUp(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.UP) {
+            this.state.tableConfiguration.setSortSettings(columnId, SortOrder.UP);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.UP;
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            table.scrollTop = 0;
+            this.scrollTableToTop();
         }
     }
 
     private sortDown(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.DOWN) {
+            this.state.tableConfiguration.setSortSettings(columnId, SortOrder.DOWN);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.DOWN;
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            table.scrollTop = 0;
+            this.scrollTableToTop();
         }
+    }
+
+    private scrollTableToTop(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        table.scrollTop = 0;
     }
 
     private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
@@ -181,7 +186,7 @@ class StandardTableComponent<T> {
         }
     }
 
-    private rowClicked(row: TableRow, columnId: string): void {
+    private rowClicked(row: TableRow<T>, columnId: string): void {
         if (this.state.tableConfiguration.clickListener) {
             this.state.tableConfiguration.clickListener.rowClicked(row.object, columnId);
         }

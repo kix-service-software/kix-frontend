@@ -9,7 +9,10 @@ import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { Link, Ticket } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { StandardTableColumn, StandardTableConfiguration, ITableConfigurationListener } from '@kix/core/dist/browser';
+import {
+    StandardTableColumn, StandardTable,
+    ITableConfigurationListener, StandardTableSortLayer
+} from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 class LinkedObjectsWidgetComponent {
@@ -64,7 +67,7 @@ class LinkedObjectsWidgetComponent {
         }
     }
 
-    private getTicketTableConfiguration(linkedTickets: Link[]): StandardTableConfiguration<Ticket> {
+    private getTicketTableConfiguration(linkedTickets: Link[]): StandardTable<Ticket> {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelProvider();
 
@@ -80,9 +83,11 @@ class LinkedObjectsWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            return new StandardTableConfiguration(
+            return new StandardTable(
                 contentProvider,
                 labelProvider,
+                [],
+                [new StandardTableSortLayer()],
                 columnConfig,
                 null,
                 clickListener

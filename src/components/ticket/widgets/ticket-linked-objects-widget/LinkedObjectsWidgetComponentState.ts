@@ -1,7 +1,7 @@
-import { Link, TicketDetails, WidgetConfiguration } from '@kix/core/dist/model';
+import { TicketDetails } from '@kix/core/dist/model';
 import { WidgetComponentState } from '@kix/core/dist/browser/model';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
-import { StandardTableConfiguration } from '@kix/core/dist/browser';
+import { StandardTable } from '@kix/core/dist/browser';
 
 export class LinkedObjectsWidgetComponentState extends WidgetComponentState<LinkedObjectsSettings> {
 
@@ -11,6 +11,6 @@ export class LinkedObjectsWidgetComponentState extends WidgetComponentState<Link
 
     public linkCount: number = 0;
 
-    public linkedObjectGroups: Array<[string, number, StandardTableConfiguration<any>]> = [];
+    public linkedObjectGroups: Array<[string, number, StandardTable<any>]> = [];
 
 }

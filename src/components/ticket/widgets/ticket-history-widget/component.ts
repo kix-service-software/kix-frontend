@@ -4,8 +4,9 @@ import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
-    StandardTableColumn, StandardTableConfiguration, ITableClickListener,
-    ITableConfigurationListener
+    StandardTableColumn, StandardTable, ITableClickListener,
+    ITableConfigurationListener,
+    StandardTableSortLayer
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -53,9 +54,11 @@ class TicketHistoryWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.historyTableConfiguration = new StandardTableConfiguration(
+            this.state.historyTableConfiguration = new StandardTable(
                 contentProvider,
                 labelProvider,
+                [],
+                [new StandardTableSortLayer()],
                 columnConfig,
                 null,
                 clickListener

@@ -14,8 +14,9 @@ import {
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
 import {
-    StandardTableColumn, StandardTableConfiguration, StandardTableRowHeight,
-    ITableConfigurationListener
+    StandardTableColumn, StandardTable, StandardTableRowHeight,
+    ITableConfigurationListener,
+    StandardTableSortLayer
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
@@ -46,7 +47,7 @@ class TicketListWidgetComponent {
         if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
             const contextFilter: ContextFilter = args[0];
             if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
-                this.state.contextFilter = contextFilter;
+                this.state.StatuscontextFilter = contextFilter;
                 this.filter();
             } else {
                 this.state.contextFilter = null;
@@ -62,21 +63,18 @@ class TicketListWidgetComponent {
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
 
-            const labelProvider = new TicketTableLabelProvider();
-            const contentProvider = new TicketTableContentProvider(this.state.instanceId, 100);
-
-            const selectionListener = new TicketTableSelectionListener();
-            const clickListener = new TicketTableClickListener();
             const configurationListener: ITableConfigurationListener<Ticket> = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            this.state.tableConfiguration = new StandardTableConfiguration(
-                contentProvider,
-                labelProvider,
+            this.state.tableConfiguration = new StandardTable(
+                new TicketTableContentProvider(this.state.instanceId, 100),
+                new TicketTableLabelProvider(),
+                [],
+                [new StandardTableSortLayer()],
                 this.state.widgetConfiguration.settings.tableColumns || [],
-                selectionListener,
-                clickListener,
+                new TicketTableSelectionListener(),
+                new TicketTableClickListener(),
                 true,
                 true,
                 StandardTableRowHeight.SMALL,
