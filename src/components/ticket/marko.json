@@ -2,6 +2,7 @@
     "tags-dir": [
         "./ticket-inputs",
         "./ticket-labels",
-        "./actions"
+        "./actions",
+        "./widgets"
     ]
 }

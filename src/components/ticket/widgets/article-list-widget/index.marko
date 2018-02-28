@@ -1,0 +1,23 @@
+<div.article-table-widget>
+    <widget configurationTagId="ticket-info-configuration">
+        <@icon/>
+        <@title>Artikelübersicht (${state.articles ? state.articles.length : "0"})</@title>
+        <@actions>
+            <for(action in state.generalArticleActions)>
+                <include(component.getTemplate(action), { ticketId: state.ticketId })/>
+            </for>
+        </@actions>
+        <@content>
+            <div.article-table-wrapper>
+                <if(state.articles)>
+                    <!-- TODO: Standard-Tabelle einbinden -->
+                </if>
+                <else>Keine Artikel vorhanden.</else>
+            </div>
+        </@content>
+        <@filter>
+            <input type="text" placeholder="Filtern in Liste"/>
+            <span.kix-icon-filter/>
+        </@filter>
+    </widget>
+</div>
