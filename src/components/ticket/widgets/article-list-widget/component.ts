@@ -4,7 +4,7 @@ import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentSta
 import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
-    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn
+    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn, TableSortLayer
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -51,7 +51,7 @@ export class ArticleListWidgetComponent {
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
                 [],
-                [],
+                [new TableSortLayer()],
                 columns,
                 null,
                 null,
