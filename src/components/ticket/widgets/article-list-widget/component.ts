@@ -118,6 +118,10 @@ export class ArticleListWidgetComponent {
 
         return count;
     }
+
+    private attachmentsClicked(): void {
+        alert('Alle Anlagen ...');
+    }
 }
 
 module.exports = ArticleListWidgetComponent;
