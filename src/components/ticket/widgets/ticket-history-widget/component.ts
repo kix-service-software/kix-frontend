@@ -1,14 +1,14 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { HistoryTableLabelProvider, HistoryTableContentProvider } from '@kix/core/dist/browser/ticket';
+import { HistoryTableLabelLayer, HistoryTableContentLayer } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
-    StandardTableColumn, StandardTable, ITableClickListener,
+    TableColumnConfiguration, StandardTable, ITableClickListener,
     ITableConfigurationListener,
-    StandardTableSortLayer,
+    TableSortLayer,
     TableColumn,
-    StandardTableFilterLayer
+    TableFilterLayer
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -42,11 +42,11 @@ class TicketHistoryWidgetComponent {
 
     private setHistoryTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const labelProvider = new HistoryTableLabelProvider();
+            const labelProvider = new HistoryTableLabelLayer();
 
-            const columnConfig: StandardTableColumn[] = this.state.widgetConfiguration.settings.tableColumns || [];
+            const columnConfig: TableColumnConfiguration[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const contentProvider = new HistoryTableContentProvider(this.state.instanceId, this.state.ticketId);
+            const contentProvider = new HistoryTableContentLayer(this.state.instanceId, this.state.ticketId);
 
             const clickListener: ITableClickListener<TicketHistory> = {
                 rowClicked: this.navigateToArticle.bind(this)
@@ -59,8 +59,8 @@ class TicketHistoryWidgetComponent {
             this.state.standardTable = new StandardTable(
                 contentProvider,
                 labelProvider,
-                [new StandardTableFilterLayer()],
-                [new StandardTableSortLayer()],
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
                 columnConfig,
                 null,
                 clickListener,

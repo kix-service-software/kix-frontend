@@ -7,7 +7,7 @@ export class ArticleListWidgetComponentState extends WidgetComponentState<Articl
 
     public ticketId: number = null;
 
-    public articleTableConfiguration: StandardTable<Article> = null;
+    public standardTable: StandardTable<Article> = null;
 
     public filterValue: string = '';
 

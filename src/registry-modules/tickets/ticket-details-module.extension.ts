@@ -3,7 +3,7 @@ import {
     TicketDetailsDashboardConfiguration,
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, DataType
 } from '@kix/core/dist/model/';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -23,11 +23,11 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-history-widget", "Historie", ['print-ticket-action'],
                 {
                     tableColumns: [
-                        new StandardTableColumn('HistoryType', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('Name', '', false, true, false, true, true, 200),
-                        new StandardTableColumn('ArticleID', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('CreateBy', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('CreateTime', '', false, true, false, true, true, 100)
+                        new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
+                        new TableColumnConfiguration('Name', true, false, true, true, 200),
+                        new TableColumnConfiguration('ArticleID', true, false, true, true, 100),
+                        new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
+                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
                     ]
                 },
                 WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
@@ -60,18 +60,20 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     groups: [
                         [
                             "Ticket", [
-                                new StandardTableColumn(
-                                    'TicketNumber', '', true, true, false, true, true, 100, DataType.STRING),
-                                new StandardTableColumn('Title', '', true, true, false, true, true, 100),
-                                new StandardTableColumn('TypeID', 'TypeID', true, true, false, true, true, 100),
-                                new StandardTableColumn('QueueID', 'QueueID', true, true, false, true, true, 100),
-                                new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
-                                new StandardTableColumn(
-                                    'Created', 'Created',
-                                    true, true, false, true, true, 100,
-                                    DataType.DATE_TIME
+                                new TableColumnConfiguration(
+                                    'TicketNumber', true, false, true, true, 100, DataType.STRING),
+                                new TableColumnConfiguration('Title', true, false, true, true, 100),
+                                new TableColumnConfiguration('TypeID', true, false, true, true, 100),
+                                new TableColumnConfiguration('QueueID', true, false, true, true, 100),
+                                new TableColumnConfiguration(
+                                    'StateID', false, true, true, true, 100
                                 ),
-                                new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false, true, true, 100)
+                                new TableColumnConfiguration(
+                                    'Created', true, false, true, true, 100, DataType.DATE_TIME
+                                ),
+                                new TableColumnConfiguration(
+                                    'LinkedAs', true, false, true, true, 100
+                                )
                             ]
                         ]
                     ]
@@ -89,15 +91,18 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         'call-outgoing-article-action', 'call-incoming-article-action'
                     ],
                     tableColumns: [
-                        new StandardTableColumn('Number', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('SenderTypeID', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('ArticleTypeID', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('From', '', false, true, false, true, true, 100),
-                        new StandardTableColumn('Subject', '', false, true, false, true, true, 100),
-                        new StandardTableColumn(
-                            'IncomingTime', '', false, true, false, true, true, 100, DataType.DATE_TIME
+                        new TableColumnConfiguration(
+                            'Number', true, false, false, true, 50, DataType.NUMBER
                         ),
-                        new StandardTableColumn('Attachments', '', false, true, false, true, true, 100),
+                        new TableColumnConfiguration('ArticleInformation', false, true, false, false, 50),
+                        new TableColumnConfiguration('SenderTypeID', true, false, true, true, 100),
+                        new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 50),
+                        new TableColumnConfiguration('From', true, false, true, true, 225),
+                        new TableColumnConfiguration('Subject', true, false, true, true, 500),
+                        new TableColumnConfiguration(
+                            'IncomingTime', true, false, true, true, 150, DataType.DATE_TIME
+                        ),
+                        new TableColumnConfiguration('Attachment', true, false, true, true, 100),
                     ]
                 },
                 WidgetType.CONTENT, false, true, true, WidgetSize.LARGE, null, false)

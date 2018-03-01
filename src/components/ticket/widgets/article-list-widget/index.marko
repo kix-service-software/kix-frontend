@@ -9,10 +9,9 @@
         </@actions>
         <@content>
             <div.article-table-wrapper>
-                <if(state.articles)>
-                    <!-- TODO: Standard-Tabelle einbinden -->
+                <if(state.standardTable)>
+                    <standard-table standardTable=state.standardTable/>
                 </if>
-                <else>Keine Artikel vorhanden.</else>
             </div>
         </@content>
         <@filter>

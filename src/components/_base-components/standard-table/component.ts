@@ -1,7 +1,7 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { StandardTable, StandardTableColumn, TableRow, TableColumn } from '@kix/core/dist/browser';
+import { StandardTable, TableColumnConfiguration, TableRow, TableColumn } from '@kix/core/dist/browser';
 import { SortOrder } from '@kix/core/dist/model';
 
 class StandardTableComponent<T> {
@@ -154,11 +154,13 @@ class StandardTableComponent<T> {
     }
 
     private isSelected(row): boolean {
-        return this.state.standardTable.selectionListener.isRowSelected(row);
+        return this.state.standardTable.selectionListener ?
+            this.state.standardTable.selectionListener.isRowSelected(row) : false;
     }
 
     private isAllSelected(row): boolean {
-        return this.state.standardTable.selectionListener.isAllSelected();
+        return this.state.standardTable.selectionListener ?
+            this.state.standardTable.selectionListener.isAllSelected() : false;
     }
 
     private selectAll(event): void {

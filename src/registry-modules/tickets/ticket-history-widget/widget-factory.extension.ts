@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, DataType } from '@kix/core/dist/model';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { TicketHistorySettings } from '../../../components/ticket/widgets/ticket-history-widget/TicketHistorySettings';
 
 export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtension {
@@ -12,12 +12,12 @@ export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtens
     public getDefaultConfiguration(): any {
         const settings: TicketHistorySettings = {
             tableColumns: [
-                new StandardTableColumn('HistoryType', '', false, true, false, true, true, 100),
-                new StandardTableColumn('Name', '', false, true, false, true, true, 200),
-                new StandardTableColumn('ArticleID', '', false, true, false, true, true, 100),
-                new StandardTableColumn('CreateBy', '', false, true, false, true, true, 100),
-                new StandardTableColumn(
-                    'CreateTime', '', false, true, false, true, true, 100, DataType.DATE_TIME
+                new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
+                new TableColumnConfiguration('Name', true, false, true, true, 200),
+                new TableColumnConfiguration('ArticleID', true, false, true, true, 100),
+                new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
+                new TableColumnConfiguration(
+                    'CreateTime', true, false, true, true, 100, DataType.DATE_TIME
                 )
             ]
         };

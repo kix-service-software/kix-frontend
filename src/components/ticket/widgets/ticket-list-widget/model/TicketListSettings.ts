@@ -1,4 +1,4 @@
-import { StandardTableColumn } from "@kix/core/dist/browser";
+import { TableColumnConfiguration } from "@kix/core/dist/browser";
 
 export class TicketListSettings {
 
@@ -8,6 +8,6 @@ export class TicketListSettings {
 
     public showTotalCount: boolean;
 
-    public tableColumns: StandardTableColumn[];
+    public tableColumns: TableColumnConfiguration[];
 
 }

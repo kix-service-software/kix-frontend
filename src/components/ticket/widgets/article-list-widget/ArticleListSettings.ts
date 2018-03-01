@@ -1,8 +1,8 @@
-import { StandardTableColumn } from "@kix/core/dist/browser";
+import { TableColumnConfiguration } from "@kix/core/dist/browser";
 
 export class ArticleListSettings {
 
-    public tableColumns: StandardTableColumn[];
+    public tableColumns: TableColumnConfiguration[];
 
     public generalActions: string[];
 
