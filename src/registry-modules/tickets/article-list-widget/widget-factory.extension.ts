@@ -16,15 +16,19 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
                 'call-outgoing-article-action', 'call-incoming-article-action'
             ],
             tableColumns: [
-                new TableColumnConfiguration('Number', true, false, true, true, 100),
-                new TableColumnConfiguration('SenderTypeID', false, true, false, true, 100),
-                new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 100),
-                new TableColumnConfiguration('From', true, false, true, true, 100),
-                new TableColumnConfiguration('Subject', true, false, true, true, 100),
                 new TableColumnConfiguration(
-                    'IncomingTime', true, false, true, true, 100, DataType.DATE_TIME
+                    'Number', true, false, false, true, 50, DataType.NUMBER
                 ),
-                new TableColumnConfiguration('Attachments', true, false, true, true, 100),
+                new TableColumnConfiguration('ArticleInformation', false, true, false, false, 50),
+                new TableColumnConfiguration('SenderTypeID', true, false, true, true, 100),
+                new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 50),
+                new TableColumnConfiguration('ArticleTag', false, true, false, false, 50),
+                new TableColumnConfiguration('From', true, false, true, true, 225),
+                new TableColumnConfiguration('Subject', true, false, true, true, 500),
+                new TableColumnConfiguration(
+                    'IncomingTime', true, false, true, true, 150, DataType.DATE_TIME
+                ),
+                new TableColumnConfiguration('Attachment', true, false, true, false, 50),
             ]
         };
         // TODO: irgendwie mit in Konfiguraton bringen
