@@ -106,6 +106,18 @@ export class ArticleListWidgetComponent {
     private isArticleExpanded(articleId: number): boolean {
         return this.state.expandedArticles.some((a) => a === articleId);
     }
+
+    private getAttachmentsCount(): number {
+        let count = 0;
+
+        if (this.state.articles) {
+            this.state.articles.forEach((article) => {
+                count += article.Attachments.filter((a) => a.Disposition !== 'inline').length;
+            });
+        }
+
+        return count;
+    }
 }
 
 module.exports = ArticleListWidgetComponent;
