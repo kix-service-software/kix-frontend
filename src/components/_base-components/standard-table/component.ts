@@ -228,7 +228,7 @@ class StandardTableComponent<T> {
         let spacerHeight = 0;
         const remainder =
             this.state.standardTable.limit
-            - this.state.standardTable.displayLimit
+            - this.state.standardTable.getCurrentDisplayLimit()
             - Math.ceil(this.state.standardTable.displayLimit * 1.5);
         if (remainder > 0) {
             spacerHeight = remainder * this.state.standardTable.rowHeight;
