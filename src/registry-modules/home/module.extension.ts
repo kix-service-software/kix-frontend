@@ -2,7 +2,7 @@ import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, DataType
 } from '@kix/core/dist/model';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -58,19 +58,17 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     displayLimit: 15,
                     showTotalCount: true,
                     tableColumns: [
-                        new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 130),
-                        new StandardTableColumn('PriorityID', 'Priority', true, false, true, false, false, 100),
-                        new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
-                        new StandardTableColumn('QueueID', 'QueueID', true, true, true, true, true, 200),
-                        new StandardTableColumn('TypeID', '', true, true, true, true, true, 100),
-                        new StandardTableColumn('Title', '', true, true, false, true, true, 200),
-                        new StandardTableColumn(
-                            'Created', '', true, true, false, true, true, 100,
-                            DataType.DATE_TIME
+                        new TableColumnConfiguration('TicketNumber', true, false, true, true, 130),
+                        new TableColumnConfiguration('PriorityID', false, true, false, false, 100),
+                        new TableColumnConfiguration('StateID', false, true, true, true, 100),
+                        new TableColumnConfiguration('QueueID', true, true, true, true, 200),
+                        new TableColumnConfiguration('TypeID', true, true, true, true, 100),
+                        new TableColumnConfiguration('Title', false, true, true, true, 200),
+                        new TableColumnConfiguration(
+                            'Created', true, false, true, true, 100, DataType.DATE_TIME
                         ),
-                        new StandardTableColumn(
-                            'Age', '', true, true, false, true, true, 100,
-                            DataType.DATE_TIME
+                        new TableColumnConfiguration(
+                            'Age', true, false, true, true, 100, DataType.DATE_TIME
                         ),
                     ]
                 },

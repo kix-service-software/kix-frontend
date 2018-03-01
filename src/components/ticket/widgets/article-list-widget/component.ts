@@ -1,9 +1,12 @@
-import { TicketDetails } from "@kix/core/dist/model";
+import { TicketDetails, Article } from "@kix/core/dist/model";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
-import { StandardTableColumn } from "@kix/core/dist/browser";
+import {
+    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn
+} from "@kix/core/dist/browser";
+import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
 export class ArticleListWidgetComponent {
 
@@ -15,6 +18,7 @@ export class ArticleListWidgetComponent {
 
     public onInput(input: any): void {
         this.state.ticketId = Number(input.ticketId);
+        this.state.instanceId = input.instanceId;
     }
 
     public onMount(): void {
@@ -37,25 +41,37 @@ export class ArticleListWidgetComponent {
 
     private setArticleTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            // const labelProvider = new HistoryTableLabelProvider();
+            const columns: TableColumnConfiguration[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const columnConfig: StandardTableColumn[] = this.state.widgetConfiguration.settings.tableColumns || [];
+            const configurationListener: ITableConfigurationListener<Article> = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
 
-            // const contentProvider = new HistoryTableContentProvider(
-            //     labelProvider, this.state.instanceId, this.state.ticketId, columnConfig, 7
-            // );
+            this.state.standardTable = new StandardTable(
+                new ArticleTableContentLayer(this.state.ticketId),
+                new ArticleTableLabelLayer(),
+                [],
+                [],
+                columns,
+                null,
+                null,
+                configurationListener,
+                true,
+                true,
+                TableRowHeight.LARGE
+            );
+        }
+    }
 
-            // const clickListener: ITableClickListener<TicketHistory> = {
-            //     rowClicked: this.navigateToArticle.bind(this)
-            // };
+    private columnConfigurationChanged(column: TableColumn): void {
+        const index =
+            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
 
-            // const configurationListener: ITableConfigurationListener<TicketHistory> = {
-            //     columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            // };
-
-            // this.state.historyTableConfiguration = new StandardTableConfiguration(
-            //     labelProvider, contentProvider, null, clickListener, configurationListener
-            // );
+        if (index >= 0) {
+            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
+            DashboardService.getInstance().saveWidgetConfiguration(
+                this.state.instanceId, this.state.widgetConfiguration
+            );
         }
     }
 

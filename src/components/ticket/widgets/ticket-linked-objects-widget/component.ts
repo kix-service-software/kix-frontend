@@ -1,8 +1,8 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import {
-    LinkedTicketTableContentProvider,
+    LinkedTicketTableContentLayer,
     TicketService,
-    TicketTableLabelProvider,
+    TicketTableLabelLayer,
     TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
@@ -10,8 +10,8 @@ import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponen
 import { Link, Ticket } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
-    StandardTableColumn, StandardTable,
-    ITableConfigurationListener, StandardTableSortLayer, TableColumn
+    TableColumnConfiguration, StandardTable,
+    ITableConfigurationListener, TableSortLayer, TableColumn
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -69,12 +69,12 @@ class LinkedObjectsWidgetComponent {
 
     private getTicketTableConfiguration(linkedTickets: Link[]): StandardTable<Ticket> {
         if (this.state.widgetConfiguration) {
-            const labelProvider = new TicketTableLabelProvider();
+            const labelProvider = new TicketTableLabelLayer();
 
             const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
             const columnConfig = groupEntry ? groupEntry[1] : [];
 
-            const contentProvider = new LinkedTicketTableContentProvider(
+            const contentProvider = new LinkedTicketTableContentLayer(
                 this.state.instanceId, this.state.ticketId, linkedTickets
             );
 
@@ -87,7 +87,7 @@ class LinkedObjectsWidgetComponent {
                 contentProvider,
                 labelProvider,
                 [],
-                [new StandardTableSortLayer()],
+                [new TableSortLayer()],
                 columnConfig,
                 null,
                 clickListener,

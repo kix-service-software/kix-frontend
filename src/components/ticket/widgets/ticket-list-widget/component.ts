@@ -7,18 +7,18 @@ import { ContextService, ContextNotification } from '@kix/core/dist/browser/cont
 import {
     TicketNotification,
     TicketService,
-    TicketTableContentProvider,
-    TicketTableLabelProvider,
+    TicketTableContentLayer,
+    TicketTableLabelLayer,
     TicketTableSelectionListener,
     TicketTableClickListener,
     TicketUtil
 } from '@kix/core/dist/browser/ticket/';
 import {
-    StandardTableColumn, StandardTable, StandardTableRowHeight,
+    TableColumnConfiguration, StandardTable, TableRowHeight,
     ITableConfigurationListener,
-    StandardTableSortLayer,
+    TableSortLayer,
     TableColumn,
-    StandardTableFilterLayer
+    TableFilterLayer
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
@@ -70,17 +70,17 @@ class TicketListWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
-                new TicketTableContentProvider(this.state.instanceId, 100),
-                new TicketTableLabelProvider(),
-                [new StandardTableFilterLayer()],
-                [new StandardTableSortLayer()],
+                new TicketTableContentLayer(this.state.instanceId, 100),
+                new TicketTableLabelLayer(),
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
                 configurationListener,
                 true,
                 true,
-                StandardTableRowHeight.SMALL,
+                TableRowHeight.SMALL,
                 100,
                 10
             );
@@ -99,7 +99,6 @@ class TicketListWidgetComponent {
                 this.state.instanceId, this.state.widgetConfiguration
             );
         }
-
     }
 
     private filterChanged(event): void {

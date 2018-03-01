@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, DataType } from '@kix/core/dist/model';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
 export class TicketLinkedObjectsWidgetFactoryExtension implements IWidgetFactoryExtension {
 
@@ -15,17 +15,15 @@ export class TicketLinkedObjectsWidgetFactoryExtension implements IWidgetFactory
                 groups: [
                     [
                         "Ticket", [
-                            new StandardTableColumn('TicketNumber', '', true, true, false, true, true, 100),
-                            new StandardTableColumn('Title', '', true, true, false, true, true, 100),
-                            new StandardTableColumn('TypeID', 'TypeID', true, true, false, true, true, 100),
-                            new StandardTableColumn('QueueID', 'QueueID', true, true, false, true, true, 100),
-                            new StandardTableColumn('StateID', 'TicketState', true, false, true, true, true, 100),
-                            new StandardTableColumn(
-                                'Created', 'Created',
-                                true, true, false, true, true, 100,
-                                DataType.DATE_TIME
+                            new TableColumnConfiguration('TicketNumber', true, false, true, true, 100),
+                            new TableColumnConfiguration('Title', true, false, true, true, 100),
+                            new TableColumnConfiguration('TypeID', true, false, true, true, 100),
+                            new TableColumnConfiguration('QueueID', true, false, true, true, 100),
+                            new TableColumnConfiguration('StateID', false, true, true, true, 100),
+                            new TableColumnConfiguration(
+                                'Created', true, false, true, true, 100, DataType.DATE_TIME
                             ),
-                            new StandardTableColumn('LinkedAs', 'LinkedAs', false, true, false, true, true, 100)
+                            new TableColumnConfiguration('LinkedAs', true, false, true, true, 100)
                         ]
                     ]
                 ]

@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize, DataType } from '@kix/core/dist/model';
-import { StandardTableColumn } from '@kix/core/dist/browser';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { ArticleListSettings } from '../../../components/ticket/widgets/article-list-widget/ArticleListSettings';
 
 export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtension {
@@ -16,13 +16,15 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
                 'call-outgoing-article-action', 'call-incoming-article-action'
             ],
             tableColumns: [
-                new StandardTableColumn('Number', '', false, true, false, true, true, 100),
-                new StandardTableColumn('SenderTypeID', '', false, true, false, true, true, 100),
-                new StandardTableColumn('ArticleTypeID', '', false, true, false, true, true, 100),
-                new StandardTableColumn('From', '', false, true, false, true, true, 100),
-                new StandardTableColumn('Subject', '', false, true, false, true, true, 100),
-                new StandardTableColumn('IncomingTime', '', false, true, false, true, true, 100, DataType.DATE_TIME),
-                new StandardTableColumn('Attachments', '', false, true, false, true, true, 100),
+                new TableColumnConfiguration('Number', true, false, true, true, 100),
+                new TableColumnConfiguration('SenderTypeID', false, true, false, true, 100),
+                new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 100),
+                new TableColumnConfiguration('From', true, false, true, true, 100),
+                new TableColumnConfiguration('Subject', true, false, true, true, 100),
+                new TableColumnConfiguration(
+                    'IncomingTime', true, false, true, true, 100, DataType.DATE_TIME
+                ),
+                new TableColumnConfiguration('Attachments', true, false, true, true, 100),
             ]
         };
         // TODO: irgendwie mit in Konfiguraton bringen
