@@ -56,6 +56,7 @@ export class ArticleListWidgetComponent {
                 null,
                 null,
                 configurationListener,
+                this.state.articles.length,
                 true,
                 true,
                 TableRowHeight.LARGE

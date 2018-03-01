@@ -9,18 +9,20 @@
             </if>
             <else>
                 <if(component.isInputDefined(input.actions))>
-                    <include(input.actions)/>
+                    <action-list list=input.actions/>
                 </if>
                 <if(state.minimizable)>
-                    <if(state.minimized)>
-                        <span.kix-icon-sort-down on-click('minimizeWidget')/>
-                    </if>
-                    <else>
-                        <span.kix-icon-triangle-up on-click('minimizeWidget')>
-                            <span.path1/>
-                            <span.path2/>
-                        </span>
-                    </else>
+                    <span.minimize-icon-wrapper>
+                        <if(state.minimized)>
+                            <span.kix-icon-sort-down on-click('minimizeWidget')/>
+                        </if>
+                        <else>
+                            <span.kix-icon-triangle-up on-click('minimizeWidget')>
+                                <span.path1/>
+                                <span.path2/>
+                            </span>
+                        </else>
+                    </span>
                 </if>
             </else>
         </span>
@@ -36,11 +38,9 @@
                     <include(input.title)/>
                 </if>
             </h3>
-            <span>
-                <if(component.hasFilter(input.filter))>
-                    <include(input.filter)/>
-                </if>
-            </span>
+            <if(component.hasFilter(input.filter))>
+                <include(input.filter)/>
+            </if>
         </span>
     </div>
     <div.widget-content.clearfix>

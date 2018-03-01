@@ -1,12 +1,7 @@
 <div.article-table-widget>
-    <widget configurationTagId="ticket-info-configuration">
+    <widget configurationTagId="ticket-info-configuration" actions=state.generalArticleActions>
         <@icon/>
         <@title>Artikelübersicht (${state.articles ? state.articles.length : "0"})</@title>
-        <@actions>
-            <for(action in state.generalArticleActions)>
-                <include(component.getTemplate(action), { ticketId: state.ticketId })/>
-            </for>
-        </@actions>
         <@content>
             <div.article-table-wrapper>
                 <if(state.standardTable)>

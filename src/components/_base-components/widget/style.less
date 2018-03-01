@@ -19,40 +19,34 @@
             [class*=" kix-icon-"] {
                 margin-right: .5em;
             }
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
             h3 {
                 display: inline;
-                margin-bottom: 0;
                 font-weight: 400;
             }
+            max-width: 60%;
         }
         .header-right {
-            display: inline-block;
             float: right;
             line-height: 32px;
-            .action {
-                float: left;
-                margin-right: .5em;
-                cursor: pointer;
-                &:last-of-type {
-                    margin-right: 0;
-                }
+            text-align: right;
+            width: 35%;
+            .minimize-icon-wrapper {
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
-                    font-size: 1.25em;
-                    width: auto;
-                    margin: 0 .125em;
-                    line-height: 29px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    width: 2em;
+                    height: 2em;
+                    line-height: 2em;
+                    text-align: center;
+                    cursor: pointer;
                 }
             }
-            [class^="kix-icon-"],
-            [class*=" kix-icon-"] {
-                vertical-align: middle;
+            .action-list-wrapper {
                 display: inline-block;
-                width: 2em;
-                height: 2em;
-                line-height: 2em;
-                text-align: center;
-                cursor: pointer;
             }
         }
         input[type=text] {

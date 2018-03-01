@@ -3,16 +3,13 @@
         <span>Lade Ticket ...</span>
     </if>
     <else-if(state.ticket)>
-        <widget minimizable=true>
+        <widget minimizable=true actions=state.generalActions>
             <@icon/>
             <@title>${component.getTitle()}</@title>
-            <@actions>
-                <for(action in state.generalActions)>
-                    <include(component.getWidgetTemplate(action), { ticketId: state.ticketId })/>
-                </for>
-            </@actions>
             <@contentActions>
-                <action-list list=state.ticketActions/>
+                <div.ticket-actions-wrapper>
+                    <action-list list=state.ticketActions/>
+                </div>
             </@contentActions>
             <@content>
                 <ul.lane-list>
@@ -35,7 +32,6 @@
                                 </div>
                             </@content>
                             <@filter/>
-                            <@actions/>
                             <@contentActions/>
                         </widget>
                     </li>
