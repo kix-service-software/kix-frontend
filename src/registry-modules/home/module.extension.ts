@@ -63,7 +63,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         new TableColumnConfiguration('StateID', false, true, true, true, 100),
                         new TableColumnConfiguration('QueueID', true, true, true, true, 200),
                         new TableColumnConfiguration('TypeID', true, true, true, true, 100),
-                        new TableColumnConfiguration('Title', false, true, true, true, 200),
+                        new TableColumnConfiguration('Title', true, false, true, true, 200),
                         new TableColumnConfiguration(
                             'Created', true, false, true, true, 100, DataType.DATE_TIME
                         ),
