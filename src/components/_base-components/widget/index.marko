@@ -36,11 +36,9 @@
                     <include(input.title)/>
                 </if>
             </h3>
-            <span>
-                <if(component.hasFilter(input.filter))>
-                    <include(input.filter)/>
-                </if>
-            </span>
+            <if(component.hasFilter(input.filter))>
+                <include(input.filter)/>
+            </if>
         </span>
     </div>
     <div.widget-content.clearfix>
