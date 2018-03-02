@@ -55,7 +55,7 @@
                 .widget {
                     margin-bottom: .75em;
                     .widget-header {
-                        padding: 0 .5em;
+                        padding: 0 0.5em 0 2.25em;
                         color: #ffffff;
                         background-color: #007faf;
                         border-radius: 3px;
@@ -80,10 +80,16 @@
                         background-color: #ffffff;
                         overflow: visible;
                         min-height: 10em;
+                        .widget {
+                            .widget-header {
+                                padding: 0 0.5em 0 0.5em;
+                            }
+                        }
                     }
                     &.minimized {
                         margin-bottom: .25em;
                         .widget-header {
+                            padding-left: 0.5em;
                             margin-left: 1.75em;
                             color: #5b5b5b;
                             background-color: #eaebeb;
