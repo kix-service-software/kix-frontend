@@ -11,24 +11,42 @@
             margin-top: 0;
         }
         .widget-header {
-            .header-left {
-                line-height: 32px;
-                margin-right: 5px;
-                overflow: hidden;
-                max-width: 75%;
-                white-space: nowrap;
-                display: inline-block;
-                text-overflow: ellipsis;
-                h3 {
-                    max-width: 75%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+            .action-list-expansion-container {
+                .color-theme-3;
+                .action-list-expansion {
+                    li {
+                        border-top: 1px solid @secondary-1;
+                    }
                 }
             }
         }
         .widget-content {
+            .ticket-actions-wrapper {
+                background-color: @secondary-3;
+                color: @secondary-0;
+                .action-list-expansion-container {
+                    background-color: @secondary-3;
+                    color: @secondary-0;
+                    .action-list-expansion {
+                        li {
+                            border-top: 1px solid @secondary-2;
+                        }
+                    }
+                }
+            }
             background-color: transparent;
+        }
+        .action-list-wrapper {
+            li.list-button {
+                span {
+                    box-shadow: 0px 0px 3px 0px @secondary-0
+                }
+                &.active {
+                    span {
+                        box-shadow: inset 0px 0px 2px 0px @secondary-0;
+                    }
+                }
+            }
         }
         .lane-list {
             list-style: none;

@@ -78,11 +78,10 @@ class TicketListWidgetComponent {
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
                 configurationListener,
+                this.state.widgetConfiguration.settings.displayLimit,
                 true,
                 true,
-                TableRowHeight.SMALL,
-                100,
-                10
+                TableRowHeight.SMALL
             );
 
             this.filter();

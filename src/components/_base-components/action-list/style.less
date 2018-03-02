@@ -1,11 +1,10 @@
 .action-list-wrapper {
+    .header-right & {
+        width: 80%;
+    }
     ul {
         display: block;
         list-style: none;
-        background-color: @secondary-3;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        color: @secondary-0;
         li {
             cursor: pointer;
             display: inline-block;
@@ -24,6 +23,7 @@
             padding: 0 .5em 0 1em;
             height: 32px;
             text-align: right;
+            white-space: nowrap;
             li {
                 max-width: 110px;
                 text-align: right;
@@ -36,16 +36,16 @@
                     margin-right: 0;
                 }
                 &.list-button {
-                    &.active {
-                        color: @secondary-2;
-                        span {
-                            box-shadow: inset -2px -2px 3px -2px #9e9e9e;
-                        }
-                    }
                     span {
-                        padding: 3px 3px;
+                        padding: 3px 2px 0px 2px;
+                        margin: 0px;
                         border-radius: @border-radius;
-                        border: 1px solid #b5b5b5;
+                        position: relative;
+                        top: 2px;
+                        &::before {
+                            position: relative;
+                            top: 2px;
+                        }
                     }
                 }
             }
@@ -54,19 +54,17 @@
     .action-list-expansion-container {
         position: absolute;
         right: 0;
-        z-index: 1;
+        z-index: 10;
         top: 32px;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
         .action-list-expansion {
             z-index: 1;
             li {
                 height: 32px;
                 display: block;
-                border-bottom: 1px solid @secondary-2;
                 margin: 0 .5em;
                 padding: 0 .5em 0 1em;
-                &:last-of-type {
-                    border-bottom: none;
-                }
             }
         }
     }

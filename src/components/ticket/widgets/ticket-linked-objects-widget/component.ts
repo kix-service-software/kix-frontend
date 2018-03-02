@@ -11,7 +11,7 @@ import { Link, Ticket } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
     TableColumnConfiguration, StandardTable,
-    ITableConfigurationListener, TableSortLayer, TableColumn
+    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -92,6 +92,7 @@ class LinkedObjectsWidgetComponent {
                 null,
                 clickListener,
                 configurationListener,
+                7
             );
         }
     }
