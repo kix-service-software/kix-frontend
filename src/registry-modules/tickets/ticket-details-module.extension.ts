@@ -87,7 +87,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 ],
                 {
                     generalActions: [
-                        'new-email-article-action', 'new-note-article-action',
+                        'collective-article-action', 'new-email-article-action', 'new-note-article-action',
                         'call-outgoing-article-action', 'call-incoming-article-action'
                     ],
                     tableColumns: [
@@ -97,12 +97,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         new TableColumnConfiguration('ArticleInformation', false, true, false, false, 50),
                         new TableColumnConfiguration('SenderTypeID', true, false, true, true, 100),
                         new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 50),
+                        new TableColumnConfiguration('ArticleTag', false, true, true, false, 50),
                         new TableColumnConfiguration('From', true, false, true, true, 225),
                         new TableColumnConfiguration('Subject', true, false, true, true, 500),
                         new TableColumnConfiguration(
-                            'IncomingTime', true, false, true, true, 150, DataType.DATE_TIME
+                            'IncomingTime', true, false, true, true, 120, DataType.DATE_TIME
                         ),
-                        new TableColumnConfiguration('Attachment', true, false, true, true, 100),
+                        new TableColumnConfiguration('Attachment', true, false, true, false, 50),
                     ]
                 },
                 WidgetType.CONTENT, false, true, true, WidgetSize.LARGE, null, false)

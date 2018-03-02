@@ -4,7 +4,7 @@ import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentSta
 import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
-    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn
+    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn, TableSortLayer
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -51,7 +51,7 @@ export class ArticleListWidgetComponent {
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
                 [],
-                [],
+                [new TableSortLayer()],
                 columns,
                 null,
                 null,
@@ -106,6 +106,22 @@ export class ArticleListWidgetComponent {
 
     private isArticleExpanded(articleId: number): boolean {
         return this.state.expandedArticles.some((a) => a === articleId);
+    }
+
+    private getAttachmentsCount(): number {
+        let count = 0;
+
+        if (this.state.articles) {
+            this.state.articles.forEach((article) => {
+                count += article.Attachments.filter((a) => a.Disposition !== 'inline').length;
+            });
+        }
+
+        return count;
+    }
+
+    private attachmentsClicked(): void {
+        alert('Alle Anlagen ...');
     }
 }
 

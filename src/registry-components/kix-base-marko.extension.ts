@@ -38,6 +38,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/widgets/ticket-contact-info-widget',
             'ticket/widgets/ticket-dynamic-fields-widget',
             'ticket/widgets/ticket-linked-objects-widget',
+            'ticket/actions/collective-article-action',
             'ticket/actions/edit-ticket-action',
             'ticket/actions/link-ticket-action',
             'ticket/actions/lock-ticket-action',
@@ -120,6 +121,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
 
         const actions: Array<[string, string]> = [
+            ['collective-article-action', 'ticket/actions/collective-article-action'],
             ['edit-ticket-action', 'ticket/actions/edit-ticket-action'],
             ['link-ticket-action', 'ticket/actions/link-ticket-action'],
             ['lock-ticket-action', 'ticket/actions/lock-ticket-action'],

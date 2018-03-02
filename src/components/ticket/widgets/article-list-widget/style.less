@@ -3,6 +3,15 @@
     >.widget-header {
         background-color: @tertiary-5;
         color: @secondary-6;
+        .header-attachments {
+            margin-left: 10px;
+            display: inline-block;
+            cursor: pointer;
+            span {
+                font-size: 1.25em;
+                margin-right: 0.125em;
+            }
+        }
         input {
             margin: 0 .5em 0 1em;
         }
@@ -29,74 +38,25 @@
                 }
             }
         }
-    } // TODO: an Standard-Tabelle anpassen
-    .article-table-wrapper {
-        overflow-y: auto;
-        width: 100%;
-        .article-table {
-            width: 100%;
-            a {
-                color: #5b5b5b;
-                text-decoration: none;
-                 :visited,
-                 :active,
-                 :hover,
-                 :focus {
-                    color: #5b5b5b;
-                    text-decoration: none;
-                }
-            }
-            th,
-            td {
-                color: #5b5b5b;
-                font-weight: 400;
-                &.select-all-rows,
-                &.select-row,
-                &.PriorityID,
-                &.StateID,
-                &.QueueID {
-                    text-align: center
-                }
-                &.article-content {
-                    .widget {
-                        >.widget-header {
-                            display: none;
-                        }
-                        >.widget-content {
-                            margin: 0 2.25em .5em;
-                            padding: 1em;
-                            overflow: visible;
-                            border: 1px solid @primary-1;
-                            border-top: 0 none;
-                            min-height: 10em;
-                        }
-                    }
-                }
-            }
-            thead {
+    }
+    .standard-table-wrapper {
+        .row {
+            &.header-row {
                 background-color: @primary-1;
-                height: 2em;
-                vertical-align: middle;
-                line-height: 2em;
-                th {
-                    color: @secondary-6;
-                }
-            }
-            tbody {
-                tr {
-                    height: 2em;
-                    &:nth-of-type(2n) {
-                        background-color: #f5f5f5;
-                    }
-                    &.expanded {
-                        background-color: #b6d6e8;
-                        +tr {
-                            background-color: #ffffff;
+                color: @secondary-6;
+                .table-header-cell {
+                    .sortable {
+                        color: @secondary-6;
+                        .sort-active {
+                            color: @secondary-6;
+                            opacity: 0.6;
                         }
                     }
-                    .content-actions li {
-                        background-color: #b6d6e8;
-                        color: #5b5b5b;
+                    .move-point {
+                        &:hover,
+                        &:active {
+                            background-color: @secondary-6;
+                        }
                     }
                 }
             }

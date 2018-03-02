@@ -11,6 +11,9 @@
                 </if>
                 <for(column in component.getColumns())>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
+                        <if(column.icon)>
+                            <icon object=column.icon[0] objectId=column.icon[1]/>
+                        </if>
                         ${column.text}
                         <if(column.sortable)>
                             <span.sortable>
