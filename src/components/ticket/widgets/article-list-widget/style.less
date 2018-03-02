@@ -1,8 +1,8 @@
 .article-table-widget>.widget {
-    background-color: #ffffff;
+    background-color: @default-light-font-color;
     >.widget-header {
-        background-color: #035580;
-        color: #ffffff;
+        background-color: @tertiary-5;
+        color: @default-light-font-color;
         .header-attachments {
             margin-left: 10px;
             display: inline-block;
@@ -24,8 +24,23 @@
     .standard-table-wrapper {
         .row {
             &.header-row {
-                background-color: #0a7cb3;
-                color: #fff;
+                background-color: @primary-1;
+                color: @default-light-font-color;
+                .table-header-cell {
+                    .sortable {
+                        color: @default-light-font-color;
+                        .sort-active {
+                            color: @default-light-font-color;
+                            opacity: 0.6;
+                        }
+                    }
+                    .move-point {
+                        &:hover,
+                        &:active {
+                            background-color: @default-light-font-color;
+                        }
+                    }
+                }
             }
         }
     }
