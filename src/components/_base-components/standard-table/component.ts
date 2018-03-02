@@ -153,12 +153,12 @@ class StandardTableComponent<T> {
         return this.state.sortedColumnId === columnId && this.state.sortOrder === sortOrder;
     }
 
-    private isSelected(row): boolean {
+    private isSelected(row: TableRow<T>): boolean {
         return this.state.standardTable.selectionListener ?
             this.state.standardTable.selectionListener.isRowSelected(row) : false;
     }
 
-    private isAllSelected(row): boolean {
+    private isAllSelected(): boolean {
         return this.state.standardTable.selectionListener ?
             this.state.standardTable.selectionListener.isAllSelected() : false;
     }
@@ -174,7 +174,7 @@ class StandardTableComponent<T> {
         if (this.state.standardTable.selectionListener) {
             if (checked) {
                 this.state.standardTable.selectionListener.selectAll(
-                    this.state.standardTable.getRows()
+                    this.state.standardTable.getRows(true)
                 );
             } else {
                 this.state.standardTable.selectionListener.selectNone();
