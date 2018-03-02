@@ -1,16 +1,17 @@
 .widget {
     position: relative;
-    border-radius: 3px;
-    box-shadow: 0 0 2px 0 #e2e2e2;
+    border-radius: @border-radius;
+    box-shadow: 0 0 2px 0 @secondary-3;
     box-sizing: border-box;
     .widget-header {
         .color-theme-3;
         box-sizing: border-box;
         padding: 0 .5em 0 1em;
         height: 32px;
-        border-top-right-radius: 3px;
-        border-top-left-radius: 3px;
+        border-top-right-radius: @border-radius;
+        border-top-left-radius: @border-radius;
         overflow: hidden;
+        white-space: nowrap;
         .header-left {
             line-height: 32px;
             margin-right: 5px;
@@ -55,9 +56,9 @@
     }
     .widget-content {
         position: relative;
-        .color-theme-4; // padding: .5em 1em;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
+        .color-theme-4;
+        border-bottom-right-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
         overflow: hidden;
         box-sizing: border-box;
         height: 100%;
@@ -69,14 +70,14 @@
             right: -2em;
             top: 0;
             li {
-                border: 1px solid #0a7cb3;
-                border-top-right-radius: 3px;
-                border-bottom-right-radius: 3px;
+                border: 1px solid @primary-1;
+                border-top-right-radius: @border-radius;
+                border-bottom-right-radius: @border-radius;
                 border-left: 0 none;
                 margin: 2px 0 2px 1px;
                 height: 2em;
-                color: #0a7cb3;
-                background-color: #ffffff;
+                color: @primary-1;
+                background-color: @secondary-6;
                 text-align: center;
                 box-sizing: border-box;
                 padding-top: 3px;

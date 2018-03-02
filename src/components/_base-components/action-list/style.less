@@ -1,4 +1,7 @@
 .action-list-wrapper {
+    .header-right & {
+        width: 80%;
+    }
     ul {
         display: block;
         list-style: none;
@@ -53,8 +56,8 @@
         right: 0;
         z-index: 10;
         top: 32px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
         .action-list-expansion {
             z-index: 1;
             li {
