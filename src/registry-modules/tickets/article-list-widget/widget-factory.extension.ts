@@ -12,7 +12,7 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
     public getDefaultConfiguration(): any {
         const settings: ArticleListSettings = {
             generalActions: [
-                'new-email-article-action', 'new-note-article-action',
+                'collective-article-action', 'new-email-article-action', 'new-note-article-action',
                 'call-outgoing-article-action', 'call-incoming-article-action'
             ],
             tableColumns: [
@@ -22,7 +22,7 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
                 new TableColumnConfiguration('ArticleInformation', false, true, false, false, 50),
                 new TableColumnConfiguration('SenderTypeID', true, false, true, true, 100),
                 new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 50),
-                new TableColumnConfiguration('ArticleTag', false, true, false, false, 50),
+                new TableColumnConfiguration('ArticleTag', false, true, true, false, 50),
                 new TableColumnConfiguration('From', true, false, true, true, 225),
                 new TableColumnConfiguration('Subject', true, false, true, true, 500),
                 new TableColumnConfiguration(

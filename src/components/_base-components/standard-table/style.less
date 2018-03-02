@@ -73,8 +73,8 @@
             &.opened {
                 .inner-row-wrapper {
                     .closed-row {
-                        background-color: #9acae5;
-                        color: #035580;
+                        background-color: @primary-4;
+                        color: @tertiary-5;
                     }
                     .opened-row {
                         background-color: @secondary-6;
@@ -82,7 +82,8 @@
                         .opened-row-content-wrapper {
                             margin: 0 4em 1em 3em;
                             min-height: 10em;
-                            border: 1px solid #9acae5;
+                            border: 1px solid @primary-4;
+                            border-top: 0;
                             border-bottom-left-radius: 3px;
                             border-bottom-right-radius: 3px;
                             padding: 1em 2em;
@@ -105,6 +106,7 @@
                 background-color: lightgray;
                 .table-header-cell {
                     .sortable {
+                        color: #9b9d9d;
                         .sort-active {
                             color: @secondary-7;
                         }
@@ -126,7 +128,7 @@
                         transition: background-color .5s;
                         &:hover,
                         &:active {
-                            background-color: grey;
+                            background-color: @secondary-1;
                         }
                     }
                 }
