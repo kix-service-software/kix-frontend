@@ -52,6 +52,7 @@
                     position: relative;
                     z-index: 1;
                     &.toggle-row-column {
+                        background-color: @secondary-6;
                         position: absolute;
                         min-width: auto;
                         width: 3em;
@@ -69,6 +70,13 @@
             }
             &:nth-of-type(2n) {
                 background-color: @secondary-5;
+                .table-cell {
+                    &.fixed {
+                        &.toggle-row-column {
+                            background-color: @secondary-5;
+                        }
+                    }
+                }
             }
             &.opened {
                 .inner-row-wrapper {
@@ -94,6 +102,13 @@
             }
             &:hover {
                 background-color: @secondary-4;
+                .table-cell {
+                    &.fixed {
+                        &.toggle-row-column {
+                            background-color: @secondary-4;
+                        }
+                    }
+                }
             }
             &.header-row {
                 position: relative;
@@ -105,6 +120,11 @@
                 border-bottom-right-radius: 3px;
                 background-color: lightgray;
                 .table-header-cell {
+                    &.fixed {
+                        &.toggle-row-column {
+                            background: none;
+                        }
+                    }
                     .sortable {
                         color: #9b9d9d;
                         .sort-active {
