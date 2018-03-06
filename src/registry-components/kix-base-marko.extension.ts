@@ -62,6 +62,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/lock-ticket-dialog',
             'ticket/dialogs/spam-ticket-dialog',
             'ticket/dialogs/watch-ticket-dialog',
+            'ticket/article-details',
         ];
     }
 
@@ -147,6 +148,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
             ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content'],
             ['ticket-property-label', 'ticket/ticket-labels/ticket-property-label'],
+            ['article-details', 'ticket/article-details'],
             ...widgets,
             ...explorer,
             ...dialogs,

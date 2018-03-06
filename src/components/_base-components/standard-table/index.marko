@@ -1,6 +1,6 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
-        <div.standard-table class={"has-checkbox-column": state.standardTable.rowSelectionEnabled ? true : false, "has-toggle-row-column": state.standardTable.toggleRowEnabled ? true : false}
+        <div.standard-table class={"has-checkbox-column": state.standardTable.rowSelectionEnabled ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
             key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
                 style={height: component.getRowHeight()}>
@@ -28,46 +28,44 @@
                         </if>
                     </div>
                 </for>
-                <if(state.standardTable.toggleRowEnabled)>
+                <if(state.standardTable.toggle)>
                     <div.table-cell.table-header-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
                 </if>
             </div>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={minHeight: component.getRowHeight()}>
-                    <div.inner-row-wrapper>
-                        <div.closed-row>
-                            <if(state.standardTable.rowSelectionEnabled)>
-                                <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
-                                    <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
-                                        checked=component.isSelected(row)/>
-                                </div>
-                            </if>
-                            <for(column in component.getColumns() | status-var=colLoop)>
-                                <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                    data-id=(state.tableId + column.id)>
-                                    <if(column.showIcon)>
-                                        <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
-                                    </if>
-                                    <if(column.showText)>
-                                        <span>${row.displayValues[colLoop.getIndex()]}</span>
-                                    </if>
-                                </div>
-                            </for>
-                            <if(state.standardTable.toggleRowEnabled)>
-                                <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
-                                    on-click('toggleRow', loop.getIndex())>
-                                    <span.kix-icon-sort-down/>
-                                </div>
-                            </if>
-                        </div>
-                        <if(component.rowIsToggled(loop.getIndex()))>
-                            <div.opened-row data-id=(state.tableId + "opened-row")>
-                                <div.opened-row-content-wrapper data-id=(state.tableId + "opened-row-content-wrapper")>
-                                    <!-- Hier das Widget mit den Inhalten rein --> Test
-                                </div>
+                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "")>
+                    <div.row-columns style={minHeight: component.getRowHeight()}>
+                        <if(state.standardTable.rowSelectionEnabled)>
+                            <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
+                                <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
+                                    checked=component.isSelected(row)/>
+                            </div>
+                        </if>
+                        <for(column in component.getColumns() | status-var=colLoop)>
+                            <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
+                                data-id=(state.tableId + column.id)>
+                                <if(column.showIcon)>
+                                    <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
+                                </if>
+                                <if(column.showText)>
+                                    <span>${row.displayValues[colLoop.getIndex()]}</span>
+                                </if>
+                            </div>
+                        </for>
+                        <if(state.standardTable.toggle)>
+                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
+                                on-click('toggleRow', loop.getIndex())>
+                                <span.kix-icon-sort-down/>
                             </div>
                         </if>
                     </div>
+                    <if(component.rowIsToggled(loop.getIndex()))>
+                        <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                            <div.row-toggle-content-wrapper data-id=(state.tableId + "row-toggle-content-wrapper")>
+                                <include(component.getToggleTemplate(), component.getToggleInput(row))/>
+                            </div>
+                        </div>
+                    </if>
                 </div>
             </for>
             <div.row.rowSpacer style={height: component.getSpacerHeight()}/>

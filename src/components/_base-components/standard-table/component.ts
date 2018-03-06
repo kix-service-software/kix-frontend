@@ -3,6 +3,7 @@ import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTable, TableColumnConfiguration, TableRow, TableColumn } from '@kix/core/dist/browser';
 import { SortOrder } from '@kix/core/dist/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class StandardTableComponent<T> {
 
@@ -57,7 +58,7 @@ class StandardTableComponent<T> {
                 });
 
                 const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
                 openedRows.forEach((cell: any) => {
                     cell.style.left = table.scrollLeft + 'px';
                 });
@@ -257,7 +258,7 @@ class StandardTableComponent<T> {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             if (table) {
                 const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "opened-row-content-wrapper']");
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
                 openedRows.forEach((cell: any) => {
                     cell.style.left = table.scrollLeft + 'px';
                 });
@@ -267,6 +268,21 @@ class StandardTableComponent<T> {
 
     private rowIsToggled(rowId): boolean {
         return this.state.toggledRows.findIndex((r) => r === rowId) !== -1;
+    }
+
+    private getToggleTemplate(): any {
+        return this.state.standardTable.toggleOptions.componentId ?
+            ClientStorageHandler.getComponentTemplate(
+                this.state.standardTable.toggleOptions.componentId
+            ) : undefined;
+    }
+
+    private getToggleInput(row: TableRow<T>): any {
+        const toggleInput = {};
+        if (this.state.standardTable.toggleOptions.inputPropertyName) {
+            toggleInput[this.state.standardTable.toggleOptions.inputPropertyName] = row;
+        }
+        return toggleInput;
     }
 }
 

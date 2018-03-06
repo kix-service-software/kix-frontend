@@ -5,7 +5,7 @@ import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from 
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, TableFilterLayer
+    TableSortLayer, TableFilterLayer, ToggleOptions
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -61,8 +61,9 @@ export class ArticleListWidgetComponent {
                 configurationListener,
                 this.state.articles.length,
                 true,
+                TableRowHeight.LARGE,
                 true,
-                TableRowHeight.LARGE
+                new ToggleOptions('article-details', 'article')
             );
         }
     }

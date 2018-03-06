@@ -18,7 +18,8 @@ import {
     ITableConfigurationListener,
     TableSortLayer,
     TableColumn,
-    TableFilterLayer
+    TableFilterLayer,
+    ToggleOptions
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
@@ -80,8 +81,9 @@ class TicketListWidgetComponent {
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
-                true,
-                TableRowHeight.SMALL
+                TableRowHeight.LARGE,
+                false,
+                new ToggleOptions('article-details', 'article')
             );
 
             this.filter();
