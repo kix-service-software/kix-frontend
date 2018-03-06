@@ -33,6 +33,10 @@ class StandardTableComponent<T> {
             this.state.standardTable.setTableListener(() => {
                 (this as any).forceUpdate();
             });
+
+            if (this.state.standardTable.toggleOptions.toggleFirst) {
+                this.toggleRow(0);
+            }
         }
 
         this.initTableScrollRange();

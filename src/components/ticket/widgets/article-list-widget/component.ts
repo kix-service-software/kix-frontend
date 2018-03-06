@@ -63,7 +63,7 @@ export class ArticleListWidgetComponent {
                 true,
                 TableRowHeight.LARGE,
                 true,
-                new ToggleOptions('ticket-article-details', 'article')
+                new ToggleOptions('ticket-article-details', 'article', true)
             );
         }
     }
