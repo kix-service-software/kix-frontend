@@ -9,8 +9,6 @@ export class ArticleListWidgetComponentState extends WidgetComponentState<Articl
 
     public standardTable: StandardTable<Article> = null;
 
-    public filterValue: string = '';
-
     public articles: Article[] = [];
 
     public expandedArticles: number[] = [];

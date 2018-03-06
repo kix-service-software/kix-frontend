@@ -11,8 +11,6 @@
         </if>
     </@content>
     <@filter>
-        <input type="text" on-change("filterChanged") value=state.filterValue placeholder="Filtern in Liste"/>
-        <span.kix-icon-filter on-click('filter')/>
+        <filter on-filter('filter')/>
     </@filter>
-    
 </widget>
