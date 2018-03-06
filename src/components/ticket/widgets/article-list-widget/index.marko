@@ -13,8 +13,7 @@
             <div.header-attachments on-click('attachmentsClicked')>
                 <span.kix-icon-attachement/>(${component.getAttachmentsCount()})
             </div>
-            <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('filterValueChanged')/>
-            <span.kix-icon-filter on-click('filter')/>
+            <filter on-filter('filter')/>
         </@filter>
     </widget>
 </div>

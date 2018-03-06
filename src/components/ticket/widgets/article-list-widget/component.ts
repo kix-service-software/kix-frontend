@@ -127,12 +127,8 @@ export class ArticleListWidgetComponent {
         alert('Alle Anlagen ...');
     }
 
-    private filterValueChanged(event: any): void {
-        this.state.filterValue = event.target.value;
-    }
-
-    private filter(): void {
-        this.state.standardTable.setFilterSettings(this.state.filterValue);
+    private filter(filterValue: string): void {
+        this.state.standardTable.setFilterSettings(filterValue);
     }
 }
 
