@@ -13,15 +13,13 @@
                         <ul>
                             <for(attachment in state.attachments)>
                                 <li>
-                                    <ticket-article-attachment ticketId=state.ticketId articleId=state.firstArticle.ArticleID attachment=attachment/>
+                                    <ticket-article-attachment article=state.firstArticle attachment=attachment/>
                                 </li>
                             </for>
                         </ul>
                     </div>
                     <div.description-text-wrapper>
-                        <div.description-text>
-                            <ticket-article-content ticketId=state.ticketId article=state.firstArticle/>
-                        </div>
+                        <ticket-article-content article=state.firstArticle/>
                     </div>
                 </@content>
             </widget>
@@ -34,7 +32,6 @@
         </div>
     </@content>
     <@filter/>
-    
     <@contentActions>
         <ul.content-actions>
             <if(state.widgetConfiguration)>

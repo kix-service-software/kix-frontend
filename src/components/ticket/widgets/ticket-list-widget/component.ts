@@ -83,7 +83,7 @@ class TicketListWidgetComponent {
                 true,
                 TableRowHeight.LARGE,
                 false,
-                new ToggleOptions('article-details', 'article')
+                new ToggleOptions('ticket-article-details', 'article')
             );
 
             this.filter();

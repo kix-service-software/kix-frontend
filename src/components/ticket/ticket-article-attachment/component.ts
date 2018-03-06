@@ -13,8 +13,7 @@ class ArticleAttachmentComponent {
     }
 
     public onInput(input: any): void {
-        this.state.ticketId = input.ticketId;
-        this.state.articleId = input.articleId;
+        this.state.article = input.article;
         this.state.attachment = input.attachment;
 
         if (this.state.attachment) {
@@ -27,9 +26,9 @@ class ArticleAttachmentComponent {
     }
 
     private async download(): Promise<void> {
-        if (!this.state.progress && this.state.articleId && this.state.attachment) {
+        if (!this.state.progress && this.state.article && this.state.attachment) {
             this.state.progress = true;
-            const attachment = await this.loadArticleAttachment(this.state.articleId, this.state.attachment.ID);
+            const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
             this.state.progress = false;
 
             const blob = this.b64toBlob(attachment.Content, attachment.ContentType);
@@ -44,9 +43,9 @@ class ArticleAttachmentComponent {
         }
     }
 
-    private async loadArticleAttachment(articleId: number, attachmentId: number): Promise<Attachment> {
+    private async loadArticleAttachment(attachmentId: number): Promise<Attachment> {
         const attachment = await TicketService.getInstance().loadArticleAttachment(
-            this.state.ticketId, articleId, attachmentId
+            this.state.article.TicketID, this.state.article.ArticleID, attachmentId
         );
         return attachment;
     }

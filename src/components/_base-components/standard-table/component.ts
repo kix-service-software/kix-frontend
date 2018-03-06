@@ -280,7 +280,7 @@ class StandardTableComponent<T> {
     private getToggleInput(row: TableRow<T>): any {
         const toggleInput = {};
         if (this.state.standardTable.toggleOptions.inputPropertyName) {
-            toggleInput[this.state.standardTable.toggleOptions.inputPropertyName] = row;
+            toggleInput[this.state.standardTable.toggleOptions.inputPropertyName] = row.object;
         }
         return toggleInput;
     }
