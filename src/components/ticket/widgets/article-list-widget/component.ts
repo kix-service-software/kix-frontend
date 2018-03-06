@@ -1,16 +1,11 @@
-import { TicketDetails, Article } from "@kix/core/dist/model";
+import { TicketDetails, Article, ArticleProperty } from "@kix/core/dist/model";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
-    TableColumnConfiguration,
-    StandardTable,
-    TableRowHeight,
-    ITableConfigurationListener,
-    TableColumn,
-    TableSortLayer,
-    ToggleOptions
+    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
+    TableSortLayer, TableFilterLayer, ToggleOptions
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -56,7 +51,9 @@ export class ArticleListWidgetComponent {
             this.state.standardTable = new StandardTable(
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
-                [],
+                [new TableFilterLayer(
+                    [ArticleProperty.NUMBER, ArticleProperty.ARTICLE_TYPE_ID, ArticleProperty.ATTACHMENT]
+                )],
                 [new TableSortLayer()],
                 columns,
                 null,
@@ -129,6 +126,10 @@ export class ArticleListWidgetComponent {
 
     private attachmentsClicked(): void {
         alert('Alle Anlagen ...');
+    }
+
+    private filter(filterValue: string): void {
+        this.state.standardTable.setFilterSettings(filterValue);
     }
 }
 

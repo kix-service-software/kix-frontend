@@ -11,8 +11,7 @@
         <div.history-content>
             <div.history-filter>
                 <span.header>Änderungsverlauf</span>
-                <input type="text" placeholder="| Filtern in Liste" value=state.filterValue on-change('filterValueChanged')/>
-                <span.kix-icon-filter on-click('filterHistory')/>
+                <filter on-filter('filter')/>
             </div>
             <div.history-container>
                 <if(state.standardTable)>
@@ -24,7 +23,6 @@
     <@filter>
         <span/>
     </@filter>
-    
     <@contentActions>
         <ul.content-actions>
             <if(state.widgetConfiguration)>

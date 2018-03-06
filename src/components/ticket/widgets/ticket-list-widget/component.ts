@@ -102,11 +102,8 @@ class TicketListWidgetComponent {
         }
     }
 
-    private filterChanged(event): void {
-        this.state.filterValue = event.target.value;
-    }
-
-    private filter(): void {
+    private filter(filterValue: string = this.state.filterValue): void {
+        this.state.filterValue = filterValue;
         if (this.state.filterValue !== null && this.state.filterValue !== "") {
             this.state.standardTable.setFilterSettings(this.state.filterValue);
         } else {
