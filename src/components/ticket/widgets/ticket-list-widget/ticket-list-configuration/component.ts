@@ -23,9 +23,9 @@ class TicketListConfigurationComponent {
         this.state.configuration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         const th = await TranslationHandler.getInstance();
-        for (const property of TicketUtil.getDisplayProperties()) {
-            this.state.properties.push([property, th.getTranslation(property)]);
-        }
+        // for (const property of TicketUtil.getDisplayProperties()) {
+        //     this.state.properties.push([property, th.getTranslation(property)]);
+        // }
         (this as any).setStateDirty('properties');
     }
 

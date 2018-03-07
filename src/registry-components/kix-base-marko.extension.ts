@@ -153,7 +153,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
             ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content'],
-            ['ticket-property-label', 'ticket/ticket-labels/ticket-property-label'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ...widgets,
             ...explorer,

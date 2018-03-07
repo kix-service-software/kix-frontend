@@ -1,34 +1,43 @@
 import { Ticket } from "@kix/core/dist/model";
 import { ObjectPropertyLabelComponentState } from './ObjectPropertyLabelComponentState';
+import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
 
-export class ObjectPropertyLabelComponent {
+export class ObjectPropertyLabelComponent<T> {
 
-    private state: any;
+    private state: ObjectPropertyLabelComponentState<T>;
 
     public onCreate(): void {
         this.state = new ObjectPropertyLabelComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ObjectPropertyLabelInput<T>): void {
         this.state.object = input.object;
         this.state.property = input.property;
-        this.state.hasLabel = typeof input.hasLabel !== 'undefined' ? input.hasLabel : true;
-        this.state.hasText = typeof input.hasText !== 'undefined' ? input.hasText : true;
-        this.state.hasIcon = typeof input.hasIcon !== 'undefined' ? input.hasIcon : true;
+        this.state.labelProvider = input.labelProvider;
     }
 
-    // TODO: "Objekte" als Extension ermöglichen
-    private isTicket(): boolean {
-        return this.state.object instanceof Ticket;
-    }
-
-    private getValue(): string {
-        let value = '';
-        if (this.state.property) {
-            value = typeof this.state.object[this.state.property] !== 'undefined' ?
-                this.state.object[this.state.property] : this.state.property;
+    private getPropertyName(): string {
+        let name = this.state.property;
+        if (this.state.labelProvider) {
+            name = this.state.labelProvider.getPropertyText(this.state.property);
         }
-        return value.toString();
+        return name;
+    }
+
+    private getPropertyDisplayText(): string {
+        let value = this.state.property;
+        if (this.state.labelProvider && this.state.object) {
+            value = this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
+        }
+        return value;
+    }
+
+    private getValueClasses(): string {
+        let classes = [];
+        if (this.state.labelProvider) {
+            classes = this.state.labelProvider.getDisplayTextClasses(this.state.object, this.state.property);
+        }
+        return classes.join(',');
     }
 
 }

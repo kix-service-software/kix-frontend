@@ -12,7 +12,6 @@
         "home",
         "reports",
         "search",
-        "ticket",
-        "ticket/ticket-labels"
+        "ticket"
     ]
 }
