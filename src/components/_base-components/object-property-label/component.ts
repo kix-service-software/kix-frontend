@@ -32,6 +32,14 @@ export class ObjectPropertyLabelComponent<T> {
         return value;
     }
 
+    private getValueClasses(): string {
+        let classes = [];
+        if (this.state.labelProvider) {
+            classes = this.state.labelProvider.getDisplayTextClasses(this.state.object, this.state.property);
+        }
+        return classes.join(',');
+    }
+
 }
 
 module.exports = ObjectPropertyLabelComponent;
