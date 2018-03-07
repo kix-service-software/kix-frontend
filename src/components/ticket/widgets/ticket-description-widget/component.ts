@@ -34,8 +34,8 @@ class TicketDescriptionWidgetComponent {
     private async getFirstArticle(): Promise<void> {
         if (this.state.ticketId) {
             const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails && ticketDetails.articles && ticketDetails.articles.length) {
-                this.state.firstArticle = ticketDetails.articles[0];
+            if (ticketDetails && ticketDetails.ticket.Articles && ticketDetails.ticket.Articles.length) {
+                this.state.firstArticle = ticketDetails.ticket.Articles[0];
                 this.state.attachments = this.state.firstArticle.Attachments
                     ? this.state.firstArticle.Attachments.filter((a) => a.Disposition !== 'inline')
                     : [];
