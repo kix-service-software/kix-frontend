@@ -3,7 +3,7 @@
         <div.standard-table class={"has-checkbox-column": state.standardTable.selection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
             key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
-                style={height: component.getRowHeight()}>
+                style={height: component.getRowHeight(), width: state.rowWidth}>
                 <if(state.standardTable.selection)>
                     <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
@@ -33,7 +33,7 @@
                 </if>
             </div>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "")>
+                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={width: state.rowWidth}>
                     <div.row-columns style={minHeight: component.getRowHeight()}>
                         <if(state.standardTable.selection)>
                             <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
@@ -43,7 +43,7 @@
                         </if>
                         <for(column in component.getColumns() | status-var=colLoop)>
                             <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                data-id=(state.tableId + column.id)>
+                                data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")>
                                 <if(column.showIcon)>
                                     <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
                                 </if>

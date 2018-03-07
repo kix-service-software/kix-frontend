@@ -40,6 +40,8 @@ class StandardTableComponent<T> {
         }
 
         this.initTableScrollRange();
+        this.setRowWidth();
+
     }
 
     private initTableScrollRange(): void {
@@ -69,6 +71,18 @@ class StandardTableComponent<T> {
             });
 
             this.ps.update();
+        }
+    }
+
+    private setRowWidth(): void {
+        const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
+        if (headerRow) {
+            let rowWidth = 0;
+            this.state.standardTable.getColumns().forEach((c) => rowWidth += c.size);
+            if (this.state.standardTable.selection) {
+                rowWidth += headerRow.firstChild.offsetWidth;
+            }
+            this.state.rowWidth = rowWidth;
         }
     }
 
@@ -109,8 +123,9 @@ class StandardTableComponent<T> {
             this.state.resizeSettings.startOffset = event.pageX;
             headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
 
-            const selector = "[data-id='" + this.state.tableId + this.state.resizeSettings.columnId + "']";
-            const elements: any = document.querySelectorAll(selector);
+            const elements: any = (this as any).getEls(
+                this.state.tableId.toString() + this.state.resizeSettings.columnId
+            );
             elements.forEach((element: any) => {
                 element.style.width = this.state.resizeSettings.currentSize + 'px';
             });
@@ -129,6 +144,7 @@ class StandardTableComponent<T> {
         }
         this.state.resizeSettings.columnId = undefined;
         this.state.resizeActive = false;
+        this.setRowWidth();
     }
 
     private sortUp(columnId: string): void {

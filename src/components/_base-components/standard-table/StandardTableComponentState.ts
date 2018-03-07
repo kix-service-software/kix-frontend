@@ -23,4 +23,5 @@ export class StandardTableComponentState<T = any> {
 
     public selectedRows: string[] | number[];
 
+    public rowWidth: number = 0;
 }
