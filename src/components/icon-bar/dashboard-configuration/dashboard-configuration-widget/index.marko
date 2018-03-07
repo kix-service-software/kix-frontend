@@ -6,24 +6,22 @@
     <div.dashboard-configuration-widget>
         <widget minimizable=false hasConfigOverlay=false>
             <@title>
-                <span.kix-icon.icon-dummy.icon-asterisk/>${component.getTranslation(component.translationIds.TITLE)}
+                <span.kix-icon.icon-dummy.icon-asterisk/>Widgets verwalten
             </@title>
             <@content>
                 <if(component.isConfigMode())>
                     <h4>Home Dashboard</h4>
                     <!-- TODO: korrekten Dashboard-Namen (home, ticket, ...) und dessen Übersetzung bestimmen, ggf. von Eltern-Komponente (input.name) -->
                     <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
-                    ${component.getTranslation(component.translationIds.DESCRIPTION)}
-                    <button on-click('openDashboardConfigurationDialog')>
-                        ${component.getTranslation(component.translationIds.OPEN_DIALOG)}
-                    </button>
-                    <span.kix-icon.icon-dummy.icon-i/>${component.getTranslation(component.translationIds.DESCRIPTION_INFO)}
+                    Widgets hinzufügen oder entfernen:
+                    <button on-click('openDashboardConfigurationDialog')>Auswahl der Widgets</button>
+                    <span.kix-icon.icon-dummy.icon-i/>Die angezeigten Widgets können mittels Drag & Drop verschoben werden.
                     <hr/>
-                    <button on-click('toggleConfigurationMode')>${component.getTranslation(component.translationIds.STOP)}</button>
+                    <button on-click('toggleConfigurationMode')>Konfiguration beenden</button>
                 </if>
                 <else>
-                    ${component.getTranslation(component.translationIds.PRE_DESCRIPTION)}
-                    <button on-click('toggleConfigurationMode')>${component.getTranslation(component.translationIds.START)}</button>
+                    Hier können Sie die angezeigten Widgets anpassen (z.B. hinzufügen, entfernen, konfigurieren sowie deren Position verändern).
+                    <button on-click('toggleConfigurationMode')>Konfiguration starten</button>
                 </else>
             </@content>
         </widget>

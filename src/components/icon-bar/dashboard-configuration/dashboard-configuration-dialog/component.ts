@@ -1,4 +1,3 @@
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import {
     SelectWithFilterListElement,
