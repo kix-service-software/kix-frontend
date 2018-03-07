@@ -60,7 +60,27 @@ describe('Ticket Service', () => {
         });
 
         it('should return a ticket type object.', async () => {
-            const ticketType = await ticketService.getTicket('', 12345)
+            const ticketType = await ticketService.getTicket('', 12345, false, false)
+            expect(ticketType).not.undefined;
+            expect(ticketType.TicketID).equal(12345);
+        });
+    });
+
+    describe('Create a valid request to retrieve a ticket with articles and history.', () => {
+
+        before(() => {
+            nockScope
+                .get(resourcePath + '/12345')
+                .query({
+                    fields: 'Ticket.*',
+                    include: 'TimeUnits,DynamicFields,Links,Articles,Attachments,History',
+                    expand: 'Links,Articles,Attachments,History'
+                })
+                .reply(200, buildTicketResponse(12345));
+        });
+
+        it('should return a ticket type object.', async () => {
+            const ticketType = await ticketService.getTicket('', 12345, true, true)
             expect(ticketType).not.undefined;
             expect(ticketType.TicketID).equal(12345);
         });
