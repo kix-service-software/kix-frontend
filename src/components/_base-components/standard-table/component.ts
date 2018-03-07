@@ -34,7 +34,7 @@ class StandardTableComponent<T> {
                 (this as any).forceUpdate();
             });
 
-            if (this.state.standardTable.toggleOptions.toggleFirst) {
+            if (this.state.standardTable.toggle && this.state.standardTable.toggleOptions.toggleFirst) {
                 this.toggleRow(0);
             }
         }
