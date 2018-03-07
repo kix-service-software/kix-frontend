@@ -43,7 +43,8 @@
                         </if>
                         <for(column in component.getColumns() | status-var=colLoop)>
                             <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")>
+                                data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
+                                title=row.displayValues[colLoop.getIndex()]>
                                 <if(column.showIcon)>
                                     <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
                                 </if>

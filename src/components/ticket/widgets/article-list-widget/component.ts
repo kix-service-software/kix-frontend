@@ -93,7 +93,7 @@ export class ArticleListWidgetComponent {
     private getArticles(): void {
         const ticketDetails: TicketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
         if (ticketDetails) {
-            this.state.articles = ticketDetails.articles;
+            this.state.articles = ticketDetails.ticket.Articles;
         }
     }
 

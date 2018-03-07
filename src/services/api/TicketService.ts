@@ -49,8 +49,21 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     protected RESOURCE_URI: string = "tickets";
 
-    public async getTicket(token: string, ticketId: number): Promise<Ticket> {
-        const query: any = { fields: 'Ticket.*', include: 'TimeUnits,DynamicFields,Links', expand: 'Links' };
+    public async getTicket(
+        token: string, ticketId: number, articles: boolean = false, history: boolean = false
+    ): Promise<Ticket> {
+        let include = 'TimeUnits,DynamicFields,Links';
+        let expand = 'Links';
+        if (articles) {
+            include += ',Articles,Attachments';
+            expand += ',Articles,Attachments';
+        }
+        if (history) {
+            include += ',History';
+            expand += ',History';
+        }
+
+        const query: any = { fields: 'Ticket.*', include, expand };
         const response = await this.getObject<TicketResponse>(token, ticketId, query);
         return new Ticket(response.Ticket);
     }
