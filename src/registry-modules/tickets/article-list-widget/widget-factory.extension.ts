@@ -12,7 +12,7 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
     public getDefaultConfiguration(): any {
         const settings: ArticleListSettings = {
             generalActions: [
-                'article-collective-action', 'article-new-email-action', 'article-new-note-action',
+                'article-bulk-action', 'article-new-email-action', 'article-new-note-action',
                 'article-call-outgoing-action', 'article-call-incoming-action'
             ],
             tableColumns: [
