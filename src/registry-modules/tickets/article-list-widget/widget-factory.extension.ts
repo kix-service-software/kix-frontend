@@ -12,8 +12,8 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
     public getDefaultConfiguration(): any {
         const settings: ArticleListSettings = {
             generalActions: [
-                'collective-article-action', 'new-email-article-action', 'new-note-article-action',
-                'call-outgoing-article-action', 'call-incoming-article-action'
+                'article-collective-action', 'article-new-email-action', 'article-new-note-action',
+                'article-call-outgoing-action', 'article-call-incoming-action'
             ],
             tableColumns: [
                 new TableColumnConfiguration(
@@ -31,13 +31,12 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
                 new TableColumnConfiguration('Attachment', true, false, true, false, 50),
             ]
         };
-        // TODO: irgendwie mit in Konfiguraton bringen
-        const generalArticleActions = [
-            'new-email-article-action', 'new-note-article-action',
-            'call-outgoing-article-action', 'call-incoming-article-action'
-        ];
         const articleActions = [
-            'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
+            'article-print-action',
+            'article-edit-action',
+            'article-communication-action',
+            'article-tag-action',
+            'article-maximize-action'
         ];
         return new WidgetConfiguration(
             this.widgetId, 'Artikelübersicht', articleActions,

@@ -1,10 +1,10 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
-        <div.standard-table class={"has-checkbox-column": state.standardTable.rowSelectionEnabled ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
+        <div.standard-table class={"has-checkbox-column": state.standardTable.selection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
             key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
                 style={height: component.getRowHeight()}>
-                <if(state.standardTable.rowSelectionEnabled)>
+                <if(state.standardTable.selection)>
                     <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
                     </div>
@@ -35,7 +35,7 @@
             <for(row in component.getRows() | status-var=loop)>
                 <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "")>
                     <div.row-columns style={minHeight: component.getRowHeight()}>
-                        <if(state.standardTable.rowSelectionEnabled)>
+                        <if(state.standardTable.selection)>
                             <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
                                 <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
                                     checked=component.isSelected(row)/>
@@ -61,6 +61,15 @@
                     </div>
                     <if(component.rowIsToggled(loop.getIndex()))>
                         <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                            <if(component.getToggleActions().length)>
+                                <ul.toggle-actions>
+                                    <for(action in component.getToggleActions())>
+                                        <li>
+                                            <include(component.getTemplate(action)) short=true/>
+                                        </li>
+                                    </for>
+                                </ul>
+                            </if>
                             <div.row-toggle-content-wrapper data-id=(state.tableId + "row-toggle-content-wrapper")>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
