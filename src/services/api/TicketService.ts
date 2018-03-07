@@ -110,12 +110,16 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
             expand: "Attachments",
             include: "Attachments"
         });
-        return response.Article;
+        return response.Article.map((a) => {
+            a.TicketID = ticketId;
+            return a;
+        });
     }
 
     public async getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId);
         const response = await this.getObjectByUri<ArticleResponse>(token, uri);
+        response.Article.TicketID = ticketId;
         return response.Article;
     }
 

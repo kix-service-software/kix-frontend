@@ -11,7 +11,6 @@ class TicketArticleContentComponent {
     }
 
     public onInput(input: any): void {
-        this.state.ticketId = Number(input.ticketId);
         this.state.article = input.article;
         this.prepareContent();
     }
@@ -29,7 +28,7 @@ class TicketArticleContentComponent {
                 const htmlBodyAttachment = attachments[htmlBodyAttachmentIndex];
 
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
-                    this.state.ticketId, this.state.article.ArticleID, htmlBodyAttachment.ID
+                    this.state.article.TicketID, this.state.article.ArticleID, htmlBodyAttachment.ID
                 );
 
                 if (AttachmentWithContent) {
