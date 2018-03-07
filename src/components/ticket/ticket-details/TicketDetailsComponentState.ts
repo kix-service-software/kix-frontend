@@ -1,4 +1,5 @@
 import { ConfiguredWidget, Ticket } from '@kix/core/dist/model';
+import { ILabelProvider } from '@kix/core/dist/browser';
 
 export class TicketDetailsComponentState {
 

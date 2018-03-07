@@ -1,13 +1,13 @@
 import { Ticket } from '@kix/core/dist/model';
+import { ILabelProvider } from '@kix/core/dist/browser';
 
-export class ObjectPropertyLabelComponentState {
+export class ObjectPropertyLabelComponentState<T> {
 
     public constructor(
-        public object: Ticket = null,
+        public object: T = null,
         public property: string = null,
-        public hasLabel: boolean = true,
-        public hasText: boolean = true,
-        public hasIcon: boolean = true
+        public labelProvider: ILabelProvider<T> = null,
+        public showInfo: boolean = false
     ) { }
 
 }
