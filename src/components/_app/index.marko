@@ -15,7 +15,7 @@
     </head>
     <body>
         <if(input.login)>
-            <_login/>
+            <_login logout=input.data.logout/>
         </if>
         <else>
             <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId

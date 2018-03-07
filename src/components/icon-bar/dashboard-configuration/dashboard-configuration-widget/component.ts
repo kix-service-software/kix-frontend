@@ -1,4 +1,3 @@
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 
 import { DashboardConfigurationWidgetComponentState } from './model/DashboardConfigurationWidgetComponentState';
@@ -13,19 +12,6 @@ class DashboardConfigurationWidget {
     public onCreate(input: any): void {
         this.state = new DashboardConfigurationWidgetComponentState();
         this.translationIds = DashboardConfigurationWidgetTranslationId;
-    }
-
-    public async onMount(input: any): Promise<void> {
-        const translationHandler = await TranslationHandler.getInstance();
-        this.state.translations = translationHandler.getTranslations([
-            DashboardConfigurationWidgetTranslationId.TITLE,
-            DashboardConfigurationWidgetTranslationId.PRE_DESCRIPTION,
-            DashboardConfigurationWidgetTranslationId.DESCRIPTION,
-            DashboardConfigurationWidgetTranslationId.OPEN_DIALOG,
-            DashboardConfigurationWidgetTranslationId.DESCRIPTION_INFO,
-            DashboardConfigurationWidgetTranslationId.START,
-            DashboardConfigurationWidgetTranslationId.STOP
-        ]);
     }
 
     private toggleDashboardConfigurationWidget(): void {
@@ -43,10 +29,6 @@ class DashboardConfigurationWidget {
             'dashboard-configuration-dialog',
             { title: 'Dashboard Config - Paltzhalter-Titel' }
         );
-    }
-
-    private getTranslation(id: DashboardConfigurationWidgetTranslationId): string {
-        return (this.state.translations && this.state.translations[id]) ? this.state.translations[id] : id.toString();
     }
 
     private isConfigMode(): boolean {
