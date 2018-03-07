@@ -1,10 +1,10 @@
 <div.key-value-pair.clearfix>
     <span.key>${component.getPropertyName()}:</span>
-    <if(input.info)>
-        <span.info>
+    <span.info>
+        <if(input.info)>
             <include(input.info)/>
-        </span>
-    </if>
+        </if>
+    </span>
     <span.value class=component.getValueClasses()>
         ${component.getPropertyDisplayText()}
         <if(input.icon)>
