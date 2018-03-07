@@ -1,6 +1,6 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 
-export class EditArticleActionComponent {
+export class ArticleNewNoteActionComponent {
 
     private doAction(): void {
         alert('Neue Notiz');
@@ -9,4 +9,4 @@ export class EditArticleActionComponent {
 
 }
 
-module.exports = EditArticleActionComponent;
+module.exports = ArticleNewNoteActionComponent;

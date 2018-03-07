@@ -1,6 +1,6 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 
-export class ArticlePrintActionComponent {
+export class ArticleMaximizeActionComponent {
 
     private doAction(): void {
         alert('Großansicht');
@@ -9,4 +9,4 @@ export class ArticlePrintActionComponent {
 
 }
 
-module.exports = ArticlePrintActionComponent;
+module.exports = ArticleMaximizeActionComponent;
