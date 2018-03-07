@@ -1,5 +1,4 @@
 import { SocketEvent } from '@kix/core/dist/model';
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';

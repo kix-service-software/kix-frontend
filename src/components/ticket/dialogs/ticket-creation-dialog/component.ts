@@ -1,4 +1,3 @@
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { TicketService } from '@kix/core/dist/browser/ticket/TicketService';
 import { CreationDialogComponentEvent } from '@kix/core/dist/model';
@@ -26,10 +25,7 @@ class TicketCreationDialogComponent {
 
         TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
-        const translationHandler = await TranslationHandler.getInstance();
-        const questionString = translationHandler.getTranslation(TranslationId.LOAD_DRAFT_QUESTION);
-
-        if (existingState && !confirm(questionString)) {
+        if (existingState && !confirm("Es existiert ein Entwurf im Zwischenspeicher. Soll dieser geladen werden?")) {
             ClientStorageHandler.deleteState(TicketService.TICKET_CREATION_STATE_ID);
             TicketService.getInstance().resetTicketCreation(ComponentId.TICKET_CREATION_ID);
         }

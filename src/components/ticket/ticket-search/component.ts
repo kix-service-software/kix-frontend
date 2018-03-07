@@ -1,6 +1,5 @@
 import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
 import { TicketProperty } from "@kix/core/dist/model/";
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 
 class TicketSearchComponent {
@@ -17,9 +16,8 @@ class TicketSearchComponent {
     public async onMount(): Promise<void> {
         TicketService.getInstance().addStateListener(this.ticketStateChanged.bind(this));
 
-        const th = await TranslationHandler.getInstance();
         this.state.ticketProperties = Object.keys(TicketProperty).map(
-            (key) => [TicketProperty[key], th.getTranslation(key)]
+            (key) => [TicketProperty[key], key]
         ) as Array<[string, string]>;
         this.state.ticketProperties = this.state.ticketProperties.sort((a, b) => a[1].localeCompare(b[1]));
 

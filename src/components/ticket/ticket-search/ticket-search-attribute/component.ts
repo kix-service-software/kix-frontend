@@ -1,4 +1,3 @@
-import { TranslationHandler } from "@kix/core/dist/browser/TranslationHandler";
 import { TicketProperty, TicketPropertyOperationMapper } from '@kix/core/dist/model';
 import { SearchOperator } from "@kix/core/dist/browser/SearchOperator";
 import { SearchAttributeState } from './SearchAttributeState';
@@ -23,30 +22,28 @@ export class TicketSearchAttributeComponent {
     }
 
     public async onMount(): Promise<void> {
-        const th = await TranslationHandler.getInstance();
         this.state.properties =
             Object.keys(TicketProperty)
                 .filter((key) => TicketPropertyOperationMapper.getInstance().hasSearchOperations(TicketProperty[key]))
-                .map((key) => [TicketProperty[key], th.getTranslation(TicketProperty[key])]) as Array<[string, string]>;
+                .map((key) => [TicketProperty[key], TicketProperty[key]]) as Array<[string, string]>;
 
         this.state.properties = this.state.properties.sort((a, b) => a[1].localeCompare(b[1]));
 
-        if (this.state.attribute[0]) {
-            const operations =
-                TicketPropertyOperationMapper.getInstance().getPropertyOperations(this.state.attribute[0]);
-            this.state.operations =
-                operations.map((op) => [op, th.getTranslation(op)]) as Array<[string, string]>;
-        }
+        // if (this.state.attribute[0]) {
+        //     const operations =
+        //         TicketPropertyOperationMapper.getInstance().getPropertyOperations(this.state.attribute[0]);
+        //     this.state.operations =
+        //         operations.map((op) => [op, op]) as Array<[string, string]>;
+        // }
     }
 
     private async propertyChanged(event: any): Promise<void> {
         const property = event.target.value;
         this.state.attribute[0] = property;
 
-        const th = await TranslationHandler.getInstance();
-        const operations = TicketPropertyOperationMapper.getInstance().getPropertyOperations(property);
-        this.state.operations =
-            operations.map((op) => [op, th.getTranslation(op)]) as Array<[string, string]>;
+        // const operations = TicketPropertyOperationMapper.getInstance().getPropertyOperations(property);
+        // this.state.operations =
+        //     operations.map((op) => [op, op]) as Array<[string, string]>;
 
         this.attributeChanged();
     }

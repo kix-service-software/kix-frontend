@@ -1,6 +1,5 @@
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
-import { TranslationHandler } from '@kix/core/dist/browser/TranslationHandler';
 import { TicketProperty } from "@kix/core/dist/model/";
 import { TicketSearchState } from './TicketSearchState';
 import { SearchOperator } from "@kix/core/dist/browser/SearchOperator";
