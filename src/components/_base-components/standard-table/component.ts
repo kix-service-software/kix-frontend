@@ -288,6 +288,15 @@ class StandardTableComponent<T> {
         }
         return toggleInput;
     }
+
+    private getToggleActions(): string[] {
+        return this.state.standardTable.toggleOptions.actions.length ?
+            this.state.standardTable.toggleOptions.actions : [];
+    }
+
+    private getTemplate(componentId: string): any {
+        return ClientStorageHandler.getComponentTemplate(componentId);
+    }
 }
 
 module.exports = StandardTableComponent;

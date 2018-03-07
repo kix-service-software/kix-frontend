@@ -83,12 +83,16 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const articleList =
             new ConfiguredWidget("article-list", new WidgetConfiguration(
                 "article-list-widget", "Artikelübersicht", [
-                    'print-article-action', 'edit-article-action', 'attachment-download-action', 'delete-article-action'
+                    'article-print-action',
+                    'article-edit-action',
+                    'article-communication-action',
+                    'article-tag-action',
+                    'article-maximize-action'
                 ],
                 {
                     generalActions: [
-                        'collective-article-action', 'new-email-article-action', 'new-note-article-action',
-                        'call-outgoing-article-action', 'call-incoming-article-action'
+                        'article-bulk-action', 'article-new-email-action', 'article-new-note-action',
+                        'article-call-outgoing-action', 'article-call-incoming-action'
                     ],
                     tableColumns: [
                         new TableColumnConfiguration(

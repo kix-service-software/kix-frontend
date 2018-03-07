@@ -1,7 +1,12 @@
 import { TicketDetails, Article, ArticleProperty } from "@kix/core/dist/model";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
-import { TicketService, ArticleTableLabelLayer, ArticleTableContentLayer } from "@kix/core/dist/browser/ticket";
+import {
+    TicketService,
+    ArticleTableLabelLayer,
+    ArticleTableContentLayer,
+    ArticleTableSelectionListener
+} from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
@@ -56,14 +61,19 @@ export class ArticleListWidgetComponent {
                 )],
                 [new TableSortLayer()],
                 columns,
-                null,
+                new ArticleTableSelectionListener(),
                 null,
                 configurationListener,
                 this.state.articles.length,
                 true,
                 TableRowHeight.LARGE,
                 true,
-                new ToggleOptions('ticket-article-details', 'article', true)
+                new ToggleOptions(
+                    'ticket-article-details',
+                    'article',
+                    this.state.widgetConfiguration.actions,
+                    true
+                )
             );
         }
     }
