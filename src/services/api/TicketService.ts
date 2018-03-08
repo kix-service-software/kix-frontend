@@ -55,8 +55,8 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         let include = 'TimeUnits,DynamicFields,Links';
         let expand = 'Links';
         if (articles) {
-            include += ',Articles,Attachments';
-            expand += ',Articles,Attachments';
+            include += ',Articles,Attachments,Flags';
+            expand += ',Articles,Attachments,Flags';
         }
         if (history) {
             include += ',History';
