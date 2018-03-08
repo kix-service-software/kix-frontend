@@ -1,6 +1,7 @@
 @import "kix_font.less";
-
-@default-font-size: 100%;
+html {
+    font-size: 87.5%;
+}
 
 @font-face {
     font-family: Carlito;
@@ -26,13 +27,21 @@
     font-style: italic;
 }
 
+.font-size-normal() {
+    font-size: 1rem;
+}
+
+.font-size-small() {
+    font-size: 0.875rem;
+}
+
 h1 {
-    font-size: 2.25em;
+    font-size: 2.25rem;
     font-weight: 400;
-    margin-bottom: 1.2em;
+    margin-bottom: 1.2rem;
 }
 
 h3 {
-    font-size: 1.25em;
-    margin-bottom: .8em;
+    font-size: 1.125rem;
+    margin-bottom: .8rem;
 }

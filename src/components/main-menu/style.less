@@ -9,7 +9,8 @@ ul.user-menu {
     border-bottom-right-radius: 3px;
     margin-bottom: .125em;
     li {
-        .color-theme-2;
+        background: @primary-2;
+        color: @default-light-font-color;
         height: 40px;
         width: 64px;
         border-top: 1px solid #35a5de;
@@ -39,17 +40,17 @@ ul.user-menu {
             }
         }
         &.active {
-            .color-theme-0; 
+            background: @primary-0;
+            color: @default-light-font-color;
             width: 68px;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
             padding-right: 6px;
             box-sizing: border-box;
-        } 
+        }
         &.active+li {
             border-top: 0 none;
-        }
-        // TODO: should be removed or replaced with other link solution
+        } // TODO: should be removed or replaced with other link solution
         a {
             display: block;
             height: 100%;

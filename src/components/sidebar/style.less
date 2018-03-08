@@ -7,7 +7,8 @@
         margin-top: 10em;
     }
     .bar-icon {
-        .color-theme-8;
+        background: @secondary-0;
+        color: @secondary-3;
         box-sizing: border-box;
         width: 32px;
         height: 32px;
@@ -18,7 +19,8 @@
         box-shadow: @shadow;
         font-size: 1.5em;
         &.select-active {
-            .color-theme-7;
+            background: @secondary-3;
+            color: @secondary-0;
         }
         &>span {
             .vertical-align;
@@ -41,7 +43,8 @@
             margin-bottom: 0;
         }
         .widget-header {
-            .color-theme-1;
+            background: @primary-1;
+            color: @default-light-font-color;
         }
         .widget-content {
             min-height: 160px;
@@ -50,30 +53,6 @@
     }
 }
 
-// .sidebar-container {
-//     .shadow-margin;
-//     .clearfix;
-//     overflow-x: hidden;
-//     margin-right: 5px;
-//     #default-sidebars {
-//         min-height: 90px;
-//     }
-//     .sidebar-widget {
-//         width: 250px;
-//         margin-bottom: 20px;
-//         margin-left: 50px;
-//         padding: 5px;
-//         overflow: hidden;
-//         .widget-header {
-//             .color-theme-1;
-//         }
-//         .widget-content {
-//             min-height: 10em;
-//         }
-//     }
-// }
-//
-// TODO: remove - erstmal notwendig, bis draggable-container auch in sidebar enthalten ist
 .sidebar {
     >div {
         &.config-mode:not(.config-dialog-shown) {
