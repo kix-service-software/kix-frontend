@@ -78,7 +78,6 @@
 }
 
 @static-path: '/dist/static/';
-@default-font-size: 100%;
 @border-radius: 3px;
 // predefine shadows
 @shadow-color: @secondary-3;
@@ -109,28 +108,4 @@
 .height-2() {
     height: @height-2;
     box-sizing: border-box;
-}
-
-@font-face {
-    font-family: Carlito;
-    src: url(@{static-path}font/carlito-regular.woff);
-}
-
-@font-face {
-    font-family: Carlito;
-    src: url(@{static-path}font/carlito-bold.woff);
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: Carlito;
-    src: url(@{static-path}font/carlito-italic.woff);
-    font-style: italic;
-}
-
-@font-face {
-    font-family: Carlito;
-    src: url(@{static-path}font/carlito-bold-italic.woff);
-    font-weight: bold;
-    font-style: italic;
 }
