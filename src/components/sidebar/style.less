@@ -4,10 +4,11 @@
     top: 0;
     bottom: 0;
     .widget-bar {
-        margin-top: 10em;
+        margin-top: @margin-large;
     }
     .bar-icon {
-        .color-theme-8;
+        background: @secondary-0;
+        color: @secondary-3;
         box-sizing: border-box;
         width: 32px;
         height: 32px;
@@ -18,7 +19,8 @@
         box-shadow: @shadow;
         font-size: 1.5em;
         &.select-active {
-            .color-theme-7;
+            background: @secondary-3;
+            color: @secondary-0;
         }
         &>span {
             .vertical-align;
@@ -32,16 +34,17 @@
 .sidebar {
     float: right;
     height: 100%;
-    padding-top: 80px;
+    width: @sidebar-width;
+    margin-top: @margin-large - @margin-default + @margin-small;
     >div {
         box-sizing: border-box;
-        width: 192px;
-        margin-bottom: 2em;
+        margin-bottom: @margin-default;
         &:last-of-type {
             margin-bottom: 0;
         }
         .widget-header {
-            .color-theme-1;
+            background: @primary-1;
+            color: @default-light-font-color;
         }
         .widget-content {
             min-height: 160px;
@@ -50,30 +53,6 @@
     }
 }
 
-// .sidebar-container {
-//     .shadow-margin;
-//     .clearfix;
-//     overflow-x: hidden;
-//     margin-right: 5px;
-//     #default-sidebars {
-//         min-height: 90px;
-//     }
-//     .sidebar-widget {
-//         width: 250px;
-//         margin-bottom: 20px;
-//         margin-left: 50px;
-//         padding: 5px;
-//         overflow: hidden;
-//         .widget-header {
-//             .color-theme-1;
-//         }
-//         .widget-content {
-//             min-height: 10em;
-//         }
-//     }
-// }
-//
-// TODO: remove - erstmal notwendig, bis draggable-container auch in sidebar enthalten ist
 .sidebar {
     >div {
         &.config-mode:not(.config-dialog-shown) {

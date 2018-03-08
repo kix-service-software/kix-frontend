@@ -1,22 +1,23 @@
 .breadcrumb {
-    .color-theme-4;
-    margin-bottom: 8px;
+    background: @secondary-6;
+    color: @default-dark-font-color;
+    margin-bottom: @margin-small;
     box-shadow: 0 0 2px 0 #e2e2e2;
     padding: 2px .5em 0;
     border-radius: 3px;
-    height: 32px;
+    height: @breadcrumb-height;
     box-sizing: border-box;
     overflow: hidden;
-    line-height: 32px;
+    line-height: @breadcrumb-height;
     vertical-align: text-bottom;
     span,
     a {
-        margin-right: .5em;
+        margin-right: @margin-small;
     }
     a:not(:first-of-type)::before {
         content: "|";
         display: inline-block;
-        margin: 0 .5em;
+        margin: 0 @margin-small 0 @margin-small;
     }
     [class^="kix-icon-"],
     [class*=" kix-icon-"] {

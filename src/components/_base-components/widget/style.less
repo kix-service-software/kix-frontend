@@ -1,20 +1,21 @@
+@widget-header-height: 2.25em;
 .widget {
     position: relative;
     border-radius: @border-radius;
     box-shadow: 0 0 2px 0 @secondary-3;
     box-sizing: border-box;
     .widget-header {
-        .color-theme-3;
+        background: @secondary-2;
+        color: @secondary-0;
         box-sizing: border-box;
         padding: 0 .5em 0 1em;
-        height: 32px;
+        height: @widget-header-height;
         border-top-right-radius: @border-radius;
         border-top-left-radius: @border-radius;
         overflow: hidden;
         white-space: nowrap;
         .header-left {
-            line-height: 32px;
-            margin-right: 5px;
+            line-height: @widget-header-height;
             overflow: hidden;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
@@ -32,7 +33,7 @@
         }
         .header-right {
             float: right;
-            line-height: 32px;
+            line-height: @widget-header-height;
             text-align: right;
             width: 35%;
             .minimize-icon-wrapper {
@@ -56,8 +57,9 @@
         }
     }
     .widget-content {
+        background: @secondary-6;
+        color: @default-dark-font-color;
         position: relative;
-        .color-theme-4;
         border-bottom-right-radius: @border-radius;
         border-bottom-left-radius: @border-radius;
         overflow: hidden;

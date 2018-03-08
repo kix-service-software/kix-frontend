@@ -1,6 +1,6 @@
 .explorerbar {
     float: left;
-    > div {
+    >div {
         margin-top: 10px;
         &.config-mode:not(.config-dialog-shown) {
             z-index: 100;
@@ -10,10 +10,10 @@
             margin-top: 0;
         }
         .widget {
-            width: 192px;
+            width: @explorer-width;
             .widget-content {
                 height: unset;
-                min-height: 192px;
+                min-height: @explorer-width;
                 max-height: 400px;
                 overflow: auto;
                 padding: 1.25em .75em 1.25em .5em;
@@ -23,13 +23,14 @@
     &.collapsed {
         width: 38px;
         .explorer {
-            .color-theme-3;
+            background: @secondary-2;
+            color: @secondary-0;
             position: relative;
             border-radius: 3px;
             box-shadow: 0 0 2px 0 #e2e2e2;
             box-sizing: border-box;
             margin-bottom: 184px;
-            width: 192px;
+            width: @explorer-width;
             height: 2em;
             background-color: #e2e2e2;
             border: 0 none;
@@ -39,7 +40,6 @@
             .header-left {
                 display: inline-block;
                 float: left;
-                line-height: 2.5em;
                 font-size: .75em;
                 margin-right: 5px;
                 padding: 2px 1em 2px;

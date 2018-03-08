@@ -3,15 +3,17 @@
     left: 0;
 }
 
+@main-menu-height: 3em;
 ul.main-menu,
 ul.user-menu {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    margin-bottom: .125em;
+    margin-bottom: @margin-small/4;
     li {
-        .color-theme-2;
-        height: 40px;
-        width: 64px;
+        background: @primary-2;
+        color: @default-light-font-color;
+        height: @main-menu-height;
+        width: @main-menu-width;
         border-top: 1px solid #35a5de;
         border-bottom: 1px solid #005a85;
         transition: width .5s, border-radius .25s;
@@ -39,17 +41,17 @@ ul.user-menu {
             }
         }
         &.active {
-            .color-theme-0; 
-            width: 68px;
+            background: @primary-0;
+            color: @default-light-font-color;
+            width: @main-menu-active-width;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
             padding-right: 6px;
             box-sizing: border-box;
-        } 
+        }
         &.active+li {
             border-top: 0 none;
-        }
-        // TODO: should be removed or replaced with other link solution
+        } // TODO: should be removed or replaced with other link solution
         a {
             display: block;
             height: 100%;

@@ -1,7 +1,7 @@
 .wrapper {
     >section {
-        margin-top: 112px;
-        padding: 0 72px 0 104px;
+        margin-top: @margin-default + @header-height;
+        padding: 0 (@action-menu-width + @margin-default) 0 (@main-menu-active-width + @margin-default);
         position: relative;
         >.content {
             >header {
@@ -10,7 +10,7 @@
             }
         }
         >.sidebar+.content {
-            margin-right: 232px;
+            margin-right: @margin-default + @sidebar-width;
         }
     }
     .main-overlay {
