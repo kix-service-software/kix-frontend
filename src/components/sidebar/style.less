@@ -4,7 +4,7 @@
     top: 0;
     bottom: 0;
     .widget-bar {
-        margin-top: 10em;
+        margin-top: @margin-large;
     }
     .bar-icon {
         background: @secondary-0;
@@ -34,11 +34,11 @@
 .sidebar {
     float: right;
     height: 100%;
-    padding-top: 80px;
+    width: @sidebar-width;
+    margin-top: @margin-large - @margin-default + @margin-small;
     >div {
         box-sizing: border-box;
-        width: 192px;
-        margin-bottom: 2em;
+        margin-bottom: @margin-default;
         &:last-of-type {
             margin-bottom: 0;
         }

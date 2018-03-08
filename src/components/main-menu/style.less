@@ -3,16 +3,17 @@
     left: 0;
 }
 
+@main-menu-height: 3em;
 ul.main-menu,
 ul.user-menu {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    margin-bottom: .125em;
+    margin-bottom: @margin-small/4;
     li {
         background: @primary-2;
         color: @default-light-font-color;
-        height: 40px;
-        width: 64px;
+        height: @main-menu-height;
+        width: @main-menu-width;
         border-top: 1px solid #35a5de;
         border-bottom: 1px solid #005a85;
         transition: width .5s, border-radius .25s;
@@ -42,7 +43,7 @@ ul.user-menu {
         &.active {
             background: @primary-0;
             color: @default-light-font-color;
-            width: 68px;
+            width: @main-menu-active-width;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
             padding-right: 6px;

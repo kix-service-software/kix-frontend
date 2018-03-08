@@ -3,7 +3,7 @@
  */
 
 .unit,
-.unit-space  {
+.unit-space {
     // float: left;
     display: inline-block;
     vertical-align: top;
@@ -395,30 +395,33 @@
 //     margin-left: 12px;
 //     margin-right: 12px;
 // }
-
 .unit-space {
-    padding: 0 1em;
+    padding: 0 (@margin-default/2);
     &:first-of-type {
-        margin-left: -1em;
+        margin-left: -(@margin-default/2);
     }
     &:last-of-type {
-        margin-right: -1em;
+        margin-right: -(@margin-default/2);
     }
 }
 
 .unit-space .spaceReset {
     margin: 0;
 }
+
 .line,
 .line-space {
-    margin-bottom: 2em;
-    margin-right: -2em;
+    margin-bottom: @margin-default;
+    margin-right: -@margin-default;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
 }
 
-.line > .unit-space:first-of-type > div {
+.line>.unit-space:first-of-type>div {
     margin-left: 0;
 }
 
-.line > .unit-space:last-of-type > div {
+.line>.unit-space:last-of-type>div {
     margin-right: 0;
 }
