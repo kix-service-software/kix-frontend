@@ -1,7 +1,7 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { StandardTable, TableColumnConfiguration, TableRow, TableColumn } from '@kix/core/dist/browser';
+import { StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue } from '@kix/core/dist/browser';
 import { SortOrder } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
@@ -312,6 +312,11 @@ class StandardTableComponent<T> {
 
     private getTemplate(componentId: string): any {
         return ClientStorageHandler.getComponentTemplate(componentId);
+    }
+
+    private getColumn(value: TableValue): TableColumn {
+        const column = this.state.standardTable.getColumns().find((c) => c.id === value.columnId);
+        return column;
     }
 }
 
