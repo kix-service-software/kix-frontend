@@ -57,17 +57,17 @@
                     margin-bottom: .75em;
                     .widget-header {
                         padding: 0 0.5em 0 2.25em;
-                        color: #ffffff;
-                        background-color: #007faf;
+                        color: @secondary-6;
+                        background-color: @primary-3;
                         border-radius: 3px;
                         height: 2em;
                         .header-left {
                             line-height: 2em;
                             h3 {
+                                .font-size-normal();
                                 margin-bottom: 0;
                                 font-weight: 600;
                                 padding-top: 1px;
-                                font-size: 1em;
                             }
                         }
                         .header-right {
@@ -76,9 +76,9 @@
                     }
                     .widget-content {
                         margin: 0 2.25em;
-                        border: 1px solid #0a7cb3;
+                        border: 1px solid @primary-2;
                         border-top: 0;
-                        background-color: #ffffff;
+                        background-color: @secondary-6;
                         overflow: visible;
                         min-height: 10em;
                         .widget {
@@ -92,8 +92,8 @@
                         .widget-header {
                             padding-left: 0.5em;
                             margin-left: 1.75em;
-                            color: #5b5b5b;
-                            background-color: #eaebeb;
+                            color: @secondary-0;
+                            background-color: @secondary-5;
                             .header-left {
                                 line-height: 2em;
                             }
@@ -139,9 +139,9 @@
                                 li {
                                     position: relative;
                                     display: inline-block;
-                                    background-color: #72bedc;
-                                    color: #00385d;
-                                    border: 1px solid #0a7cb3;
+                                    background-color: @primary-4;
+                                    color: @primary-0;
+                                    border: 1px solid @primary-2;
                                     border-top-left-radius: 3px;
                                     border-top-right-radius: 3px;
                                     border-bottom: 0;
@@ -151,17 +151,17 @@
                                     height: 1em;
                                     &.active {
                                         z-index: 5;
-                                        background-color: #ffffff;
-                                        color: @tertiary-5;
+                                        background-color: @secondary-6;
+                                        color: @primary-0;
                                     }
                                 }
                             }
                             .tab-content {
-                                border: 1px solid #0a7cb3;
+                                border: 1px solid @primary-2;
                                 border-top: 0;
                                 border-bottom-left-radius: 3px;
                                 border-bottom-right-radius: 3px;
-                                background-color: #ffffff;
+                                background-color: @secondary-6;
                                 .widget {
                                     .widget-header {
                                         display: none;
@@ -189,9 +189,9 @@
                 height: auto;
                 li {
                     float: left;
-                    background-color: #fff;
-                    color: @tertiary-5;
-                    border: 1px solid @tertiary-5;
+                    background-color: @secondary-6;
+                    color: @primary-0;
+                    border: 1px solid @primary-0;
                     border-radius: 5px;
                     border-bottom: 0;
                     border-right: 0;
@@ -219,7 +219,7 @@
 }
 
 .detail-label {
-    color: #000;
+    color: @secondary-7;
     display: block;
     margin: 5px; // float: left;
     font-weight: bold; // width: 45%;
