@@ -4,7 +4,6 @@ import {
     IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
     IGeneralCatalogService,
-    ILinkService,
     ILoggingService,
     IObjectIconService,
     IPluginService,
@@ -35,8 +34,7 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
         @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
-        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
-        @inject('ILinkService') protected linkService: ILinkService
+        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

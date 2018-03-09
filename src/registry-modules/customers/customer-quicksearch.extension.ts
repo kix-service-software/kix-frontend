@@ -17,26 +17,7 @@ export class CustomerQuickSearchExtension implements IQuickSearchExtension<Ticke
 
     public execute(token: string, searchValue: string): Promise<any[]> {
         return new Promise(async (resolve, reject) => {
-            const contactService = container.getDIContainer().get<ICustomerService>("ICustomerService");
-
-            if (contactService) {
-                searchValue = '*' + searchValue + '*';
-                const contacts = await contactService.getCustomers(token, 15, null, null, {
-                    fields: "Customer.CustomerID,Customer.CustomerCompanyName",
-                    filter: {
-                        Customer: {
-                            OR: [
-                                { Field: "CustomerCompanyName", Operator: "LIKE", Value: searchValue },
-                                { Field: "CustomerID", Operator: "LIKE", Value: searchValue }
-                            ]
-                        }
-                    }
-                });
-
-                resolve(contacts);
-            } else {
-                reject("CustomerService not available!");
-            }
+            resolve([]);
         });
     }
 }

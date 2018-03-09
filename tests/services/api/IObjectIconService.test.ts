@@ -66,23 +66,6 @@ describe('ObjectIcon Service', () => {
             expect(objectIcon.ID).equal(123456);
         });
     });
-
-    describe('Create a valid request to retrieve a list of objectIcons.', () => {
-
-        before(() => {
-            nockScope
-                .get(resourcePath)
-                .reply(200, { ObjectIcon: [] });
-        });
-
-        it('should return a list of objectIcons.', async () => {
-            const objectIcon: ObjectIcon[] = await objectIconService.getObjectIcons('')
-            expect(objectIcon).not.undefined;
-            expect(objectIcon).an('array');
-        });
-
-    });
-
 });
 
 function buildObjectIconResponse(id: number): ObjectIconsResponse {
