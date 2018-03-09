@@ -28,40 +28,51 @@
                         </if>
                     </div>
                 </for>
-                <if(state.standardTable.toggle)>
-                    <div.table-cell.table-header-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
-                </if>
             </div>
+            <if(state.standardTable.toggle)>
+                <div.toggle-header-column style={height: component.getRowHeight()} data-id=(state.tableId + "toggle-row-column")>
+                    &nbsp;
+                </div>
+            </if>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "") style={width: state.rowWidth}>
-                    <div.row-columns style={minHeight: component.getRowHeight()}>
+                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "")>
+                    <div.row-columns class=row.classes style={minHeight: component.getRowHeight(), width: state.rowWidth}>
                         <if(state.standardTable.selection)>
                             <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
                                 <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
                                     checked=component.isSelected(row)/>
                             </div>
                         </if>
-                        <for(column in component.getColumns() | status-var=colLoop)>
+                        <for(value in row.values)>
+                            $ let column = component.getColumn(value);
                             <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
                                 data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
-                                title=row.displayValues[colLoop.getIndex()]>
+                                title=value.displayValue>
                                 <if(column.showIcon)>
-                                    <icon object=column.id objectId=row.objectValues[colLoop.getIndex()]/>
+                                    <icon object=column.id objectId=value.objectValue/>
                                 </if>
                                 <if(column.showText)>
-                                    <span>${row.displayValues[colLoop.getIndex()]}</span>
+                                    <span>${value.displayValue}</span>
                                 </if>
                             </div>
                         </for>
                         <if(state.standardTable.toggle)>
                             <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
                                 on-click('toggleRow', loop.getIndex())>
-                                <span.kix-icon-sort-down/>
+                                <if(component.rowIsToggled(loop.getIndex()))>
+                                    <span.kix-icon-triangle-up>
+                                        <span.path1/>
+                                        <span.path2/>
+                                    </span>
+                                </if>
+                                <else>
+                                    <span.kix-icon-sort-down/>
+                                </else>
                             </div>
                         </if>
                     </div>
                     <if(component.rowIsToggled(loop.getIndex()))>
-                        <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                        <div.row-toggle-content-wrapper data-id=(state.tableId + "row-toggle-content-wrapper")>
                             <if(component.getToggleActions().length)>
                                 <ul.toggle-actions>
                                     <for(action in component.getToggleActions())>
@@ -71,7 +82,7 @@
                                     </for>
                                 </ul>
                             </if>
-                            <div.row-toggle-content-wrapper data-id=(state.tableId + "row-toggle-content-wrapper")>
+                            <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
                         </div>
