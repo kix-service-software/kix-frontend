@@ -38,7 +38,7 @@ class StandardTableComponent<T> {
             });
 
             if (this.state.standardTable.toggle && this.state.standardTable.toggleOptions.toggleFirst) {
-                this.toggleRow(0);
+                this.toggleRow(this.state.standardTable.getRows()[0], 0);
             }
         }
 
@@ -267,12 +267,16 @@ class StandardTableComponent<T> {
         return column.size + 'px';
     }
 
-    private toggleRow(rowId: number): void {
+    private async toggleRow(row: TableRow<T>, rowId: number): Promise<void> {
         const rowIndex = this.state.toggledRows.findIndex((r) => r === rowId);
         if (rowIndex === -1) {
             this.state.toggledRows.push(rowId);
         } else {
             this.state.toggledRows.splice(rowIndex, 1);
+        }
+
+        if (this.state.standardTable.toggleListener) {
+            await this.state.standardTable.toggleListener.rowToggled(row);
         }
 
         (this as any).forceUpdate();

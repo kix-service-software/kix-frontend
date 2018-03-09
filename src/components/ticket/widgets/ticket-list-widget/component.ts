@@ -79,6 +79,7 @@ class TicketListWidgetComponent {
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
                 configurationListener,
+                null,
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
                 TableRowHeight.LARGE,

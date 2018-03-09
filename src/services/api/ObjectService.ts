@@ -112,7 +112,7 @@ export abstract class ObjectService<T> {
      * @return a Promise which resolves the response from the API
      */
     protected async updateObject<R, C>(token: string, uri: string, content: C): Promise<R> {
-        return await this.httpService.patch<R>(uri, content);
+        return await this.httpService.patch<R>(uri, content, token);
     }
 
     /**

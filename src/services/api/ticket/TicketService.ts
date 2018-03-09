@@ -124,6 +124,14 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.Attachment;
     }
 
+    public async removeArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId, 'flags', 'seen');
+        const ArticleFlag = {
+            Value: "0"
+        };
+        await this.updateObject(token, uri, { ArticleFlag });
+    }
+
     // -----------------------------
     // ArticleTypes implementation
     // -----------------------------
