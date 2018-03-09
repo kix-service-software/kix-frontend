@@ -30,8 +30,11 @@ class StandardTableComponent<T> {
                 wrapperElement
             });
 
-            this.state.standardTable.setTableListener(() => {
+            this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
                 (this as any).forceUpdate();
+                if (scrollToTop) {
+                    this.scrollTableToTop();
+                }
             });
 
             if (this.state.standardTable.toggle && this.state.standardTable.toggleOptions.toggleFirst) {
