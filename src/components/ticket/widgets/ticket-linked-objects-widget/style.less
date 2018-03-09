@@ -1,30 +1,30 @@
-.ticket-details .widget .lane-list .lane>.widget {
-    .linked-objects-container {
-        position: relative;
-        overflow: auto;
-        padding: .5em .5em .5em 1.5em;
-        box-sizing: border-box;
-        .widget {
-            margin: 0 0 .5em;
-            &.minimized .widget-header {
-                margin-left: 0;
-                border-bottom: 1px solid @secondary-2;
-                border-radius: 0;
+// TODO: @uboehm: CSS aus "dynamic fields lane" für gruppen
+.ticket-details .widget .lane-list .lane .widget .linked-objects-container {
+    position: relative;
+    overflow: auto;
+    padding: .5em .5em .5em 1.5em;
+    box-sizing: border-box;
+    .widget {
+        &.minimized .widget-header {
+            margin-left: 0;
+        }
+        .widget-header {
+            background-color: @secondary-6;
+            color: @secondary-7;
+        }
+        .widget-content {
+            border: 0 none;
+            padding: 0;
+            min-height: auto; // TODO: @uboehm: CSS aus "history lane" für tabelle
+            .linked-object-table-container {
+                overflow: auto;
+                padding: 0 1.5em;
+                .standard-table-wrapper .standard-table {
+                    height: 100%;
+                }
             }
             .widget-header {
-                background-color: #ffffff;
-                color: #000000;
-            }
-            .widget-content {
-                border: 0;
-                padding: 0;
-                min-height: auto;
-                .linked-object-table-container {
-                    overflow: auto;
-                    .standard-table-wrapper .standard-table {
-                        height: 100%;
-                    }
-                }
+                border-bottom: 1px solid @secondary-2;
             }
         }
     }

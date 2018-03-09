@@ -1,6 +1,6 @@
 .tree-list {
     .tree-node {
-        color: #5d5d5d;
+        color: @secondary-0;
         white-space: nowrap;
         overflow: hidden;
         width: 100%;
@@ -19,7 +19,7 @@
             width: 12px;
             height: 12px;
             margin: 0 7px 1px 0;
-            color: #5b5b5b;
+            color: @secondary-0;
             text-align: center;
             font-size: .625rem; // TODO: rem!!!
             vertical-align: middle;
@@ -30,10 +30,10 @@
             &[class^="kix-icon-"],
             &[class*=" kix-icon-"] {
                 visibility: visible;
-                background-color: #c5c6c6;
+                background-color: @secondary-2;
             }
             &.kix-icon-minus+span {
-                color: #04537d;
+                color: @primary-0;
                 font-weight: 600;
             }
         }
@@ -43,12 +43,12 @@
         }
         >.sub-tree-list>.tree-node {
             .subtree-icon.kix-icon-minus+span {
-                color: #0a7cb3;
+                color: @primary-2;
                 font-weight: 600;
             }
             >.sub-tree-list .tree-node {
                 .subtree-icon.kix-icon-minus+span {
-                    color: #81bddf;
+                    color: @primary-5;
                     font-weight: 600;
                 }
             }
