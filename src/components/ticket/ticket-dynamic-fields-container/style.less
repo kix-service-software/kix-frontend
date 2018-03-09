@@ -1,55 +1,27 @@
-.dynamic-fields-group>.widget {
-    margin: 0 0 .5em;
-    &.minimized .widget-header {
-        margin-left: 0;
-    }
-    .widget-header {
-        background-color: @secondary-6;
-        color: @secondary-7;
-    }
-    .widget-content {
-        border: 0 none;
-        padding: 0;
-        min-height: auto;
-        ul.field-container {
-            overflow: auto;
-            background-color: @secondary-5;
-            border-radius: 5px;
-            padding: .5em;
-            list-style: none;
-            li.dynamic-field {
-                min-height: 2em;
-                display: block;
-                margin-bottom: 4px;
-                line-height: 2em;
-                .key {
-                    width: 160px;
-                    text-align: right;
-                    margin-right: .5em;
-                    float: left;
-                    height: 100%;
-                }
-                .info {
-                    width: 1.5em;
-                    margin-right: .5em;
-                    text-align: center;
-                    float: left;
-                    .overlay-info-icon {
-                        color: @secondary-7;
-                    }
-                }
-                .text {
-                    display: block;
-                    margin-left: 180px;
-                    height: 100%;
-                    min-width: 20px;
-                    height: 100%;
-                    box-sizing: border-box;
-                    border: 1px solid @secondary-5;
-                    border-radius: 3px;
-                    padding: 0 1em;
-                    margin-right: 4px;
-                    background-color: @secondary-6;
+.ticket-details .widget .lane-list .lane>.widget {
+    .dynamic-fields-group>.widget {
+        margin: 0 0 .5em;
+        &.minimized .widget-header {
+            margin-left: 0;
+            border-bottom: 1px solid @secondary-2;
+            border-radius: 0;
+        }
+        .widget-header {
+            background-color: @secondary-6;
+            color: @secondary-7;
+        }
+        .widget-content {
+            border: 0 none;
+            padding: 0;
+            min-height: auto;
+            ul.field-container {
+                overflow: auto;
+                background-color: @secondary-5;
+                border-radius: 5px;
+                padding: .5em;
+                list-style: none;
+                li.dynamic-field {
+                    min-height: 2em;
                     display: block;
                     margin-bottom: 4px;
                     line-height: 2em;
@@ -103,13 +75,6 @@
                     }
                 }
             }
-        }
-    }
-    &.minimized {
-        margin-top: 0;
-        margin-bottom: 0;
-        .widget-header {
-            border-bottom: 1px solid @secondary-3;
         }
     }
 }
