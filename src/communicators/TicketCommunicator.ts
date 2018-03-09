@@ -66,23 +66,21 @@ export class TicketCommunicator extends KIXCommunicator {
         client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
 
             const ticket = await this.ticketService.getTicket(data.token, data.ticketId, true, true);
+            let contact;
+            let customer;
+            if (ticket.CustomerUserID) {
+                contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
+                    return undefined;
+                });
 
-            const contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
-                return undefined;
-            });
+                customer = await this.customerService.getCustomer(
+                    data.token, ticket.CustomerID.toString()
+                ).catch((error) => {
+                    return undefined;
+                });
+            }
 
-            const customer = await this.customerService.getCustomer(
-                data.token, ticket.CustomerID.toString()
-            ).catch((error) => {
-                return undefined;
-            });
-
-            const ticketDetails = new TicketDetails(
-                Number(data.ticketId),
-                (ticket as Ticket),
-                (contact as Contact),
-                (customer as Customer),
-            );
+            const ticketDetails = new TicketDetails(Number(data.ticketId), ticket, contact, customer);
 
             const response = new LoadTicketDetailsResponse(ticketDetails);
             client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
