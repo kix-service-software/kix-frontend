@@ -1,4 +1,3 @@
-export { ArticleTypeService } from './ArticleTypeService';
 export { AuthenticationService } from './AuthenticationService';
 export { ClientRegistrationService } from './ClientRegistrationService';
 export { ContactService } from './ContactService';
@@ -8,10 +7,8 @@ export { GeneralCatalogService } from './GeneralCatalogService';
 export { GroupService } from './GroupService';
 export { HttpService } from './HttpService';
 export { LinkService } from './LinkService';
-export { TicketLockService } from './TicketLockService';
 export { MailAccountService } from './MailAccountService';
 export { ObjectIconService } from './ObjectIconService';
-export { QueueService } from './QueueService';
 export { RoleService } from './RoleService';
 export { SalutationService } from './SalutationService';
 export { SearchProfileService } from './SearchProfileService';
@@ -20,9 +17,7 @@ export { SignatureService } from './SignatureService';
 export { StandardAttachmentService } from './StandardAttachmentService';
 export { SysConfigService } from './SysConfigService';
 export { TextModuleService } from './TextModuleService';
-export { TicketPriorityService } from './TicketPriorityService';
-export { TicketService } from './TicketService';
-export { TicketStateService } from './TicketStateService';
-export { TicketTypeService } from './TicketTypeService';
 export { UserService } from './UserService';
 export { ValidObjectService } from './ValidObjectService';
+
+export * from './ticket';

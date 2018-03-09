@@ -4,28 +4,16 @@ import {
 } from '@kix/core/dist/api';
 
 import {
-    Contact,
-    Customer,
-    Ticket,
-    SocketEvent,
-    SearchTicketsRequest,
-    SearchTicketsResponse,
-    TicketCreationEvent,
-    TicketCreationRequest,
-    TicketEvent,
-    TicketCreationResponse,
-    TicketCreationError,
-    TicketProperty,
-    LoadTicketDetailsRequest,
-    LoadTicketDetailsResponse,
-    TicketDetails,
+    Contact, Customer,
+    LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketDetailsRequest, LoadTicketDetailsResponse,
     QuickSearchRequest,
-    LoadArticleAttachmentResponse,
-    LoadArticleAttachmentRequest
+    SocketEvent, SearchTicketsRequest, SearchTicketsResponse,
+    Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,
+    TicketProperty, TicketDetails
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { TicketService } from '../services/api/TicketService';
+import { TicketService } from '../services/api/';
 import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
 
 export class TicketCommunicator extends KIXCommunicator {

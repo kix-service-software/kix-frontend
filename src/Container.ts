@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import {
-    IArticleTypeService, IAuthenticationService,
+    IAuthenticationService,
     IClientRegistrationService, IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
     IGeneralCatalogService, IGroupService,
@@ -10,12 +10,11 @@ import {
     IMailAccountService, IMarkoService,
     IObjectIconService,
     IPluginService,
-    IQueueService,
     IRoleService,
     ISalutationService, ISearchProfileService, IServiceService, ISignatureService, ISysConfigService,
     ISocketCommunicationService, IStandardAttachmentService,
-    ITextModuleService, ITicketLockService, ITicketPriorityService, ITicketService, ITicketStateService,
-    ITicketTypeService, ITranslationService,
+    ITextModuleService, ITicketService,
+    ITranslationService,
     IUserService,
     IValidObjectService,
     IWidgetRepositoryService
@@ -29,7 +28,7 @@ import { Container } from 'inversify';
 import { ApplicationRouter, AuthenticationRouter } from './routes/';
 import { Server } from './Server';
 import {
-    ArticleTypeService, AuthenticationService,
+    AuthenticationService,
     ClientRegistrationService, ConfigurationService, ContactService, CustomerService,
     DynamicFieldService,
     GeneralCatalogService, GroupService,
@@ -38,12 +37,10 @@ import {
     MailAccountService, MarkoService,
     ObjectIconService,
     PluginService,
-    QueueService,
     RoleService,
     SalutationService, SearchProfileService, ServiceService, SignatureService, SysConfigService,
     StandardAttachmentService, SocketCommunicationService,
-    TextModuleService, TicketLockService, TicketPriorityService, TicketService, TicketStateService,
-    TicketTypeService, TranslationService,
+    TextModuleService, TicketService, TranslationService,
     UserService,
     ValidObjectService,
     WidgetRepositoryService
@@ -75,7 +72,6 @@ export class ServiceContainer {
     }
 
     private bindServices(): void {
-        this.container.bind<IArticleTypeService>('IArticleTypeService').to(ArticleTypeService);
         this.container.bind<IAuthenticationService>('IAuthenticationService').to(AuthenticationService);
         this.container.bind<IClientRegistrationService>('IClientRegistrationService').to(ClientRegistrationService);
         this.container.bind<IConfigurationService>('IConfigurationService').to(ConfigurationService);
@@ -91,7 +87,6 @@ export class ServiceContainer {
         this.container.bind<IMarkoService>('IMarkoService').to(MarkoService);
         this.container.bind<IObjectIconService>('IObjectIconService').to(ObjectIconService);
         this.container.bind<IPluginService>('IPluginService').to(PluginService);
-        this.container.bind<IQueueService>('IQueueService').to(QueueService);
         this.container.bind<IRoleService>('IRoleService').to(RoleService);
         this.container.bind<ISalutationService>('ISalutationService').to(SalutationService);
         this.container.bind<ISearchProfileService>('ISearchProfileService').to(SearchProfileService);
@@ -101,11 +96,7 @@ export class ServiceContainer {
         this.container.bind<IStandardAttachmentService>('IStandardAttachmentService').to(StandardAttachmentService);
         this.container.bind<ISysConfigService>('ISysConfigService').to(SysConfigService);
         this.container.bind<ITextModuleService>('ITextModuleService').to(TextModuleService);
-        this.container.bind<ITicketLockService>('ITicketLockService').to(TicketLockService);
-        this.container.bind<ITicketTypeService>('ITicketTypeService').to(TicketTypeService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);
-        this.container.bind<ITicketPriorityService>('ITicketPriorityService').to(TicketPriorityService);
-        this.container.bind<ITicketStateService>('ITicketStateService').to(TicketStateService);
         this.container.bind<ITranslationService>('ITranslationService').to(TranslationService);
         this.container.bind<IUserService>('IUserService').to(UserService);
         this.container.bind<IValidObjectService>('IValidObjectService').to(ValidObjectService);
