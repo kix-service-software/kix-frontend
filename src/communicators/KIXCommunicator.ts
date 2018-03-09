@@ -4,13 +4,11 @@ import {
     IConfigurationService, IContactService, ICustomerService,
     IDynamicFieldService,
     IGeneralCatalogService,
-    ILinkService,
     ILoggingService,
     IObjectIconService,
     IPluginService,
-    IQueueService,
     IServiceService, ISysConfigService,
-    ITicketLockService, ITicketPriorityService, ITicketService, ITicketStateService, ITicketTypeService,
+    ITicketService,
     ITranslationService,
     IUserService,
     IWidgetRepositoryService,
@@ -31,18 +29,12 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IContactService') protected contactService: IContactService,
         @inject('ITranslationService') protected translationService: ITranslationService,
         @inject('ITicketService') protected ticketService: ITicketService,
-        @inject('ITicketStateService') protected ticketStateService: ITicketStateService,
-        @inject('ITicketTypeService') protected ticketTypeService: ITicketTypeService,
-        @inject('ITicketPriorityService') protected ticketPriorityService: ITicketPriorityService,
-        @inject('IQueueService') protected queueService: IQueueService,
         @inject('IServiceService') protected serviceService: IServiceService,
         @inject('IDynamicFieldService') protected dynamicFieldService: IDynamicFieldService,
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
         @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
-        @inject('ITicketLockService') protected ticketLockService: ITicketLockService,
-        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
-        @inject('ILinkService') protected linkService: ILinkService
+        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService
     ) { }
 
     public abstract registerNamespace(socketIO: SocketIO.Server): void;

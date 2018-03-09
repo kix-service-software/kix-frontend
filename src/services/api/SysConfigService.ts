@@ -9,7 +9,7 @@ export class SysConfigService extends ObjectService<SysConfigItem> implements IS
 
     protected RESOURCE_URI: string = "sysconfig";
 
-    public async getSysConfigItem(token: string, textModuleId: string, query?: any): Promise<SysConfigItem> {
+    public async getSysConfigItem(token: string, textModuleId: string): Promise<SysConfigItem> {
         const response = await this.getObject<SysConfigItemResponse>(
             token, textModuleId
         );

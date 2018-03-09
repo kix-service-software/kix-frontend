@@ -9,13 +9,8 @@ export class ObjectIconService extends ObjectService<ObjectIcon> implements IObj
 
     protected RESOURCE_URI: string = "objecticons";
 
-    public async getObjectIcons(token: string, query?: any): Promise<ObjectIcon[]> {
-        const response = await this.getObjects<ObjectIconsResponse>(token);
-        return response.ObjectIcon;
-    }
-
     public async getObjectIcon(
-        token: string, objectType: string, objectId: number | string, query?: any
+        token: string, objectType: string, objectId: number | string
     ): Promise<ObjectIcon> {
         const uri = this.buildUri(this.RESOURCE_URI);
         const response = await this.httpService.get<ObjectIconsResponse>(uri, {
