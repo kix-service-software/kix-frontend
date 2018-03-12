@@ -128,7 +128,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.Attachment;
     }
 
-    public async removeArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
+    public async setArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
         const seenFlag = 'seen';
         const article = await this.getArticle(token, ticketId, articleId);
 

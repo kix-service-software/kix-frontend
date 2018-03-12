@@ -3,7 +3,7 @@ import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import { TicketService, TicketNotification, TicketLabelProvider } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import {
-    TicketDetailsDashboardConfiguration, TicketDetails, Ticket, Context, WidgetType, DashboardConfiguration
+    TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
@@ -21,7 +21,7 @@ export class TicketDetailsComponent {
 
     public onInput(input: any): void {
         this.state.ticketId = Number(input.ticketId);
-        this.loadTicketDetails();
+        this.loadTicket();
     }
 
     public onMount(): void {
@@ -38,12 +38,12 @@ export class TicketDetailsComponent {
             this.setConfiguration();
         });
 
-        this.loadTicketDetails();
+        this.loadTicket();
     }
 
-    private loadTicketDetails(): void {
+    private loadTicket(): void {
         this.state.loading = true;
-        TicketService.getInstance().loadTicketDetails(this.state.ticketId).then(() => {
+        TicketService.getInstance().loadTicket(this.state.ticketId).then(() => {
             this.setTicketHookInfo();
             this.state.loading = false;
         });
@@ -80,10 +80,10 @@ export class TicketDetailsComponent {
     }
 
     public ticketServiceNotified(id: string, type: TicketNotification, ...args) {
-        if (type === TicketNotification.TICKET_DETAILS_LOADED) {
-            const ticketDetails: TicketDetails = args[0];
-            if (ticketDetails.ticketId === this.state.ticketId && ticketDetails) {
-                this.state.ticket = ticketDetails.ticket;
+        if (type === TicketNotification.TICKET_LOADED) {
+            const ticket: Ticket = args[0];
+            if (ticket.TicketID === this.state.ticketId) {
+                this.state.ticket = ticket;
                 this.setBreadcrumbDetails();
             }
         }

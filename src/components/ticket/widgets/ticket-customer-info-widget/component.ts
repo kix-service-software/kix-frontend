@@ -28,14 +28,14 @@ class CustomerInfoWidgetComponent {
 
     private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
         const context = ContextService.getInstance().getContext();
-        if (type === TicketNotification.TICKET_DETAILS_LOADED && id === context.contextObjectId) {
+        if (type === TicketNotification.TICKET_LOADED && id === context.contextObjectId) {
             this.loadCustomer(context.contextObjectId);
         }
     }
 
     private loadCustomer(ticketId: number): void {
-        const ticketDetails = TicketService.getInstance().getTicketDetails(ticketId);
-        this.state.customer = ticketDetails ? ticketDetails.customer : undefined;
+        const ticket = TicketService.getInstance().getTicket(ticketId);
+        this.state.customer = ticket ? ticket.customer : undefined;
     }
 
 }

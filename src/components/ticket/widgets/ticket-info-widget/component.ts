@@ -1,8 +1,8 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
-import { TicketUtil } from '@kix/core/dist/browser/ticket/TicketUtil';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { SysconfigUtil } from '@kix/core/dist/model';
 
 class TicketInfoWidgetComponent {
 
@@ -38,13 +38,12 @@ class TicketInfoWidgetComponent {
 
     private getTicket(): void {
         if (this.state.ticketId) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails) {
-                this.state.ticket = ticketDetails.ticket;
-                this.state.customer = ticketDetails.customer;
-                this.state.contact = ticketDetails.contact;
-                this.state.isPending = TicketUtil.isPendingState(this.state.ticket.StateID);
-                this.state.isAccountTimeEnabled = TicketUtil.isAccountTimeEnabled();
+            this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (this.state.ticket) {
+                this.state.customer = this.state.customer;
+                this.state.contact = this.state.contact;
+                this.state.isPending = this.state.ticket.hasPendingState();
+                this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
             }
         }
     }

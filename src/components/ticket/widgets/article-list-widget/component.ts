@@ -1,4 +1,4 @@
-import { TicketDetails, Article, ArticleProperty } from "@kix/core/dist/model";
+import { Article, ArticleProperty } from "@kix/core/dist/model";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
@@ -93,9 +93,9 @@ export class ArticleListWidgetComponent {
     }
 
     private getArticles(): void {
-        const ticketDetails: TicketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-        if (ticketDetails) {
-            this.state.articles = ticketDetails.ticket.Articles;
+        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+        if (ticket) {
+            this.state.articles = ticket.Articles;
         }
     }
 

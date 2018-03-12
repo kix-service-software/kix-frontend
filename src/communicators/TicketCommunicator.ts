@@ -5,17 +5,18 @@ import {
 
 import {
     Contact, Customer,
-    LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketDetailsRequest, LoadTicketDetailsResponse,
+    LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketRequest, LoadTicketResponse,
     QuickSearchRequest,
     SetArticleSeenFlagRequest,
     SocketEvent, SearchTicketsRequest, SearchTicketsResponse,
     Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,
-    TicketProperty, TicketDetails
+    TicketProperty
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/';
 import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
+import { currentId } from 'async_hooks';
 
 export class TicketCommunicator extends KIXCommunicator {
 
@@ -64,27 +65,27 @@ export class TicketCommunicator extends KIXCommunicator {
                 });
         });
 
-        client.on(TicketEvent.LOAD_TICKET_DETAILS, async (data: LoadTicketDetailsRequest) => {
-
-            const ticket = await this.ticketService.getTicket(data.token, data.ticketId, true, true);
+        client.on(TicketEvent.LOAD_TICKET, async (data: LoadTicketRequest) => {
+            const loadedTicket = await this.ticketService.getTicket(data.token, data.ticketId, true, true);
             let contact;
             let customer;
-            if (ticket.CustomerUserID) {
-                contact = await this.contactService.getContact(data.token, ticket.CustomerUserID).catch((error) => {
-                    return undefined;
-                });
+            if (loadedTicket.CustomerUserID) {
+                contact = await this.contactService.getContact(data.token, loadedTicket.CustomerUserID)
+                    .catch((error) => {
+                        return undefined;
+                    });
 
                 customer = await this.customerService.getCustomer(
-                    data.token, ticket.CustomerID.toString()
+                    data.token, loadedTicket.CustomerID.toString()
                 ).catch((error) => {
                     return undefined;
                 });
             }
 
-            const ticketDetails = new TicketDetails(Number(data.ticketId), ticket, contact, customer);
+            const ticket = new Ticket(loadedTicket, contact, customer);
 
-            const response = new LoadTicketDetailsResponse(ticketDetails);
-            client.emit(TicketEvent.TICKET_DETAILS_LOADED, response);
+            const response = new LoadTicketResponse(ticket);
+            client.emit(TicketEvent.TICKET_LOADED, response);
         });
 
         client.on(TicketEvent.LOAD_ARTICLE_ATTACHMENT, async (data: LoadArticleAttachmentRequest) => {
@@ -97,7 +98,7 @@ export class TicketCommunicator extends KIXCommunicator {
         });
 
         client.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, async (data: SetArticleSeenFlagRequest) => {
-            await this.ticketService.removeArticleSeenFlag(data.token, data.ticketId, data.articleId);
+            await this.ticketService.setArticleSeenFlag(data.token, data.ticketId, data.articleId);
             client.emit(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
         });
     }

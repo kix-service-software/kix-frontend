@@ -1,25 +1,16 @@
 import { TicketListComponentState } from './model/TicketListComponentState';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import {
-    TicketDetails, ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
+    ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import {
-    TicketNotification,
-    TicketService,
-    TicketTableContentLayer,
-    TicketTableLabelLayer,
-    TicketTableSelectionListener,
-    TicketTableClickListener,
-    TicketUtil
+    TicketNotification, TicketService, TicketTableContentLayer, TicketTableLabelLayer,
+    TicketTableSelectionListener, TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
-    TableColumnConfiguration, StandardTable, TableRowHeight,
-    ITableConfigurationListener,
-    TableSortLayer,
-    TableColumn,
-    TableFilterLayer,
-    ToggleOptions
+    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener,
+    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent {
