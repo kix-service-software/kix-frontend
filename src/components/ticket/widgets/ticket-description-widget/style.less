@@ -5,44 +5,7 @@
         padding: .5em .5em .5em 1.5em;
         box-sizing: border-box;
         &>.widget {
-            margin: 0 0 .5em;
-            &.minimized .widget-header {
-                margin-left: 0;
-                border-bottom: 1px solid @secondary-2;
-                border-radius: 0;
-            }
-            .widget-header {
-                background-color: @secondary-6;
-                color: @secondary-7;
-            }
-            .widget-content {
-                border: 0;
-                padding: 0;
-                min-height: auto;
-                .description-attachments {
-                    float: right;
-                    max-height: 105px;
-                    min-width: 250px;
-                    width: 20%;
-                    padding: 0 1em;
-                    box-sizing: border-box;
-                    ul {
-                        padding-left: 1em;
-                        list-style-type: none;
-                        li {
-                            height: 1.5em;
-                            line-height: 1.5em;
-                            vertical-align: middle;
-                        }
-                        img {
-                            margin-right: 5px;
-                        }
-                    }
-                }
-                .description-text-wrapper {
-                    margin-right: 20%;
-                }
-            }
+            .group-widget();
         }
     }
 }
