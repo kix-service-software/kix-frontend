@@ -239,7 +239,7 @@ class StandardTableComponent<T> {
     }
 
     public getRowHeight(): string {
-        return this.state.standardTable.rowHeight + 'px';
+        return this.state.standardTable.rowHeight + 'em';
     }
 
     public getTableHeight(): string {
@@ -247,7 +247,7 @@ class StandardTableComponent<T> {
             this.getRows().length > this.state.standardTable.displayLimit ?
                 this.state.standardTable.displayLimit : this.getRows().length;
         const height = (minElements + 1) * this.state.standardTable.rowHeight;
-        return height + 'px';
+        return height + 'em';
     }
 
     public getSpacerHeight(): string {
@@ -259,7 +259,7 @@ class StandardTableComponent<T> {
         if (remainder > 0) {
             spacerHeight = remainder * this.state.standardTable.rowHeight;
         }
-        return spacerHeight + 'px';
+        return spacerHeight + 'em';
     }
 
     private getColumnSize(columnId: string): string {
