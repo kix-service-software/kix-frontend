@@ -105,7 +105,11 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     public async getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId);
-        const response = await this.getObjectByUri<ArticleResponse>(token, uri);
+        const query = {
+            include: 'Flags',
+            expand: 'Flags'
+        };
+        const response = await this.getObjectByUri<ArticleResponse>(token, uri, query);
         response.Article.TicketID = ticketId;
         return response.Article;
     }
@@ -125,11 +129,25 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     }
 
     public async removeArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId, 'flags', 'seen');
+        const seenFlag = 'seen';
+        const article = await this.getArticle(token, ticketId, articleId);
+
         const ArticleFlag = {
-            Value: "0"
+            Name: seenFlag,
+            Value: '0'
         };
-        await this.updateObject(token, uri, { ArticleFlag });
+
+        if (this.articleHasFlag(article, seenFlag)) {
+            const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId, 'flags', seenFlag);
+            await this.updateObject(token, uri, { ArticleFlag });
+        } else {
+            const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId, 'flags');
+            await this.createObject(token, uri, { ArticleFlag });
+        }
+    }
+
+    private articleHasFlag(article: Article, flagName: string): boolean {
+        return article.Flags && article.Flags.findIndex((f) => f.Name === flagName) !== -1;
     }
 
     // -----------------------------

@@ -276,7 +276,7 @@ class StandardTableComponent<T> {
         }
 
         if (this.state.standardTable.toggleListener) {
-            await this.state.standardTable.toggleListener.rowToggled(row);
+            this.state.standardTable.toggleListener.rowToggled(row);
         }
 
         (this as any).forceUpdate();
@@ -286,9 +286,7 @@ class StandardTableComponent<T> {
             if (table) {
                 const openedRows: any =
                     document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
-                openedRows.forEach((cell: any) => {
-                    cell.style.left = table.scrollLeft + 'px';
-                });
+                openedRows.forEach((cell: any) => cell.style.left = table.scrollLeft + 'px');
             }
         }, 50);
     }
