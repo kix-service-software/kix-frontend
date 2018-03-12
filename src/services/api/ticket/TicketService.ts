@@ -134,7 +134,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
         const ArticleFlag = {
             Name: seenFlag,
-            Value: '0'
+            Value: '1'
         };
 
         if (this.articleHasFlag(article, seenFlag)) {
