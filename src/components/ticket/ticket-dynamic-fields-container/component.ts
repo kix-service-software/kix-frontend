@@ -1,4 +1,4 @@
-import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketNotification, TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { DynamicField } from "@kix/core/dist/model/ticket/DynamicField";
 import { DynamicFieldContainerComponentState } from './DynamicFieldContainerComponentState';

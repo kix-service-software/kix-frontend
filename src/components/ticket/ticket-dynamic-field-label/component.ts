@@ -1,5 +1,5 @@
-import { TicketNotification, TicketUtil, TicketService } from "@kix/core/dist/browser/ticket/";
-import { TicketProperty } from "@kix/core/dist/model/";
+import { TicketNotification, TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketProperty, DateTimeUtil } from "@kix/core/dist/model/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
 
@@ -22,7 +22,7 @@ export class TicketPriorityLabelComponent {
     }
 
     private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
-        if (id === this.state.ticketId && type === TicketNotification.TICKET_DETAILS_LOADED) {
+        if (id === this.state.ticketId && type === TicketNotification.TICKET_LOADED) {
             this.setDisplayValue();
         }
     }
@@ -32,17 +32,17 @@ export class TicketPriorityLabelComponent {
         if (objectData) {
             this.state.field = objectData.dynamicFields.find((df) => df.ID === this.state.fieldId);
             if (this.state.field) {
-                const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-                if (ticketDetails && ticketDetails.ticket) {
-                    const field = ticketDetails.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
+                const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+                if (ticket) {
+                    const field = ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
                     if (field) {
                         this.state.value = field.Value;
                         this.state.displayValue = field.DisplayValue;
 
                         if (this.state.field.FieldType === "Date") {
-                            this.state.displayValue = TicketUtil.getDateString(field.DisplayValue);
+                            this.state.displayValue = DateTimeUtil.getDateString(field.DisplayValue);
                         } else if (this.state.field.FieldType === "DateTime") {
-                            this.state.displayValue = TicketUtil.getDateTimeString(field.DisplayValue);
+                            this.state.displayValue = DateTimeUtil.getDateTimeString(field.DisplayValue);
                         }
                     }
                 }

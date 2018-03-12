@@ -1,13 +1,13 @@
-import { TicketDetails } from '@kix/core/dist/model';
 import { WidgetComponentState } from '@kix/core/dist/browser/model';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { StandardTable } from '@kix/core/dist/browser';
+import { Ticket } from '@kix/core/dist/model';
 
 export class LinkedObjectsWidgetComponentState extends WidgetComponentState<LinkedObjectsSettings> {
 
     public ticketId: number = null;
 
-    public ticketDetails: TicketDetails = null;
+    public ticket: Ticket = null;
 
     public linkCount: number = 0;
 

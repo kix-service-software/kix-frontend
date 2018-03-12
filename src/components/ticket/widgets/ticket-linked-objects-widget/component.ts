@@ -50,10 +50,10 @@ class LinkedObjectsWidgetComponent {
         this.state.linkCount = 0;
 
         if (this.state.ticketId) {
-            this.state.ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (this.state.ticketDetails) {
+            this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (this.state.ticket) {
 
-                const linkedTickets = this.state.ticketDetails.ticket.Links.filter((link) => {
+                const linkedTickets = this.state.ticket.Links.filter((link) => {
                     return (link.SourceObject === 'Ticket' && link.SourceKey !== this.state.ticketId.toString()) ||
                         (link.TargetObject === 'Ticket' && link.TargetKey !== this.state.ticketId.toString());
                 });

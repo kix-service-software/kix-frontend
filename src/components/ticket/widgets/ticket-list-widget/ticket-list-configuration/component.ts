@@ -1,6 +1,5 @@
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
-import { TicketUtil } from '@kix/core/dist/browser/ticket/';
 import { TicketProperty } from '@kix/core/dist/model/';
 import { TicketListConfigurationComponentState } from './TicketListConfigurationComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';

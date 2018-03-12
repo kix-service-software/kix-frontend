@@ -28,14 +28,14 @@ class ContactInfoWidgetComponent {
 
     private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
         const context = ContextService.getInstance().getContext();
-        if (type === TicketNotification.TICKET_DETAILS_LOADED && id === context.contextObjectId) {
+        if (type === TicketNotification.TICKET_LOADED && id === context.contextObjectId) {
             this.loadContact(context.contextObjectId);
         }
     }
 
     private loadContact(ticketId: number): void {
-        const ticketDetails = TicketService.getInstance().getTicketDetails(ticketId);
-        this.state.contact = ticketDetails ? ticketDetails.contact : undefined;
+        const ticket = TicketService.getInstance().getTicket(ticketId);
+        this.state.contact = ticket ? ticket.contact : undefined;
     }
 
 }

@@ -33,9 +33,9 @@ class TicketDescriptionWidgetComponent {
 
     private async getFirstArticle(): Promise<void> {
         if (this.state.ticketId) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails && ticketDetails.ticket.Articles && ticketDetails.ticket.Articles.length) {
-                this.state.firstArticle = ticketDetails.ticket.Articles[0];
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket && ticket.Articles && ticket.Articles.length) {
+                this.state.firstArticle = ticket.Articles[0];
                 this.state.attachments = this.state.firstArticle.Attachments
                     ? this.state.firstArticle.Attachments.filter((a) => a.Disposition !== 'inline')
                     : [];
@@ -46,9 +46,9 @@ class TicketDescriptionWidgetComponent {
     private getTicketNotes(): void {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails && ticketDetails.ticket) {
-                const ticketNotesDF = ticketDetails.ticket.DynamicFields.find(
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                const ticketNotesDF = ticket.DynamicFields.find(
                     (df) => df.ID === objectData.ticketNotesDFId
                 );
                 if (ticketNotesDF) {

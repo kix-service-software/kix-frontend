@@ -38,9 +38,9 @@ class DynamicFieldWidgetComponent {
 
     private setDynamicFields(): void {
         if (this.state.ticketId) {
-            const ticketDetails = TicketService.getInstance().getTicketDetails(this.state.ticketId);
-            if (ticketDetails && ticketDetails.ticket) {
-                this.state.dynamicFields = ticketDetails.ticket.DynamicFields;
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.dynamicFields = ticket.DynamicFields;
                 this.state.filteredDynamicFields = [];
                 this.state.configuredDynamicFields.forEach((dfId) => {
                     const ticketDf = this.state.dynamicFields.find((df) => df.ID === dfId);
