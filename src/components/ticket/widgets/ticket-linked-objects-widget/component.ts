@@ -92,6 +92,7 @@ class LinkedObjectsWidgetComponent {
                 null,
                 clickListener,
                 configurationListener,
+                null,
                 7
             );
         }

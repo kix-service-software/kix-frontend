@@ -65,6 +65,7 @@ class TicketHistoryWidgetComponent {
                 null,
                 clickListener,
                 configurationListener,
+                null,
                 7
             );
         }
