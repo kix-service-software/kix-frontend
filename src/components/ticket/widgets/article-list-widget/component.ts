@@ -5,7 +5,8 @@ import {
     TicketService,
     ArticleTableLabelLayer,
     ArticleTableContentLayer,
-    ArticleTableSelectionListener
+    ArticleTableSelectionListener,
+    ArticleTableToggleListener
 } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
@@ -64,6 +65,7 @@ export class ArticleListWidgetComponent {
                 new ArticleTableSelectionListener(),
                 null,
                 configurationListener,
+                new ArticleTableToggleListener(),
                 this.state.articles.length,
                 true,
                 TableRowHeight.LARGE,

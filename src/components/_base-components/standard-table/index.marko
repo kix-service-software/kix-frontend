@@ -58,7 +58,7 @@
                         </for>
                         <if(state.standardTable.toggle)>
                             <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
-                                on-click('toggleRow', loop.getIndex())>
+                                on-click('toggleRow', row, loop.getIndex())>
                                 <if(component.rowIsToggled(loop.getIndex()))>
                                     <span.kix-icon-triangle-up>
                                         <span.path1/>
