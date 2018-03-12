@@ -7,7 +7,7 @@ import {
     Contact, Customer,
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketDetailsRequest, LoadTicketDetailsResponse,
     QuickSearchRequest,
-    RemoveArticleSeenFlagRequest,
+    SetArticleSeenFlagRequest,
     SocketEvent, SearchTicketsRequest, SearchTicketsResponse,
     Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,
     TicketProperty, TicketDetails
@@ -96,7 +96,7 @@ export class TicketCommunicator extends KIXCommunicator {
             client.emit(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
         });
 
-        client.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, async (data: RemoveArticleSeenFlagRequest) => {
+        client.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, async (data: SetArticleSeenFlagRequest) => {
             await this.ticketService.removeArticleSeenFlag(data.token, data.ticketId, data.articleId);
             client.emit(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
         });
