@@ -1,4 +1,4 @@
-@cell-min-width: 3em;
+@cell-min-width: 2.875em;
 .standard-table-wrapper {
     position: relative;
     height: 100%;
@@ -32,8 +32,6 @@
                 display: none;
             }
             .table-cell {
-                line-height: 2em;
-                width: @cell-min-width;
                 min-width: @cell-min-width;
                 display: inline-block;
                 vertical-align: top;
@@ -41,7 +39,7 @@
                 text-overflow: ellipsis;
                 overflow: hidden;
                 position: relative;
-                height: 2em;
+                min-height: 1.75em;
                 padding: 0 2px;
                 box-sizing: border-box;
                 &:not(.table-header-cell):not(.checkbox-column):not(.toggle-row-column):not(.scrollbar-column)::before {
@@ -64,9 +62,6 @@
                     &.scrollbar-column {
                         right: 0;
                     }
-                }
-                .key-value-pair {
-                    display: inline-block;
                 }
             }
             &:nth-of-type(2n) {
