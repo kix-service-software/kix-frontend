@@ -44,7 +44,7 @@ class LoginFormComponent {
 
     private keyDown(event: any): void {
         // 13 == Enter
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13 || event.key === 'Enter') {
             this.login(event);
         }
     }
