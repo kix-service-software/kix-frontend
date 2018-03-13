@@ -3,15 +3,16 @@ import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandle
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
     TicketService,
-    ArticleTableLabelLayer,
     ArticleTableContentLayer,
+    ArticleTableFilterLayer,
+    ArticleTableLabelLayer,
     ArticleTableSelectionListener,
     ArticleTableToggleListener
 } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, TableFilterLayer, ToggleOptions
+    TableSortLayer, ToggleOptions
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -57,9 +58,7 @@ export class ArticleListWidgetComponent {
             this.state.standardTable = new StandardTable(
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
-                [new TableFilterLayer(
-                    [ArticleProperty.NUMBER, ArticleProperty.ARTICLE_TYPE_ID, ArticleProperty.ATTACHMENT]
-                )],
+                [new ArticleTableFilterLayer()],
                 [new TableSortLayer()],
                 columns,
                 new ArticleTableSelectionListener(),
