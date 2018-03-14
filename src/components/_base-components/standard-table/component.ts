@@ -42,8 +42,9 @@ class StandardTableComponent<T> {
             }
         }
 
-        this.initTableScrollRange();
         this.setRowWidth();
+        this.setTableHeight();
+        this.initTableScrollRange();
 
     }
 
@@ -99,6 +100,7 @@ class StandardTableComponent<T> {
                 header.style.top = table.scrollTop + 'px';
             });
         }
+        this.setTableHeight();
         this.ps.update();
     }
 
@@ -238,16 +240,24 @@ class StandardTableComponent<T> {
         }
     }
 
-    public getRowHeight(): string {
-        return this.state.standardTable.rowHeight + 'em';
+    public setTableHeight(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        if (table) {
+            const minElements = this.getRows().length > this.state.standardTable.displayLimit ?
+                this.state.standardTable.displayLimit : this.getRows().length;
+            const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
+            const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
+            let height = (minElements + 1) * rowHeight;
+            const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
+            openedRowsContent.forEach((rC) => {
+                height += rC.offsetHeight;
+            });
+            table.style.height = height + 'px';
+        }
     }
 
-    public getTableHeight(): string {
-        const minElements =
-            this.getRows().length > this.state.standardTable.displayLimit ?
-                this.state.standardTable.displayLimit : this.getRows().length;
-        const height = (minElements + 1) * this.state.standardTable.rowHeight;
-        return height + 'em';
+    public getRowHeight(): string {
+        return this.state.standardTable.rowHeight + 'em';
     }
 
     public getSpacerHeight(): string {
