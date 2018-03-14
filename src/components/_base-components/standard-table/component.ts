@@ -2,20 +2,20 @@ declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue } from '@kix/core/dist/browser';
-import { SortOrder } from '@kix/core/dist/model';
+import { SortOrder, KIXObject } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
-class StandardTableComponent<T> {
+class StandardTableComponent<T extends KIXObject<T>> {
 
-    private state: StandardTableComponentState;
+    private state: StandardTableComponentState<T>;
     private loadMoreTimeout: any = null;
     private ps: any;
 
-    public onCreate(input: StandardTableInput): void {
-        this.state = new StandardTableComponentState();
+    public onCreate(input: StandardTableInput<T>): void {
+        this.state = new StandardTableComponentState<T>();
     }
 
-    public onInput(input: StandardTableInput): void {
+    public onInput(input: StandardTableInput<T>): void {
         this.state.standardTable = input.standardTable;
     }
 
@@ -36,10 +36,6 @@ class StandardTableComponent<T> {
                     this.scrollTableToTop();
                 }
             });
-
-            if (this.state.standardTable.toggle && this.state.standardTable.toggleOptions.toggleFirst) {
-                this.toggleRow(this.state.standardTable.getRows()[0], 0);
-            }
         }
 
         this.initTableScrollRange();
@@ -267,17 +263,8 @@ class StandardTableComponent<T> {
         return column.size + 'px';
     }
 
-    private async toggleRow(row: TableRow<T>, rowId: number): Promise<void> {
-        const rowIndex = this.state.toggledRows.findIndex((r) => r === rowId);
-        if (rowIndex === -1) {
-            this.state.toggledRows.push(rowId);
-        } else {
-            this.state.toggledRows.splice(rowIndex, 1);
-        }
-
-        if (this.state.standardTable.toggleListener) {
-            this.state.standardTable.toggleListener.rowToggled(row);
-        }
+    private async toggleRow(row: TableRow<T>): Promise<void> {
+        this.state.standardTable.toggleRow(row);
 
         (this as any).forceUpdate();
 
@@ -289,10 +276,6 @@ class StandardTableComponent<T> {
                 openedRows.forEach((cell: any) => cell.style.left = table.scrollLeft + 'px');
             }
         }, 50);
-    }
-
-    private rowIsToggled(rowId): boolean {
-        return this.state.toggledRows.findIndex((r) => r === rowId) !== -1;
     }
 
     private getToggleTemplate(): any {

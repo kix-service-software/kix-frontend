@@ -98,31 +98,6 @@ export class ArticleListWidgetComponent {
         }
     }
 
-    private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
-    }
-
-    private toggleArticle(articleId: number): void {
-        const index = this.state.expandedArticles.findIndex((a) => a === articleId);
-        if (index >= 0) {
-            this.state.expandedArticles.splice(index, 1);
-            this.state.expandedArticles = [...this.state.expandedArticles];
-        } else {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    // TODO: ggf. noch für den Artikel-Link der Historie-Lane
-    private expandArticle(articleId: number): void {
-        if (!this.state.expandedArticles.some((a) => a === articleId)) {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    private isArticleExpanded(articleId: number): boolean {
-        return this.state.expandedArticles.some((a) => a === articleId);
-    }
-
     private getAttachmentsCount(): number {
         let count = 0;
 

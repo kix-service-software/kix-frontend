@@ -1,9 +1,9 @@
 import { StandardTable } from '@kix/core/dist/browser';
 import { ResizeSettings } from './ResizeSettings';
 import { IdService } from '@kix/core/dist/browser/IdService';
-import { SortOrder } from '@kix/core/dist/model';
+import { SortOrder, KIXObject } from '@kix/core/dist/model';
 
-export class StandardTableComponentState<T = any> {
+export class StandardTableComponentState<T extends KIXObject<T>> {
 
     public standardTable: StandardTable<T> = null;
 
@@ -11,17 +11,11 @@ export class StandardTableComponentState<T = any> {
 
     public resizeActive: boolean = false;
 
-    public rows: T[] = [];
-
     public tableId: string = IdService.generateDateBasedRandomId();
 
     public sortedColumnId: string = null;
 
     public sortOrder: SortOrder = null;
-
-    public toggledRows: number[] = [];
-
-    public selectedRows: string[] | number[];
 
     public rowWidth: number = 0;
 }
