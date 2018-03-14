@@ -96,7 +96,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
         }
         this.setTableHeight();
-        this.ps.update();
     }
 
     private getRows(): Array<TableRow<T>> {
@@ -249,6 +248,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
             table.style.height = height + 'px';
         }
+        this.ps.update();
     }
 
     public getRowHeight(): string {
@@ -321,13 +321,12 @@ class StandardTableComponent<T extends KIXObject<T>> {
             if (this.state.standardTable.toggleOptions.actions.length > 5) {
                 const actionList = document.querySelector('ul.toggle-actions');
                 const computedHeight = getComputedStyle(actionList).height;
-                const selector = "[data-id='" + this.state.tableId + "row-toggle-content-" + index + "']";
-                const row: any = document.querySelector(selector);
+                const rowContent = (this as any).getEl(this.state.tableId + "row-toggle-content-" + index);
 
-                row.style.minHeight = computedHeight;
+                rowContent.style.minHeight = computedHeight;
+                this.setTableHeight();
             }
         }, 100);
-
 
         return minHeight;
     }

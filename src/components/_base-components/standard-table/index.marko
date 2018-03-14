@@ -83,7 +83,7 @@
                                 </ul>
                             </if>
                             <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
-                                data-id=((state.tableId + "row-toggle-content-") + loop.getIndex())>
+                                key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
                         </div>
