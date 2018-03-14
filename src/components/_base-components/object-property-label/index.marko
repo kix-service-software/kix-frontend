@@ -1,14 +1,16 @@
 <div.key-value-pair.clearfix>
-    <span.key title=component.getPropertyName()>${component.getPropertyName()}:</span>
-    <span.info>
+    <div.key title=component.getPropertyName()>
+        <span.property-name>${component.getPropertyName()}</span>
+    </div>
+    <div.info>
         <if(input.info)>
             <include(input.info)/>
         </if>
-    </span>
-    <span.value title=component.getPropertyDisplayText() class=component.getValueClasses()>
+    </div>
+    <div.value title=component.getPropertyDisplayText() class=component.getValueClasses()>
         ${component.getPropertyDisplayText()}
         <if(input.icon)>
             <include(input.icon)/>
         </if>
-    </span>
+    </div>
 </div>

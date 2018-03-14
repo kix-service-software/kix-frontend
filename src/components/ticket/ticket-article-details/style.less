@@ -4,18 +4,19 @@
     .article-metadata-container {
         grid-column: 1;
         grid-row: 1;
-        span.key {
-            width: 4em;
-            font-weight: bold;
-            float: left;
-            line-height: 1em;
-        }
-        span.value {
-            width: 10em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1em;
-            display: inline-block;
+        margin-top: 1em;
+        .key-value-pair {
+            grid-template-columns: 4em 0.5em 10em;
+            .key {
+                font-weight: bold;
+                line-height: 1em;
+            }
+            .value {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1em;
+                display: inline-block;
+            }
         }
     }
     .article-content-container {
