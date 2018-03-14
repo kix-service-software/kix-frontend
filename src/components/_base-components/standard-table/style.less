@@ -7,7 +7,6 @@
         color: @secondary-7;
         position: relative;
         overflow: auto;
-        padding-bottom: 2em;
         >.toggle-header-column {
             background-color: @secondary-3;
             position: absolute;
@@ -84,6 +83,8 @@
                     background-color: @secondary-6;
                     display: block;
                     position: relative;
+                    padding-bottom: 1em;
+                    box-sizing: border-box;
                     .toggle-actions {
                         list-style: none;
                         position: absolute;
@@ -117,7 +118,7 @@
                         }
                     }
                     .row-toggle-content {
-                        margin: 0 4em 1em 3em;
+                        margin: 0 4em 0em 3em;
                         border: 1px solid @primary-4;
                         border-top: 0;
                         border-bottom-left-radius: 3px;
