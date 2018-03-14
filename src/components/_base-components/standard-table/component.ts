@@ -96,6 +96,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
         }
         this.setTableHeight();
+        this.ps.update();
     }
 
     private getRows(): Array<TableRow<T>> {
@@ -248,7 +249,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
             table.style.height = height + 'px';
         }
-        this.ps.update();
     }
 
     public getRowHeight(): string {
@@ -325,6 +325,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
                 rowContent.style.minHeight = computedHeight;
                 this.setTableHeight();
+                this.ps.update();
             }
         }, 100);
 
