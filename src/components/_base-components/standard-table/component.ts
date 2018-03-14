@@ -38,8 +38,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
         }
 
-        this.initTableScrollRange();
         this.setRowWidth();
+        this.setTableHeight();
+        this.initTableScrollRange();
 
     }
 
@@ -62,8 +63,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     cell.style.right = scrollbarColumnPos + 'px';
                 });
 
-                const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
+                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRows.forEach((cell: any) => {
                     cell.style.left = table.scrollLeft + 'px';
                 });
@@ -95,6 +95,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 header.style.top = table.scrollTop + 'px';
             });
         }
+        this.setTableHeight();
         this.ps.update();
     }
 
@@ -234,16 +235,24 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    public getRowHeight(): string {
-        return this.state.standardTable.rowHeight + 'em';
+    public setTableHeight(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        if (table) {
+            const minElements = this.getRows().length > this.state.standardTable.displayLimit ?
+                this.state.standardTable.displayLimit : this.getRows().length;
+            const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
+            const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
+            let height = (minElements + 1) * rowHeight;
+            const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
+            openedRowsContent.forEach((rC) => {
+                height += rC.offsetHeight;
+            });
+            table.style.height = height + 'px';
+        }
     }
 
-    public getTableHeight(): string {
-        const minElements =
-            this.getRows().length > this.state.standardTable.displayLimit ?
-                this.state.standardTable.displayLimit : this.getRows().length;
-        const height = (minElements + 1) * this.state.standardTable.rowHeight;
-        return height + 'em';
+    public getRowHeight(): string {
+        return this.state.standardTable.rowHeight + 'em';
     }
 
     public getSpacerHeight(): string {
@@ -271,8 +280,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         setTimeout(() => {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             if (table) {
-                const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
+                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRows.forEach((cell: any) => cell.style.left = table.scrollLeft + 'px');
             }
         }, 50);
@@ -313,13 +321,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
             if (this.state.standardTable.toggleOptions.actions.length > 5) {
                 const actionList = document.querySelector('ul.toggle-actions');
                 const computedHeight = getComputedStyle(actionList).height;
-                const selector = "[data-id='" + this.state.tableId + "row-toggle-content-" + index + "']";
-                const row: any = document.querySelector(selector);
+                const rowContent = (this as any).getEl(this.state.tableId + "row-toggle-content-" + index);
 
-                row.style.minHeight = computedHeight;
+                rowContent.style.minHeight = computedHeight;
+                this.setTableHeight();
+                this.ps.update();
             }
         }, 100);
-
 
         return minHeight;
     }
