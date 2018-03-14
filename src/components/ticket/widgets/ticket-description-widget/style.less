@@ -19,11 +19,15 @@
                 border: 0;
                 padding: 0;
                 min-height: auto;
+                display: grid;
+                grid-template-columns: auto minmax(15em, 20em);
+                .description-text-wrapper {
+                    grid-column: 1;
+                    grid-row: 1;
+                }
                 .description-attachments {
-                    float: right;
-                    max-height: 105px;
-                    min-width: 250px;
-                    width: 20%;
+                    grid-column: 2;
+                    grid-row: 1;
                     padding: 0 1em;
                     box-sizing: border-box;
                     ul {
@@ -38,9 +42,6 @@
                             margin-right: 5px;
                         }
                     }
-                }
-                .description-text-wrapper {
-                    margin-right: 20%;
                 }
             }
         }

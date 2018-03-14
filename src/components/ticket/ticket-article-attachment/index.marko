@@ -1,7 +1,9 @@
-<div>
-    <icon object="Filetype" objectId=state.extension/>
+<div.attachment>
+    <span.attachment-icon>
+        <icon object="Filetype" objectId=state.extension/>
+    </span>
     <span.attachment-link class=(state.progress ? "inactive-link" : "") on-click('download')>
         ${state.attachment.Filename}
     </span>
-    <span>(${state.attachment.Filesize})</span>
+    <span.file-size>(${state.attachment.Filesize})</span>
 </div>
