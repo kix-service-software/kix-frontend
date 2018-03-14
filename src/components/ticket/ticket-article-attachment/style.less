@@ -1,14 +1,25 @@
-.attachment-link {
-    color: @primary-0;
-    cursor: pointer;
-    width: 118px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin-right: 5px;
-}
-
-.inactive-link {
-    color: @secondary-0;
-    cursor: none;
+.attachment {
+    display: grid;
+    grid-template-columns: 1.5em auto 6em;
+    .attachment-icon {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    .attachment-link {
+        grid-row: 1;
+        grid-column: 2;
+        color: @primary-0;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .inactive-link {
+        color: @secondary-0;
+        cursor: none;
+    }
+    .file-size {
+        grid-row: 1;
+        grid-column: 3;
+    }
 }
