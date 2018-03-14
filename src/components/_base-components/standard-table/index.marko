@@ -34,7 +34,7 @@
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class={opened: component.rowIsToggled(loop.getIndex())}>
+                <div.row class={opened: row.isToggled}>
                     <div.row-columns class=row.classes
                         style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
                         <if(state.standardTable.selection)>
@@ -57,9 +57,8 @@
                             </div>
                         </for>
                         <if(state.standardTable.toggle)>
-                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
-                                on-click('toggleRow', row, loop.getIndex())>
-                                <if(component.rowIsToggled(loop.getIndex()))>
+                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
+                                <if(row.isToggled)>
                                     <span.kix-icon-triangle-up>
                                         <span.path1/>
                                         <span.path2/>
@@ -71,7 +70,7 @@
                             </div>
                         </if>
                     </div>
-                    <if(component.rowIsToggled(loop.getIndex()))>
+                    <if(row.isToggled)>
                         <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
                             data-id=(state.tableId + "row-toggle-content-wrapper")>
                             <if(component.getToggleActions().length)>
@@ -83,7 +82,8 @@
                                     </for>
                                 </ul>
                             </if>
-                            <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                            <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                data-id=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
                         </div>
