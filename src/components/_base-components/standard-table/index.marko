@@ -33,7 +33,7 @@
                 <div.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
-            <for(row in component.getRows())>
+            <for(row in component.getRows() | status-var=loop)>
                 <div.row class=(row.isToggled ? "opened" : "")>
                     <div.row-columns class=row.classes
                         style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
@@ -81,7 +81,8 @@
                                     </for>
                                 </ul>
                             </if>
-                            <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                            <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                data-id=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
                         </div>
