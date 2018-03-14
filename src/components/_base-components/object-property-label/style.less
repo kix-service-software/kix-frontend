@@ -1,14 +1,34 @@
 .key-value-pair {
+    display: grid;
+    grid-template-columns: 5em 2em 5em;
+    grid-row-gap: 0.5em;
     .key,
     .value {
+        grid-row: 1;
         text-overflow: ellipsis;
         overflow: hidden;
         vertical-align: middle;
     }
+    .key {
+        grid-column: 1;
+        .property-name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 90%;
+            float: left;
+        }
+        &:after {
+            content: ":"
+        }
+    }
     .info {
+        grid-row: 1;
+        grid-column: 2;
         cursor: pointer;
     }
     .value {
+        grid-column: 3;
         [class^="kix-icon-"],
         [class*=" kix-icon-"],
         .svg-icon {

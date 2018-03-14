@@ -10,8 +10,6 @@ export class TicketInfoComponentState extends WidgetComponentState<any> {
         public isPending: boolean = false,
         public isAccountTimeEnabled: boolean = false,
         public labelProvider: ILabelProvider<Ticket> = null,
-        public customer: Customer = null,
-        public contact: Contact = null
     ) {
         super();
     }
