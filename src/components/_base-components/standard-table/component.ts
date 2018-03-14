@@ -306,6 +306,23 @@ class StandardTableComponent<T extends KIXObject<T>> {
         const column = this.state.standardTable.getColumns().find((c) => c.id === value.columnId);
         return column;
     }
+
+    private calculateMinHeight(index: number): string {
+        const minHeight = "10em";
+        setTimeout(() => {
+            if (this.state.standardTable.toggleOptions.actions.length > 5) {
+                const actionList = document.querySelector('ul.toggle-actions');
+                const computedHeight = getComputedStyle(actionList).height;
+                const selector = "[data-id='" + this.state.tableId + "row-toggle-content-" + index + "']";
+                const row: any = document.querySelector(selector);
+
+                row.style.minHeight = computedHeight;
+            }
+        }, 100);
+
+
+        return minHeight;
+    }
 }
 
 module.exports = StandardTableComponent;
