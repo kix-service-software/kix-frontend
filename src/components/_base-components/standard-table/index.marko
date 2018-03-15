@@ -34,7 +34,7 @@
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class={opened: row.isToggled}>
+                <div.row data-id=((state.tableId + "row") + loop.getIndex()) class={opened: row.isToggled}>
                     <div.row-columns class=row.classes
                         style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
                         <if(state.standardTable.selection)>

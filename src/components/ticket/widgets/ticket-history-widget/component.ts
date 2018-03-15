@@ -1,5 +1,5 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { HistoryTableLabelLayer, HistoryTableContentLayer } from '@kix/core/dist/browser/ticket';
+import { HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
@@ -8,10 +8,12 @@ import {
     ITableConfigurationListener,
     TableSortLayer,
     TableColumn,
-    TableFilterLayer
+    TableFilterLayer,
+    TableToggleLayer
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TicketHistoryWidgetComponent {
 
@@ -57,15 +59,16 @@ class TicketHistoryWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
+                IdService.generateDateBasedRandomId(),
                 contentProvider,
                 labelProvider,
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
+                null,
                 columnConfig,
                 null,
                 clickListener,
                 configurationListener,
-                null,
                 7
             );
         }
@@ -73,9 +76,8 @@ class TicketHistoryWidgetComponent {
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
         if (columnId === 'ArticleID' && historyEntry[columnId]) {
-            (this as any).emit('expandArticle', historyEntry[columnId]);
-            const articleElement = document.getElementById(historyEntry[columnId].toString());
-            articleElement.scrollIntoView();
+            const context = ContextService.getInstance().getContext();
+            (context as TicketDetailsContext).navigateToArticle(historyEntry[columnId]);
         }
     }
 

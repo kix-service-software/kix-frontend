@@ -11,7 +11,7 @@ export class StandardTableComponentState<T extends KIXObject<T>> {
 
     public resizeActive: boolean = false;
 
-    public tableId: string = IdService.generateDateBasedRandomId();
+    public tableId: string = null;
 
     public sortedColumnId: string = null;
 

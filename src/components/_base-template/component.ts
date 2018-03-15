@@ -18,14 +18,13 @@ class BaseTemplateComponent {
     public onMount(): void {
         ClientStorageHandler.setTagLib(this.state.tagLib);
 
-        ContextService.getInstance().setObjectData(this.state.objectData).then(() => {
-            this.state.initialized = true;
-            if (this.state.contextId) {
-                ComponentRouterStore.getInstance().navigate(
-                    'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
-                );
-            }
-        });
+        ContextService.getInstance().setObjectData(this.state.objectData);
+        this.state.initialized = true;
+        if (this.state.contextId) {
+            ComponentRouterStore.getInstance().navigate(
+                'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
+            );
+        }
 
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
 

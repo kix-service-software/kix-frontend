@@ -7,7 +7,8 @@ import {
     ArticleTableFilterLayer,
     ArticleTableLabelLayer,
     ArticleTableSelectionListener,
-    ArticleTableToggleListener
+    ArticleTableToggleListener,
+    ArticleTableToggleLayer
 } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
@@ -15,6 +16,7 @@ import {
     TableSortLayer, ToggleOptions
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
+import { IdService } from "@kix/core/dist/browser/IdService";
 
 export class ArticleListWidgetComponent {
 
@@ -56,15 +58,16 @@ export class ArticleListWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
+                IdService.generateDateBasedRandomId(),
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
                 [new ArticleTableFilterLayer()],
                 [new TableSortLayer()],
+                new ArticleTableToggleLayer(new ArticleTableToggleListener(), true),
                 columns,
                 new ArticleTableSelectionListener(),
                 null,
                 configurationListener,
-                new ArticleTableToggleListener(),
                 this.state.articles.length,
                 true,
                 TableRowHeight.LARGE,

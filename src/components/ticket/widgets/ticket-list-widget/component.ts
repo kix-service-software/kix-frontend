@@ -12,6 +12,7 @@ import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener,
     TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions
 } from '@kix/core/dist/browser';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TicketListWidgetComponent {
 
@@ -62,15 +63,16 @@ class TicketListWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
+                IdService.generateDateBasedRandomId(),
                 new TicketTableContentLayer(this.state.instanceId, 100),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
+                null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
                 configurationListener,
-                null,
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
                 TableRowHeight.LARGE,

@@ -25,7 +25,7 @@ class TicketsComponent {
         } else {
             ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
             ContextService.getInstance().provideContext(
-                new Context(TicketsComponentState.MODULE_ID, 'tickets'), TicketsComponentState.MODULE_ID, true
+                new Context(TicketsComponentState.MODULE_ID, 'tickets'), true
             );
 
             DashboardService.getInstance().loadDashboardConfiguration(TicketsComponentState.MODULE_ID);

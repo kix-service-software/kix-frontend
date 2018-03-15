@@ -15,7 +15,7 @@ class ReportsComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('reports', 'reports'), 'reports', true);
+        ContextService.getInstance().provideContext(new Context('reports', 'reports'), true);
 
         const breadcrumbDetails =
             new BreadcrumbDetails('reports', null, null, 'Reports-Dashboard');
