@@ -17,6 +17,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public onInput(input: StandardTableInput<T>): void {
         this.state.standardTable = input.standardTable;
+        this.state.tableId = this.state.standardTable.tableId;
     }
 
     public onMount(): void {

@@ -14,6 +14,7 @@ import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class LinkedObjectsWidgetComponent {
 
@@ -84,15 +85,16 @@ class LinkedObjectsWidgetComponent {
             };
 
             return new StandardTable(
+                IdService.generateDateBasedRandomId(),
                 contentProvider,
                 labelProvider,
                 [],
                 [new TableSortLayer()],
+                null,
                 columnConfig,
                 null,
                 clickListener,
                 configurationListener,
-                null,
                 7
             );
         }

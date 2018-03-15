@@ -15,7 +15,7 @@ class CMDBComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('cmdb', 'cmdb'), 'cmdb', true);
+        ContextService.getInstance().provideContext(new Context('cmdb', 'cmdb'), true);
 
         const breadcrumbDetails =
             new BreadcrumbDetails('cmdb', null, null, 'CMDB-Dashboard');

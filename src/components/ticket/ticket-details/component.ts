@@ -1,6 +1,8 @@
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { TicketService, TicketNotification, TicketLabelProvider } from '@kix/core/dist/browser/ticket/';
+import {
+    TicketService, TicketNotification, TicketLabelProvider, TicketDetailsContext
+} from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import {
     TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
@@ -12,8 +14,6 @@ import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardServ
 export class TicketDetailsComponent {
 
     private state: TicketDetailsComponentState;
-
-    private static MODULE_ID: string = 'ticket-details';
 
     public onCreate(input: any): void {
         this.state = new TicketDetailsComponentState();
@@ -31,12 +31,8 @@ export class TicketDetailsComponent {
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
-        const context = new Context(TicketDetailsComponent.MODULE_ID, contextURL, this.state.ticketId);
-        ContextService.getInstance().provideContext(context, TicketDetailsComponent.MODULE_ID, true);
-
-        DashboardService.getInstance().loadDashboardConfiguration(TicketDetailsComponent.MODULE_ID).then(() => {
-            this.setConfiguration();
-        });
+        const context = new TicketDetailsContext(this.state.ticketId);
+        ContextService.getInstance().provideContext(context, true);
 
         this.loadTicket();
     }
@@ -50,13 +46,13 @@ export class TicketDetailsComponent {
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsComponent.MODULE_ID) {
+        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED && id === TicketDetailsContext.CONTEXT_ID) {
             this.setConfiguration();
         }
     }
 
     private setConfiguration(): void {
-        const context = ContextService.getInstance().getContext(TicketDetailsComponent.MODULE_ID);
+        const context = ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         const config = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
 
         if (config) {
@@ -93,7 +89,7 @@ export class TicketDetailsComponent {
         const value = this.state.ticket ? this.state.ticket.TicketNumber : this.state.ticketId;
 
         const breadcrumbDetails = new BreadcrumbDetails(
-            'tickets', TicketDetailsComponent.MODULE_ID, this.state.ticketId.toString(),
+            'tickets', TicketDetailsContext.CONTEXT_ID, this.state.ticketId.toString(),
             'Ticket-Dashboard', '#' + value, null
         );
 
