@@ -3,15 +3,16 @@ import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandle
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
     TicketService,
-    ArticleTableLabelLayer,
     ArticleTableContentLayer,
+    ArticleTableFilterLayer,
+    ArticleTableLabelLayer,
     ArticleTableSelectionListener,
     ArticleTableToggleListener
 } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, TableFilterLayer, ToggleOptions
+    TableSortLayer, ToggleOptions
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 
@@ -57,9 +58,7 @@ export class ArticleListWidgetComponent {
             this.state.standardTable = new StandardTable(
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
-                [new TableFilterLayer(
-                    [ArticleProperty.NUMBER, ArticleProperty.ARTICLE_TYPE_ID, ArticleProperty.ATTACHMENT]
-                )],
+                [new ArticleTableFilterLayer()],
                 [new TableSortLayer()],
                 columns,
                 new ArticleTableSelectionListener(),
@@ -97,31 +96,6 @@ export class ArticleListWidgetComponent {
         if (ticket) {
             this.state.articles = ticket.Articles;
         }
-    }
-
-    private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
-    }
-
-    private toggleArticle(articleId: number): void {
-        const index = this.state.expandedArticles.findIndex((a) => a === articleId);
-        if (index >= 0) {
-            this.state.expandedArticles.splice(index, 1);
-            this.state.expandedArticles = [...this.state.expandedArticles];
-        } else {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    // TODO: ggf. noch für den Artikel-Link der Historie-Lane
-    private expandArticle(articleId: number): void {
-        if (!this.state.expandedArticles.some((a) => a === articleId)) {
-            this.state.expandedArticles = [...this.state.expandedArticles, articleId];
-        }
-    }
-
-    private isArticleExpanded(articleId: number): boolean {
-        return this.state.expandedArticles.some((a) => a === articleId);
     }
 
     private getAttachmentsCount(): number {

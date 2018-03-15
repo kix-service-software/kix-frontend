@@ -21,7 +21,7 @@
         }
     }
     &.collapsed {
-        width: 38px;
+        width: @explorer-collapsed-width;
         .explorer {
             background: @secondary-2;
             color: @secondary-0;
@@ -35,7 +35,7 @@
             background-color: @secondary-3;
             border: 0 none;
             transform: rotate(270deg);
-            transform-origin: 96px 96px;
+            transform-origin: @explorer-width/2 @explorer-width/2;
             overflow: hidden;
             .header-left {
                 display: inline-block;

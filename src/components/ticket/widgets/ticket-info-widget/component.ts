@@ -40,8 +40,6 @@ class TicketInfoWidgetComponent {
         if (this.state.ticketId) {
             this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
             if (this.state.ticket) {
-                this.state.customer = this.state.customer;
-                this.state.contact = this.state.contact;
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
             }

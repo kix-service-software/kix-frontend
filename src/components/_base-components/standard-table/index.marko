@@ -1,7 +1,7 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
         <div.standard-table class={"has-checkbox-column": state.standardTable.selection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
-            key=(state.tableId + "standard-table") style={height: component.getTableHeight()} on-scroll('loadMore')>
+            key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
                 style={height: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
                 <if(state.standardTable.selection)>
@@ -34,7 +34,7 @@
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
             <for(row in component.getRows() | status-var=loop)>
-                <div.row class=(component.rowIsToggled(loop.getIndex()) ? "opened" : "")>
+                <div.row class={opened: row.isToggled}>
                     <div.row-columns class=row.classes
                         style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
                         <if(state.standardTable.selection)>
@@ -57,9 +57,8 @@
                             </div>
                         </for>
                         <if(state.standardTable.toggle)>
-                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column")
-                                on-click('toggleRow', row, loop.getIndex())>
-                                <if(component.rowIsToggled(loop.getIndex()))>
+                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
+                                <if(row.isToggled)>
                                     <span.kix-icon-triangle-up>
                                         <span.path1/>
                                         <span.path2/>
@@ -71,8 +70,9 @@
                             </div>
                         </if>
                     </div>
-                    <if(component.rowIsToggled(loop.getIndex()))>
-                        <div.row-toggle-content-wrapper data-id=(state.tableId + "row-toggle-content-wrapper")>
+                    <if(row.isToggled)>
+                        <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
+                            data-id=(state.tableId + "row-toggle-content-wrapper")>
                             <if(component.getToggleActions().length)>
                                 <ul.toggle-actions>
                                     <for(action in component.getToggleActions())>
@@ -82,7 +82,8 @@
                                     </for>
                                 </ul>
                             </if>
-                            <div.row-toggle-content data-id=(state.tableId + "row-toggle-content")>
+                            <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                             </div>
                         </div>

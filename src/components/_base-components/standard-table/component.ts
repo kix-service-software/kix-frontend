@@ -2,20 +2,20 @@ declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue } from '@kix/core/dist/browser';
-import { SortOrder } from '@kix/core/dist/model';
+import { SortOrder, KIXObject } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
-class StandardTableComponent<T> {
+class StandardTableComponent<T extends KIXObject<T>> {
 
-    private state: StandardTableComponentState;
+    private state: StandardTableComponentState<T>;
     private loadMoreTimeout: any = null;
     private ps: any;
 
-    public onCreate(input: StandardTableInput): void {
-        this.state = new StandardTableComponentState();
+    public onCreate(input: StandardTableInput<T>): void {
+        this.state = new StandardTableComponentState<T>();
     }
 
-    public onInput(input: StandardTableInput): void {
+    public onInput(input: StandardTableInput<T>): void {
         this.state.standardTable = input.standardTable;
     }
 
@@ -36,14 +36,11 @@ class StandardTableComponent<T> {
                     this.scrollTableToTop();
                 }
             });
-
-            if (this.state.standardTable.toggle && this.state.standardTable.toggleOptions.toggleFirst) {
-                this.toggleRow(this.state.standardTable.getRows()[0], 0);
-            }
         }
 
-        this.initTableScrollRange();
         this.setRowWidth();
+        this.setTableHeight();
+        this.initTableScrollRange();
 
     }
 
@@ -66,8 +63,7 @@ class StandardTableComponent<T> {
                     cell.style.right = scrollbarColumnPos + 'px';
                 });
 
-                const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
+                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRows.forEach((cell: any) => {
                     cell.style.left = table.scrollLeft + 'px';
                 });
@@ -99,6 +95,7 @@ class StandardTableComponent<T> {
                 header.style.top = table.scrollTop + 'px';
             });
         }
+        this.setTableHeight();
         this.ps.update();
     }
 
@@ -238,16 +235,24 @@ class StandardTableComponent<T> {
         }
     }
 
-    public getRowHeight(): string {
-        return this.state.standardTable.rowHeight + 'em';
+    public setTableHeight(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        if (table) {
+            const minElements = this.getRows().length > this.state.standardTable.displayLimit ?
+                this.state.standardTable.displayLimit : this.getRows().length;
+            const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
+            const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
+            let height = (minElements + 1) * rowHeight;
+            const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
+            openedRowsContent.forEach((rC) => {
+                height += rC.offsetHeight;
+            });
+            table.style.height = height + 'px';
+        }
     }
 
-    public getTableHeight(): string {
-        const minElements =
-            this.getRows().length > this.state.standardTable.displayLimit ?
-                this.state.standardTable.displayLimit : this.getRows().length;
-        const height = (minElements + 1) * this.state.standardTable.rowHeight;
-        return height + 'em';
+    public getRowHeight(): string {
+        return this.state.standardTable.rowHeight + 'em';
     }
 
     public getSpacerHeight(): string {
@@ -267,32 +272,18 @@ class StandardTableComponent<T> {
         return column.size + 'px';
     }
 
-    private async toggleRow(row: TableRow<T>, rowId: number): Promise<void> {
-        const rowIndex = this.state.toggledRows.findIndex((r) => r === rowId);
-        if (rowIndex === -1) {
-            this.state.toggledRows.push(rowId);
-        } else {
-            this.state.toggledRows.splice(rowIndex, 1);
-        }
-
-        if (this.state.standardTable.toggleListener) {
-            this.state.standardTable.toggleListener.rowToggled(row);
-        }
+    private async toggleRow(row: TableRow<T>): Promise<void> {
+        this.state.standardTable.toggleRow(row);
 
         (this as any).forceUpdate();
 
         setTimeout(() => {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             if (table) {
-                const openedRows: any =
-                    document.querySelectorAll("[data-id='" + this.state.tableId + "row-toggle-content-wrapper']");
+                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRows.forEach((cell: any) => cell.style.left = table.scrollLeft + 'px');
             }
         }, 50);
-    }
-
-    private rowIsToggled(rowId): boolean {
-        return this.state.toggledRows.findIndex((r) => r === rowId) !== -1;
     }
 
     private getToggleTemplate(): any {
@@ -322,6 +313,23 @@ class StandardTableComponent<T> {
     private getColumn(value: TableValue): TableColumn {
         const column = this.state.standardTable.getColumns().find((c) => c.id === value.columnId);
         return column;
+    }
+
+    private calculateMinHeight(index: number): string {
+        const minHeight = "10em";
+        setTimeout(() => {
+            if (this.state.standardTable.toggleOptions.actions.length > 5) {
+                const actionList = document.querySelector('ul.toggle-actions');
+                const computedHeight = getComputedStyle(actionList).height;
+                const rowContent = (this as any).getEl(this.state.tableId + "row-toggle-content-" + index);
+
+                rowContent.style.minHeight = computedHeight;
+                this.setTableHeight();
+                this.ps.update();
+            }
+        }, 100);
+
+        return minHeight;
     }
 }
 
