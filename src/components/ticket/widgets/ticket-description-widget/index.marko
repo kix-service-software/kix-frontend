@@ -10,13 +10,7 @@
                 <@content>
                     <div.description-attachments>
                         <b>Anlagen:</b>
-                        <ul>
-                            <for(attachment in state.attachments)>
-                                <li>
-                                    <ticket-article-attachment article=state.firstArticle attachment=attachment/>
-                                </li>
-                            </for>
-                        </ul>
+                        <ticket-article-attachment-list article=state.firstArticle/>
                     </div>
                     <div.description-text-wrapper>
                         <ticket-article-content article=state.firstArticle/>
@@ -26,7 +20,7 @@
             <widget>
                 <@title>Anmerkungen</@title>
                 <@content>
-                    <div>${state.ticketNotes}</div>
+                    <div.ticket-notes>${state.ticketNotes}</div>
                 </@content>
             </widget>
         </div>

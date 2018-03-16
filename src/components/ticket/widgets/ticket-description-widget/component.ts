@@ -36,9 +36,6 @@ class TicketDescriptionWidgetComponent {
             const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
             if (ticket && ticket.Articles && ticket.Articles.length) {
                 this.state.firstArticle = ticket.Articles[0];
-                this.state.attachments = this.state.firstArticle.Attachments
-                    ? this.state.firstArticle.Attachments.filter((a) => a.Disposition !== 'inline')
-                    : [];
             }
         }
     }
