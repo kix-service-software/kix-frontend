@@ -213,9 +213,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    private rowClicked(row: TableRow<T>, columnId: string): void {
+    private rowClicked(row: TableRow<T>, columnId: string, event: any): void {
         if (this.state.standardTable.clickListener) {
-            this.state.standardTable.clickListener.rowClicked(row.object, columnId);
+            this.state.standardTable.clickListener.rowClicked(row.object, columnId, event);
         }
     }
 

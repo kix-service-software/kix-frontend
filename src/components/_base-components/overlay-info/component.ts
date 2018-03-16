@@ -11,6 +11,7 @@ class ObjectInfoOverlayComponent {
 
     public onInput(input: any): void {
         this.state.position = input.position;
+        this.state.data = input.data;
         this.positionOverlay();
     }
 
@@ -39,6 +40,10 @@ class ObjectInfoOverlayComponent {
 
     private closeOverlay() {
         ApplicationStore.getInstance().toggleInfoOverlay();
+    }
+
+    private getData(): any {
+        return { ...this.state.data, minimizable: false };
     }
 }
 module.exports = ObjectInfoOverlayComponent;

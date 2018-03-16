@@ -1,130 +1,114 @@
 <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration">
-  <@icon>
-    <if(state.widgetConfiguration)>
-      <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
-    </if>
-  </@icon>
-  <@title>
-    <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-  </@title>
-  <@contentActions>
-    <ul.content-actions>
-      <if(state.widgetConfiguration)>
-        <for(action in state.widgetConfiguration.actions)>
-          <li>
-            <include(component.getTemplate(action)) short=true/>
-          </li>
-        </for>
-      </if>
-    </ul>
-  </@contentActions>
-  <@content>
-    <if(state.ticket)>
-      <div.ci-wrapper.clearfix>
-        <div.ci-content>
-          <textarea>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@title>
+        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+    </@title>
+    <@contentActions>
+        <ul.content-actions>
+            <if(state.widgetConfiguration)>
+                <for(action in state.widgetConfiguration.actions)>
+                    <li>
+                        <include(component.getTemplate(action)) short=true/>
+                    </li>
+                </for>
+            </if>
+        </ul>
+    </@contentActions>
+    <@content>
+        <if(state.ticket)>
+            <div.ci-wrapper.clearfix>
+                <div.ci-content>
+                    <textarea>
                     </textarea>
-        </div>
-        <span>CI:</span>
-      </div>
-      <ul.information-list.clearfix>
-        <li>
-          <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
-            <@info>
-              <if(state.ticket.customer)>
-                <overlay-info-icon>
-                  <@title>Kundeninfo</@title>
-                  <@widgetIcon>
-                    <span.kix-icon-man/>
-                  </@widgetIcon>
-                  <@content>
-                    <customer-info customer=state.ticket.customer/>
-                  </@content>
-                </overlay-info-icon>
-              </if>
-            </@info>
-          </object-property-label>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="TypeID" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="ResponsibleID" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider>
-            <@info>
-              <if(state.ticket.contact)>
-                <overlay-info-icon>
-                  <@title>Ansprechpartnerinfo</@title>
-                  <@widgetIcon>
-                    <span.kix-icon-man/>
-                  </@widgetIcon>
-                  <@content>
-                    <contact-info contact=state.contact/>
-                  </@content>
-                </overlay-info-icon>
-              </if>
-            </@info>
-          </object-property-label>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider>
-            <@icon>
-              <icon object="CurInciStateID" objectId=component.getIncidentStateId()/>
-            </@icon>
-          </object-property-label>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="OwnerID" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="Created" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="SLAID" labelProvider=state.labelProvider/>
-        </li>
-        <if(state.isAccountTimeEnabled)>
-          <li>
-            <object-property-label object=state.ticket property="TimeUnits" labelProvider=state.labelProvider/>
-          </li>
+                </div>
+                <span>CI:</span>
+            </div>
+            <ul.information-list.clearfix>
+                <li>
+                    <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
+                        <@info>
+                            <if(state.ticket.customer)>
+                                <overlay-info-icon content="ticket-customer-info-widget"/>
+                            </if>
+                        </@info>
+                    </object-property-label>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="TypeID" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="ResponsibleID" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider>
+                        <@info>
+                            <if(state.ticket.contact)>
+                                <overlay-info-icon content="ticket-contact-info-widget"/>
+                            </if>
+                        </@info>
+                    </object-property-label>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider>
+                        <@icon>
+                            <icon object="CurInciStateID" objectId=component.getIncidentStateId()/>
+                        </@icon>
+                    </object-property-label>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="OwnerID" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="Created" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="SLAID" labelProvider=state.labelProvider/>
+                </li>
+                <if(state.isAccountTimeEnabled)>
+                    <li>
+                        <object-property-label object=state.ticket property="TimeUnits" labelProvider=state.labelProvider/>
+                    </li>
+                </if>
+                <li>
+                    <object-property-label object=state.ticket property="Age" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="QueueID" labelProvider=state.labelProvider/>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider>
+                        <@icon>
+                            <icon object="StateID" objectId=state.ticket.StateID/>
+                        </@icon>
+                    </object-property-label>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider>
+                        <@icon>
+                            <icon object="LockID" objectId=state.ticket.LockID/>
+                        </@icon>
+                    </object-property-label>
+                </li>
+                <li>
+                    <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider>
+                        <@icon>
+                            <icon object="PriorityID" objectId=state.ticket.PriorityID/>
+                        </@icon>
+                    </object-property-label>
+                </li>
+                <if(state.isPending)>
+                    <li>
+                        <object-property-label object=state.ticket property="PendingTime" labelProvider=state.labelProvider/>
+                    </li>
+                </if>
+            </ul>
         </if>
-        <li>
-          <object-property-label object=state.ticket property="Age" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="QueueID" labelProvider=state.labelProvider/>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider>
-            <@icon>
-              <icon object="StateID" objectId=state.ticket.StateID/>
-            </@icon>
-          </object-property-label>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider>
-            <@icon>
-              <icon object="LockID" objectId=state.ticket.LockID/>
-            </@icon>
-          </object-property-label>
-        </li>
-        <li>
-          <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider>
-            <@icon>
-              <icon object="PriorityID" objectId=state.ticket.PriorityID/>
-            </@icon>
-          </object-property-label>
-        </li>
-        <if(state.isPending)>
-          <li>
-            <object-property-label object=state.ticket property="PendingTime" labelProvider=state.labelProvider/>
-          </li>
-        </if>
-      </ul>
-    </if>
-  </@content>
-  <@filter>
-    <span/>
-  </@filter>
+    </@content>
+    <@filter>
+        <span/>
+    </@filter>
 </widget>

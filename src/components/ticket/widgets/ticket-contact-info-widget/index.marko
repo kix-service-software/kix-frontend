@@ -1,7 +1,10 @@
 <widget instanceId=input.instanceId>
-    <@icon/>
+    <@icon>
+        <span.kix-icon-man/>
+    </@icon>
     <@title>
         <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+        <else>Ansprechpartnerinfo</else>
     </@title>
     <@content>
         <if(state.contact)>
@@ -9,6 +12,5 @@
         </if>
     </@content>
     <@filter/>
-    
     <@contentActions/>
 </widget>
