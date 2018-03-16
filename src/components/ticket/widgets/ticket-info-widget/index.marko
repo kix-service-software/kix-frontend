@@ -32,15 +32,7 @@
                     <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
                         <@info>
                             <if(state.ticket.customer)>
-                                <overlay-info-icon>
-                                    <@title>Kundeninfo</@title>
-                                    <@widgetIcon>
-                                        <span.kix-icon-man/>
-                                    </@widgetIcon>
-                                    <@content>
-                                        <customer-info customer=state.customer/>
-                                    </@content>
-                                </overlay-info-icon>
+                                <overlay-info-icon content="ticket-customer-info-widget"/>
                             </if>
                         </@info>
                     </object-property-label>
@@ -55,15 +47,7 @@
                     <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider>
                         <@info>
                             <if(state.ticket.contact)>
-                                <overlay-info-icon>
-                                    <@title>Ansprechpartnerinfo</@title>
-                                    <@widgetIcon>
-                                        <span.kix-icon-man/>
-                                    </@widgetIcon>
-                                    <@content>
-                                        <contact-info contact=state.contact/>
-                                    </@content>
-                                </overlay-info-icon>
+                                <overlay-info-icon content="ticket-contact-info-widget"/>
                             </if>
                         </@info>
                     </object-property-label>

@@ -28,6 +28,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-dynamic-fields-container',
             'ticket/ticket-search/ticket-search-result',
             'ticket/ticket-search/ticket-search-dialog-content',
+            'ticket/widgets/article-attachment-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-list-widget/ticket-list-configuration',
             'ticket/widgets/ticket-info-widget',
@@ -66,6 +67,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/spam-ticket-dialog',
             'ticket/dialogs/watch-ticket-dialog',
             'ticket/ticket-article-details',
+            'ticket/ticket-article-attachment-list'
         ];
     }
 
@@ -94,6 +96,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     // tslint:disable:max-line-length
     private getTicketComponentTags(): Array<[string, string]> {
         const widgets: Array<[string, string]> = [
+            ['article-attachment-widget', 'ticket/widgets/article-attachment-widget'],
             ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
             ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
             ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
@@ -149,6 +152,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
         return [
             ['tickets', 'ticket/ticket-module'],
+            ['ticket-article-attachment-list', 'ticket/ticket-article-attachment-list'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],

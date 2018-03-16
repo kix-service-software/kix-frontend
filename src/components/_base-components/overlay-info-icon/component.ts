@@ -2,6 +2,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
+import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 class OverlayInfoIconComponent {
 
@@ -12,10 +13,9 @@ class OverlayInfoIconComponent {
     }
 
     public onInput(input: any): void {
+        const content = ClientStorageHandler.getComponentTemplate(input.content);
         this.state.overlayWidgetData = new InfoOverlayWidgetData(
-            input.widgetIcon,
-            input.title,
-            input.content
+            content
         );
     }
 
@@ -25,18 +25,10 @@ class OverlayInfoIconComponent {
     }
 
     private showOverlay(event: any) {
-        let position: [number, number] = [event.pageX, event.pageY];
-        const self = (this as any).getEl('overlay-info-icon');
-        if (self) {
-            position = [
-                self.getBoundingClientRect().left + self.getBoundingClientRect().width + window.scrollX,
-                self.getBoundingClientRect().top - 2 + window.scrollY
-            ];
-        }
         ApplicationStore.getInstance().toggleInfoOverlay(
             this.state.id,
             this.state.overlayWidgetData,
-            position
+            [event.pageX, event.pageY]
         );
     }
 
