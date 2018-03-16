@@ -17,6 +17,7 @@ class WidgetComponent {
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
         this.state.hasConfigOverlay = input.hasConfigOverlay !== undefined ? input.hasConfigOverlay : false;
+        this.state.minimizable = input.minimizable;
     }
 
     public onMount(): void {

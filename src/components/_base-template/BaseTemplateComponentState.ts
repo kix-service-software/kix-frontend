@@ -18,6 +18,7 @@ export class BaseTemplateComponentState {
         public infoOverlayIcon: any = null,
         public infoOverlayTitle: string = "",
         public infoOverlayContent: any = null,
+        public infoOverlayData: any = null,
         public infoOverlayPosition: [number, number] = null
     ) { }
 
