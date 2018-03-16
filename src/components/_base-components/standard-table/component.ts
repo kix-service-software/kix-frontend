@@ -17,7 +17,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public onInput(input: StandardTableInput<T>): void {
         this.state.standardTable = input.standardTable;
-        this.state.tableId = this.state.standardTable.tableId;
+        if (this.state.standardTable) {
+            this.state.tableId = this.state.standardTable.tableId;
+        }
     }
 
     public onMount(): void {
@@ -39,10 +41,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
         }
 
-        this.setRowWidth();
-        this.setTableHeight();
-        this.initTableScrollRange();
-
+        setTimeout(() => {
+            this.setRowWidth();
+            this.setTableHeight();
+            this.initTableScrollRange();
+        }, 500);
     }
 
     private initTableScrollRange(): void {
@@ -325,10 +328,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 const rowContent = (this as any).getEl(this.state.tableId + "row-toggle-content-" + index);
 
                 rowContent.style.minHeight = computedHeight;
-                this.setTableHeight();
-                this.ps.update();
             }
-        }, 100);
+            this.setTableHeight();
+            this.ps.update();
+        }, 10);
 
         return minHeight;
     }
