@@ -76,8 +76,9 @@ class TicketHistoryWidgetComponent {
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
         if (columnId === 'ArticleID' && historyEntry[columnId]) {
-            const context = ContextService.getInstance().getContext();
-            (context as TicketDetailsContext).navigateToArticle(historyEntry[columnId]);
+            ContextService.getInstance().notifyListener(
+                TicketDetailsContext.CONTEXT_ID, ContextNotification.GO_TO_ARTICLE, historyEntry[columnId]
+            );
         }
     }
 

@@ -2,6 +2,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { ContextNotification } from '@kix/core/dist/browser/context';
 
 class WidgetComponent {
 
@@ -19,10 +20,17 @@ class WidgetComponent {
     }
 
     public onMount(): void {
+        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
         if (config) {
             this.state.minimizable = config.minimizable;
             this.state.minimized = config.minimized;
+        }
+    }
+
+    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
+        if (id === this.state.instanceId && type === ContextNotification.TOGGLE_WIDGET) {
+            this.state.minimized = args[0];
         }
     }
 
