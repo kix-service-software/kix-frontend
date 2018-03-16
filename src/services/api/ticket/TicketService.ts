@@ -6,6 +6,7 @@ import {
     CreateQueue, CreateQueueRequest, CreateQueueResponse,
     LocksResponse,
     QueuesResponse, QueueResponse,
+    SenderTypesResponse, SenderTypeResponse,
     TicketHistoryItemResponse, TicketHistoryResponse, TicketResponse, TicketsResponse, TicketQuery,
     TicketPrioritiesResponse, TicketStatesResponse, TicketTypesResponse, TicketStateTypesResponse,
     UpdateTicket, UpdateTicketRequest, UpdateTicketResponse, UpdateQueue, UpdateQueueResponse, UpdateQueueRequest
@@ -15,7 +16,8 @@ import {
     Article, Attachment,
     DynamicField,
     StateType,
-    Ticket, TicketHistory, TicketProperty, ArticleType, SortOrder, Queue, Lock, TicketPriority, TicketState, TicketType
+    Ticket, TicketHistory, TicketProperty, ArticleType, SenderType, SortOrder,
+    Queue, Lock, TicketPriority, TicketState, TicketType
 } from '@kix/core/dist/model/';
 import { TicketServiceUtil } from './TicketServiceUtil';
 
@@ -158,6 +160,16 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         const uri = this.buildUri('articletypes');
         const response = await this.getObjectByUri<ArticleTypesResponse>(token, uri);
         return response.ArticleType;
+    }
+
+    // -----------------------------
+    // SenderTypes implementation
+    // -----------------------------
+
+    public async getSenderTypes(token: string): Promise<SenderType[]> {
+        const uri = this.buildUri('sendertypes');
+        const response = await this.getObjectByUri<SenderTypesResponse>(token, uri);
+        return response.SenderType;
     }
 
     // -----------------------------
