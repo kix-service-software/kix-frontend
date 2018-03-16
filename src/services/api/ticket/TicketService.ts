@@ -129,7 +129,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
     }
 
     public async setArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
-        const seenFlag = 'seen';
+        const seenFlag = 'Seen';
         const article = await this.getArticle(token, ticketId, articleId);
 
         const ArticleFlag = {
