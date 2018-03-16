@@ -1,4 +1,4 @@
-import { Article, ArticleProperty } from "@kix/core/dist/model";
+import { Article, ArticleProperty, Context, Ticket } from "@kix/core/dist/model";
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
@@ -8,7 +8,8 @@ import {
     ArticleTableLabelLayer,
     ArticleTableSelectionListener,
     ArticleTableToggleListener,
-    ArticleTableToggleLayer
+    ArticleTableToggleLayer,
+    TicketDetailsContext
 } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
@@ -24,18 +25,18 @@ export class ArticleListWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = new ArticleListWidgetComponentState();
+        this.state.instanceId = 'article-list';
     }
 
     public onInput(input: any): void {
         this.state.ticketId = Number(input.ticketId);
-        this.state.instanceId = input.instanceId;
     }
 
     public onMount(): void {
         this.getArticles();
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration('article-list') : undefined;
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         if (this.state.widgetConfiguration) {
             this.state.generalArticleActions = this.state.widgetConfiguration.settings.generalActions;
         }
@@ -46,6 +47,16 @@ export class ArticleListWidgetComponent {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getArticles();
             this.setArticleTableConfiguration();
+        } else if (id === TicketDetailsContext.CONTEXT_ID && type === ContextNotification.GO_TO_ARTICLE) {
+            ContextService.getInstance().notifyListener(
+                this.state.instanceId, ContextNotification.TOGGLE_WIDGET, false
+            );
+
+            setTimeout(() => {
+                ContextService.getInstance().notifyListener(
+                    TicketDetailsContext.CONTEXT_ID, ContextNotification.SCROLL_TO_ARTICLE, args[0]
+                );
+            }, 500);
         }
     }
 
