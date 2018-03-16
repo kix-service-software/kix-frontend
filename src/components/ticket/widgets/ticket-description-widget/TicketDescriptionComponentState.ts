@@ -9,5 +9,4 @@ export class TicketDescriptionComponentState extends WidgetComponentState {
 
     public ticketNotes: string = null;
 
-    public attachments: Attachment[] = [];
 }
