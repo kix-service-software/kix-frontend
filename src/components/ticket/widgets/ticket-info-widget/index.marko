@@ -1,28 +1,28 @@
 <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration">
-    <@icon>
-        <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
-        </if>
-    </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
-    <@contentActions>
-        <ul.content-actions>
-            <if(state.widgetConfiguration)>
-                <for(action in state.widgetConfiguration.actions)>
-                    <li>
-                        <include(component.getTemplate(action)) short=true/>
-                    </li>
-                </for>
-            </if>
-        </ul>
-    </@contentActions>
-    <@content>
-        <if(state.ticket)>
-            <div.ci-wrapper.clearfix>
-                <div.ci-content>
-                    <textarea>
+  <@icon>
+    <if(state.widgetConfiguration)>
+      <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+    </if>
+  </@icon>
+  <@title>
+    <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
+  </@title>
+  <@contentActions>
+    <ul.content-actions>
+      <if(state.widgetConfiguration)>
+        <for(action in state.widgetConfiguration.actions)>
+          <li>
+            <include(component.getTemplate(action)) short=true/>
+          </li>
+        </for>
+      </if>
+    </ul>
+  </@contentActions>
+  <@content>
+    <if(state.ticket)>
+      <div.ci-wrapper.clearfix>
+        <div.ci-content>
+          <textarea>
                     </textarea>
                 </div>
                 <span>CI:</span>
@@ -107,8 +107,10 @@
                 </if>
             </ul>
         </if>
-    </@content>
-    <@filter>
-        <span/>
-    </@filter>
+      </ul>
+    </if>
+  </@content>
+  <@filter>
+    <span/>
+  </@filter>
 </widget>
