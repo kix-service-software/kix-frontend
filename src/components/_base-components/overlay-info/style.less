@@ -1,6 +1,8 @@
 .object-info-overlay {
     position: absolute;
     .widget {
+        width: @default-widget-width;
+        height: @default-widget-height;
         .widget-header {
             background-color: @tertiary-1;
             color: @secondary-6;
@@ -9,6 +11,8 @@
             border: 1px solid @tertiary-1;
             background-color: @secondary-6;
             font-weight: normal;
+            overflow: auto;
+            padding: 0 0.75em 0 1em;
         }
     }
     .kix-icon-close {
