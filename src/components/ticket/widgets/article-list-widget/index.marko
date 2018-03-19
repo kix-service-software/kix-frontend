@@ -14,7 +14,7 @@
             <div.header-attachments on-click('attachmentsClicked')>
                 <span.kix-icon-attachement/>(${component.getAttachmentsCount()})
             </div>
-            <filter on-filter('filter')/>
+            <filter filterValue=state.filterValue on-filter('filter')/>
         </@filter>
     </widget>
 </div>

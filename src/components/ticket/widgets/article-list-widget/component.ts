@@ -130,6 +130,7 @@ export class ArticleListWidgetComponent {
     }
 
     private filter(filterValue: string): void {
+        this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
     }
 }

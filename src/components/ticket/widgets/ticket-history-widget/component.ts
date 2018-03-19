@@ -94,13 +94,9 @@ class TicketHistoryWidgetComponent {
     }
 
     private filter(filterValue: string): void {
-        if (filterValue !== null && filterValue !== "") {
-            this.state.standardTable.setFilterSettings(filterValue);
-        } else {
-            this.state.standardTable.resetFilter();
-        }
+        this.state.filterValue = filterValue;
+        this.state.standardTable.setFilterSettings(filterValue);
     }
-
     private print(): void {
         ApplicationStore.getInstance().toggleMainDialog();
     }

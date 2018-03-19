@@ -11,7 +11,7 @@
         <div.history-content>
             <div.history-filter>
                 <span.header>Änderungsverlauf</span>
-                <filter on-filter('filter')/>
+                <filter filterValue=state.filterValue on-filter('filter')/>
             </div>
             <div.history-container>
                 <if(state.standardTable)>
