@@ -3,7 +3,7 @@
         <span>Lade Ticket ...</span>
     </if>
     <else-if(state.ticket)>
-        <widget minimizable=true actions=state.generalActions>
+        <widget minimizable=true actions=state.generalActions instanceId="ticket-details-widget">
             <@icon/>
             <@title>${component.getTitle()}</@title>
             <@contentActions>
