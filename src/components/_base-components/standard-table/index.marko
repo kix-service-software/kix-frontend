@@ -51,6 +51,7 @@
                                 <if(column.showIcon)>
                                     <icon object=column.id objectId=value.objectValue/>
                                 </if>
+                                <if(column.showIcon && column.showText)>&nbsp;</if>
                                 <if(column.showText)>
                                     <span>${value.displayValue}</span>
                                 </if>

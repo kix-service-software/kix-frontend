@@ -37,6 +37,8 @@ class IconComponent {
                 this.state.base64 = false;
                 this.state.content = 'kix-icon-minus';
             }
+        } else {
+            this.state.content = null;
         }
     }
 
