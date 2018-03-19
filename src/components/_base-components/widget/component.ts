@@ -3,6 +3,7 @@ import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ContextNotification } from '@kix/core/dist/browser/context';
+import { WidgetType } from '@kix/core/dist/model';
 
 class WidgetComponent {
 
@@ -16,16 +17,22 @@ class WidgetComponent {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedRandomId();
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
-        this.state.hasConfigOverlay = input.hasConfigOverlay !== undefined ? input.hasConfigOverlay : false;
+        this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+        this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
     }
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
         if (config) {
-            this.state.minimizable = config.minimizable;
-            this.state.minimized = config.minimized;
+            if ((config.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
+                this.state.minimizable = false;
+                this.state.minimized = false;
+            } else {
+                this.state.minimizable = config.minimizable;
+                this.state.minimized = config.minimized;
+            }
         }
     }
 
