@@ -1,20 +1,37 @@
+@overlay-width: @default-widget-width;
+@overlay-hight: @default-widget-height;
 .object-info-overlay {
+    z-index: 100;
     position: absolute;
     .widget {
+        width: @overlay-width;
+        height: @overlay-hight;
         .widget-header {
             background-color: @tertiary-1;
             color: @secondary-6;
+            box-sizing: border-box;
+            height: 1.75em;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
         }
         .widget-content {
             border: 1px solid @tertiary-1;
             background-color: @secondary-6;
             font-weight: normal;
+            overflow: auto;
+            padding: 0 0.75em 0 1em;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+            box-sizing: border-box;
         }
     }
     .kix-icon-close {
         position: absolute;
         top: 5px;
         right: 5px;
-        color: @secondary-0;
+        color: @primary-0;
+        font-size: .75em;
     }
 }
