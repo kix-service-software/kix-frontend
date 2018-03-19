@@ -60,13 +60,13 @@
                         <if(state.standardTable.toggle)>
                             <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
                                 <if(row.isToggled)>
-                                    <span.kix-icon-triangle-up>
+                                    <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
                                         <span.path1/>
                                         <span.path2/>
                                     </span>
                                 </if>
                                 <else>
-                                    <span.kix-icon-sort-down/>
+                                    <span.kix-icon-sort-down key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")/>
                                 </else>
                             </div>
                         </if>
