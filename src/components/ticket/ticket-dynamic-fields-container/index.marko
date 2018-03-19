@@ -5,9 +5,10 @@
                 <@icon/>
                 <@title>${displayGroup.Name}</@title>
                 <@content>
-                    <ul.field-container>
+                    <!-- TODO: "key" ggf. unnötig, wenn es eigene label-componenten sein sollten (siehe #399) -->
+                    <ul.field-container key=("field-container" + displayGroup.ItemID)>
                         <for(df in component.getDynamicFields(displayGroup.ItemID))>
-                            <li.dynamic-field>
+                            <li.dynamic-field key=(("dynamic-field" + displayGroup.ItemID) + df.ID)>
                                 <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID/>
                             </li>
                         </for>
