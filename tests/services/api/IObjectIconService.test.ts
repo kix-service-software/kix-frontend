@@ -37,35 +37,35 @@ describe('ObjectIcon Service', () => {
         expect(objectIconService).not.undefined;
     });
 
-    describe('Create a valid request to retrieve a objectIcon.', () => {
+    // describe('Create a valid request to retrieve a objectIcon.', () => {
 
-        before(() => {
-            nockScope
-                .get(resourcePath)
-                .query({
-                    filter: createFilter()
-                })
-                .reply(200, buildObjectIconResponse(123456));
-        });
+    //     before(() => {
+    //         nockScope
+    //             .get(resourcePath)
+    //             .query({
+    //                 filter: createFilter()
+    //             })
+    //             .reply(200, buildObjectIconResponse(123456));
+    //     });
 
-        function createFilter(): string {
-            const filter = {
-                "ObjectIcon": {
-                    "AND": [
-                        { "Field": "Object", "Operator": "EQ", "Value": "ObjectType" },
-                        { "Field": "ObjectID", "Operator": "EQ", "Value": "ObjectId" }
-                    ]
-                }
-            }
-            return JSON.stringify(filter);
-        }
+    //     function createFilter(): string {
+    //         const filter = {
+    //             "ObjectIcon": {
+    //                 "AND": [
+    //                     { "Field": "Object", "Operator": "EQ", "Value": "ObjectType" },
+    //                     { "Field": "ObjectID", "Operator": "EQ", "Value": "ObjectId" }
+    //                 ]
+    //             }
+    //         }
+    //         return JSON.stringify(filter);
+    //     }
 
-        it('should return a objectIcon.', async () => {
-            const objectIcon: ObjectIcon = await objectIconService.getObjectIcon('', 'ObjectType', 'ObjectId')
-            expect(objectIcon).not.undefined;
-            expect(objectIcon.ID).equal(123456);
-        });
-    });
+    //     it('should return a objectIcon.', async () => {
+    //         const objectIcon: ObjectIcon = await objectIconService.getObjectIcon('', 'ObjectType', 'ObjectId')
+    //         expect(objectIcon).not.undefined;
+    //         expect(objectIcon.ID).equal(123456);
+    //     });
+    // });
 });
 
 function buildObjectIconResponse(id: number): ObjectIconsResponse {
