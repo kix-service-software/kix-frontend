@@ -8,6 +8,10 @@ class FilterComponent {
         this.state = new FilterComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.filterValue = input.filterValue;
+    }
+
     private filterValueChanged(event: any): void {
         this.state.filterValue = event.target.value;
     }
