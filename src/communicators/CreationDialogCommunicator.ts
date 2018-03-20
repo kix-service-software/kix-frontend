@@ -9,33 +9,30 @@ import {
 
 import { ICreationDialogExtension, KIXExtensions } from '@kix/core/dist/extensions';
 
-const CREATION_DIALOG = "creation-dialog";
-
 export class CreationDialogCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/' + CREATION_DIALOG);
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerEvents(client);
-            });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return 'creation-dialog';
     }
 
-    private registerEvents(client: SocketIO.Socket): void {
-        client.on(CreationDialogEvent.LOAD_CREATION_DIALOGS, async (data: LoadCreationDialogRequest) => {
-
-            const createDialogExtensions = await this.pluginService
-                .getExtensions<ICreationDialogExtension>(KIXExtensions.CREATION_DIALOG);
-
-            const dialogs: CreationDialog[] = [];
-            for (const dialog of createDialogExtensions) {
-                dialogs.push(dialog.getDialog());
-            }
-
-            const loadResponse = new LoadCreationDialogResponse(dialogs);
-            client.emit(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
-        });
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(CreationDialogEvent.LOAD_CREATION_DIALOGS, this.loadCreationDialogs.bind(this));
     }
 
+    private async loadCreationDialogs(data: LoadCreationDialogRequest): Promise<void> {
+
+        const createDialogExtensions = await this.pluginService
+            .getExtensions<ICreationDialogExtension>(KIXExtensions.CREATION_DIALOG);
+
+        const dialogs: CreationDialog[] = [];
+        for (const dialog of createDialogExtensions) {
+            dialogs.push(dialog.getDialog());
+        }
+
+        const loadResponse = new LoadCreationDialogResponse(dialogs);
+        this.client.emit(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
+    }
 }

@@ -16,44 +16,44 @@ import { KIXCommunicator } from './KIXCommunicator';
 
 export class MainMenuCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/main-menu');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerMainMenuEvents(client);
-            });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return 'main-menu';
     }
 
-    private registerMainMenuEvents(client: SocketIO.Socket): void {
-        client.on(MainMenuEvent.LOAD_MENU_ENTRIES, async (data: MainMenuEntriesRequest) => {
-
-            const user = await this.userService.getUserByToken(data.token);
-
-            const extensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
-
-            let configuration: MainMenuConfiguration = await this.configurationService.getComponentConfiguration(
-                "personal-settings", "main-menu", user.UserID
-            );
-
-            if (!configuration) {
-                configuration = await this.createDefaultConfiguraton(extensions, user.UserID);
-            } else {
-                configuration = await this.validateConfiguration(extensions, configuration, user.UserID);
-            }
-
-            const primaryEntries =
-                this.getMenuEntries(extensions, configuration.primaryMenuEntryConfigurations);
-
-            const secondaryEntries =
-                this.getMenuEntries(extensions, configuration.secondaryMenuEntryConfigurations);
-
-            const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries, configuration.showText);
-            client.emit(MainMenuEvent.MENU_ENTRIES_LOADED, response);
-        });
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async createDefaultConfiguraton(
+    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<void> {
+
+        const user = await this.userService.getUserByToken(data.token);
+
+        const extensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
+
+        let configuration: MainMenuConfiguration = await this.configurationService.getComponentConfiguration(
+            "personal-settings", "main-menu", user.UserID
+        );
+
+        if (!configuration) {
+            configuration = await this.createDefaultConfiguration(extensions, user.UserID);
+        } else {
+            configuration = await this.validateConfiguration(extensions, configuration, user.UserID);
+        }
+
+        const primaryEntries =
+            this.getMenuEntries(extensions, configuration.primaryMenuEntryConfigurations);
+
+        const secondaryEntries =
+            this.getMenuEntries(extensions, configuration.secondaryMenuEntryConfigurations);
+
+        const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries, configuration.showText);
+        this.client.emit(MainMenuEvent.MENU_ENTRIES_LOADED, response);
+    }
+
+    private async createDefaultConfiguration(
         extensions: IMainMenuExtension[], userId: number
     ): Promise<MainMenuConfiguration> {
 

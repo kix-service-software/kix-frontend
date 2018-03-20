@@ -20,19 +20,18 @@ export class DashboardCommunicator extends KIXCommunicator {
 
     private client: SocketIO.Socket;
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/dashboard');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.client = client;
-                this.client.on(DashboardEvent.LOAD_DASHBOARD, this.loadDashboard.bind(this));
-                this.client.on(DashboardEvent.SAVE_DASHBOARD, this.saveDashboard.bind(this));
-                this.client.on(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
-            });
+    public getNamespace(): string {
+        return 'dashboard';
     }
 
-    private async loadDashboard(data: LoadDashboardRequest): Promise<void> {
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(DashboardEvent.LOAD_DASHBOARD, this.loadDashboard.bind(this));
+        client.on(DashboardEvent.SAVE_DASHBOARD, this.saveDashboard.bind(this));
+        client.on(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
+    }
+
+    protected async loadDashboard(data: LoadDashboardRequest): Promise<void> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
@@ -58,7 +57,6 @@ export class DashboardCommunicator extends KIXCommunicator {
     }
 
     private async saveDashboard(data: SaveDashboardRequest): Promise<void> {
-
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 

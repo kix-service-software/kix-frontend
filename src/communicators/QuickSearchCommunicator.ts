@@ -11,26 +11,28 @@ import { IQuickSearchExtension } from '@kix/core/dist/extensions';
 
 export class QuickSearchCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/quick-search');
-        nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-            this.registerEvents(client);
-        });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return 'quick-search';
     }
 
-    private registerEvents(client: SocketIO.Socket): void {
-        client.on(QuickSearchEvent.EXECUTE_QUICK_SEARCH, async (data: QuickSearchRequest) => {
-            const quickSearch = await this.pluginService.getQuickSearchExtension(data.quickSearchId);
-
-            const result = await quickSearch.execute(data.token, data.searchValue);
-            const response = new QuickSearchResponse(result);
-            client.emit(QuickSearchEvent.QUICK_SEARCH_FINISHED, response);
-        });
-
-        client.on(QuickSearchEvent.LOAD_QUICK_SEARCHES, async (data: LoadQuickSearchesRequest) => {
-            const quickSearches = await this.pluginService.getQuickSearches();
-            client.emit(QuickSearchEvent.LOAD_QUICK_SEARCHES_FINISHED, new LoadQuickSearchesResponse(quickSearches));
-        });
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(QuickSearchEvent.EXECUTE_QUICK_SEARCH, this.executeQuickSearch.bind(this));
+        client.on(QuickSearchEvent.LOAD_QUICK_SEARCHES, this.loadQuickSearches.bind(this));
     }
 
+    private async executeQuickSearch(data: QuickSearchRequest): Promise<void> {
+        const quickSearch = await this.pluginService.getQuickSearchExtension(data.quickSearchId);
+
+        const result = await quickSearch.execute(data.token, data.searchValue);
+        const response = new QuickSearchResponse(result);
+        this.client.emit(QuickSearchEvent.QUICK_SEARCH_FINISHED, response);
+    }
+
+    private async loadQuickSearches(data: LoadQuickSearchesRequest): Promise<void> {
+        const quickSearches = await this.pluginService.getQuickSearches();
+        this.client.emit(QuickSearchEvent.LOAD_QUICK_SEARCHES_FINISHED, new LoadQuickSearchesResponse(quickSearches));
+    }
 }

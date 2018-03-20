@@ -14,30 +14,29 @@ const PERSONAL_SETTINGS = "personal-settings";
 
 export class PersonalSettingsCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/' + PERSONAL_SETTINGS);
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerPersonalSettingsEvents(client);
-                this.registerSavePersonalSettingsEvents(client);
-            });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return PERSONAL_SETTINGS;
     }
 
-    private registerPersonalSettingsEvents(client: SocketIO.Socket): void {
-        client.on(PersonalSettingsEvent.LOAD_PERSONAL_SETTINGS, async (data: LoadPersonalSettingsRequest) => {
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(PersonalSettingsEvent.LOAD_PERSONAL_SETTINGS, this.loadPersonalSettings.bind(this));
+        client.on(PersonalSettingsEvent.SAVE_PERSONAL_SETTINGS, this.savePersonalSettings.bind(this));
+    }
 
-            const user = await this.userService.getUserByToken(data.token);
-            const userId = user.UserID;
+    private async loadPersonalSettings(data: LoadPersonalSettingsRequest): Promise<void> {
+        const user = await this.userService.getUserByToken(data.token);
+        const userId = user.UserID;
 
-            const personalSettingsExtensions = await this.pluginService
-                .getExtensions<IPersonalSettingsExtension>(KIXExtensions.PERSONAL_SETTINGS);
+        const personalSettingsExtensions = await this.pluginService
+            .getExtensions<IPersonalSettingsExtension>(KIXExtensions.PERSONAL_SETTINGS);
 
-            const settings = await this.getPersonalSettings(personalSettingsExtensions, userId);
+        const settings = await this.getPersonalSettings(personalSettingsExtensions, userId);
 
-            const loadResponse = new LoadPersonalSettingsResponse(settings);
-            client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, loadResponse);
-        });
+        const loadResponse = new LoadPersonalSettingsResponse(settings);
+        this.client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, loadResponse);
     }
 
     private async getPersonalSettings(
@@ -64,19 +63,16 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
         return settings;
     }
 
-    private registerSavePersonalSettingsEvents(client: SocketIO.Socket): void {
-        client.on(PersonalSettingsEvent.SAVE_PERSONAL_SETTINGS, async (data: SavePersonalSettingsRequest) => {
+    private async savePersonalSettings(data: SavePersonalSettingsRequest): Promise<void> {
 
-            const user = await this.userService.getUserByToken(data.token);
-            const userId = user.UserID;
+        const user = await this.userService.getUserByToken(data.token);
+        const userId = user.UserID;
 
-            for (const ps of data.personalSettings) {
-                await this.configurationService
-                    .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, userId, ps.configuration);
-            }
+        for (const ps of data.personalSettings) {
+            await this.configurationService
+                .saveComponentConfiguration(PERSONAL_SETTINGS, ps.id, userId, ps.configuration);
+        }
 
-            client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_SAVED);
-        });
+        this.client.emit(PersonalSettingsEvent.PERSONAL_SETTINGS_SAVED);
     }
-
 }

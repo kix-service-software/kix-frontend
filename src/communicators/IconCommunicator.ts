@@ -9,17 +9,19 @@ import { KIXCommunicator } from './KIXCommunicator';
 
 export class IconCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/icons');
-        nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-            this.registerIconEvents(client);
-        });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return 'icons';
     }
 
-    private registerIconEvents(client: SocketIO.Socket): void {
-        client.on(IconEvent.LOAD_ICON, async (data: ObjectIconLoadRequest) => {
-            const icon = await this.objectIconService.getObjectIcon(data.token, data.object, data.objectId);
-            client.emit(IconEvent.ICON_LOADED, new ObjectIconLoadResponse(data.requestId, icon));
-        });
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(IconEvent.LOAD_ICON, this.loadIcon.bind(this));
+    }
+
+    private async loadIcon(data: ObjectIconLoadRequest): Promise<void> {
+        const icon = await this.objectIconService.getObjectIcon(data.token, data.object, data.objectId);
+        this.client.emit(IconEvent.ICON_LOADED, new ObjectIconLoadResponse(data.requestId, icon));
     }
 }

@@ -37,5 +37,16 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService
     ) { }
 
-    public abstract registerNamespace(socketIO: SocketIO.Server): void;
+    public abstract getNamespace(): string;
+
+    protected abstract registerEvents(client: SocketIO.Socket): void;
+
+    public registerNamespace(socketIO: SocketIO.Server): void {
+        const nsp = socketIO.of('/' + this.getNamespace());
+        nsp
+            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
+            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
+                this.registerEvents(client);
+            });
+    }
 }

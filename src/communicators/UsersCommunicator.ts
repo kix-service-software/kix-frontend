@@ -12,19 +12,19 @@ import {
 
 export class UsersCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/users');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerUsersEvents(client);
-            });
+    private client: SocketIO.Socket;
+
+    public getNamespace(): string {
+        return 'users';
     }
 
-    private registerUsersEvents(client: SocketIO.Socket): void {
-        client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
-            client.emit(UsersEvent.USERS_LOADED, new LoadUsersResponse([]));
-        });
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.client = client;
+        client.on(UsersEvent.LOAD_USERS, this.loadUsers.bind(this));
+    }
+
+    private async loadUsers(data: LoadUsersRequest): Promise<void> {
+        this.client.emit(UsersEvent.USERS_LOADED, new LoadUsersResponse([]));
     }
 }
 

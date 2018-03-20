@@ -7,6 +7,7 @@ import * as express from 'express';
 import path = require('path');
 import fs = require('fs');
 import https = require('https');
+import { SocketEvent } from '@kix/core/dist/model';
 
 @injectable()
 export class SocketCommunicationService implements ISocketCommunicationService {
