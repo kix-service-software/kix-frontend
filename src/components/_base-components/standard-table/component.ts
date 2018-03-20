@@ -34,7 +34,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             });
 
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
-                (this as any).forceUpdate();
+                (this as any).setStateDirty();
                 if (scrollToTop) {
                     this.scrollTableToTop();
                 }
@@ -101,12 +101,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
         this.setTableHeight();
         this.ps.update();
-    }
-
-    private getRows(): Array<TableRow<T>> {
-        return this.state.standardTable
-            ? this.state.standardTable.getRows()
-            : [];
     }
 
     private getColumns(): TableColumn[] {
@@ -199,7 +193,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (this.state.standardTable.selectionListener) {
             if (checked) {
                 this.state.standardTable.selectionListener.selectAll(
-                    this.state.standardTable.getRows(true)
+                    this.state.standardTable.getTableRows(true)
                 );
             } else {
                 this.state.standardTable.selectionListener.selectNone();
@@ -242,8 +236,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public setTableHeight(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
         if (table) {
-            const minElements = this.getRows().length > this.state.standardTable.displayLimit ?
-                this.state.standardTable.displayLimit : this.getRows().length;
+            const rows = this.state.standardTable.getTableRows();
+            const minElements = rows.length > this.state.standardTable.displayLimit ?
+                this.state.standardTable.displayLimit : rows.length;
             const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
             const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
             let height = (minElements + 1) * rowHeight;
