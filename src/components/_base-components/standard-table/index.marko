@@ -33,7 +33,7 @@
                 <div.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
-            <for(row in component.getRows() | status-var=loop)>
+            <for(row in state.standardTable.getTableRows() | status-var=loop)>
                 <div.row data-id=((state.tableId + "row") + loop.getIndex()) class={opened: row.isToggled}>
                     <div.row-columns class=row.classes
                         style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>

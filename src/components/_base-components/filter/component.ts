@@ -16,16 +16,15 @@ class FilterComponent {
         this.state.filterValue = event.target.value;
     }
 
-    private filter(): void {
-        (this as any).emit('filter', this.state.filterValue);
-    }
-
     private keyDown(event: any): void {
-        // 13 == Enter
         if (event.keyCode === 13 || event.key === 'Enter') {
             this.filterValueChanged(event);
             this.filter();
         }
+    }
+
+    private filter(): void {
+        (this as any).emit('filter', this.state.filterValue);
     }
 
 }
