@@ -241,6 +241,67 @@
 
 .lane-tab-widget {
     .widget();
+    .widget-header {
+        display: none;
+    }
+    &.minimized {
+        .widget-header {
+            .header-left {
+                display: inline-block;
+                h3 {
+                    max-width: none;
+                }
+            }
+        }
+    }
+    .widget-content {
+        position: relative;
+        top: -1.5em;
+        border: 0 none;
+        background-color: @secondary-6;
+        margin-bottom: -1.5em;
+        .tab-list {
+            list-style: none;
+            position: relative;
+            height: 1.5em;
+            li {
+                position: relative;
+                display: inline-block;
+                background-color: @primary-4;
+                color: @primary-0;
+                border: 1px solid @primary-2;
+                border-top-left-radius: @border-radius;
+                border-top-right-radius: @border-radius;
+                border-bottom: 0;
+                margin-right: .5em;
+                padding: 2px .5em 4px .5em;
+                font-weight: 600;
+                height: 1em;
+                &.active {
+                    z-index: 5;
+                    background-color: @secondary-6;
+                    color: @primary-0;
+                }
+            }
+        }
+        .tab-content {
+            border: 1px solid @primary-2;
+            border-top: 0;
+            border-bottom-left-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            background-color: @secondary-6;
+            .widget {
+                .widget-header {
+                    display: none;
+                }
+                .widget-content {
+                    margin: 0;
+                    padding: 1.5em 1em 1em;
+                    top: auto;
+                }
+            }
+        }
+    }
 }
 
 .group-widget {
@@ -254,33 +315,11 @@
     .widget-header {
         background-color: @secondary-6;
         color: @secondary-7;
+        font-weight: bold;
     }
     .widget-content {
         border: 0;
         padding: 0;
         min-height: auto;
-        .description-attachments {
-            float: right;
-            max-height: 105px;
-            min-width: 250px;
-            width: 20%;
-            padding: 0 1em;
-            box-sizing: border-box;
-            ul {
-                padding-left: 1em;
-                list-style-type: none;
-                li {
-                    height: 1.5em;
-                    line-height: 1.5em;
-                    vertical-align: middle;
-                }
-                img {
-                    margin-right: 5px;
-                }
-            }
-        }
-        .description-text-wrapper {
-            margin-right: 20%;
-        }
     }
 }

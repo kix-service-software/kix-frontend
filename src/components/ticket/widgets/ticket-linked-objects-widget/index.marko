@@ -18,7 +18,7 @@
         <if(state.linkCount > 0)>
             <div.linked-objects-container>
                 <for(group in state.linkedObjectGroups)>
-                    <widget>
+                    <widget type=32>
                         <@icon/>
                         <@title>${group[0]} (${group[1]})</@title>
                         <@content>
@@ -29,7 +29,6 @@
                             </div>
                         </@content>
                         <@filter/>
-                        
                         <@contentActions/>
                     </widget>
                 </for>
@@ -40,5 +39,4 @@
         </else>
     </@content>
     <@filter/>
-    
 </widget>

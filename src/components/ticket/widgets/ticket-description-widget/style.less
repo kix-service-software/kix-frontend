@@ -1,11 +1,33 @@
-.ticket-details .widget .lane-list .lane>.widget {
+.widget-content {
     .description-container {
         position: relative;
         overflow: auto;
         padding: .5em .5em .5em 1.5em;
         box-sizing: border-box;
-        &>.widget {
-            .group-widget();
+        .widget-content {
+            .description-attachments {
+                float: right;
+                max-height: 105px;
+                min-width: 250px;
+                width: 20%;
+                padding: 0 1em;
+                box-sizing: border-box;
+                ul {
+                    padding-left: 1em;
+                    list-style-type: none;
+                    li {
+                        height: 1.5em;
+                        line-height: 1.5em;
+                        vertical-align: middle;
+                    }
+                    img {
+                        margin-right: 5px;
+                    }
+                }
+            }
+            .description-text-wrapper {
+                margin-right: 20%;
+            }
         }
     }
 }
