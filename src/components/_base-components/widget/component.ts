@@ -2,11 +2,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
-<<<<<<< HEAD
-import { ContextNotification } from '@kix/core/dist/browser/context';
-=======
 import { WidgetType } from '@kix/core/dist/model';
->>>>>>> refs/heads/368-widgetstyling-vereinheitlichen-zentralisieren
 
 class WidgetComponent {
 
@@ -20,28 +16,22 @@ class WidgetComponent {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedRandomId();
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
-        this.state.hasConfigOverlay = input.hasConfigOverlay !== undefined ? input.hasConfigOverlay : false;
-<<<<<<< HEAD
+        this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
-=======
-        this.state.type = input.type;
->>>>>>> refs/heads/368-widgetstyling-vereinheitlichen-zentralisieren
+        this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
     }
 
     public onMount(): void {
-<<<<<<< HEAD
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
         if (config) {
-            this.state.minimizable = config.minimizable;
-            this.state.minimized = config.minimized;
-=======
-        this.state.widgetConfiguration =
-            ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
-        if (this.state.widgetConfiguration) {
-            this.state.minimizable = this.state.widgetConfiguration.minimizable;
-            this.state.minimized = this.state.widgetConfiguration.minimized;
->>>>>>> refs/heads/368-widgetstyling-vereinheitlichen-zentralisieren
+            if ((config.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
+                this.state.minimizable = false;
+                this.state.minimized = false;
+            } else {
+                this.state.minimizable = config.minimizable;
+                this.state.minimized = config.minimized;
+            }
         }
     }
 
