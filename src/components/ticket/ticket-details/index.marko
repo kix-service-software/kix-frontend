@@ -1,6 +1,6 @@
 <div.ticket-details>
     <if(state.loading)>
-        <span>Lade Ticket ...</span>
+        <loading-spinner/>
     </if>
     <else-if(state.ticket)>
         <widget minimizable=true actions=state.generalActions instanceId="ticket-details-widget">

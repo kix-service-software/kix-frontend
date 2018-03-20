@@ -50,6 +50,11 @@
         <if(!state.minimized && component.isInputDefined(input.content))>
             <include(input.content)/>
         </if>
+        <if(state.isLoading)>
+            <div.widget-overlay.loading>
+                <loading-spinner/>
+            </div>
+        </if>
     </div>
     <if(component.hasConfigurationOverlay())>
         <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>

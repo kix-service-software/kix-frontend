@@ -2,6 +2,7 @@ import { ApplicationStore } from '@kix/core/dist/browser/application/Application
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { ContextNotification } from '@kix/core/dist/browser/context';
 import { WidgetType } from '@kix/core/dist/model';
 
 class WidgetComponent {
