@@ -1,4 +1,4 @@
-import { StandardTable } from '@kix/core/dist/browser';
+import { StandardTable, TableRow } from '@kix/core/dist/browser';
 import { ResizeSettings } from './ResizeSettings';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { SortOrder, KIXObject } from '@kix/core/dist/model';
@@ -18,4 +18,5 @@ export class StandardTableComponentState<T extends KIXObject<T>> {
     public sortOrder: SortOrder = null;
 
     public rowWidth: number = 0;
+
 }

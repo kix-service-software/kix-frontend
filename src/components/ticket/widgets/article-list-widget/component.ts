@@ -57,6 +57,7 @@ export class ArticleListWidgetComponent {
                 ContextService.getInstance().notifyListener(
                     TicketDetailsContext.CONTEXT_ID, ContextNotification.SCROLL_TO_ARTICLE, args[0]
                 );
+                this.state.standardTable.loadRows();
             }, 500);
         }
     }
