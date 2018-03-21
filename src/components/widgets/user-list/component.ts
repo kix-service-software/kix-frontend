@@ -4,7 +4,7 @@ import { UserListComponentState } from './model/UserListComponentState';
 
 import { UserService } from '@kix/core/dist/browser/user/UserService';
 import { User, LoadUsersRequest } from '@kix/core/dist/model/';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 
 class UserListWidgetComponent {

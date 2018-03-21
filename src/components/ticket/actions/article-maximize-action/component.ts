@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleMaximizeActionComponent {
 
     private doAction(): void {
         alert('Großansicht');
-        // ApplicationStore.getInstance().toggleMainDialog('article-maximize-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-maximize-dialog');
     }
 
 }

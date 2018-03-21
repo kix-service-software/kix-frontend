@@ -1,4 +1,4 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 import { TicketProperty } from "@kix/core/dist/model/";
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
 
@@ -25,7 +25,7 @@ class TicketSearchComponent {
     }
 
     private openSearchDialog(): void {
-        ApplicationStore.getInstance().toggleMainDialog(
+        ApplicationService.getInstance().toggleMainDialog(
             'ticket-search-dialog-content', { properties: this.state.properties }
         );
     }
