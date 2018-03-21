@@ -9,31 +9,44 @@ class ObjectInfoOverlayComponent {
         this.state = new ObjectInfoOverlayComponentState();
     }
 
-    public onInput(input: any): void {
-        this.state.position = input.position;
-        this.state.data = input.data;
+    public onMount(): void {
+        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+    }
+
+    public onUpdate(): void {
         this.positionOverlay();
     }
 
-    public onMount(): void {
-        this.positionOverlay();
+    private applicationStateChanged(): void {
+        const showOverlay = ApplicationStore.getInstance().isShowInfoOverlay();
+
+        if (showOverlay) {
+            const infoOverlay = ApplicationStore.getInstance().getCurrentInfoOverlay();
+            if (infoOverlay[0]) {
+                this.state.content = infoOverlay[0].content;
+                this.state.data = infoOverlay[0].data;
+                this.state.position = infoOverlay[1];
+            }
+        }
+
+        this.state.show = showOverlay;
     }
 
     private positionOverlay(): void {
-        const self = (this as any).getEl('overlay');
-        if (self) {
+        const overlay = (this as any).getEl('overlay');
+        if (overlay) {
             // TODO: wenn gefordert: umpositionieren, wenn außerhalb vom "bildschirm"
             if (this.state.position && this.state.position[0]) {
                 // TODO: +10 vermutet, laut Preview-Screen
-                self.style.left = (this.state.position[0] + 10) + 'px';
+                overlay.style.left = (this.state.position[0] + 10) + 'px';
             } else {
-                self.style.left = '45%';
+                overlay.style.left = '45%';
             }
             if (this.state.position && this.state.position[1]) {
                 // TODO: -112 margin-top von "section", sonst ist das overlay zu tief (egal ob clientY oder pageY)
-                self.style.top = (this.state.position[1] - 112) + 'px';
+                overlay.style.top = (this.state.position[1] - 112) + 'px';
             } else {
-                self.style.top = '45%';
+                overlay.style.top = '45%';
             }
         }
     }
@@ -46,4 +59,5 @@ class ObjectInfoOverlayComponent {
         return { ...this.state.data, minimizable: false };
     }
 }
+
 module.exports = ObjectInfoOverlayComponent;
