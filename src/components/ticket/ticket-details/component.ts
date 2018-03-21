@@ -25,7 +25,6 @@ export class TicketDetailsComponent {
         this.setBreadcrumbDetails();
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
@@ -34,12 +33,13 @@ export class TicketDetailsComponent {
         this.loadTicket();
     }
 
-    private loadTicket(): void {
+    private async loadTicket(): Promise<void> {
         this.state.loading = true;
-        TicketService.getInstance().loadTicket(this.state.ticketId).then(() => {
-            this.setTicketHookInfo();
-            this.state.loading = false;
-        });
+        const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
+        this.state.ticket = ticket;
+        this.setBreadcrumbDetails();
+        this.setTicketHookInfo();
+        this.state.loading = false;
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -69,16 +69,6 @@ export class TicketDetailsComponent {
         if (objectData) {
             this.state.ticketHook = objectData.ticketHook;
             this.state.ticketHookDivider = objectData.ticketHookDivider;
-        }
-    }
-
-    public ticketServiceNotified(id: string, type: TicketNotification, ...args) {
-        if (type === TicketNotification.TICKET_LOADED) {
-            const ticket: Ticket = args[0];
-            if (ticket.TicketID === this.state.ticketId) {
-                this.state.ticket = ticket;
-                this.setBreadcrumbDetails();
-            }
         }
     }
 

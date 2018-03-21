@@ -26,8 +26,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-module',
             'ticket/ticket-details',
             'ticket/ticket-dynamic-fields-container',
-            'ticket/ticket-search/ticket-search-result',
-            'ticket/ticket-search/ticket-search-dialog-content',
             'ticket/widgets/article-attachment-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-list-widget/ticket-list-configuration',
@@ -59,7 +57,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/actions/article-communication-action',
             'ticket/actions/article-tag-action',
             'ticket/actions/article-maximize-action',
-            'ticket/dialogs/ticket-creation-dialog',
             'ticket/dialogs/merge-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
             'ticket/dialogs/link-ticket-dialog',
@@ -118,7 +115,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         ];
 
         const dialogs: Array<[string, string]> = [
-            ['ticket-creation-dialog', 'ticket/dialogs/ticket-creation-dialog'],
             ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
             ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
             ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog'],
@@ -155,8 +151,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-article-attachment-list', 'ticket/ticket-article-attachment-list'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-table', 'ticket/ticket-table'],
-            ['ticket-search-result', 'ticket/ticket-search/ticket-search-result'],
-            ['ticket-search-dialog-content', 'ticket/ticket-search/ticket-search-dialog-content'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ...widgets,
             ...explorer,
