@@ -11,6 +11,14 @@ class ObjectInfoOverlayComponent {
 
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+
+        document.addEventListener("click", (event) => {
+            if (this.state.keepShow) {
+                this.state.keepShow = false;
+            } else {
+                ApplicationStore.getInstance().toggleInfoOverlay();
+            }
+        }, false);
     }
 
     public onUpdate(): void {
@@ -27,6 +35,8 @@ class ObjectInfoOverlayComponent {
                 this.state.data = infoOverlay[0].data;
                 this.state.position = infoOverlay[1];
             }
+
+            this.state.keepShow = true;
         }
 
         this.state.show = showOverlay;
@@ -55,9 +65,6 @@ class ObjectInfoOverlayComponent {
         ApplicationStore.getInstance().toggleInfoOverlay();
     }
 
-    private getData(): any {
-        return { ...this.state.data, minimizable: false };
-    }
 }
 
 module.exports = ObjectInfoOverlayComponent;
