@@ -1,9 +1,9 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class EditTicketActionComponent {
 
     private doAction(): void {
-        // ApplicationStore.getInstance().toggleMainDialog('edit-ticket-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('edit-ticket-dialog');
         alert("Bearbeiten ...");
     }
 

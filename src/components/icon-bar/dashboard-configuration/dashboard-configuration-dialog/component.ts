@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import {
     SelectWithFilterListElement,
     SelectWithPropertiesListElement,
@@ -255,7 +255,7 @@ class DashboardConfigurationDialog {
     }
 
     private cancel(): void {
-        ApplicationStore.getInstance().toggleMainDialog();
+        ApplicationService.getInstance().toggleMainDialog();
     }
 
     private saveConfiguration(): void {
@@ -273,7 +273,7 @@ class DashboardConfigurationDialog {
         });
 
         DashboardService.getInstance().saveDashboardConfiguration(this.state.dashboardConfig);
-        ApplicationStore.getInstance().toggleMainDialog();
+        ApplicationService.getInstance().toggleMainDialog();
     }
 
     private updateRows(listElement: SelectWithPropertiesListElement, rows: string[][]): void {

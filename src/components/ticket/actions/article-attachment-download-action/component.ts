@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleAttachmentDownloadActionComponent {
 
     private doAction(): void {
         alert('Download');
-        // ApplicationStore.getInstance().toggleMainDialog('article-attachment-download-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-attachment-download-dialog');
     }
 
 }

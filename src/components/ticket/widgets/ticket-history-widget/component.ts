@@ -1,7 +1,7 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import {
     TableColumnConfiguration, StandardTable, ITableClickListener,
@@ -98,7 +98,7 @@ class TicketHistoryWidgetComponent {
         this.state.standardTable.setFilterSettings(filterValue);
     }
     private print(): void {
-        ApplicationStore.getInstance().toggleMainDialog();
+        ApplicationService.getInstance().toggleMainDialog();
     }
 
     private getTemplate(componentId: string): any {

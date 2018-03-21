@@ -1,4 +1,4 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 import { SearchTemplatesComponentState } from './model/SearchTemplatesComponentState';
 import { ContextService } from "@kix/core/dist/browser/context/ContextService";
 
@@ -32,7 +32,7 @@ class SearchTemplatesWidgetComponent {
     }
 
     private showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleMainDialog('search-templates-configuration');
+        ApplicationService.getInstance().toggleMainDialog('search-templates-configuration');
     }
 
     private saveConfiguration(): void {

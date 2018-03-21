@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 class PersonalSettingsToolbarComponent {
 
@@ -9,7 +9,7 @@ class PersonalSettingsToolbarComponent {
     }
 
     public openPersonalSettings(): void {
-        ApplicationStore.getInstance().toggleMainDialog('personal-settings-container');
+        ApplicationService.getInstance().toggleMainDialog('personal-settings-container');
     }
 
 }

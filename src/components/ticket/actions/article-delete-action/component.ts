@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleDeleteActionComponent {
 
     private doAction(): void {
         alert('Löschen');
-        // ApplicationStore.getInstance().toggleMainDialog('article-delete-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-delete-dialog');
     }
 
 }

@@ -1,6 +1,6 @@
 import { NotesComponentState } from './model/NotesComponentState';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class NotesWidgetComponent {
@@ -23,7 +23,7 @@ class NotesWidgetComponent {
     }
 
     public showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleMainDialog('notes-configuration');
+        ApplicationService.getInstance().toggleMainDialog('notes-configuration');
     }
 
     public saveConfiguration(): void {

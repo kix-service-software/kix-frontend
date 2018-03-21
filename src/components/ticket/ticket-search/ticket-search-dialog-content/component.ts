@@ -1,5 +1,5 @@
 import { TicketService } from "@kix/core/dist/browser/ticket/TicketService";
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { TicketProperty } from "@kix/core/dist/model/";
 import { TicketSearchState } from './TicketSearchState';
 import { SearchOperator } from "@kix/core/dist/browser/SearchOperator";
@@ -61,7 +61,7 @@ export class TicketSearchDialogComponent {
         TicketService.getInstance().searchTickets('ticket-search', this.state.limit, this.state.properties).then(() => {
             this.state.searching = false;
             this.state.error = null;
-            ApplicationStore.getInstance().toggleMainDialog();
+            ApplicationService.getInstance().toggleMainDialog();
         }).catch(() => {
             this.state.error = TicketService.getInstance().getTicketsSearchError('ticket-search');
             this.state.searching = false;
