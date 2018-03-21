@@ -1,15 +1,12 @@
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import {
-    TicketService, TicketNotification, TicketLabelProvider, TicketDetailsContext
+    TicketService, TicketNotification, TicketDetailsContext
 } from '@kix/core/dist/browser/ticket/';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
+    BreadcrumbDetails, TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
-import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 export class TicketDetailsComponent {
 
@@ -93,7 +90,7 @@ export class TicketDetailsComponent {
             'Ticket-Dashboard', '#' + value, null
         );
 
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
     private getWidgetTemplate(instanceId: string): any {

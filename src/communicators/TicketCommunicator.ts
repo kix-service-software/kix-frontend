@@ -6,7 +6,6 @@ import {
 import {
     Contact, Customer,
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketRequest, LoadTicketResponse,
-    QuickSearchRequest,
     SetArticleSeenFlagRequest,
     SocketEvent, SearchTicketsRequest, SearchTicketsResponse,
     Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,

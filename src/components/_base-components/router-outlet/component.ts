@@ -1,4 +1,4 @@
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
 export class RouterOutletComponent {
@@ -19,12 +19,12 @@ export class RouterOutletComponent {
     }
 
     public onMount(): void {
-        ComponentRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
+        ComponentRouterService.getInstance().addServiceListener(this.routerStateChanged.bind(this));
         this.routerStateChanged();
     }
 
     private routerStateChanged(): void {
-        const router = ComponentRouterStore.getInstance().getCurrentRouter(this.state.routerId);
+        const router = ComponentRouterService.getInstance().getCurrentRouter(this.state.routerId);
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;

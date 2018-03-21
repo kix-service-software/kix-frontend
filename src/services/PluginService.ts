@@ -2,15 +2,12 @@ import { injectable, inject } from 'inversify';
 import Plugins = require('js-plugins');
 
 import {
-    IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions, IQuickSearchExtension
+    IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions
 } from '@kix/core/dist/extensions';
 import { IPluginService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import { IServerConfiguration } from '@kix/core/dist/common';
-import { IQuickSearch } from '@kix/core/dist/model/quick-search/IQuickSearch';
 
-const host = {
-    debug: true
-};
+const host = { debug: true };
 
 @injectable()
 export class PluginService implements IPluginService {
@@ -62,14 +59,4 @@ export class PluginService implements IPluginService {
         return moduleFactories.find((mf) => mf.getModuleId() === moduleId);
     }
 
-    public async getQuickSearchExtension<T>(quickSearchId: string): Promise<IQuickSearchExtension<T>> {
-        const quickSearches = await this.getExtensions<IQuickSearchExtension<any>>(KIXExtensions.QUICK_SEARCH);
-        return quickSearches.find((qs) => qs.id === quickSearchId);
-    }
-
-    public async getQuickSearches(): Promise<IQuickSearch[]> {
-        const extensions = await this.getExtensions<IQuickSearchExtension<any>>(KIXExtensions.QUICK_SEARCH);
-        const quickSearches = extensions.map((e) => e.getQuickSearch());
-        return quickSearches;
-    }
 }

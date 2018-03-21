@@ -1,7 +1,7 @@
 import { SocketEvent } from '@kix/core/dist/model';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 
@@ -21,7 +21,7 @@ class BaseTemplateComponent {
         ContextService.getInstance().setObjectData(this.state.objectData);
         this.state.initialized = true;
         if (this.state.contextId) {
-            ComponentRouterStore.getInstance().navigate(
+            ComponentRouterService.getInstance().navigate(
                 'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
             );
         }

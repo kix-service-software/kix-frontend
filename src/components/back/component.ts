@@ -1,4 +1,4 @@
-import { ComponentRouterStore } from "@kix/core/dist/browser/router/ComponentRouterStore";
+import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class BackComponent {
 
@@ -9,7 +9,7 @@ class BackComponent {
     }
 
     private navigateBack(): void {
-        ComponentRouterStore.getInstance().navigateBack('base-router');
+        ComponentRouterService.getInstance().navigateBack('base-router');
     }
 
 }

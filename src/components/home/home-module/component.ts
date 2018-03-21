@@ -1,7 +1,6 @@
 import { HomeComponentState } from './model/HomeComponentState';
-import { Context, DashboardConfiguration } from '@kix/core/dist/model/';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { BreadcrumbDetails, Context, DashboardConfiguration } from '@kix/core/dist/model/';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -23,7 +22,7 @@ class HomeComponent {
 
         const breadcrumbDetails =
             new BreadcrumbDetails(HomeComponentState.MODULE_ID, null, null, 'Home-Dashboard');
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args: any[]): void {
