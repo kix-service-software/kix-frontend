@@ -1,9 +1,9 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class MergeTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleMainDialog('merge-ticket-dialog');
+        ApplicationService.getInstance().toggleMainDialog('merge-ticket-dialog');
     }
 
 }

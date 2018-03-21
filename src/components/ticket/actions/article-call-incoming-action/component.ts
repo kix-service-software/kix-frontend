@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleCallIncomingActionComponent {
 
     private doAction(): void {
         alert('Anruf eingehend');
-        // ApplicationStore.getInstance().toggleMainDialog('article-call-incoming-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-call-incoming-dialog');
     }
 
 }

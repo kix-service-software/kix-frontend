@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 import { DashboardConfigurationWidgetComponentState } from './model/DashboardConfigurationWidgetComponentState';
 import { DashboardConfigurationWidgetTranslationId } from './model/DashboardConfigurationWidgetTranslationId';
@@ -20,23 +20,23 @@ class DashboardConfigurationWidget {
 
     private toggleConfigurationMode(): void {
         this.toggleDashboardConfigurationWidget();
-        ApplicationStore.getInstance().toggleConfigurationMode();
+        ApplicationService.getInstance().toggleConfigurationMode();
     }
 
     private openDashboardConfigurationDialog(): void {
         this.toggleDashboardConfigurationWidget();
-        ApplicationStore.getInstance().toggleMainDialog(
+        ApplicationService.getInstance().toggleMainDialog(
             'dashboard-configuration-dialog',
             { title: 'Dashboard Config - Paltzhalter-Titel' }
         );
     }
 
     private isConfigMode(): boolean {
-        return ApplicationStore.getInstance().isConfigurationMode();
+        return ApplicationService.getInstance().isConfigurationMode();
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowMainDialog();
+        return ApplicationService.getInstance().isShowMainDialog();
     }
 }
 

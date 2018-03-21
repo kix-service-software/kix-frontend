@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticlePrintActionComponent {
 
     private doAction(): void {
         alert('Drucken');
-        // ApplicationStore.getInstance().toggleMainDialog('article-print-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-print-dialog');
     }
 
 }

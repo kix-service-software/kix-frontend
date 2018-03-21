@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ObjectInfoOverlayComponentState } from './model/ObjectInfoOverlayComponentState';
 
 class ObjectInfoOverlayComponent {
@@ -10,13 +10,13 @@ class ObjectInfoOverlayComponent {
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
+        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
 
         document.addEventListener("click", (event) => {
             if (this.state.keepShow) {
                 this.state.keepShow = false;
             } else {
-                ApplicationStore.getInstance().toggleInfoOverlay();
+                ApplicationService.getInstance().toggleInfoOverlay();
             }
         }, false);
     }
@@ -26,10 +26,10 @@ class ObjectInfoOverlayComponent {
     }
 
     private applicationStateChanged(): void {
-        const showOverlay = ApplicationStore.getInstance().isShowInfoOverlay();
+        const showOverlay = ApplicationService.getInstance().isShowInfoOverlay();
 
         if (showOverlay) {
-            const infoOverlay = ApplicationStore.getInstance().getCurrentInfoOverlay();
+            const infoOverlay = ApplicationService.getInstance().getCurrentInfoOverlay();
             if (infoOverlay[0]) {
                 this.state.content = infoOverlay[0].content;
                 this.state.data = infoOverlay[0].data;
@@ -62,7 +62,7 @@ class ObjectInfoOverlayComponent {
     }
 
     private closeOverlay() {
-        ApplicationStore.getInstance().toggleInfoOverlay();
+        ApplicationService.getInstance().toggleInfoOverlay();
     }
 
 }

@@ -1,6 +1,6 @@
 import { ChartFactory } from '@kix/core/dist/browser/model/charts';
 import { ChartComponentState } from './model/ChartComponentState';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 
 class ChartWidgetComponent {
@@ -30,7 +30,7 @@ class ChartWidgetComponent {
     }
 
     private showConfigurationClicked(): void {
-        ApplicationStore.getInstance().toggleMainDialog('chart-configuration');
+        ApplicationService.getInstance().toggleMainDialog('chart-configuration');
     }
 
     private saveConfiguration(): void {
