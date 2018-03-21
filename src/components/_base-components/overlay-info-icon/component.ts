@@ -14,26 +14,25 @@ class OverlayInfoIconComponent {
 
     public onInput(input: any): void {
         const content = ClientStorageHandler.getComponentTemplate(input.content);
-        this.state.overlayWidgetData = new InfoOverlayWidgetData(
-            content
-        );
+        this.state.overlayWidgetData = new InfoOverlayWidgetData(content);
     }
 
     public onMount(): void {
         ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-        this.state.id = IdService.generateDateBasedId('info-overlay-');
+        this.state.overlayId = IdService.generateDateBasedId('info-overlay-');
     }
 
     private showOverlay(event: any) {
         ApplicationStore.getInstance().toggleInfoOverlay(
-            this.state.id,
+            this.state.overlayId,
             this.state.overlayWidgetData,
             [event.pageX, event.pageY]
         );
     }
 
     private applicationStateChanged() {
-        this.state.show = ApplicationStore.getInstance().isShowInfoOverlay(this.state.id);
+        this.state.show = ApplicationStore.getInstance().isShowInfoOverlay(this.state.overlayId);
     }
 }
+
 module.exports = OverlayInfoIconComponent;
