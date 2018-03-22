@@ -9,7 +9,7 @@
             </if>
             <else>
                 <if(component.isInputDefined(input.actions))>
-                    <action-list list=input.actions/>
+                    <action-list list=input.actions actionData=input.actionsData/>
                 </if>
                 <if(state.minimizable)>
                     <span.minimize-icon-wrapper>
