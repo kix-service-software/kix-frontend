@@ -95,8 +95,7 @@ gulp.task('test', () => {
         'tests/services/IConfigurationService.test.ts',
         'tests/services/ILoggingService.test.ts',
         'tests/services/IPluginService.test.ts',
-        'tests/services/ISocketCommunicationService.test.ts',
-        'tests/services/ITranslationService.test.ts',
+        'tests/services/ISocketCommunicationService.test.ts'
     ])
         .pipe(mocha({
             reporter: 'spec',

@@ -20,8 +20,6 @@ class DashboardConfigurationDialog {
 
     private state: DashboardConfigurationDialogComponentState;
 
-    private translationIds: any;
-
     public onCreate(input: any): void {
         this.state = new DashboardConfigurationDialogComponentState(
             [],
