@@ -8,34 +8,29 @@ import {
 } from '@kix/core/dist/model';
 
 import { ICreationDialogExtension, KIXExtensions } from '@kix/core/dist/extensions';
-
-const CREATION_DIALOG = "creation-dialog";
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class CreationDialogCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/' + CREATION_DIALOG);
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerEvents(client);
-            });
+    protected getNamespace(): string {
+        return 'creation-dialog';
     }
 
-    private registerEvents(client: SocketIO.Socket): void {
-        client.on(CreationDialogEvent.LOAD_CREATION_DIALOGS, async (data: LoadCreationDialogRequest) => {
-
-            const createDialogExtensions = await this.pluginService
-                .getExtensions<ICreationDialogExtension>(KIXExtensions.CREATION_DIALOG);
-
-            const dialogs: CreationDialog[] = [];
-            for (const dialog of createDialogExtensions) {
-                dialogs.push(dialog.getDialog());
-            }
-
-            const loadResponse = new LoadCreationDialogResponse(dialogs);
-            client.emit(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
-        });
+    protected registerEvents(): void {
+        this.registerEventHandler(CreationDialogEvent.LOAD_CREATION_DIALOGS, this.loadCreationDialogs.bind(this));
     }
 
+    private async loadCreationDialogs(data: LoadCreationDialogRequest): Promise<CommunicatorResponse> {
+
+        const createDialogExtensions = await this.pluginService
+            .getExtensions<ICreationDialogExtension>(KIXExtensions.CREATION_DIALOG);
+
+        const dialogs: CreationDialog[] = [];
+        for (const dialog of createDialogExtensions) {
+            dialogs.push(dialog.getDialog());
+        }
+
+        const loadResponse = new LoadCreationDialogResponse(dialogs);
+        return new CommunicatorResponse(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
+    }
 }

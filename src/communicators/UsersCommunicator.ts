@@ -9,22 +9,20 @@ import {
     LoadUsersRequest,
     LoadUsersResponse
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class UsersCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/users');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerUsersEvents(client);
-            });
+    protected getNamespace(): string {
+        return 'users';
     }
 
-    private registerUsersEvents(client: SocketIO.Socket): void {
-        client.on(UsersEvent.LOAD_USERS, async (data: LoadUsersRequest) => {
-            client.emit(UsersEvent.USERS_LOADED, new LoadUsersResponse([]));
-        });
+    protected registerEvents(): void {
+        this.registerEventHandler(UsersEvent.LOAD_USERS, this.loadUsers.bind(this));
+    }
+
+    private async loadUsers(data: LoadUsersRequest): Promise<CommunicatorResponse> {
+        return new CommunicatorResponse(UsersEvent.USERS_LOADED, new LoadUsersResponse([]));
     }
 }
 
