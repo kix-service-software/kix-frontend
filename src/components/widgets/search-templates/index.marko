@@ -1,8 +1,5 @@
-<widget instanceId=state.instanceId configurationTagId="search-templates-configuration" minimizable=input.minimizable>
-    <@icon/>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
+<widget instanceId=state.instanceId configurationTagId="search-templates-configuration" minimizable=input.minimizable
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@content>
         <div.left>
             <select.template-list size=6>
@@ -28,8 +25,4 @@
             </ul>
         </div>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
-    
 </widget>

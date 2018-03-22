@@ -1,10 +1,8 @@
-<widget instanceId=state.instanceId configurationTagId="ticket-list-configuration">
+<widget instanceId=state.instanceId configurationTagId="ticket-list-configuration"
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <span.kix-icon-minus/>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@content>
         <if(state.standardTable)>
             <standard-table standardTable=state.standardTable/>
