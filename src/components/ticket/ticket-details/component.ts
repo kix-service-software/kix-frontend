@@ -7,6 +7,7 @@ import {
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
+import { ActionFactory } from '@kix/core/dist/browser';
 
 export class TicketDetailsComponent {
 
@@ -55,8 +56,8 @@ export class TicketDetailsComponent {
         if (config) {
             this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
             this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
-            this.state.generalActions = config.generalActions;
-            this.state.ticketActions = config.ticketActions;
+            this.state.generalActions = ActionFactory.getInstance().generateActions(config.generalActions, true);
+            this.state.ticketActions = ActionFactory.getInstance().generateActions(config.ticketActions, true);
 
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;

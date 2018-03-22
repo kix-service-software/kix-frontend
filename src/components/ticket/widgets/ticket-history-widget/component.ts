@@ -2,14 +2,15 @@ import { ContextService, ContextNotification } from '@kix/core/dist/browser/cont
 import { HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable, ITableClickListener,
     ITableConfigurationListener,
     TableSortLayer,
     TableColumn,
     TableFilterLayer,
-    TableToggleLayer
+    TableToggleLayer,
+    ActionFactory
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -33,6 +34,11 @@ class TicketHistoryWidgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        if (this.state.widgetConfiguration) {
+            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
+        }
+
         this.setHistoryTableConfiguration();
     }
 
@@ -102,7 +108,7 @@ class TicketHistoryWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 
 }

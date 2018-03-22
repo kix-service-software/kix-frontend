@@ -8,10 +8,10 @@ import {
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { Link, Ticket } from '@kix/core/dist/model';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable,
-    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight
+    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -37,6 +37,11 @@ class LinkedObjectsWidgetComponent {
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
+
+        if (this.state.widgetConfiguration) {
+            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
+        }
+
         this.setLinkedObjects();
     }
 
@@ -123,7 +128,7 @@ class LinkedObjectsWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 }
 

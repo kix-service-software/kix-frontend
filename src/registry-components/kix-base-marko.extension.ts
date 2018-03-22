@@ -36,33 +36,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/widgets/ticket-contact-info-widget',
             'ticket/widgets/ticket-dynamic-fields-widget',
             'ticket/widgets/ticket-linked-objects-widget',
-            'ticket/actions/edit-ticket-action',
-            'ticket/actions/link-ticket-action',
-            'ticket/actions/lock-ticket-action',
-            'ticket/actions/merge-ticket-action',
-            'ticket/actions/new-ticket-action',
-            'ticket/actions/print-ticket-action',
-            'ticket/actions/spam-ticket-action',
-            'ticket/actions/watch-ticket-action',
-            'ticket/actions/article-bulk-action',
-            'ticket/actions/article-attachment-download-action',
-            'ticket/actions/article-call-incoming-action',
-            'ticket/actions/article-call-outgoing-action',
-            'ticket/actions/article-delete-action',
-            'ticket/actions/article-edit-action',
-            'ticket/actions/article-new-email-action',
-            'ticket/actions/article-new-note-action',
-            'ticket/actions/article-print-action',
-            'ticket/actions/article-communication-action',
-            'ticket/actions/article-tag-action',
-            'ticket/actions/article-maximize-action',
-            'ticket/actions/article-attachment-zip-download',
-            'ticket/dialogs/merge-ticket-dialog',
-            'ticket/dialogs/edit-ticket-dialog',
-            'ticket/dialogs/link-ticket-dialog',
-            'ticket/dialogs/lock-ticket-dialog',
-            'ticket/dialogs/spam-ticket-dialog',
-            'ticket/dialogs/watch-ticket-dialog',
             'ticket/ticket-article-details',
             'ticket/ticket-article-attachment-list'
         ];
@@ -70,8 +43,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getFaqDependencies(): string[] {
         return [
-            'faq/faq-module',
-            'faq/faq-creation-dialog'
+            'faq/faq-module'
         ];
     }
 
@@ -113,39 +85,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-service-explorer-configuration', 'ticket/explorer/ticket-service-explorer/ticket-service-explorer-configuration'],
         ];
 
-        const dialogs: Array<[string, string]> = [
-            ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
-            ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
-            ['merge-ticket-dialog', 'ticket/dialogs/merge-ticket-dialog'],
-            ['lock-ticket-dialog', 'ticket/dialogs/lock-ticket-dialog'],
-            ['spam-ticket-dialog', 'ticket/dialogs/spam-ticket-dialog'],
-            ['watch-ticket-dialog', 'ticket/dialogs/watch-ticket-dialog']
-        ];
-
-        const actions: Array<[string, string]> = [
-            ['edit-ticket-action', 'ticket/actions/edit-ticket-action'],
-            ['link-ticket-action', 'ticket/actions/link-ticket-action'],
-            ['lock-ticket-action', 'ticket/actions/lock-ticket-action'],
-            ['merge-ticket-action', 'ticket/actions/merge-ticket-action'],
-            ['new-ticket-action', 'ticket/actions/new-ticket-action'],
-            ['print-ticket-action', 'ticket/actions/print-ticket-action'],
-            ['spam-ticket-action', 'ticket/actions/spam-ticket-action'],
-            ['watch-ticket-action', 'ticket/actions/watch-ticket-action'],
-            ['article-bulk-action', 'ticket/actions/article-bulk-action'],
-            ['article-attachment-download-action', 'ticket/actions/article-attachment-download-action'],
-            ['article-call-incoming-action', 'ticket/actions/article-call-incoming-action'],
-            ['article-call-outgoing-action', 'ticket/actions/article-call-outgoing-action'],
-            ['article-delete-action', 'ticket/actions/article-delete-action'],
-            ['article-edit-action', 'ticket/actions/article-edit-action'],
-            ['article-new-email-action', 'ticket/actions/article-new-email-action'],
-            ['article-new-note-action', 'ticket/actions/article-new-note-action'],
-            ['article-print-action', 'ticket/actions/article-print-action'],
-            ['article-communication-action', 'ticket/actions/article-communication-action'],
-            ['article-tag-action', 'ticket/actions/article-tag-action'],
-            ['article-maximize-action', 'ticket/actions/article-maximize-action'],
-            ['article-attachment-zip-download', 'ticket/actions/article-attachment-zip-download']
-        ];
-
         return [
             ['tickets', 'ticket/ticket-module'],
             ['ticket-article-attachment-list', 'ticket/ticket-article-attachment-list'],
@@ -153,16 +92,13 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ...widgets,
-            ...explorer,
-            ...dialogs,
-            ...actions
+            ...explorer
         ];
     }
 
     private getFaqComponentTags(): Array<[string, string]> {
         return [
-            ['faq', 'faq/faq-module'],
-            ['faq-creation-dialog', 'faq/faq-creation-dialog']
+            ['faq', 'faq/faq-module']
         ];
     }
 

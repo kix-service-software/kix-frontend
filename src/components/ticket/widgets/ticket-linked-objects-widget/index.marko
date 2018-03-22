@@ -5,13 +5,11 @@
     </@title>
     <@contentActions>
         <ul.content-actions>
-            <if(state.widgetConfiguration)>
-                <for(action in state.widgetConfiguration.actions)>
-                    <li>
-                        <include(component.getTemplate(action)) short=true/>
-                    </li>
-                </for>
-            </if>
+            <for(action in state.actions)>
+                <li>
+                    <action action=action/>
+                </li>
+            </for>
         </ul>
     </@contentActions>
     <@content>
@@ -29,7 +27,6 @@
                             </div>
                         </@content>
                         <@filter/>
-                        
                         <@contentActions/>
                     </widget>
                 </for>
@@ -40,5 +37,4 @@
         </else>
     </@content>
     <@filter/>
-    
 </widget>

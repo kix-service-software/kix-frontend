@@ -1,9 +1,11 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue } from '@kix/core/dist/browser';
+import {
+    StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue, ActionFactory
+} from '@kix/core/dist/browser';
 import { SortOrder, KIXObject } from '@kix/core/dist/model';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 
 class StandardTableComponent<T extends KIXObject<T>> {
 
@@ -39,6 +41,12 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     this.scrollTableToTop();
                 }
             });
+        }
+
+        if (this.state.standardTable.toggleOptions.actions.length) {
+            this.state.toggleActions = ActionFactory.getInstance().generateActions(
+                this.state.standardTable.toggleOptions.actions
+            );
         }
 
         setTimeout(() => {
@@ -287,7 +295,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     private getToggleTemplate(): any {
         return this.state.standardTable.toggleOptions.componentId ?
-            ClientStorageHandler.getComponentTemplate(
+            ClientStorageService.getComponentTemplate(
                 this.state.standardTable.toggleOptions.componentId
             ) : undefined;
     }
@@ -300,13 +308,8 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return toggleInput;
     }
 
-    private getToggleActions(): string[] {
-        return this.state.standardTable.toggleOptions.actions.length ?
-            this.state.standardTable.toggleOptions.actions : [];
-    }
-
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 
     private getColumn(value: TableValue): TableColumn {

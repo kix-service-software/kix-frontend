@@ -2,7 +2,7 @@ import {
     SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MenuEntryConfiguration, MainMenuEntriesRequest, MenuEntry
 } from '@kix/core/dist/model';
 import { SocketListener } from '@kix/core/dist/browser/SocketListener';
-import { ClientStorageHandler } from '@kix/core/dist/browser';
+import { ClientStorageService } from '@kix/core/dist/browser';
 
 export class MainMenuSocketListener extends SocketListener {
 
@@ -48,7 +48,7 @@ export class MainMenuSocketListener extends SocketListener {
             }, 30000);
 
             this.socket.emit(
-                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(ClientStorageHandler.getToken())
+                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(ClientStorageService.getToken())
             );
 
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {

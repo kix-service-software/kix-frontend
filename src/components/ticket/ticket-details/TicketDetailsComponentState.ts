@@ -1,4 +1,4 @@
-import { ConfiguredWidget, Ticket } from '@kix/core/dist/model';
+import { ConfiguredWidget, Ticket, AbstractAction } from '@kix/core/dist/model';
 import { ILabelProvider } from '@kix/core/dist/browser';
 
 export class TicketDetailsComponentState {
@@ -9,8 +9,8 @@ export class TicketDetailsComponentState {
         public lanes: ConfiguredWidget[] = [],
         public tabs: ConfiguredWidget[] = [],
         public activeTabId: string = null,
-        public generalActions: string[] = [],
-        public ticketActions: string[] = [],
+        public generalActions: AbstractAction[] = [],
+        public ticketActions: AbstractAction[] = [],
         public ticketHook: string = '',
         public ticketHookDivider: string = '',
         public loading: boolean = false

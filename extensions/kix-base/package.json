@@ -9,23 +9,17 @@
             "notes-sidebar-marko": "../../dist/registry-modules/widgets/notes/marko-dependencies.extension",
             "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
-        "kix:dialog:creation": {
-            "ticket-creation-dialog": "../../dist/registry-modules/tickets/creation-dialog.extension",
-            "faq-creation-dialog": "../../dist/registry-modules/faq/creation-dialog.extension"
-        },
         "kix:communicator": {
-            "action-communicator": "../../dist/communicators/extensions/ActionCommunicator.extension",
             "authentication-communicator": "../../dist/communicators/extensions/AuthenticationCommunicator.extension",
             "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
-            "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
-            "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
-            "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
-            "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
-            "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
-            "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
             "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
+            "icon-communicator": "../../dist/communicators/extensions/IconCommunicator.extension",
+            "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
+            "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
+            "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
-            "icon-communicator": "../../dist/communicators/extensions/IconCommunicator.extension"
+            "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
+            "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
@@ -62,7 +56,6 @@
             "ticket-description-widget": "../../dist/registry-modules/tickets/ticket-description-widget/widget-factory.extension",
             "queue-explorer": "../../dist/registry-modules/tickets/queue-explorer/widget-factory.extension",
             "service-explorer": "../../dist/registry-modules/tickets/service-explorer/widget-factory.extension"
-        },
-        "kix:action": {}
+        }
     }
 }

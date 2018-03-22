@@ -1,6 +1,6 @@
 import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
-import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
+import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
 import { ContextFilter, Context, ConfiguredWidget, WidgetType } from "@kix/core/dist/model/";
 import { DashboardConfiguration } from "@kix/core/dist/model/dashboard/DashboardConfiguration";
 
@@ -32,7 +32,7 @@ class ExplorerbarComponent {
     }
 
     private getWidgetTemplate(widget: ConfiguredWidget): any {
-        return ClientStorageHandler.getComponentTemplate(widget.configuration.widgetId);
+        return ClientStorageService.getComponentTemplate(widget.configuration.widgetId);
     }
 
     private isExplorerBarExpanded(instanceId: string): boolean {

@@ -1,5 +1,5 @@
 import { Article, ArticleProperty, Context, Ticket } from "@kix/core/dist/model";
-import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
+import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
     TicketService,

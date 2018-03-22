@@ -1,5 +1,5 @@
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { ActionListComponentState } from './model/ActionListComponentState';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ActionListComponentState } from './ActionListComponentState';
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
 
 export class ActionListComponent {
@@ -62,7 +62,7 @@ export class ActionListComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 
     private toggleListExpansion(): any {
