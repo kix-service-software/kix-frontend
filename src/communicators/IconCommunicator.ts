@@ -6,22 +6,20 @@ import {
 } from '@kix/core/dist/model';
 
 import { KIXCommunicator } from './KIXCommunicator';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class IconCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'icons';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(IconEvent.LOAD_ICON, this.loadIcon.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(IconEvent.LOAD_ICON, this.loadIcon.bind(this));
     }
 
-    private async loadIcon(data: ObjectIconLoadRequest): Promise<void> {
+    private async loadIcon(data: ObjectIconLoadRequest): Promise<CommunicatorResponse> {
         const icon = await this.objectIconService.getObjectIcon(data.token, data.object, data.objectId);
-        this.client.emit(IconEvent.ICON_LOADED, new ObjectIconLoadResponse(data.requestId, icon));
+        return new CommunicatorResponse(IconEvent.ICON_LOADED, new ObjectIconLoadResponse(data.requestId, icon));
     }
 }

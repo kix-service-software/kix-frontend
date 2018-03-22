@@ -8,21 +8,19 @@ import {
 } from '@kix/core/dist/model';
 
 import { ICreationDialogExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class CreationDialogCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'creation-dialog';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(CreationDialogEvent.LOAD_CREATION_DIALOGS, this.loadCreationDialogs.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(CreationDialogEvent.LOAD_CREATION_DIALOGS, this.loadCreationDialogs.bind(this));
     }
 
-    private async loadCreationDialogs(data: LoadCreationDialogRequest): Promise<void> {
+    private async loadCreationDialogs(data: LoadCreationDialogRequest): Promise<CommunicatorResponse> {
 
         const createDialogExtensions = await this.pluginService
             .getExtensions<ICreationDialogExtension>(KIXExtensions.CREATION_DIALOG);
@@ -33,6 +31,6 @@ export class CreationDialogCommunicator extends KIXCommunicator {
         }
 
         const loadResponse = new LoadCreationDialogResponse(dialogs);
-        this.client.emit(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
+        return new CommunicatorResponse(CreationDialogEvent.CREATION_DIALOGS_LOADED, loadResponse);
     }
 }

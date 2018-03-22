@@ -8,21 +8,19 @@ import {
     SocketEvent,
     RunActionRequest,
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class ActionCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'action';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(ActionEvent.RUN_ACTION, this.runAction.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(ActionEvent.RUN_ACTION, this.runAction.bind(this));
     }
 
-    private async runAction(data: RunActionRequest) {
+    private async runAction(data: RunActionRequest): Promise<CommunicatorResponse> {
         const actionFactoryExtensions =
             await this.pluginService.getExtensions<IActionFactoryExtension>(KIXExtensions.ACTION);
 
@@ -31,15 +29,16 @@ export class ActionCommunicator extends KIXCommunicator {
 
         if (action.canRun(data.input)) {
             await action.run(data.input).then(() => {
-                this.client.emit(ActionEvent.ACTION_FINISHED);
+                return new CommunicatorResponse(ActionEvent.ACTION_FINISHED);
             }).catch((error) => {
-                this.client.emit(ActionEvent.ACTION_FAILED, new ActionFailedResponse(error));
+                return new CommunicatorResponse(ActionEvent.ACTION_FAILED, new ActionFailedResponse(error));
             });
 
         } else {
-            this.client.emit(ActionEvent.ACTION_CANNOT_RUN, new ActionCannotRunResponse("Action cannot be executed."));
+            return new CommunicatorResponse(
+                ActionEvent.ACTION_CANNOT_RUN,
+                new ActionCannotRunResponse("Action cannot be executed."));
         }
     }
-
 }
 

@@ -15,23 +15,21 @@ import {
 } from '@kix/core/dist/model';
 
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class DashboardCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'dashboard';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(DashboardEvent.LOAD_DASHBOARD, this.loadDashboard.bind(this));
-        client.on(DashboardEvent.SAVE_DASHBOARD, this.saveDashboard.bind(this));
-        client.on(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(DashboardEvent.LOAD_DASHBOARD, this.loadDashboard.bind(this));
+        this.registerEventHandler(DashboardEvent.SAVE_DASHBOARD, this.saveDashboard.bind(this));
+        this.registerEventHandler(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
     }
 
-    protected async loadDashboard(data: LoadDashboardRequest): Promise<void> {
+    protected async loadDashboard(data: LoadDashboardRequest): Promise<CommunicatorResponse> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
@@ -41,7 +39,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         if (!configuration) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
-            await this.configurationService.saveModuleConfiguration(
+            this.configurationService.saveModuleConfiguration(
                 data.contextId, userId, moduleDefaultConfiguration);
 
             configuration = moduleDefaultConfiguration;
@@ -53,20 +51,20 @@ export class DashboardCommunicator extends KIXCommunicator {
         configuration.availableWidgets = availableWidgets;
 
         const response = new LoadDashboardResponse(configuration);
-        this.client.emit(DashboardEvent.DASHBOARD_LOADED, response);
+        return new CommunicatorResponse(DashboardEvent.DASHBOARD_LOADED, response);
     }
 
-    private async saveDashboard(data: SaveDashboardRequest): Promise<void> {
+    private async saveDashboard(data: SaveDashboardRequest): Promise<CommunicatorResponse> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
-        await this.configurationService
+        this.configurationService
             .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
-        this.client.emit(DashboardEvent.DASHBOARD_SAVED);
+        return new CommunicatorResponse(DashboardEvent.DASHBOARD_SAVED, null);
     }
 
-    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<void> {
+    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<CommunicatorResponse> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
@@ -87,10 +85,12 @@ export class DashboardCommunicator extends KIXCommunicator {
                 moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
             }
 
-            await this.configurationService.saveModuleConfiguration(
+            this.configurationService.saveModuleConfiguration(
                 data.contextId, userId, moduleConfiguration
             );
-            this.client.emit(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
+            return new CommunicatorResponse(DashboardEvent.WIDGET_CONFIGURATION_SAVED);
         }
+
+        return null;
     }
 }

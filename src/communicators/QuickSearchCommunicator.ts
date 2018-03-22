@@ -8,31 +8,31 @@ import {
     QuickSearchResponse
 } from '@kix/core/dist/model';
 import { IQuickSearchExtension } from '@kix/core/dist/extensions';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class QuickSearchCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'quick-search';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(QuickSearchEvent.EXECUTE_QUICK_SEARCH, this.executeQuickSearch.bind(this));
-        client.on(QuickSearchEvent.LOAD_QUICK_SEARCHES, this.loadQuickSearches.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(QuickSearchEvent.EXECUTE_QUICK_SEARCH, this.executeQuickSearch.bind(this));
+        this.registerEventHandler(QuickSearchEvent.LOAD_QUICK_SEARCHES, this.loadQuickSearches.bind(this));
     }
 
-    private async executeQuickSearch(data: QuickSearchRequest): Promise<void> {
+    private async executeQuickSearch(data: QuickSearchRequest): Promise<CommunicatorResponse> {
         const quickSearch = await this.pluginService.getQuickSearchExtension(data.quickSearchId);
 
         const result = await quickSearch.execute(data.token, data.searchValue);
         const response = new QuickSearchResponse(result);
-        this.client.emit(QuickSearchEvent.QUICK_SEARCH_FINISHED, response);
+        return new CommunicatorResponse(QuickSearchEvent.QUICK_SEARCH_FINISHED, response);
     }
 
-    private async loadQuickSearches(data: LoadQuickSearchesRequest): Promise<void> {
+    private async loadQuickSearches(data: LoadQuickSearchesRequest): Promise<CommunicatorResponse> {
         const quickSearches = await this.pluginService.getQuickSearches();
-        this.client.emit(QuickSearchEvent.LOAD_QUICK_SEARCHES_FINISHED, new LoadQuickSearchesResponse(quickSearches));
+        return new CommunicatorResponse(
+            QuickSearchEvent.LOAD_QUICK_SEARCHES_FINISHED,
+            new LoadQuickSearchesResponse(quickSearches));
     }
 }

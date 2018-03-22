@@ -7,23 +7,24 @@ import {
     SocketEvent,
     User
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
-        return 'authentication';
+    protected getNamespace(): string {
+        return 'configuration';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, this.loadModuleConfiguration.bind(this));
-        client.on(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION, this.loadSidebarConfiguration.bind(this));
-        client.on(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, this.saveComponentConfiguration.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(ConfigurationEvent.LOAD_MODULE_CONFIGURATION,
+            this.loadModuleConfiguration.bind(this));
+        this.registerEventHandler(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION,
+            this.loadSidebarConfiguration.bind(this));
+        this.registerEventHandler(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
+            this.saveComponentConfiguration.bind(this));
     }
 
-    private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<void> {
+    private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
         let userId = null;
         if (data.userSpecific) {
             const user = await this.userService.getUserByToken(data.token);
@@ -43,10 +44,10 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             configuration = moduleDefaultConfiguration;
         }
 
-        this.emitConfigurationLoadedEvent(configuration);
+        return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<void> {
+    private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
         const user = await this.userService.getUserByToken(data.token);
 
         let configuration = await this.configurationService
@@ -56,16 +57,16 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
             const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
-            await this.configurationService.saveComponentConfiguration(
+            this.configurationService.saveComponentConfiguration(
                 data.contextId, data.componentId, user.UserID, sidebarDefaultConfiguration);
 
             configuration = sidebarDefaultConfiguration;
         }
 
-        this.emitConfigurationLoadedEvent(configuration);
+        return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<void> {
+    private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<CommunicatorResponse> {
         let userId = null;
         if (data.userSpecific) {
             const user = await this.userService.getUserByToken(data.token);
@@ -77,10 +78,12 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
                 userId, data.configuration
             );
 
-        this.client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
+        return new CommunicatorResponse(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
     }
 
-    private emitConfigurationLoadedEvent(configuration: any): void {
-        this.client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
+    private emitConfigurationLoadedEvent(configuration: any): CommunicatorResponse {
+        return new CommunicatorResponse(
+            ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
+            new LoadConfigurationResult(configuration));
     }
 }

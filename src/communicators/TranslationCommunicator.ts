@@ -5,21 +5,19 @@ import {
     SocketEvent,
     TranslationEvent
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class TranslationCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'translation';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(TranslationEvent.LOAD_TRANSLATIONS, this.loadTranslations.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(TranslationEvent.LOAD_TRANSLATIONS, this.loadTranslations.bind(this));
     }
 
-    private async loadTranslations(data: LoadTranslationRequest): Promise<void> {
+    private async loadTranslations(data: LoadTranslationRequest): Promise<CommunicatorResponse> {
         // TODO: Get default language.
         const language = 'de';
         if (data.token) {
@@ -33,6 +31,8 @@ export class TranslationCommunicator extends KIXCommunicator {
             translations = this.translationService.getTranslations(data.ids, language);
         }
 
-        this.client.emit(TranslationEvent.TRANSLATIONS_LOADED, new LoadTranslationResponse(translations));
+        return new CommunicatorResponse(
+            TranslationEvent.TRANSLATIONS_LOADED,
+            new LoadTranslationResponse(translations));
     }
 }

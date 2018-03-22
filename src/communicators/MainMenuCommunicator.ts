@@ -9,25 +9,22 @@ import {
 } from '@kix/core/dist/model';
 
 import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { IServerConfiguration, ICommunicator } from '@kix/core/dist/common';
+import { IServerConfiguration, ICommunicator, CommunicatorResponse } from '@kix/core/dist/common';
 import { IAuthenticationService, ILoggingService, IConfigurationService } from '@kix/core/dist/services';
 
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class MainMenuCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'main-menu';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<void> {
+    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<CommunicatorResponse> {
 
         const user = await this.userService.getUserByToken(data.token);
 
@@ -50,7 +47,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
             this.getMenuEntries(extensions, configuration.secondaryMenuEntryConfigurations);
 
         const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries, configuration.showText);
-        this.client.emit(MainMenuEvent.MENU_ENTRIES_LOADED, response);
+        return new CommunicatorResponse(MainMenuEvent.MENU_ENTRIES_LOADED, response);
     }
 
     private async createDefaultConfiguration(
@@ -91,6 +88,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         return configuration;
     }
+
 
     private removeInvalidConfigurations(
         extensions: IMainMenuExtension[], configuration: MainMenuConfiguration

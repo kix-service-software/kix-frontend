@@ -9,7 +9,7 @@ import chai = require('chai');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe('Ticket Type Service', () => {
+describe('Translation Service', () => {
     let translationService: ITranslationService;
 
     before(async () => {

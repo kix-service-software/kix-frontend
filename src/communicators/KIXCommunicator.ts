@@ -14,10 +14,12 @@ import {
     IWidgetRepositoryService,
 } from '@kix/core/dist/services';
 import { SocketEvent } from '@kix/core/dist/model';
-import { ICommunicator, IServerConfiguration } from '@kix/core/dist/common';
+import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/core/dist/common';
 
 @injectable()
 export abstract class KIXCommunicator implements ICommunicator {
+
+    private client: SocketIO.Socket;
 
     public constructor(
         @inject('IConfigurationService') protected configurationService: IConfigurationService,
@@ -34,19 +36,31 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
         @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
-        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService
+        @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
     ) { }
 
-    public abstract getNamespace(): string;
+    protected abstract getNamespace(): string;
 
-    protected abstract registerEvents(client: SocketIO.Socket): void;
+    protected abstract registerEvents(): void;
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/' + this.getNamespace());
+    public registerNamespace(server: SocketIO.Server): void {
+        const nsp = server.of('/' + this.getNamespace());
         nsp
             .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
             .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerEvents(client);
+                this.setClient(client);
+                this.registerEvents();
             });
+    }
+
+    protected setClient(client: SocketIO.Socket): void {
+        this.client = client;
+    }
+
+    protected registerEventHandler(event: string, handler: any): void {
+        this.client.on(event, async (args: any[]) => {
+            const response: CommunicatorResponse = await handler(args);
+            this.client.emit(response.event, response.data);
+        });
     }
 }

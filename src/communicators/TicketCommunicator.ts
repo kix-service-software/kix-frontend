@@ -15,42 +15,41 @@ import {
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { TicketService } from '../services/api/';
-import { SearchOperator } from '@kix/core/dist/browser/SearchOperator';
 import { currentId } from 'async_hooks';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class TicketCommunicator extends KIXCommunicator {
 
-    private client: SocketIO.Socket;
-
-    public getNamespace(): string {
+    protected getNamespace(): string {
         return 'tickets';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
-        this.client = client;
-        client.on(TicketEvent.SEARCH_TICKETS, this.searchTickets.bind(this));
-        client.on(TicketCreationEvent.CREATE_TICKET, this.createTicket.bind(this));
-        client.on(TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
-        client.on(TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
-        client.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
+    protected registerEvents(): void {
+        this.registerEventHandler(TicketEvent.SEARCH_TICKETS, this.searchTickets.bind(this));
+        this.registerEventHandler(TicketCreationEvent.CREATE_TICKET, this.createTicket.bind(this));
+        this.registerEventHandler(TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
+        this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
+        this.registerEventHandler(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
     }
 
-    private async searchTickets(data: SearchTicketsRequest): Promise<void> {
+    private async searchTickets(data: SearchTicketsRequest): Promise<CommunicatorResponse> {
         if (!data.properties.find((p) => p === TicketProperty.TICKET_ID)) {
             data.properties.push(TicketProperty.TICKET_ID);
         }
 
         const tickets = await this.ticketService.getTickets(data.token, data.properties, data.limit, data.filter)
             .catch((error) => {
-                this.client.emit(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
+                return new CommunicatorResponse(TicketEvent.TICKET_SEARCH_ERROR, error.errorMessage.body);
             });
-        this.client.emit(
+        return new CommunicatorResponse(
             TicketEvent.TICKETS_SEARCH_FINISHED,
             new SearchTicketsResponse(data.requestId, tickets as Ticket[])
         );
     }
 
-    private async createTicket(data: TicketCreationRequest): Promise<void> {
+    private async createTicket(data: TicketCreationRequest): Promise<CommunicatorResponse> {
+
+        let response: CommunicatorResponse;
 
         const article = new CreateArticle(data.subject, data.description, null, 'text/html', 'utf8');
 
@@ -64,15 +63,18 @@ export class TicketCommunicator extends KIXCommunicator {
 
         this.ticketService.createTicket(data.token, ticket)
             .then((ticketId: number) => {
-                this.client.emit(TicketCreationEvent.TICKET_CREATED, new TicketCreationResponse(ticketId));
+                response = new CommunicatorResponse(TicketCreationEvent.TICKET_CREATED,
+                    new TicketCreationResponse(ticketId));
             })
             .catch((error) => {
                 const creationError = new TicketCreationError(error.errorMessage.body);
-                this.client.emit(TicketCreationEvent.CREATE_TICKET_FAILED, creationError);
+                response = new CommunicatorResponse(TicketCreationEvent.CREATE_TICKET_FAILED, creationError);
             });
+
+        return response;
     }
 
-    private async loadTicket(data: LoadTicketRequest): Promise<void> {
+    private async loadTicket(data: LoadTicketRequest): Promise<CommunicatorResponse> {
         const loadedTicket = await this.ticketService.getTicket(data.token, data.ticketId, true, true);
         let contact;
         let customer;
@@ -92,20 +94,20 @@ export class TicketCommunicator extends KIXCommunicator {
         const ticket = new Ticket(loadedTicket, contact, customer);
 
         const response = new LoadTicketResponse(ticket);
-        this.client.emit(TicketEvent.TICKET_LOADED, response);
+        return new CommunicatorResponse(TicketEvent.TICKET_LOADED, response);
     }
 
-    private async loadArticleAttachment(data: LoadArticleAttachmentRequest): Promise<void> {
+    private async loadArticleAttachment(data: LoadArticleAttachmentRequest): Promise<CommunicatorResponse> {
         const attachemnt = await this.ticketService.getArticleAttachment(
             data.token, data.ticketId, data.articleId, data.attachmentId
         );
 
         const response = new LoadArticleAttachmentResponse(attachemnt);
-        this.client.emit(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
+        return new CommunicatorResponse(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
     }
 
-    private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<void> {
+    private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<CommunicatorResponse> {
         await this.ticketService.setArticleSeenFlag(data.token, data.ticketId, data.articleId);
-        this.client.emit(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
+        return new CommunicatorResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
     }
 }
