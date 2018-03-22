@@ -25,7 +25,9 @@ export class RouterOutletComponent {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
-            (this as any).setStateDirty('template');
+            setTimeout(() => {
+                (this as any).setStateDirty('template');
+            }, 50);
         }
     }
 
