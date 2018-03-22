@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -58,7 +58,7 @@ class WidgetComponent {
 
     private showConfiguration(): void {
         if (this.state.configurationTagId) {
-            ApplicationStore.getInstance().toggleMainDialog(
+            ApplicationService.getInstance().toggleMainDialog(
                 this.state.configurationTagId, { instanceId: this.state.instanceId }
             );
         }
@@ -69,7 +69,7 @@ class WidgetComponent {
     }
 
     private isConfigMode(): boolean {
-        return ApplicationStore.getInstance().isConfigurationMode();
+        return ApplicationService.getInstance().isConfigurationMode();
     }
 
     private hasFilter(filter: any): boolean {

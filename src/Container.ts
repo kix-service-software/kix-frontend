@@ -14,7 +14,6 @@ import {
     IServiceService, ISysConfigService,
     ISocketCommunicationService,
     ITicketService,
-    ITranslationService,
     IUserService,
     IValidObjectService,
     IWidgetRepositoryService
@@ -39,7 +38,7 @@ import {
     PluginService,
     ServiceService, SysConfigService,
     SocketCommunicationService,
-    TicketService, TranslationService,
+    TicketService,
     UserService,
     ValidObjectService,
     WidgetRepositoryService
@@ -88,7 +87,6 @@ export class ServiceContainer {
         this.container.bind<ISocketCommunicationService>('ISocketCommunicationService').to(SocketCommunicationService);
         this.container.bind<ISysConfigService>('ISysConfigService').to(SysConfigService);
         this.container.bind<ITicketService>('ITicketService').to(TicketService);
-        this.container.bind<ITranslationService>('ITranslationService').to(TranslationService);
         this.container.bind<IUserService>('IUserService').to(UserService);
         this.container.bind<IValidObjectService>('IValidObjectService').to(ValidObjectService);
         this.container.bind<IWidgetRepositoryService>('IWidgetRepositoryService').to(WidgetRepositoryService);

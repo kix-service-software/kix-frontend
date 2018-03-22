@@ -1,6 +1,7 @@
 .attachment {
     display: grid;
-    grid-template-columns: 1.5em auto minmax(6em, auto);
+    grid-column-gap: 0.5em;
+    grid-template-columns: 1.5em auto auto;
     .attachment-icon {
         grid-row: 1;
         grid-column: 1;
@@ -11,8 +12,6 @@
         color: @primary-0;
         cursor: pointer;
         white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
     }
     .inactive-link {
         color: @secondary-0;
@@ -21,5 +20,6 @@
     .file-size {
         grid-row: 1;
         grid-column: 3;
+        white-space: nowrap;
     }
 }

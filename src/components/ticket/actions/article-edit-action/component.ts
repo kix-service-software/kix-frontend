@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleEditActionComponent {
 
     private doAction(): void {
         alert('Bearbeiten');
-        // ApplicationStore.getInstance().toggleMainDialog('article-edit-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-edit-dialog');
     }
 
 }

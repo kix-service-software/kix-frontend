@@ -1,6 +1,6 @@
 import { IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import { Environment, IServerConfiguration } from '@kix/core/dist/common';
-import { TranslationConfiguration, WidgetDescriptor } from '@kix/core/dist/model';
+import { WidgetDescriptor } from '@kix/core/dist/model';
 
 import { injectable, inject } from 'inversify';
 
@@ -12,7 +12,6 @@ export class ConfigurationService implements IConfigurationService {
 
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
-    private translationConfiguration: TranslationConfiguration;
     private preDefinedWidgetConfiguration: any;
 
     private CONFIG_DIR: string = '../../config/';
@@ -33,10 +32,6 @@ export class ConfigurationService implements IConfigurationService {
         this.clearRequireCache(lassoConfig);
         this.lassoConfiguration = require(lassoConfig);
 
-        const translationConfig = this.getConfigurationFilePath("translation");
-        this.clearRequireCache(translationConfig);
-        this.translationConfiguration = require(translationConfig);
-
         this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
     }
 
@@ -46,10 +41,6 @@ export class ConfigurationService implements IConfigurationService {
 
     public getLassoConfiguration(): any {
         return this.lassoConfiguration;
-    }
-
-    public getTranslationConfiguration(): TranslationConfiguration {
-        return this.translationConfiguration;
     }
 
     public getPreDefinedWidgetConfiguration<T = any>(contextId: string): Array<WidgetDescriptor<T>> {

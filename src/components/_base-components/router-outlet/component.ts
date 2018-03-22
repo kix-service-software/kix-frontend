@@ -1,17 +1,13 @@
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { RouterComponentState } from './RouterComponentState';
 
 export class RouterOutletComponent {
 
-    private state: any;
+    private state: RouterComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            componentId: null,
-            template: "",
-            routerId: null,
-            data: null
-        };
+        this.state = new RouterComponentState();
     }
 
     public onInput(input: any): void {
@@ -19,19 +15,19 @@ export class RouterOutletComponent {
     }
 
     public onMount(): void {
-        ComponentRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
+        ComponentRouterService.getInstance().addServiceListener(this.routerStateChanged.bind(this));
         this.routerStateChanged();
     }
 
     private routerStateChanged(): void {
-        const router = ComponentRouterStore.getInstance().getCurrentRouter(this.state.routerId);
+        const router = ComponentRouterService.getInstance().getCurrentRouter(this.state.routerId);
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
-            if (!this.state.template) {
-                this.state.template = "";
-            }
+            setTimeout(() => {
+                (this as any).setStateDirty('template');
+            }, 50);
         }
     }
 

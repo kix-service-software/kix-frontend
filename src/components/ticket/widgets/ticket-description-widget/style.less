@@ -30,6 +30,13 @@
                     grid-row: 1;
                     padding: 0 1em;
                     box-sizing: border-box;
+                    .attachment {
+                        grid-template-columns: 1.5em auto minmax(6em, auto);
+                        .attachment-link {
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+                    }
                 }
                 .ticket-notes {
                     grid-column: 1;

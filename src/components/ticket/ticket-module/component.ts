@@ -1,7 +1,6 @@
 import { TicketsComponentState } from './model/TicketsComponentState';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router/';
-import { Context, DashboardConfiguration } from '@kix/core/dist/model/';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
+import { BreadcrumbDetails, Context, DashboardConfiguration } from '@kix/core/dist/model/';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
@@ -19,7 +18,7 @@ class TicketsComponent {
 
     public onMount(): void {
         if (this.state.ticketId) {
-            ComponentRouterStore.getInstance().navigate(
+            ComponentRouterService.getInstance().navigate(
                 'base-router', 'ticket-details', { ticketId: this.state.ticketId }, this.state.ticketId
             );
         } else {
@@ -32,7 +31,7 @@ class TicketsComponent {
 
             const breadcrumbDetails =
                 new BreadcrumbDetails(TicketsComponentState.MODULE_ID, null, null, 'Ticket-Dashboard');
-            ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+            ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
         }
     }
 

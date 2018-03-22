@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleCommunicationActionComponent {
 
     private doAction(): void {
         alert('Kommunikation');
-        // ApplicationStore.getInstance().toggleMainDialog('article-communication-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-communication-dialog');
     }
 
 }

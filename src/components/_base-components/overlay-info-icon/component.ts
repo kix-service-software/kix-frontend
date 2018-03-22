@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
@@ -14,26 +14,25 @@ class OverlayInfoIconComponent {
 
     public onInput(input: any): void {
         const content = ClientStorageHandler.getComponentTemplate(input.content);
-        this.state.overlayWidgetData = new InfoOverlayWidgetData(
-            content
-        );
+        this.state.overlayWidgetData = new InfoOverlayWidgetData(content);
     }
 
     public onMount(): void {
-        ApplicationStore.getInstance().addStateListener(this.applicationStateChanged.bind(this));
-        this.state.id = IdService.generateDateBasedId('info-overlay-');
+        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
+        this.state.overlayId = IdService.generateDateBasedId('info-overlay-');
     }
 
     private showOverlay(event: any) {
-        ApplicationStore.getInstance().toggleInfoOverlay(
-            this.state.id,
+        ApplicationService.getInstance().toggleInfoOverlay(
+            this.state.overlayId,
             this.state.overlayWidgetData,
             [event.pageX, event.pageY]
         );
     }
 
     private applicationStateChanged() {
-        this.state.show = ApplicationStore.getInstance().isShowInfoOverlay(this.state.id);
+        this.state.show = ApplicationService.getInstance().isShowInfoOverlay(this.state.overlayId);
     }
 }
+
 module.exports = OverlayInfoIconComponent;

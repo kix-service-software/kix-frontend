@@ -1,4 +1,4 @@
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { TicketProperty } from '@kix/core/dist/model/';
 import { TicketListConfigurationComponentState } from './TicketListConfigurationComponentState';
@@ -49,7 +49,7 @@ class TicketListConfigurationComponent {
 
     private saveConfiguration(): void {
         DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.configuration);
-        ApplicationStore.getInstance().toggleMainDialog();
+        ApplicationService.getInstance().toggleMainDialog();
     }
 
 }

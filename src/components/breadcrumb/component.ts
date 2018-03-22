@@ -1,5 +1,5 @@
-import { ComponentRouterStore } from "@kix/core/dist/browser/router/ComponentRouterStore";
-import { ComponentRouterHistoryEntry } from '@kix/core/dist/browser/router/ComponentRouterHistoryEntry';
+import { ComponentRouterService } from "@kix/core/dist/browser/router";
+import { ComponentRouterHistoryEntry } from '@kix/core/dist/model';
 import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
 
 class BreadcrumbComponent {
@@ -13,11 +13,11 @@ class BreadcrumbComponent {
     }
 
     public onMount(): void {
-        ComponentRouterStore.getInstance().addStateListener(this.routerStateChanged.bind(this));
+        ComponentRouterService.getInstance().addServiceListener(this.routerStateChanged.bind(this));
     }
 
     private routerStateChanged(): void {
-        this.state.breadcrumbDetails = ComponentRouterStore.getInstance().getBreadcrumbDetails();
+        this.state.breadcrumbDetails = ComponentRouterService.getInstance().getBreadcrumbDetails();
     }
 
 }
