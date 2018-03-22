@@ -56,6 +56,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/actions/article-communication-action',
             'ticket/actions/article-tag-action',
             'ticket/actions/article-maximize-action',
+            'ticket/actions/article-attachment-zip-download',
             'ticket/dialogs/merge-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
             'ticket/dialogs/link-ticket-dialog',
@@ -141,7 +142,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['article-print-action', 'ticket/actions/article-print-action'],
             ['article-communication-action', 'ticket/actions/article-communication-action'],
             ['article-tag-action', 'ticket/actions/article-tag-action'],
-            ['article-maximize-action', 'ticket/actions/article-maximize-action']
+            ['article-maximize-action', 'ticket/actions/article-maximize-action'],
+            ['article-attachment-zip-download', 'ticket/actions/article-attachment-zip-download']
         ];
 
         return [
