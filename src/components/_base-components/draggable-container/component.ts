@@ -1,4 +1,3 @@
-import { promiseMiddleware } from 'redux-promise-middleware';
 import { ContainerComponentState } from './model/ContainterComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';

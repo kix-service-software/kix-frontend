@@ -1,56 +1,6 @@
 {
     "dashboard": [
         {
-            "widgetId": "user-list-widget",
-            "isContentWidget": true,
-            "isSidebarWidget": false,
-            "isExplorerWidget": false,
-            "required": false,
-            "configuration": {
-                "title": "User-List vom Admin",
-                "actions": [
-                    {
-                        "template": null,
-                        "useOverlay": false,
-                        "id": "delete-action",
-                        "name": "Delete",
-                        "icon": ""
-                    },
-                    {
-                        "template": "/@kix/frontend$0.0.15/dist/components/actions/assign-tour",
-                        "useOverlay": true,
-                        "id": "assign-tour-action",
-                        "name": "Assign Tour",
-                        "icon": ""
-                    }
-                ],
-                "settings": {
-                    "properties": [
-                        {
-                            "name": "UserID",
-                            "displayName": "ID"
-                        },
-                        {
-                            "name": "UserFirstname",
-                            "displayName": "Vorname"
-                        },
-                        {
-                            "name": "UserLastname",
-                            "displayName": "Nachname"
-                        },
-                        {
-                            "name": "UserEmail",
-                            "displayName": "Email"
-                        }
-                    ],
-                    "limit": 2
-                },
-                "show": true,
-                "size": "small",
-                "icon": null
-            }
-        },
-        {
             "widgetId": "chart-widget",
             "isContentWidget": true,
             "isSidebarWidget": false,

@@ -1,17 +1,13 @@
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { RouterComponentState } from './RouterComponentState';
 
 export class RouterOutletComponent {
 
-    private state: any;
+    private state: RouterComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            componentId: null,
-            template: "",
-            routerId: null,
-            data: null
-        };
+        this.state = new RouterComponentState();
     }
 
     public onInput(input: any): void {
@@ -29,9 +25,7 @@ export class RouterOutletComponent {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
-            if (!this.state.template) {
-                this.state.template = "";
-            }
+            (this as any).setStateDirty('template');
         }
     }
 
