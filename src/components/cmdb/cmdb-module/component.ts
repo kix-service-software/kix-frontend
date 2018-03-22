@@ -1,8 +1,7 @@
 import { CmdbComponentState } from './model/CmdbComponentState';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router/ComponentRouterService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { Context } from '@kix/core/dist/model';
+import { BreadcrumbDetails, Context } from '@kix/core/dist/model';
 
 class CMDBComponent {
 
@@ -19,7 +18,7 @@ class CMDBComponent {
 
         const breadcrumbDetails =
             new BreadcrumbDetails('cmdb', null, null, 'CMDB-Dashboard');
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
 }

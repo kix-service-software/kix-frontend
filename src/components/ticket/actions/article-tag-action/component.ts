@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleTagActionComponent {
 
     private doAction(): void {
         alert('Taggen/Flaggen');
-        // ApplicationStore.getInstance().toggleMainDialog('article-tag-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-tag-dialog');
     }
 
 }

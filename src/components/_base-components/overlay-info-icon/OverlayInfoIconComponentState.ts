@@ -4,7 +4,7 @@ export class OverlayInfoIconComponentState {
 
     public constructor(
         public show: boolean = false,
-        public id: string = '',
+        public overlayId: string = '',
         public overlayWidgetData: InfoOverlayWidgetData = null
     ) { }
 

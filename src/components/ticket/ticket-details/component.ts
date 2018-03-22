@@ -1,15 +1,12 @@
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
 import {
-    TicketService, TicketNotification, TicketLabelProvider, TicketDetailsContext
+    TicketService, TicketNotification, TicketDetailsContext
 } from '@kix/core/dist/browser/ticket/';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
+    BreadcrumbDetails, TicketDetailsDashboardConfiguration, Ticket, Context, WidgetType, DashboardConfiguration
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
-import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 
 export class TicketDetailsComponent {
 
@@ -28,7 +25,6 @@ export class TicketDetailsComponent {
         this.setBreadcrumbDetails();
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
@@ -37,12 +33,13 @@ export class TicketDetailsComponent {
         this.loadTicket();
     }
 
-    private loadTicket(): void {
+    private async loadTicket(): Promise<void> {
         this.state.loading = true;
-        TicketService.getInstance().loadTicket(this.state.ticketId).then(() => {
-            this.setTicketHookInfo();
-            this.state.loading = false;
-        });
+        const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
+        this.state.ticket = ticket;
+        this.setBreadcrumbDetails();
+        this.setTicketHookInfo();
+        this.state.loading = false;
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -75,16 +72,6 @@ export class TicketDetailsComponent {
         }
     }
 
-    public ticketServiceNotified(id: string, type: TicketNotification, ...args) {
-        if (type === TicketNotification.TICKET_LOADED) {
-            const ticket: Ticket = args[0];
-            if (ticket.TicketID === this.state.ticketId) {
-                this.state.ticket = ticket;
-                this.setBreadcrumbDetails();
-            }
-        }
-    }
-
     private setBreadcrumbDetails(): void {
         const value = this.state.ticket ? this.state.ticket.TicketNumber : this.state.ticketId;
 
@@ -93,7 +80,7 @@ export class TicketDetailsComponent {
             'Ticket-Dashboard', '#' + value, null
         );
 
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
     private getWidgetTemplate(instanceId: string): any {

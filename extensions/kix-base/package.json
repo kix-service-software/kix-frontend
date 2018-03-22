@@ -6,7 +6,6 @@
             "main-menu": "../../dist/registry-modules/main-menu/marko-dependencies.extension",
             "chart-widget-marko": "../../dist/registry-modules/widgets/chart/marko-dependencies.extension",
             "search-template-widget-marko": "../../dist/registry-modules/widgets/search-templates/marko-dependencies.extension",
-            "user-list-widget-marko": "../../dist/registry-modules/widgets/user-list/marko-dependencies.extension",
             "notes-sidebar-marko": "../../dist/registry-modules/widgets/notes/marko-dependencies.extension",
             "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
@@ -20,14 +19,12 @@
             "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
             "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
             "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
-            "translation-communicator": "../../dist/communicators/extensions/TranslationCommunicator.extension",
             "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
             "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension",
             "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
             "creation-dialog-communicator": "../../dist/communicators/extensions/CreationDialogCommunicator.extension",
             "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
-            "quick-search-communicator": "../../dist/communicators/extensions/QuickSearchCommunicator.extension",
             "icon-communicator": "../../dist/communicators/extensions/IconCommunicator.extension"
         },
         "kix:personal:settings": {
@@ -56,7 +53,6 @@
         "kix:widget": {
             "chart": "../../dist/registry-modules/widgets/chart/widget-factory.extension",
             "search-templates": "../../dist/registry-modules/widgets/search-templates/widget-factory.extension",
-            "user-list": "../../dist/registry-modules/widgets/user-list/widget-factory.extension",
             "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
             "ticket-list-widget": "../../dist/registry-modules/tickets/ticket-list-widget/widget-factory.extension",
             "ticket-info-widget": "../../dist/registry-modules/tickets/ticket-info-widget/widget-factory.extension",
@@ -67,11 +63,6 @@
             "queue-explorer": "../../dist/registry-modules/tickets/queue-explorer/widget-factory.extension",
             "service-explorer": "../../dist/registry-modules/tickets/service-explorer/widget-factory.extension"
         },
-        "kix:action": {},
-        "kix:quick-search": {
-            "ticket-quick-search": "../../dist/registry-modules/tickets/quicksearch.extension",
-            "cutsomer-quick-search": "../../dist/registry-modules/customers/customer-quicksearch.extension",
-            "contact-quick-search": "../../dist/registry-modules/customers/contact-quicksearch.extension"
-        }
+        "kix:action": {}
     }
 }

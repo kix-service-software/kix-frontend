@@ -1,8 +1,7 @@
 import { SearchComponentState } from './model/SearchComponentState';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { Context } from '@kix/core/dist/model';
+import { Context, BreadcrumbDetails } from '@kix/core/dist/model';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
 
 class SearchComponent {
 
@@ -19,7 +18,7 @@ class SearchComponent {
 
         const breadcrumbDetails =
             new BreadcrumbDetails('search', null, null, 'Search-Dashboard');
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
 }

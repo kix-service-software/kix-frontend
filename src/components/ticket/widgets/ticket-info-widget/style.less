@@ -24,13 +24,12 @@
         width: 33.333%;
         float: left;
         .key-value-pair {
-            grid-template-columns: 45% 1em 45%;
+            grid-template-columns: 45% 1em minmax(3em, auto);
             line-height: 1.5em;
             .key {
                 font-weight: bold;
             }
             .value {
-                height: 1.5em;
                 white-space: nowrap;
             }
             &::after {

@@ -1,6 +1,6 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
@@ -53,7 +53,7 @@ class DynamicFieldWidgetComponent {
     }
 
     private expandWidget(): void {
-        // ApplicationStore.getInstance().toggleMainDialog(
+        // ApplicationService.getInstance().toggleMainDialog(
         //     'ticket-dynamic-fields-container', {
         //         dynamicFields: this.state.dynamicFields,
         //         ticketId: this.state.ticketId

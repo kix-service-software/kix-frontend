@@ -1,10 +1,10 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class ArticleBulkActionComponent {
 
     private doAction(): void {
         alert('Sammelaktionen ...');
-        // ApplicationStore.getInstance().toggleMainDialog('article-bulk-dialog');
+        // ApplicationService.getInstance().toggleMainDialog('article-bulk-dialog');
     }
 
 }

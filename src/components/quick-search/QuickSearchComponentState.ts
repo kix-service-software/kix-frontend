@@ -1,8 +1,4 @@
-import { IQuickSearch } from '@kix/core/dist/model';
-
 export class QuickSearchComponentState {
-
-    public currentQuickSearch: IQuickSearch = null;
 
     public searchValue: string = '';
 
@@ -11,7 +7,5 @@ export class QuickSearchComponentState {
     public searching: boolean = false;
 
     public showSuggestions: boolean = false;
-
-    public quickSearches: IQuickSearch[] = [];
 
 }

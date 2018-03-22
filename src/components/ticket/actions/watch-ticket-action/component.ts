@@ -1,9 +1,9 @@
-import { ApplicationStore } from "@kix/core/dist/browser/application/ApplicationStore";
+import { ApplicationService } from "@kix/core/dist/browser/application/ApplicationService";
 
 export class SpamTicketActionComponent {
 
     private doAction(): void {
-        ApplicationStore.getInstance().toggleMainDialog('watch-ticket-dialog');
+        ApplicationService.getInstance().toggleMainDialog('watch-ticket-dialog');
     }
 
 }

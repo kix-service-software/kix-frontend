@@ -75,25 +75,11 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
 
-        const userListWidget =
-            new ConfiguredWidget("20170920093015", new WidgetConfiguration(
-                "user-list-widget", "User-List", [], {
-                    properties: [
-                        { name: 'UserID', displayName: 'ID' },
-                        { name: 'UserFirstname', displayName: 'Vorname' },
-                        { name: 'UserLastname', displayName: 'Nachname' },
-                        { name: 'UserEmail', displayName: 'Email' }
-                    ],
-                    limit: 10
-                },
-                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
-            );
-
         const contentRows: string[][] = [
             ['20170920072542', '20170920084512', '20170920113214'], ['20170920101621'], ['20170920093015']
         ];
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> =
-            [chart1, chart2, searchTemplateWidget, ticketListWidget, userListWidget];
+            [chart1, chart2, searchTemplateWidget, ticketListWidget];
 
 
         const notes =

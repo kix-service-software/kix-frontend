@@ -1,7 +1,7 @@
 import { SidebarComponentState } from './model/SidebarComponentState';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
-import { ApplicationStore } from '@kix/core/dist/browser/application/ApplicationStore';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 
@@ -94,11 +94,11 @@ class SidebarComponent {
     }
 
     private isConfigMode(): boolean {
-        return ApplicationStore.getInstance().isConfigurationMode();
+        return ApplicationService.getInstance().isConfigurationMode();
     }
 
     private isConfigDialogShown(): boolean {
-        return ApplicationStore.getInstance().isShowMainDialog();
+        return ApplicationService.getInstance().isShowMainDialog();
     }
 
     private hasSidebarsToShow(): boolean {
