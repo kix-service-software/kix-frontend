@@ -8,39 +8,37 @@ import {
     SocketEvent,
     RunActionRequest,
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class ActionCommunicator extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/action');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerActionEvents(client);
+    protected getNamespace(): string {
+        return 'action';
+    }
+
+    protected registerEvents(): void {
+        this.registerEventHandler(ActionEvent.RUN_ACTION, this.runAction.bind(this));
+    }
+
+    private async runAction(data: RunActionRequest): Promise<CommunicatorResponse> {
+        const actionFactoryExtensions =
+            await this.pluginService.getExtensions<IActionFactoryExtension>(KIXExtensions.ACTION);
+
+        const actionFactory = actionFactoryExtensions.find((af) => af.getActionId() === data.actionId);
+        const action = actionFactory.createAction();
+
+        if (action.canRun(data.input)) {
+            await action.run(data.input).then(() => {
+                return new CommunicatorResponse(ActionEvent.ACTION_FINISHED);
+            }).catch((error) => {
+                return new CommunicatorResponse(ActionEvent.ACTION_FAILED, new ActionFailedResponse(error));
             });
+
+        } else {
+            return new CommunicatorResponse(
+                ActionEvent.ACTION_CANNOT_RUN,
+                new ActionCannotRunResponse("Action cannot be executed."));
+        }
     }
-
-    private registerActionEvents(client: SocketIO.Socket): void {
-        client.on(ActionEvent.RUN_ACTION, async (data: RunActionRequest) => {
-
-            const actionFactoryExtensions =
-                await this.pluginService.getExtensions<IActionFactoryExtension>(KIXExtensions.ACTION);
-
-            const actionFactory = actionFactoryExtensions.find((af) => af.getActionId() === data.actionId);
-            const action = actionFactory.createAction();
-
-            if (action.canRun(data.input)) {
-                await action.run(data.input).then(() => {
-                    client.emit(ActionEvent.ACTION_FINISHED);
-                }).catch((error) => {
-                    client.emit(ActionEvent.ACTION_FAILED, new ActionFailedResponse(error));
-                });
-
-            } else {
-                client.emit(ActionEvent.ACTION_CANNOT_RUN, new ActionCannotRunResponse("Action cannot be executed."));
-            }
-        });
-    }
-
 }
 
