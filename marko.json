@@ -2,7 +2,6 @@
     "tags-dir": [
         "./dist/components",
         "./dist/components/_base-components",
-        "./dist/components/personal-settings",
         "./dist/components/widgets"
     ]
 }

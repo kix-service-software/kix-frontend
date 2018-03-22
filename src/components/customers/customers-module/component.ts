@@ -1,8 +1,7 @@
 import { CustomersComponentState } from './model/CustomersComponentState';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { Context } from '@kix/core/dist/model';
+import { BreadcrumbDetails, Context } from '@kix/core/dist/model';
 
 class CustomersComponent {
 
@@ -19,7 +18,7 @@ class CustomersComponent {
 
         const breadcrumbDetails =
             new BreadcrumbDetails('customers', null, null, 'Customer-Dashboard');
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 
 }

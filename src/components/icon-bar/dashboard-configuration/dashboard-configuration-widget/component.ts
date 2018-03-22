@@ -1,17 +1,13 @@
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 import { DashboardConfigurationWidgetComponentState } from './model/DashboardConfigurationWidgetComponentState';
-import { DashboardConfigurationWidgetTranslationId } from './model/DashboardConfigurationWidgetTranslationId';
 
 class DashboardConfigurationWidget {
 
     private state: DashboardConfigurationWidgetComponentState;
 
-    private translationIds: any;
-
     public onCreate(input: any): void {
         this.state = new DashboardConfigurationWidgetComponentState();
-        this.translationIds = DashboardConfigurationWidgetTranslationId;
     }
 
     private toggleDashboardConfigurationWidget(): void {

@@ -2,7 +2,7 @@
     <span.kix-icon-gear class=(state.showDashboardConfigurationWidget ? "" : "icon-asterisk")
         on-click('toggleDashboardConfigurationWidget')/>
 </div>
-<if(state.translations && state.showDashboardConfigurationWidget)>
+<if(state.showDashboardConfigurationWidget)>
     <div.dashboard-configuration-widget>
         <widget minimizable=false hasConfigOverlay=false>
             <@title>
@@ -11,8 +11,6 @@
             <@content>
                 <if(component.isConfigMode())>
                     <h4>Home Dashboard</h4>
-                    <!-- TODO: korrekten Dashboard-Namen (home, ticket, ...) und dessen Übersetzung bestimmen, ggf. von Eltern-Komponente (input.name) -->
-                    <!-- <h4>${component.getTranslation(component.translationIds.DASHBOARD_NAME)}</h4> -->
                     Widgets hinzufügen oder entfernen:
                     <button on-click('openDashboardConfigurationDialog')>Auswahl der Widgets</button>
                     <span.kix-icon.icon-dummy.icon-i/>Die angezeigten Widgets können mittels Drag & Drop verschoben werden.

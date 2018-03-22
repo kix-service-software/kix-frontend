@@ -1,8 +1,7 @@
 import { FaqComponentState } from './model/FaqComponentState';
-import { BreadcrumbDetails } from '@kix/core/dist/browser/router';
-import { ComponentRouterStore } from '@kix/core/dist/browser/router/ComponentRouterStore';
+import { ComponentRouterService } from '@kix/core/dist/browser/router/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { Context } from '@kix/core/dist/model';
+import { Context, BreadcrumbDetails } from '@kix/core/dist/model';
 
 class FAQComponent {
 
@@ -19,7 +18,7 @@ class FAQComponent {
 
         const breadcrumbDetails =
             new BreadcrumbDetails('faq', null, null, 'FAQ-Dashboard');
-        ComponentRouterStore.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
+        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
     }
 }
 

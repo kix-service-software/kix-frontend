@@ -1,5 +1,0 @@
-export enum TranslationId {
-
-    LOAD_DRAFT_QUESTION = "CREATION-DIALOG:LOAD-DRAFT-QUESTION"
-
-}
