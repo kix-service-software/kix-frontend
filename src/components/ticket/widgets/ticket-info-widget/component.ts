@@ -23,15 +23,21 @@ class TicketInfoWidgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
-        }
         this.getTicket();
+        this.setActions();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 

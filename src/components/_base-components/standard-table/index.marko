@@ -75,7 +75,7 @@
                         <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
                             data-id=(state.tableId + "row-toggle-content-wrapper")>
                             <ul.toggle-actions>
-                                <for(action in state.toggleActions)>
+                                <for(action in component.getToggleActions(row.object))>
                                     <li>
                                         <action action=action/>
                                     </li>

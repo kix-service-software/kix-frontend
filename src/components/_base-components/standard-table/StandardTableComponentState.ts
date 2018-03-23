@@ -19,6 +19,4 @@ export class StandardTableComponentState<T extends KIXObject<T>> {
 
     public rowWidth: number = 0;
 
-    public toggleActions: AbstractAction[] = [];
-
 }

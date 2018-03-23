@@ -22,11 +22,8 @@ class TicketDescriptionWidgetComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
-        }
-
         this.getFirstArticle();
+        this.setActions();
         this.getTicketNotes();
     }
 
@@ -38,6 +35,14 @@ class TicketDescriptionWidgetComponent {
                 articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
                 this.state.firstArticle = articles[0];
             }
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.firstArticle) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.firstArticle
+            );
         }
     }
 

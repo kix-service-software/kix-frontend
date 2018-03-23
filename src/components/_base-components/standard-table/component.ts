@@ -4,7 +4,7 @@ import { StandardTableInput } from './StandardTableInput';
 import {
     StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue, ActionFactory
 } from '@kix/core/dist/browser';
-import { SortOrder, KIXObject } from '@kix/core/dist/model';
+import { SortOrder, KIXObject, Article, IAction } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 
 class StandardTableComponent<T extends KIXObject<T>> {
@@ -41,12 +41,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     this.scrollTableToTop();
                 }
             });
-        }
-
-        if (this.state.standardTable.toggleOptions.actions.length) {
-            this.state.toggleActions = ActionFactory.getInstance().generateActions(
-                this.state.standardTable.toggleOptions.actions
-            );
         }
 
         setTimeout(() => {
@@ -306,6 +300,16 @@ class StandardTableComponent<T extends KIXObject<T>> {
             toggleInput[this.state.standardTable.toggleOptions.inputPropertyName] = row.object;
         }
         return toggleInput;
+    }
+
+    private getToggleActions(article: Article): IAction[] {
+        let actions = [];
+        if (this.state.standardTable.isToggleEnabled()) {
+            actions = ActionFactory.getInstance().generateActions(
+                this.state.standardTable.toggleOptions.actions, false, article
+            );
+        }
+        return actions;
     }
 
     private getTemplate(componentId: string): any {

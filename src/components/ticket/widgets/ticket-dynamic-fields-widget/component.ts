@@ -27,9 +27,7 @@ class DynamicFieldWidgetComponent {
             ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)
             : undefined;
 
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
-        }
+        this.setActions();
 
         this.state.configuredDynamicFields = this.state.widgetConfiguration.settings.dynamicFields;
         this.setDynamicFields();
@@ -38,6 +36,17 @@ class DynamicFieldWidgetComponent {
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setDynamicFields();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.actions = ActionFactory.getInstance().generateActions(
+                    this.state.widgetConfiguration.actions, false, ticket
+                );
+            }
         }
     }
 

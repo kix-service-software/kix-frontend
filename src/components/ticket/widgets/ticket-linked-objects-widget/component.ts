@@ -38,16 +38,21 @@ class LinkedObjectsWidgetComponent {
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
 
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
-        }
-
         this.setLinkedObjects();
+        this.setActions();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setLinkedObjects();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 

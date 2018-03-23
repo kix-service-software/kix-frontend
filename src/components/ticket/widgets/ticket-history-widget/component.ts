@@ -1,5 +1,7 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
+import {
+    HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
+} from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
@@ -35,16 +37,24 @@ class TicketHistoryWidgetComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(this.state.widgetConfiguration.actions);
-        }
-
+        this.setActions();
         this.setHistoryTableConfiguration();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setHistoryTableConfiguration();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.actions = ActionFactory.getInstance().generateActions(
+                    this.state.widgetConfiguration.actions, false, ticket
+                );
+            }
         }
     }
 
