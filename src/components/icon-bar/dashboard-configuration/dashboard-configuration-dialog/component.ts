@@ -96,7 +96,7 @@ class DashboardConfigurationDialog {
                 false
             );
         } else {
-            const newInstanceId = IdService.generateDateBasedRandomId();
+            const newInstanceId = IdService.generateDateBasedId();
             listElement = new SelectWithPropertiesListElement(
                 newInstanceId,
                 explorerDescriptor.configuration.title,
@@ -188,7 +188,7 @@ class DashboardConfigurationDialog {
             if (le.selected) {
                 le.selected = false;
                 const descListElement = this.state.widgetDescriptorList.find((wdle) => wdle.listId === le.id);
-                const newInstanceId = IdService.generateDateBasedRandomId();
+                const newInstanceId = IdService.generateDateBasedId();
                 const newSecondListElement = new SelectWithPropertiesListElement(
                     newInstanceId,
                     le.label,

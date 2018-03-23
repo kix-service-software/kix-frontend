@@ -85,7 +85,7 @@ class LinkedObjectsWidgetComponent {
             };
 
             return new StandardTable(
-                IdService.generateDateBasedRandomId(),
+                IdService.generateDateBasedId(),
                 contentProvider,
                 labelProvider,
                 [],

@@ -14,7 +14,7 @@ class WidgetComponent {
     }
 
     public onInput(input: any): void {
-        this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedRandomId();
+        this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
