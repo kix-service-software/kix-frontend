@@ -71,7 +71,7 @@ export class ArticleListWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedRandomId(),
+                IdService.generateDateBasedId(),
                 new ArticleTableContentLayer(this.state.ticketId),
                 new ArticleTableLabelLayer(),
                 [new ArticleTableFilterLayer()],
