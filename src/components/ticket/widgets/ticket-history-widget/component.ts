@@ -59,7 +59,7 @@ class TicketHistoryWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedRandomId(),
+                IdService.generateDateBasedId(),
                 contentProvider,
                 labelProvider,
                 [new TableFilterLayer()],

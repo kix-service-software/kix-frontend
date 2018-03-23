@@ -63,7 +63,7 @@ class TicketListWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedRandomId(),
+                IdService.generateDateBasedId(),
                 new TicketTableContentLayer(this.state.instanceId, 100),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
