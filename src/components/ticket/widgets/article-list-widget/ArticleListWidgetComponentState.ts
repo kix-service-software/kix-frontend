@@ -1,6 +1,6 @@
-import { Article, IAction } from '@kix/core/dist/model';
 import { StandardTable } from '@kix/core/dist/browser';
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
+import { Article, IAction, WidgetComponentState } from '@kix/core/dist/model';
+
 import { ArticleListSettings } from './ArticleListSettings';
 
 export class ArticleListWidgetComponentState extends WidgetComponentState<ArticleListSettings> {

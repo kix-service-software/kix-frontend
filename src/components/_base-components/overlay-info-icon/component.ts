@@ -1,8 +1,9 @@
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { IdService } from '@kix/core/dist/browser/IdService';
+import { InfoOverlayWidgetData } from '@kix/core/dist/model';
+
+import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
 
 class OverlayInfoIconComponent {
 

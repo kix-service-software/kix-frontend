@@ -1,5 +1,5 @@
 import { SelectWithFilterComponentState } from './model/SelectWithFilterComponentState';
-import { SelectWithFilterListElement } from '@kix/core/dist/browser/model';
+import { SelectWithFilterListElement } from '@kix/core/dist/model';
 
 class SelectWithFilter {
 

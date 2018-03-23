@@ -1,17 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    ObjectIconResponse,
-    ObjectIconsResponse
-} from '@kix/core/dist/api';
-
-import { ObjectIcon, SortOrder } from '@kix/core/dist/model';
-import { IObjectIconService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { ObjectIconsResponse } from '@kix/core/dist/api';
+import { ObjectIcon } from '@kix/core/dist/model';
+import { IConfigurationService, IObjectIconService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

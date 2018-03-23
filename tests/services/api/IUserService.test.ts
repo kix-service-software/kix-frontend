@@ -1,23 +1,11 @@
 /* tslint:disable no-var-requires no-unused-expression max-line-length */
-import {
-    UsersResponse,
-    UserResponse,
-    CreateUser,
-    CreateUserResponse,
-    CreateUserRequest,
-    UpdateUser,
-    UpdateUserRequest,
-    UpdateUserResponse,
-    HttpError,
-
-} from '@kix/core/dist/api';
-
-import { TicketType, User, UserLogin, SortOrder } from '@kix/core/dist/model';
+import { UserResponse, UsersResponse } from '@kix/core/dist/api';
+import { User } from '@kix/core/dist/model';
 import { IConfigurationService, IUserService } from '@kix/core/dist/services';
+import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
 
 import { container } from '../../../src/Container';
-import chaiAsPromised = require('chai-as-promised');
-import chai = require('chai');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

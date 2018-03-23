@@ -1,4 +1,4 @@
-import { DynamicField } from '@kix/core/dist/model/dynamic-field/DynamicField';
+import { DynamicField } from '@kix/core/dist/model';
 
 export class DynamicFieldLabelComponentState {
 

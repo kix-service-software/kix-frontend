@@ -1,4 +1,4 @@
-import { WidgetComponentState } from "@kix/core/dist/browser/model/widget/WidgetComponentState";
+import { WidgetComponentState } from "@kix/core/dist/model/";
 
 export class BaseWidgetComponentState extends WidgetComponentState {
 

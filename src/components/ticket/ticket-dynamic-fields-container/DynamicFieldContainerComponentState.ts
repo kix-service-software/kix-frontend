@@ -1,6 +1,6 @@
 import { GeneralCatalogItem } from '@kix/core/dist/model';
-import { DynamicField as TicketDynamicField } from '@kix/core/dist/model/ticket/DynamicField';
-import { DynamicField } from '@kix/core/dist/model/dynamic-field/DynamicField';
+import { DynamicField } from '@kix/core/dist/model/kix/dynamic-field/DynamicField';
+import { DynamicField as TicketDynamicField } from '@kix/core/dist/model/kix/ticket/DynamicField';
 
 export class DynamicFieldContainerComponentState {
 

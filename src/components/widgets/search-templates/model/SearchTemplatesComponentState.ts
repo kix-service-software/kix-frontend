@@ -1,4 +1,4 @@
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
+import { WidgetComponentState } from '@kix/core/dist/model';
 
 export class SearchTemplatesComponentState extends WidgetComponentState<any> {
 
