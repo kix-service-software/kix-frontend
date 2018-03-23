@@ -9,7 +9,7 @@ class TicketArticleMetadataComponent {
         this.state = new TicketArticleMetadataComponentState();
     }
 
-    public onInput(input: any) {
+    public onInput(input: any): void {
         this.state.article = input.article;
     }
 

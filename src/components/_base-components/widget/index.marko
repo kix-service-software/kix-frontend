@@ -33,11 +33,7 @@
             <else-if(component.isInputDefined(input.icon))>
                 <include(input.icon)/>
             </else-if>
-            <h3 on-click('minimizeWidget')>
-                <if(component.isInputDefined(input.title))>
-                    <include(input.title)/>
-                </if>
-            </h3>
+            <h3 title=input.title class={minimizeable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
             <if(component.hasFilter(input.filter))>
                 <include(input.filter)/>
             </if>

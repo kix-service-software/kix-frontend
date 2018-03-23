@@ -1,13 +1,11 @@
 <widget instanceId=state.instanceId configurationTagId="ticket-service-explorer-configuration" minimizable=true
-    explorer=input.explorer minimized=input.minimized>
+    explorer=input.explorer minimized=input.minimized
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@content>
         <ul.service-list>
             <for(service in state.service)>
@@ -15,8 +13,4 @@
             </for>
         </ul>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
-    
 </widget>

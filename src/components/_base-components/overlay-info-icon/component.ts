@@ -2,7 +2,7 @@ import { ApplicationService } from '@kix/core/dist/browser/application/Applicati
 import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 
 class OverlayInfoIconComponent {
 
@@ -13,8 +13,8 @@ class OverlayInfoIconComponent {
     }
 
     public onInput(input: any): void {
-        const content = ClientStorageHandler.getComponentTemplate(input.content);
-        this.state.overlayWidgetData = new InfoOverlayWidgetData(content);
+        const content = ClientStorageService.getComponentTemplate(input.content);
+        this.state.overlayWidgetData = new InfoOverlayWidgetData(content, input.data);
     }
 
     public onMount(): void {

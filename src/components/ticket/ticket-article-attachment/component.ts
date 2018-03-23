@@ -1,6 +1,7 @@
 import { Attachment } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 declare var window: any;
 
@@ -31,15 +32,7 @@ class ArticleAttachmentComponent {
             const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
             this.state.progress = false;
 
-            const blob = this.b64toBlob(attachment.Content, attachment.ContentType);
-            const objectURL = URL.createObjectURL(blob);
-
-            const a = window.document.createElement('a');
-            a.href = objectURL;
-            a.download = attachment.Filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            TicketService.getInstance().startBrowserDownload(attachment);
         }
     }
 
@@ -50,25 +43,6 @@ class ArticleAttachmentComponent {
         return attachment;
     }
 
-    private b64toBlob(b64Data: string, contentType: string = '', sliceSize: number = 512) {
-        const byteCharacters = atob(b64Data);
-        const byteArrays = [];
-
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-            const byteNumbers = new Array(slice.length);
-            for (let i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-        }
-
-        const blob = new Blob(byteArrays, { type: contentType });
-        return blob;
-    }
 }
 
 module.exports = ArticleAttachmentComponent;

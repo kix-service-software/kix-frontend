@@ -1,9 +1,7 @@
 <if(state.displayGroups)>
     <for(displayGroup in state.displayGroups)>
         <div.dynamic-fields-group>
-            <widget type=32>
-                <@icon/>
-                <@title>${displayGroup.Name}</@title>
+            <widget type=32 title=displayGroup.Name>
                 <@content>
                     <!-- TODO: "key" ggf. unnötig, wenn es eigene label-componenten sein sollten (siehe #399) -->
                     <ul.field-container key=("field-container" + displayGroup.ItemID)>

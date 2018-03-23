@@ -1,21 +1,17 @@
-<widget instanceId=state.instanceId configurationTagId="ticket-info-configuration">
+<widget instanceId=state.instanceId configurationTagId="ticket-info-configuration"
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@contentActions>
         <ul.content-actions>
-            <if(state.widgetConfiguration)>
-                <for(action in state.widgetConfiguration.actions)>
-                    <li>
-                        <include(component.getTemplate(action)) short=true/>
-                    </li>
-                </for>
-            </if>
+            <for(action in state.actions)>
+                <li>
+                    <action action=action/>
+                </li>
+            </for>
         </ul>
     </@contentActions>
     <@content>
@@ -108,7 +104,4 @@
             </ul>
         </if>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
 </widget>

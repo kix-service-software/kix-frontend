@@ -1,4 +1,4 @@
-import { TicketHistory, WidgetConfiguration } from '@kix/core/dist/model';
+import { TicketHistory, WidgetConfiguration, AbstractAction } from '@kix/core/dist/model';
 import { WidgetComponentState } from '@kix/core/dist/browser/model/';
 import { StandardTable } from '@kix/core/dist/browser';
 import { TicketHistorySettings } from './TicketHistorySettings';
@@ -10,5 +10,7 @@ export class TicketHistoryComponentState extends WidgetComponentState<TicketHist
     public standardTable: StandardTable<TicketHistory> = null;
 
     public filterValue: string = '';
+
+    public actions: AbstractAction[] = [];
 
 }

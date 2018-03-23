@@ -7,6 +7,7 @@ import {
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
+import { ActionFactory } from '@kix/core/dist/browser';
 
 export class TicketDetailsComponent {
 
@@ -37,6 +38,7 @@ export class TicketDetailsComponent {
         this.state.loading = true;
         const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
         this.state.ticket = ticket;
+        this.setActions();
         this.setBreadcrumbDetails();
         this.setTicketHookInfo();
         this.state.loading = false;
@@ -50,17 +52,25 @@ export class TicketDetailsComponent {
 
     private setConfiguration(): void {
         const context = ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        const config = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
+        this.state.ticketDeatilsConfiguration = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
 
-        if (config) {
+        if (this.state.ticketDeatilsConfiguration) {
             this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
             this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
-            this.state.generalActions = config.generalActions;
-            this.state.ticketActions = config.ticketActions;
-
+            this.setActions();
             if (!this.state.activeTabId && this.state.tabs.length) {
                 this.state.activeTabId = this.state.tabs[0].instanceId;
             }
+        }
+    }
+
+    private setActions(): void {
+        const config = this.state.ticketDeatilsConfiguration;
+        if (config && this.state.ticket) {
+            this.state.generalActions =
+                ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.ticket);
+            this.state.ticketActions =
+                ActionFactory.getInstance().generateActions(config.ticketActions, true, this.state.ticket);
         }
     }
 

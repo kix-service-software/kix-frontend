@@ -1,0 +1,12 @@
+<widget instanceId="article-receiver-list-widget" minimizable=false title=state.title>
+    <@icon>
+        <span.kix-icon-man/>
+    </@icon>
+    <@content>
+        <div.receiver-list-container>
+            <for(receiver in state.receiverList)>
+                <div title=receiver.email>${receiver.realName}</div>
+            </for>
+        </div>
+    </@content>
+</widget>

@@ -1,5 +1,5 @@
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { RouterComponentState } from './RouterComponentState';
 
 export class RouterOutletComponent {
@@ -24,7 +24,7 @@ export class RouterOutletComponent {
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
-            this.state.template = ClientStorageHandler.getComponentTemplate(this.state.componentId);
+            this.state.template = ClientStorageService.getComponentTemplate(this.state.componentId);
             setTimeout(() => {
                 (this as any).setStateDirty('template');
             }, 50);

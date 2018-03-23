@@ -3,7 +3,7 @@ import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardServ
 import { ContextFilter, Context, ConfiguredWidget, DashboardConfiguration, WidgetType } from '@kix/core/dist/model';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 
 class SidebarComponent {
 

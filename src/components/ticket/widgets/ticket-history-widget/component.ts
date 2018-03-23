@@ -1,15 +1,18 @@
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
+import {
+    HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
+} from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable, ITableClickListener,
     ITableConfigurationListener,
     TableSortLayer,
     TableColumn,
     TableFilterLayer,
-    TableToggleLayer
+    TableToggleLayer,
+    ActionFactory
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
@@ -33,12 +36,25 @@ class TicketHistoryWidgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        this.setActions();
         this.setHistoryTableConfiguration();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setHistoryTableConfiguration();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.actions = ActionFactory.getInstance().generateActions(
+                    this.state.widgetConfiguration.actions, false, ticket
+                );
+            }
         }
     }
 
@@ -59,7 +75,7 @@ class TicketHistoryWidgetComponent {
             };
 
             this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedRandomId(),
+                IdService.generateDateBasedId(),
                 contentProvider,
                 labelProvider,
                 [new TableFilterLayer()],
@@ -102,7 +118,7 @@ class TicketHistoryWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 
 }

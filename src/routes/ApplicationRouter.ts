@@ -3,10 +3,13 @@ import { IAuthenticationService, IConfigurationService } from '@kix/core/dist/se
 
 import { IServerConfiguration } from '@kix/core/dist/common';
 import { IRouter } from '@kix/core/dist/routes';
-import { IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import {
+    IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions
+} from '@kix/core/dist/extensions';
 
 import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
+import { AbstractAction } from '@kix/core/dist/model';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -68,7 +71,9 @@ export class ApplicationRouter extends KIXRouter {
 
         const objectData = await this.getObjectData(token);
 
-        this.prepareMarkoTemplate(res, moduleId, objectId, objectData, themeCSS, specificCSS, tagLib);
+        this.prepareMarkoTemplate(
+            res, moduleId, objectId, objectData, themeCSS, specificCSS, tagLib
+        );
     }
 
     private async getUserThemeCSS(userId: number): Promise<string> {

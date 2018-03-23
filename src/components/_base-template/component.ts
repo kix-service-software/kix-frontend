@@ -1,5 +1,5 @@
 import { SocketEvent } from '@kix/core/dist/model';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
@@ -12,11 +12,13 @@ class BaseTemplateComponent {
     public state: BaseTemplateComponentState;
 
     public onCreate(input: any): void {
-        this.state = new BaseTemplateComponentState(input.contextId, input.objectData, input.objectId, input.tagLib);
+        this.state = new BaseTemplateComponentState(
+            input.contextId, input.objectData, input.objectId, input.tagLib
+        );
     }
 
     public onMount(): void {
-        ClientStorageHandler.setTagLib(this.state.tagLib);
+        ClientStorageService.setTagLib(this.state.tagLib);
 
         ContextService.getInstance().setObjectData(this.state.objectData);
         this.state.initialized = true;
@@ -28,8 +30,8 @@ class BaseTemplateComponent {
 
         ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
 
-        const token = ClientStorageHandler.getToken();
-        const socketUrl = ClientStorageHandler.getFrontendSocketUrl();
+        const token = ClientStorageService.getToken();
+        const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const configurationSocket = io.connect(socketUrl + "/configuration", {
             query: "Token=" + token
@@ -52,7 +54,7 @@ class BaseTemplateComponent {
         if (this.state.showMainDialog) {
             const currentMainDialog = ApplicationService.getInstance().getCurrentMainDialog();
             if (currentMainDialog[0]) {
-                this.state.mainDialogTemplate = ClientStorageHandler.getComponentTemplate(currentMainDialog[0]);
+                this.state.mainDialogTemplate = ClientStorageService.getComponentTemplate(currentMainDialog[0]);
                 this.state.mainDialogInput = currentMainDialog[1];
             }
         }

@@ -74,15 +74,13 @@
                     <if(row.isToggled)>
                         <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
                             data-id=(state.tableId + "row-toggle-content-wrapper")>
-                            <if(component.getToggleActions().length)>
-                                <ul.toggle-actions>
-                                    <for(action in component.getToggleActions())>
-                                        <li>
-                                            <include(component.getTemplate(action)) short=true/>
-                                        </li>
-                                    </for>
-                                </ul>
-                            </if>
+                            <ul.toggle-actions>
+                                <for(action in component.getToggleActions(row.object))>
+                                    <li>
+                                        <action action=action/>
+                                    </li>
+                                </for>
+                            </ul>
                             <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
                                 key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                 <include(component.getToggleTemplate(), component.getToggleInput(row))/>

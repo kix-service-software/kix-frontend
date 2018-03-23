@@ -1,5 +1,5 @@
 import { LoginComponentState } from './LoginComponentState';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { AuthenticationService } from '@kix/core/dist/browser/authentication';
 
 class LoginFormComponent {
@@ -16,7 +16,7 @@ class LoginFormComponent {
 
     public onMount(): void {
         if (this.state.logout) {
-            ClientStorageHandler.destroyToken();
+            ClientStorageService.destroyToken();
         }
     }
 
