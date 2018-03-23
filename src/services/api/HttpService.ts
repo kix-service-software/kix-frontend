@@ -1,4 +1,4 @@
-import { IHttpService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
+import { IHttpService, IConfigurationService, ILoggingService, IProfilingService } from '@kix/core/dist/services';
 
 import { HttpError } from '@kix/core/dist/api';
 import { IServerConfiguration } from '@kix/core/dist/common';
@@ -12,12 +12,12 @@ export class HttpService implements IHttpService {
 
     private request: any;
     private apiURL: string;
-    private loggingService: ILoggingService;
     private backendCertificate: any;
 
     public constructor(
         @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("ILoggingService") loggingService: ILoggingService
+        @inject("ILoggingService") protected loggingService: ILoggingService,
+        @inject("IProfilingService") protected profilingService: IProfilingService
     ) {
         const serverConfig: IServerConfiguration = configurationService.getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
@@ -26,105 +26,80 @@ export class HttpService implements IHttpService {
         this.backendCertificate = fs.readFileSync(path.join(__dirname, '../../../cert/backend.pem'));
     }
 
-    public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
-        const options = {
-            method: 'GET',
-            uri: this.buildRequestUrl(resource),
-            qs: queryParameters,
-            headers: {
-                Authorization: 'Token ' + token
-            },
-            json: true,
-            ca: this.backendCertificate
+    private async executeRequest<T>(resource: string, token: string, options: any): Promise<T> {
+        // extend options
+        options.uri = this.buildRequestUrl(resource);
+        options.headers = {
+            Authorization: 'Token ' + token
         };
+        options.json = true;
+        options.ca = this.backendCertificate;
+
+        const queryParameters = (options.method === 'GET') ? ' ' + JSON.stringify(options.qs) : '';
+
+        // start profiling
+        const profileTaskId = this.profilingService.start(
+            'HttpService',
+            options.method + ' ' + resource + queryParameters,
+            {
+                a: options,
+                b: queryParameters
+            });
 
         const response = await this.request(options)
             .catch((error) => {
-                this.loggingService.error('Error during http GET request.', error);
+                this.loggingService.error('Error during HTTP ' + options.method + ' request.', error);
                 return Promise.reject(this.createHttpError(error));
             });
 
+        // stop profiling
+        this.profilingService.stop(profileTaskId, response);
+
         return response;
+    }
+
+    public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
+        const options = {
+            method: 'GET',
+            qs: queryParameters
+        };
+
+        return this.executeRequest<T>(resource, token, options);
     }
 
     public async post<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'POST',
-            uri: this.buildRequestUrl(resource),
-            body: content,
-            headers: {
-                Authorization: 'Token ' + token
-            },
-            json: true,
-            ca: this.backendCertificate
+            body: content
         };
 
-        const response = await this.request(options)
-            .catch((error) => {
-                this.loggingService.error('Error during http POST request.', error);
-                return Promise.reject(this.createHttpError(error));
-            });
-
-        return response;
+        return this.executeRequest<T>(resource, token, options);
     }
 
     public async put<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'PUT',
-            uri: this.buildRequestUrl(resource),
-            body: content,
-            headers: {
-                Authorization: 'Token ' + token
-            },
-            json: true,
-            ca: this.backendCertificate
+            body: content
         };
 
-        const response = await this.request(options)
-            .catch((error) => {
-                this.loggingService.error('Error during http PUT request.', error);
-                return Promise.reject(this.createHttpError(error));
-            });
-        return response;
+        return this.executeRequest<T>(resource, token, options);
     }
 
     public async patch<T>(resource: string, content: any, token?: any): Promise<T> {
         const options = {
             method: 'PATCH',
-            uri: this.buildRequestUrl(resource),
-            body: content,
-            headers: {
-                Authorization: 'Token ' + token
-            },
-            json: true,
-            ca: this.backendCertificate
+            body: content
         };
 
-        const response = await this.request(options)
-            .catch((error) => {
-                this.loggingService.error('Error during http PATCH request.', error);
-                return Promise.reject(this.createHttpError(error));
-            });
-        return response;
+        return this.executeRequest<T>(resource, token, options);
     }
 
     public async delete<T>(resource: string, token?: any): Promise<T> {
         const options = {
             method: 'DELETE',
-            uri: this.buildRequestUrl(resource),
-            headers: {
-                Authorization: 'Token ' + token
-            },
-            json: true,
-            ca: this.backendCertificate
         };
 
-        const response = await this.request.delete(options)
-            .catch((error) => {
-                this.loggingService.error('Error during http DELETE request.', error);
-                return Promise.reject(this.createHttpError(error));
-            });
-        return response;
+        return this.executeRequest<T>(resource, token, options);
     }
 
     private buildRequestUrl(resource: string): string {

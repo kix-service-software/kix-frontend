@@ -7,8 +7,9 @@
     ],
     "FRONTEND_URL": "https://localhost",
     "BACKEND_API_URL": "http://docker.vm.devel.cape-it.de:54918/api.pl/webservice/core:v1",
-    "LOG_LEVEL": 2,
+    "LOG_LEVEL": 3,
     "LOG_FILEDIR": "logs",
     "LOG_TRACE": true,
-    "DEFAULT_MODULE_ID": "home"
+    "DEFAULT_MODULE_ID": "home",
+    "ENABLE_PROFILING": true
 }
