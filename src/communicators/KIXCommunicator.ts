@@ -55,9 +55,9 @@ export abstract class KIXCommunicator implements ICommunicator {
         this.client = client;
     }
 
-    protected registerEventHandler(event: string, handler: any): void {
+    protected registerEventHandler<T>(event: string, handler: any): void {
         this.client.on(event, async (args: any[]) => {
-            const response: CommunicatorResponse = await handler(args);
+            const response: CommunicatorResponse<T> = await handler(args);
             this.client.emit(response.event, response.data);
         });
     }

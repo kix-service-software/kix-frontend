@@ -60,7 +60,7 @@ describe('Ticket Service', () => {
         });
 
         it('should return a ticket type object.', async () => {
-            const ticketType = await ticketService.getTicket('', 12345, false, false)
+            const ticketType = await ticketService.loadTicket('', 12345, false, false)
             expect(ticketType).not.undefined;
             expect(ticketType.TicketID).equal(12345);
         });
@@ -80,46 +80,9 @@ describe('Ticket Service', () => {
         });
 
         it('should return a ticket type object.', async () => {
-            const ticketType = await ticketService.getTicket('', 12345, true, true)
+            const ticketType = await ticketService.loadTicket('', 12345, true, true)
             expect(ticketType).not.undefined;
             expect(ticketType.TicketID).equal(12345);
-        });
-    });
-
-    describe('Create Ticket', () => {
-        describe('Create a valid request to create a new ticket.', () => {
-
-            before(() => {
-                nockScope
-                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
-                    .reply(200, buildCreateTicketResponse(123456));
-            });
-
-            it('should return a the id of the new users.', async () => {
-                const userId = await ticketService.createTicket('', new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []));
-                expect(userId).equal(123456);
-            });
-
-        });
-
-        describe('Create a invalid create request.', () => {
-
-            before(() => {
-                nockScope
-                    .post(resourcePath, new CreateTicketRequest(new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [])))
-                    .reply(400, {});
-            });
-
-            it('should throw an error if request is invalid.', async () => {
-                const userId = await ticketService.createTicket('', new CreateTicket('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], []))
-                    .then((result) => {
-                        expect(true).false;
-                    }).catch((error: HttpError) => {
-                        expect(error).instanceof(HttpError);
-                        expect(error.status).equals(400);
-                    });
-            });
-
         });
     });
 
@@ -142,35 +105,11 @@ describe('Ticket Service', () => {
                 });
 
                 it('should return articles from ticket.', async () => {
-                    const articles: Article[] = await ticketService.getArticles('', 12345)
+                    const articles: Article[] = await ticketService.loadArticles('', 12345)
                     expect(articles).not.undefined;
                     expect(articles).an('array');
                     expect(articles).not.empty;
                 });
-            });
-        });
-
-        describe("Create a valid request to create a new article.", () => {
-            before(() => {
-                nockScope
-                    .post(resourcePath + '/12345/articles', new CreateArticleRequest(
-                        new CreateArticle(
-                            '', '', '', '', '', 0, 0, '', '', '', '', '', true, [], [], [], [], []
-                        ))
-                    )
-                    .reply(200, {
-                        ArticleID: 1234
-                    });
-            });
-
-            it('should return the id of the new article.', async () => {
-                const response = await ticketService.createArticle('', 12345,
-                    new CreateArticle(
-                        '', '', '', '', '', 0, 0, '', '', '', '', '', true, [], [], [], [], []
-                    ));
-
-                expect(response).not.undefined;
-                expect(response).equal(1234);
             });
         });
 
@@ -185,7 +124,7 @@ describe('Ticket Service', () => {
             });
 
             it('should return a list with attachments', async () => {
-                const response = await ticketService.getArticleAttachment('', 12345, 1234, 9876);
+                const response = await ticketService.loadArticleAttachment('', 12345, 1234, 9876);
 
                 expect(response).not.undefined;
                 expect(response.ID).equals(9876);

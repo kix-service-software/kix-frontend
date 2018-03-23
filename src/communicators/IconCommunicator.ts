@@ -18,8 +18,9 @@ export class IconCommunicator extends KIXCommunicator {
         this.registerEventHandler(IconEvent.LOAD_ICON, this.loadIcon.bind(this));
     }
 
-    private async loadIcon(data: ObjectIconLoadRequest): Promise<CommunicatorResponse> {
+    private async loadIcon(data: ObjectIconLoadRequest): Promise<CommunicatorResponse<ObjectIconLoadResponse>> {
         const icon = await this.objectIconService.getObjectIcon(data.token, data.object, data.objectId);
-        return new CommunicatorResponse(IconEvent.ICON_LOADED, new ObjectIconLoadResponse(data.requestId, icon));
+        const response = new ObjectIconLoadResponse(data.requestId, icon);
+        return new CommunicatorResponse(IconEvent.ICON_LOADED, response);
     }
 }

@@ -39,7 +39,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
 
     protected RESOURCE_URI: string = 'tickets';
 
-    public async getTicket(
+    public async loadTicket(
         token: string, ticketId: number, articles: boolean = false, history: boolean = false
     ): Promise<Ticket> {
         let include = 'TimeUnits,DynamicFields,Links';
@@ -58,7 +58,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return new Ticket(response.Ticket);
     }
 
-    public async getTickets(
+    public async loadTickets(
         token: string, properties: string[], limit: number,
         filter?: Array<[TicketProperty, SearchOperator, string | number | string[] | number[]]>,
         OR_SEARCH: boolean = false
@@ -72,28 +72,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.Ticket.map((t) => new Ticket(t));
     }
 
-    public async createTicket(token: string, createTicket: CreateTicket): Promise<number> {
-        const createTicketRequest = new CreateTicketRequest(createTicket);
-
-        const response = await this.createObject<CreateTicketResponse, CreateTicketRequest>(
-            token, this.RESOURCE_URI, createTicketRequest
-        );
-
-        return response.TicketID;
-    }
-
-    public async createArticle(token: string, ticketId: number, createArticle: CreateArticle): Promise<number> {
-        const createArticleRequest = new CreateArticleRequest(createArticle);
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES);
-
-        const response = await this.createObject<CreateArticleResponse, CreateArticleRequest>(
-            token, uri, createArticleRequest
-        );
-
-        return response.ArticleID;
-    }
-
-    public async getArticles(token: string, ticketId: number): Promise<Article[]> {
+    public async loadArticles(token: string, ticketId: number): Promise<Article[]> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES);
         const response = await this.getObjectByUri<ArticlesResponse>(token, uri, {
             expand: 'Attachments',
@@ -105,7 +84,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         });
     }
 
-    public async getArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
+    public async loadArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
         const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId);
         const query = {
             include: 'Flags',
@@ -116,7 +95,7 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.Article;
     }
 
-    public async getArticleAttachment(
+    public async loadArticleAttachment(
         token: string, ticketId: number, articleId: number, attachmentId: number
     ): Promise<Attachment> {
 
@@ -130,9 +109,20 @@ export class TicketService extends ObjectService<Ticket> implements ITicketServi
         return response.Attachment;
     }
 
+    public async loadArticleZipAttachment(token: string, ticketId: number, articleId: number): Promise<Attachment> {
+        const uri = this.buildUri(
+            this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, 'zip'
+        );
+
+        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
+            include: 'Content'
+        });
+        return response.Attachment;
+    }
+
     public async setArticleSeenFlag(token: string, ticketId: number, articleId: number): Promise<void> {
         const seenFlag = 'Seen';
-        const article = await this.getArticle(token, ticketId, articleId);
+        const article = await this.loadArticle(token, ticketId, articleId);
 
         const ArticleFlag = {
             Name: seenFlag,

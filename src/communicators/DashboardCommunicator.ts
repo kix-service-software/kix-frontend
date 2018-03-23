@@ -29,7 +29,7 @@ export class DashboardCommunicator extends KIXCommunicator {
         this.registerEventHandler(DashboardEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
     }
 
-    protected async loadDashboard(data: LoadDashboardRequest): Promise<CommunicatorResponse> {
+    protected async loadDashboard(data: LoadDashboardRequest): Promise<CommunicatorResponse<LoadDashboardResponse>> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
@@ -54,17 +54,17 @@ export class DashboardCommunicator extends KIXCommunicator {
         return new CommunicatorResponse(DashboardEvent.DASHBOARD_LOADED, response);
     }
 
-    private async saveDashboard(data: SaveDashboardRequest): Promise<CommunicatorResponse> {
+    private async saveDashboard(data: SaveDashboardRequest): Promise<CommunicatorResponse<void>> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
         this.configurationService
             .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
-        return new CommunicatorResponse(DashboardEvent.DASHBOARD_SAVED, null);
+        return new CommunicatorResponse(DashboardEvent.DASHBOARD_SAVED);
     }
 
-    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<CommunicatorResponse> {
+    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<CommunicatorResponse<void>> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user && user.UserID;
 
