@@ -36,8 +36,8 @@ export class AuthenticationCommunicator extends KIXCommunicator {
         this.registerEventHandler(AuthenticationEvent.LOGIN, this.login.bind(this));
     }
 
-    private async login(data: LoginRequest): Promise<CommunicatorResponse> {
-        let response: CommunicatorResponse;
+    private async login(data: LoginRequest): Promise<CommunicatorResponse<AuthenticationResult>> {
+        let response;
         await this.authenticationService
             .login(data.userName, data.password, data.userType)
             .then((token: string) => {

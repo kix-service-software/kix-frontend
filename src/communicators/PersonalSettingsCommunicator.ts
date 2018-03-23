@@ -24,7 +24,9 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
         this.registerEventHandler(PersonalSettingsEvent.SAVE_PERSONAL_SETTINGS, this.savePersonalSettings.bind(this));
     }
 
-    private async loadPersonalSettings(data: LoadPersonalSettingsRequest): Promise<CommunicatorResponse> {
+    private async loadPersonalSettings(
+        data: LoadPersonalSettingsRequest
+    ): Promise<CommunicatorResponse<LoadPersonalSettingsResponse>> {
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;
 
@@ -37,7 +39,7 @@ export class PersonalSettingsCommunicator extends KIXCommunicator {
         return new CommunicatorResponse(PersonalSettingsEvent.PERSONAL_SETTINGS_LOADED, loadResponse);
     }
 
-    private async savePersonalSettings(data: SavePersonalSettingsRequest): Promise<CommunicatorResponse> {
+    private async savePersonalSettings(data: SavePersonalSettingsRequest): Promise<CommunicatorResponse<void>> {
 
         const user = await this.userService.getUserByToken(data.token);
         const userId = user.UserID;

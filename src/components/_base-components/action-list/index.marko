@@ -2,7 +2,7 @@
     <ul.action-list key="action-list">
         <for(element in state.listDefault)>
             <li>
-                <include(component.getTemplate(element))/>
+                <action action=element/>
             </li>
         </for>
         <if(state.listExpansion && state.listExpansion.length > 0)>
@@ -16,7 +16,7 @@
             <ul.action-list-expansion>
                 <for(element in state.listExpansion)>
                     <li>
-                        <include(component.getTemplate(element))/>
+                        <action action=element displayText=true/>
                     </li>
                 </for>
             </ul>

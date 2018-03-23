@@ -24,7 +24,9 @@ export class MainMenuCommunicator extends KIXCommunicator {
         this.registerEventHandler(MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<CommunicatorResponse> {
+    private async loadMenuEntries(
+        data: MainMenuEntriesRequest
+    ): Promise<CommunicatorResponse<MainMenuEntriesResponse>> {
 
         const user = await this.userService.getUserByToken(data.token);
 

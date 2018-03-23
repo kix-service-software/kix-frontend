@@ -1,5 +1,5 @@
 import { WidgetComponentState } from '@kix/core/dist/browser/model';
-import { Contact, Customer, Ticket } from '@kix/core/dist/model';
+import { Contact, Customer, Ticket, AbstractAction } from '@kix/core/dist/model';
 import { ILabelProvider } from '@kix/core/dist/browser';
 
 export class TicketInfoComponentState extends WidgetComponentState<any> {
@@ -10,6 +10,7 @@ export class TicketInfoComponentState extends WidgetComponentState<any> {
         public isPending: boolean = false,
         public isAccountTimeEnabled: boolean = false,
         public labelProvider: ILabelProvider<Ticket> = null,
+        public actions: AbstractAction[] = []
     ) {
         super();
     }

@@ -3,7 +3,8 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ActionFactory } from '@kix/core/dist/browser';
 
 class DynamicFieldWidgetComponent {
 
@@ -26,6 +27,8 @@ class DynamicFieldWidgetComponent {
             ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)
             : undefined;
 
+        this.setActions();
+
         this.state.configuredDynamicFields = this.state.widgetConfiguration.settings.dynamicFields;
         this.setDynamicFields();
     }
@@ -33,6 +36,17 @@ class DynamicFieldWidgetComponent {
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setDynamicFields();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.actions = ActionFactory.getInstance().generateActions(
+                    this.state.widgetConfiguration.actions, false, ticket
+                );
+            }
         }
     }
 
@@ -71,7 +85,7 @@ class DynamicFieldWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 }
 

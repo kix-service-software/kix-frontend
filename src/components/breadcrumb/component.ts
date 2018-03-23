@@ -1,6 +1,6 @@
 import { ComponentRouterService } from "@kix/core/dist/browser/router";
 import { ComponentRouterHistoryEntry } from '@kix/core/dist/model';
-import { ClientStorageHandler } from "@kix/core/dist/browser/ClientStorageHandler";
+import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
 
 class BreadcrumbComponent {
 

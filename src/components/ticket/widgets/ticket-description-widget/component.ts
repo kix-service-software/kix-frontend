@@ -2,7 +2,8 @@ import { TicketDescriptionComponentState } from './TicketDescriptionComponentSta
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { Attachment } from '@kix/core/dist/model/';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ActionFactory } from '@kix/core/dist/browser';
 
 class TicketDescriptionWidgetComponent {
 
@@ -20,7 +21,9 @@ class TicketDescriptionWidgetComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         this.getFirstArticle();
+        this.setActions();
         this.getTicketNotes();
     }
 
@@ -32,6 +35,14 @@ class TicketDescriptionWidgetComponent {
                 articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
                 this.state.firstArticle = articles[0];
             }
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.firstArticle) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.firstArticle
+            );
         }
     }
 
@@ -48,22 +59,6 @@ class TicketDescriptionWidgetComponent {
                 }
             }
         }
-    }
-
-    private print(): void {
-        alert('Drucken ...');
-    }
-
-    private edit(): void {
-        alert('Bearbeiten ...');
-    }
-
-    private maximize(): void {
-        alert('Großansicht ...');
-    }
-
-    private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 }
 

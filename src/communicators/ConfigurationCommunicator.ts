@@ -5,7 +5,8 @@ import {
     LoadConfigurationResult,
     SaveConfigurationRequest,
     SocketEvent,
-    User
+    User,
+    DashboardConfiguration
 } from '@kix/core/dist/model';
 import { CommunicatorResponse } from '@kix/core/dist/common';
 
@@ -24,7 +25,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             this.saveComponentConfiguration.bind(this));
     }
 
-    private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
+    private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse<void>> {
         let userId = null;
         if (data.userSpecific) {
             const user = await this.userService.getUserByToken(data.token);
@@ -47,7 +48,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
+    private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse<void>> {
         const user = await this.userService.getUserByToken(data.token);
 
         let configuration = await this.configurationService
@@ -66,7 +67,7 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<CommunicatorResponse> {
+    private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<CommunicatorResponse<void>> {
         let userId = null;
         if (data.userSpecific) {
             const user = await this.userService.getUserByToken(data.token);
@@ -81,9 +82,8 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         return new CommunicatorResponse(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
     }
 
-    private emitConfigurationLoadedEvent(configuration: any): CommunicatorResponse {
-        return new CommunicatorResponse(
-            ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
-            new LoadConfigurationResult(configuration));
+    private emitConfigurationLoadedEvent(configuration: any): CommunicatorResponse<any> {
+        const response = new LoadConfigurationResult(configuration);
+        return new CommunicatorResponse(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, response);
     }
 }

@@ -8,10 +8,10 @@ import {
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { Link, Ticket } from '@kix/core/dist/model';
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable,
-    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight
+    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory
 } from '@kix/core/dist/browser';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -37,12 +37,22 @@ class LinkedObjectsWidgetComponent {
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
+
         this.setLinkedObjects();
+        this.setActions();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.setLinkedObjects();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 
@@ -123,7 +133,7 @@ class LinkedObjectsWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
+        return ClientStorageService.getComponentTemplate(componentId);
     }
 
     private getGroupTitle(group: any): string {

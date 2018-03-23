@@ -1,8 +1,8 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
-import { ClientStorageHandler } from '@kix/core/dist/browser/ClientStorageHandler';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { SysconfigUtil } from '@kix/core/dist/model';
+import { ActionFactory } from '@kix/core/dist/browser';
 
 class TicketInfoWidgetComponent {
 
@@ -24,11 +24,20 @@ class TicketInfoWidgetComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getTicket();
+        this.setActions();
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
+        }
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 
@@ -52,10 +61,6 @@ class TicketInfoWidgetComponent {
 
     private edit(): void {
         alert('Bearbeiten ...');
-    }
-
-    private getTemplate(componentId: string): any {
-        return ClientStorageHandler.getComponentTemplate(componentId);
     }
 
     private getIncidentStateId(): number {

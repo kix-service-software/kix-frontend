@@ -1,4 +1,4 @@
-import { ObjectData } from "@kix/core/dist/model";
+import { ObjectData, AbstractAction } from "@kix/core/dist/model";
 
 export class BaseTemplateComponentState {
 
