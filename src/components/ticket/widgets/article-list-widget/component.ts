@@ -15,7 +15,7 @@ import {
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ToggleOptions
+    TableSortLayer, ToggleOptions, ActionFactory
 } from "@kix/core/dist/browser";
 import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 import { IdService } from "@kix/core/dist/browser/IdService";
@@ -38,15 +38,24 @@ export class ArticleListWidgetComponent {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        if (this.state.widgetConfiguration) {
-            this.state.generalArticleActions = this.state.widgetConfiguration.settings.generalActions;
-        }
+        this.setActions();
         this.setArticleTableConfiguration();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.generalArticleActions = ActionFactory.getInstance()
+                    .generateActions(this.state.widgetConfiguration.settings.generalActions, true, ticket);
+            }
+        }
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getArticles();
+            this.setActions();
             this.setArticleTableConfiguration();
         } else if (id === TicketDetailsContext.CONTEXT_ID && type === ContextNotification.GO_TO_ARTICLE) {
             ContextService.getInstance().notifyListener(

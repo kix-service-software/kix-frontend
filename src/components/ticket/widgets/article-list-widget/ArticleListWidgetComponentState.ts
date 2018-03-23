@@ -1,4 +1,4 @@
-import { Article } from '@kix/core/dist/model';
+import { Article, IAction } from '@kix/core/dist/model';
 import { StandardTable } from '@kix/core/dist/browser';
 import { WidgetComponentState } from '@kix/core/dist/browser/model';
 import { ArticleListSettings } from './ArticleListSettings';
@@ -13,7 +13,7 @@ export class ArticleListWidgetComponentState extends WidgetComponentState<Articl
 
     public expandedArticles: number[] = [];
 
-    public generalArticleActions: string[] = [];
+    public generalArticleActions: IAction[] = [];
 
     public filterValue: string = '';
 
