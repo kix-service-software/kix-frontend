@@ -18,7 +18,6 @@
             "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
             "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
             "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
-            "users-communicator": "../../dist/communicators/extensions/UsersCommunicator.extension",
             "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension"
         },
         "kix:personal:settings": {
