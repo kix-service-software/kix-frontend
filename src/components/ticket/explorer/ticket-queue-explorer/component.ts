@@ -1,8 +1,9 @@
-import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { ObjectType, Queue, ContextFilter, TicketProperty } from '@kix/core/dist/model/';
+import { TicketService } from '@kix/core/dist/browser/ticket';
+import { TreeNode, TreeNodeProperty } from '@kix/core/dist/model';
+import { ContextFilter, ObjectType, Queue, TicketProperty } from '@kix/core/dist/model/';
+
 import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
-import { TreeNode, TreeNodeProperty } from '@kix/core/dist/browser/model';
 
 export class QueueExplorerComponent {
 

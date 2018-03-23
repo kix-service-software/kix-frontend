@@ -1,16 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    SysConfigItemResponse
-} from '@kix/core/dist/api';
-
-import { SysConfigItem, SortOrder } from '@kix/core/dist/model';
-import { ISysConfigService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { SysConfigItemResponse } from '@kix/core/dist/api';
+import { SysConfigItem } from '@kix/core/dist/model';
+import { IConfigurationService, ISysConfigService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

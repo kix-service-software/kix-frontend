@@ -1,23 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../../src/Container';
-
-import {
-    HttpError,
-    QueueResponse,
-    QueuesResponse,
-    CreateQueue,
-    CreateQueueRequest,
-    CreateQueueResponse,
-    UpdateQueue,
-    UpdateQueueRequest,
-    UpdateQueueResponse
-} from '@kix/core/dist/api';
-
-import { Queue, SortOrder } from '@kix/core/dist/model';
-import { ITicketService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { QueuesResponse } from '@kix/core/dist/api';
+import { Queue } from '@kix/core/dist/model';
+import { IConfigurationService, ITicketService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

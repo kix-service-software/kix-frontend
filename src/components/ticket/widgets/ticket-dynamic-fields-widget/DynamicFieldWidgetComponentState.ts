@@ -1,7 +1,7 @@
-import { WidgetConfiguration, AbstractAction } from '@kix/core/dist/model';
+import { AbstractAction, WidgetComponentState } from '@kix/core/dist/model';
+import { DynamicField } from '@kix/core/dist/model/kix/ticket/DynamicField';
+
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
-import { DynamicField } from '@kix/core/dist/model/ticket/DynamicField';
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
 
 export class DynamicFieldWidgetComponentState extends WidgetComponentState<DynamicFieldsSettings> {
 

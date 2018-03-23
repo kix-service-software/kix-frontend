@@ -1,19 +1,15 @@
 /* tslint:disable no-var-requires no-unused-expression */
-import {
-    IAuthenticationService,
-    IHttpService,
-    IConfigurationService
-} from '@kix/core/dist/services';
-import { UserType } from '@kix/core/dist/model';
 import { HttpError } from '@kix/core/dist/api';
-import { Request, Response } from 'express';
-import chaiAsPromised = require('chai-as-promised');
+import { UserType } from '@kix/core/dist/model';
+import { IAuthenticationService, IConfigurationService, IHttpService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+import { Request, Response } from 'express';
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-
-import { container } from "../../../src/Container";
 
 describe('Authentication Service', () => {
     let nockScope;

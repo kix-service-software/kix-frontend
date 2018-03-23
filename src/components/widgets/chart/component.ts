@@ -1,4 +1,4 @@
-import { ChartFactory } from '@kix/core/dist/browser/model/charts';
+import { ChartFactory } from '@kix/core/dist/model';
 import { ChartComponentState } from './model/ChartComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';

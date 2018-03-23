@@ -1,5 +1,4 @@
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
-import { ChartSettings } from '@kix/core/dist/browser/model/charts/ChartSettings';
+import { ChartSettings, WidgetComponentState } from '@kix/core/dist/model';
 
 export class ChartComponentState extends WidgetComponentState<ChartSettings> {
 

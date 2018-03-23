@@ -1,23 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    ContactResponse,
-    ContactsResponse,
-    CreateContact,
-    CreateContactRequest,
-    CreateContactResponse,
-    UpdateContact,
-    UpdateContactRequest,
-    UpdateContactResponse
-} from '@kix/core/dist/api';
-
-import { Contact, SortOrder } from '@kix/core/dist/model';
-import { IContactService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { ContactResponse } from '@kix/core/dist/api';
+import { Contact } from '@kix/core/dist/model';
+import { IConfigurationService, IContactService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

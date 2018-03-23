@@ -1,17 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../../src/Container';
-
-import {
-    HttpError,
-    TicketStateResponse,
-    TicketStatesResponse
-} from '@kix/core/dist/api';
-
-import { TicketState, SortOrder } from '@kix/core/dist/model';
+import { TicketStatesResponse } from '@kix/core/dist/api';
+import { TicketState } from '@kix/core/dist/model';
 import { IConfigurationService, ITicketService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

@@ -1,20 +1,17 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
 import {
-    HttpError,
-    ClientRegistrationResponse,
     ClientRegistrationsResponse,
     CreateClientRegistration,
     CreateClientRegistrationRequest,
-    CreateClientRegistrationResponse
+    CreateClientRegistrationResponse,
+    HttpError,
 } from '@kix/core/dist/api';
-
 import { ClientRegistration, SortOrder } from '@kix/core/dist/model';
 import { IClientRegistrationService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

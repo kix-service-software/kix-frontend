@@ -1,4 +1,4 @@
-import { SelectWithFilterListElement } from '@kix/core/dist/browser/model';
+import { SelectWithFilterListElement } from '@kix/core/dist/model';
 
 export class SelectWithFilterComponentState {
     public constructor(
