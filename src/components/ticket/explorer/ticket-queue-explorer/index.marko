@@ -1,17 +1,12 @@
 <widget instanceId=state.instanceId minimizable=true configurationTagId="ticket-queue-explorer-configuration"
-    explorer=input.explorer minimized=input.minimized>
+    explorer=input.explorer minimized=input.minimized
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@content>
         <tree tree=state.tree on-nodeClicked('queueClicked')/>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
 </widget>

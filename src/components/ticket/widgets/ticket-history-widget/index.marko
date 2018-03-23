@@ -1,12 +1,9 @@
-<widget instanceId=state.instanceId>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@content>
         <div.history-content>
             <div.history-filter>
@@ -20,9 +17,6 @@
             </div>
         </div>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
     <@contentActions>
         <ul.content-actions>
             <if(state.widgetConfiguration)>

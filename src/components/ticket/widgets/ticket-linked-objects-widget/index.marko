@@ -1,8 +1,5 @@
-<widget instanceId=state.instanceId>
-    <@icon/>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title} (${state.linkCount})</if>
-    </@title>
+<widget instanceId=state.instanceId
+    title=(state.widgetConfiguration ? ((state.widgetConfiguration.title + " (") + state.linkCount) + ")" : "")>
     <@contentActions>
         <ul.content-actions>
             <if(state.widgetConfiguration)>
@@ -18,9 +15,7 @@
         <if(state.linkCount > 0)>
             <div.linked-objects-container>
                 <for(group in state.linkedObjectGroups)>
-                    <widget>
-                        <@icon/>
-                        <@title>${group[0]} (${group[1]})</@title>
+                    <widget title=component.getGroupTitle(group)>
                         <@content>
                             <div.linked-object-table-container>
                                 <if(group[2])>
@@ -28,9 +23,6 @@
                                 </if>
                             </div>
                         </@content>
-                        <@filter/>
-                        
-                        <@contentActions/>
                     </widget>
                 </for>
             </div>
@@ -39,6 +31,4 @@
             <span>Es sind keine verknüpften Objekte vorhanden.</span>
         </else>
     </@content>
-    <@filter/>
-    
 </widget>

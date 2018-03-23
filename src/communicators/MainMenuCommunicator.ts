@@ -89,7 +89,6 @@ export class MainMenuCommunicator extends KIXCommunicator {
         return configuration;
     }
 
-
     private removeInvalidConfigurations(
         extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
     ): MainMenuConfiguration {

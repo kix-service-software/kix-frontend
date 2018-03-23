@@ -3,9 +3,7 @@
         <loading-spinner/>
     </if>
     <else-if(state.ticket)>
-        <widget minimizable=true actions=state.generalActions>
-            <@icon/>
-            <@title>${component.getTitle()}</@title>
+        <widget minimizable=true actions=state.generalActions title=component.getTitle()>
             <@contentActions>
                 <div.ticket-actions-wrapper>
                     <action-list list=state.ticketActions/>
@@ -14,9 +12,7 @@
             <@content>
                 <ul.lane-list>
                     <li.lane.tabs.clearfix>
-                        <widget>
-                            <@icon/>
-                            <@title>Ticketinformationen</@title>
+                        <widget title="Ticketinformationen">
                             <@content>
                                 <ul.tab-list>
                                     <for(tab in state.tabs)>

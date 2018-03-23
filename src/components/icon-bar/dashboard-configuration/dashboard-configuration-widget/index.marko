@@ -4,10 +4,10 @@
 </div>
 <if(state.showDashboardConfigurationWidget)>
     <div.dashboard-configuration-widget>
-        <widget minimizable=false hasConfigOverlay=false>
-            <@title>
-                <span.kix-icon.icon-dummy.icon-asterisk/>Widgets verwalten
-            </@title>
+        <widget minimizable=false hasConfigOverlay=false title="Widgets verwalten">
+            <@icon>
+                <span.kix-icon.icon-dummy.icon-asterisk/>
+            </@icon>
             <@content>
                 <if(component.isConfigMode())>
                     <h4>Home Dashboard</h4>

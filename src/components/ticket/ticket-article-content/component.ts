@@ -20,15 +20,9 @@ class TicketArticleContentComponent {
             this.state.isContentHTML = false;
             this.state.content = this.state.article.Body;
 
-            const attachments = this.state.article.Attachments ? [...this.state.article.Attachments] : [];
-            const htmlBodyAttachmentIndex = attachments.findIndex(
-                (a) => a.Disposition === 'inline' && a.Filename === 'file-2'
-            );
-            if (htmlBodyAttachmentIndex > -1) {
-                const htmlBodyAttachment = attachments[htmlBodyAttachmentIndex];
-
+            if (this.state.article.bodyAttachment) {
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
-                    this.state.article.TicketID, this.state.article.ArticleID, htmlBodyAttachment.ID
+                    this.state.article.TicketID, this.state.article.ArticleID, this.state.article.bodyAttachment.ID
                 );
 
                 if (AttachmentWithContent) {

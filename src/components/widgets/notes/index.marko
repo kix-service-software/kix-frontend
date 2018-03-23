@@ -1,12 +1,10 @@
-<widget instanceId=state.instanceId configurationTagId="notes-configuration" minimizable=input.minimizable>
+<widget instanceId=state.instanceId configurationTagId="notes-configuration" minimizable=input.minimizable
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
     <@content>
         <if(state.widgetConfiguration)>
             <if(state.editMode)>
@@ -19,9 +17,6 @@
             </else>
         </if>
     </@content>
-    <@filter>
-        <span/>
-    </@filter>
     <!-- TODO: als Komponente umsetzen und ensprechenden Parameter an die Widget-Komp. übergeben -->
     <!-- <@actions>
         <span class="kix-icon-edit" on-click('toggleEditMode')/>

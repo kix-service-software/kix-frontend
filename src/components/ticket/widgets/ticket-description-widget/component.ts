@@ -18,24 +18,19 @@ class TicketDescriptionWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getFirstArticle();
         this.getTicketNotes();
     }
 
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.getFirstArticle();
-        }
-    }
-
     private async getFirstArticle(): Promise<void> {
         if (this.state.ticketId) {
             const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
             if (ticket && ticket.Articles && ticket.Articles.length) {
-                this.state.firstArticle = ticket.Articles[0];
+                const articles = new Array(...ticket.Articles);
+                articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
+                this.state.firstArticle = articles[0];
             }
         }
     }

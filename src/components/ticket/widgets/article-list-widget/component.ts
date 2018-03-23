@@ -134,6 +134,10 @@ export class ArticleListWidgetComponent {
         this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
     }
+
+    private getTitle(): string {
+        return 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
+    }
 }
 
 module.exports = ArticleListWidgetComponent;
