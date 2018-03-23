@@ -14,7 +14,7 @@ class OverlayInfoIconComponent {
 
     public onInput(input: any): void {
         const content = ClientStorageService.getComponentTemplate(input.content);
-        this.state.overlayWidgetData = new InfoOverlayWidgetData(content);
+        this.state.overlayWidgetData = new InfoOverlayWidgetData(content, input.data);
     }
 
     public onMount(): void {

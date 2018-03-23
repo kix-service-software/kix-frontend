@@ -1,8 +1,6 @@
 <div.article-table-widget>
-    <widget configurationTagId="article-list-configuration" instanceId=state.instanceId
-        actions=state.generalArticleActions>
-        <@icon/>
-        <@title>Artikelübersicht (${state.articles ? state.articles.length : "0"})</@title>
+    <widget configurationTagId="article-list-configuration" instanceId=state.instanceId actions=state.generalArticleActions
+        title=component.getTitle()>
         <@content>
             <div.article-table-wrapper>
                 <if(state.standardTable)>

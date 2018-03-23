@@ -1,11 +1,7 @@
-<widget instanceId=input.instanceId isLoading=(!state.customer) minimizable=false>
+<widget instanceId=input.instanceId isLoading=(!state.customer) minimizable=false title="Kundeninfo">
     <@icon>
         <span.kix-icon-man/>
     </@icon>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-        <else>Kundeninfo</else>
-    </@title>
     <@content>
         <if(state.customer)>
             <customer-info customer=state.customer/>

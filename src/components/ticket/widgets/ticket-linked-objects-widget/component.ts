@@ -130,6 +130,10 @@ class LinkedObjectsWidgetComponent {
     private getTemplate(componentId: string): any {
         return ClientStorageService.getComponentTemplate(componentId);
     }
+
+    private getGroupTitle(group: any): string {
+        return group[0] + ' (' + group[1] + ')';
+    }
 }
 
 module.exports = LinkedObjectsWidgetComponent;

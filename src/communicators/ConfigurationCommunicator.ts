@@ -7,84 +7,83 @@ import {
     SocketEvent,
     User
 } from '@kix/core/dist/model';
+import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {
 
-    public registerNamespace(socketIO: SocketIO.Server): void {
-        const nsp = socketIO.of('/configuration');
-        nsp
-            .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.registerLoadComponentConfigurationEvents(client);
-                this.registerSaveComponentConfigurationEvents(client);
-            });
+    protected getNamespace(): string {
+        return 'configuration';
     }
 
-    private registerLoadComponentConfigurationEvents(client: SocketIO.Socket): void {
-        client.on(ConfigurationEvent.LOAD_MODULE_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+    protected registerEvents(): void {
+        this.registerEventHandler(ConfigurationEvent.LOAD_MODULE_CONFIGURATION,
+            this.loadModuleConfiguration.bind(this));
+        this.registerEventHandler(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION,
+            this.loadSidebarConfiguration.bind(this));
+        this.registerEventHandler(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
+            this.saveComponentConfiguration.bind(this));
+    }
 
-            let userId = null;
-            if (data.userSpecific) {
-                const user = await this.userService.getUserByToken(data.token);
-                userId = user.UserID;
-            }
-
-            let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, userId);
-
-            if (!configuration) {
-                const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
-                const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
-
-                await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, userId, moduleDefaultConfiguration);
-
-                configuration = moduleDefaultConfiguration;
-            }
-
-            this.emitConfigurationLoadedEvent(client, configuration);
-        });
-
-        client.on(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION, async (data: LoadConfigurationRequest) => {
+    private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
+        let userId = null;
+        if (data.userSpecific) {
             const user = await this.userService.getUserByToken(data.token);
+            userId = user.UserID;
+        }
 
-            let configuration = await this.configurationService
-                .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+        let configuration = await this.configurationService
+            .getComponentConfiguration(data.contextId, data.componentId, userId);
 
-            if (!configuration) {
-                const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
-                const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+        if (!configuration) {
+            const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+            const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
-                await this.configurationService.saveComponentConfiguration(
-                    data.contextId, data.componentId, user.UserID, sidebarDefaultConfiguration);
+            await this.configurationService.saveComponentConfiguration(
+                data.contextId, data.componentId, userId, moduleDefaultConfiguration);
 
-                configuration = sidebarDefaultConfiguration;
-            }
+            configuration = moduleDefaultConfiguration;
+        }
 
-            this.emitConfigurationLoadedEvent(client, configuration);
-        });
+        return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private emitConfigurationLoadedEvent(client: SocketIO.Socket, configuration: any): void {
-        client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED, new LoadConfigurationResult(configuration));
+    private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse> {
+        const user = await this.userService.getUserByToken(data.token);
+
+        let configuration = await this.configurationService
+            .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
+
+        if (!configuration) {
+            const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
+            const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+
+            this.configurationService.saveComponentConfiguration(
+                data.contextId, data.componentId, user.UserID, sidebarDefaultConfiguration);
+
+            configuration = sidebarDefaultConfiguration;
+        }
+
+        return this.emitConfigurationLoadedEvent(configuration);
     }
 
-    private registerSaveComponentConfigurationEvents(client: SocketIO.Socket): void {
-        client.on(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION, async (data: SaveConfigurationRequest) => {
+    private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<CommunicatorResponse> {
+        let userId = null;
+        if (data.userSpecific) {
+            const user = await this.userService.getUserByToken(data.token);
+            userId = user && user.UserID;
+        }
 
-            let userId = null;
-            if (data.userSpecific) {
-                const user = await this.userService.getUserByToken(data.token);
-                userId = user && user.UserID;
-            }
-
-            await this.configurationService
-                .saveComponentConfiguration(data.contextId, data.componentId,
+        await this.configurationService
+            .saveComponentConfiguration(data.contextId, data.componentId,
                 userId, data.configuration
-                );
+            );
 
-            client.emit(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
-        });
+        return new CommunicatorResponse(ConfigurationEvent.COMPONENT_CONFIGURATION_SAVED);
     }
 
+    private emitConfigurationLoadedEvent(configuration: any): CommunicatorResponse {
+        return new CommunicatorResponse(
+            ConfigurationEvent.COMPONENT_CONFIGURATION_LOADED,
+            new LoadConfigurationResult(configuration));
+    }
 }

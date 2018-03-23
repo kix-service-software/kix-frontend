@@ -1,8 +1,4 @@
-<widget instanceId=state.instanceId>
-    <@icon/>
-    <@title>
-        <if(state.widgetConfiguration)>${state.widgetConfiguration.title}</if>
-    </@title>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
     <@contentActions>
         <ul.content-actions>
             <for(action in state.actions)>
@@ -20,5 +16,4 @@
             <ticket-dynamic-fields-container ticketId=state.ticketId dynamicFields=state.filteredDynamicFields/>
         </div>
     </@content>
-    <@filter/>
 </widget>

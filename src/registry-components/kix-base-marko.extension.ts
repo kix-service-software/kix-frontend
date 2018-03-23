@@ -26,6 +26,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-details',
             'ticket/ticket-dynamic-fields-container',
             'ticket/widgets/article-attachment-widget',
+            'ticket/widgets/article-receiver-list-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-list-widget/ticket-list-configuration',
             'ticket/widgets/ticket-info-widget',
@@ -65,6 +66,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getTicketComponentTags(): Array<[string, string]> {
         const widgets: Array<[string, string]> = [
             ['article-attachment-widget', 'ticket/widgets/article-attachment-widget'],
+            ['article-receiver-list-widget', 'ticket/widgets/article-receiver-list-widget'],
             ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
             ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
             ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
