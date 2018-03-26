@@ -62,11 +62,23 @@
 .sidebar+.content .explorerbar:not(.collapsed)+.ticket-details {
     .widget-content {
         .information-list {
-            @media only screen and (max-width: 1520px) {
+            @media only screen and (max-width: 1550px) {
                 grid-template-rows: repeat(8, 1.25em);
             }
-            @media only screen and (max-width: 1320px) {
-                grid-template-rows: repeat(20, 1.25em);
+            @media only screen and (max-width: 1300px) {
+                grid-template-rows: repeat(15, 1.25em);
+            }
+        }
+    }
+}
+
+// if explorer and sidebar not visible, use more columns (less rows) if necessary
+.tools-col+.content .explorerbar.collapsed+.ticket-details,
+.tools-col+.content header+.ticket-details {
+    .widget-content {
+        .information-list {
+            @media only screen and (min-width: 1620px) {
+                grid-template-rows: repeat(4, 1.25em);
             }
         }
     }
