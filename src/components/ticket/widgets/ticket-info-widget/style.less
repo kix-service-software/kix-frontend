@@ -9,7 +9,7 @@
                     .ci-list-wrapper {
                         display: grid;
                         grid-template-columns: 2em auto;
-                        .div:first-child {
+                        div:first-child {
                             font-weight: bold;
                         }
                         .ci-list-content {
@@ -45,16 +45,28 @@
                                 }
                             }
                         }
-                        @media only screen and (max-device-width: 1279px) {
-                            & {
-                                grid-template-rows: repeat(8, 1.25em);
-                            }
+                        @media only screen and (max-width: 1439px) {
+                            grid-template-rows: repeat(8, 1.25em);
                         }
-                        @media only screen and (min-device-width: 1981px) {
+                        @media only screen and (min-width: 1981px) {
                             grid-template-rows: repeat(4, 1.25em);
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+// if explorer and sidebar visible, use less columns (more rows) if necessary
+.sidebar+.content .explorerbar:not(.collapsed)+.ticket-details {
+    .widget-content {
+        .information-list {
+            @media only screen and (max-width: 1520px) {
+                grid-template-rows: repeat(8, 1.25em);
+            }
+            @media only screen and (max-width: 1320px) {
+                grid-template-rows: repeat(20, 1.25em);
             }
         }
     }
