@@ -20,12 +20,12 @@ export class RouterOutletComponent {
         this.routerStateChanged();
     }
 
-    private async routerStateChanged(): Promise<void> {
+    private routerStateChanged(): void {
         const router = ComponentRouterService.getInstance().getCurrentRouter(this.state.routerId);
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
-            this.state.template = await ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
+            this.state.template = ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
             setTimeout(() => {
                 (this as any).setStateDirty('template');
             }, 50);
