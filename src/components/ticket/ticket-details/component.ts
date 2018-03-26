@@ -18,8 +18,11 @@ export class TicketDetailsComponent {
     }
 
     public onInput(input: any): void {
-        this.state.ticketId = Number(input.ticketId);
-        this.loadTicket();
+        const newTicketId = Number(input.ticketId);
+        if (newTicketId !== this.state.ticketId) {
+            this.state.ticketId = newTicketId;
+            this.loadTicket();
+        }
     }
 
     public onMount(): void {
@@ -30,18 +33,18 @@ export class TicketDetailsComponent {
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
         ContextService.getInstance().provideContext(context, true);
-
-        this.loadTicket();
     }
 
     private async loadTicket(): Promise<void> {
-        this.state.loading = true;
-        const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
-        this.state.ticket = ticket;
-        this.setActions();
-        this.setBreadcrumbDetails();
-        this.setTicketHookInfo();
-        this.state.loading = false;
+        if (!this.state.loading) {
+            this.state.loading = true;
+            const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
+            this.state.ticket = ticket;
+            this.setActions();
+            this.setBreadcrumbDetails();
+            this.setTicketHookInfo();
+            this.state.loading = false;
+        }
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {

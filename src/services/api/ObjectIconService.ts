@@ -31,6 +31,14 @@ export class ObjectIconService extends ObjectService<ObjectIcon> implements IObj
         return icon;
     }
 
+    public async getIcons(token: string): Promise<ObjectIcon[]> {
+        if (!this.iconCache || !this.iconCache.length) {
+            await this.initIcons(token);
+        }
+
+        return this.iconCache;
+    }
+
     private getIconFromCache(object: string, objectId: string): ObjectIcon {
         return this.iconCache.find((oi) => oi.Object === object && oi.ObjectID === objectId);
     }
