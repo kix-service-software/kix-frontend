@@ -128,7 +128,9 @@ export class ArticleListWidgetComponent {
 
         if (this.state.articles) {
             this.state.articles.forEach((article) => {
-                count += article.Attachments.filter((a) => a.Disposition !== 'inline').length;
+                if (article.Attachments) {
+                    count += article.Attachments.length;
+                }
             });
         }
 
