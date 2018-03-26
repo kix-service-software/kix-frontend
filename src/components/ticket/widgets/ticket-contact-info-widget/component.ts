@@ -9,7 +9,8 @@ class ContactInfoWidgetComponent {
         this.state = {
             instanceId: null,
             contact: null,
-            widgetConfiguration: null
+            widgetConfiguration: null,
+            isLoading: true
         };
     }
 
@@ -35,7 +36,10 @@ class ContactInfoWidgetComponent {
 
     private loadContact(ticketId: number): void {
         const ticket = TicketService.getInstance().getTicket(ticketId);
-        this.state.contact = ticket ? ticket.contact : undefined;
+        if (ticket) {
+            this.state.contact = ticket.contact;
+            this.state.isLoading = false;
+        }
     }
 
 }
