@@ -84,9 +84,6 @@ class DynamicFieldWidgetComponent {
         alert('Bearbeiten ...');
     }
 
-    private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
-    }
 }
 
 module.exports = DynamicFieldWidgetComponent;

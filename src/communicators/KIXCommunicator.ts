@@ -12,6 +12,7 @@ import {
     IUserService,
     IWidgetRepositoryService,
     IProfilingService,
+    IMarkoService,
 } from '@kix/core/dist/services';
 import { SocketEvent } from '@kix/core/dist/model';
 import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/core/dist/common';
@@ -37,6 +38,7 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
         @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
         @inject('IProfilingService') protected profilingService: IProfilingService,
+        @inject('IMarkoService') protected markoService: IMarkoService
     ) { }
 
     protected abstract getNamespace(): string;
@@ -57,13 +59,15 @@ export abstract class KIXCommunicator implements ICommunicator {
         this.client = client;
     }
 
-    protected registerEventHandler<T>(event: string, handler: any): void {
-        this.client.on(event, async (args: any[]) => {
+    protected registerEventHandler<RQ, RS>(
+        event: string, handler: (data: RQ) => Promise<CommunicatorResponse<RS>>
+    ): void {
+        this.client.on(event, async (data: RQ) => {
 
             // start profiling
-            const profileTaskId = this.profilingService.start('SocketIO', this.getNamespace() + '/' + event, args);
+            const profileTaskId = this.profilingService.start('SocketIO', this.getNamespace() + '/' + event, data);
 
-            const response: CommunicatorResponse<T> = await handler(args);
+            const response: CommunicatorResponse<RS> = await handler(data);
             this.client.emit(response.event, response.data);
 
             // stop profiling
