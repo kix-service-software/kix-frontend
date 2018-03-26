@@ -117,10 +117,6 @@ class TicketHistoryWidgetComponent {
         ApplicationService.getInstance().toggleMainDialog();
     }
 
-    private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
-    }
-
 }
 
 module.exports = TicketHistoryWidgetComponent;

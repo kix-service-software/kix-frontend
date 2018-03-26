@@ -61,10 +61,6 @@ export class ActionListComponent {
         }
     }
 
-    private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
-    }
-
     private toggleListExpansion(): any {
         this.state.showListExpansion = !this.state.showListExpansion;
         this.state.keepShow = !this.state.keepShow;

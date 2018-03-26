@@ -6,8 +6,6 @@ import { ClientStorageService } from '@kix/core/dist/browser';
 
 export class MainMenuSocketListener extends SocketListener {
 
-    private socket: SocketIO.Server;
-
     public static INSTANCE: MainMenuSocketListener;
 
     public static getInstance(): MainMenuSocketListener {

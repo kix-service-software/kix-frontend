@@ -4,6 +4,7 @@ import { IdService } from '@kix/core/dist/browser/IdService';
 import { InfoOverlayWidgetData } from '@kix/core/dist/model';
 
 import { OverlayInfoIconComponentState } from './OverlayInfoIconComponentState';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class OverlayInfoIconComponent {
 
@@ -14,7 +15,7 @@ class OverlayInfoIconComponent {
     }
 
     public onInput(input: any): void {
-        const content = ClientStorageService.getComponentTemplate(input.content);
+        const content = ComponentsService.getInstance().getComponentTemplate(input.content);
         this.state.overlayWidgetData = new InfoOverlayWidgetData(content, input.data);
     }
 

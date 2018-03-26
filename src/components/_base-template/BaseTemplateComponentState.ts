@@ -8,7 +8,6 @@ export class BaseTemplateComponentState {
         public contextId: string,
         public objectData: ObjectData,
         public objectId: string,
-        public tagLib: any,
         public configurationMode: boolean = false,
         public showShieldOverlay: boolean = false,
         public showInfoOverlay: boolean = false,
