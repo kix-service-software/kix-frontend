@@ -3,10 +3,10 @@
         <span.kix-icon-man/>
     </@icon>
     <@content>
-        <div.receiver-list-container>
+        <ul.receiver-list-container>
             <for(receiver in state.receiverList)>
-                <div title=receiver.email>${receiver.realName}</div>
+                <li title=receiver.email>${receiver.realName}</li>
             </for>
-        </div>
+        </ul>
     </@content>
 </widget>
