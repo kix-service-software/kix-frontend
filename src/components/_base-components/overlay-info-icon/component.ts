@@ -14,8 +14,8 @@ class OverlayInfoIconComponent {
         this.state = new OverlayInfoIconComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        const content = await ComponentsService.getInstance().getComponentTemplate(input.content);
+    public onInput(input: any): void {
+        const content = ComponentsService.getInstance().getComponentTemplate(input.content);
         this.state.overlayWidgetData = new InfoOverlayWidgetData(content, input.data);
     }
 
