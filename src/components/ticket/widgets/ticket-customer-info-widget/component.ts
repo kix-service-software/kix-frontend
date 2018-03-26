@@ -9,7 +9,8 @@ class CustomerInfoWidgetComponent {
         this.state = {
             instanceId: null,
             customer: null,
-            widgetConfiguration: null
+            widgetConfiguration: null,
+            isLoading: true
         };
     }
 
@@ -35,7 +36,10 @@ class CustomerInfoWidgetComponent {
 
     private loadCustomer(ticketId: number): void {
         const ticket = TicketService.getInstance().getTicket(ticketId);
-        this.state.customer = ticket ? ticket.customer : undefined;
+        if (ticket) {
+            this.state.customer = ticket.customer;
+            this.state.isLoading = false;
+        }
     }
 
 }
