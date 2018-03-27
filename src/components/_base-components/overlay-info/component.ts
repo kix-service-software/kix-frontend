@@ -11,29 +11,19 @@ class ObjectInfoOverlayComponent {
 
     public onMount(): void {
         ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
-
         document.addEventListener("click", (event: any) => {
-            if (!this.isOverlayClicked(event)) {
-                if (this.state.keepShow) {
-                    this.state.keepShow = false;
-                } else {
+            if (ApplicationService.getInstance().isShowInfoOverlay()) {
+                if (!this.state.keepShow) {
                     ApplicationService.getInstance().toggleInfoOverlay();
+                } else {
+                    this.state.keepShow = false;
                 }
             }
         }, false);
     }
 
-    private isOverlayClicked(event: any): boolean {
-        let element = event.target;
-        let found = false;
-        while (element !== null) {
-            if (element.attributes['infoOverlay']) {
-                found = true;
-                break;
-            }
-            element = element.parentElement;
-        }
-        return found;
+    private overlayClicked(): void {
+        this.state.keepShow = true;
     }
 
     public onUpdate(): void {
@@ -50,7 +40,6 @@ class ObjectInfoOverlayComponent {
                 this.state.data = infoOverlay[0].data;
                 this.state.position = infoOverlay[1];
             }
-
             this.state.keepShow = true;
         }
 
