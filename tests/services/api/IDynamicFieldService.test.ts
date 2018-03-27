@@ -1,23 +1,9 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    DynamicFieldResponse,
-    DynamicFieldsResponse,
-    CreateDynamicField,
-    CreateDynamicFieldRequest,
-    CreateDynamicFieldResponse,
-    UpdateDynamicField,
-    UpdateDynamicFieldRequest,
-    UpdateDynamicFieldResponse
-} from '@kix/core/dist/api';
-
-import { DynamicField, SortOrder } from '@kix/core/dist/model/';
-import { IDynamicFieldService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { IConfigurationService, IDynamicFieldService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

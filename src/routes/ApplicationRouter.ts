@@ -67,12 +67,10 @@ export class ApplicationRouter extends KIXRouter {
         const themeCSS = await this.getUserThemeCSS(user.UserID);
         const specificCSS = await this.getSpecificCSS();
 
-        const tagLib = await this.markoService.getComponentTags();
-
         const objectData = await this.getObjectData(token);
 
         this.prepareMarkoTemplate(
-            res, moduleId, objectId, objectData, themeCSS, specificCSS, tagLib
+            res, moduleId, objectId, objectData, themeCSS, specificCSS
         );
     }
 

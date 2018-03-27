@@ -1,9 +1,10 @@
 /* tslint:disable no-var-requires no-unused-expression */
-import { container } from '../../../src/Container';
-import { IHttpService, IConfigurationService } from '@kix/core/dist/services';
 import { HttpError } from '@kix/core/dist/api';
-import chaiAsPromised = require('chai-as-promised');
+import { IConfigurationService, IHttpService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

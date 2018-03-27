@@ -6,6 +6,7 @@ import {
 } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, Article, IAction } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class StandardTableComponent<T extends KIXObject<T>> {
 
@@ -289,7 +290,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     private getToggleTemplate(): any {
         return this.state.standardTable.toggleOptions.componentId ?
-            ClientStorageService.getComponentTemplate(
+            ComponentsService.getInstance().getComponentTemplate(
                 this.state.standardTable.toggleOptions.componentId
             ) : undefined;
     }
@@ -310,10 +311,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
             );
         }
         return actions;
-    }
-
-    private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
     }
 
     private getColumn(value: TableValue): TableColumn {

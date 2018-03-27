@@ -1,7 +1,7 @@
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
-import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { StandardTable } from '@kix/core/dist/browser';
-import { Ticket, AbstractAction } from '@kix/core/dist/model';
+import { AbstractAction, Ticket, WidgetComponentState } from '@kix/core/dist/model';
+
+import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 
 export class LinkedObjectsWidgetComponentState extends WidgetComponentState<LinkedObjectsSettings> {
 

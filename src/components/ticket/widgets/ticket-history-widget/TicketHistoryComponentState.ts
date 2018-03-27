@@ -1,6 +1,7 @@
-import { TicketHistory, WidgetConfiguration, AbstractAction } from '@kix/core/dist/model';
-import { WidgetComponentState } from '@kix/core/dist/browser/model/';
 import { StandardTable } from '@kix/core/dist/browser';
+import { AbstractAction, TicketHistory } from '@kix/core/dist/model';
+import { WidgetComponentState } from '@kix/core/dist/model/';
+
 import { TicketHistorySettings } from './TicketHistorySettings';
 
 export class TicketHistoryComponentState extends WidgetComponentState<TicketHistorySettings> {

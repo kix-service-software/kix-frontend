@@ -10,6 +10,7 @@
             "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
         "kix:communicator": {
+            "application-communicator": "../../dist/communicators/extensions/ApplicationCommunicator.extension",
             "authentication-communicator": "../../dist/communicators/extensions/AuthenticationCommunicator.extension",
             "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
             "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",

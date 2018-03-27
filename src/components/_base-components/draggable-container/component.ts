@@ -2,6 +2,7 @@ import { ContainerComponentState } from './model/ContainterComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class DraggableContainerComponent {
 
@@ -21,7 +22,7 @@ class DraggableContainerComponent {
     private getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getContext();
         const configuration = context ? context.getWidgetConfiguration(instanceId) : undefined;
-        return configuration ? ClientStorageService.getComponentTemplate(configuration.widgetId) : undefined;
+        return configuration ? ComponentsService.getInstance().getComponentTemplate(configuration.widgetId) : undefined;
     }
 
     private dragStart(event): void {

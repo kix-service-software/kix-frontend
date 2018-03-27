@@ -1,5 +1,9 @@
-import { SelectWithFilterListElement, SelectWithPropertiesListElement } from "@kix/core/dist/browser/model";
-import { DashboardConfiguration, WidgetDescriptor } from "@kix/core/dist/model";
+import {
+    DashboardConfiguration,
+    SelectWithFilterListElement,
+    SelectWithPropertiesListElement,
+    WidgetDescriptor,
+} from '@kix/core/dist/model';
 
 export class DashboardConfigurationDialogComponentState {
     public constructor(

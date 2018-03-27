@@ -1,4 +1,4 @@
-import { SelectWithPropertiesListElement, SelectWithPropertiesProperty } from '@kix/core/dist/browser/model';
+import { SelectWithPropertiesListElement, SelectWithPropertiesProperty } from '@kix/core/dist/model';
 
 export class SelectWithPropertiesComponentState {
     public constructor(

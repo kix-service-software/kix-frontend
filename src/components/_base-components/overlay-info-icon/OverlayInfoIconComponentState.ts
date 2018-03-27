@@ -1,4 +1,4 @@
-import { InfoOverlayWidgetData } from '@kix/core/dist/browser/model';
+import { InfoOverlayWidgetData } from '@kix/core/dist/model';
 
 export class OverlayInfoIconComponentState {
 

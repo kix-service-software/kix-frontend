@@ -1,5 +1,4 @@
-import { TreeNode } from '@kix/core/dist/browser/model';
-import { TreeNodeComponentState } from './model/TreeNodeComponentState';
+import { TreeNodeComponentState } from './TreeNodeComponentState';
 
 class TreeNodeComponent {
 

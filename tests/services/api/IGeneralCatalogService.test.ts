@@ -1,25 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    GeneralCatalogItemResponse,
-    GeneralCatalogItemsResponse,
-    CreateGeneralCatalogItem,
-    CreateGeneralCatalogItemRequest,
-    CreateGeneralCatalogItemResponse,
-    UpdateGeneralCatalogItem,
-    UpdateGeneralCatalogItemRequest,
-    UpdateGeneralCatalogItemResponse,
-    UpdateGeneralCatalogClassRequest,
-    UpdateGeneralCatalogClassResponse
-} from '@kix/core/dist/api';
-
-import { GeneralCatalogItem, SortOrder } from '@kix/core/dist/model';
-import { IGeneralCatalogService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { GeneralCatalogItemsResponse } from '@kix/core/dist/api';
+import { GeneralCatalogItem } from '@kix/core/dist/model';
+import { IConfigurationService, IGeneralCatalogService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

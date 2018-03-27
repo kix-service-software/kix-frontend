@@ -4,6 +4,7 @@ import { ApplicationService } from '@kix/core/dist/browser/application/Applicati
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 
 declare var io: any;
 
@@ -13,15 +14,16 @@ class BaseTemplateComponent {
 
     public onCreate(input: any): void {
         this.state = new BaseTemplateComponentState(
-            input.contextId, input.objectData, input.objectId, input.tagLib
+            input.contextId, input.objectData, input.objectId
         );
     }
 
-    public onMount(): void {
-        ClientStorageService.setTagLib(this.state.tagLib);
-
+    public async onMount(): Promise<void> {
         ContextService.getInstance().setObjectData(this.state.objectData);
+
+        await ComponentsService.getInstance().init();
         this.state.initialized = true;
+
         if (this.state.contextId) {
             ComponentRouterService.getInstance().navigate(
                 'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
@@ -46,7 +48,7 @@ class BaseTemplateComponent {
         this.state.configurationMode = !this.state.configurationMode;
     }
 
-    private applicationStateChanged(): void {
+    private async  applicationStateChanged(): Promise<void> {
         this.state.showShieldOverlay = ApplicationService.getInstance().isShowShieldOverlay();
         this.state.showInfoOverlay = ApplicationService.getInstance().isShowInfoOverlay();
         this.state.showMainDialog = ApplicationService.getInstance().isShowMainDialog();
@@ -54,7 +56,8 @@ class BaseTemplateComponent {
         if (this.state.showMainDialog) {
             const currentMainDialog = ApplicationService.getInstance().getCurrentMainDialog();
             if (currentMainDialog[0]) {
-                this.state.mainDialogTemplate = ClientStorageService.getComponentTemplate(currentMainDialog[0]);
+                this.state.mainDialogTemplate =
+                    await ComponentsService.getInstance().getComponentTemplate(currentMainDialog[0]);
                 this.state.mainDialogInput = currentMainDialog[1];
             }
         }

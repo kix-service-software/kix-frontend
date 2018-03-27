@@ -13,7 +13,8 @@ class ArticleReceiverListWidget {
         this.state.receiverList = input;
         this.state.title = 'Empfänger';
         if (this.state.receiverList) {
-            this.state.title += ' (' + this.state.receiverList[0].type + ')';
+            // TODO: ggf. über "type" eine Bezeichnung/Übersetzung ermitteln, statt es direkt zu verwenden
+            this.state.title += ': ' + this.state.receiverList[0].type;
         }
     }
 

@@ -1,10 +1,10 @@
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ActionFactory } from '@kix/core/dist/browser';
+import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { ContextNotification, ContextService } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
+
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ActionFactory } from '@kix/core/dist/browser';
 
 class DynamicFieldWidgetComponent {
 
@@ -84,9 +84,6 @@ class DynamicFieldWidgetComponent {
         alert('Bearbeiten ...');
     }
 
-    private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
-    }
 }
 
 module.exports = DynamicFieldWidgetComponent;

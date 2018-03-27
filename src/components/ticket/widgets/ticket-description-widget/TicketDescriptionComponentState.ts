@@ -1,5 +1,4 @@
-import { Article, Attachment, WidgetConfiguration, AbstractAction } from '@kix/core/dist/model';
-import { WidgetComponentState } from '@kix/core/dist/browser/model';
+import { AbstractAction, Article, WidgetComponentState } from '@kix/core/dist/model';
 
 export class TicketDescriptionComponentState extends WidgetComponentState {
 

@@ -5,6 +5,7 @@ import {
     TicketTableLabelLayer,
     TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { Link, Ticket } from '@kix/core/dist/model';
@@ -133,7 +134,7 @@ class LinkedObjectsWidgetComponent {
     }
 
     private getTemplate(componentId: string): any {
-        return ClientStorageService.getComponentTemplate(componentId);
+        return ComponentsService.getInstance().getComponentTemplate(componentId);
     }
 
     private getGroupTitle(group: any): string {

@@ -1,17 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../src/Container';
-
-import {
-    HttpError,
-    ValidObjectResponse,
-    ValidObjectsResponse
-} from '@kix/core/dist/api';
-
-import { ValidObject, SortOrder } from '@kix/core/dist/model';
-import { IValidObjectService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { ValidObjectResponse, ValidObjectsResponse } from '@kix/core/dist/api';
+import { SortOrder, ValidObject } from '@kix/core/dist/model';
+import { IConfigurationService, IValidObjectService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

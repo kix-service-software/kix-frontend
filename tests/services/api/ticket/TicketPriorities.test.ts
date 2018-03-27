@@ -1,23 +1,11 @@
 /* tslint:disable*/
-import { container } from '../../../../src/Container';
-
-import {
-    HttpError,
-    TicketPriorityResponse,
-    TicketPrioritiesResponse,
-    CreateTicketPriority,
-    CreateTicketPriorityRequest,
-    CreateTicketPriorityResponse,
-    UpdateTicketPriority,
-    UpdateTicketPriorityRequest,
-    UpdateTicketPriorityResponse
-} from '@kix/core/dist/api';
-
-import { TicketPriority, SortOrder } from '@kix/core/dist/model';
-import { ITicketService, IConfigurationService } from '@kix/core/dist/services';
-
-import chaiAsPromised = require('chai-as-promised');
+import { TicketPrioritiesResponse } from '@kix/core/dist/api';
+import { TicketPriority } from '@kix/core/dist/model';
+import { IConfigurationService, ITicketService } from '@kix/core/dist/services';
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from '../../../../src/Container';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

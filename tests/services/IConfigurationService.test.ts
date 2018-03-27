@@ -1,11 +1,11 @@
 /* tslint:disable no-var-requires no-unused-expression */
-import { ConfigurationService } from './../../src/services/ConfigurationService';
-import { IServerConfiguration, Environment, LogLevel } from '@kix/core/dist/common';
+import { Environment, IServerConfiguration, LogLevel } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
-import { container } from './../../src/Container';
-
-import chaiAsPromised = require('chai-as-promised');
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
+import { container } from './../../src/Container';
+import { ConfigurationService } from './../../src/services/ConfigurationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

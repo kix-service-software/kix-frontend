@@ -1,20 +1,17 @@
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import {
-    SelectWithFilterListElement,
-    SelectWithPropertiesListElement,
-    SelectWithPropertiesProperty
-} from '@kix/core/dist/browser/model';
-import {
-    ConfiguredWidget,
-    DashboardConfiguration,
-    WidgetDescriptor,
-    WidgetSize,
-    WidgetType
-} from '@kix/core/dist/model';
-import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import {
+    ConfiguredWidget,
+    SelectWithFilterListElement,
+    SelectWithPropertiesListElement,
+    SelectWithPropertiesProperty,
+    WidgetSize,
+    WidgetType,
+} from '@kix/core/dist/model';
+
+import { DashboardConfigurationDialogComponentState } from './model/DashboardConfigurationDialogComponentState';
 
 class DashboardConfigurationDialog {
 
