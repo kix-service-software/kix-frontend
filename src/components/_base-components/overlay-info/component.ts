@@ -37,7 +37,7 @@ class ObjectInfoOverlayComponent {
             const infoOverlay = ApplicationService.getInstance().getCurrentInfoOverlay();
             if (infoOverlay[0]) {
                 this.state.content = infoOverlay[0].content;
-                this.state.data = infoOverlay[0].data;
+                this.state.data = { ...infoOverlay[0].data, type: 64 };
                 this.state.position = infoOverlay[1];
             }
             this.state.keepShow = true;
