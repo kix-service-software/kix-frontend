@@ -1,6 +1,7 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { SysconfigUtil } from '@kix/core/dist/model';
 import { ActionFactory } from '@kix/core/dist/browser';
 
@@ -30,6 +31,12 @@ class TicketInfoWidgetComponent {
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
         if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
+        }
+        if (
+            type === ContextNotification.SIDEBAR_BAR_TOGGLED
+            || type === ContextNotification.EXPLORER_BAR_TOGGLED
+        ) {
+            (this as any).setStateDirty('ticket');
         }
     }
 
@@ -77,6 +84,13 @@ class TicketInfoWidgetComponent {
         return incidentStateId;
     }
 
+    private isExplorerAndSidebarShown(): boolean {
+        return ContextService.getInstance().getContext()
+            && ContextService.getInstance().getContext().isExplorerBarShown()
+            && ContextService.getInstance().getContext().explorerBarExpanded
+            && (ContextService.getInstance().getContext().isSidebarShown()
+                || ApplicationService.getInstance().isConfigurationMode());
+    }
 }
 
 module.exports = TicketInfoWidgetComponent;

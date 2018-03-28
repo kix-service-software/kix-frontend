@@ -1,7 +1,19 @@
-<div.tools-col>
-    <if(state.showIconBar)>
+<if(component.hasSidebarsToShow() || component.isConfigMode())>
+    <div.sidebar>
+        <for(widget in state.configuredWidgets)>
+            <if(component.showSidebar(widget))>
+                <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
+                <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
+                    <include(component.getWidgetTemplate(widget.instanceId), { instanceId: widget.instanceId, minimizable: false })/>
+                </div>
+            </if>
+        </for>
+    </div>
+</if>
+<div.sidebar-menu>
+    <!-- <if(state.showIconBar)>
         <icon-bar/>
-    </if>
+    </if> -->
     <if(state.configuredWidgets)>
         <div.widget-bar>
             <for(widget in state.configuredWidgets)>
@@ -15,15 +27,3 @@
         </div>
     </if>
 </div>
-<if(component.hasSidebarsToShow() || component.isConfigMode())>
-    <div.sidebar>
-        <for(widget in state.configuredWidgets)>
-            <if(component.showSidebar(widget))>
-                <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
-                <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-                    <include(component.getWidgetTemplate(widget.instanceId), { instanceId: widget.instanceId, minimizable: false })/>
-                </div>
-            </if>
-        </for>
-    </div>
-</if>

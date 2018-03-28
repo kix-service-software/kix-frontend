@@ -3,7 +3,7 @@ import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageServic
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
 declare var io: any;
@@ -42,6 +42,8 @@ class BaseTemplateComponent {
         configurationSocket.on('error', (error) => {
             window.location.replace('/auth');
         });
+
+        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
     }
 
     public toggleConfigurationMode(): void {
@@ -61,6 +63,40 @@ class BaseTemplateComponent {
                 this.state.mainDialogInput = currentMainDialog[1];
             }
         }
+    }
+
+    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
+        if (id === ContextService.getInstance().getActiveContextId()) {
+            if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED ||
+                type === ContextNotification.CONTEXT_CHANGED ||
+                type === ContextNotification.SIDEBAR_BAR_TOGGLED
+            ) {
+                (this as any).setStateDirty();
+            }
+        }
+    }
+
+    private getGridColumn(): string {
+        let gridColumns = '[menu-col] 4.5rem';
+        if (this.isExplorerBarShown()) {
+            gridColumns += ' [explorer-bar] min-content';
+        }
+        gridColumns += ' [content] minmax(40rem, auto)';
+        if (
+            (ContextService.getInstance().getContext()
+                && ContextService.getInstance().getContext().isSidebarShown())
+            || ApplicationService.getInstance().isConfigurationMode()
+        ) {
+            gridColumns += ' [sidebar] min-content';
+        }
+        gridColumns += ' [sidebar-menu] min-content';
+
+        return gridColumns;
+    }
+
+    private isExplorerBarShown(): boolean {
+        return ContextService.getInstance().getContext()
+            && ContextService.getInstance().getContext().isExplorerBarShown();
     }
 }
 
