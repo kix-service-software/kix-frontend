@@ -1,0 +1,38 @@
+.tab-lane {
+    >.lane-widget {
+        >.widget-header {
+            >.header-left {
+                line-height: unset;
+                >h3 {
+                    display: none;
+                }
+                >.tab-list {
+                    list-style: none;
+                    li {
+                        background-color: @primary-4;
+                        color: @primary-0;
+                        border: 1px solid @primary-2;
+                        border-top-left-radius: @border-radius;
+                        border-top-right-radius: @border-radius;
+                        margin-right: .5em;
+                        padding: 0.25em 0.5em 0.25em 0.5em;
+                        font-weight: 600;
+                        float: left;
+                        height: 1.25em;
+                        margin-top: 0.25em;
+                        &.active {
+                            z-index: 5;
+                            background-color: @secondary-6;
+                            color: @primary-0;
+                        }
+                    }
+                }
+            }
+        }
+        >.widget-content {
+            .widget-header {
+                display: none;
+            }
+        }
+    }
+}

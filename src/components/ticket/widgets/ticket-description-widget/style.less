@@ -1,46 +1,32 @@
-.ticket-details .widget .lane-list .lane>.widget {
+.widget-content {
     .description-container {
         position: relative;
         overflow: auto;
         padding: .5em .5em .5em 1.5em;
         box-sizing: border-box;
-        &>.widget {
-            margin: 0 0 .5em;
-            &.minimized .widget-header {
-                margin-left: 0;
-                border-bottom: 1px solid @secondary-2;
-                border-radius: 0;
-            }
-            .widget-header {
-                background-color: @secondary-6;
-                color: @secondary-7;
-            }
-            .widget-content {
-                border: 0;
-                padding: 0;
-                min-height: auto;
-                display: grid;
-                grid-template-columns: auto minmax(15em, 20em);
-                .description-text-wrapper {
-                    grid-column: 1;
-                    grid-row: 1;
-                }
-                .description-attachments {
-                    grid-column: 2;
-                    grid-row: 1;
-                    padding: 0 1em;
-                    box-sizing: border-box;
-                    .attachment {
-                        grid-template-columns: 1.5em auto minmax(6em, auto);
-                        .attachment-link {
-                            text-overflow: ellipsis;
-                            overflow: hidden;
-                        }
+        .widget-content {
+            .description-attachments {
+                float: right;
+                max-height: 105px;
+                min-width: 250px;
+                width: 20%;
+                padding: 0 1em;
+                box-sizing: border-box;
+                ul {
+                    padding-left: 1em;
+                    list-style-type: none;
+                    li {
+                        height: 1.5em;
+                        line-height: 1.5em;
+                        vertical-align: middle;
+                    }
+                    img {
+                        margin-right: 5px;
                     }
                 }
-                .ticket-notes {
-                    grid-column: 1;
-                }
+            }
+            .description-text-wrapper {
+                margin-right: 20%;
             }
         }
     }

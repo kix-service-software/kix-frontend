@@ -4,13 +4,12 @@
 
 .ticket-details {
     margin-left: @explorer-width + @margin-default;
-    .widget {
+    >.content-widget {
         margin-top: 1.5em;
-        box-shadow: none;
         &:first-of-type {
             margin-top: 0;
         }
-        .widget-header {
+        >.widget-header {
             .action-list-expansion-container {
                 background: @secondary-2;
                 color: @secondary-0;
@@ -21,7 +20,7 @@
                 }
             }
         }
-        .widget-content {
+        >.widget-content {
             .ticket-actions-wrapper {
                 background-color: @secondary-3;
                 color: @secondary-0;
@@ -54,179 +53,6 @@
         .lane-list {
             list-style: none;
             margin-bottom: 1.5em;
-            .lane {
-                .widget {
-                    margin-bottom: .75em;
-                    .widget-header {
-                        padding: 0 0.5em 0 2.25em;
-                        color: @secondary-6;
-                        background-color: @primary-2;
-                        border-radius: @border-radius;
-                        height: 2em;
-                        .header-left {
-                            line-height: 2em;
-                            h3 {
-                                .font-size-normal();
-                                margin-bottom: 0;
-                                font-weight: 600;
-                                padding-top: 1px;
-                            }
-                        }
-                        .header-right {
-                            line-height: 2em;
-                        }
-                    }
-                    .widget-content {
-                        margin: 0 2.25em;
-                        border: 1px solid @primary-2;
-                        border-top: 0;
-                        background-color: @secondary-6;
-                        overflow: visible;
-                        min-height: 10em;
-                        .widget {
-                            .widget-header {
-                                padding: 0 0.5em 0 0.5em;
-                            }
-                        }
-                    }
-                    &.minimized {
-                        margin-bottom: .25em;
-                        .widget-header {
-                            padding-left: 0.5em;
-                            margin-left: 1.75em;
-                            color: @secondary-0;
-                            background-color: @secondary-3;
-                            .header-left {
-                                line-height: 2em;
-                            }
-                            .header-right {
-                                line-height: 2em;
-                            }
-                        }
-                        .widget-content {
-                            display: none;
-                        }
-                    }
-                }
-                &.tabs {
-                    .widget {
-                        .widget-header {
-                            .header-left {
-                                display: none;
-                            }
-                            .header-right {
-                                line-height: 2em;
-                            }
-                        }
-                        &.minimized {
-                            .widget-header {
-                                .header-left {
-                                    display: inline-block;
-                                    h3 {
-                                        max-width: none;
-                                    }
-                                }
-                            }
-                        }
-                        .widget-content {
-                            position: relative;
-                            top: -1.5em;
-                            border: 0 none;
-                            background-color: transparent;
-                            margin-bottom: -1.5em;
-                            .tab-list {
-                                list-style: none;
-                                position: relative;
-                                height: 1.5em;
-                                li {
-                                    position: relative;
-                                    display: inline-block;
-                                    background-color: @primary-4;
-                                    color: @primary-0;
-                                    border: 1px solid @primary-2;
-                                    border-top-left-radius: @border-radius;
-                                    border-top-right-radius: @border-radius;
-                                    border-bottom: 0;
-                                    margin-right: .5em;
-                                    padding: 2px .5em 4px .5em;
-                                    font-weight: 600;
-                                    height: 1em;
-                                    &.active {
-                                        z-index: 5;
-                                        background-color: @secondary-6;
-                                        color: @primary-0;
-                                    }
-                                }
-                            }
-                            .tab-content {
-                                border: 1px solid @primary-2;
-                                border-top: 0;
-                                border-bottom-left-radius: @border-radius;
-                                border-bottom-right-radius: @border-radius;
-                                background-color: @secondary-6;
-                                >.widget {
-                                    margin-bottom: 0;
-                                    .widget-header {
-                                        display: none;
-                                    }
-                                    .widget-content {
-                                        margin: 0;
-                                        padding: 1em 1em 1em;
-                                        top: auto;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
-        .lane-widget {
-            // width: 96%;
-            // left: 2%;
-            // position: relative;
-            margin: 0 2em;
-            ul.tab-list {
-                list-style: none;
-                display: table;
-                height: auto;
-                li {
-                    float: left;
-                    background-color: @secondary-6;
-                    color: @primary-0;
-                    border: 1px solid @primary-0;
-                    border-radius: @border-radius;
-                    border-bottom: 0;
-                    border-right: 0;
-                    margin-right: 5px;
-                    padding: 3px;
-                }
-            }
-            .tab-widget {
-                margin-top: 0;
-                .widget {
-                    margin: 0;
-                    min-height: 192px;
-                }
-                .widget-header {
-                    height: 0;
-                    .header-right {
-                        top: 50%;
-                        right: 0;
-                        position: absolute;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.detail-label {
-    color: @secondary-7;
-    display: block;
-    margin: 5px; // float: left;
-    font-weight: bold; // width: 45%;
-    span {
-        font-weight: 100;
     }
 }

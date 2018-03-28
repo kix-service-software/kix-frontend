@@ -11,25 +11,8 @@
             </@contentActions>
             <@content>
                 <ul.lane-list>
-                    <li.lane.tabs.clearfix>
-                        <widget title="Ticketinformationen">
-                            <@content>
-                                <ul.tab-list>
-                                    <for(tab in state.tabs)>
-                                        <li class=(state.activeTabId === tab.instanceId ? "active" : "") on-click('tabClicked', tab.instanceId)>
-                                            ${tab.configuration.title}
-                                        </li>
-                                    </for>
-                                </ul>
-                                <div.tab-content>
-                                    <if(state.activeTabId)>
-                                        <include(component.getWidgetTemplate(state.activeTabId), {instanceId: state.activeTabId, ticketId: state.ticket.TicketID})/>
-                                    </if>
-                                </div>
-                            </@content>
-                            <@filter/>
-                            <@contentActions/>
-                        </widget>
+                    <li.clearfix>
+                        <tab-lane tabWidgets=state.tabWidgets/>
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix>
