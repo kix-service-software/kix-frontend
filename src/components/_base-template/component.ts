@@ -76,7 +76,7 @@ class BaseTemplateComponent {
         }
     }
 
-    private getGridColumn(): string {
+    private getGridColumns(): string {
         let gridColumns = '[menu-col] 4.5rem';
         if (this.isExplorerBarShown()) {
             gridColumns += ' [explorer-bar] min-content';
