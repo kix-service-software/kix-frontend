@@ -59,11 +59,8 @@ export class TicketDetailsComponent {
 
         if (this.state.ticketDeatilsConfiguration) {
             this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
-            this.state.tabs = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
+            this.state.tabWidgets = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
             this.setActions();
-            if (!this.state.activeTabId && this.state.tabs.length) {
-                this.state.activeTabId = this.state.tabs[0].instanceId;
-            }
         }
     }
 
@@ -99,10 +96,6 @@ export class TicketDetailsComponent {
     private getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getContext();
         return context ? context.getWidgetTemplate(instanceId) : undefined;
-    }
-
-    private tabClicked(tabId: string): void {
-        this.state.activeTabId = tabId;
     }
 
     private getTitle(): string {

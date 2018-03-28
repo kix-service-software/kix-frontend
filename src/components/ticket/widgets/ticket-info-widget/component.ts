@@ -12,12 +12,6 @@ class TicketInfoWidgetComponent {
         this.state = new TicketInfoComponentState();
     }
 
-    public onInput(input: any): void {
-        this.state.instanceId = input.instanceId;
-        this.state.ticketId = Number(input.ticketId);
-        this.getTicket();
-    }
-
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
@@ -28,7 +22,7 @@ class TicketInfoWidgetComponent {
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
+        if (type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
         }
     }
@@ -46,8 +40,9 @@ class TicketInfoWidgetComponent {
     }
 
     private getTicket(): void {
-        if (this.state.ticketId) {
-            this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+        const context = ContextService.getInstance().getContext();
+        if (context.contextObjectId) {
+            this.state.ticket = TicketService.getInstance().getTicket(context.contextObjectId);
             if (this.state.ticket) {
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
