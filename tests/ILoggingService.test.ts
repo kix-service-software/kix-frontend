@@ -12,7 +12,7 @@ describe('Logging Service', () => {
     let serverConfiguration: IServerConfiguration;
 
     before(async () => {
-        require('../TestSetup');
+        require('./TestSetup');
         configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         loggingService = ServiceContainer.getInstance().getClass<ILoggingService>("ILoggingService");
         serverConfiguration = configurationService.getServerConfiguration();

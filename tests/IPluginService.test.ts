@@ -11,7 +11,7 @@ describe('Plugin Service Service', () => {
     let pluginService: IPluginService;
 
     before(async () => {
-        require('../TestSetup');
+        require('./TestSetup');
         pluginService = ServiceContainer.getInstance().getClass<IPluginService>("IPluginService");
     });
 

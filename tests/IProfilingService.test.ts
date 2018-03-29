@@ -12,7 +12,7 @@ describe('Profiling Service', () => {
     let serverConfiguration: IServerConfiguration;
 
     before(async () => {
-        require('../TestSetup');
+        require('./TestSetup');
         configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         profilingService = ServiceContainer.getInstance().getClass<IProfilingService>("IProfilingService");
         serverConfiguration = configurationService.getServerConfiguration();

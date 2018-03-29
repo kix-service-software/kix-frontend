@@ -14,20 +14,27 @@ import {
     ITicketService,
     IUserService,
     IValidObjectService,
-    IWidgetRepositoryService
+    IWidgetRepositoryService,
+    ConfigurationService,
+    LoggingService,
+    SocketCommunicationService,
+    WidgetRepositoryService,
+    ProfilingService
 } from '@kix/core/dist/services';
 import {
-    ProfilingService, ValidObjectService, UserService, SysConfigService, SocketCommunicationService,
-    ServiceService, PluginService, ObjectIconService, MarkoService, LoggingService, LinkService, HttpService,
-    GeneralCatalogService, DynamicFieldService, CustomerService, ContactService, ConfigurationService,
+    ValidObjectService, UserService, SysConfigService,
+    ServiceService, ObjectIconService, LinkService, HttpService,
+    GeneralCatalogService, DynamicFieldService, CustomerService, ContactService,
     ClientRegistrationService,
-    WidgetRepositoryService,
     AuthenticationService,
     TicketService
-} from './services';
+} from '@kix/core/dist/services';
 import { IRouter } from '@kix/core/dist/routes';
 import { AuthenticationRouter, ApplicationRouter } from './routes';
 import { IRouterExtension, KIXExtensions, ICommunicatorExtension } from '@kix/core/dist/extensions';
+import {
+    MarkoService, PluginService,
+} from './services';
 
 process.setMaxListeners(0);
 
@@ -40,6 +47,9 @@ class Startup {
     }
 
     private async initApplication(): Promise<void> {
+        ServiceContainer.getInstance().configurationDirectory = __dirname + '/../config/';
+        ServiceContainer.getInstance().certDirectory = __dirname + '/../cert/';
+
         this.bindServices();
         await this.bindRouters();
         await this.bindCommunicators();
