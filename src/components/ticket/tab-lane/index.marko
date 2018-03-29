@@ -1,0 +1,21 @@
+<div.tab-lane>
+    <widget type=8 title="">
+        <@filter>
+            <ul.tab-list>
+                <for(tab in state.tabWidgets)>
+                    <li class=(state.activeTabId === tab.instanceId ? "active" : "") on-click('tabClicked', tab.instanceId)>
+                        ${tab.configuration.title}
+                    </li>
+                </for>
+            </ul>
+        </@filter>
+        <@content>
+            <div.tab-content>
+                <if(state.activeTabId)>
+                    <include(component.getWidgetTemplate(state.activeTabId), {type: 16, instanceId: state.activeTabId})/>
+                </if>
+            </div>
+        </@content>
+        <@contentActions/>
+    </widget>
+</div>

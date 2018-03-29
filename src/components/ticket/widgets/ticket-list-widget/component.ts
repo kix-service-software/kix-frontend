@@ -47,7 +47,7 @@ class TicketListWidgetComponent {
             } else {
                 this.state.contextFilter = null;
             }
-        } else if (type === ContextNotification.CONTEXT_UPDATED) {
+        } else if (type === ContextNotification.CONTEXT_CHANGED) {
             const context = ContextService.getInstance().getContext();
             this.state.widgetConfiguration =
                 context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;

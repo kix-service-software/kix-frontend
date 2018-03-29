@@ -1,29 +1,14 @@
-.ticket-details .widget .lane-list .lane>.widget {
+.widget-content {
     .linked-objects-container {
         position: relative;
         overflow: auto;
         padding: @margin-small @margin-small @margin-small 1.5em;
         box-sizing: border-box;
-        .widget {
-            margin: 0 0 @margin-small;
-            &.minimized .widget-header {
-                margin-left: 0;
-                border-bottom: 1px solid @secondary-2;
-                border-radius: 0;
-            }
-            .widget-header {
-                background-color: @secondary-6;
-                color: @secondary-7;
-            }
-            .widget-content {
-                border: 0;
-                padding: 0;
-                min-height: auto;
-                .linked-object-table-container {
-                    overflow: auto;
-                    .standard-table-wrapper .standard-table {
-                        height: 100%;
-                    }
+        .widget-content {
+            .linked-object-table-container {
+                overflow: auto;
+                .standard-table-wrapper .standard-table {
+                    height: 100%;
                 }
             }
         }

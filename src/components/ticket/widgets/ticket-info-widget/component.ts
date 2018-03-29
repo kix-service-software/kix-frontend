@@ -1,6 +1,7 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { SysconfigUtil } from '@kix/core/dist/model';
 import { ActionFactory } from '@kix/core/dist/browser';
 
@@ -10,12 +11,6 @@ class TicketInfoWidgetComponent {
 
     public onCreate(input: any): void {
         this.state = new TicketInfoComponentState();
-    }
-
-    public onInput(input: any): void {
-        this.state.instanceId = input.instanceId;
-        this.state.ticketId = Number(input.ticketId);
-        this.getTicket();
     }
 
     public onMount(): void {
@@ -28,8 +23,14 @@ class TicketInfoWidgetComponent {
     }
 
     private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
+        if (type === ContextNotification.OBJECT_UPDATED) {
             this.getTicket();
+        }
+        if (
+            type === ContextNotification.SIDEBAR_BAR_TOGGLED
+            || type === ContextNotification.EXPLORER_BAR_TOGGLED
+        ) {
+            (this as any).setStateDirty('ticket');
         }
     }
 
@@ -46,8 +47,9 @@ class TicketInfoWidgetComponent {
     }
 
     private getTicket(): void {
-        if (this.state.ticketId) {
-            this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+        const context = ContextService.getInstance().getContext();
+        if (context.contextObjectId) {
+            this.state.ticket = TicketService.getInstance().getTicket(context.contextObjectId);
             if (this.state.ticket) {
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
@@ -77,6 +79,13 @@ class TicketInfoWidgetComponent {
         return incidentStateId;
     }
 
+    private isExplorerAndSidebarShown(): boolean {
+        return ContextService.getInstance().getContext()
+            && ContextService.getInstance().getContext().isExplorerBarShown()
+            && ContextService.getInstance().getContext().explorerBarExpanded
+            && (ContextService.getInstance().getContext().isSidebarShown()
+                || ApplicationService.getInstance().isConfigurationMode());
+    }
 }
 
 module.exports = TicketInfoWidgetComponent;
