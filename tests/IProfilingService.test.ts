@@ -1,6 +1,5 @@
-import { container } from './../../src/Container';
 import { IConfigurationService, IProfilingService } from '@kix/core/dist/services';
-import { IServerConfiguration } from '@kix/core/dist/common';
+import { IServerConfiguration, ServiceContainer } from '@kix/core/dist/common';
 import { RequiredError } from '@kix/core/dist/decorators/RequiredError';
 import * as chai from 'chai';
 
@@ -13,9 +12,9 @@ describe('Profiling Service', () => {
     let serverConfiguration: IServerConfiguration;
 
     before(async () => {
-        await container.initialize();
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
-        profilingService = container.getDIContainer().get<IProfilingService>("IProfilingService");
+        require('./TestSetup');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        profilingService = ServiceContainer.getInstance().getClass<IProfilingService>("IProfilingService");
         serverConfiguration = configurationService.getServerConfiguration();
     });
 

@@ -1,1 +1,0 @@
-export { TicketService } from './TicketService';

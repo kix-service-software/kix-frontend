@@ -22,7 +22,10 @@ export class PluginService implements IPluginService {
 
         const pluginDirs = [];
         const fs = require('fs');
-        for (const dir of serverConfiguration.PLUGIN_FOLDERS) {
+
+        // FIXME: use Plugin folders from configuration service
+        const PLUGIN_FOLDERS = ["node_modules/@kix", "extensions"];
+        for (const dir of PLUGIN_FOLDERS) {
             const path = __dirname + '/../../' + dir;
             pluginDirs.push(path);
         }

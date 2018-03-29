@@ -88,15 +88,7 @@ gulp.task('minify-js', (cb) => {
 gulp.task('test', () => {
     process.env.NODE_ENV = 'test';
     return gulp.src([
-        'tests/client/**/*.test.ts',
-        'tests/model/**/*.test.ts',
-        'tests/communicators/**/*.test.ts',
-        'tests/services/api/**/*.test.ts',
-        'tests/services/IConfigurationService.test.ts',
-        'tests/services/ILoggingService.test.ts',
-        'tests/services/IPluginService.test.ts',
-        'tests/services/ISocketCommunicationService.test.ts',
-        'tests/services/IProfilingService.test.ts',
+        'tests/**/*.test.ts',
     ])
         .pipe(mocha({
             reporter: 'spec',
