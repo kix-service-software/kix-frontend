@@ -1,21 +1,21 @@
 <div.wrapper>
     <if(state.initialized)>
         <kix-header/>
-        <section.clearfix no-update-body>
+        <div.content-wrapper style=("grid-template-columns: " + component.getGridColumns())>
             <main-menu/>
-            <sidebar context="dashboard"/>
-            <section.content>
-                <header>
-                    <breadcrumb/>
-                    <back/>
-                </header>
-                <explorerbar/>
+            <div.site-navigation class={"with-explorer": component.isExplorerBarShown()}>
+                <breadcrumb/>
+                <back/>
+            </div>
+            <explorerbar/>
+            <div.content>
                 <router-outlet id="base-router"/>
-            </section>
-        </section>
+            </div>
+            <sidebar context="dashboard"/>
+        </div>
         <kix-footer/>
         <if(state.showShieldOverlay)>
-            <div.main-overlay/>
+            <div.shield-overlay/>
         </if>
         <if(state.showMainDialog)>
             <!-- div zwecks Marko Bug #920 -->

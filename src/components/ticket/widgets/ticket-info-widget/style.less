@@ -1,8 +1,8 @@
 .ticket-information {
     display: grid;
-    margin: 1em;
     grid-template-columns: auto max-content;
     grid-auto-flow: column;
+    margin: @margin-widget-content;
     .ci-list-wrapper {
         display: grid;
         grid-template-columns: 2em auto;
@@ -45,23 +45,10 @@
         @media only screen and (max-width: 1439px) {
             grid-template-rows: repeat(8, 1.25em);
         }
-        @media only screen and (min-width: 1981px) {
+        @media only screen and (min-width: 1921px) {
             grid-template-rows: repeat(4, 1.25em);
         }
-    }
-}
-
-@media only screen and (max-device-width: 1279px) {
-    width: auto;
-    float: none;
-}
-
-@media only screen and (min-device-width: 1279px) and (max-device-width: 1560px) {
-    width: 50%;
-} // if explorer and sidebar visible, use less columns (more rows) if necessary
-.sidebar+.content .explorerbar:not(.collapsed)+.ticket-details {
-    .widget-content {
-        .information-list {
+        &.explorer-and-sidebar-open {
             @media only screen and (max-width: 1550px) {
                 grid-template-rows: repeat(8, 1.25em);
             }
@@ -69,12 +56,7 @@
                 grid-template-rows: repeat(15, 1.25em);
             }
         }
-    }
-} // if explorer and sidebar not visible, use more columns (less rows) if necessary
-.tools-col+.content .explorerbar.collapsed+.ticket-details,
-.tools-col+.content header+.ticket-details {
-    .widget-content {
-        .information-list {
+        &:not(.explorer-and-sidebar-open) {
             @media only screen and (min-width: 1620px) {
                 grid-template-rows: repeat(4, 1.25em);
             }

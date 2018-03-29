@@ -1,19 +1,30 @@
 .wrapper {
-    >section {
-        margin-top: @margin-default + @header-height;
-        padding: 0 (@action-menu-width + @margin-default) 0 (@main-menu-active-width + @margin-default);
-        position: relative;
-        >.content {
-            >header {
-                padding: 0;
-                margin-bottom: 2em;
+    position: relative;
+    box-sizing: border-box;
+    background: @secondary-5;
+    color: @secondary-2;
+    >.content-wrapper {
+        margin: @margin-default + @header-height 0 0;
+        display: grid;
+        grid-template-rows: max-content 1fr;
+        grid-gap: @margin-default;
+        >.main-menu-wrapper,
+        >.sidebar-menu {
+            grid-row: 1 / span 2;
+        }
+        >.site-navigation {
+            grid-row: 1;
+            &.with-explorer {
+                grid-column: 2 / span 2;
             }
         }
-        >.sidebar+.content {
-            margin-right: @margin-default + @sidebar-width;
+        >.explorerbar,
+        >.content,
+        >.sidebar {
+            grid-row: 2;
         }
     }
-    .main-overlay {
+    .shield-overlay {
         position: fixed;
         top: 0;
         left: 0;
