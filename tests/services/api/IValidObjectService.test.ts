@@ -5,7 +5,7 @@ import { IConfigurationService, IValidObjectService } from '@kix/core/dist/servi
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -19,10 +19,10 @@ describe('Valid Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        validService = container.getDIContainer().get<IValidObjectService>("IValidObjectService");
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        validService = ServiceContainer.getInstance().getClass<IValidObjectService>("IValidObjectService");
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

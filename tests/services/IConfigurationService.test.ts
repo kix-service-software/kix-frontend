@@ -1,24 +1,21 @@
 /* tslint:disable no-var-requires no-unused-expression */
-import { Environment, IServerConfiguration, LogLevel } from '@kix/core/dist/common';
+import { Environment, IServerConfiguration, LogLevel, ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { container } from './../../src/Container';
 import { ConfigurationService } from './../../src/services/ConfigurationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-
-
 
 describe('Configuration Service', () => {
 
     let configurationService: IConfigurationService;
 
     before(async () => {
-        await container.initialize();
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        require('../TestSetup');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
     });
 
     it('service instance is registered in container.', () => {

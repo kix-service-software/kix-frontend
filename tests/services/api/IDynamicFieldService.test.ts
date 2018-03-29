@@ -3,7 +3,7 @@ import { IConfigurationService, IDynamicFieldService } from '@kix/core/dist/serv
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -17,10 +17,10 @@ describe('DynamicField Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        dynamicFieldService = container.getDIContainer().get<IDynamicFieldService>("IDynamicFieldService");
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        dynamicFieldService = ServiceContainer.getInstance().getClass<IDynamicFieldService>("IDynamicFieldService");
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

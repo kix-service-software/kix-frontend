@@ -1,11 +1,10 @@
-/* tslint:disable no-var-requires no-unused-expression max-line-length */
+/* tslint:disable */
 import { UserResponse, UsersResponse } from '@kix/core/dist/api';
 import { User } from '@kix/core/dist/model';
 import { IConfigurationService, IUserService } from '@kix/core/dist/services';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -17,10 +16,10 @@ describe('User Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        userService = container.getDIContainer().get<IUserService>("IUserService");
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        userService = ServiceContainer.getInstance().getClass<IUserService>("IUserService");
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

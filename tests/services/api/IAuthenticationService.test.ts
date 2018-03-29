@@ -1,12 +1,11 @@
-/* tslint:disable no-var-requires no-unused-expression */
+/* tslint:disable */
 import { HttpError } from '@kix/core/dist/api';
 import { UserType } from '@kix/core/dist/model';
 import { IAuthenticationService, IConfigurationService, IHttpService } from '@kix/core/dist/services';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Request, Response } from 'express';
-
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -19,11 +18,11 @@ describe('Authentication Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        httpService = container.getDIContainer().get<IHttpService>("IHttpService");
-        authenticationService = container.getDIContainer().get<IAuthenticationService>("IAuthenticationService");
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        httpService = ServiceContainer.getInstance().getClass<IHttpService>("IHttpService");
+        authenticationService = ServiceContainer.getInstance().getClass<IAuthenticationService>("IAuthenticationService");
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);

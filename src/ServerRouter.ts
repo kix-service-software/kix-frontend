@@ -1,6 +1,6 @@
 import { IRouter } from '@kix/core/dist/routes';
-import { container } from './Container';
 import { Application, Router, Request, Response } from 'express';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 export class ServerRouter {
 
@@ -15,7 +15,7 @@ export class ServerRouter {
     }
 
     private initializeRoutes(): void {
-        const registeredRouter = container.getDIContainer().getAll<IRouter>("IRouter");
+        const registeredRouter = ServiceContainer.getInstance().getClasses<IRouter>("IRouter");
         for (const router of registeredRouter) {
             this.expressRouter.use(router.getBaseRoute(), router.getRouter());
 

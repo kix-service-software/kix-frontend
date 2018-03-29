@@ -1,7 +1,6 @@
 import { ISocketCommunicationService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
-import { ICommunicator } from '@kix/core/dist/common';
+import { ICommunicator, ServiceContainer } from '@kix/core/dist/common';
 import { inject, injectable } from 'inversify';
-import { container } from '../Container';
 import * as express from 'express';
 
 import path = require('path');
@@ -33,7 +32,7 @@ export class SocketCommunicationService implements ISocketCommunicationService {
     }
 
     private registerListener(): void {
-        const communicators = container.getDIContainer().getAll<ICommunicator>("ICommunicator");
+        const communicators = ServiceContainer.getInstance().getClasses<ICommunicator>("ICommunicator");
         for (const communicator of communicators) {
             communicator.registerNamespace(this.socketIO);
         }

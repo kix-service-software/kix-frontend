@@ -5,7 +5,7 @@ import { IConfigurationService, IObjectIconService } from '@kix/core/dist/servic
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -19,10 +19,10 @@ describe('ObjectIcon Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        objectIconService = container.getDIContainer().get<IObjectIconService>('IObjectIconService');
-        configurationService = container.getDIContainer().get<IConfigurationService>('IConfigurationService');
+        objectIconService = ServiceContainer.getInstance().getClass<IObjectIconService>('IObjectIconService');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>('IConfigurationService');
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

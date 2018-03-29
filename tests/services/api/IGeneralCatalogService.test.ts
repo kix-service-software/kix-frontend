@@ -5,7 +5,7 @@ import { IConfigurationService, IGeneralCatalogService } from '@kix/core/dist/se
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -19,10 +19,10 @@ describe('General Catalog Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        catalogItemService = container.getDIContainer().get<IGeneralCatalogService>('IGeneralCatalogService');
-        configurationService = container.getDIContainer().get<IConfigurationService>('IConfigurationService');
+        catalogItemService = ServiceContainer.getInstance().getClass<IGeneralCatalogService>('IGeneralCatalogService');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>('IConfigurationService');
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

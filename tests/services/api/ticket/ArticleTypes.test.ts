@@ -1,5 +1,5 @@
 /* tslint:disable*/
-import { container } from '../../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 import { HttpError, ArticleTypeResponse, ArticleTypesResponse } from '@kix/core/dist/api';
 import { ITicketService, IConfigurationService } from '@kix/core/dist/services';
@@ -20,10 +20,10 @@ describe('ArticleType Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../../TestSetup');
         const nock = require('nock');
-        ticketService = container.getDIContainer().get<ITicketService>("ITicketService");
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        ticketService = ServiceContainer.getInstance().getClass<ITicketService>("ITicketService");
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

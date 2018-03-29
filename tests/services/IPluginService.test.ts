@@ -2,8 +2,7 @@
 import { IPluginService } from '@kix/core/dist/services';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { container } from './../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -12,8 +11,8 @@ describe('Plugin Service Service', () => {
     let pluginService: IPluginService;
 
     before(async () => {
-        await container.initialize();
-        pluginService = container.getDIContainer().get<IPluginService>("IPluginService");
+        require('../TestSetup');
+        pluginService = ServiceContainer.getInstance().getClass<IPluginService>("IPluginService");
     });
 
     describe('Register and load a Extension', () => {

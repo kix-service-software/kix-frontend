@@ -1,8 +1,6 @@
-import { IServerConfiguration } from '@kix/core/dist/common';
+import { IServerConfiguration, ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import * as chai from 'chai';
-
-import { container } from './../../src/Container';
 
 const expect = chai.expect;
 
@@ -13,8 +11,8 @@ describe('Server Configuration', () => {
     let serverConfiguration: IServerConfiguration;
 
     before(async () => {
-        await container.initialize();
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
+        require('../TestSetup');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
         serverConfiguration = configurationService.getServerConfiguration();
     });
 

@@ -4,8 +4,7 @@ import { Customer } from '@kix/core/dist/model';
 import { IConfigurationService, ICustomerService } from '@kix/core/dist/services';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { container } from '../../../src/Container';
+import { ServiceContainer } from '@kix/core/dist/common';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -19,10 +18,10 @@ describe('Customer Service', () => {
     let apiURL: string;
 
     before(async () => {
-        await container.initialize();
+        require('../../TestSetup');
         const nock = require('nock');
-        customerService = container.getDIContainer().get<ICustomerService>('ICustomerService');
-        configurationService = container.getDIContainer().get<IConfigurationService>('IConfigurationService');
+        customerService = ServiceContainer.getInstance().getClass<ICustomerService>('ICustomerService');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>('IConfigurationService');
         apiURL = configurationService.getServerConfiguration().BACKEND_API_URL;
         nockScope = nock(apiURL);
     });

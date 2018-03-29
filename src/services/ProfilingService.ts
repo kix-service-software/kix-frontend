@@ -1,6 +1,5 @@
 import { injectable, inject } from 'inversify';
 import { validate, required } from '../decorators';
-import { container } from '../Container';
 import { IConfigurationService, ILoggingService, IProfilingService } from '@kix/core/dist/services';
 import { LogLevel, IServerConfiguration } from '@kix/core/dist/common';
 
