@@ -11,23 +11,6 @@ export class CustomerInfoComponent {
 
     public onInput(input: any): void {
         this.state.customer = input.customer;
-        this.state.customerAttributeValueMap = this.state.customer.getCustomerInfoValues();
-    }
-
-    private getGroups(): string[] {
-        const groups = [];
-        this.state.customerAttributeValueMap.forEach((attrMap, group) => {
-            groups.push(group);
-        });
-        return groups;
-    }
-
-    private getAttributes(group: string): Array<[string, string]> {
-        const attributes = [];
-        this.state.customerAttributeValueMap.get(group).forEach((value, label) => {
-            attributes.push([label, value]);
-        });
-        return attributes;
     }
 }
 
