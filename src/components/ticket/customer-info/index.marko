@@ -1,13 +1,9 @@
 <if(state.customer)>
-    <div>${state.customer.CustomerID}</div>
-    <div>${state.customer.CustomerCompanyName}</div>
-    <div>
-        <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
-    </div>
-    <div>
-        <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
-    </div>
-    <div>
-        <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
-    </div>
+    <for(group in component.getGroups())>
+        <div.customer-attribute-group>
+            <for(attribute in component.getAttributes(group))>
+                <div title=((attribute[0] + ": ") + attribute[1])>${attribute[0]}:  ${attribute[1]}</div>
+            </for>
+        </div>
+    </for>
 </if>
