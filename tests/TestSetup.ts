@@ -1,4 +1,4 @@
-import { ServiceContainer } from "@kix/core/dist/common";
+import { ServiceContainer, IService } from "@kix/core/dist/common";
 import {
     IMarkoService,
     IPluginService,
@@ -21,10 +21,9 @@ import {
 const container = ServiceContainer.getInstance();
 container.configurationDirectory = __dirname + '/../config/';
 container.certDirectory = __dirname + '/../cert/';
-container.register<IConfigurationService>('IConfigurationService', ConfigurationService);
-container.register<ILoggingService>('ILoggingService', LoggingService);
-container.register<IProfilingService>('IProfilingService', ProfilingService);
-container.register<IMarkoService>('IMarkoService', MarkoService);
-container.register<IPluginService>('IPluginService', PluginService);
-container.register<ISocketCommunicationService>('ISocketCommunicationService', SocketCommunicationService);
-container.register<IWidgetRepositoryService>('IWidgetRepositoryService', WidgetRepositoryService);
+container.register<IService>('IConfigurationService', ConfigurationService);
+container.register<IService>('ILoggingService', LoggingService);
+container.register<IService>('IProfilingService', ProfilingService);
+container.register<IService>('IMarkoService', MarkoService);
+container.register<IService>('IPluginService', PluginService);
+container.register<IService>('ISocketCommunicationService', SocketCommunicationService);
