@@ -1,9 +1,7 @@
-import { IServerConfiguration } from '@kix/core/dist/common';
+import { IServerConfiguration, ServiceContainer } from '@kix/core/dist/common';
 import { RequiredError } from '@kix/core/dist/decorators/RequiredError';
 import { IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import * as chai from 'chai';
-
-import { container } from './../../src/Container';
 
 const expect = chai.expect;
 
@@ -14,9 +12,9 @@ describe('Logging Service', () => {
     let serverConfiguration: IServerConfiguration;
 
     before(async () => {
-        await container.initialize();
-        configurationService = container.getDIContainer().get<IConfigurationService>("IConfigurationService");
-        loggingService = container.getDIContainer().get<ILoggingService>("ILoggingService");
+        require('./TestSetup');
+        configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        loggingService = ServiceContainer.getInstance().getClass<ILoggingService>("ILoggingService");
         serverConfiguration = configurationService.getServerConfiguration();
     });
 

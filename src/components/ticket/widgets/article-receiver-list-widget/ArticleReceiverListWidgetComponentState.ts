@@ -4,5 +4,5 @@ export class ArticleReceiverListWidgetComponentState {
 
     public title: string = null;
 
-    public receiverList: ArticleReceiver[] = null;
+    public receiverList: ArticleReceiver[] = [];
 }

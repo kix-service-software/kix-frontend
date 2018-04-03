@@ -14,8 +14,6 @@ import {
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { TicketService } from '../services/api/';
-import { currentId } from 'async_hooks';
 import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class TicketCommunicator extends KIXCommunicator {
