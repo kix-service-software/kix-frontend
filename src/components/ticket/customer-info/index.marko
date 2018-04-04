@@ -1,13 +1,12 @@
 <if(state.customer)>
-    <div>${state.customer.CustomerID}</div>
-    <div>${state.customer.CustomerCompanyName}</div>
-    <div>
-        <strong>Straße:</strong> ${state.customer.CustomerCompanyStreet}
-    </div>
-    <div>
-        <strong>Stadt:</strong> ${state.customer.CustomerCompanyCity}
-    </div>
-    <div>
-        <strong>Land:</strong> ${state.customer.CustomerCompanyCountry}
-    </div>
+    <for(groupTuple in state.customer.getCustomerInfoValues())>
+        <div.customer-attribute-group>
+            <for(attributeTuple in groupTuple[1])>
+                <div title=((attributeTuple[0] + ": ") + attributeTuple[1])>
+                    <span>${attributeTuple[0]}:</span>
+                    ${attributeTuple[1]}
+                </div>
+            </for>
+        </div>
+    </for>
 </if>

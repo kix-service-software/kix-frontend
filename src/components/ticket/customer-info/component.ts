@@ -1,19 +1,16 @@
+import { CustomerInfoComponentState } from './CustomerInfoComponentState';
+import { ContextService } from "@kix/core/dist/browser/context";
+
 export class CustomerInfoComponent {
 
-    private state: any;
+    private state: CustomerInfoComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            customer: null
-        };
+        this.state = new CustomerInfoComponentState();
     }
 
     public onInput(input: any): void {
         this.state.customer = input.customer;
-    }
-
-    public onMount(): void {
-        // TODO: mittels übergebener "customerId" den Kunden mit Hilfe eines service ermitteln
     }
 }
 

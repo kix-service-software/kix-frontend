@@ -1,0 +1,11 @@
+.customer-attribute-group {
+    &:not(:last-child) {
+        margin-bottom: @margin-small;
+    }
+    span {
+        font-weight: bold;
+        &::after {
+            content: ' ';
+        }
+    }
+}
