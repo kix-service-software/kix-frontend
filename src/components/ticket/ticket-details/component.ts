@@ -38,8 +38,7 @@ export class TicketDetailsComponent {
     private async loadTicket(): Promise<void> {
         if (!this.state.loading) {
             this.state.loading = true;
-            const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
-            this.state.ticket = ticket;
+            await TicketService.getInstance().loadTicket(this.state.ticketId);
             this.setActions();
             this.setBreadcrumbDetails();
             this.setTicketHookInfo();
@@ -66,11 +65,14 @@ export class TicketDetailsComponent {
 
     private setActions(): void {
         const config = this.state.ticketDeatilsConfiguration;
-        if (config && this.state.ticket) {
-            this.state.generalActions =
-                ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.ticket);
-            this.state.ticketActions =
-                ActionFactory.getInstance().generateActions(config.ticketActions, true, this.state.ticket);
+        if (config && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                this.state.generalActions =
+                    ActionFactory.getInstance().generateActions(config.generalActions, true, ticket);
+                this.state.ticketActions =
+                    ActionFactory.getInstance().generateActions(config.ticketActions, true, ticket);
+            }
         }
     }
 
@@ -83,7 +85,8 @@ export class TicketDetailsComponent {
     }
 
     private setBreadcrumbDetails(): void {
-        const value = this.state.ticket ? this.state.ticket.TicketNumber : this.state.ticketId;
+        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+        const value = ticket ? ticket.TicketNumber : this.state.ticketId;
 
         const breadcrumbDetails = new BreadcrumbDetails(
             'tickets', TicketDetailsContext.CONTEXT_ID, this.state.ticketId.toString(),
@@ -99,8 +102,9 @@ export class TicketDetailsComponent {
     }
 
     private getTitle(): string {
-        const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + this.state.ticket.TicketNumber;
-        return titlePrefix + " - " + this.state.ticket.Title;
+        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+        const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + ticket.TicketNumber;
+        return titlePrefix + " - " + ticket.Title;
     }
 
 }

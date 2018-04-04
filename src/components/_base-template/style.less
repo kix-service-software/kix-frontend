@@ -9,7 +9,7 @@
         grid-template-rows: max-content 1fr;
         grid-gap: @margin-default;
         >.main-menu-wrapper,
-        >.sidebar-menu {
+        >.site-menu-wrapper {
             grid-row: 1 / span 2;
         }
         >.site-navigation {
@@ -20,8 +20,13 @@
         }
         >.explorerbar,
         >.content,
-        >.sidebar {
+        >.sidebar-area {
             grid-row: 2;
+        }
+        >.site-menu-wrapper {
+            .widget-bar {
+                margin-top: @margin-large;
+            }
         }
     }
     .shield-overlay {

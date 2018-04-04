@@ -1,9 +1,9 @@
 <div.wrapper>
     <if(state.initialized)>
         <kix-header/>
-        <div.content-wrapper style=("grid-template-columns: " + component.getGridColumns())>
+        <div.content-wrapper style=("grid-template-columns: " + state.gridColumns)>
             <main-menu/>
-            <div.site-navigation class={"with-explorer": component.isExplorerBarShown()}>
+            <div.site-navigation class={"with-explorer": state.hasExplorer}>
                 <breadcrumb/>
                 <back/>
             </div>
@@ -11,7 +11,10 @@
             <div.content>
                 <router-outlet id="base-router"/>
             </div>
-            <sidebar context="dashboard"/>
+            <sidebar/>
+            <div.site-menu-wrapper>
+                <sidebar-menu/>
+            </div>
         </div>
         <kix-footer/>
         <if(state.showShieldOverlay)>

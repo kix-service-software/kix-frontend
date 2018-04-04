@@ -12,9 +12,6 @@ export class ContactInfoComponent {
         this.state.contact = input.contact;
     }
 
-    public onMount(): void {
-        // TODO: mittels übergebener "contactId" den Konakt mit Hilfe eines service ermitteln
-    }
 }
 
 module.exports = ContactInfoComponent;

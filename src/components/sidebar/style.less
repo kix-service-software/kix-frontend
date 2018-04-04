@@ -1,51 +1,8 @@
-.sidebar {
+.sidebar-area {
     height: 100%;
     width: @sidebar-width;
-    >div {
-        box-sizing: border-box;
-        margin-bottom: @margin-default;
-        &:last-of-type {
-            margin-bottom: 0;
-        }
-        &.config-mode:not(.config-dialog-shown) {
-            z-index: 100;
-            position: relative;
-        }
-        .widget-overlay {
-            cursor: ns-resize;
-        }
-        .drag-element {
-            opacity: 0.7;
-        }
-        .drop-element {
-            background-color: @tertiary-5;
-        }
-    }
-}
-
-.sidebar-menu {
-    .widget-bar {
-        margin-top: @margin-large;
-    }
-    .bar-icon {
-        background: @secondary-0;
-        color: @secondary-3;
-        box-sizing: border-box;
-        width: 32px;
-        height: 32px;
-        text-align: center;
-        margin-bottom: 2px;
-        border-top-left-radius: @border-radius;
-        border-bottom-left-radius: @border-radius;
-        box-shadow: @shadow;
-        font-size: 1.5em;
-        &.select-active {
-            background: @secondary-3;
-            color: @secondary-0;
-        }
-        &>span {
-            .vertical-align;
-        }
+    .sidebar {
+        margin-bottom: @margin-middle;
         &:last-of-type {
             margin-bottom: 0;
         }

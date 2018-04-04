@@ -26,9 +26,10 @@ export class RouterOutletComponent {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
-            setTimeout(() => {
-                (this as any).setStateDirty('template');
-            }, 50);
+            (this as any).update();
+            // setTimeout(() => {
+            //     (this as any).setStateDirty('template');
+            // }, 50);
         }
     }
 

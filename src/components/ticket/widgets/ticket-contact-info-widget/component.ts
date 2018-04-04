@@ -9,8 +9,7 @@ class ContactInfoWidgetComponent {
         this.state = {
             instanceId: null,
             contact: null,
-            widgetConfiguration: null,
-            isLoading: true
+            widgetConfiguration: null
         };
     }
 
@@ -21,9 +20,7 @@ class ContactInfoWidgetComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-
         this.loadContact(context.contextObjectId);
     }
 
@@ -38,7 +35,6 @@ class ContactInfoWidgetComponent {
         const ticket = TicketService.getInstance().getTicket(ticketId);
         if (ticket) {
             this.state.contact = ticket.contact;
-            this.state.isLoading = false;
         }
     }
 
