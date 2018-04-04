@@ -1,4 +1,4 @@
-import { Customer, CustomerSourceAttributeMap } from '@kix/core/dist/model';
+import { Customer } from '@kix/core/dist/model';
 
 export class CustomerInfoComponentState {
 
