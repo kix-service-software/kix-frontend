@@ -1,19 +1,15 @@
+import { ContactInfoComponentState } from './ContactInfoComponentState';
+
 export class ContactInfoComponent {
 
-    private state: any;
+    private state: ContactInfoComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            contact: null
-        };
+        this.state = new ContactInfoComponentState();
     }
 
     public onInput(input: any): void {
         this.state.contact = input.contact;
-    }
-
-    public onMount(): void {
-        // TODO: mittels übergebener "contactId" den Konakt mit Hilfe eines service ermitteln
     }
 }
 

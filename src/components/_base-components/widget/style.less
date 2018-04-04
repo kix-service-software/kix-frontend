@@ -1,4 +1,5 @@
 @widget-header-height: 2.25em;
+@widget-header-height-small: 1.75em;
 .widget {
     position: relative;
     border-radius: @border-radius;
@@ -7,7 +8,7 @@
         background: @secondary-2;
         color: @secondary-0;
         box-sizing: border-box;
-        padding: 0 1em 0 0.75em;
+        padding: 0 1em 0 .75em;
         height: @widget-header-height;
         border-top-right-radius: @border-radius;
         border-top-left-radius: @border-radius;
@@ -18,7 +19,7 @@
             overflow: hidden;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
-                margin-right: .5em;
+                margin-right: .75em;
             }
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -133,29 +134,29 @@
 
 .overlay-widget {
     .widget();
-    width: 15em;
-    height: 15em;
+    width: @default-widget-width;
+    height: @default-widget-height;
     >.widget-header {
         background-color: @tertiary-1;
         color: @secondary-6;
-        height: 1.75em;
+        height: @widget-header-height-small;
         >.header-right {
             >.action-list-wrapper {
                 >.action-list-expansion-container {
                     background-color: @tertiary-1;
                     color: @secondary-6;
-                    top: 1.75em;
+                    top: @widget-header-height-small;
                 }
             }
         }
     }
     >.widget-content {
         .font-size-small();
-        border: 1px solid @tertiary-1;
+        border: 2px solid @tertiary-1;
         background-color: @secondary-6;
         overflow: auto;
-        padding: 1em;
-        height: 15em;
+        padding: @margin-widget-content;
+        height: @default-widget-height - @widget-header-height-small;
     }
 }
 
@@ -187,7 +188,7 @@
     .widget();
     margin-bottom: .75em;
     >.widget-header {
-        padding: 0 0.5em 0 2.25em;
+        padding: 0 .5em 0 2.25em;
         color: @secondary-6;
         background-color: @primary-2;
         border-radius: @border-radius;
@@ -216,7 +217,7 @@
     &.minimized {
         margin-bottom: .25em;
         >.widget-header {
-            padding-left: 0.5em;
+            padding-left: .5em;
             margin-left: 1.75em;
             color: @secondary-0;
             background-color: @secondary-3;
@@ -243,7 +244,7 @@
             >h3 {
                 .font-size-normal();
                 color: @secondary-7;
-                font-weight: 600;
+                font-weight: bold;
             }
         }
     }
@@ -262,7 +263,7 @@
                 >h3 {
                     .font-size-normal();
                     color: @secondary-7;
-                    font-weight: 600;
+                    font-weight: bold;
                 }
             }
         }

@@ -1,37 +1,35 @@
-.widget-content {
-    .description-container {
-        position: relative;
-        overflow: auto;
-        margin: @margin-widget-content;
-        box-sizing: border-box;
-        .widget-content {
-            .description-attachments {
-                float: right;
-                max-height: 105px;
-                min-width: 250px;
-                width: 20%;
-                padding: 0 1em;
-                box-sizing: border-box;
-                ul {
-                    padding-left: 1em;
-                    list-style-type: none;
-                    li {
-                        height: 1.5em;
-                        line-height: 1.5em;
-                        vertical-align: middle;
-                        .attachment-link {
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                        }
-                    }
-                    img {
-                        margin-right: 5px;
+.description-container {
+    position: relative;
+    overflow: auto;
+    margin: @margin-widget-content;
+    box-sizing: border-box;
+    .widget-content {
+        .description-attachments {
+            float: right;
+            max-height: 105px;
+            min-width: 250px;
+            width: 20%;
+            padding: 0 1em;
+            box-sizing: border-box;
+            ul {
+                padding-left: 1em;
+                list-style-type: none;
+                li {
+                    height: 1.5em;
+                    line-height: 1.5em;
+                    vertical-align: middle;
+                    .attachment-link {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
+                img {
+                    margin-right: 5px;
+                }
             }
-            .description-text-wrapper {
-                margin-right: 20%;
-            }
+        }
+        .description-text-wrapper {
+            margin-right: 20%;
         }
     }
 }
