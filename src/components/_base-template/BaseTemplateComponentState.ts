@@ -10,10 +10,6 @@ export class BaseTemplateComponentState {
         public objectId: string,
         public configurationMode: boolean = false,
         public showShieldOverlay: boolean = false,
-        public showInfoOverlay: boolean = false,
-        public showMainDialog: boolean = false,
-        public mainDialogTemplate: any = null,
-        public mainDialogInput: any = null,
         public gridColumns: string = null,
         public hasExplorer: boolean = false
     ) { }
