@@ -11,7 +11,8 @@ export class TicketDetailsComponentState {
         public ticketActions: AbstractAction[] = [],
         public ticketHook: string = '',
         public ticketHookDivider: string = '',
-        public loading: boolean = false,
+        public loadingTicket: boolean = true,
+        public loadingConfig: boolean = true,
         public ticketDeatilsConfiguration: TicketDetailsDashboardConfiguration = null
     ) { }
 

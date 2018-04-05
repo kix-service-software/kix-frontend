@@ -8,42 +8,30 @@ import {
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
 import { ActionFactory } from '@kix/core/dist/browser';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 export class TicketDetailsComponent {
 
     private state: TicketDetailsComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketDetailsComponentState();
-    }
-
-    public onInput(input: any): void {
-        const newTicketId = Number(input.ticketId);
-        if (newTicketId !== this.state.ticketId) {
-            this.state.ticketId = newTicketId;
-            this.loadTicket();
-        }
+        this.state = new TicketDetailsComponentState(Number(input.ticketId));
     }
 
     public onMount(): void {
         this.setBreadcrumbDetails();
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
         ContextService.getInstance().provideContext(context, true);
+        this.loadTicket();
     }
 
-    private async loadTicket(): Promise<void> {
-        if (!this.state.loading) {
-            this.state.loading = true;
-            await TicketService.getInstance().loadTicket(this.state.ticketId);
-            this.setActions();
-            this.setBreadcrumbDetails();
-            this.setTicketHookInfo();
-            this.state.loading = false;
-        }
+    private loadTicket(): void {
+        TicketService.getInstance().loadTicket(this.state.ticketId);
     }
 
     private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -52,28 +40,48 @@ export class TicketDetailsComponent {
         }
     }
 
+    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
+        if (type === TicketNotification.TICKET_LOADED && id === this.state.ticketId) {
+            this.state.loadingTicket = false;
+            this.setBreadcrumbDetails();
+            this.setTicketHookInfo();
+        }
+    }
+
     private setConfiguration(): void {
         const context = ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         this.state.ticketDeatilsConfiguration = (context.dashboardConfiguration as TicketDetailsDashboardConfiguration);
 
         if (this.state.ticketDeatilsConfiguration) {
+            this.state.loadingConfig = false;
             this.state.lanes = context ? context.getWidgets(WidgetType.LANE) : [];
             this.state.tabWidgets = context ? context.getWidgets(WidgetType.LANE_TAB) : [];
-            this.setActions();
+            (this as any).update();
         }
     }
 
-    private setActions(): void {
+    private getActions(): string[] {
+        let actions = [];
         const config = this.state.ticketDeatilsConfiguration;
         if (config && this.state.ticketId) {
             const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
             if (ticket) {
-                this.state.generalActions =
-                    ActionFactory.getInstance().generateActions(config.generalActions, true, ticket);
-                this.state.ticketActions =
-                    ActionFactory.getInstance().generateActions(config.ticketActions, true, ticket);
+                actions = ActionFactory.getInstance().generateActions(config.generalActions, true, ticket);
             }
         }
+        return actions;
+    }
+
+    private getTicketActions(): string[] {
+        let actions = [];
+        const config = this.state.ticketDeatilsConfiguration;
+        if (config && this.state.ticketId) {
+            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
+            if (ticket) {
+                actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, ticket);
+            }
+        }
+        return actions;
     }
 
     private setTicketHookInfo(): void {
@@ -105,6 +113,10 @@ export class TicketDetailsComponent {
         const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
         const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + ticket.TicketNumber;
         return titlePrefix + " - " + ticket.Title;
+    }
+
+    private getLaneKey(): string {
+        return IdService.generateDateBasedId('lane-');
     }
 
 }

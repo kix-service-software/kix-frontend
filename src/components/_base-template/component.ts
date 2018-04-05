@@ -83,20 +83,22 @@ class BaseTemplateComponent {
     }
 
     private setGridColumns(): void {
-        this.state.gridColumns = '[menu-col] 4.5rem';
+        let gridColumns = '[menu-col] 4.5rem';
 
         if (this.state.hasExplorer) {
-            this.state.gridColumns += ' [explorer-bar] min-content';
+            gridColumns += ' [explorer-bar] min-content';
         }
 
-        this.state.gridColumns += ' [content] minmax(40rem, auto)';
+        gridColumns += ' [content] minmax(40rem, auto)';
 
         const context = ContextService.getInstance().getContext();
         if ((context && context.isSidebarShown())) {
-            this.state.gridColumns += ' [sidebar] min-content';
+            gridColumns += ' [sidebar] min-content';
         }
 
-        this.state.gridColumns += ' [sidebar-menu] min-content';
+        gridColumns += ' [sidebar-menu] min-content';
+
+        this.state.gridColumns = gridColumns;
     }
 }
 

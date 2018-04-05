@@ -36,7 +36,7 @@ class ContactInfoWidgetComponent {
         let changed = true;
 
         if (this.state.contact) {
-            changed = !this.state.contact.equals(contact);
+            changed = contact && !this.state.contact.equals(contact);
         }
 
         return changed;

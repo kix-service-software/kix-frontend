@@ -2,7 +2,7 @@
     <@icon/>
     <@content>
         <div.description-container>
-            <widget type=32 title="Beschreibung">
+            <widget type=32 title="Beschreibung" key=("Widget" + Math.random())>
                 <@content>
                     <div.description-attachments>
                         <b>Anlagen:</b>
@@ -13,7 +13,7 @@
                     </div>
                 </@content>
             </widget>
-            <widget type=32 title="Anmerkungen">
+            <widget type=32 title="Anmerkungen" key=("Widget" + Math.random())>
                 <@content>
                     <div.ticket-notes>${state.ticketNotes}</div>
                 </@content>
@@ -22,7 +22,7 @@
     </@content>
     <@filter/>
     <@contentActions>
-        <ul.content-actions>
+        <ul.content-actions key=("Widget" + Math.random())>
             <for(action in state.actions)>
                 <li>
                     <action action=action/>

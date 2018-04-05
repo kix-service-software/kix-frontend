@@ -5,16 +5,16 @@ import { ArticleListSettings } from './ArticleListSettings';
 
 export class ArticleListWidgetComponentState extends WidgetComponentState<ArticleListSettings> {
 
-    public ticketId: number = null;
-
-    public standardTable: StandardTable<Article> = null;
-
-    public articles: Article[] = [];
-
-    public expandedArticles: number[] = [];
-
-    public generalArticleActions: IAction[] = [];
-
-    public filterValue: string = '';
+    public constructor(
+        public ticketId: number = null,
+        public instanceId: string = null,
+        public standardTable: StandardTable<Article> = null,
+        public articles: Article[] = [],
+        public expandedArticles: number[] = [],
+        public generalArticleActions: IAction[] = [],
+        public filterValue: string = ''
+    ) {
+        super();
+    }
 
 }

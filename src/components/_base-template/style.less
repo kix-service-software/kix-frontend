@@ -11,6 +11,9 @@
         >.main-menu-wrapper,
         >.site-menu-wrapper {
             grid-row: 1 / span 2;
+            .widget-bar {
+                margin-top: @margin-large;
+            }
         }
         >.site-navigation {
             grid-row: 1;
@@ -22,11 +25,6 @@
         >.content,
         >.sidebar-area {
             grid-row: 2;
-        }
-        >.site-menu-wrapper {
-            .widget-bar {
-                margin-top: @margin-large;
-            }
         }
     }
     .shield-overlay {

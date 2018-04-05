@@ -25,12 +25,7 @@ export class ArticleListWidgetComponent {
     private state: ArticleListWidgetComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ArticleListWidgetComponentState();
-        this.state.instanceId = 'article-list';
-    }
-
-    public onInput(input: any): void {
-        this.state.ticketId = Number(input.ticketId);
+        this.state = new ArticleListWidgetComponentState(Number(input.ticketId), 'article-list');
     }
 
     public onMount(): void {
