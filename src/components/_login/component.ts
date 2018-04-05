@@ -18,6 +18,7 @@ class LoginFormComponent {
         if (this.state.logout) {
             ClientStorageService.destroyToken();
         }
+        this.state.loading = false;
     }
 
     private userNameChanged(event: any): void {
