@@ -10,7 +10,8 @@ import {
     SearchTicketsRequest, SearchTicketsResponse,
     Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,
     TicketProperty,
-    LoadArticleZipAttachmentRequest
+    LoadArticleZipAttachmentRequest,
+    TicketFactory
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -45,8 +46,8 @@ export class TicketCommunicator extends KIXCommunicator {
 
     private async loadTicket(data: LoadTicketRequest): Promise<CommunicatorResponse<LoadTicketResponse>> {
         const loadedTicket = await this.ticketService.loadTicket(data.token, data.ticketId, true, true);
-        let contact;
-        let customer;
+        let contact: Contact;
+        let customer: Customer;
         if (loadedTicket.CustomerUserID) {
             contact = await this.contactService.getContact(data.token, loadedTicket.CustomerUserID)
                 .catch((error) => {
@@ -59,7 +60,7 @@ export class TicketCommunicator extends KIXCommunicator {
                 });
         }
 
-        const ticket = new Ticket(loadedTicket, contact, customer);
+        const ticket = TicketFactory.create(loadedTicket, customer, contact);
         const response = new LoadTicketResponse(ticket);
         return new CommunicatorResponse(TicketEvent.TICKET_LOADED, response);
     }
