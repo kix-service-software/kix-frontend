@@ -1,21 +1,21 @@
-<div.ticket-details>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else>
-        <widget minimizable=true actions=state.generalActions title=component.getTitle()>
+<if(state.loadingTicket || state.loadingConfig)>
+    <loading-spinner/>
+</if>
+<else>
+    <div.ticket-details>
+        <widget minimizable=true actions=component.getActions title=component.getTitle()>
             <@contentActions>
                 <div.ticket-actions-wrapper>
-                    <action-list list=state.ticketActions/>
+                    <action-list list=component.getTicketActions()/>
                 </div>
             </@contentActions>
             <@content>
-                <ul.lane-list>
-                    <li.clearfix>
+                <ul.lane-list no-update>
+                    <li.clearfix key=component.getLaneKey()>
                         <tab-lane tabWidgets=state.tabWidgets/>
                     </li>
                     <for(lane in state.lanes)>
-                        <li.lane.clearfix>
+                        <li.lane.clearfix key=component.getLaneKey()>
                             <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId})/>
                         </li>
                     </for>
@@ -24,5 +24,5 @@
             <@filter/>
         </widget>
         <article-list-widget ticketId=state.ticketId instanceId="article-list"/>
-    </else>
-</div>
+    </div>
+</else>
