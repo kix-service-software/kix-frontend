@@ -30,8 +30,6 @@ class BaseTemplateComponent {
             );
         }
 
-        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
-
         const token = ClientStorageService.getToken();
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
@@ -44,6 +42,7 @@ class BaseTemplateComponent {
         });
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
 
         const context = ContextService.getInstance().getContext();
         this.state.hasExplorer = context && context.isExplorerBarShown();
@@ -56,17 +55,6 @@ class BaseTemplateComponent {
 
     private async  applicationStateChanged(): Promise<void> {
         this.state.showShieldOverlay = ApplicationService.getInstance().isShowShieldOverlay();
-        this.state.showInfoOverlay = ApplicationService.getInstance().isShowInfoOverlay();
-        this.state.showMainDialog = ApplicationService.getInstance().isShowMainDialog();
-
-        if (this.state.showMainDialog) {
-            const currentMainDialog = ApplicationService.getInstance().getCurrentMainDialog();
-            if (currentMainDialog[0]) {
-                this.state.mainDialogTemplate =
-                    await ComponentsService.getInstance().getComponentTemplate(currentMainDialog[0]);
-                this.state.mainDialogInput = currentMainDialog[1];
-            }
-        }
     }
 
     public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
