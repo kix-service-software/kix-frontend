@@ -2,7 +2,7 @@
     <for(row in state.rows)>
         <div.line>
             <for(widgetInstanceId in row)>
-                <div.unit-space.drag-widget class=[row.length === 1 ? "size1of1" : "size1of3", component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]
+                <div.unit-space.drag-widget class={size1of1: row.length === 1, "config-mode": component.isConfigMode(), "config-dialog-shown": component.isConfigDialogShown()}
                     draggable=(state.dndState.enabled ? "true" : "false") data-id=widgetInstanceId
                     on-dragstart('dragStart') on-dragover('dragOver') on-drop('drop') on-dragend('dragEnd')>
                     <include(component.getWidgetTemplate(widgetInstanceId ), {instanceId: widgetInstanceId})/>
