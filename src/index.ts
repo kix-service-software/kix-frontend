@@ -3,7 +3,7 @@ import { Server } from './Server';
 import { IRouter } from '@kix/core/dist/routes';
 import { AuthenticationRouter, ApplicationRouter } from './routes';
 import {
-    IRouterExtension, KIXExtensions, ICommunicatorExtension, IServiceRegistryExtension
+    IRouterExtension, KIXExtensions, ICommunicatorRegistryExtension, IServiceRegistryExtension
 } from '@kix/core/dist/extensions';
 import { MarkoService, PluginService } from './services';
 import { IPluginService, CoreServiceRegistry } from '@kix/core/dist/services';
@@ -60,11 +60,13 @@ class Startup {
     private async bindCommunicators(): Promise<void> {
         const pluginService = ServiceContainer.getInstance().getClass<IPluginService>('IPluginService');
         const communicatorExtensions = await pluginService
-            .getExtensions<ICommunicatorExtension>(KIXExtensions.COMMUNICATOR);
+            .getExtensions<ICommunicatorRegistryExtension>(KIXExtensions.COMMUNICATOR);
 
         const container = ServiceContainer.getInstance();
         for (const communicator of communicatorExtensions) {
-            container.register<ICommunicator>('ICommunicator', communicator.getCommunicatorClass());
+            communicator.getCommunicatorClasses().forEach(
+                (c) => container.register<ICommunicator>('ICommunicator', c)
+            );
         }
     }
 
