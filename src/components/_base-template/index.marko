@@ -20,14 +20,7 @@
         <if(state.showShieldOverlay)>
             <div.shield-overlay no-update/>
         </if>
-        <if(state.showMainDialog)>
-            <dialog-main>
-                <@title>Dialogtitel</@title>
-                <@content>
-                    <include(state.mainDialogTemplate, state.mainDialogInput)/>
-                </@content>
-            </dialog-main>
-        </if>
+        <dialog-main/>
         <overlay-info/>
     </if>
 </div>

@@ -75,9 +75,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
             );
 
-        const contentRows: string[][] = [
-            ['20170920072542', '20170920084512', '20170920113214'], ['20170920101621'], ['20170920093015']
-        ];
+        const contentRows: string[][] = [['20170920101621']];
         const contentConfiguredWidgets: Array<ConfiguredWidget<any>> =
             [chart1, chart2, searchTemplateWidget, ticketListWidget];
 
@@ -100,7 +98,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notes, notes2];
 
         return new DashboardConfiguration(
-            this.getModuleId(), contentRows, sidebars, [],
+            this.getModuleId(), contentRows, [], [],
             contentConfiguredWidgets, sidebarConfiguredWidgets, [], []
         );
     }
