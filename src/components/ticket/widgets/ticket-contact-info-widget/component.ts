@@ -1,21 +1,14 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import { Contact } from "@kix/core/dist/model";
+import { ContactInfoWidgetComponentState } from './ContactInfoWidgetComponentState';
 
 class ContactInfoWidgetComponent {
 
-    private state: any;
+    private state: ContactInfoWidgetComponentState;
 
-    public onCreate(): void {
-        this.state = {
-            instanceId: null,
-            contact: null,
-            widgetConfiguration: null
-        };
-    }
-
-    public onInput(input: any) {
-        this.state.instanceId = input.instanceId;
+    public onCreate(input: any): void {
+        this.state = new ContactInfoWidgetComponentState(input.instanceId);
     }
 
     public onMount(): void {
@@ -43,7 +36,7 @@ class ContactInfoWidgetComponent {
         let changed = true;
 
         if (this.state.contact) {
-            changed = contact && (this.state.contact.ContactID !== contact.ContactID);
+            changed = !this.state.contact.equals(contact);
         }
 
         return changed;

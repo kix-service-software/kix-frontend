@@ -10,7 +10,19 @@ export class CustomerInfoComponent {
     }
 
     public onInput(input: any): void {
-        this.state.customer = input.customer;
+        if (this.customerChanged(input)) {
+            this.state.customer = input.customer;
+        }
+    }
+
+    private customerChanged(input: any): boolean {
+        let changed = true;
+
+        if (this.state.customer) {
+            changed = this.state.customer.equals(input.customer);
+        }
+
+        return changed;
     }
 }
 

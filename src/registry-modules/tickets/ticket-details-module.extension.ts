@@ -154,12 +154,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         // Sidebars
         const customerInfo =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kundeninfo", [], {},
+                "ticket-customer-info-widget", "Kunde", [], {},
                 WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man', false)
             );
         const contactInfo =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Kontaktinfo", [], {},
+                "ticket-contact-info-widget", "Ansprechpartner", [], {},
                 WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
@@ -174,8 +174,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         ];
 
         return new TicketDetailsDashboardConfiguration(
-            this.getModuleId(), contentRows, sidebars, explorerRows,
-            contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, [],
+            this.getModuleId(), contentRows, sidebars, [],
+            contentConfiguredWidgets, sidebarConfiguredWidgets, [], [],
             generalActions, ticketActions
         );
     }
