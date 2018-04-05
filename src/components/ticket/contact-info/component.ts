@@ -1,15 +1,27 @@
+import { ContactInfoComponentState } from './ContactInfoComponentState';
+
 export class ContactInfoComponent {
 
-    private state: any;
+    private state: ContactInfoComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            contact: null
-        };
+        this.state = new ContactInfoComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.contact = input.contact;
+        if (this.contactChanged(input)) {
+            this.state.contact = input.contact;
+        }
+    }
+
+    private contactChanged(input: any): boolean {
+        let changed = true;
+
+        if (this.state.contact) {
+            changed = input.contact && (this.state.contact.ContactID !== input.contact.ContactID);
+        }
+
+        return changed;
     }
 
 }

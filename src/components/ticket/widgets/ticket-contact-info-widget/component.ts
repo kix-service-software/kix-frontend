@@ -1,5 +1,6 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { Contact } from "@kix/core/dist/model";
 
 class ContactInfoWidgetComponent {
 
@@ -33,9 +34,19 @@ class ContactInfoWidgetComponent {
 
     private loadContact(ticketId: number): void {
         const ticket = TicketService.getInstance().getTicket(ticketId);
-        if (ticket) {
+        if (ticket && this.contactChanged(ticket.contact)) {
             this.state.contact = ticket.contact;
         }
+    }
+
+    private contactChanged(contact: Contact): boolean {
+        let changed = true;
+
+        if (this.state.contact) {
+            changed = contact && (this.state.contact.ContactID !== contact.ContactID);
+        }
+
+        return changed;
     }
 
 }
