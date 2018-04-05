@@ -2,10 +2,6 @@
     >.lane-widget {
         >.widget-header {
             >.header-left {
-                line-height: unset;
-                >h3 {
-                    display: none;
-                }
                 >.tab-list {
                     list-style: none;
                     li {
@@ -20,11 +16,31 @@
                         float: left;
                         height: 1.25em;
                         margin-top: 0.25em;
+                        line-height: normal;
+                        cursor: pointer;
                         &.active {
                             z-index: 5;
                             background-color: @secondary-6;
                             color: @primary-0;
                         }
+                    }
+                }
+            }
+        }
+        &.minimized {
+            >.widget-header {
+                >.header-left {
+                    >.tab-list {
+                        display: none;
+                    }
+                }
+            }
+        }
+        &:not(.minimized) {
+            >.widget-header {
+                >.header-left {
+                    >h3 {
+                        display: none;
                     }
                 }
             }
