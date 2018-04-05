@@ -71,7 +71,7 @@ class BaseTemplateComponent {
     }
 
     private setGridColumns(): void {
-        let gridColumns = '[menu-col] 4.5rem';
+        let gridColumns = '[main-menu-wrapper] 4.5rem';
 
         if (this.state.hasExplorer) {
             gridColumns += ' [explorer-bar] min-content';
@@ -81,10 +81,10 @@ class BaseTemplateComponent {
 
         const context = ContextService.getInstance().getContext();
         if ((context && context.isSidebarShown())) {
-            gridColumns += ' [sidebar] min-content';
+            gridColumns += ' [sidebar-area] min-content';
         }
 
-        gridColumns += ' [sidebar-menu] min-content';
+        gridColumns += ' [sidebar-menu-wrapper] min-content';
 
         this.state.gridColumns = gridColumns;
     }

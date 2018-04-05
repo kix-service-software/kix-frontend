@@ -1,487 +1,625 @@
 @font-face {
-  font-family: 'kix_font';
-  src:  url('@{static-path}font/kix_font.eot?uuqcpg');
-  src:  url('@{static-path}font/kix_font.eot?uuqcpg#iefix') format('embedded-opentype'),
+    font-family: 'kix_font';
+    src : url('@{static-path}font/kix_font.eot?uuqcpg');
+    src : url('@{static-path}font/kix_font.eot?uuqcpg#iefix') format('embedded-opentype'),
     url('@{static-path}font/kix_font.ttf?uuqcpg') format('truetype'),
     url('@{static-path}font/kix_font.woff?uuqcpg') format('woff'),
     url('@{static-path}font/kix_font.svg?uuqcpg#kix_font') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-weight: normal;
+    font-style: normal;
 }
 
-[class^="kix-icon-"], [class*=" kix-icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'kix_font' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+[class^="kix-icon-"],
+[class*=" kix-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'kix_font' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .kix-icon-dots:before {
-  content: "\e900";
+    content: "\e900";
 }
+
 .kix-icon-address:before {
-  content: "\e901";
+    content: "\e901";
 }
+
 .kix-icon-admin:before {
-  content: "\e902";
+    content: "\e902";
 }
+
 .kix-icon-admin-info:before {
-  content: "\e903";
+    content: "\e903";
 }
+
 .kix-icon-arrow-collect:before {
-  content: "\e904";
+    content: "\e904";
 }
+
 .kix-icon-arrow-distribute:before {
-  content: "\e905";
+    content: "\e905";
 }
+
 .kix-icon-arrow-fullscreen:before {
-  content: "\e906";
+    content: "\e906";
 }
+
 .kix-icon-arrow-left:before {
-  content: "\e907";
+    content: "\e907";
 }
+
 .kix-icon-arrow-outward:before {
-  content: "\e908";
+    content: "\e908";
 }
+
 .kix-icon-arrow-receive:before {
-  content: "\e909";
+    content: "\e909";
 }
+
 .kix-icon-arrow-refresh:before {
-  content: "\e90a";
+    content: "\e90a";
 }
+
 .kix-icon-arrow-right:before {
-  content: "\e90b";
+    content: "\e90b";
 }
+
 .kix-icon-arrow-rotate-left:before {
-  content: "\e90c";
+    content: "\e90c";
 }
+
 .kix-icon-arrow-split:before {
-  content: "\e90d";
+    content: "\e90d";
 }
+
 .kix-icon-arrow-split2:before {
-  content: "\e90e";
+    content: "\e90e";
 }
+
 .kix-icon-arrow-sumup:before {
-  content: "\e90f";
+    content: "\e90f";
 }
+
 .kix-icon-attachement:before {
-  content: "\e910";
+    content: "\e910";
 }
+
 .kix-icon-bookmark:before {
-  content: "\e911";
+    content: "\e911";
 }
+
 .kix-icon-calendar:before {
-  content: "\e912";
+    content: "\e912";
 }
+
 .kix-icon-call:before {
-  content: "\e913";
+    content: "\e913";
 }
+
 .kix-icon-call-outward:before {
-  content: "\e914";
+    content: "\e914";
 }
+
 .kix-icon-call-receive:before {
-  content: "\e915";
+    content: "\e915";
 }
+
 .kix-icon-check:before {
-  content: "\e916";
+    content: "\e916";
 }
+
 .kix-icon-checklist:before {
-  content: "\e917";
+    content: "\e917";
 }
+
 .kix-icon-ci:before {
-  content: "\e918";
+    content: "\e918";
 }
+
 .kix-icon-ci-gear:before {
-  content: "\e919";
+    content: "\e919";
 }
+
 .kix-icon-circle-next:before {
-  content: "\e91a";
+    content: "\e91a";
 }
+
 .kix-icon-circle-prior:before {
-  content: "\e91b";
+    content: "\e91b";
 }
+
 .kix-icon-close:before {
-  content: "\e91c";
+    content: "\e91c";
 }
+
 .kix-icon-close-down:before {
-  content: "\e91d";
+    content: "\e91d";
 }
+
 .kix-icon-close-left:before {
-  content: "\e91e";
+    content: "\e91e";
 }
+
 .kix-icon-close-right:before {
-  content: "\e91f";
+    content: "\e91f";
 }
+
 .kix-icon-close-up:before {
-  content: "\e920";
+    content: "\e920";
 }
+
 .kix-icon-cmdb:before {
-  content: "\e921";
+    content: "\e921";
 }
+
 .kix-icon-comparison-standard:before {
-  content: "\e922";
+    content: "\e922";
 }
+
 .kix-icon-comparison-version:before {
-  content: "\e923";
+    content: "\e923";
 }
+
 .kix-icon-conversationguide:before {
-  content: "\e924";
+    content: "\e924";
 }
+
 .kix-icon-copy:before {
-  content: "\e925";
+    content: "\e925";
 }
+
 .kix-icon-csv:before {
-  content: "\e926";
+    content: "\e926";
 }
+
 .kix-icon-cti:before {
-  content: "\e927";
+    content: "\e927";
 }
+
 .kix-icon-customers:before {
-  content: "\e928";
+    content: "\e928";
 }
+
 .kix-icon-dropdown-address:before {
-  content: "\e929";
+    content: "\e929";
 }
+
 .kix-icon-dropdown-customers:before {
-  content: "\e92a";
+    content: "\e92a";
 }
+
 .kix-icon-dropdown-ticket:before {
-  content: "\e92b";
+    content: "\e92b";
 }
+
 .kix-icon-edit:before {
-  content: "\e92c";
+    content: "\e92c";
 }
+
 .kix-icon-exchange:before {
-  content: "\e92d";
+    content: "\e92d";
 }
+
 .kix-icon-exclamation:before {
-  content: "\e92e";
+    content: "\e92e";
 }
+
 .kix-icon-eye:before {
-  content: "\e92f";
+    content: "\e92f";
 }
+
 .kix-icon-faq:before {
-  content: "\e930";
+    content: "\e930";
 }
+
 .kix-icon-filter:before {
-  content: "\e931";
+    content: "\e931";
 }
+
 .kix-icon-fire:before {
-  content: "\e932";
+    content: "\e932";
 }
+
 .kix-icon-fire-add:before {
-  content: "\e933";
+    content: "\e933";
 }
+
 .kix-icon-flag:before {
-  content: "\e934";
+    content: "\e934";
 }
+
 .kix-icon-folder:before {
-  content: "\e935";
+    content: "\e935";
 }
+
 .kix-icon-gear:before {
-  content: "\e936";
+    content: "\e936";
 }
+
 .kix-icon-gears:before {
-  content: "\e937";
+    content: "\e937";
 }
+
 .kix-icon-globe:before {
-  content: "\e938";
+    content: "\e938";
 }
+
 .kix-icon-handshake:before {
-  content: "\e939";
+    content: "\e939";
 }
+
 .kix-icon-home:before {
-  content: "\e93a";
+    content: "\e93a";
 }
+
 .kix-icon-icircle:before {
-  content: "\e93b";
+    content: "\e93b";
 }
+
 .kix-icon-info:before {
-  content: "\e93c";
+    content: "\e93c";
 }
+
 .kix-icon-internal:before {
-  content: "\e93d";
+    content: "\e93d";
 }
+
 .kix-icon-kanban:before {
-  content: "\e93e";
+    content: "\e93e";
 }
+
 .kix-icon-kpi:before {
-  content: "\e93f";
+    content: "\e93f";
 }
+
 .kix-icon-kpi-reports:before {
-  content: "\e940";
+    content: "\e940";
 }
+
 .kix-icon-link:before {
-  content: "\e941";
+    content: "\e941";
 }
+
 .kix-icon-lock-close:before {
-  content: "\e942";
+    content: "\e942";
 }
+
 .kix-icon-lock-open:before {
-  content: "\e943";
+    content: "\e943";
 }
+
 .kix-icon-logout:before {
-  content: "\e944";
+    content: "\e944";
 }
+
 .kix-icon-mail:before {
-  content: "\e945";
+    content: "\e945";
 }
+
 .kix-icon-mail-answer-outline:before {
-  content: "\e946";
+    content: "\e946";
 }
+
 .kix-icon-mail-forward-outline:before {
-  content: "\e947";
+    content: "\e947";
 }
+
 .kix-icon-mail-redirect:before {
-  content: "\e948";
+    content: "\e948";
 }
+
 .kix-icon-mail-redirect-outline:before {
-  content: "\e949";
+    content: "\e949";
 }
+
 .kix-icon-maintain-record:before {
-  content: "\e94a";
+    content: "\e94a";
 }
+
 .kix-icon-man:before {
-  content: "\e94b";
+    content: "\e94b";
 }
+
 .kix-icon-man-linked:before {
-  content: "\e94c";
+    content: "\e94c";
 }
+
 .kix-icon-minus:before {
-  content: "\e94d";
+    content: "\e94d";
 }
+
 .kix-icon-new:before {
-  content: "\e94e";
+    content: "\e94e";
 }
+
 .kix-icon-new-address:before {
-  content: "\e94f";
+    content: "\e94f";
 }
+
 .kix-icon-new-call-outward:before {
-  content: "\e950";
+    content: "\e950";
 }
+
 .kix-icon-new-call-receive:before {
-  content: "\e951";
+    content: "\e951";
 }
+
 .kix-icon-new-ci:before {
-  content: "\e952";
+    content: "\e952";
 }
+
 .kix-icon-new-kanban:before {
-  content: "\e953";
+    content: "\e953";
 }
+
 .kix-icon-new-mail:before {
-  content: "\e954";
+    content: "\e954";
 }
+
 .kix-icon-new-note:before {
-  content: "\e955";
+    content: "\e955";
 }
+
 .kix-icon-new-searchtemplate:before {
-  content: "\e956";
+    content: "\e956";
 }
+
 .kix-icon-new-ticket:before {
-  content: "\e957";
+    content: "\e957";
 }
+
 .kix-icon-new-widget:before {
-  content: "\e958";
+    content: "\e958";
 }
+
 .kix-icon-note:before {
-  content: "\e959";
+    content: "\e959";
 }
+
 .kix-icon-open-left:before {
-  content: "\e95a";
+    content: "\e95a";
 }
+
 .kix-icon-open-right:before {
-  content: "\e95b";
+    content: "\e95b";
 }
+
 .kix-icon-plus:before {
-  content: "\e95c";
+    content: "\e95c";
 }
+
 .kix-icon-print:before {
-  content: "\e95d";
+    content: "\e95d";
 }
+
 .kix-icon-process:before {
-  content: "\e95e";
+    content: "\e95e";
 }
+
 .kix-icon-query:before {
-  content: "\e95f";
+    content: "\e95f";
 }
+
 .kix-icon-save:before {
-  content: "\e960";
+    content: "\e960";
 }
+
 .kix-icon-search:before {
-  content: "\e961";
+    content: "\e961";
 }
+
 .kix-icon-search-ci .path1:before {
-  content: "\e962";
-  color: rgb(0, 0, 0);
+    content: "\e962";
+    color: rgb(0, 0, 0);
 }
+
 .kix-icon-search-ci .path2:before {
-  content: "\e963";
-  margin-left: -1em;
-  color: rgb(254, 254, 254);
+    content: "\e963";
+    margin-left: -1em;
+    color: rgb(254, 254, 254);
 }
+
 .kix-icon-search-ci .path3:before {
-  content: "\e964";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
+    content: "\e964";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
 }
+
 .kix-icon-search-quick:before {
-  content: "\e965";
+    content: "\e965";
 }
+
 .kix-icon-searchtemplate:before {
-  content: "\e966";
+    content: "\e966";
 }
+
 .kix-icon-sort:before {
-  content: "\e967";
+    content: "\e967";
 }
+
 .kix-icon-sort-down:before {
-  content: "\e968";
+    content: "\e968";
 }
+
 .kix-icon-sort-up:before {
-  content: "\e969";
+    content: "\e969";
 }
+
 .kix-icon-start:before {
-  content: "\e96a";
+    content: "\e96a";
 }
+
 .kix-icon-textblocks:before {
-  content: "\e96b";
+    content: "\e96b";
 }
+
 .kix-icon-ticket:before {
-  content: "\e96c";
+    content: "\e96c";
 }
+
 .kix-icon-ticket-open:before {
-  content: "\e96d";
+    content: "\e96d";
 }
+
 .kix-icon-time:before {
-  content: "\e96e";
+    content: "\e96e";
 }
+
 .kix-icon-time-back:before {
-  content: "\e96f";
+    content: "\e96f";
 }
+
 .kix-icon-time-wait:before {
-  content: "\e970";
+    content: "\e970";
 }
+
 .kix-icon-tour:before {
-  content: "\e971";
+    content: "\e971";
 }
+
 .kix-icon-trash:before {
-  content: "\e972";
+    content: "\e972";
 }
+
 .kix-icon-warnsign:before {
-  content: "\e973";
+    content: "\e973";
 }
+
 .kix-icon-triangle-down .path1:before {
-  content: "\e974";
-  color: rgb(255, 255, 255);
+    content: "\e974";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-triangle-down .path2:before {
-  content: "\e975";
-  margin-left: -1em;
-  color: rgb(91, 91, 91);
+    content: "\e975";
+    margin-left: -1em;
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-triangle-left .path1:before {
-  content: "\e976";
-  color: rgb(255, 255, 255);
+    content: "\e976";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-triangle-left .path2:before {
-  content: "\e977";
-  margin-left: -1em;
-  color: rgb(91, 91, 91);
+    content: "\e977";
+    margin-left: -1em;
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-triangle-right .path1:before {
-  content: "\e978";
-  color: rgb(255, 255, 255);
+    content: "\e978";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-triangle-right .path2:before {
-  content: "\e979";
-  margin-left: -1em;
-  color: rgb(91, 91, 91);
+    content: "\e979";
+    margin-left: -1em;
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-triangle-up .path1:before {
-  content: "\e97a";
-  color: rgb(255, 255, 255);
+    content: "\e97a";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-triangle-up .path2:before {
-  content: "\e97b";
-  margin-left: -1em;
-  color: rgb(91, 91, 91);
+    content: "\e97b";
+    margin-left: -1em;
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-drawer-ok .path1:before {
-  content: "\e97c";
-  color: rgb(198, 198, 198);
+    content: "\e97c";
+    color: rgb(198, 198, 198);
 }
+
 .kix-icon-drawer-ok .path2:before {
-  content: "\e97d";
-  margin-left: -1em;
-  color: rgb(175, 206, 100);
+    content: "\e97d";
+    margin-left: -1em;
+    color: rgb(175, 206, 100);
 }
+
 .kix-icon-drawer-X .path1:before {
-  content: "\e97e";
-  color: rgb(198, 198, 198);
+    content: "\e97e";
+    color: rgb(198, 198, 198);
 }
+
 .kix-icon-drawer-X .path2:before {
-  content: "\e97f";
-  margin-left: -1em;
-  color: rgb(214, 92, 81);
+    content: "\e97f";
+    margin-left: -1em;
+    color: rgb(214, 92, 81);
 }
+
 .kix-icon-i-orange .path1:before {
-  content: "\e980";
-  color: rgb(255, 255, 255);
+    content: "\e980";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-i-orange .path2:before {
-  content: "\e981";
-  margin-left: -1em;
-  color: rgb(239, 127, 26);
+    content: "\e981";
+    margin-left: -1em;
+    color: rgb(239, 127, 26);
 }
+
 .kix-icon-letter-blue .path1:before {
-  content: "\e982";
-  color: rgb(91, 91, 91);
+    content: "\e982";
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-letter-blue .path2:before {
-  content: "\e983";
-  margin-left: -1em;
-  color: rgb(0, 141, 210);
+    content: "\e983";
+    margin-left: -1em;
+    color: rgb(0, 141, 210);
 }
+
 .kix-icon-letter-blue .path3:before {
-  content: "\e984";
-  margin-left: -1em;
-  color: rgb(91, 91, 91);
+    content: "\e984";
+    margin-left: -1em;
+    color: rgb(91, 91, 91);
 }
+
 .kix-icon-letter-white .path1:before {
-  content: "\e985";
-  color: rgb(188, 189, 189);
+    content: "\e985";
+    color: rgb(188, 189, 189);
 }
+
 .kix-icon-letter-white .path2:before {
-  content: "\e986";
-  margin-left: -1em;
-  color: rgb(254, 254, 254);
+    content: "\e986";
+    margin-left: -1em;
+    color: rgb(254, 254, 254);
 }
+
 .kix-icon-letter-white .path3:before {
-  content: "\e987";
-  margin-left: -1em;
-  color: rgb(188, 189, 189);
+    content: "\e987";
+    margin-left: -1em;
+    color: rgb(188, 189, 189);
 }
+
 .kix-icon-Plus .path1:before {
-  content: "\e988";
-  color: rgb(255, 255, 255);
+    content: "\e988";
+    color: rgb(255, 255, 255);
 }
+
 .kix-icon-Plus .path2:before {
-  content: "\e989";
-  margin-left: -1em;
-  color: rgb(124, 182, 49);
+    content: "\e989";
+    margin-left: -1em;
+    color: rgb(124, 182, 49);
 }
+
 .kix-icon-Plus .path3:before {
-  content: "\e98a";
-  margin-left: -1em;
-  color: rgb(130, 200, 38);
+    content: "\e98a";
+    margin-left: -1em;
+    color: rgb(130, 200, 38);
 }
+
 .kix-icon-unknown-filetype:before {
-  content: "\e98b";
+    content: "\e98b";
 }
