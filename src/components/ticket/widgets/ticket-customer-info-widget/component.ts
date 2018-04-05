@@ -1,21 +1,14 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { Customer } from "@kix/core/dist/model";
+import { CustomerWidgetComponentState } from './CustomerWidgetComponentState';
 
 class CustomerInfoWidgetComponent {
 
-    private state: any;
+    private state: CustomerWidgetComponentState;
 
-    public onCreate(): void {
-        this.state = {
-            instanceId: null,
-            customer: null,
-            widgetConfiguration: null,
-            isLoading: true
-        };
-    }
-
-    public onInput(input: any) {
-        this.state.instanceId = input.instanceId;
+    public onCreate(input: any): void {
+        this.state = new CustomerWidgetComponentState(input.instanceId);
     }
 
     public onMount(): void {
@@ -23,7 +16,6 @@ class CustomerInfoWidgetComponent {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-
         this.loadCustomer(context.contextObjectId);
     }
 
@@ -36,10 +28,19 @@ class CustomerInfoWidgetComponent {
 
     private loadCustomer(ticketId: number): void {
         const ticket = TicketService.getInstance().getTicket(ticketId);
-        if (ticket) {
+        if (ticket && this.customerChanged(ticket.customer)) {
             this.state.customer = ticket.customer;
-            this.state.isLoading = false;
         }
+    }
+
+    private customerChanged(customer: Customer): boolean {
+        let changed = true;
+
+        if (this.state.customer) {
+            changed = !this.state.customer.equals(customer);
+        }
+
+        return changed;
     }
 
 }

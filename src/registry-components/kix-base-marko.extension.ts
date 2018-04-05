@@ -11,8 +11,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'customers/customers-module',
             'home/home-module',
             'reports/reports-module',
-            'search/search-module',
-            'icon-bar/dashboard-configuration/dashboard-configuration-dialog'
+            'search/search-module'
         ];
     }
 
@@ -57,7 +56,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['home', 'home/home-module'],
             ['reports', 'reports/reports-module'],
             ['search', 'search/search-module'],
-            ['dashboard-configuration-dialog', 'icon-bar/dashboard-configuration/dashboard-configuration-dialog'],
             ['icon', '_base-components/icon']
         ];
     }

@@ -1,29 +1,9 @@
-<if(component.hasSidebarsToShow() || component.isConfigMode())>
-    <div.sidebar>
-        <for(widget in state.configuredWidgets)>
-            <if(component.showSidebar(widget))>
-                <!--nicht mehr relevant, wenn durch draggable-container befüllt (da ist dann sowieso div drum (drag-widget))-->
-                <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
-                    <include(component.getWidgetTemplate(widget.instanceId), { instanceId: widget.instanceId, minimizable: false })/>
-                </div>
-            </if>
+<if(state.showSidebar)>
+    <div.sidebar-area>
+        <for(sidebar in state.sidebars)>
+            <div.sidebar key=("sidebar" + Math.random())>
+                <include(component.getSidebarTemplate(sidebar.instanceId), { instanceId: sidebar.instanceId, minimizable: false })/>
+            </div>
         </for>
     </div>
 </if>
-<div.sidebar-menu>
-    <!-- <if(state.showIconBar)>
-        <icon-bar/>
-    </if> -->
-    <if(state.configuredWidgets)>
-        <div.widget-bar>
-            <for(widget in state.configuredWidgets)>
-                <if(component.sidebarAvailable(widget.instanceId))>
-                    <div.bar-icon class=(widget.configuration.show ? "select-active" : "")
-                        on-click('toggleSidebarWidget', widget.instanceId)>
-                        <span class=(widget.configuration.icon ? "kix-icon-" + widget.configuration.icon : "")/>
-                    </div>
-                </if>
-            </for>
-        </div>
-    </if>
-</div>

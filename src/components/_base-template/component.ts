@@ -44,6 +44,10 @@ class BaseTemplateComponent {
         });
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+
+        const context = ContextService.getInstance().getContext();
+        this.state.hasExplorer = context && context.isExplorerBarShown();
+        this.setGridColumns();
     }
 
     public toggleConfigurationMode(): void {
@@ -71,32 +75,28 @@ class BaseTemplateComponent {
                 type === ContextNotification.CONTEXT_CHANGED ||
                 type === ContextNotification.SIDEBAR_BAR_TOGGLED
             ) {
-                (this as any).setStateDirty();
+                const context = ContextService.getInstance().getContext();
+                this.state.hasExplorer = context && context.isExplorerBarShown();
+                this.setGridColumns();
             }
         }
     }
 
-    private getGridColumns(): string {
-        let gridColumns = '[menu-col] 4.5rem';
-        if (this.isExplorerBarShown()) {
-            gridColumns += ' [explorer-bar] min-content';
-        }
-        gridColumns += ' [content] minmax(40rem, auto)';
-        if (
-            (ContextService.getInstance().getContext()
-                && ContextService.getInstance().getContext().isSidebarShown())
-            || ApplicationService.getInstance().isConfigurationMode()
-        ) {
-            gridColumns += ' [sidebar] min-content';
-        }
-        gridColumns += ' [sidebar-menu] min-content';
+    private setGridColumns(): void {
+        this.state.gridColumns = '[menu-col] 4.5rem';
 
-        return gridColumns;
-    }
+        if (this.state.hasExplorer) {
+            this.state.gridColumns += ' [explorer-bar] min-content';
+        }
 
-    private isExplorerBarShown(): boolean {
-        return ContextService.getInstance().getContext()
-            && ContextService.getInstance().getContext().isExplorerBarShown();
+        this.state.gridColumns += ' [content] minmax(40rem, auto)';
+
+        const context = ContextService.getInstance().getContext();
+        if ((context && context.isSidebarShown())) {
+            this.state.gridColumns += ' [sidebar] min-content';
+        }
+
+        this.state.gridColumns += ' [sidebar-menu] min-content';
     }
 }
 

@@ -1,25 +1,28 @@
 <div.wrapper>
     <if(state.initialized)>
         <kix-header/>
-        <div.content-wrapper style=("grid-template-columns: " + component.getGridColumns())>
-            <main-menu/>
-            <div.site-navigation class={"with-explorer": component.isExplorerBarShown()}>
+        <div.content-wrapper style=("grid-template-columns: " + state.gridColumns)>
+            <main-menu no-update/>
+            <div.site-navigation class={"with-explorer": state.hasExplorer} no-update>
                 <breadcrumb/>
                 <back/>
             </div>
-            <explorerbar/>
-            <div.content>
+            <explorerbar no-update/>
+            <div.content no-update>
                 <router-outlet id="base-router"/>
             </div>
-            <sidebar context="dashboard"/>
+            <sidebar no-update/>
+            <div.site-menu-wrapper no-update>
+                <sidebar-menu/>
+            </div>
         </div>
-        <kix-footer/>
+        <kix-footer no-update/>
         <if(state.showShieldOverlay)>
-            <div.shield-overlay/>
+            <div.shield-overlay no-update/>
         </if>
         <if(state.showMainDialog)>
             <!-- div zwecks Marko Bug #920 -->
-            <div>
+            <div no-update>
                 <dialog-main>
                     <@title>Dialogtitel</@title>
                     <@content>

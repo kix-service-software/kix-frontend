@@ -5,7 +5,6 @@ export class TicketDetailsComponentState {
 
     public constructor(
         public ticketId: number = null,
-        public ticket: Ticket = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],
         public generalActions: AbstractAction[] = [],

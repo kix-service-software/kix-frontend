@@ -1,6 +1,6 @@
 import { IWidgetFactoryExtension } from '@kix/core/dist/extensions';
 
-import { NotesSettings } from './../../../components/widgets/notes/model/NotesSettings';
+import { NotesSettings } from './../../../components/widgets/notes/NotesSettings';
 import { NotesWidget } from './NotesSidebar';
 import { WidgetType, IWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 

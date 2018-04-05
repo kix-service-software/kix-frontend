@@ -90,11 +90,11 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     WidgetType.SIDEBAR, false, true, true, WidgetSize.SMALL, "note", false
                 )
             );
-        const sidebarRows = [["ticket-module-notes"]];
+        const sidebars = ["ticket-module-notes"];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notesWidget];
 
         return new DashboardConfiguration(
-            this.getModuleId(), contentRows, sidebarRows, explorerRows,
+            this.getModuleId(), contentRows, sidebars, explorerRows,
             contentConfiguredWidgets, sidebarConfiguredWidgets, explorerConfiguredWidgets, []
         );
     }

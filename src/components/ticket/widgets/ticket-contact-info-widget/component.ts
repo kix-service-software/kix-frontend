@@ -1,29 +1,20 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { Contact } from "@kix/core/dist/model";
+import { ContactInfoWidgetComponentState } from './ContactInfoWidgetComponentState';
 
 class ContactInfoWidgetComponent {
 
-    private state: any;
+    private state: ContactInfoWidgetComponentState;
 
-    public onCreate(): void {
-        this.state = {
-            instanceId: null,
-            contact: null,
-            widgetConfiguration: null,
-            isLoading: true
-        };
-    }
-
-    public onInput(input: any) {
-        this.state.instanceId = input.instanceId;
+    public onCreate(input: any): void {
+        this.state = new ContactInfoWidgetComponentState(input.instanceId);
     }
 
     public onMount(): void {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-
         this.loadContact(context.contextObjectId);
     }
 
@@ -36,10 +27,19 @@ class ContactInfoWidgetComponent {
 
     private loadContact(ticketId: number): void {
         const ticket = TicketService.getInstance().getTicket(ticketId);
-        if (ticket) {
+        if (ticket && this.contactChanged(ticket.contact)) {
             this.state.contact = ticket.contact;
-            this.state.isLoading = false;
         }
+    }
+
+    private contactChanged(contact: Contact): boolean {
+        let changed = true;
+
+        if (this.state.contact) {
+            changed = !this.state.contact.equals(contact);
+        }
+
+        return changed;
     }
 
 }

@@ -1,0 +1,8 @@
+<div.widget-bar>
+    <for(sidebar in state.sidebars)>
+        <div.bar-icon class=(sidebar.configuration.show ? "select-active" : "") on-click('toggleSidebar', sidebar.instanceId)
+            title=sidebar.configuration.title>
+            <span class=sidebar.configuration.icon/>
+        </div>
+    </for>
+</div>

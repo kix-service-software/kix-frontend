@@ -1,4 +1,4 @@
-import { NotesComponentState } from './model/NotesComponentState';
+import { NotesComponentState } from './NotesComponentState';
 import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';

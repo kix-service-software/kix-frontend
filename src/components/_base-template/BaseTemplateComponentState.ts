@@ -13,7 +13,9 @@ export class BaseTemplateComponentState {
         public showInfoOverlay: boolean = false,
         public showMainDialog: boolean = false,
         public mainDialogTemplate: any = null,
-        public mainDialogInput: any = null
+        public mainDialogInput: any = null,
+        public gridColumns: string = null,
+        public hasExplorer: boolean = false
     ) { }
 
 }

@@ -5,4 +5,5 @@ export class ContactInfoComponentState {
     public constructor(
         public contact: Contact = null
     ) { }
+
 }

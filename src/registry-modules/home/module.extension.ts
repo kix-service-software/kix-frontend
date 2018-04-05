@@ -87,20 +87,20 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 "notes-widget", "Notes", [], {
                     notes: 'Test <strong style="color:red">123</strong>'
                 },
-                WidgetType.SIDEBAR, false, false, true, WidgetSize.SMALL, 'note', false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.SMALL, 'kix-icon-note', false)
             );
         const notes2 =
             new ConfiguredWidget("20170915094112",
                 new WidgetConfiguration(
                     "notes-widget", "Notes 2", [], { notes: '' }, WidgetType.SIDEBAR,
-                    false, false, true, WidgetSize.SMALL, 'note', false
+                    false, false, true, WidgetSize.SMALL, 'kix-icon-note', false
                 )
             );
-        const sidebarRows: string[][] = [['20170915101514'], ['20170915094112'], ['20170915085411']];
+        const sidebars: string[] = ['20170915101514', '20170915094112'];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notes, notes2];
 
         return new DashboardConfiguration(
-            this.getModuleId(), contentRows, sidebarRows, [],
+            this.getModuleId(), contentRows, sidebars, [],
             contentConfiguredWidgets, sidebarConfiguredWidgets, [], []
         );
     }

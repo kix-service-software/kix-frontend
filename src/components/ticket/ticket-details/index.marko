@@ -2,7 +2,7 @@
     <if(state.loading)>
         <loading-spinner/>
     </if>
-    <else-if(state.ticket)>
+    <else>
         <widget minimizable=true actions=state.generalActions title=component.getTitle()>
             <@contentActions>
                 <div.ticket-actions-wrapper>
@@ -16,7 +16,7 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix>
-                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticket.TicketID})/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId})/>
                         </li>
                     </for>
                 </ul>
@@ -24,8 +24,5 @@
             <@filter/>
         </widget>
         <article-list-widget ticketId=state.ticketId instanceId="article-list"/>
-    </else-if>
-    <else>
-        <span>Keine Ticketdaten (ID: ${state.ticketId}) verfügbar.</span>
     </else>
 </div>

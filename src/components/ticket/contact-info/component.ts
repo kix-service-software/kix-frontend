@@ -9,8 +9,21 @@ export class ContactInfoComponent {
     }
 
     public onInput(input: any): void {
-        this.state.contact = input.contact;
+        if (this.contactChanged(input)) {
+            this.state.contact = input.contact;
+        }
     }
+
+    private contactChanged(input: any): boolean {
+        let changed = true;
+
+        if (this.state.contact) {
+            changed = input.contact && (this.state.contact.ContactID !== input.contact.ContactID);
+        }
+
+        return changed;
+    }
+
 }
 
 module.exports = ContactInfoComponent;
