@@ -75,8 +75,9 @@ class WidgetComponent {
         return ApplicationService.getInstance().isConfigurationMode();
     }
 
-    private hasFilter(filter: any): boolean {
-        return this.isInputDefined(filter) && !this.isConfigMode();
+    private hasHeaderContent(headerContent: any): boolean {
+        // TODO: ConfigMode blendet nur Filter aus, aber wahrscheinlich nicht den anderen "HeaderContent"
+        return this.isInputDefined(headerContent) && !this.isConfigMode();
     }
 
     private isInputDefined(input: any): boolean {
