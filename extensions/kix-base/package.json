@@ -10,16 +10,7 @@
             "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
         },
         "kix:communicator": {
-            "application-communicator": "../../dist/communicators/extensions/ApplicationCommunicator.extension",
-            "authentication-communicator": "../../dist/communicators/extensions/AuthenticationCommunicator.extension",
-            "configuration-communicator": "../../dist/communicators/extensions/ConfigurationCommunicator.extension",
-            "dashboard-communicator": "../../dist/communicators/extensions/DashboardCommunicator.extension",
-            "icon-communicator": "../../dist/communicators/extensions/IconCommunicator.extension",
-            "main-menu-communicator": "../../dist/communicators/extensions/MainMenuCommunicator.extension",
-            "personal-settings-communicator": "../../dist/communicators/extensions/PersonalSettingsCommunicator.extension",
-            "sidebar-communicator": "../../dist/communicators/extensions/SidebarCommunicator.extension",
-            "ticket-communicator": "../../dist/communicators/extensions/TicketCommunicator.extension",
-            "widget-communicator": "../../dist/communicators/extensions/WidgetCommunicator.extension"
+            "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
         },
         "kix:personal:settings": {
             "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
