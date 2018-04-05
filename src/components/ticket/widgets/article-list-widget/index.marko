@@ -1,6 +1,12 @@
 <div.article-table-widget>
     <widget configurationTagId="article-list-configuration" instanceId=state.instanceId actions=state.generalArticleActions
         title=component.getTitle()>
+        <@headerContent>
+            <div.header-attachments on-click('attachmentsClicked')>
+                <span.kix-icon-attachement/>(${component.getAttachmentsCount()})
+            </div>
+            <filter filterValue=state.filterValue on-filter('filter')/>
+        </@headerContent>
         <@content>
             <div.article-table-wrapper>
                 <if(state.standardTable)>
@@ -8,11 +14,5 @@
                 </if>
             </div>
         </@content>
-        <@filter>
-            <div.header-attachments on-click('attachmentsClicked')>
-                <span.kix-icon-attachement/>(${component.getAttachmentsCount()})
-            </div>
-            <filter filterValue=state.filterValue on-filter('filter')/>
-        </@filter>
     </widget>
 </div>

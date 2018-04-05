@@ -1,13 +1,13 @@
 <div.tab-lane>
     <widget type=8 title="Ticketinformationen">
-        <@filter>
+        <@headerContent>
             <ul.tab-list>
                 <for(tab in state.tabWidgets)>
                     <li class=(state.activeTabId === tab.instanceId ? "active" : "") on-click('tabClicked', tab.instanceId)
                         key=tab.instanceId>${tab.configuration.title}</li>
                 </for>
             </ul>
-        </@filter>
+        </@headerContent>
         <@content>
             <div.tab-content>
                 <if(state.activeTabId)>
@@ -15,6 +15,5 @@
                 </if>
             </div>
         </@content>
-        <@contentActions/>
     </widget>
 </div>

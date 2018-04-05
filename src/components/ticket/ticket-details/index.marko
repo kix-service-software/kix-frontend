@@ -4,11 +4,6 @@
 <else>
     <div.ticket-details>
         <widget minimizable=true actions=component.getActions title=component.getTitle()>
-            <@contentActions>
-                <div.ticket-actions-wrapper>
-                    <action-list list=component.getTicketActions()/>
-                </div>
-            </@contentActions>
             <@content>
                 <ul.lane-list no-update>
                     <li.clearfix key=component.getLaneKey()>
@@ -21,7 +16,11 @@
                     </for>
                 </ul>
             </@content>
-            <@filter/>
+            <@contentActions>
+                <div.ticket-actions-wrapper>
+                    <action-list list=component.getTicketActions()/>
+                </div>
+            </@contentActions>
         </widget>
         <article-list-widget ticketId=state.ticketId instanceId="article-list"/>
     </div>

@@ -3,12 +3,12 @@
     <@icon>
         <span.kix-icon-minus/>
     </@icon>
+    <@headerContent>
+        <filter on-filter('filter')/>
+    </@headerContent>
     <@content>
         <if(state.standardTable)>
             <standard-table standardTable=state.standardTable/>
         </if>
     </@content>
-    <@filter>
-        <filter on-filter('filter')/>
-    </@filter>
 </widget>
