@@ -1,6 +1,11 @@
-<widget instanceId="article-receiver-list-widget" minimizable=false title=state.title>
+<widget instanceId=input.instanceId minimizable=false title=state.title>
     <@icon>
-        <span.kix-icon-man/>
+        <if(state.configuration)>
+            <span class=state.configuration.icon/>
+        </if>
+        <else>
+            <span.kix-icon-man/>
+        </else>
     </@icon>
     <@content>
         <ul.receiver-list-container>

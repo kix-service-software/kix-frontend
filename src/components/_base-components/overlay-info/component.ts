@@ -22,6 +22,11 @@ class ObjectInfoOverlayComponent {
                 }
             }
         }, false);
+
+        const context = ContextService.getInstance().getContext();
+        if (context) {
+            context.setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
+        }
     }
 
     private overlayClicked(): void {
@@ -70,13 +75,6 @@ class ObjectInfoOverlayComponent {
 
     private closeOverlay() {
         ApplicationService.getInstance().toggleInfoOverlay();
-    }
-
-    private getData(): any {
-        return {
-            ...this.state.data,
-            instanceId: this.state.instanceId
-        };
     }
 
 }

@@ -94,7 +94,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const sidebars = ["ticket-module-notes"];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notesWidget];
 
-        return new TicketContextConfiguration(this.getModuleId(), [], [], [], []);
+        return new TicketContextConfiguration(this.getModuleId(), [], [], [], [], []);
     }
 
 }

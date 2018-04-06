@@ -40,8 +40,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const content: string[] = ['20170920101621'];
         const contentWidgets = [ticketListWidget];
 
-        return new HomeContextConfiguration(
-            this.getModuleId(), [], [], [], [], content, contentWidgets);
+        return new HomeContextConfiguration(this.getModuleId(), [], [], [], [], content, contentWidgets, []);
     }
 
 }

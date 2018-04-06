@@ -112,17 +112,17 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const laneTabWidgets = [ticketInfoLane];
 
         // Sidebars
-        const customerInfo =
+        const customerInfoSidebar =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
                 "ticket-customer-info-widget", "Kunde", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
             );
-        const contactInfo =
+        const contactInfoSidebar =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
                 "ticket-contact-info-widget", "Ansprechpartner", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-man', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfo, contactInfo];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
 
         // actions
         const generalActions = ['new-ticket-action'];
@@ -165,6 +165,42 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 false, true, WidgetSize.LARGE, null, false)
             );
 
+        // Overlays
+        const customerInfoOverlay =
+            new ConfiguredWidget("customer-info-overlay", new WidgetConfiguration(
+                "ticket-customer-info-widget", "Kunde1", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const contactInfoOverlay =
+            new ConfiguredWidget("contact-info-overlay", new WidgetConfiguration(
+                "ticket-contact-info-widget", "Ansprechpartner1", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const toReceiverOverlay =
+            new ConfiguredWidget("to-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: An", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const ccReceiverOverlay =
+            new ConfiguredWidget("cc-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: CC", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const bccReceiverOverlay =
+            new ConfiguredWidget("bcc-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: BCC", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const articleAttachmentOverlay =
+            new ConfiguredWidget("article-attachment-widget", new WidgetConfiguration(
+                "article-receiver-list-widget", "Anlagen", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-attachement', false)
+            );
+        const infoOverlayWidgets = [
+            customerInfoOverlay, contactInfoOverlay,
+            toReceiverOverlay, ccReceiverOverlay, bccReceiverOverlay,
+            articleAttachmentOverlay
+        ];
+
         return new TicketDetailsContextConfiguration(
             this.getModuleId(),
             [],
@@ -177,7 +213,8 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             laneTabWidgets,
             articleWidget,
             generalActions,
-            ticketActions
+            ticketActions,
+            infoOverlayWidgets
         );
     }
 

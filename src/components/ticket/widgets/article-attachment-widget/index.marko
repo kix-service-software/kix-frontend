@@ -1,4 +1,5 @@
-<widget instanceId="article-attachment-widget" minimizable=false title="Anlagen" actions=state.actions >
+<widget instanceId="article-attachment-widget" minimizable=false
+    title=(state.configuration ? state.configuration.title : "Anlagen") actions=state.actions>
     <@icon>
         <span.kix-icon-attachement/>
     </@icon>

@@ -1,5 +1,6 @@
 import { ArticleReceiverListWidgetComponentState } from './ArticleReceiverListWidgetComponentState';
 import { ArticleProperty } from '@kix/core/dist/model';
+import { ContextService } from '@kix/core/dist/browser/context';
 
 class ArticleReceiverListWidget {
 
@@ -10,12 +11,10 @@ class ArticleReceiverListWidget {
     }
 
     public onInput(input: any): void {
-        this.state.receiverList = input;
-        this.state.title = 'Empfänger';
-        if (this.state.receiverList) {
-            // TODO: ggf. über "type" eine Bezeichnung/Übersetzung ermitteln, statt es direkt zu verwenden
-            this.state.title += ': ' + this.state.receiverList[0].type;
-        }
+        this.state.receiverList = input.receiver;
+        this.state.configuration =
+            ContextService.getInstance().getContext().getWidgetConfiguration(input.instanceId);
+        this.state.title = this.state.configuration ? this.state.configuration.title : 'Empfänger';
     }
 
 }
