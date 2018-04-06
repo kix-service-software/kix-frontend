@@ -1,4 +1,5 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
@@ -17,13 +18,4 @@
             </div>
         </div>
     </@content>
-    <@contentActions>
-        <ul.content-actions>
-            <for(action in state.actions)>
-                <li>
-                    <action action=action/>
-                </li>
-            </for>
-        </ul>
-    </@contentActions>
 </widget>

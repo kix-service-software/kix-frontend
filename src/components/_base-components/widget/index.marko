@@ -41,7 +41,20 @@
     </div>
     <div.widget-content.clearfix>
         <if(component.isInputDefined(input.contentActions))>
-            <include(input.contentActions)/>
+            <if(component.isContentWidget())>
+                <div.content-actions key=("content-actions" + Math.random())>
+                    <action-list list=input.contentActions/>
+                </div>
+            </if>
+            <else-if(component.isLaneOrLaneTabWidget())>
+                <ul.content-actions key=("content-actions" + Math.random())>
+                    <for(action in input.contentActions)>
+                        <li>
+                            <action action=action/>
+                        </li>
+                    </for>
+                </ul>
+            </else-if>
         </if>
         <if(!state.minimized && component.isInputDefined(input.content))>
             <include(input.content)/>

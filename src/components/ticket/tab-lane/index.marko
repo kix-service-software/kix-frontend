@@ -11,7 +11,7 @@
         <@content>
             <div.tab-content>
                 <if(state.activeTabId)>
-                    <include(component.getWidgetTemplate(state.activeTabId), {type: 16, instanceId: state.activeTabId})/>
+                    <include(component.getWidgetTemplate(state.activeTabId), {type: component.getLaneTabWidgetType(), instanceId: state.activeTabId})/>
                 </if>
             </div>
         </@content>
