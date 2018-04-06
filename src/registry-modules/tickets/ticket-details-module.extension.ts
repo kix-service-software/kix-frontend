@@ -155,12 +155,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const customerInfo =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
                 "ticket-customer-info-widget", "Kunde", [], {},
-                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man', false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfo =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
                 "ticket-contact-info-widget", "Ansprechpartner", [], {},
-                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man', false)
+                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [customerInfo, contactInfo];
