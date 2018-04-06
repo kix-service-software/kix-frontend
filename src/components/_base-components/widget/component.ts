@@ -29,7 +29,7 @@ class WidgetComponent {
         this.state.widgetConfiguration = config;
 
         if (config) {
-            if ((config.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
+            if (this.state.type === WidgetType.SIDEBAR) {
                 this.state.minimizable = false;
                 this.state.minimized = false;
             } else {
@@ -48,7 +48,7 @@ class WidgetComponent {
     private minimizeWidget(): void {
         if (this.state.minimizable) {
             if (this.state.explorer) {
-                ContextService.getInstance().toggleExplorer();
+                // ContextService.getInstance().getContext().toggleExplorer();
             } else {
                 this.state.minimized = !this.state.minimized;
             }
@@ -56,7 +56,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        ContextService.getInstance().toggleExplorerBar();
+        ContextService.getInstance().getContext().toggleExplorerBar();
     }
 
     private showConfiguration(): void {
@@ -95,9 +95,7 @@ class WidgetComponent {
             classes.push('minimized');
         }
 
-        if (this.state.widgetConfiguration) {
-            classes.push(this.getWidgetTypeClass(this.state.widgetConfiguration.type));
-        } else if (this.state.type) {
+        if (this.state.type) {
             classes.push(this.getWidgetTypeClass(this.state.type));
         } else {
             classes.push('content-widget');

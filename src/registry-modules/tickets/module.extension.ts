@@ -1,7 +1,8 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize
+    WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize
 } from '@kix/core/dist/model/';
+import { TicketContextConfiguration } from '@kix/core/dist/browser/ticket';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -19,7 +20,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     showTotalCount: true,
                     properties: ["TicketNumber", "PriorityID", "StateID", "TypeID", "Title", "Created", "Age"]
                 },
-                WidgetType.CONTENT, false, true, true, WidgetSize.LARGE, null, true)
+                false, true, WidgetSize.LARGE, null, true)
             );
 
         const chart1 =
@@ -32,7 +33,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     showAxes: true,
                     showValues: true
                 },
-                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
+                false, true, WidgetSize.SMALL, null, true)
             );
 
         const chart2 =
@@ -45,7 +46,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     showAxes: true,
                     showValues: true
                 },
-                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
+                false, true, WidgetSize.SMALL, null, true)
             );
 
         const chart3 =
@@ -58,7 +59,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                     showAxes: true,
                     showValues: true
                 },
-                WidgetType.CONTENT, false, true, true, WidgetSize.SMALL, null, true)
+                false, true, WidgetSize.SMALL, null, true)
             );
 
         const contentRows = [
@@ -71,12 +72,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const queueExplorer =
             new ConfiguredWidget("20171211155412", new WidgetConfiguration(
                 "ticket-queue-explorer", "Übersicht Queues", [], {},
-                WidgetType.EXPLORER, false, true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
         const servicesExplorer =
             new ConfiguredWidget("20171215093654", new WidgetConfiguration(
                 "ticket-service-explorer", "Übersicht Services", [], {},
-                WidgetType.EXPLORER, false, true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const explorerRows: string[][] = [['20171211155412'], ['20171215093654']];
@@ -87,13 +88,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 "ticket-module-notes",
                 new WidgetConfiguration(
                     "notes-widget", "Notizen", [], { notes: "Ticketnotizen" },
-                    WidgetType.SIDEBAR, false, true, true, WidgetSize.SMALL, "note", false
+                    false, true, WidgetSize.SMALL, "note", false
                 )
             );
         const sidebars = ["ticket-module-notes"];
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notesWidget];
 
-        return new DashboardConfiguration(this.getModuleId(), [], [], [], [], [], [], []);
+        return new TicketContextConfiguration(this.getModuleId(), [], [], [], []);
     }
 
 }

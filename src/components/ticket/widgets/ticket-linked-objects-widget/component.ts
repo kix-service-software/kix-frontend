@@ -14,7 +14,6 @@ import {
     TableColumnConfiguration, StandardTable,
     ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory
 } from '@kix/core/dist/browser';
-import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 class LinkedObjectsWidgetComponent {
@@ -118,7 +117,7 @@ class LinkedObjectsWidgetComponent {
 
             if (index >= 0) {
                 groupEntry[1][index].size = column.size;
-                DashboardService.getInstance().saveWidgetConfiguration(
+                ContextService.getInstance().saveWidgetConfiguration(
                     this.state.instanceId, this.state.widgetConfiguration
                 );
             }

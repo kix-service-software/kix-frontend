@@ -3,7 +3,7 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 import { TreeNode, TreeNodeProperty } from '@kix/core/dist/model';
 import { ContextFilter, ObjectType, Queue, TicketProperty } from '@kix/core/dist/model/';
 
-import { TicketQueueExplorerComponentState } from './model/TicketQueueExplorerComponentState';
+import { TicketQueueExplorerComponentState } from './TicketQueueExplorerComponentState';
 
 export class QueueExplorerComponent {
 
@@ -61,13 +61,6 @@ export class QueueExplorerComponent {
 
     private isConfigMode(): boolean {
         return true;
-    }
-
-    private queueClicked(queueId: number): void {
-        const contextFilter =
-            new ContextFilter('queue-explorer', 'queue-explorer', ObjectType.QUEUE, TicketProperty.QUEUE_ID, queueId);
-
-        ContextService.getInstance().provideContextFilter(contextFilter);
     }
 }
 

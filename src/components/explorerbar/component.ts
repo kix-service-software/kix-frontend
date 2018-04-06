@@ -23,7 +23,7 @@ class ExplorerbarComponent {
             if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED ||
                 type === ContextNotification.CONTEXT_CHANGED) {
                 const context = ContextService.getInstance().getContext();
-                this.state.explorer = context ? context.getWidgets(WidgetType.EXPLORER) : [];
+                this.state.explorer = context ? (context.getExplorer() || []) : [];
             } else if (type === ContextNotification.EXPLORER_TOGGLED ||
                 type === ContextNotification.EXPLORER_BAR_TOGGLED) {
                 (this as any).setStateDirty('explorer');
@@ -46,7 +46,7 @@ class ExplorerbarComponent {
     }
 
     private toggleExplorerBar(): void {
-        ContextService.getInstance().toggleExplorerBar();
+        ContextService.getInstance().getContext().toggleExplorerBar();
     }
 
     private isConfigMode(): boolean {

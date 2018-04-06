@@ -1,4 +1,5 @@
 import { ContextService } from '@kix/core/dist/browser/context';
+import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class TabLaneComponent {
 
@@ -27,7 +28,8 @@ class TabLaneComponent {
 
     private getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getContext();
-        return context ? context.getWidgetTemplate(instanceId) : undefined;
+        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
 }

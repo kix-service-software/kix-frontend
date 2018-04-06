@@ -1,5 +1,6 @@
-import { ConfiguredWidget, Ticket, AbstractAction, TicketDetailsDashboardConfiguration } from '@kix/core/dist/model';
+import { ConfiguredWidget, Ticket, AbstractAction } from '@kix/core/dist/model';
 import { ILabelProvider } from '@kix/core/dist/browser';
+import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
 
 export class TicketDetailsComponentState {
 
@@ -13,7 +14,7 @@ export class TicketDetailsComponentState {
         public ticketHookDivider: string = '',
         public loadingTicket: boolean = true,
         public loadingConfig: boolean = true,
-        public ticketDeatilsConfiguration: TicketDetailsDashboardConfiguration = null
+        public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null
     ) { }
 
 }

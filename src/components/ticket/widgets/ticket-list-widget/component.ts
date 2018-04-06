@@ -1,5 +1,4 @@
-import { TicketListComponentState } from './model/TicketListComponentState';
-import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
+import { TicketListComponentState } from './TicketListComponentState';
 import {
     ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
@@ -90,7 +89,7 @@ class TicketListWidgetComponent {
 
         if (index >= 0) {
             this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-            DashboardService.getInstance().saveWidgetConfiguration(
+            ContextService.getInstance().saveWidgetConfiguration(
                 this.state.instanceId, this.state.widgetConfiguration
             );
         }

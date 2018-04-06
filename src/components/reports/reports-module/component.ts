@@ -13,14 +13,6 @@ class ReportsComponent {
         this.state = new ReportsComponentState();
     }
 
-    public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('reports', 'reports'), true);
-
-        const breadcrumbDetails =
-            new BreadcrumbDetails('reports', null, null, 'Reports-Dashboard');
-        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
-    }
-
 }
 
 module.exports = ReportsComponent;

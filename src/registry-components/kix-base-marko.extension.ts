@@ -18,19 +18,15 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getTicketDependencies(): string[] {
         return [
             'ticket/explorer/ticket-queue-explorer',
-            'ticket/explorer/ticket-queue-explorer/ticket-queue-explorer-configuration',
             'ticket/explorer/ticket-service-explorer',
-            'ticket/explorer/ticket-service-explorer/ticket-service-explorer-configuration',
             'ticket/ticket-module',
             'ticket/ticket-details',
             'ticket/ticket-dynamic-fields-container',
             'ticket/widgets/article-attachment-widget',
             'ticket/widgets/article-receiver-list-widget',
             'ticket/widgets/ticket-list-widget',
-            'ticket/widgets/ticket-list-widget/ticket-list-configuration',
             'ticket/widgets/ticket-info-widget',
             'ticket/widgets/ticket-history-widget',
-            'ticket/widgets/ticket-info-widget/ticket-info-configuration',
             'ticket/widgets/ticket-description-widget',
             'ticket/widgets/ticket-customer-info-widget',
             'ticket/widgets/ticket-contact-info-widget',
@@ -80,9 +76,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
         const explorer: Array<[string, string]> = [
             ['ticket-queue-explorer', 'ticket/explorer/ticket-queue-explorer'],
-            ['ticket-queue-explorer-configuration', 'ticket/explorer/ticket-queue-explorer/ticket-queue-explorer-configuration'],
-            ['ticket-service-explorer', 'ticket/explorer/ticket-service-explorer'],
-            ['ticket-service-explorer-configuration', 'ticket/explorer/ticket-service-explorer/ticket-service-explorer-configuration'],
+            ['ticket-service-explorer', 'ticket/explorer/ticket-service-explorer']
         ];
 
         return [
