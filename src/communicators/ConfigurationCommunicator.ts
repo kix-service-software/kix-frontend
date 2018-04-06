@@ -5,8 +5,7 @@ import {
     LoadConfigurationResult,
     SaveConfigurationRequest,
     SocketEvent,
-    User,
-    DashboardConfiguration
+    User
 } from '@kix/core/dist/model';
 import { CommunicatorResponse } from '@kix/core/dist/common';
 

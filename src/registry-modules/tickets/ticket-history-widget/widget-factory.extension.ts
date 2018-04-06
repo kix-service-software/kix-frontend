@@ -23,7 +23,7 @@ export class TicketHistoryWidgetFactoryExtension implements IWidgetFactoryExtens
         };
         return new WidgetConfiguration(
             this.widgetId, 'History', ['print-ticket-action'],
-            settings, this.type, false, true, true, WidgetSize.BOTH, 'minus'
+            settings, false, true, WidgetSize.BOTH, 'minus'
         );
     }
 

@@ -15,7 +15,6 @@ import {
     ActionFactory
 } from '@kix/core/dist/browser';
 import { TicketHistory } from '@kix/core/dist/model';
-import { DashboardService } from '@kix/core/dist/browser/dashboard/DashboardService';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TicketHistoryWidgetComponent {
@@ -106,7 +105,7 @@ class TicketHistoryWidgetComponent {
             this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
         }
 
-        DashboardService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
+        ContextService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
     private filter(filterValue: string): void {

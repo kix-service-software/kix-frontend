@@ -13,14 +13,6 @@ class SearchComponent {
         this.state = new SearchComponentState();
     }
 
-    public onMount(): void {
-        ContextService.getInstance().provideContext(new Context('search', 'search'), true);
-
-        const breadcrumbDetails =
-            new BreadcrumbDetails('search', null, null, 'Search-Dashboard');
-        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
-    }
-
 }
 
 module.exports = SearchComponent;

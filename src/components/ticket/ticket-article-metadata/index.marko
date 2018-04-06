@@ -3,21 +3,24 @@
     <object-property-label object=state.article property="To" labelProvider=state.labelProvider>
         <@info>
             <if(state.article.toList.length > 1)>
-                <overlay-info-icon content="article-receiver-list-widget" data=state.article.toList/>
+                <overlay-info-icon content="article-receiver-list-widget"
+                    data={instanceId: "to-receiver-overlay", receiver: state.article.toList}/>
             </if>
         </@info>
     </object-property-label>
     <object-property-label object=state.article property="Cc" labelProvider=state.labelProvider>
         <@info>
             <if(state.article.ccList.length > 1)>
-                <overlay-info-icon content="article-receiver-list-widget" data=state.article.ccList/>
+                <overlay-info-icon content="article-receiver-list-widget"
+                    data={instanceId: "cc-receiver-overlay", receiver: state.article.ccList}/>
             </if>
         </@info>
     </object-property-label>
     <object-property-label object=state.article property="Bcc" labelProvider=state.labelProvider>
         <@info>
             <if(state.article.bccList.length > 1)>
-                <overlay-info-icon content="article-receiver-list-widget" data=state.article.bccList/>
+                <overlay-info-icon content="article-receiver-list-widget"
+                    data={instanceId: "bcc-receiver-overlay", receiver: state.article.bccList}/>
             </if>
         </@info>
     </object-property-label>

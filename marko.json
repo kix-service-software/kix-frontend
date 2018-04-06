@@ -1,7 +1,6 @@
 {
     "tags-dir": [
         "./dist/components",
-        "./dist/components/_base-components",
-        "./dist/components/widgets"
+        "./dist/components/_base-components"
     ]
 }

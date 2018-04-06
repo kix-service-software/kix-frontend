@@ -38,14 +38,6 @@ export class ServiceExplorerComponent {
         return true;
     }
 
-    private queueClicked(serviceId: number): void {
-        const contextFilter = new ContextFilter(
-            'service-explorer', 'service-explorer', ObjectType.SERVICE, TicketProperty.SERVICE_ID, serviceId
-        );
-
-        ContextService.getInstance().provideContextFilter(contextFilter);
-    }
-
 }
 
 module.exports = ServiceExplorerComponent;

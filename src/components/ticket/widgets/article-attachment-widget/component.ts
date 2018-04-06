@@ -1,5 +1,6 @@
 import { ArticleAttachmentWidgetComponentState } from './ArticleAttachmentWidgetComponentState';
 import { ActionFactory } from '@kix/core/dist/browser';
+import { ContextService } from '@kix/core/dist/browser/context';
 
 class ArticleAttachmentWidget {
 
@@ -16,6 +17,10 @@ class ArticleAttachmentWidget {
                 ['article-attachment-zip-download'], false, this.state.article
             );
         }
+
+        const context = ContextService.getInstance().getContext();
+        this.state.configuration = context.getWidgetConfiguration(input.instanceId);
+
     }
 
 }

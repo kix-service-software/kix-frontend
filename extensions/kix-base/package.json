@@ -3,11 +3,7 @@
     "extensions": {
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
-            "main-menu": "../../dist/registry-modules/main-menu/marko-dependencies.extension",
-            "chart-widget-marko": "../../dist/registry-modules/widgets/chart/marko-dependencies.extension",
-            "search-template-widget-marko": "../../dist/registry-modules/widgets/search-templates/marko-dependencies.extension",
-            "notes-sidebar-marko": "../../dist/registry-modules/widgets/notes/marko-dependencies.extension",
-            "assign-tour-action-marko": "../../dist/registry-modules/actions/assign-tour/marko-dependencies.extension"
+            "main-menu": "../../dist/registry-modules/main-menu/marko-dependencies.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"

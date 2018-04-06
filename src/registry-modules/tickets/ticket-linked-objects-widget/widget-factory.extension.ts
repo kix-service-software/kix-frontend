@@ -28,7 +28,7 @@ export class TicketLinkedObjectsWidgetFactoryExtension implements IWidgetFactory
                     ]
                 ]
             },
-            this.type, true, true, true, WidgetSize.BOTH, 'minus'
+            true, true, WidgetSize.BOTH, 'minus'
         );
     }
 

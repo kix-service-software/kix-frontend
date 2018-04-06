@@ -9,7 +9,7 @@ export class ServiceExplorerWidgetFactoryExtension implements IWidgetFactoryExte
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Übersicht Services', [], {}, this.type, false, true, true, WidgetSize.SMALL
+            this.widgetId, 'Übersicht Services', [], {}, false, true,  WidgetSize.SMALL
         );
     }
 

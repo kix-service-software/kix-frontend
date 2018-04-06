@@ -1,7 +1,0 @@
-<widget instanceId=state.instanceId configurationTagId="chart-configuration" minimizable=input.minimizable
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") on-update('drawChart')>
-    <@content>
-        <!-- TODO: richtige Größen bestimmen (100% geht sehr wahrscheinlich nicht) -->
-        <svg id=("svg_" + state.instanceId) height="150" width="100%"/>
-    </@content>
-</widget>

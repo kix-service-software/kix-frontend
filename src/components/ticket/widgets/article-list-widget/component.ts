@@ -17,7 +17,6 @@ import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
     TableSortLayer, ToggleOptions, ActionFactory
 } from "@kix/core/dist/browser";
-import { DashboardService } from "@kix/core/dist/browser/dashboard/DashboardService";
 import { IdService } from "@kix/core/dist/browser/IdService";
 
 export class ArticleListWidgetComponent {
@@ -105,7 +104,7 @@ export class ArticleListWidgetComponent {
 
         if (index >= 0) {
             this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-            DashboardService.getInstance().saveWidgetConfiguration(
+            ContextService.getInstance().saveWidgetConfiguration(
                 this.state.instanceId, this.state.widgetConfiguration
             );
         }

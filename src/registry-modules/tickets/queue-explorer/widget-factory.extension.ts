@@ -9,7 +9,7 @@ export class QueueExplorerWidgetFactoryExtension implements IWidgetFactoryExtens
 
     public getDefaultConfiguration(): any {
         return new WidgetConfiguration(
-            this.widgetId, 'Übersicht Queues', [], {}, this.type, false, true, true, WidgetSize.SMALL
+            this.widgetId, 'Übersicht Queues', [], {}, false, true, WidgetSize.SMALL
         );
     }
 }

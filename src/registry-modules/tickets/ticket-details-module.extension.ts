@@ -1,9 +1,9 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    TicketDetailsDashboardConfiguration,
-    WidgetConfiguration, WidgetType, DashboardConfiguration, ConfiguredWidget, WidgetSize, DataType
+    WidgetConfiguration, WidgetType, ContextConfiguration, ConfiguredWidget, WidgetSize, DataType
 } from '@kix/core/dist/model/';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
+import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -11,18 +11,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         return "ticket-details";
     }
 
-    public getDefaultConfiguration(): DashboardConfiguration {
+    public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
         const ticketDetailsWidget = new ConfiguredWidget("ticket-details-widget", new WidgetConfiguration(
-            "ticket-details-widget", "Ticket Details", [], null, WidgetType.CONTENT,
-            false, true, true, WidgetSize.BOTH, null, false
+            "ticket-details-widget", "Ticket Details", [], null,
+            false, true, WidgetSize.BOTH, null, false
         ));
 
-        const ticketInfoLane =
-            new ConfiguredWidget("ticket-information-lane", new WidgetConfiguration(
-                "ticket-info-widget", "Ticketinformationen", ['print-ticket-action', 'edit-ticket-action'], {},
-                WidgetType.LANE_TAB, false, true, true, WidgetSize.SMALL, null, false)
-            );
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
                 "ticket-history-widget", "Historie", ['print-ticket-action'],
@@ -35,20 +30,20 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
                     ]
                 },
-                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+                true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
                 "ticket-description-widget", "Beschreibung & Anmerkungen",
                 ['print-ticket-action', 'edit-ticket-action', 'article-maximize-action'], {},
-                WidgetType.LANE, false, true, true, WidgetSize.BOTH, null, false)
+                false, true, WidgetSize.BOTH, null, false)
             );
         const processLane =
             new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Prozessinformationen", ['print-ticket-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
-                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+                true, true, WidgetSize.BOTH, null, false)
             );
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
@@ -56,7 +51,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 ['print-ticket-action', 'edit-ticket-action', 'article-maximize-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
-                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+                true, true, WidgetSize.BOTH, null, false)
             );
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
@@ -83,9 +78,61 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         ]
                     ]
                 },
-                WidgetType.LANE, true, true, true, WidgetSize.BOTH, null, false)
+                true, true, WidgetSize.BOTH, null, false)
             );
-        const articleList =
+
+        // info-overlay
+        // TODO: eigener Widget-Typ
+        const infoOverlay =
+            new ConfiguredWidget("info-overlay", new WidgetConfiguration(
+                "info-overlay-widget", "", [], {}, false, false, WidgetSize.BOTH, null, false)
+            );
+
+        const lanes =
+            [
+                "ticket-history-lane",
+                "ticket-description-lane",
+                "ticket-dynamic-fields-lane",
+                "ticket-process-lane",
+                "ticket-linked-objects-lane"
+            ];
+
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            descriptionLane, linkedObjectsLane, processLane,
+            dynamicFieldsLane, ticketHistoryLane, infoOverlay, ticketDetailsWidget
+        ];
+
+        const ticketInfoLane =
+            new ConfiguredWidget("ticket-information-lane", new WidgetConfiguration(
+                "ticket-info-widget", "Ticketinformationen", ['print-ticket-action', 'edit-ticket-action'], {},
+                false, true, WidgetSize.SMALL, null, false)
+            );
+
+        const laneTabs = ["ticket-information-lane"];
+        const laneTabWidgets = [ticketInfoLane];
+
+        // Sidebars
+        const customerInfoSidebar =
+            new ConfiguredWidget("20180116143215", new WidgetConfiguration(
+                "ticket-customer-info-widget", "Kunde", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const contactInfoSidebar =
+            new ConfiguredWidget("20180116143216", new WidgetConfiguration(
+                "ticket-contact-info-widget", "Ansprechpartner", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const sidebars = ['20180116143215', '20180116143216'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
+
+        // actions
+        const generalActions = ['new-ticket-action'];
+        const ticketActions = [
+            'edit-ticket-action', 'merge-ticket-action', 'link-ticket-action',
+            'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
+            'print-ticket-action',
+        ];
+
+        const articleWidget =
             new ConfiguredWidget("article-list", new WidgetConfiguration(
                 "article-list-widget", "Artikelübersicht", [
                     'article-print-action',
@@ -115,68 +162,59 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                         new TableColumnConfiguration('Attachment', true, false, true, false, 50),
                     ]
                 },
-                WidgetType.CONTENT, false, true, true, WidgetSize.LARGE, null, false)
+                false, true, WidgetSize.LARGE, null, false)
             );
 
-        // info-overlay
-        // TODO: eigener Widget-Typ
-        const infoOverlay =
-            new ConfiguredWidget("info-overlay", new WidgetConfiguration(
-                "info-overlay-widget", "", [], {},
-                WidgetType.CONTENT, false, false, true, WidgetSize.BOTH, null, false)
+        // Overlays
+        const customerInfoOverlay =
+            new ConfiguredWidget("customer-info-overlay", new WidgetConfiguration(
+                "ticket-customer-info-widget", "Kunde1", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
             );
-
-        const contentRows = [
-            [
-                "ticket-information-lane",
-                "ticket-history-lane",
-                "ticket-description-lane",
-                "ticket-dynamic-fields-lane",
-                "ticket-process-lane",
-                "ticket-linked-objects-lane"
-            ]
+        const contactInfoOverlay =
+            new ConfiguredWidget("contact-info-overlay", new WidgetConfiguration(
+                "ticket-contact-info-widget", "Ansprechpartner1", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const toReceiverOverlay =
+            new ConfiguredWidget("to-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: An", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const ccReceiverOverlay =
+            new ConfiguredWidget("cc-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: CC", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const bccReceiverOverlay =
+            new ConfiguredWidget("bcc-receiver-overlay", new WidgetConfiguration(
+                "article-receiver-list-widget", "Empfänger: BCC", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+            );
+        const articleAttachmentOverlay =
+            new ConfiguredWidget("article-attachment-widget", new WidgetConfiguration(
+                "article-receiver-list-widget", "Anlagen", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-attachement', false)
+            );
+        const infoOverlayWidgets = [
+            customerInfoOverlay, contactInfoOverlay,
+            toReceiverOverlay, ccReceiverOverlay, bccReceiverOverlay,
+            articleAttachmentOverlay
         ];
 
-        const contentConfiguredWidgets: Array<ConfiguredWidget<any>> = [
-            ticketInfoLane, descriptionLane, linkedObjectsLane, processLane,
-            dynamicFieldsLane, ticketHistoryLane, infoOverlay, articleList, ticketDetailsWidget
-        ];
-
-        // Explorer
-        const queueExplorer =
-            new ConfiguredWidget("20171211155412", new WidgetConfiguration(
-                "ticket-queue-explorer", "Übersicht Queues", [], {},
-                WidgetType.EXPLORER, false, true, true, WidgetSize.SMALL, null, false)
-            );
-        const explorerRows: string[][] = [['20171211155412']];
-        const explorerConfiguredWidgets: Array<ConfiguredWidget<any>> = [queueExplorer];
-
-        // Sidebars
-        const customerInfo =
-            new ConfiguredWidget("20180116143215", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {},
-                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man-house', false)
-            );
-        const contactInfo =
-            new ConfiguredWidget("20180116143216", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Ansprechpartner", [], {},
-                WidgetType.SIDEBAR, false, false, true, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
-            );
-        const sidebars = ['20180116143215', '20180116143216'];
-        const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [customerInfo, contactInfo];
-
-        // actions
-        const generalActions = ['new-ticket-action'];
-        const ticketActions = [
-            'edit-ticket-action', 'merge-ticket-action', 'link-ticket-action',
-            'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
-            'print-ticket-action',
-        ];
-
-        return new TicketDetailsDashboardConfiguration(
-            this.getModuleId(), contentRows, sidebars, [],
-            contentConfiguredWidgets, sidebarConfiguredWidgets, [], [],
-            generalActions, ticketActions
+        return new TicketDetailsContextConfiguration(
+            this.getModuleId(),
+            [],
+            sidebars,
+            sidebarWidgets,
+            [],
+            lanes,
+            laneTabs,
+            laneWidgets,
+            laneTabWidgets,
+            articleWidget,
+            generalActions,
+            ticketActions,
+            infoOverlayWidgets
         );
     }
 

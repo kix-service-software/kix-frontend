@@ -20,16 +20,19 @@ class WidgetComponent {
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
-        this.state.type = input.type ? input.type : WidgetType.CONTENT;
     }
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
-        const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+
+        this.state.type = context.getWidgetType(this.state.instanceId);
+
+        const config = context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
 
         if (config) {
-            if ((config.type & WidgetType.SIDEBAR) === WidgetType.SIDEBAR) {
+            if (this.state.type === WidgetType.SIDEBAR) {
                 this.state.minimizable = false;
                 this.state.minimized = false;
             } else {
@@ -48,7 +51,7 @@ class WidgetComponent {
     private minimizeWidget(): void {
         if (this.state.minimizable) {
             if (this.state.explorer) {
-                ContextService.getInstance().toggleExplorer();
+                // ContextService.getInstance().getContext().toggleExplorer();
             } else {
                 this.state.minimized = !this.state.minimized;
             }
@@ -56,7 +59,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        ContextService.getInstance().toggleExplorerBar();
+        ContextService.getInstance().getContext().toggleExplorerBar();
     }
 
     private showConfiguration(): void {
@@ -95,8 +98,8 @@ class WidgetComponent {
             classes.push('minimized');
         }
 
-        if (this.state.widgetConfiguration) {
-            classes.push(this.getWidgetTypeClass(this.state.widgetConfiguration.type));
+        if (this.state.type) {
+            classes.push(this.getWidgetTypeClass(this.state.type));
         } else {
             classes.push(this.getWidgetTypeClass(this.state.type));
         }
@@ -107,22 +110,22 @@ class WidgetComponent {
     private getWidgetTypeClass(type: WidgetType): string {
         let typeClass = 'widget-content';
         switch (type) {
-            case (type & WidgetType.SIDEBAR):
+            case (WidgetType.SIDEBAR):
                 typeClass = 'sidebar-widget';
                 break;
-            case (type & WidgetType.LANE):
+            case (WidgetType.LANE):
                 typeClass = 'lane-widget';
                 break;
-            case (type & WidgetType.LANE_TAB):
+            case (WidgetType.LANE_TAB):
                 typeClass = 'lane-tab-widget';
                 break;
-            case (type & WidgetType.EXPLORER):
+            case (WidgetType.EXPLORER):
                 typeClass = 'explorer-widget';
                 break;
-            case (type & WidgetType.GROUP):
+            case (WidgetType.GROUP):
                 typeClass = 'group-widget';
                 break;
-            case (type & WidgetType.OVERLAY):
+            case (WidgetType.OVERLAY):
                 typeClass = 'overlay-widget';
                 break;
             default:
@@ -134,17 +137,11 @@ class WidgetComponent {
 
     // TODO: ggf. wieder entfernen, wenn Unterscheidung nur noch CSS betrifft (contentActions)
     private isContentWidget(): boolean {
-        const type = this.state.widgetConfiguration && this.state.widgetConfiguration.type ?
-            this.state.widgetConfiguration.type : this.state.type;
-
-        return type === (type & WidgetType.CONTENT);
+        return this.state.type === WidgetType.CONTENT;
     }
-    private isLaneOrLaneTabWidget(): boolean {
-        const type = this.state.widgetConfiguration && this.state.widgetConfiguration.type ?
-            this.state.widgetConfiguration.type : this.state.type;
 
-        return type === (type & WidgetType.LANE) ||
-            type === (type & WidgetType.LANE_TAB);
+    private isLaneOrLaneTabWidget(): boolean {
+        return this.state.type === WidgetType.LANE || this.state.type === WidgetType.LANE_TAB;
     }
 
 }

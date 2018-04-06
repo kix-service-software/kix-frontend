@@ -5,7 +5,7 @@
         <if(state.linkCount > 0)>
             <div.linked-objects-container>
                 <for(group in state.linkedObjectGroups)>
-                    <widget type=32 title=component.getGroupTitle(group)>
+                    <widget instanceId="ticket-linked-objects" title=component.getGroupTitle(group)>
                         <@content>
                             <div.linked-object-table-container>
                                 <if(group[2])>

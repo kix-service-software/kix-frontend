@@ -40,7 +40,7 @@ export class ArticleListWidgetFactoryExtension implements IWidgetFactoryExtensio
         ];
         return new WidgetConfiguration(
             this.widgetId, 'Artikelübersicht', articleActions,
-            settings, this.type, false, true, true, WidgetSize.LARGE, null
+            settings, false, true, WidgetSize.LARGE, null
         );
     }
 
