@@ -81,13 +81,6 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 true, true, WidgetSize.BOTH, null, false)
             );
 
-        // info-overlay
-        // TODO: eigener Widget-Typ
-        const infoOverlay =
-            new ConfiguredWidget("info-overlay", new WidgetConfiguration(
-                "info-overlay-widget", "", [], {}, false, false, WidgetSize.BOTH, null, false)
-            );
-
         const lanes =
             [
                 "ticket-history-lane",
@@ -99,7 +92,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
             descriptionLane, linkedObjectsLane, processLane,
-            dynamicFieldsLane, ticketHistoryLane, infoOverlay, ticketDetailsWidget
+            dynamicFieldsLane, ticketHistoryLane, ticketDetailsWidget
         ];
 
         const ticketInfoLane =
@@ -114,12 +107,13 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         // Sidebars
         const customerInfoSidebar =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                "ticket-customer-info-widget", "Kunde", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
                 "ticket-contact-info-widget", "Ansprechpartner", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
@@ -168,27 +162,28 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         // Overlays
         const customerInfoOverlay =
             new ConfiguredWidget("customer-info-overlay", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde1", [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                "ticket-customer-info-widget", "Kunde", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoOverlay =
             new ConfiguredWidget("contact-info-overlay", new WidgetConfiguration(
                 "ticket-contact-info-widget", "Ansprechpartner1", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const toReceiverOverlay =
             new ConfiguredWidget("to-receiver-overlay", new WidgetConfiguration(
                 "article-receiver-list-widget", "Empfänger: An", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-To', false)
             );
         const ccReceiverOverlay =
             new ConfiguredWidget("cc-receiver-overlay", new WidgetConfiguration(
-                "article-receiver-list-widget", "Empfänger: CC", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                "article-receiver-list-widget", "Empfänger: Cc", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Cc', false)
             );
         const bccReceiverOverlay =
             new ConfiguredWidget("bcc-receiver-overlay", new WidgetConfiguration(
-                "article-receiver-list-widget", "Empfänger: BCC", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man', false)
+                "article-receiver-list-widget", "Empfänger: Bcc", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Bcc', false)
             );
         const articleAttachmentOverlay =
             new ConfiguredWidget("article-attachment-widget", new WidgetConfiguration(
