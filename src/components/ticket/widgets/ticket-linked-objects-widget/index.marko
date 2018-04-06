@@ -1,14 +1,6 @@
 <widget instanceId=state.instanceId
-    title=(state.widgetConfiguration ? ((state.widgetConfiguration.title + " (") + state.linkCount) + ")" : "")>
-    <@contentActions>
-        <ul.content-actions>
-            <for(action in state.actions)>
-                <li>
-                    <action action=action/>
-                </li>
-            </for>
-        </ul>
-    </@contentActions>
+    title=(state.widgetConfiguration ? ((state.widgetConfiguration.title + " (") + state.linkCount) + ")" : "")
+    contentActions=state.actions>
     <@content>
         <if(state.linkCount > 0)>
             <div.linked-objects-container>

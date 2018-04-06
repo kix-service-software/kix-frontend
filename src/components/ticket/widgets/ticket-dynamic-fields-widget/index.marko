@@ -1,19 +1,5 @@
-<widget instanceId=state.instanceId
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Dynamische Felder")>
-    <@contentActions>
-        <ul.content-actions>
-            <if(state.widgetConfiguration)>
-                <for(action in state.widgetConfiguration.actions)>
-                    <li>
-                        <include(component.getTemplate(action)) short=true/>
-                    </li>
-                </for>
-            </if>
-            <li>
-                <span.kix-icon-arrow-split2 on-click('expandWidget')/>
-            </li>
-        </ul>
-    </@contentActions>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
     <@content>
         <div.dynamic-fields-container>
             <ticket-dynamic-fields-container ticketId=state.ticketId dynamicFields=state.filteredDynamicFields/>

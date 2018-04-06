@@ -121,6 +121,9 @@ export class TicketDetailsComponent {
         return IdService.generateDateBasedId('lane-');
     }
 
+    private getLaneWidgetType(): number {
+        return WidgetType.LANE;
+    }
 }
 
 module.exports = TicketDetailsComponent;

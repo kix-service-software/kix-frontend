@@ -3,7 +3,8 @@
 </if>
 <else>
     <div.ticket-details>
-        <widget minimizable=true actions=component.getActions title=component.getTitle()>
+        <widget minimizable=true actions=component.getActions title=component.getTitle()
+            contentActions=component.getTicketActions()>
             <@content>
                 <ul.lane-list no-update>
                     <li.clearfix key=component.getLaneKey()>
@@ -11,7 +12,7 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane.clearfix key=component.getLaneKey()>
-                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId})/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId, type: component.getLaneWidgetType()})/>
                         </li>
                     </for>
                 </ul>

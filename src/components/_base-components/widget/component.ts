@@ -101,7 +101,7 @@ class WidgetComponent {
         if (this.state.type) {
             classes.push(this.getWidgetTypeClass(this.state.type));
         } else {
-            classes.push('content-widget');
+            classes.push(this.getWidgetTypeClass(this.state.type));
         }
 
         return classes;
@@ -133,6 +133,15 @@ class WidgetComponent {
         }
 
         return typeClass;
+    }
+
+    // TODO: ggf. wieder entfernen, wenn Unterscheidung nur noch CSS betrifft (contentActions)
+    private isContentWidget(): boolean {
+        return this.state.type === WidgetType.CONTENT;
+    }
+
+    private isLaneOrLaneTabWidget(): boolean {
+        return this.state.type === WidgetType.LANE || this.state.type === WidgetType.LANE_TAB;
     }
 
 }

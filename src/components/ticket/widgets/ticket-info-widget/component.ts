@@ -13,6 +13,10 @@ class TicketInfoWidgetComponent {
         this.state = new TicketInfoComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
+    }
+
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));

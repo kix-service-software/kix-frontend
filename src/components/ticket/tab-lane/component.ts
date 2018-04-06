@@ -37,6 +37,9 @@ class TabLaneComponent {
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
+    private getLaneTabWidgetType(): number {
+        return WidgetType.LANE_TAB;
+    }
 }
 
 module.exports = TabLaneComponent;
