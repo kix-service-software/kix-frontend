@@ -2,6 +2,7 @@ import { ContextService } from '@kix/core/dist/browser/context/';
 import { DynamicField } from '@kix/core/dist/model/kix/ticket/DynamicField';
 
 import { DynamicFieldContainerComponentState } from './DynamicFieldContainerComponentState';
+import { WidgetType } from '@kix/core/dist/model';
 
 class DynamicFieldsContainerComponent {
 
@@ -18,6 +19,7 @@ class DynamicFieldsContainerComponent {
 
     public onMount(input: any): void {
         this.setDisplayGroups();
+        ContextService.getInstance().getContext().setWidgetType('dynamic-fields-group-widget', WidgetType.GROUP);
     }
 
     private setDisplayGroups(): void {
