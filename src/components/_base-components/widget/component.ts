@@ -20,7 +20,7 @@ class WidgetComponent {
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
-        this.state.type = input.type;
+        this.state.type = input.type ? input.type : WidgetType.CONTENT;
     }
 
     public onMount(): void {
@@ -97,10 +97,8 @@ class WidgetComponent {
 
         if (this.state.widgetConfiguration) {
             classes.push(this.getWidgetTypeClass(this.state.widgetConfiguration.type));
-        } else if (this.state.type) {
-            classes.push(this.getWidgetTypeClass(this.state.type));
         } else {
-            classes.push('content-widget');
+            classes.push(this.getWidgetTypeClass(this.state.type));
         }
 
         return classes;
@@ -132,6 +130,21 @@ class WidgetComponent {
         }
 
         return typeClass;
+    }
+
+    // TODO: ggf. wieder entfernen, wenn Unterscheidung nur noch CSS betrifft (contentActions)
+    private isContentWidget(): boolean {
+        const type = this.state.widgetConfiguration && this.state.widgetConfiguration.type ?
+            this.state.widgetConfiguration.type : this.state.type;
+
+        return type === (type & WidgetType.CONTENT);
+    }
+    private isLaneOrLaneTabWidget(): boolean {
+        const type = this.state.widgetConfiguration && this.state.widgetConfiguration.type ?
+            this.state.widgetConfiguration.type : this.state.type;
+
+        return type === (type & WidgetType.LANE) ||
+            type === (type & WidgetType.LANE_TAB);
     }
 
 }

@@ -1,19 +1,10 @@
 <widget instanceId=state.instanceId configurationTagId="ticket-info-configuration"
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")>
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") contentActions=state.actions>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
-    <@contentActions>
-        <ul.content-actions>
-            <for(action in state.actions)>
-                <li>
-                    <action action=action/>
-                </li>
-            </for>
-        </ul>
-    </@contentActions>
     <@content>
         <if(state.ticket)>
             <div.ticket-information>

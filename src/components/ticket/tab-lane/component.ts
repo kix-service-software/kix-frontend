@@ -1,4 +1,5 @@
 import { ContextService } from '@kix/core/dist/browser/context';
+import { WidgetType } from '@kix/core/dist/model';
 
 class TabLaneComponent {
 
@@ -30,6 +31,9 @@ class TabLaneComponent {
         return context ? context.getWidgetTemplate(instanceId) : undefined;
     }
 
+    private getLaneTabWidgetType(): number {
+        return WidgetType.LANE_TAB;
+    }
 }
 
 module.exports = TabLaneComponent;
