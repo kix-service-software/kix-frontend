@@ -1,6 +1,7 @@
 import { SidebarComponentState } from './SidebarComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { WidgetType } from '@kix/core/dist/model';
 
 class SidebarComponent {
 
@@ -34,6 +35,10 @@ class SidebarComponent {
         const context = ContextService.getInstance().getContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
+    }
+
+    private getWidgetType(): WidgetType {
+        return WidgetType.SIDEBAR;
     }
 }
 

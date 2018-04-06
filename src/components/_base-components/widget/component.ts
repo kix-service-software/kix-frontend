@@ -20,12 +20,15 @@ class WidgetComponent {
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
-        this.state.type = input.type;
     }
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
-        const config = ContextService.getInstance().getContext().getWidgetConfiguration(this.state.instanceId);
+        const context = ContextService.getInstance().getContext();
+
+        this.state.type = context.getWidgetType(this.state.instanceId);
+
+        const config = context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
 
         if (config) {
@@ -107,22 +110,22 @@ class WidgetComponent {
     private getWidgetTypeClass(type: WidgetType): string {
         let typeClass = 'widget-content';
         switch (type) {
-            case (type & WidgetType.SIDEBAR):
+            case (WidgetType.SIDEBAR):
                 typeClass = 'sidebar-widget';
                 break;
-            case (type & WidgetType.LANE):
+            case (WidgetType.LANE):
                 typeClass = 'lane-widget';
                 break;
-            case (type & WidgetType.LANE_TAB):
+            case (WidgetType.LANE_TAB):
                 typeClass = 'lane-tab-widget';
                 break;
-            case (type & WidgetType.EXPLORER):
+            case (WidgetType.EXPLORER):
                 typeClass = 'explorer-widget';
                 break;
-            case (type & WidgetType.GROUP):
+            case (WidgetType.GROUP):
                 typeClass = 'group-widget';
                 break;
-            case (type & WidgetType.OVERLAY):
+            case (WidgetType.OVERLAY):
                 typeClass = 'overlay-widget';
                 break;
             default:

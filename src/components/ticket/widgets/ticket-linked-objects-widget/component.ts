@@ -8,7 +8,7 @@ import {
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { Link, Ticket } from '@kix/core/dist/model';
+import { Link, Ticket, WidgetType } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable,
@@ -37,6 +37,8 @@ class LinkedObjectsWidgetComponent {
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
+
+        context.setWidgetType('ticket-linked-objects', WidgetType.GROUP);
 
         this.setLinkedObjects();
         this.setActions();

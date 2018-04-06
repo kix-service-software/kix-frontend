@@ -1,5 +1,5 @@
 <div.tab-lane>
-    <widget type=8 title="Ticketinformationen">
+    <widget instanceId="tab-lane" title="Ticketinformationen">
         <@headerContent>
             <ul.tab-list>
                 <for(tab in state.tabWidgets)>
@@ -11,7 +11,7 @@
         <@content>
             <div.tab-content>
                 <if(state.activeTabId)>
-                    <include(component.getWidgetTemplate(state.activeTabId), {type: 16, instanceId: state.activeTabId})/>
+                    <include(component.getWidgetTemplate(state.activeTabId), { instanceId: state.activeTabId })/>
                 </if>
             </div>
         </@content>

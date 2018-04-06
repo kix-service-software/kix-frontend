@@ -1,5 +1,7 @@
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { ObjectInfoOverlayComponentState } from './model/ObjectInfoOverlayComponentState';
+import { ObjectInfoOverlayComponentState } from './ObjectInfoOverlayComponentState';
+import { WidgetType } from '@kix/core/dist/model';
+import { ContextService } from '@kix/core/dist/browser/context';
 
 class ObjectInfoOverlayComponent {
 
@@ -34,6 +36,7 @@ class ObjectInfoOverlayComponent {
         const showOverlay = ApplicationService.getInstance().isShowInfoOverlay();
 
         if (showOverlay) {
+            ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
             const infoOverlay = ApplicationService.getInstance().getCurrentInfoOverlay();
             if (infoOverlay[0]) {
                 this.state.content = infoOverlay[0].content;
@@ -67,6 +70,13 @@ class ObjectInfoOverlayComponent {
 
     private closeOverlay() {
         ApplicationService.getInstance().toggleInfoOverlay();
+    }
+
+    private getData(): any {
+        return {
+            ...this.state.data,
+            instanceId: this.state.instanceId
+        };
     }
 
 }
