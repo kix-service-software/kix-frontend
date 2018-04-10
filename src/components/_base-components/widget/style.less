@@ -6,7 +6,7 @@
         background: @header-background;
         color: @header-color;
         box-sizing: border-box;
-        padding: 0 1em 0 .75em;
+        padding: 0 .75em;
         height: @widget-header-height;
         border-top-right-radius: @border-radius;
         border-top-left-radius: @border-radius;
@@ -181,7 +181,7 @@
     .widget(@primary-2, @secondary-6, 2em);
     margin-bottom: .75em;
     >.widget-header {
-        padding: 0 .5em 0 2.25em;
+        padding-left: @margin-default;
         border-radius: @border-radius;
         >.header-left {
             line-height: 2em;
@@ -202,10 +202,19 @@
     }
     >.widget-content {
         margin: 0 2.25em;
+        padding: @margin-small @margin-widget-content*2;
         border: 1px solid @primary-2;
         border-top: 0;
         background-color: @secondary-6;
         min-height: 10em;
+        >.tab-content {
+            margin: @margin-small 0;
+            .widget-content {
+                .content-actions {
+                    right: -4em;
+                }
+            }
+        }
     }
     &.minimized {
         margin-bottom: .25em;
@@ -229,9 +238,9 @@
 
 .group-widget {
     .widget(@secondary-6);
-    margin: 0 0 .5em;
+    margin-bottom: @margin-small;
     >.widget-header {
-        padding: 0 0.5em 0 0.5em;
+        padding: 0;
         >.header-left {
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
@@ -247,14 +256,13 @@
     >.widget-content {
         border: 0;
         padding: 0;
+        margin-left: 1.5em;
         min-height: auto;
         background-color: @secondary-6;
     }
     &.minimized {
         >.widget-header {
-            margin-left: 0;
             border-bottom: 1px solid @secondary-2;
-            border-radius: 0;
             >.header-left {
                 >[class^="kix-icon-"],
                 >[class*=" kix-icon-"] {

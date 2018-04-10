@@ -5,12 +5,12 @@
         <div.description-container>
             <widget instanceId="ticket-description-widget" title="Beschreibung" key=("Widget" + Math.random())>
                 <@content>
+                    <div.description-text-wrapper>
+                        <ticket-article-content article=state.firstArticle/>
+                    </div>
                     <div.description-attachments>
                         <b>Anlagen:</b>
                         <ticket-article-attachment-list article=state.firstArticle/>
-                    </div>
-                    <div.description-text-wrapper>
-                        <ticket-article-content article=state.firstArticle/>
                     </div>
                 </@content>
             </widget>
