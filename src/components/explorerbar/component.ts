@@ -53,10 +53,6 @@ class ExplorerbarComponent {
         return ApplicationService.getInstance().isConfigurationMode();
     }
 
-    private isConfigDialogShown(): boolean {
-        return ApplicationService.getInstance().isShowMainDialog();
-    }
-
     private explorerAvailable(instanceId: string): boolean {
         return this.state.explorer.some((r) => r.instanceId === instanceId);
     }

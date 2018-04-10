@@ -6,7 +6,8 @@ export class BaseWidgetComponentState extends WidgetComponentState {
         public configChanged: boolean = false,
         public hasConfigOverlay: boolean = true,
         public isLoading: boolean = false,
-        public type: WidgetType = null
+        public widgetType: WidgetType = null,
+        public isDialog: WidgetType = null
     ) {
         super();
     }

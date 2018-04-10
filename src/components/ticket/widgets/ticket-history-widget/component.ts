@@ -112,9 +112,6 @@ class TicketHistoryWidgetComponent {
         this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
     }
-    private print(): void {
-        ApplicationService.getInstance().toggleMainDialog();
-    }
 
 }
 
