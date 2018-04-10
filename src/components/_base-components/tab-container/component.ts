@@ -9,12 +9,16 @@ class TabLaneComponent {
     public onCreate(): void {
         this.state = {
             activeTabId: null,
-            tabWidgets: []
+            tabWidgets: [],
+            title: "",
+            minimizable: true
         };
     }
 
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
+        this.state.title = input.title;
+        this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
     }
 
     public onMount(): void {
@@ -23,7 +27,7 @@ class TabLaneComponent {
         }
 
         const context = ContextService.getInstance().getContext();
-        context.setWidgetType("tab-lane", WidgetType.LANE);
+        context.setWidgetType("tab-widget", WidgetType.LANE);
         this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
     }
 
