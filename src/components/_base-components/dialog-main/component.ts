@@ -1,7 +1,5 @@
 import { DialogService } from '@kix/core/dist/browser/DialogService';
 import { DialogMainComponentState } from './DialogMainComponentState';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { WidgetType } from '@kix/core/dist/model';
 
 export class MainDialogComponent {
 
@@ -13,6 +11,7 @@ export class MainDialogComponent {
 
     public onMount(): void {
         DialogService.getInstance().addServiceListener(this.dialogStateChanged.bind(this));
+        this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
     }
 
     private async  dialogStateChanged(): Promise<void> {
@@ -21,10 +20,6 @@ export class MainDialogComponent {
 
     private closeDialog(): void {
         DialogService.getInstance().toggleMainDialog();
-    }
-
-    public getWidgetType(): WidgetType {
-        return WidgetType.DIALOG;
     }
 
 }

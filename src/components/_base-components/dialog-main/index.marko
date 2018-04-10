@@ -1,7 +1,8 @@
 <if(state.show)>
     <div.dialog-main>
-        <widget type=component.getWidgetType() isDialog=true minimizable=false title="Neues Objekt erstellen">
+        <widget isDialog=true title="Neues Objekt erstellen" minimizable=false>
             <@content>
+                <tab-container tabWidgets=state.dialogWidgets minimizable=false/>
                 <div.dialog-footer>
                     <version/>
                 </div>
