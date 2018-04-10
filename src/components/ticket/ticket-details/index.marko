@@ -3,7 +3,7 @@
 </if>
 <else>
     <div.ticket-details>
-        <widget minimizable=true actions=component.getActions title=component.getTitle()
+        <widget actions=component.getActions() minimizable=true title=component.getTitle()
             contentActions=component.getTicketActions()>
             <@content>
                 <ul.lane-list no-update>
