@@ -1,6 +1,7 @@
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
+import { DialogService } from '@kix/core/dist/browser/DialogService';
 import { DialogMainComponentState } from './DialogMainComponentState';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { WidgetType } from '@kix/core/dist/model';
 
 export class MainDialogComponent {
 
@@ -11,24 +12,21 @@ export class MainDialogComponent {
     }
 
     public onMount(): void {
-        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
+        DialogService.getInstance().addServiceListener(this.dialogStateChanged.bind(this));
     }
 
-    private async  applicationStateChanged(): Promise<void> {
-        if (this.state.showMainDialog) {
-            const currentMainDialog = ApplicationService.getInstance().getCurrentMainDialog();
-            if (currentMainDialog[0]) {
-                this.state.dialogTemplate =
-                    await ComponentsService.getInstance().getComponentTemplate(currentMainDialog[0]);
-                this.state.dialogInput = currentMainDialog[1];
-                this.state.show = ApplicationService.getInstance().isShowMainDialog();
-            }
-        }
+    private async  dialogStateChanged(): Promise<void> {
+        this.state.show = DialogService.getInstance().isShowMainDialog();
     }
 
     private closeDialog(): void {
-        ApplicationService.getInstance().toggleMainDialog();
+        DialogService.getInstance().toggleMainDialog();
     }
+
+    public getWidgetType(): WidgetType {
+        return WidgetType.DIALOG;
+    }
+
 }
 
 module.exports = MainDialogComponent;
