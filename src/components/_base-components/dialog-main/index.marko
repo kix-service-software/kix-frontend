@@ -1,11 +1,6 @@
 <if(state.show)>
     <div.dialog-main>
-        <button on-click('closeDialog')>Schließen</button>
-        <div.dialog-title>
-            <h2>Dialog</h2>
-        </div>
-        <div.dialog-content>
-            <include(state.dialogTemplate, state.dialogInput)/>
-        </div>
+        <widget type=component.getWidgetType() isDialog=true minimizable=false title="Neues Objekt erstellen"/>
+        <span.kix-icon-close.close-button on-click('closeDialog')/>
     </div>
 </if>

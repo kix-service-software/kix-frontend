@@ -21,19 +21,12 @@ class DashboardConfigurationWidget {
 
     private openDashboardConfigurationDialog(): void {
         this.toggleDashboardConfigurationWidget();
-        ApplicationService.getInstance().toggleMainDialog(
-            'dashboard-configuration-dialog',
-            { title: 'Dashboard Config - Paltzhalter-Titel' }
-        );
     }
 
     private isConfigMode(): boolean {
         return ApplicationService.getInstance().isConfigurationMode();
     }
 
-    private isConfigDialogShown(): boolean {
-        return ApplicationService.getInstance().isShowMainDialog();
-    }
 }
 
 module.exports = DashboardConfigurationWidget;
