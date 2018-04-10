@@ -1,18 +1,14 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { Context, WidgetType } from '@kix/core/dist/model';
+import { Context, WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { TabContainerComponentState } from './TabContainerComponentState';
 
 class TabLaneComponent {
 
-    private state: any;
+    private state: TabContainerComponentState;
 
     public onCreate(): void {
-        this.state = {
-            activeTabId: null,
-            tabWidgets: [],
-            title: "",
-            minimizable: true
-        };
+        this.state = new TabContainerComponentState();
     }
 
     public onInput(input: any): void {
@@ -22,8 +18,8 @@ class TabLaneComponent {
     }
 
     public onMount(): void {
-        if (!this.state.activeTabId && this.state.tabWidgets.length) {
-            this.state.activeTabId = this.state.tabWidgets[0].instanceId;
+        if (!this.state.activeTab && this.state.tabWidgets.length) {
+            this.state.activeTab = this.state.tabWidgets[0];
         }
 
         const context = ContextService.getInstance().getContext();
@@ -31,14 +27,14 @@ class TabLaneComponent {
         this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
     }
 
-    private tabClicked(tabId: string): void {
-        this.state.activeTabId = tabId;
+    private tabClicked(tab: ConfiguredWidget): void {
+        this.state.activeTab = tab;
     }
 
-    private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
-        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
-        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
+    private getWidgetTemplate(): any {
+        return this.state.activeTab
+            ? ComponentsService.getInstance().getComponentTemplate(this.state.activeTab.configuration.widgetId)
+            : undefined;
     }
 
     private getLaneTabWidgetType(): number {

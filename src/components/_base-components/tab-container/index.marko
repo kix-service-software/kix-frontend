@@ -3,15 +3,20 @@
         <@headerContent>
             <ul.tab-list>
                 <for(tab in state.tabWidgets)>
-                    <li class=(state.activeTabId === tab.instanceId ? "active" : "") on-click('tabClicked', tab.instanceId)
-                        key=tab.instanceId>${tab.configuration.title}</li>
+                    <li class=(state.activeTab && (state.activeTab.instanceId === tab.instanceId) ? "active" : "")
+                        on-click('tabClicked', tab) key=tab.instanceId>
+                        <if(tab.configuration.icon)>
+                            <span class=tab.configuration.icon/>
+                        </if>
+                        ${tab.configuration.title}
+                    </li>
                 </for>
             </ul>
         </@headerContent>
         <@content>
             <div.tab-content>
-                <if(state.activeTabId)>
-                    <include(component.getWidgetTemplate(state.activeTabId), { instanceId: state.activeTabId })/>
+                <if(state.activeTab)>
+                    <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
                 </if>
             </div>
         </@content>
