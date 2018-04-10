@@ -1,6 +1,12 @@
 <if(state.show)>
     <div.dialog-main>
-        <widget type=component.getWidgetType() isDialog=true minimizable=false title="Neues Objekt erstellen"/>
+        <widget type=component.getWidgetType() isDialog=true minimizable=false title="Neues Objekt erstellen">
+            <@content>
+                <div.dialog-footer>
+                    <version/>
+                </div>
+            </@content>
+        </widget>
         <span.kix-icon-close.close-button on-click('closeDialog')/>
     </div>
 </if>
