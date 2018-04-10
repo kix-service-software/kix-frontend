@@ -20,11 +20,9 @@ html {
 }
 
 @border-radius: 3px;
-//TODO: Shadow als mixin
 @shadow-color: @secondary-3;
-@shadow-blur: 5px;
-@shadow: -1px -1px @shadow-blur @shadow-color,
-1px 1px @shadow-blur @shadow-color;
+@shadow-1: 0 0 2px @shadow-color;
+@shadow-2: 0 0 2em @secondary-0;
 .dialog-header {
     background: @primary-1;
     color: @default-light-font-color;

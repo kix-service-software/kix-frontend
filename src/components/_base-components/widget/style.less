@@ -1,4 +1,5 @@
-.widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: 2.25em) {
+@default-widget-header-height: @margin-default;
+.widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height) {
     position: relative;
     border-radius: @border-radius;
     box-sizing: border-box;
@@ -279,5 +280,20 @@
 }
 
 .dialog-widget {
-    .widget(@primary-0, @secondary-6);
+    .widget(@primary-3, @secondary-6);
+    box-shadow: @shadow-2;
+    width: 86.5em;
+    height: 60em;
+    >.widget-content {
+        height: 60em - @default-widget-header-height;
+        border: 3px solid @primary-3;
+        >.dialog-footer {
+            .font-size-small();
+            position: absolute;
+            bottom: 0;
+            color: @secondary-2;
+            text-align: center;
+            width: 100%;
+        }
+    }
 }
