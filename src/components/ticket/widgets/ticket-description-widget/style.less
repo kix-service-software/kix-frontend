@@ -1,13 +1,12 @@
 .description-container {
     position: relative;
     overflow: auto;
-    margin: @margin-widget-content;
     box-sizing: border-box;
     .widget-content {
+        display: grid;
+        grid-template-columns: auto 25%;
         .description-attachments {
-            float: right;
             min-width: 250px;
-            width: 20%;
             padding: 0 1em;
             box-sizing: border-box;
             ul {
@@ -26,9 +25,6 @@
                     margin-right: 5px;
                 }
             }
-        }
-        .description-text-wrapper {
-            margin-right: 20%;
         }
     }
 }

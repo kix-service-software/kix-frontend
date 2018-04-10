@@ -7,11 +7,11 @@
             contentActions=component.getTicketActions()>
             <@content>
                 <ul.lane-list no-update>
-                    <li.clearfix key=component.getLaneKey()>
+                    <li key=component.getLaneKey()>
                         <tab-lane tabWidgets=state.tabWidgets/>
                     </li>
                     <for(lane in state.lanes)>
-                        <li.lane.clearfix key=component.getLaneKey()>
+                        <li.lane key=component.getLaneKey()>
                             <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId, type: component.getLaneWidgetType()})/>
                         </li>
                     </for>

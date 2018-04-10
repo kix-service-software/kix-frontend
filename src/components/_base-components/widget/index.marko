@@ -1,6 +1,6 @@
 <div class=component.getWidgetClasses()>
-    <div.widget-header.clearfix>
-        <span.header-right.clearfix>
+    <div.widget-header>
+        <span.header-right>
             <if(component.isConfigMode() && !input.isNotConfigurable)>
                 <if(state.configChanged)>
                     <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
@@ -39,7 +39,7 @@
             </if>
         </span>
     </div>
-    <div.widget-content.clearfix>
+    <div.widget-content>
         <if(component.isInputDefined(input.contentActions))>
             <if(component.isContentWidget())>
                 <div.content-actions key=("content-actions" + Math.random())>
