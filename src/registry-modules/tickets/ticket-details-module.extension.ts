@@ -14,7 +14,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
         const ticketDetailsWidget = new ConfiguredWidget("ticket-details-widget", new WidgetConfiguration(
-            "ticket-details-widget", "Ticket Details", [], null,
+            "ticket-details-widget", "Ticket Details", ['new-ticket-action'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
