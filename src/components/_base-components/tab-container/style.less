@@ -1,27 +1,37 @@
 .tab-container {
     >.lane-widget {
         >.widget-header {
+            padding-left: @margin-default;
             >.header-left {
+                padding-left: 1px;
                 >.tab-list {
                     list-style: none;
-                    li {
+                    margin-top: .25em;
+                    >li {
                         background-color: @primary-4;
                         color: @primary-0;
-                        border: 1px solid @primary-2;
                         border-top-left-radius: @border-radius;
                         border-top-right-radius: @border-radius;
                         margin-right: .5em;
-                        padding: 0.25em 0.5em 0.25em 0.5em;
-                        font-weight: 600;
-                        float: left;
-                        height: 1.25em;
-                        margin-top: 0.25em;
-                        line-height: normal;
+                        padding: 0 .75em;
+                        font-weight: bold;
+                        height: 1.5em;
+                        line-height: unset;
+                        min-width: 13em;
+                        box-sizing: border-box;
                         cursor: pointer;
                         &.active {
-                            z-index: 5;
                             background-color: @secondary-6;
-                            color: @primary-0;
+                        }
+                        &:hover {
+                            &:not(.active) {
+                                background-color: lighten(@primary-4, 20%);
+                            }
+                            color: lighten(@primary-4, 20%);
+                        }
+                        >[class^="kix-icon-"],
+                        >[class*=" kix-icon-"] {
+                            margin-right: @margin-small;
                         }
                     }
                 }

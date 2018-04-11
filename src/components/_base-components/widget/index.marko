@@ -33,7 +33,9 @@
             <else-if(component.isInputDefined(input.icon))>
                 <include(input.icon)/>
             </else-if>
-            <h3 title=input.title class={minimizable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
+            <if(input.title)>
+                <h3 title=input.title class={minimizable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
+            </if>
             <if(component.hasHeaderContent(input.headerContent))>
                 <include(input.headerContent)/>
             </if>
