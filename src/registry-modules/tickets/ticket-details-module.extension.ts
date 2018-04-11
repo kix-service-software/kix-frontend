@@ -5,7 +5,7 @@ import {
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
 
-export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
+export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtension {
 
     public getModuleId(): string {
         return "ticket-details";
@@ -213,8 +213,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         );
     }
 
+    public createFormularDefinitions(): void {
+        // do nothing
+    }
+
 }
 
 module.exports = (data, host, options) => {
-    return new TicketModuleFactoryExtension();
+    return new TicketDetailsModuleFactoryExtension();
 };

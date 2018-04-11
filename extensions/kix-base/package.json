@@ -24,7 +24,6 @@
             "home-module": "../../dist/registry-modules/home/module.extension",
             "tickets-module": "../../dist/registry-modules/tickets/module.extension",
             "ticket-details-module": "../../dist/registry-modules/tickets/ticket-details-module.extension",
-            "sidebar-module": "../../dist/registry-modules/sidebar/module.extension",
             "cmdb-module": "../../dist/registry-modules/cmdb/module.extension",
             "customers-module": "../../dist/registry-modules/customers/module.extension",
             "faq-module": "../../dist/registry-modules/faq/module.extension",
