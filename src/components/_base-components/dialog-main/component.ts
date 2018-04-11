@@ -12,10 +12,12 @@ export class MainDialogComponent {
     public onMount(): void {
         DialogService.getInstance().addServiceListener(this.dialogStateChanged.bind(this));
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
+        this.state.dialogHint = DialogService.getInstance().getDialogHint();
     }
 
     private async  dialogStateChanged(): Promise<void> {
         this.state.show = DialogService.getInstance().isShowMainDialog();
+        this.state.dialogHint = DialogService.getInstance().getDialogHint();
     }
 
     private closeDialog(): void {
