@@ -3,14 +3,44 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    opacity: 1;
     z-index: 200;
+    >.dialog-widget {
+        >.widget-content {
+            .tab-container {
+                >.lane-widget {
+                    >.widget-header {
+                        border-bottom-right-radius: 0;
+                        border-bottom-left-radius: 0;
+                        padding-left: 0px;
+                        height: @default-widget-header-height;
+                        >.header-left {
+                            padding-left: 2px;
+                            >.tab-list {
+                                margin-top: .5em;
+                                >li {
+                                    height: 1.75em;
+                                }
+                            }
+                        }
+                    }
+                    >.widget-content {
+                        border-width: 2px;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
     .close-button {
         font-size: 3.5em;
         position: absolute;
-        top: -2.5rem;
+        top: -1.75rem;
         right: -1.75rem;
         color: @primary-3;
+        text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
+        &:hover {
+            color: @primary-1;
+        }
     }
     .dialog-footer {
         display: grid;

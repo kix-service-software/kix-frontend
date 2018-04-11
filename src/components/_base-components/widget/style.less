@@ -1,18 +1,18 @@
 @default-widget-header-height: @margin-default;
 .widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height) {
     position: relative;
-    border-radius: @border-radius;
     box-sizing: border-box;
+    overflow: hidden;
     >.widget-header {
         background: @header-background;
         color: @header-color;
         box-sizing: border-box;
         padding: 0 .75em;
         height: @widget-header-height;
-        border-top-right-radius: @border-radius;
-        border-top-left-radius: @border-radius;
         overflow: hidden;
         white-space: nowrap;
+        border-top-left-radius: @border-radius;
+        border-top-right-radius: @border-radius;
         >.header-left {
             line-height: @widget-header-height;
             overflow: hidden;
@@ -61,10 +61,10 @@
         background: @secondary-6;
         color: @default-dark-font-color;
         position: relative;
-        border-bottom-right-radius: @border-radius;
-        border-bottom-left-radius: @border-radius;
         box-sizing: border-box;
         height: 100%;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
         >div.content-actions {
             background-color: @secondary-3;
             color: @secondary-0;
@@ -179,13 +179,12 @@
 }
 
 .lane-widget {
-    .widget(@primary-2, @secondary-6, 2em);
+    .widget(@primary-2, @secondary-6, 1.75em);
     margin-bottom: .75em;
     >.widget-header {
-        padding-left: @margin-default;
+        padding-left: @margin-default + 1rem;
         border-radius: @border-radius;
         >.header-left {
-            line-height: 2em;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 .font-size-normal();
@@ -197,13 +196,10 @@
                 padding-top: 1px;
             }
         }
-        >.header-right {
-            line-height: 2em;
-        }
     }
     >.widget-content {
-        margin: 0 2.25em;
-        padding: @margin-small @margin-widget-content*2;
+        margin: 0 @margin-default;
+        padding: @margin-small 2em;
         border: 1px solid @primary-2;
         border-top: 0;
         background-color: @secondary-6;
@@ -220,16 +216,10 @@
     &.minimized {
         margin-bottom: .25em;
         >.widget-header {
-            padding-left: .5em;
-            margin-left: 1.75em;
+            padding-left: 1em;
+            margin-left: @margin-default;
             color: @secondary-0;
             background-color: @secondary-3;
-            >.header-left {
-                line-height: 2em;
-            }
-            >.header-right {
-                line-height: 2em;
-            }
         }
         >.widget-content {
             display: none;
@@ -281,12 +271,12 @@
 
 .dialog-widget {
     .widget(@primary-3, @secondary-6);
-    box-shadow: @shadow-2;
     width: 86.5em;
     height: 60em;
     >.widget-content {
         height: 60em - @default-widget-header-height;
         border: 3px solid @primary-3;
+        padding: @margin-middle @margin-default;
         >.dialog-footer {
             .font-size-small();
             position: absolute;
