@@ -1,31 +1,37 @@
 .form {
     .form-field {
-        margin-top: 0.5em;
+        &:not(:last-child) {
+            margin-bottom: @margin-small;
+        }
         height: 2em;
         display: grid;
-        grid-template-columns: 11em 1em auto;
+        grid-template-columns: 15.5em 2em auto;
         align-items: center;
-        .field-label {
+        >.field-label {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            max-width: 90%;
             text-align: right;
-            font-weight: 600;
-            width: 100%;
-            .required-field {
+            font-weight: bold;
+            &:after {
+                content: ":"
+            }
+            >.required-field {
                 &:after {
                     content: " ";
                 }
             }
-            &:after {
-                content: ":"
-            }
         }
-        .field-input {
+        >.field-input {
             input {
-                border: 1px solid @secondary-2;
+                box-sizing: border-box;
+                border: 1px solid @secondary-4;
+                border-radius: @border-radius;
+                padding: 0 @margin-small;
+                background-color: @secondary-6;
+                height: 1.75rem;
                 width: 100%;
+                color: @default-dark-font-color;
             }
         }
     }

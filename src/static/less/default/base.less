@@ -224,3 +224,15 @@ input[type=text] {
     -ms-user-select: none;
     user-select: none;
 }
+
+input::placeholder {
+    color: @secondary-2;
+    font-style: italic;
+    font-family: Carlito, Arial, Helvetica, sans-serif; // TODO: für Firefox scheinbar nötig
+    opacity: 1; // TODO: für Firefox scheinbar nötig
+} // TODO: extra (noch testen in IE / Edge), weil sonst Regel für Chrome/Firefox nicht greift 
+input:-ms-input-placeholder,
+input::-ms-input-placeholder {
+    color: @secondary-2;
+    font-style: italic;
+}

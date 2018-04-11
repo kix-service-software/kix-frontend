@@ -279,11 +279,14 @@
         padding: @margin-middle @margin-default;
         >.dialog-footer {
             .font-size-small();
-            position: absolute;
-            bottom: 0;
             color: @secondary-2;
             text-align: center;
             width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            .dialog-hint {
+                text-align: left;
+            }
         }
     }
 }

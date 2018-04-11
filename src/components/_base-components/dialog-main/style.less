@@ -19,13 +19,26 @@
                                 margin-top: .5em;
                                 >li {
                                     height: 1.75em;
+                                    &.active {
+                                        background-color: @secondary-5;
+                                    }
                                 }
                             }
                         }
                     }
                     >.widget-content {
+                        background-color: @secondary-5;
                         border-width: 2px;
                         margin: 0;
+                        padding: @margin-default 0;
+                        >.tab-content {
+                            margin: 0;
+                            >div {
+                                >.widget-content {
+                                    background-color: @secondary-5;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -40,13 +53,6 @@
         text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
         &:hover {
             color: @primary-1;
-        }
-    }
-    .dialog-footer {
-        display: grid;
-        grid-template-columns: 33% 33% 33%;
-        .dialog-hint {
-            text-align: left;
         }
     }
 }
