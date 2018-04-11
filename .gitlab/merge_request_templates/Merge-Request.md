@@ -1,1 +1,3 @@
-Core MR: Softwareentwicklung/KIXng/frontend/modules/core![ISSUE_ID]
+Core MR: Softwareentwicklung/KIXng/frontend/modules/core![MERGE_REQUEST_ID]
+
+Closes #[ISSUE_ID]
