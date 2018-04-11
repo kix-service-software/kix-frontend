@@ -1,18 +1,18 @@
 import { ContextService } from '@kix/core/dist/browser/context';
-import { FormularComponentState } from './FormularComponentState';
+import { FormComponentState } from './FormularComponentState';
 
 class FormularComponent {
 
-    private state: FormularComponentState;
+    private state: FormComponentState;
 
     public onCreate(input: any): void {
-        this.state = new FormularComponentState(input.formularId);
+        this.state = new FormComponentState(input.formularId);
     }
 
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.formulars) {
-            this.state.formular = objectData.formulars.find((f) => f.id === this.state.formularId);
+            this.state.form = objectData.formulars.find((f) => f.id === this.state.formId);
         }
     }
 
