@@ -43,6 +43,10 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         return new HomeContextConfiguration(this.getModuleId(), [], [], [], [], content, contentWidgets, []);
     }
 
+    public createFormularDefinitions(): void {
+        // do nothing
+    }
+
 }
 
 module.exports = (data, host, options) => {

@@ -1,8 +1,10 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize
+    WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize, Formular, FormularField
 } from '@kix/core/dist/model/';
 import { TicketContextConfiguration } from '@kix/core/dist/browser/ticket';
+import { ServiceContainer } from '@kix/core/dist/common';
+import { IConfigurationService } from '@kix/core/dist/services';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -95,6 +97,36 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const sidebarConfiguredWidgets: Array<ConfiguredWidget<any>> = [notesWidget];
 
         return new TicketContextConfiguration(this.getModuleId(), [], [], [], [], []);
+    }
+
+    public async createFormularDefinitions(): Promise<void> {
+        const formularId = 'new-ticket-formular';
+
+        const configurationService =
+            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+
+        const existingFormular = configurationService.getModuleConfiguration(formularId, null);
+        if (!existingFormular) {
+            const fields = [];
+            fields.push(new FormularField("Ansprechpartner", "CustomerUserID", true));
+            fields.push(new FormularField("Kunde", "CustomerID", true));
+            fields.push(new FormularField("Tickettyp", "TypeID", true));
+            fields.push(new FormularField("Queue", "QueueID", true));
+            fields.push(new FormularField("Service", "ServiceID"));
+            fields.push(new FormularField("SLA", "SLAID"));
+            fields.push(new FormularField("Betreff", "Title", true));
+            fields.push(new FormularField("Ticketbeschreibung", "Description", true));
+            fields.push(new FormularField("Anlage", "Attachment"));
+            fields.push(new FormularField("Ticket verknüpfen mit", "LinkTicket"));
+            fields.push(new FormularField("Bearbeiter", "OwnerID"));
+            fields.push(new FormularField("Verantwortlicher", "ResponsibleID"));
+            fields.push(new FormularField("Priorität", "PriorityID"));
+            fields.push(new FormularField("Status", "TicketStateID"));
+
+            const formular = new Formular(formularId, 'Neues Ticket', fields);
+            await configurationService.saveModuleConfiguration(formular.id, null, formular);
+        }
+
     }
 
 }

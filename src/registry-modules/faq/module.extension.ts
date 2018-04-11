@@ -11,6 +11,10 @@ export class FAQModuleFactoryExtension implements IModuleFactoryExtension {
         return content;
     }
 
+    public createFormularDefinitions(): void {
+        // do nothing
+    }
+
 }
 
 module.exports = (data, host, options) => {

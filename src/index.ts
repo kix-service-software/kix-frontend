@@ -3,7 +3,7 @@ import { Server } from './Server';
 import { IRouter } from '@kix/core/dist/routes';
 import { AuthenticationRouter, ApplicationRouter } from './routes';
 import {
-    IRouterExtension, KIXExtensions, ICommunicatorRegistryExtension, IServiceRegistryExtension
+    IRouterExtension, KIXExtensions, ICommunicatorRegistryExtension, IServiceRegistryExtension, IModuleFactoryExtension
 } from '@kix/core/dist/extensions';
 import { MarkoService, PluginService } from './services';
 import { IPluginService, CoreServiceRegistry } from '@kix/core/dist/services';
@@ -25,6 +25,7 @@ class Startup {
         await this.bindServices();
         await this.bindRouters();
         await this.bindCommunicators();
+        await this.registerModules();
         ServiceContainer.getInstance().register<Server>('Server', Server);
         this.server = ServiceContainer.getInstance().getClass<Server>('Server');
     }
@@ -68,6 +69,12 @@ class Startup {
                 (c) => container.register<ICommunicator>('ICommunicator', c)
             );
         }
+    }
+
+    private async registerModules(): Promise<void> {
+        const pluginService = ServiceContainer.getInstance().getClass<IPluginService>('IPluginService');
+        const moduleFactories = await pluginService.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
+        moduleFactories.forEach((mf) => mf.createFormularDefinitions());
     }
 
 }
