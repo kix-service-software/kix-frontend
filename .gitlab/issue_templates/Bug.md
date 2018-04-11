@@ -1,5 +1,7 @@
-# Problem
+## Problem
 
-# Was wird erwartet?
+## Was wird erwartet?
 
-# Fehlerbeschreibung
+## Fehlerbeschreibung
+
+/label ~Bug ~"Prüfen"

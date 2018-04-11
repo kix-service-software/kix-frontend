@@ -1,0 +1,32 @@
+.form {
+    .form-field {
+        margin-top: 0.5em;
+        height: 2em;
+        display: grid;
+        grid-template-columns: 11em 1em auto;
+        align-items: center;
+        .field-label {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 90%;
+            text-align: right;
+            font-weight: 600;
+            width: 100%;
+            .required-field {
+                &:after {
+                    content: " ";
+                }
+            }
+            &:after {
+                content: ":"
+            }
+        }
+        .field-input {
+            input {
+                border: 1px solid @secondary-2;
+                width: 100%;
+            }
+        }
+    }
+}

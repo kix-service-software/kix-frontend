@@ -1,0 +1,17 @@
+<div.form>
+    <if(state.form)>
+        <for(field in state.form.fields)>
+            <div.form-field>
+                <span.field-label>
+                    <if(field.required)>
+                        <span.required-field>*</span>
+                    </if>${field.label}
+                </span>
+                <span.field-icon/>
+                <span.field-input>
+                    <input type="text" placeholder=(field.required ? field.label : "")/>
+                </span>
+            </div>
+        </for>
+    </if>
+</div>
