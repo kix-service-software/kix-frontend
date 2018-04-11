@@ -4,4 +4,4 @@
 
 ## Fehlerbeschreibung
 
-/label ~bug ~prüfen
+/label ~Bug ~"Prüfen"
