@@ -111,9 +111,9 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormularField("Ansprechpartner", "CustomerUserID", true));
             fields.push(new FormularField("Kunde", "CustomerID", true));
             fields.push(new FormularField("Tickettyp", "TypeID", true));
-            fields.push(new FormularField("Queue", "QueueID", true));
-            fields.push(new FormularField("Service", "ServiceID"));
-            fields.push(new FormularField("SLA", "SLAID"));
+            fields.push(new FormularField("Zuordnung zu Bereich / Queue", "QueueID", true));
+            fields.push(new FormularField("Betroffener Service", "ServiceID"));
+            fields.push(new FormularField("SLA / Servicevertrag", "SLAID"));
             fields.push(new FormularField("Betreff", "Title", true));
             fields.push(new FormularField("Ticketbeschreibung", "Description", true));
             fields.push(new FormularField("Anlage", "Attachment"));
@@ -121,7 +121,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormularField("Bearbeiter", "OwnerID"));
             fields.push(new FormularField("Verantwortlicher", "ResponsibleID"));
             fields.push(new FormularField("Priorität", "PriorityID"));
-            fields.push(new FormularField("Status", "TicketStateID"));
+            fields.push(new FormularField("Status des Tickets", "TicketStateID"));
 
             const formular = new Formular(formularId, 'Neues Ticket', fields);
             await configurationService.saveModuleConfiguration(formular.id, null, formular);
