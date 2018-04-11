@@ -2,4 +2,4 @@
 
 # Was wird erwartet?
 
-# Fehler
+# Fehlerbeschreibung

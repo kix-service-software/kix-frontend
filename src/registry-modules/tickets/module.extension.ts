@@ -127,6 +127,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             await configurationService.saveModuleConfiguration(formular.id, null, formular);
         }
 
+        configurationService.registerFormular(formularId);
     }
 
 }
