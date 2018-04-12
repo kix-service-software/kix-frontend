@@ -10,6 +10,10 @@ class TicketInputOwnerComponent {
         this.state = new TicketInputOwnerComponentState();
     }
 
+    public onInput(input): void {
+        this.state.field = input.field;
+    }
+
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.agents.map((a) => new FormDropDownItem(a.UserID, 'kix-icon-man', a.UserFullname));

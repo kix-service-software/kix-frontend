@@ -1,6 +1,6 @@
 import { FormField, FormDropDownItem } from "@kix/core/dist/model";
 
-export class TicketInputOwnerComponentState {
+export class TicketInputPriorityComponentState {
 
     public constructor(
         public items: FormDropDownItem[] = [],
