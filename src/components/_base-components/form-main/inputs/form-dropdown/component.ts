@@ -1,5 +1,5 @@
 import { FormDropDownComponentState } from "./FormDropDownComponentState";
-import { FormDropDownItem } from "@kix/core/dist/model";
+import { FormDropDownItem, ObjectIcon } from "@kix/core/dist/model";
 
 class FormDropDownComponent {
 
@@ -130,6 +130,10 @@ class FormDropDownComponent {
 
     private isSelected(item: FormDropDownItem): boolean {
         return this.state.preSelectedItem && this.state.preSelectedItem.id === item.id;
+    }
+
+    private hasIconClass(item: FormDropDownItem): boolean {
+        return !(item.icon instanceof ObjectIcon);
     }
 }
 
