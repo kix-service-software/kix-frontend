@@ -2,6 +2,7 @@ import { ApplicationService } from '@kix/core/dist/browser/application/Applicati
 import { ObjectInfoOverlayComponentState } from './ObjectInfoOverlayComponentState';
 import { WidgetType } from '@kix/core/dist/model';
 import { ContextService } from '@kix/core/dist/browser/context';
+import { DialogService } from '@kix/core/dist/browser/DialogService';
 
 class ObjectInfoOverlayComponent {
 
@@ -73,8 +74,12 @@ class ObjectInfoOverlayComponent {
         }
     }
 
-    private closeOverlay() {
+    private closeOverlay(): void {
         ApplicationService.getInstance().toggleInfoOverlay();
+    }
+
+    private isDialogShown(): boolean {
+        return DialogService.getInstance().isShowMainDialog();
     }
 
 }

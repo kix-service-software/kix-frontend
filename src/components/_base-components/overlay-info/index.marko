@@ -1,5 +1,6 @@
 <if(state.show)>
-    <div.object-info-overlay key="overlay" infoOverlay=true on-click("overlayClicked")>
+    <div.object-info-overlay class={"over-dialog": component.isDialogShown()} key="overlay" infoOverlay=true
+        on-click("overlayClicked")>
         <include(state.content, state.data)/>
         <span.kix-icon-close on-click('closeOverlay')/>
     </div>
