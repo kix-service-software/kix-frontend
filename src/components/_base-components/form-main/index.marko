@@ -9,7 +9,7 @@
                 </span>
                 <span.field-icon/>
                 <span.field-input>
-                    <input type="text" placeholder=(field.required ? field.label : "")/>
+                    <include(component.getInputComponent(field), { field })/>
                 </span>
             </div>
         </for>
