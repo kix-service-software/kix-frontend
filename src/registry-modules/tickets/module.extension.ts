@@ -121,7 +121,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Bearbeiter", "OwnerID"));
             fields.push(new FormField("Verantwortlicher", "ResponsibleID"));
             fields.push(new FormField("Priorität", "PriorityID"));
-            fields.push(new FormField("Status des Tickets", "TicketStateID"));
+            fields.push(new FormField("Status des Tickets", "StateID"));
 
             const formular = new Form(formularId, 'Neues Ticket', fields);
             await configurationService.saveModuleConfiguration(formular.id, null, formular);
