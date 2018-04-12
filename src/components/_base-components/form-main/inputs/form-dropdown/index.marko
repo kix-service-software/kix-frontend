@@ -8,14 +8,15 @@
             </span>
         </if>
         <else>
-            <input.input-style type="text" value=state.filterValue on-keyup('filterValueChanged')/>
+            <input.input-style type="text" value=state.filterValue on-keydown('keyDown') on-keyup('filterValueChanged')/>
         </else>
         <span.dropdown-button.kix-icon-nook-down/>
     </div>
     <if(state.expanded)>
         <ul.dropdown-list>
             <for(item in state.filteredItems)>
-                <li.dropdown-item on-click('itemSelected', item)>
+                <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
+                    on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
                     <span class=item.icon/>
                     ${item.label}
                 </li>
