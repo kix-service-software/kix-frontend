@@ -1,0 +1,22 @@
+<div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
+    <input type="text" value=state.filterValue disabled=(state.selectedItem ? true : false)
+        on-keyup('filterValueChanged')/>
+    <span.dropdown-button.kix-icon-nook-down/>
+    <if(state.selectedItem)>
+        <div.selected-item>
+            <span class=state.selectedItem.icon/>
+            <span>${state.selectedItem.label}</span>
+            <span.kix-icon-close on-click('removeSelectedItem')/>
+        </div>
+    </if>
+    <if(state.expanded)>
+        <ul.dropdown-list>
+            <for(item in state.filteredItems)>
+                <li.dropdown-item on-click('itemSelected', item)>
+                    <span class=item.icon/>
+                    ${item.label}
+                </li>
+            </for>
+        </ul>
+    </if>
+</div>

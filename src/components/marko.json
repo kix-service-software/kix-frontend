@@ -5,6 +5,7 @@
     "tags-dir": [
         "_base-template",
         "_base-components",
+        "_base-components/form-main/inputs",
         "cmdb",
         "customers",
         "faq",
