@@ -8,17 +8,11 @@ class FormDropDownComponent {
 
     public onCreate(input: any): void {
         this.state = new FormDropDownComponentState();
+    }
 
-        this.state.items = [
-            { icon: 'kix-icon-unknown', label: 'Testeintrag' },
-            { icon: 'kix-icon-check', label: 'Blah' },
-            { icon: 'kix-icon-call', label: 'dsfsdfsdfsdfdsfs' },
-            { icon: 'kix-icon-checklist', label: 'sdfsdfdsf' },
-            { icon: 'kix-icon-calendar', label: 'dsf' },
-            { icon: 'kix-icon-circle-prior', label: 'asffsdfsdf' },
-            { icon: 'kix-icon-cmdb', label: 'cmdb' }
-        ];
-        this.state.filteredItems = this.state.items;
+    public onInput(input: any): void {
+        this.state.items = input.items;
+        this.state.filteredItems = input.items;
     }
 
     public onMount(): void {
