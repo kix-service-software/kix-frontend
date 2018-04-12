@@ -1,14 +1,17 @@
 <div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
     <div.input-style>
         <if(state.selectedItem)>
-            <span.selected-item>
-                <span class=state.selectedItem.icon/>
-                <span>${state.selectedItem.label}</span>
-                <span.kix-icon-close on-click('removeSelectedItem')/>
+            <span.selected-item-container>
+                <div.selected-item>
+                    <div.object-icon class=state.selectedItem.icon/>
+                    <div>${state.selectedItem.label}</div>
+                    <div.kix-icon-close on-click('removeSelectedItem')/>
+                </div>
             </span>
         </if>
         <else>
-            <input.input-style type="text" value=state.filterValue on-keydown('keyDown') on-keyup('filterValueChanged')/>
+            <input.input-style type="text" placeholder=input.placeholder value=state.filterValue on-keydown('keyDown')
+                on-keyup('filterValueChanged')/>
         </else>
         <span.dropdown-button.kix-icon-nook-down/>
     </div>
