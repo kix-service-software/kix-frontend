@@ -7,12 +7,17 @@ class TabLaneComponent {
 
     private state: TabContainerComponentState;
 
-    public onCreate(): void {
-        this.state = new TabContainerComponentState();
+    public onCreate(input: any): void {
+        this.state = new TabContainerComponentState(input.tabWidgets);
     }
 
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
+
+        const context = ContextService.getInstance().getContext();
+        context.setWidgetType("tab-widget", WidgetType.LANE);
+        this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
+
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
     }
@@ -21,10 +26,6 @@ class TabLaneComponent {
         if (!this.state.activeTab && this.state.tabWidgets.length) {
             this.state.activeTab = this.state.tabWidgets[0];
         }
-
-        const context = ContextService.getInstance().getContext();
-        context.setWidgetType("tab-widget", WidgetType.LANE);
-        this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
     }
 
     private tabClicked(tab: ConfiguredWidget): void {
