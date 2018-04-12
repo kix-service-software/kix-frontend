@@ -1,16 +1,15 @@
-.field-input {
-    input[type="text"] {
-        .font-size-normal();
-        box-sizing: border-box;
-        border: 1px solid @secondary-3;
-        border-radius: @border-radius;
-        padding: 0 @margin-small;
-        background-color: @secondary-6;
-        height: @default-input-height;
-        width: 100%;
-        color: @default-dark-font-color;
-        &:read-only {
-            background-color: @secondary-4;
-        }
-    }
+.input-style {
+    .font-size-normal();
+    box-sizing: border-box;
+    border: 1px solid @secondary-3;
+    border-radius: @border-radius;
+    padding: 0 @margin-small;
+    background-color: @secondary-6;
+    height: @default-input-height;
+    width: 100%;
+    color: @default-dark-font-color;
+}
+
+input.input-style:read-only {
+    background-color: @secondary-4;
 }
