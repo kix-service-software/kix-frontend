@@ -1,31 +1,25 @@
 .form {
     .form-field {
-        margin-top: 0.5em;
+        &:not(:last-child) {
+            margin-bottom: @margin-small;
+        }
         height: 2em;
         display: grid;
-        grid-template-columns: 11em 1em auto;
+        grid-template-columns: 15.5em 2em auto;
         align-items: center;
-        .field-label {
+        >.field-label {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            max-width: 90%;
             text-align: right;
-            font-weight: 600;
-            width: 100%;
-            .required-field {
-                &:after {
-                    content: " ";
-                }
-            }
+            font-weight: bold;
             &:after {
                 content: ":"
             }
-        }
-        .field-input {
-            input {
-                border: 1px solid @secondary-2;
-                width: 100%;
+            >.required-field {
+                &:after {
+                    content: " ";
+                }
             }
         }
     }

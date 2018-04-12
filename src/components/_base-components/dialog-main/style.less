@@ -1,17 +1,23 @@
 .dialog-main {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    left: @margin-large - @margin-default;
+    right: @margin-large - @margin-default;
+    top: @margin-default;
+    bottom: @margin-default;
+    display: grid;
+    justify-content: center;
+    align-content: center;
     z-index: 200;
     >.dialog-widget {
         >.widget-content {
-            .tab-container {
+            >.tab-container {
+                height: 100%;
                 >.lane-widget {
+                    height: 100%;
                     >.widget-header {
                         border-bottom-right-radius: 0;
                         border-bottom-left-radius: 0;
-                        padding-left: 0px;
+                        padding-left: 0;
                         height: @default-widget-header-height;
                         >.header-left {
                             padding-left: 2px;
@@ -19,19 +25,39 @@
                                 margin-top: .5em;
                                 >li {
                                     height: 1.75em;
+                                    &.active {
+                                        background-color: @secondary-5;
+                                    }
                                 }
                             }
                         }
                     }
                     >.widget-content {
+                        .full-size();
+                        top: @default-widget-header-height;
+                        background-color: @secondary-5;
                         border-width: 2px;
                         margin: 0;
+                        padding: @margin-default 0;
+                        overflow: hidden;
+                        >.tab-content {
+                            margin: 0;
+                            height: 100%;
+                            >.lane-tab-widget {
+                                height: 100%;
+                                >.widget-content {
+                                    background-color: @secondary-5;
+                                    overflow-x: hidden;
+                                    overflow-y: auto;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
-    .close-button {
+    >.close-button {
         font-size: 3.5em;
         position: absolute;
         top: -1.75rem;
@@ -39,14 +65,7 @@
         color: @primary-3;
         text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
         &:hover {
-            color: @primary-1;
-        }
-    }
-    .dialog-footer {
-        display: grid;
-        grid-template-columns: 33% 33% 33%;
-        .dialog-hint {
-            text-align: left;
+            color: darken(@primary-3, 15%);
         }
     }
 }
