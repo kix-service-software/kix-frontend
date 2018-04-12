@@ -4,7 +4,8 @@ export class TicketInputStateComponentState {
 
     public constructor(
         public items: FormDropDownItem[] = [],
-        public field: FormField = null
+        public field: FormField = null,
+        public pending: boolean = false
     ) { }
 
 }

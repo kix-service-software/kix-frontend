@@ -45,6 +45,7 @@ class FormDropDownComponent {
     private itemSelected(item: FormDropDownItem): void {
         this.state.selectedItem = item;
         this.resetFilter();
+        (this as any).emit('itemChanged', item);
     }
 
     private itemHovered(item: FormDropDownItem): void {
@@ -97,7 +98,7 @@ class FormDropDownComponent {
                     }
                     break;
                 case 13: // enter
-                    this.state.selectedItem = this.state.preSelectedItem;
+                    this.itemSelected(this.state.preSelectedItem);
                     this.state.preSelectedItem = null;
                     this.toggleList();
                     break;

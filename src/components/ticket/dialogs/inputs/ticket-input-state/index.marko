@@ -1,1 +1,5 @@
-<form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")/>
+<form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
+    on-itemChanged('itemChanged')/>
+<if(state.pending)>
+    <span>pending ...</span>
+</if>
