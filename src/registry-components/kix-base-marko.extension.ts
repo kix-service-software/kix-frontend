@@ -6,6 +6,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         return [
             ...this.getTicketDependencies(),
             ...this.getFaqDependencies(),
+            ...this.getDialogFormDependencies(),
             'quick-search',
             'cmdb/cmdb-module',
             'customers/customers-module',
@@ -14,6 +15,11 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'search/search-module'
         ];
     }
+
+    private getDialogFormDependencies(): string[] {
+        return ['_base-components/form-main/inputs/form-text-input'];
+    }
+
 
     private getTicketDependencies(): string[] {
         return [
@@ -48,12 +54,19 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         return [
             ...this.getTicketComponentTags(),
             ...this.getFaqComponentTags(),
+            ...this.getDialogFormTags(),
             ['cmdb', 'cmdb/cmdb-module'],
             ['customers', 'customers/customers-module'],
             ['home', 'home/home-module'],
             ['reports', 'reports/reports-module'],
             ['search', 'search/search-module'],
             ['icon', '_base-components/icon']
+        ];
+    }
+
+    private getDialogFormTags(): Array<[string, string]> {
+        return [
+            ['form-text-input', '_base-components/form-main/inputs/form-text-input']
         ];
     }
 
