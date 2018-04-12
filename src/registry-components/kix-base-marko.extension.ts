@@ -17,13 +17,17 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     }
 
     private getDialogFormDependencies(): string[] {
-        return ['_base-components/form-main/inputs/form-text-input'];
+        return [
+            '_base-components/form-main/inputs/form-text-input',
+            '_base-components/form-main/inputs/form-dropdown'
+        ];
     }
 
 
     private getTicketDependencies(): string[] {
         return [
             'ticket/dialogs/new-ticket-dialog',
+            'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/explorer/ticket-queue-explorer',
             'ticket/explorer/ticket-service-explorer',
             'ticket/ticket-module',
@@ -66,7 +70,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getDialogFormTags(): Array<[string, string]> {
         return [
-            ['form-text-input', '_base-components/form-main/inputs/form-text-input']
+            ['form-text-input', '_base-components/form-main/inputs/form-text-input'],
+            ['form-dropdown', '_base-components/form-main/inputs/form-dropdown']
         ];
     }
 
@@ -100,6 +105,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
+            ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ...widgets,
             ...explorer
         ];
