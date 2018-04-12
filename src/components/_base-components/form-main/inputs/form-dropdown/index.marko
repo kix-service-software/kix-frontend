@@ -1,5 +1,5 @@
 <div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
-    <input type="text" value=state.filterValue disabled=(state.selectedItem ? true : false)
+    <input type="text" value=state.filterValue disabled=(state.selectedItem ? true : false) on-keydown('keyDown')
         on-keyup('filterValueChanged')/>
     <span.dropdown-button.kix-icon-nook-down/>
     <if(state.selectedItem)>
@@ -12,7 +12,8 @@
     <if(state.expanded)>
         <ul.dropdown-list>
             <for(item in state.filteredItems)>
-                <li.dropdown-item on-click('itemSelected', item)>
+                <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
+                    on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
                     <span class=item.icon/>
                     ${item.label}
                 </li>
