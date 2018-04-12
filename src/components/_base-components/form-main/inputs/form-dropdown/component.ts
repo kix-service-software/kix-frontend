@@ -18,6 +18,7 @@ class FormDropDownComponent {
             { icon: 'kix-icon-circle-prior', label: 'asffsdfsdf' },
             { icon: 'kix-icon-cmdb', label: 'cmdb' }
         ];
+        this.state.filteredItems = this.state.items;
     }
 
     public onMount(): void {
@@ -45,14 +46,35 @@ class FormDropDownComponent {
 
     private toggleList(): void {
         this.state.expanded = !this.state.expanded;
+        this.resetFilter();
     }
 
     private itemSelected(item: FormDropDownItem): void {
         this.state.selectedItem = item;
+        this.resetFilter();
     }
 
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
+    }
+
+    private filterValueChanged(event: any): void {
+        this.state.filterValue = event.target.value;
+
+        if (this.state.filterValue && this.state.filterValue !== '') {
+            this.state.filteredItems = this.state.items.filter(
+                (i) => i.label.toLocaleLowerCase().indexOf(this.state.filterValue.toLocaleLowerCase()) !== -1
+            );
+        } else {
+            this.resetFilter();
+        }
+
+        (this as any).setStateDirty('filterValue');
+    }
+
+    private resetFilter(): void {
+        this.state.filterValue = null;
+        this.state.filteredItems = this.state.items;
     }
 
 }

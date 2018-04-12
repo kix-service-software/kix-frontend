@@ -1,5 +1,6 @@
 <div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
-    <input type="text"/>
+    <input type="text" value=state.filterValue disabled=(state.selectedItem ? true : false)
+        on-keyup('filterValueChanged')/>
     <span.dropdown-button.kix-icon-nook-down/>
     <if(state.selectedItem)>
         <div.selected-item>
@@ -10,7 +11,7 @@
     </if>
     <if(state.expanded)>
         <ul.dropdown-list>
-            <for(item in state.items)>
+            <for(item in state.filteredItems)>
                 <li.dropdown-item on-click('itemSelected', item)>
                     <span class=item.icon/>
                     ${item.label}

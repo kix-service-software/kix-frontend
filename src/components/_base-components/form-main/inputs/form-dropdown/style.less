@@ -17,6 +17,15 @@
         list-style: none;
         border: 1px solid @secondary-4;
         background-color: @secondary-2;
+        .dropdown-item {
+            display: grid;
+            grid-template-columns: 2em auto;
+            align-items: center;
+            height: 2em;
+            &:hover {
+                background-color: @secondary-4;
+            }
+        }
     }
     >.selected-item {
         position: absolute;
