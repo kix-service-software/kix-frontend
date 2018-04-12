@@ -1,17 +1,23 @@
 .dialog-main {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    left: @margin-large - @margin-default;
+    right: @margin-large - @margin-default;
+    top: @margin-default;
+    bottom: @margin-default;
+    display: grid;
+    justify-content: center;
+    align-content: center;
     z-index: 200;
     >.dialog-widget {
         >.widget-content {
-            .tab-container {
+            >.tab-container {
+                height: 100%;
                 >.lane-widget {
+                    height: 100%;
                     >.widget-header {
                         border-bottom-right-radius: 0;
                         border-bottom-left-radius: 0;
-                        padding-left: 0px;
+                        padding-left: 0;
                         height: @default-widget-header-height;
                         >.header-left {
                             padding-left: 2px;
@@ -27,13 +33,15 @@
                         }
                     }
                     >.widget-content {
+                        .full-size();
+                        top: @default-widget-header-height;
                         background-color: @secondary-5;
                         border-width: 2px;
                         margin: 0;
                         padding: @margin-default 0;
                         >.tab-content {
                             margin: 0;
-                            >div {
+                            >.lane-tab-widget {
                                 >.widget-content {
                                     background-color: @secondary-5;
                                 }
@@ -44,7 +52,7 @@
             }
         }
     }
-    .close-button {
+    >.close-button {
         font-size: 3.5em;
         position: absolute;
         top: -1.75rem;
