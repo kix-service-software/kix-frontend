@@ -9,7 +9,7 @@
                 </div>
                 <div.field-icon/>
                 <div.field-input>
-                    <input type="text" placeholder=(field.required ? field.label : "")/>
+                    <include(component.getInputComponent(field), { field })/>
                 </div>
             </div>
         </for>
