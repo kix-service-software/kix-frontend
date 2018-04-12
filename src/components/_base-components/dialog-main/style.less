@@ -39,11 +39,16 @@
                         border-width: 2px;
                         margin: 0;
                         padding: @margin-default 0;
+                        overflow: hidden;
                         >.tab-content {
                             margin: 0;
+                            height: 100%;
                             >.lane-tab-widget {
+                                height: 100%;
                                 >.widget-content {
                                     background-color: @secondary-5;
+                                    overflow-x: hidden;
+                                    overflow-y: auto;
                                 }
                             }
                         }
@@ -60,7 +65,7 @@
         color: @primary-3;
         text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
         &:hover {
-            color: @primary-1;
+            color: darken(@primary-3, 15%);
         }
     }
 }
