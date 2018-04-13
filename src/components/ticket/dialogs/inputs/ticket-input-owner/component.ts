@@ -1,6 +1,6 @@
 import { TicketInputOwnerComponentState } from "./TicketInputOwnerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropDownItem } from "@kix/core/dist/model";
+import { FormDropdownItem } from "@kix/core/dist/model";
 
 class TicketInputOwnerComponent {
 
@@ -16,7 +16,7 @@ class TicketInputOwnerComponent {
 
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.agents.map((a) => new FormDropDownItem(a.UserID, 'kix-icon-man', a.UserFullname));
+        this.state.items = objectData.agents.map((a) => new FormDropdownItem(a.UserID, 'kix-icon-man', a.UserFullname));
     }
 
 }

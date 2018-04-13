@@ -100,12 +100,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public async createFormularDefinitions(): Promise<void> {
-        const formularId = 'new-ticket-formular';
+        const formId = 'new-ticket-form';
 
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
-        const existingFormular = configurationService.getModuleConfiguration(formularId, null);
+        const existingFormular = configurationService.getModuleConfiguration(formId, null);
         if (!existingFormular) {
             const fields = [];
             fields.push(new FormField("Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, true));
@@ -123,11 +123,11 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID));
             fields.push(new FormField("Status des Tickets", TicketProperty.STATE_ID));
 
-            const formular = new Form(formularId, 'Neues Ticket', fields);
-            await configurationService.saveModuleConfiguration(formular.id, null, formular);
+            const form = new Form(formId, 'Neues Ticket', fields);
+            await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 
-        configurationService.registerFormular(formularId);
+        configurationService.registerFormular(formId);
     }
 
 }
