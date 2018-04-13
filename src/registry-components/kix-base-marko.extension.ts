@@ -32,6 +32,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-priority',
             'ticket/dialogs/inputs/ticket-input-state',
             'ticket/dialogs/inputs/ticket-input-sla',
+            'ticket/dialogs/inputs/ticket-input-service',
             'ticket/explorer/ticket-queue-explorer',
             'ticket/explorer/ticket-service-explorer',
             'ticket/ticket-module',
@@ -114,6 +115,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
             ['ticket-input-state', 'ticket/dialogs/inputs/ticket-input-state'],
             ['ticket-input-sla', 'ticket/dialogs/inputs/ticket-input-sla'],
+            ['ticket-input-service', 'ticket/dialogs/inputs/ticket-input-service'],
             ...widgets,
             ...explorer
         ];
