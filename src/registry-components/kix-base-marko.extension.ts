@@ -30,6 +30,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
             'ticket/dialogs/inputs/ticket-input-priority',
+            'ticket/dialogs/inputs/ticket-input-state',
             'ticket/explorer/ticket-queue-explorer',
             'ticket/explorer/ticket-service-explorer',
             'ticket/ticket-module',
@@ -110,6 +111,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
+            ['ticket-input-state', 'ticket/dialogs/inputs/ticket-input-state'],
             ...widgets,
             ...explorer
         ];

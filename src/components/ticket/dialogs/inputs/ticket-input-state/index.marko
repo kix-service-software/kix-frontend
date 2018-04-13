@@ -1,0 +1,20 @@
+<form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
+    on-itemChanged('itemChanged')/>
+<if(state.pending)>
+    <div.pending-state>
+        <span>* Warten bis:</span>
+        <span.pending-calendar>
+            <input type="text"/>
+            <span.kix-icon-calendar/>
+        </span>
+        <span>-</span>
+        <span.pending-time>
+            <select>
+                <for(time in state.times)>
+                    <option>${time}</option>
+                </for>
+            </select>
+            <span.kix-icon-time/>
+        </span>
+    </div>
+</if>

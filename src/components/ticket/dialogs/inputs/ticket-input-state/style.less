@@ -1,0 +1,21 @@
+.pending-state {
+    display: grid;
+    grid-template-columns: max-content 14em 0.5em 14em;
+    grid-column-gap: 0.5em;
+    margin-top: 0.5em;
+    align-items: baseline;
+    .pending-time,
+    .pending-calendar {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-column-gap: 0.5em;
+        align-items: baseline;
+    }
+    .pending-time {
+        >select {
+            height: 1.75em;
+            background-color: @secondary-6;
+            border: 1px solid @secondary-3;
+        }
+    }
+}
