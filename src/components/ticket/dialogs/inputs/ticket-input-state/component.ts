@@ -1,6 +1,6 @@
 import { TicketInputStateComponentState } from "./TicketInputStateComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropDownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
+import { FormDropdownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
 
 class TicketInputStateComponent {
 
@@ -17,11 +17,11 @@ class TicketInputStateComponent {
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.states.map((t) =>
-            new FormDropDownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
+            new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
         );
     }
 
-    public itemChanged(item: FormDropDownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         const objectData = ContextService.getInstance().getObjectData();
         const state = objectData.states.find((s) => s.ID === item.id);
         if (state) {

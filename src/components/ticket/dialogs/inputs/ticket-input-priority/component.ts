@@ -1,6 +1,6 @@
 import { TicketInputPriorityComponentState } from "./TicketInputPriorityComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropDownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
+import { FormDropdownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
 
 class TicketInputPriorityComponent {
 
@@ -17,7 +17,7 @@ class TicketInputPriorityComponent {
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.priorities.map((p) =>
-            new FormDropDownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
+            new FormDropdownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
         );
     }
 

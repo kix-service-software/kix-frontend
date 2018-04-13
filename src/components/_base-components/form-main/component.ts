@@ -9,14 +9,14 @@ class FormularComponent {
     private state: FormComponentState;
 
     public onCreate(input: any): void {
-        this.state = new FormComponentState(input.formularId);
+        this.state = new FormComponentState(input.formId);
         FormService.getInstance().setDefaultInputComponent("form-text-input");
     }
 
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
-        if (objectData && objectData.formulars) {
-            this.state.form = objectData.formulars.find((f) => f.id === this.state.formId);
+        if (objectData && objectData.forms) {
+            this.state.form = objectData.forms.find((f) => f.id === this.state.formId);
         }
     }
 

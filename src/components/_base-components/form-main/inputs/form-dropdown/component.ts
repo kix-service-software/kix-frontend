@@ -1,12 +1,12 @@
-import { FormDropDownComponentState } from "./FormDropDownComponentState";
-import { FormDropDownItem, ObjectIcon } from "@kix/core/dist/model";
+import { FormDropdownComponentState } from "./FormDropdownComponentState";
+import { FormDropdownItem, ObjectIcon } from "@kix/core/dist/model";
 
-class FormDropDownComponent {
+class FormDropdownComponent {
 
-    private state: FormDropDownComponentState;
+    private state: FormDropdownComponentState;
 
     public onCreate(input: any): void {
-        this.state = new FormDropDownComponentState();
+        this.state = new FormDropdownComponentState();
     }
 
     public onInput(input: any): void {
@@ -42,13 +42,13 @@ class FormDropDownComponent {
         this.resetFilter();
     }
 
-    private itemSelected(item: FormDropDownItem): void {
+    private itemSelected(item: FormDropdownItem): void {
         this.state.selectedItem = item;
         this.resetFilter();
         (this as any).emit('itemChanged', item);
     }
 
-    private itemHovered(item: FormDropDownItem): void {
+    private itemHovered(item: FormDropdownItem): void {
         this.state.preSelectedItem = item;
     }
 
@@ -129,7 +129,7 @@ class FormDropDownComponent {
             || event.keyCode === 38 || event.keyCode === 40;
     }
 
-    private isSelected(item: FormDropDownItem): boolean {
+    private isSelected(item: FormDropdownItem): boolean {
         return this.state.preSelectedItem && this.state.preSelectedItem.id === item.id;
     }
 
@@ -138,4 +138,4 @@ class FormDropDownComponent {
     }
 }
 
-module.exports = FormDropDownComponent;
+module.exports = FormDropdownComponent;
