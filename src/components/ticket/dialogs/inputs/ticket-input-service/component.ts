@@ -16,9 +16,15 @@ class TicketInputServiceComponent {
 
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.services.map((s) =>
-            new FormDropDownItem(s.ServiceID, new ObjectIcon(TicketProperty.SERVICE_ID, s.ServiceID), s.Name)
-        );
+        this.state.items = objectData.services.map((s) => {
+            const incidentStateID = s.IncidentState ? s.IncidentState.CurInciStateID : null;
+            return new FormDropDownItem(
+                s.ServiceID,
+                new ObjectIcon(TicketProperty.SERVICE_ID, s.ServiceID),
+                s.Name,
+                incidentStateID ? new ObjectIcon("CurInciStateID", s.ServiceID) : null
+            );
+        });
     }
 
 }

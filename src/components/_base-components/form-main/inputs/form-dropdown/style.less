@@ -66,9 +66,11 @@
             background-color: @secondary-2;
             .dropdown-item {
                 display: grid;
-                grid-template-columns: 2em auto;
+                grid-template-columns: max-content max-content max-content;
+                grid-column-gap: 0.5em;
                 align-items: center;
                 height: 2em;
+                padding-left: 0.5rem;
                 &.active {
                     background-color: @secondary-4;
                     font-weight: bold;
