@@ -1,4 +1,5 @@
 import { TreeComponentState } from './model/TreeComponentState';
+import { TreeNode } from '@kix/core/dist/model';
 
 class TreeComponent {
 
@@ -12,8 +13,8 @@ class TreeComponent {
         this.state.tree = input.tree || [];
     }
 
-    private nodeClicked(id: any, isLeaf: boolean = false): void {
-        (this as any).emit('nodeClicked', id, isLeaf);
+    private nodeClicked(node: TreeNode): void {
+        (this as any).emit('nodeClicked', node);
     }
 
 }

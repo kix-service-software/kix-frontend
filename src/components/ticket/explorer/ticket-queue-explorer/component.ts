@@ -1,6 +1,6 @@
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { TreeNode, TreeNodeProperty } from '@kix/core/dist/model';
+import { TreeNode, TreeNodeProperty, ObjectIcon } from '@kix/core/dist/model';
 import { ContextFilter, ObjectType, Queue, TicketProperty } from '@kix/core/dist/model/';
 
 import { TicketQueueExplorerComponentState } from './TicketQueueExplorerComponentState';
@@ -38,14 +38,15 @@ export class QueueExplorerComponent {
         const nodes = [];
         hierarchy.forEach((queue: Queue) => {
             if (queue.hasOwnProperty('Name')) {
-                let subNodes = [];
+                let children = [];
                 if (queue.hasOwnProperty('SubQueues')) {
-                    subNodes = this.prepareTree(queue.SubQueues);
+                    children = this.prepareTree(queue.SubQueues);
                 }
                 const treeNode = new TreeNode(
                     queue.QueueID,
                     queue.Name,
-                    subNodes,
+                    new ObjectIcon(TicketProperty.QUEUE_ID, queue.QueueID),
+                    children,
                     // TODO: Ticketanzahlen ermitteln, falls aktiviert und 0 (bei 'escalated') rausfiltern
                     [
                         new TreeNodeProperty(Math.floor(Math.random() * 100), 'total'),

@@ -1,0 +1,20 @@
+.field-input {
+    .dropdown {
+        position: relative;
+        >.tree-list {
+            z-index: 1;
+            position: absolute;
+            top: @default-input-height;
+            left: 0;
+            right: 0;
+            max-height: 15rem;
+            overflow: auto;
+            border: 1px solid @secondary-4;
+            background-color: @secondary-2;
+            >.tree-node:hover {
+                background-color: @secondary-4;
+                font-weight: bold;
+            }
+        }
+    }
+}

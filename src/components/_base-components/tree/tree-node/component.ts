@@ -1,4 +1,5 @@
 import { TreeNodeComponentState } from './TreeNodeComponentState';
+import { TreeNode } from '@kix/core/dist/model';
 
 class TreeNodeComponent {
 
@@ -12,8 +13,8 @@ class TreeNodeComponent {
         this.state.node = input.node;
     }
 
-    private hasSubNodes(): boolean {
-        return (this.state.node.subNodes && this.state.node.subNodes.length > 0);
+    private hasChildren(): boolean {
+        return (this.state.node.children && this.state.node.children.length > 0);
     }
 
     private hasProperties(): boolean {
@@ -33,12 +34,12 @@ class TreeNodeComponent {
         this.state.expanded = !this.state.expanded;
     }
 
-    private SubNodesExpanded(): boolean {
-        return (this.hasSubNodes() && this.state.expanded);
+    private ChildsExpanded(): boolean {
+        return (this.hasChildren() && this.state.expanded);
     }
 
-    private nodeClicked(id: any, isLeaf: boolean): void {
-        (this as any).emit('nodeClicked', id, isLeaf);
+    private nodeClicked(node: TreeNode, isLeaf: boolean): void {
+        (this as any).emit('nodeClicked', node);
     }
 
 }
