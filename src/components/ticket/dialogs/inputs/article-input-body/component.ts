@@ -1,6 +1,4 @@
 import { ArticleInputBodyComponentState } from "./ArticleInputBodyComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropDownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
 
 class ArticleInputBodyComponent {
 
