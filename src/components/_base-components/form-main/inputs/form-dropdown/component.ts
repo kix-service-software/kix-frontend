@@ -133,8 +133,8 @@ class FormDropDownComponent {
         return this.state.preSelectedItem && this.state.preSelectedItem.id === item.id;
     }
 
-    private hasIconClass(item: FormDropDownItem): boolean {
-        return !(item.icon instanceof ObjectIcon);
+    private hasIconClass(icon: any): boolean {
+        return !(icon instanceof ObjectIcon);
     }
 }
 

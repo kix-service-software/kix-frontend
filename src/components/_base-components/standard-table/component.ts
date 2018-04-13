@@ -4,7 +4,7 @@ import { StandardTableInput } from './StandardTableInput';
 import {
     StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue, ActionFactory
 } from '@kix/core/dist/browser';
-import { SortOrder, KIXObject, Article, IAction } from '@kix/core/dist/model';
+import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
@@ -333,6 +333,14 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }, 10);
 
         return minHeight;
+    }
+
+    private getColumnIcon(column: TableColumn): ObjectIcon {
+        return new ObjectIcon(column.icon[0], column.icon[1]);
+    }
+
+    private getValueIcon(column: TableColumn, value: TableValue): ObjectIcon {
+        return new ObjectIcon(column.id, value.objectValue);
     }
 }
 

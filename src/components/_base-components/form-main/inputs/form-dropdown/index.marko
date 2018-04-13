@@ -3,13 +3,11 @@
         <if(state.selectedItem)>
             <span.selected-item-container>
                 <div.selected-item>
-                    <if(component.hasIconClass(state.selectedItem))>
-                        <span.object-icon class=state.selectedItem.icon/>
-                    </if>
-                    <else>
-                        <icon object=state.selectedItem.icon.Object objectId=state.selectedItem.icon.ObjectID/>
-                    </else>
+                    <icon icon=state.selectedItem.icon showUnknown=true/>
                     <span.item-text>${state.selectedItem.label}</span>
+                    <if(state.selectedItem.secondaryIcon)>
+                        <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
+                    </if>
                     <span.kix-icon-close on-click('removeSelectedItem')/>
                 </div>
             </span>
@@ -25,13 +23,11 @@
             <for(item in state.filteredItems)>
                 <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
                     on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
-                    <if(component.hasIconClass(item))>
-                        <span class=item.icon/>
-                    </if>
-                    <else>
-                        <icon object=item.icon.Object objectId=item.icon.ObjectID/>
-                    </else>
+                    <icon icon=item.icon showUnknown=true/>
                     ${item.label}
+                    <if(item.secondaryIcon)>
+                        <icon icon=item.secondaryIcon showUnknown=true/>
+                    </if>
                 </li>
             </for>
         </ul>
