@@ -1,4 +1,4 @@
-import { Attachment } from '@kix/core/dist/model';
+import { Attachment, ObjectIcon } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
@@ -22,6 +22,7 @@ class ArticleAttachmentComponent {
             const idx = fileName.lastIndexOf('.');
             if (idx >= 0) {
                 this.state.extension = fileName.substring(idx + 1, fileName.length);
+                this.state.icon = new ObjectIcon("Filetype", this.state.extension);
             }
         }
     }

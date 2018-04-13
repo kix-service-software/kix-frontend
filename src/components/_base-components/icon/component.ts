@@ -1,21 +1,18 @@
 import { IconService } from '@kix/core/dist/browser/icon';
+import { ObjectIcon } from '@kix/core/dist/model';
+import { IconComponentState } from './IconComponentState';
 
 class IconComponent {
 
-    private state: any;
+    private state: IconComponentState;
 
     public onCreate(): void {
-        this.state = {
-            object: null,
-            objectId: null,
-            base64: false,
-            content: null
-        };
+        this.state = new IconComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.object = input.object;
-        this.state.objectId = input.objectId;
+        this.state.icon = input.icon;
+        this.state.showUnknown = typeof input.showUnknown !== 'undefined' ? input.showUnknown : false;
         this.setIcon();
     }
 
@@ -24,8 +21,8 @@ class IconComponent {
     }
 
     private async setIcon(): Promise<void> {
-        if (this.state.object && this.state.objectId) {
-            const icon = await IconService.getInstance().getIcon(this.state.object, this.state.objectId);
+        if (this.state.icon instanceof ObjectIcon) {
+            const icon = await IconService.getInstance().getIcon(this.state.icon.Object, this.state.icon.ObjectID);
             if (icon) {
                 if (icon.ContentType === 'image/svg') {
                     this.state.base64 = true;
@@ -33,12 +30,13 @@ class IconComponent {
                     this.state.base64 = false;
                 }
                 this.state.content = icon.Content;
-            } else {
+            } else if (this.state.showUnknown) {
                 this.state.base64 = false;
                 this.state.content = 'kix-icon-unknown';
             }
         } else {
-            this.state.content = null;
+            this.state.base64 = false;
+            this.state.content = this.state.icon;
         }
     }
 

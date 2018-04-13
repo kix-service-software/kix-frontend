@@ -12,7 +12,7 @@
                 <for(column in component.getColumns())>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
                         <if(column.icon)>
-                            <icon object=column.icon[0] objectId=column.icon[1]/>
+                            <icon icon=component.getColumnIcon(column) showUnknown=true/>
                         </if>
                         ${column.text}
                         <if(column.sortable)>
@@ -49,7 +49,7 @@
                                 data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
                                 title=value.displayValue>
                                 <if(column.showIcon)>
-                                    <icon object=column.id objectId=value.objectValue/>
+                                    <icon icon=component.getValueIcon(column, value) showUnknown=true/>
                                 </if>
                                 <if(column.showIcon && column.showText)>&nbsp;</if>
                                 <if(column.showText)>

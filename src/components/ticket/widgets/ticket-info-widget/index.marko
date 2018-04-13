@@ -36,7 +36,7 @@
                     <div>
                         <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider>
                             <@icon>
-                                <icon object="LockID" objectId=state.ticket.LockID/>
+                                <icon icon=component.getIcon("LockID", state.ticket.LockID)/>
                             </@icon>
                         </object-property-label>
                     </div>
@@ -46,7 +46,7 @@
                     <div>
                         <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider>
                             <@icon>
-                                <icon object="CurInciStateID" objectId=component.getIncidentStateId()/>
+                                <icon icon=component.getIcon("CurInciStateID", component.getIncidentStateId())/>
                             </@icon>
                         </object-property-label>
                     </div>
@@ -59,7 +59,7 @@
                     <div>
                         <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider>
                             <@icon>
-                                <icon object="PriorityID" objectId=state.ticket.PriorityID/>
+                                <icon icon=component.getIcon("PriorityID", state.ticket.PriorityID)/>
                             </@icon>
                         </object-property-label>
                     </div>
@@ -77,7 +77,7 @@
                     <div>
                         <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider>
                             <@icon>
-                                <icon object="StateID" objectId=state.ticket.StateID/>
+                                <icon icon=component.getIcon("StateID", state.ticket.StateID)/>
                             </@icon>
                         </object-property-label>
                     </div>

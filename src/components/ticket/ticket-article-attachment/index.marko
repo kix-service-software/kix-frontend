@@ -1,6 +1,6 @@
 <div.attachment>
     <span.attachment-icon>
-        <icon object="Filetype" objectId=state.extension/>
+        <icon icon=state.icon showUnknown=true/>
     </span>
     <span.attachment-link class=(state.progress ? "inactive-link" : "") on-click('download')>
         ${state.attachment.Filename}

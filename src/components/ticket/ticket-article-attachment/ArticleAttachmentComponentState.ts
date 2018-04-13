@@ -1,4 +1,4 @@
-import { Attachment, Article } from '@kix/core/dist/model';
+import { Attachment, Article, ObjectIcon } from '@kix/core/dist/model';
 
 export class ArticleAttachmentComponentState {
 
@@ -6,7 +6,8 @@ export class ArticleAttachmentComponentState {
         public article: Article = null,
         public attachment: Attachment = null,
         public progress: boolean = false,
-        public extension: string = null
+        public extension: string = null,
+        public icon: ObjectIcon = null
     ) { }
 
 }
