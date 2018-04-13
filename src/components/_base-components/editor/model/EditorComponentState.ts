@@ -99,7 +99,7 @@ export class EditorComponentState {
         this.config = {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
-            toolbar,
+            // toolbar,
             width: '100%',
             height: '100%',
             resize_minWidth: 200,
