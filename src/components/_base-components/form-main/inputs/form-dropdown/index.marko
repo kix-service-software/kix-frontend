@@ -3,13 +3,21 @@
         <if(state.selectedItem)>
             <span.selected-item-container>
                 <div.selected-item>
-                    <if(component.hasIconClass(state.selectedItem))>
+                    <if(component.hasIconClass(state.selectedItem.icon))>
                         <span.object-icon class=state.selectedItem.icon/>
                     </if>
                     <else>
                         <icon object=state.selectedItem.icon.Object objectId=state.selectedItem.icon.ObjectID/>
                     </else>
                     <span.item-text>${state.selectedItem.label}</span>
+                    <if(state.selectedItem.secondaryIcon)>
+                        <if(component.hasIconClass(state.selectedItem.secondaryIcon))>
+                            <span class=state.selectedItem.secondaryIcon/>
+                        </if>
+                        <else>
+                            <icon object=state.selectedItem.secondaryIcon.Object objectId=state.selectedItem.secondaryIcon.ObjectID/>
+                        </else>
+                    </if>
                     <span.kix-icon-close on-click('removeSelectedItem')/>
                 </div>
             </span>
@@ -25,13 +33,21 @@
             <for(item in state.filteredItems)>
                 <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
                     on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
-                    <if(component.hasIconClass(item))>
+                    <if(component.hasIconClass(item.icon))>
                         <span class=item.icon/>
                     </if>
                     <else>
                         <icon object=item.icon.Object objectId=item.icon.ObjectID/>
                     </else>
                     ${item.label}
+                    <if(item.secondaryIcon)>
+                        <if(component.hasIconClass(item.secondaryIcon))>
+                            <span class=item.secondaryIcon/>
+                        </if>
+                        <else>
+                            <icon object=item.secondaryIcon.Object objectId=item.secondaryIcon.ObjectID/>
+                        </else>
+                    </if>
                 </li>
             </for>
         </ul>
