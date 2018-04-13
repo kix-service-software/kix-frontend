@@ -52,6 +52,12 @@ class EditorComponent {
         });
     }
 
+    public onDestroy(): void {
+        if (CKEDITOR.instances[this.state.id]) {
+            CKEDITOR.instances[this.state.id].destroy();
+        }
+    }
+
     /**
      * Checks if editor is ready (with timeout recursion), stops after 10 attempts
      *

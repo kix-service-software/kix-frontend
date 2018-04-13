@@ -27,6 +27,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getTicketDependencies(): string[] {
         return [
             'ticket/dialogs/new-ticket-dialog',
+            'ticket/dialogs/inputs/article-input-body',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
             'ticket/dialogs/inputs/ticket-input-priority',
@@ -110,6 +111,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-table', 'ticket/ticket-table'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
+            ['article-input-body', 'ticket/dialogs/inputs/article-input-body'],
             ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
