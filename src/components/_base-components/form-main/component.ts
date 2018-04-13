@@ -3,6 +3,7 @@ import { FormComponentState } from './FormularComponentState';
 import { FormField } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { FormService } from '@kix/core/dist/browser/form';
+import { DialogService } from '@kix/core/dist/browser/DialogService';
 
 class FormularComponent {
 
@@ -23,6 +24,10 @@ class FormularComponent {
     private getInputComponent(field: FormField): any {
         const component = FormService.getInstance().getFormInputComponent(field.property);
         return ComponentsService.getInstance().getComponentTemplate(component);
+    }
+
+    public doCancel(): void {
+        DialogService.getInstance().toggleMainDialog();
     }
 
 }

@@ -48,76 +48,77 @@ html {
     margin-bottom: 0;
 }
 
-button {
-    position: relative;
-    left: -35px;
-    height: 35px;
-    box-sizing: border-box;
-    line-height: 35px;
-    background-color: @primary-6;
-    color: @secondary-6;
-    border-top-left-radius: @border-radius;
-    border-bottom-left-radius: @border-radius;
-    font-weight: 600;
-    border: 0;
-    padding: 0 1em;
-    cursor: pointer;
-    &.submit {
-        background-color: @primary-6;
-        &:after {
-            content: " ";
-            position: absolute;
-            top: 0;
-            right: -35px;
-            display: block;
-            box-sizing: border-box;
-            border: 2px solid @primary-6;
-            width: 35px;
-            height: 35px;
-            border-top-right-radius: @border-radius;
-            border-bottom-right-radius: @border-radius;
-            color: @primary-6;
-            cursor: pointer;
-        }
-        &.disabled {
-            background-color: @secondary-1;
-            &:after {
-                border: 2px solid @secondary-1;
-                color: @secondary-1;
-            }
-        }
-        &:hover {
-            background-color: @tertiary-6;
-            & [class^="kix-icon-"],
-            & [class*=" kix-icon-"] {
-                color: @tertiary-6;
-            }
-        }
-        &:hover:after {
-            border-color: @tertiary-6;
-            color: @tertiary-6;
-        }
-        &:active {
-            background-color: @tertiary-9;
-        }
-        &:active:after {
-            border-color: @tertiary-9;
-        }
-        & [class^="kix-icon-"],
-        & [class*=" kix-icon-"] {
-            color: @primary-6;
-        }
-        &:active [class^="kix-icon-"],
-        &:active [class*=" kix-icon-"] {
-            color: @tertiary-9;
+.button-color(@button-bg-color: @secondary-5, @button-icon-bg-color: @secondary-3, @button-font-color: @default-dark-font-color, @border-color: @secondary-7) {
+    background-color: @button-bg-color;
+    color: @button-font-color;
+    border-color: @border-color;
+    & span[class^="kix-icon-"],
+    & span[class*=" kix-icon-"] {
+        background-color: @button-icon-bg-color;
+        color: @border-color;
+        border-color: @border-color;
+    }
+    &:hover {
+        background-color: darken(@button-bg-color, 20%);
+        color: darken(@button-font-color, 20%);
+        border-color: darken(@border-color, 20%);
+        & span[class^="kix-icon-"],
+        & span[class*=" kix-icon-"] {
+            background-color: darken(@button-icon-bg-color, 20%);
+            color: darken(@border-color, 20%);
+            border-color: darken(@border-color, 20%);
         }
     }
-    & [class^="kix-icon-"],
-    & [class*=" kix-icon-"] {
+    &:disabled {
+        background-color: lighten(@button-bg-color, 20%);
+        color: lighten(@button-font-color, 20%);
+        border-color: lighten(@border-color, 20%);
+        & span[class^="kix-icon-"],
+        & span[class*=" kix-icon-"] {
+            background-color: lighten(@button-icon-bg-color, 20%);
+            color: lighten(@border-color, 20%);
+            border-color: lighten(@border-color, 20%);
+        }
+    }
+}
+
+button {
+    .button-color();
+    cursor: pointer;
+    height: @default-input-height;
+    min-width: 10rem;
+    box-sizing: border-box;
+    line-height: @default-input-height;
+    border-radius: @border-radius;
+    border: 1px solid;
+    padding-left: @default-input-height + .625rem;
+    padding-right: .625rem;
+    position: relative;
+    & span[class^="kix-icon-"],
+    & span[class*=" kix-icon-"] {
+        border-right: 1px solid;
+        width: @default-input-height;
+        height: 100%;
+        line-height: @default-input-height;
+        text-align: center;
+        border-radius: @border-radius;
+        box-sizing: border-box;
         position: absolute;
-        top: 6px;
-        right: -28px;
-        font-size: 1.5em;
+        left: 0;
+        top: 0;
+        font-size: 1.125rem;
+    }
+    &.form-button {
+        .button-color(@secondary-4, @secondary-3, @secondary-0, @primary-2);
+    }
+    &.cancel-button {
+        .button-color(@secondary-6, @secondary-3, @secondary-0, @tertiary-0);
+    }
+    &.submit-button {
+        .button-color(@secondary-6, @secondary-3, @secondary-0, @primary-6);
+    }
+    &.login-button {
+        .button-color(@primary-6, @secondary-6, @secondary-6, @primary-6);
     }
 }
 
