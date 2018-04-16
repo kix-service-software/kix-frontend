@@ -125,8 +125,11 @@ class WidgetComponent {
                 case WidgetType.GROUP:
                     typeClass = 'group-widget';
                     break;
-                case WidgetType.OVERLAY:
-                    typeClass = 'overlay-widget';
+                case WidgetType.INFO_OVERLAY:
+                    typeClass = 'info-overlay-widget';
+                    break;
+                case WidgetType.HINT_OVERLAY:
+                    typeClass = 'hint-overlay-widget';
                     break;
                 default:
                     typeClass = 'content-widget';
