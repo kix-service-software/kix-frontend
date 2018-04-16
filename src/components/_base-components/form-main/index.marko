@@ -2,7 +2,7 @@
     <if(state.form)>
         <for(field in state.form.fields)>
             <div.form-field>
-                <div.field-label>
+                <div.field-label title=field.label>
                     <span.label-text>
                         <if(field.required)>
                             <span.required-field>*</span>
