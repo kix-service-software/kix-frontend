@@ -26,7 +26,7 @@ class ObjectInfoOverlayComponent {
 
         const context = ContextService.getInstance().getContext();
         if (context) {
-            context.setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
+            context.setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
         }
     }
 
@@ -42,7 +42,7 @@ class ObjectInfoOverlayComponent {
         const showOverlay = ApplicationService.getInstance().isShowInfoOverlay();
 
         if (showOverlay) {
-            ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
+            ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
             const infoOverlay = ApplicationService.getInstance().getCurrentInfoOverlay();
             if (infoOverlay[0]) {
                 this.state.content = infoOverlay[0].content;
