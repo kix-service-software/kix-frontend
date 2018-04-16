@@ -1,25 +1,24 @@
 <li.tree-node>
-    <if(component.hasSubNodes())>
-        <span.subtree-icon class=(state.expanded ? "kix-icon-minus" : "kix-icon-plus") on-click('toggleExpand')/>
-    </if>
-    <else>
-        <span.subtree-icon/>
-    </else>
-    <span title=component.getTitle() on-click('nodeClicked', state.node.id, (component.hasSubNodes() ? true : false))>
-        ${state.node.label}
-        <!-- TODO: ggf. in eigene Komponente auslagern -->
-        <if(component.hasProperties())>
-            &nbsp;(<for(prop in state.node.properties | status-var=loop)>
-                <if(loop.getIndex() != 0 )>|</if>
-                <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
-            </for>)
-        </if>
-    </span>
-    <if(component.SubNodesExpanded())>
-        <ul.sub-tree-list>
-            <for(subNode in state.node.subNodes)>
-                <tree-node node=subNode on-nodeClicked('nodeClicked')/>
-            </for>
-        </ul>
+    <div.node-value>
+        <span.tree-icon>
+            <if(component.hasChildren())>
+                <span id="tree-expand" class=(state.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleExpand')/>
+            </if>
+        </span>
+        <icon icon=state.node.icon showUnknown=true/>
+        <span.node-title class=(state.expanded ? "expanded" : "") title=component.getTitle()
+            on-click('nodeClicked', state.node)>
+            ${state.node.label}
+            <!-- TODO: ggf. in eigene Komponente auslagern -->
+            <if(component.hasProperties())>
+                &nbsp;(<for(prop in state.node.properties | status-var=loop)>
+                    <if(loop.getIndex() != 0 )>|</if>
+                    <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
+                </for>)
+            </if>
+        </span>
+    </div>
+    <if(component.ChildsExpanded())>
+        <tree tree=state.node.children on-nodeClicked('nodeClicked')/>
     </if>
 </li>
