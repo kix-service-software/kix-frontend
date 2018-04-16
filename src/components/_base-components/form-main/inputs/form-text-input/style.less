@@ -8,6 +8,10 @@
     height: @default-input-height;
     width: 100%;
     color: @default-dark-font-color;
+    &:hover,
+    &:focus {
+        border-color: darken(@secondary-3, 20%);
+    }
 }
 
 input[type="text"].input-style:read-only {
