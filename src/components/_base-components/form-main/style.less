@@ -1,11 +1,14 @@
+@form-label-columm: 14.5rem;
+@form-hint-icon-column: 2rem;
 .form {
+    padding-left: @margin-widget-content;
     .form-field {
         &:not(:last-child) {
             margin-bottom: @margin-small;
         }
         min-height: 2em;
         display: grid;
-        grid-template-columns: 15.5em 2em auto;
+        grid-template-columns: @form-label-columm @form-hint-icon-column auto;
         >.field-label {
             text-overflow: ellipsis;
             overflow: hidden;
@@ -21,6 +24,20 @@
                     content: " ";
                 }
             }
+        }
+    }
+    .button-container {
+        margin-top: @margin-default;
+        margin-left: @form-label-columm + @form-hint-icon-column;
+        display: grid;
+        grid-auto-columns: 1fr;
+        justify-items: center;
+        grid-auto-flow: column;
+        button:last-child {
+            justify-self: right
+        }
+        button:first-child {
+            justify-self: left;
         }
     }
 }
