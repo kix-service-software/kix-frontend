@@ -13,9 +13,9 @@
             <input.input-style type="text" placeholder=input.placeholder value=state.filterValue on-keydown('keyDown')
                 on-keyup('filterValueChanged')/>
         </else>
-        <span.dropdown-button.kix-icon-nook-down on-click('toggleList')/>
+        <span.dropdown-button.kix-icon-nook-down/>
     </div>
     <if(state.expanded)>
-        <tree tree=state.nodes on-nodeClicked('nodeClicked')/>
+        <tree tree=state.filteredNodes filterValue=state.filterValue on-nodeClicked('nodeClicked')/>
     </if>
 </div>

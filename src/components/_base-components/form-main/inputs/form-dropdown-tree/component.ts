@@ -40,8 +40,10 @@ class FormDropdownTreeComponent {
     }
 
     private toggleList(): void {
-        this.state.expanded = !this.state.expanded;
-        this.resetFilter();
+        if (!this.state.expanded) {
+            this.state.expanded = !this.state.expanded;
+            this.resetFilter();
+        }
     }
 
     private nodeClicked(node: TreeNode): void {
@@ -60,16 +62,6 @@ class FormDropdownTreeComponent {
     private filterValueChanged(event: any): void {
         if (!this.navigationKeyPressed(event)) {
             this.state.filterValue = event.target.value;
-
-            if (this.state.filterValue && this.state.filterValue !== '') {
-                this.state.filteredNodes = this.state.nodes.filter(
-                    (i) => i.label.toLocaleLowerCase().indexOf(this.state.filterValue.toLocaleLowerCase()) !== -1
-                );
-            } else {
-                this.resetFilter();
-            }
-
-            this.state.preSelectedNode = null;
             this.keyDown({ keyCode: 40 });
         }
 
