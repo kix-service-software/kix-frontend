@@ -1,5 +1,6 @@
 import { TreeComponentState } from './TreeComponentState';
 import { TreeNode } from '@kix/core/dist/model';
+import { TreeUtil } from './TreeUtil';
 
 class TreeComponent {
 
@@ -10,50 +11,34 @@ class TreeComponent {
     }
 
     public onInput(input: any): void {
-        this.state.tree = this.cloneTree(input.tree);
-        this.state.filterValue = input.filterValue;
-        this.state.displayTree = this.buildTree([...this.state.tree]);
+        this.state.tree = TreeUtil.cloneTree(input.tree);
+        this.initTree();
+        if (input.filterInputId) {
+            const filterElement = document.getElementById(input.filterInputId);
+            if (filterElement) {
+                filterElement.addEventListener('keyup', this.filterValueChanged.bind(this));
+            }
+        }
     }
 
-    private cloneTree(tree: TreeNode[]): TreeNode[] {
-        const newTree = [];
-
-        for (const node of tree) {
-            const newNode = new TreeNode(
-                node.id, node.label, node.icon, this.cloneTree(node.children), node.properties
-            );
-            newTree.push(newNode);
-        }
-        return newTree;
+    private initTree(): void {
+        this.state.displayTree = TreeUtil.buildTree(this.state.tree, this.state.filterValue);
     }
 
     private nodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
 
-    private buildTree(nodes: TreeNode[]): TreeNode[] {
-        const displayTree = [];
-
-        if (nodes) {
-            for (const node of nodes) {
-                node.children = this.buildTree([...node.children]);
-                if (node.children.length || this.checkNodeLabel(node.label)) {
-                    displayTree.push(node);
-                }
-            }
+    private filterValueChanged(event: any): void {
+        if (!this.navigationKeyPressed(event)) {
+            this.state.filterValue = event.target.value;
+            this.initTree();
         }
-
-        return displayTree;
     }
 
-    private checkNodeLabel(label: string): boolean {
-        let match = true;
-
-        if (this.state.filterValue && this.state.filterValue !== '') {
-            match = label.toLocaleLowerCase().indexOf(this.state.filterValue.toLocaleLowerCase()) !== -1;
-        }
-
-        return match;
+    private navigationKeyPressed(event: any): boolean {
+        return event.keyCode === 13 || event.keyCode === 33 || event.keyCode === 34
+            || event.keyCode === 38 || event.keyCode === 40;
     }
 
 }
