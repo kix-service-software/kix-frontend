@@ -10,19 +10,23 @@
         display: grid;
         grid-template-columns: @form-label-columm @form-hint-icon-column auto;
         >.field-label {
-            text-overflow: ellipsis;
-            overflow: hidden;
             white-space: nowrap;
-            text-align: right;
             font-weight: bold;
             margin-top: .25rem;
+            display: grid;
+            grid-template-columns: auto max-content;
+            >span.label-text {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: right;
+                >.required-field {
+                    &:after {
+                        content: " ";
+                    }
+                }
+            }
             &:after {
                 content: ":"
-            }
-            >.required-field {
-                &:after {
-                    content: " ";
-                }
             }
         }
     }
