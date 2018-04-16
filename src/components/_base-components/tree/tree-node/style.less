@@ -1,57 +1,22 @@
 .tree-list {
     .tree-node {
-        color: @secondary-0;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 100%;
-        text-overflow: ellipsis;
-        margin: .625em 0 0 0;
-    }
-    >.tree-node {
-        &:first-of-type {
-            margin: 0;
-        }
-        &:hover {
-            cursor: pointer;
-        }
-        .subtree-icon {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin: 0 7px 1px 0;
-            color: @secondary-0;
-            text-align: center;
-            font-size: .625rem; // TODO: rem!!!
-            vertical-align: middle;
-            border-radius: 2px;
-            padding: 1px;
-            box-sizing: border-box;
-            visibility: hidden;
-            &[class^="kix-icon-"],
-            &[class*=" kix-icon-"] {
-                visibility: visible;
-                background-color: @secondary-2;
+        >.node-value {
+            display: grid;
+            grid-template-columns: 0.75rem 0.75rem max-content;
+            grid-column-gap: 0.5rem;
+            align-items: center;
+            height: 2rem;
+            padding-left: 0.5rem;
+            >.tree-icon {
+                font-size: 0.75rem;
+                grid-column: 1;
             }
-            &.kix-icon-minus+span {
-                color: @primary-0;
-                font-weight: 600;
+            >.node-title {
+                grid-column: 3;
             }
         }
-        .sub-tree-list {
-            list-style: none;
-            margin-left: 12px;
-        }
-        >.sub-tree-list>.tree-node {
-            .subtree-icon.kix-icon-minus+span {
-                color: @primary-2;
-                font-weight: 600;
-            }
-            >.sub-tree-list .tree-node {
-                .subtree-icon.kix-icon-minus+span {
-                    color: @primary-5;
-                    font-weight: 600;
-                }
-            }
+        >.tree-list {
+            margin-left: 1rem;
         }
     }
 }
