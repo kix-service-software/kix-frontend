@@ -1,15 +1,20 @@
 .tree-list {
     .tree-node {
-        >.tree-icon {
-            font-size: 0.75rem;
-        }
-        >.node-title {
-            margin-left: 0.5rem;
-            &.expanded {
-                font-weight: bold;
+        >.node-value {
+            display: grid;
+            grid-template-columns: 0.75rem 0.75rem max-content;
+            grid-column-gap: 0.5rem;
+            align-items: center;
+            height: 2rem;
+            padding-left: 0.5rem;
+            >.tree-icon {
+                font-size: 0.75rem;
+                grid-column: 1;
+            }
+            >.node-title {
+                grid-column: 3;
             }
         }
-        margin-top: 0.5rem;
         >.tree-list {
             margin-left: 1rem;
         }

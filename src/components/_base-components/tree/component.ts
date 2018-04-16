@@ -1,4 +1,4 @@
-import { TreeComponentState } from './model/TreeComponentState';
+import { TreeComponentState } from './TreeComponentState';
 import { TreeNode } from '@kix/core/dist/model';
 
 class TreeComponent {
