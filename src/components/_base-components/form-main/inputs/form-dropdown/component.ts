@@ -45,6 +45,7 @@ class FormDropdownComponent {
     private itemSelected(item: FormDropdownItem): void {
         this.state.selectedItem = item;
         this.resetFilter();
+        (this as any).emit('itemChanged', item);
     }
 
     private itemHovered(item: FormDropdownItem): void {
