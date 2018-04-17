@@ -1,6 +1,6 @@
 import { IdService } from "@kix/core/dist/browser/IdService";
 
-export class ObjectInfoOverlayComponentState {
+export class OverlayComponentState {
 
     public constructor(
         public show: boolean = false,

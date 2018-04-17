@@ -1,23 +1,23 @@
 import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
-import { ObjectInfoOverlayComponentState } from './ObjectInfoOverlayComponentState';
+import { OverlayComponentState } from './OverlayComponentState';
 import { WidgetType } from '@kix/core/dist/model';
 import { ContextService } from '@kix/core/dist/browser/context';
 import { DialogService } from '@kix/core/dist/browser/DialogService';
 
 class ObjectInfoOverlayComponent {
 
-    private state: ObjectInfoOverlayComponentState;
+    private state: OverlayComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ObjectInfoOverlayComponentState();
+        this.state = new OverlayComponentState();
     }
 
     public onMount(): void {
         ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
         document.addEventListener("click", (event: any) => {
-            if (ApplicationService.getInstance().isShowInfoOverlay()) {
+            if (ApplicationService.getInstance().isShowOverlay()) {
                 if (!this.state.keepShow) {
-                    ApplicationService.getInstance().toggleInfoOverlay();
+                    ApplicationService.getInstance().toggleOverlay();
                 } else {
                     this.state.keepShow = false;
                 }
@@ -26,7 +26,11 @@ class ObjectInfoOverlayComponent {
 
         const context = ContextService.getInstance().getContext();
         if (context) {
-            context.setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
+            if (ApplicationService.getInstance().isHintOverlay()) {
+                context.setWidgetType(this.state.instanceId, WidgetType.HINT_OVERLAY);
+            } else {
+                context.setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
+            }
         }
     }
 
@@ -39,11 +43,15 @@ class ObjectInfoOverlayComponent {
     }
 
     private applicationStateChanged(): void {
-        const showOverlay = ApplicationService.getInstance().isShowInfoOverlay();
+        const showOverlay = ApplicationService.getInstance().isShowOverlay();
 
         if (showOverlay) {
-            ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
-            const infoOverlay = ApplicationService.getInstance().getCurrentInfoOverlay();
+            if (ApplicationService.getInstance().isHintOverlay()) {
+                ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.HINT_OVERLAY);
+            } else {
+                ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
+            }
+            const infoOverlay = ApplicationService.getInstance().getCurrentOverlay();
             if (infoOverlay[0]) {
                 this.state.content = infoOverlay[0].content;
                 this.state.data = infoOverlay[0].data;
@@ -75,7 +83,7 @@ class ObjectInfoOverlayComponent {
     }
 
     private closeOverlay(): void {
-        ApplicationService.getInstance().toggleInfoOverlay();
+        ApplicationService.getInstance().toggleOverlay();
     }
 
     private isDialogShown(): boolean {

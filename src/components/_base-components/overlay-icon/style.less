@@ -1,8 +1,11 @@
-.overlay-info-icon {
+.overlay-icon {
     color: @secondary-0;
     font-size: 0.625em;
     cursor: pointer;
     &.overlay-shown {
         color: @tertiary-1;
+    }
+    &.hint-icon.overlay-shown {
+        color: @secondary-4; // TODO: richtige Farbe ermitteln
     }
 }
