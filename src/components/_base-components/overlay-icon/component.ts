@@ -15,9 +15,13 @@ class OverlayInfoIconComponent {
     }
 
     public onInput(input: any): void {
-        const content = ComponentsService.getInstance().getComponentTemplate(input.content);
-        this.state.overlayWidgetData = new OverlayWidgetData(content, input.data);
         this.state.isHintOverlay = input.isHint || false;
+        if (this.state.isHintOverlay) {
+            this.state.overlayWidgetData = new OverlayWidgetData(input.hint, input.data);
+        } else {
+            const content = ComponentsService.getInstance().getComponentTemplate(input.content);
+            this.state.overlayWidgetData = new OverlayWidgetData(content, input.data);
+        }
     }
 
     public onMount(): void {

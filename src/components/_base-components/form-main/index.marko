@@ -9,7 +9,9 @@
                         </if>${field.label}
                     </span>
                 </div>
-                <div.field-icon/>
+                <div.field-icon>
+                    <overlay-icon isHint=true content="Das ist ein Hinweistext." data={title: field.label}/>
+                </div>
                 <div.field-input>
                     <include(component.getInputComponent(field), { field })/>
                 </div>

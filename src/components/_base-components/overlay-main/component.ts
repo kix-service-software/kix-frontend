@@ -26,7 +26,7 @@ class ObjectInfoOverlayComponent {
 
         const context = ContextService.getInstance().getContext();
         if (context) {
-            if (ApplicationService.getInstance().isHintOverlay()) {
+            if (this.isHintOverlay()) {
                 context.setWidgetType(this.state.instanceId, WidgetType.HINT_OVERLAY);
             } else {
                 context.setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
@@ -46,7 +46,7 @@ class ObjectInfoOverlayComponent {
         const showOverlay = ApplicationService.getInstance().isShowOverlay();
 
         if (showOverlay) {
-            if (ApplicationService.getInstance().isHintOverlay()) {
+            if (this.isHintOverlay()) {
                 ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.HINT_OVERLAY);
             } else {
                 ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
@@ -88,6 +88,10 @@ class ObjectInfoOverlayComponent {
 
     private isDialogShown(): boolean {
         return DialogService.getInstance().isShowMainDialog();
+    }
+
+    private isHintOverlay(): boolean {
+        return ApplicationService.getInstance().isHintOverlay();
     }
 
 }
