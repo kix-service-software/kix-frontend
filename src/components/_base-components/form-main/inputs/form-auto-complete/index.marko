@@ -1,0 +1,34 @@
+<div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
+    <div.input-style>
+        <if(state.selectedItem)>
+            <span.selected-item-container>
+                <div.selected-item>
+                    <icon icon=state.selectedItem.icon showUnknown=true/>
+                    <span.item-text>${state.selectedItem.label}</span>
+                    <if(state.selectedItem.secondaryIcon)>
+                        <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
+                    </if>
+                    <span.kix-icon-close on-click('removeSelectedItem')/>
+                </div>
+            </span>
+        </if>
+        <else>
+            <input.input-style type="text" placeholder=input.placeholder value=state.filterValue on-keydown('keyDown')
+                on-keyup('filterValueChanged')/>
+        </else>
+    </div>
+    <if(state.expanded)>
+        <ul.dropdown-list>
+            <for(item in state.items)>
+                <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
+                    on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
+                    <icon icon=item.icon showUnknown=true/>
+                    ${item.label}
+                    <if(item.secondaryIcon)>
+                        <icon icon=item.secondaryIcon showUnknown=true/>
+                    </if>
+                </li>
+            </for>
+        </ul>
+    </if>
+</div>

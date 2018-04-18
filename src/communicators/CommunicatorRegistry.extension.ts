@@ -6,6 +6,7 @@ import { ContextCommunicator } from './ContextCommunicator';
 import { IconCommunicator } from './IconCommunicator';
 import { MainMenuCommunicator } from './MainMenuCommunicator';
 import { TicketCommunicator } from './TicketCommunicator';
+import { ContactCommunicator } from './ContactCommunicator';
 
 export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
@@ -14,6 +15,7 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
             ApplicationCommunicator,
             AuthenticationCommunicator,
             ConfigurationCommunicatior,
+            ContactCommunicator,
             ContextCommunicator,
             IconCommunicator,
             MainMenuCommunicator,
