@@ -17,18 +17,25 @@
                 on-keyup('filterValueChanged')/>
         </else>
     </div>
-    <if(state.expanded)>
+    <if(state.expanded || state.isLoading)>
         <ul.dropdown-list>
-            <for(item in state.items)>
-                <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
-                    on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
-                    <icon icon=item.icon showUnknown=true/>
-                    ${item.label}
-                    <if(item.secondaryIcon)>
-                        <icon icon=item.secondaryIcon showUnknown=true/>
-                    </if>
+            <if(state.isLoading)>
+                <li.loading-item>
+                    <loading-spinner/>
                 </li>
-            </for>
+            </if>
+            <else>
+                <for(item in state.items)>
+                    <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
+                        on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
+                        <icon icon=item.icon showUnknown=true/>
+                        ${item.label}
+                        <if(item.secondaryIcon)>
+                            <icon icon=item.secondaryIcon showUnknown=true/>
+                        </if>
+                    </li>
+                </for>
+            </else>
         </ul>
     </if>
 </div>

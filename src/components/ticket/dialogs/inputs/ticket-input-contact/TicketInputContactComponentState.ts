@@ -5,7 +5,8 @@ export class TicketInputContactComponentState {
     public constructor(
         public items: FormDropdownItem[] = [],
         public field: FormField = null,
-        public autoCompleteConfiguration: AutoCompleteConfiguration = null
+        public autoCompleteConfiguration: AutoCompleteConfiguration = null,
+        public isLoading: boolean = false
     ) { }
 
 }

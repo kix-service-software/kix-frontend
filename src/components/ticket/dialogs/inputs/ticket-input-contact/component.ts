@@ -24,10 +24,13 @@ class TicketInputContactComponent {
     }
 
     private async loadContacts(): Promise<void> {
+        this.state.isLoading = true;
         const contacts = await ContactService.getInstance().loadContacts(this.state.autoCompleteConfiguration.limit);
         this.state.items = contacts.map(
             (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.UserEmail)
         );
+
+        this.state.isLoading = false;
     }
 
 }

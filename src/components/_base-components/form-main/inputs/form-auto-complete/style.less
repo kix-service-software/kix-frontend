@@ -45,7 +45,7 @@
             top: @default-input-height;
             left: 0;
             right: 0;
-            max-height: 10em;
+            max-height: 10rem;
             overflow: auto;
             list-style: none;
             border: 1px solid @secondary-4;
@@ -53,13 +53,20 @@
             .dropdown-item {
                 display: grid;
                 grid-template-columns: max-content max-content max-content;
-                grid-column-gap: 0.5em;
+                grid-column-gap: 0.5rem;
                 align-items: center;
                 height: 2em;
                 padding-left: 0.5rem;
                 &.active {
                     background-color: @secondary-4;
                     font-weight: bold;
+                }
+            }
+            >.loading-item {
+                height: 2rem;
+                >.loading-spinner {
+                    width: 1.75rem;
+                    height: 1.75rem;
                 }
             }
         }
