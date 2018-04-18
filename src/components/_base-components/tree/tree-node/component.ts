@@ -31,8 +31,20 @@ class TreeNodeComponent {
         (this as any).setStateDirty();
     }
 
-    private nodeClicked(node: TreeNode, isLeaf: boolean): void {
+    private nodeClicked(): void {
+        (this as any).emit('nodeClicked', this.state.node);
+    }
+
+    private treeNodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
+    }
+
+    private nodeHovered(): void {
+        (this as any).emit('nodeHovered', this.state.node);
+    }
+
+    private treeNodeHovered(node: TreeNode): void {
+        (this as any).emit('nodeHovered', node);
     }
 
 }

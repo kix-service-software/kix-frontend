@@ -1,5 +1,5 @@
 <div.dropdown dropDownId=state.dropdownId>
-    <div.input-style on-click('toggleList')>
+    <div.input-style on-click('toggleList', false)>
         <if(state.selectedNode)>
             <span.selected-item-container>
                 <div.selected-item>
@@ -12,7 +12,7 @@
         <else>
             <input.input-style id=state.treeId type="text" placeholder=input.placeholder value=state.filterValue/>
         </else>
-        <span.dropdown-button.kix-icon-nook-down/>
+        <span.dropdown-button.kix-icon-nook-down on-click('toggleList')/>
     </div>
     <if(state.expanded)>
         <tree tree=state.nodes on-nodeClicked('nodeClicked') filterInputId=state.treeId/>
