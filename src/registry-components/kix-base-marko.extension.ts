@@ -35,6 +35,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-sla',
             'ticket/dialogs/inputs/ticket-input-service',
             'ticket/dialogs/inputs/ticket-input-queue',
+            'ticket/dialogs/inputs/ticket-input-contact',
             'ticket/explorer/ticket-queue-explorer',
             'ticket/explorer/ticket-service-explorer',
             'ticket/ticket-module',
@@ -120,6 +121,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-input-sla', 'ticket/dialogs/inputs/ticket-input-sla'],
             ['ticket-input-service', 'ticket/dialogs/inputs/ticket-input-service'],
             ['ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue'],
+            ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
             ...widgets,
             ...explorer
         ];
