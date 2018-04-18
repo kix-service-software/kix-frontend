@@ -1,10 +1,11 @@
-import { FormField, FormDropdownItem } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, AutoCompleteConfiguration } from "@kix/core/dist/model";
 
 export class TicketInputContactComponentState {
 
     public constructor(
         public items: FormDropdownItem[] = [],
-        public field: FormField = null
+        public field: FormField = null,
+        public autoCompleteConfiguration: AutoCompleteConfiguration = null
     ) { }
 
 }
