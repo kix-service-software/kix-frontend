@@ -1,5 +1,6 @@
 import { FormAutoCompleteComponentState } from "./FormAutoCompleteComponentState";
 import { FormDropdownItem, ObjectIcon } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class FormAutoCompleteComponent {
 
@@ -14,6 +15,8 @@ class FormAutoCompleteComponent {
     }
 
     public onMount(): void {
+        this.state.autoCompleteConfiguration = FormService.getInstance().getAutoCompleteConfiguration();
+
         document.addEventListener("click", (event) => {
             let element: any = event.target;
 

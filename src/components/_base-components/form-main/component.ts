@@ -15,10 +15,7 @@ class FormularComponent {
     }
 
     public onMount(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData && objectData.forms) {
-            this.state.form = objectData.forms.find((f) => f.id === this.state.formId);
-        }
+        this.state.form = FormService.getInstance().getForm(this.state.formId, true);
     }
 
     private getInputComponent(field: FormField): any {

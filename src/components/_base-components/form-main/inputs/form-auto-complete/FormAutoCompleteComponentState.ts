@@ -1,4 +1,4 @@
-import { FormDropdownItem } from '@kix/core/dist/model';
+import { FormDropdownItem, AutoCompleteConfiguration } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 export class FormAutoCompleteComponentState {
@@ -9,7 +9,8 @@ export class FormAutoCompleteComponentState {
         public expanded: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId(),
         public filterValue: string = null,
-        public preSelectedItem: FormDropdownItem = null
+        public preSelectedItem: FormDropdownItem = null,
+        public autoCompleteConfiguration: AutoCompleteConfiguration = null
     ) { }
 
 }
