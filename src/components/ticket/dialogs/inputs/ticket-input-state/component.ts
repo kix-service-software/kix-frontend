@@ -22,11 +22,14 @@ class TicketInputStateComponent {
     }
 
     public itemChanged(item: FormDropdownItem): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        const state = objectData.states.find((s) => s.ID === item.id);
-        if (state) {
-            const stateType = objectData.stateTypes.find((t) => t.ID === state.TypeID);
-            this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
+        this.state.pending = false;
+        if (item) {
+            const objectData = ContextService.getInstance().getObjectData();
+            const state = objectData.states.find((s) => s.ID === item.id);
+            if (state) {
+                const stateType = objectData.stateTypes.find((t) => t.ID === state.TypeID);
+                this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
+            }
         }
     }
 

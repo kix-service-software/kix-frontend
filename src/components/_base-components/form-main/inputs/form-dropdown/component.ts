@@ -54,6 +54,7 @@ class FormDropdownComponent {
 
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
+        this.itemSelected(null);
     }
 
     private filterValueChanged(event: any): void {
