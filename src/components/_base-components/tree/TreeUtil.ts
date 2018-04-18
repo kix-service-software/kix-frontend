@@ -7,7 +7,7 @@ export class TreeUtil {
         if (tree) {
             for (const node of tree) {
                 const newNode = new TreeNode(
-                    node.id, node.label, node.icon, this.cloneTree(node.children), node.properties
+                    node.id, node.label, node.icon, this.cloneTree(node.children), node.properties, node.expanded
                 );
                 newTree.push(newNode);
             }
@@ -15,14 +15,14 @@ export class TreeUtil {
         return newTree;
     }
 
-    public static buildTree(nodes: TreeNode[], filterValue: string): TreeNode[] {
+    public static buildTree(nodes: TreeNode[], filterValue: string, expandNodes: boolean = false): TreeNode[] {
         const displayTree = [];
 
         if (nodes) {
-            const clonedTree = TreeUtil.cloneTree(nodes);
             for (const node of nodes) {
-                node.children = TreeUtil.buildTree([...node.children], filterValue);
+                node.children = TreeUtil.buildTree([...node.children], filterValue, expandNodes);
                 if (node.children.length || this.checkNodeLabel(node.label, filterValue)) {
+                    node.expanded = expandNodes;
                     displayTree.push(node);
                 }
             }
