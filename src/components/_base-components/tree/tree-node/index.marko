@@ -15,6 +15,9 @@
                 </for>)
             </if>
         </span>
+        <if(state.node.secondaryIcon)>
+            <icon icon=state.node.secondaryIcon/>
+        </if>
     </div>
     <if(state.node.expanded)>
         <tree subTree=true tree=state.node.children on-nodeClicked('treeNodeClicked') on-nodeHovered('treeNodeHovered')/>

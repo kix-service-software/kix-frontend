@@ -26,6 +26,7 @@ class TicketInputTypeComponent {
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
                     new ObjectIcon(TicketProperty.QUEUE_ID, queue.QueueID),
+                    null,
                     this.prepareTree(queue.SubQueues)
                 );
                 return treeNode;

@@ -46,6 +46,7 @@ export class QueueExplorerComponent {
                     queue.QueueID,
                     queue.Name,
                     new ObjectIcon(TicketProperty.QUEUE_ID, queue.QueueID),
+                    null,
                     children,
                     null,
                     null,
