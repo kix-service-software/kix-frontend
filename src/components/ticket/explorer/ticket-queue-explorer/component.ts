@@ -47,6 +47,9 @@ export class QueueExplorerComponent {
                     queue.Name,
                     new ObjectIcon(TicketProperty.QUEUE_ID, queue.QueueID),
                     children,
+                    null,
+                    null,
+                    null,
                     // TODO: Ticketanzahlen ermitteln, falls aktiviert und 0 (bei 'escalated') rausfiltern
                     [
                         new TreeNodeProperty(Math.floor(Math.random() * 100), 'total'),

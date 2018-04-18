@@ -38,9 +38,11 @@ class FormDropdownTreeComponent {
         });
     }
 
-    private toggleList(): void {
-        if (!this.state.expanded) {
-            this.state.expanded = !this.state.expanded;
+    private toggleList(close: boolean = true): void {
+        if (this.state.expanded && close) {
+            this.state.expanded = false;
+        } else {
+            this.state.expanded = true;
         }
     }
 
