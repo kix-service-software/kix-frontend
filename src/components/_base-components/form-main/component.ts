@@ -26,6 +26,11 @@ class FormularComponent {
         return ComponentsService.getInstance().getComponentTemplate(component);
     }
 
+    private getFieldHint(field: FormField): string {
+        const hint = FormService.getInstance().getFormFieldHint(field);
+        return hint ? hint : field.property;
+    }
+
     public doCancel(): void {
         DialogService.getInstance().toggleMainDialog();
     }
