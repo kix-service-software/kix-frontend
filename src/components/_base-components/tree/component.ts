@@ -11,18 +11,23 @@ class TreeComponent {
     }
 
     public onInput(input: any): void {
-        this.state.tree = TreeUtil.cloneTree(input.tree);
-        this.initTree();
-        if (input.filterInputId) {
-            const filterElement = document.getElementById(input.filterInputId);
-            if (filterElement) {
-                filterElement.addEventListener('keyup', this.filterValueChanged.bind(this));
+        if (input.subTree) {
+            this.state.displayTree = input.tree;
+        } else {
+            this.state.tree = TreeUtil.cloneTree(input.tree);
+            this.initTree();
+            if (input.filterInputId) {
+                const filterElement = document.getElementById(input.filterInputId);
+                if (filterElement) {
+                    filterElement.addEventListener('keyup', this.filterValueChanged.bind(this));
+                }
             }
         }
     }
 
-    private initTree(): void {
-        this.state.displayTree = TreeUtil.buildTree(this.state.tree, this.state.filterValue);
+    private initTree(expandNodes: boolean = false): void {
+        const newTree = TreeUtil.cloneTree(this.state.tree);
+        this.state.displayTree = TreeUtil.buildTree(newTree, this.state.filterValue, expandNodes);
     }
 
     private nodeClicked(node: TreeNode): void {
@@ -32,7 +37,7 @@ class TreeComponent {
     private filterValueChanged(event: any): void {
         if (!this.navigationKeyPressed(event)) {
             this.state.filterValue = event.target.value;
-            this.initTree();
+            this.initTree(this.state.filterValue && this.state.filterValue !== '');
         }
     }
 

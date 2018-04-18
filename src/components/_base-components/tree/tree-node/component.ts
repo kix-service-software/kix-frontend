@@ -17,25 +17,18 @@ class TreeNodeComponent {
         return (this.state.node.children && this.state.node.children.length > 0);
     }
 
-    private hasProperties(): boolean {
-        return (this.state.node.properties && this.state.node.properties.length > 0);
-    }
-
-    private getTitle(): string {
+    private getLabel(): string {
         let title = this.state.node.label;
-        if (this.hasProperties()) {
+        if (this.state.node.properties) {
             const values = this.state.node.properties.map((prop) => prop.value);
             title += ' (' + values.join('|') + ')';
         }
         return title;
     }
 
-    private toggleExpand(): void {
-        this.state.expanded = !this.state.expanded;
-    }
-
-    private ChildsExpanded(): boolean {
-        return (this.hasChildren() && this.state.expanded);
+    private toggleNode(): void {
+        this.state.node.expanded = !this.state.node.expanded;
+        (this as any).setStateDirty();
     }
 
     private nodeClicked(node: TreeNode, isLeaf: boolean): void {
