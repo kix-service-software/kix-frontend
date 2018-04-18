@@ -12,6 +12,7 @@ class FormAutoCompleteComponent {
 
     public onInput(input: any): void {
         this.state.items = input.items;
+        this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
     }
 
     public onMount(): void {
