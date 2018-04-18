@@ -13,6 +13,7 @@ export class TreeUtil {
                     node.id,
                     node.label,
                     node.icon,
+                    node.secondaryIcon,
                     this.cloneTree(node, node.children, activeNode),
                     parent,
                     null,

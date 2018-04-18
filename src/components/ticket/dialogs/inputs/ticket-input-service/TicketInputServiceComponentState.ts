@@ -1,9 +1,9 @@
-import { FormField, FormDropdownItem } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, TreeNode } from "@kix/core/dist/model";
 
 export class TicketInputServiceComponentState {
 
     public constructor(
-        public items: FormDropdownItem[] = [],
+        public nodes: TreeNode[] = [],
         public field: FormField = null
     ) { }
 

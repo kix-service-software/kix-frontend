@@ -1,6 +1,6 @@
 import { TicketInputServiceComponentState } from "./TicketInputServiceComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty } from "@kix/core/dist/model";
+import { FormDropdownItem, ObjectIcon, TicketProperty, Service, TreeNode } from "@kix/core/dist/model";
 
 class TicketInputServiceComponent {
 
@@ -16,15 +16,25 @@ class TicketInputServiceComponent {
 
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.services.map((s) => {
-            const incidentStateID = s.IncidentState ? s.IncidentState.CurInciStateID : null;
-            return new FormDropdownItem(
-                s.ServiceID,
-                new ObjectIcon(TicketProperty.SERVICE_ID, s.ServiceID),
-                s.Name,
-                incidentStateID ? new ObjectIcon("CurInciStateID", s.ServiceID) : null
-            );
-        });
+        this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
+    }
+
+    private prepareTree(services: Service[]): TreeNode[] {
+        let nodes = [];
+        if (services) {
+            nodes = services.map((service: Service) => {
+                const incidentIcon = new ObjectIcon('CurInciStateID', service.IncidentState.CurInciStateID);
+
+                const treeNode = new TreeNode(
+                    service.ServiceID, service.Name,
+                    new ObjectIcon(TicketProperty.SERVICE_ID, service.ServiceID),
+                    incidentIcon,
+                    this.prepareTree(service.SubServices)
+                );
+                return treeNode;
+            });
+        }
+        return nodes;
     }
 
 }
