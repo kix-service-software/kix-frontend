@@ -10,7 +10,7 @@
                     </span>
                 </div>
                 <div.field-icon>
-                    <overlay-icon isHint=true content="Das ist ein Hinweistext." data={title: field.label}/>
+                    <overlay-icon isHint=true content=component.getFieldHint(field) data={title: field.label}/>
                 </div>
                 <div.field-input>
                     <include(component.getInputComponent(field), { field })/>
