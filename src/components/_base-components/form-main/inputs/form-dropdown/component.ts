@@ -12,6 +12,12 @@ class FormDropdownComponent {
     public onInput(input: any): void {
         this.state.items = input.items;
         this.state.filteredItems = input.items;
+        this.state.selectedItem = null;
+        this.state.preSelectedItem = null;
+        this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
+        if (this.state.filteredItems.length === 1) {
+            this.itemSelected(this.state.filteredItems[0]);
+        }
     }
 
     public onMount(): void {
@@ -38,8 +44,10 @@ class FormDropdownComponent {
     }
 
     private toggleList(): void {
-        this.state.expanded = !this.state.expanded;
-        this.resetFilter();
+        if (this.state.enabled) {
+            this.state.expanded = !this.state.expanded;
+            this.resetFilter();
+        }
     }
 
     private itemSelected(item: FormDropdownItem): void {
