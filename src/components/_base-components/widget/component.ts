@@ -148,6 +148,14 @@ class WidgetComponent {
         return this.state.widgetType === WidgetType.LANE || this.state.widgetType === WidgetType.LANE_TAB;
     }
 
+    private isOverlayWidget(): boolean {
+        return this.state.widgetType === WidgetType.HINT_OVERLAY || this.state.widgetType === WidgetType.INFO_OVERLAY;
+    }
+
+    private closeClicked(): void {
+        ApplicationService.getInstance().toggleOverlay();
+    }
+
 }
 
 module.exports = WidgetComponent;

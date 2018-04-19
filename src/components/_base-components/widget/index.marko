@@ -24,6 +24,11 @@
                         </else>
                     </span>
                 </if>
+                <if(component.isOverlayWidget())>
+                    <span.close-icon-wrapper>
+                        <span.kix-icon-close on-click('closeClicked')/>
+                    </span>
+                </if>
             </else>
         </span>
         <span.header-left>

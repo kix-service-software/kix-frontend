@@ -51,11 +51,11 @@ class ObjectInfoOverlayComponent {
             } else {
                 ContextService.getInstance().getContext().setWidgetType(this.state.instanceId, WidgetType.INFO_OVERLAY);
             }
-            const infoOverlay = ApplicationService.getInstance().getCurrentOverlay();
-            if (infoOverlay[0]) {
-                this.state.content = infoOverlay[0].content;
-                this.state.data = infoOverlay[0].data;
-                this.state.position = infoOverlay[1];
+            const overlay = ApplicationService.getInstance().getCurrentOverlay();
+            if (overlay[0]) {
+                this.state.content = overlay[0].content;
+                this.state.data = overlay[0].data;
+                this.state.position = overlay[1];
             }
             this.state.keepShow = true;
         }
@@ -80,10 +80,6 @@ class ObjectInfoOverlayComponent {
                 overlay.style.top = '45%';
             }
         }
-    }
-
-    private closeOverlay(): void {
-        ApplicationService.getInstance().toggleOverlay();
     }
 
     private isDialogShown(): boolean {
