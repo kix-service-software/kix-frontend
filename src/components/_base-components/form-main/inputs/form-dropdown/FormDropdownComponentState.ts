@@ -10,7 +10,8 @@ export class FormDropdownComponentState {
         public expanded: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId(),
         public filterValue: string = null,
-        public preSelectedItem: FormDropdownItem = null
+        public preSelectedItem: FormDropdownItem = null,
+        public enabled: boolean = true
     ) { }
 
 }
