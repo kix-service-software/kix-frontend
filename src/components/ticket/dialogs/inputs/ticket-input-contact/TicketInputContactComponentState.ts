@@ -1,4 +1,4 @@
-import { FormField, FormDropdownItem, AutoCompleteConfiguration } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, AutoCompleteConfiguration, Contact } from "@kix/core/dist/model";
 
 export class TicketInputContactComponentState {
 
@@ -6,7 +6,8 @@ export class TicketInputContactComponentState {
         public items: FormDropdownItem[] = [],
         public field: FormField = null,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
-        public isLoading: boolean = false
+        public isLoading: boolean = false,
+        public contacts: Contact[] = []
     ) { }
 
 }

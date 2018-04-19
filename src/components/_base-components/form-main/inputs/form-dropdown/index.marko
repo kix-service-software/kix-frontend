@@ -1,5 +1,5 @@
 <div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
-    <div.input-style>
+    <div.input-style class=(!state.enabled ? "read-only" : "")>
         <if(state.selectedItem)>
             <span.selected-item-container>
                 <div.selected-item>
@@ -13,8 +13,8 @@
             </span>
         </if>
         <else>
-            <input.input-style type="text" placeholder=input.placeholder value=state.filterValue on-keydown('keyDown')
-                on-keyup('filterValueChanged')/>
+            <input.input-style type="text" readonly=(!state.enabled) placeholder=input.placeholder value=state.filterValue
+                on-keydown('keyDown') on-keyup('filterValueChanged')/>
         </else>
         <span.dropdown-button.kix-icon-nook-down/>
     </div>
