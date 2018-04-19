@@ -1,10 +1,9 @@
-import { FormField, FormDropdownItem } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/dist/model";
 
-export class TicketInputStateComponentState {
+export class TicketInputStateComponentState extends FormInputComponentState {
 
     public constructor(
         public items: FormDropdownItem[] = [],
-        public field: FormField = null,
         public pending: boolean = false,
         public times: string[] = [
             "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30",
@@ -13,6 +12,8 @@ export class TicketInputStateComponentState {
             "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
             "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30", "23:59"
         ]
-    ) { }
+    ) {
+        super();
+    }
 
 }

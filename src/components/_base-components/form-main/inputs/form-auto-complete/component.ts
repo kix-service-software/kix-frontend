@@ -16,8 +16,6 @@ class FormAutoCompleteComponent {
     }
 
     public onMount(): void {
-        this.state.autoCompleteConfiguration = FormService.getInstance().getAutoCompleteConfiguration();
-
         document.addEventListener("click", (event) => {
             let element: any = event.target;
 
