@@ -10,7 +10,6 @@ export class FormAutoCompleteComponentState {
         public dropdownId: string = IdService.generateDateBasedId(),
         public filterValue: string = null,
         public preSelectedItem: FormDropdownItem = null,
-        public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public isLoading: boolean = false
     ) { }
 

@@ -1,8 +1,13 @@
 import { TicketInputContactComponentState } from "./TicketInputContactComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, AutoCompleteConfiguration, Contact } from "@kix/core/dist/model";
+import {
+    AutoCompleteConfiguration,
+    Contact,
+    FormDropdownItem, FormInputComponentState,
+    ObjectIcon, Form, FormFieldValue
+} from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
-import { FormService, FormFieldValueChangeEvent, FormFieldValue } from "@kix/core/dist/browser/form";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputContactComponent {
 
@@ -12,14 +17,15 @@ class TicketInputContactComponent {
         this.state = new TicketInputContactComponentState();
     }
 
-    public onInput(input): void {
+    public onInput(input: FormInputComponentState): void {
         this.state.field = input.field;
+        this.state.formId = input.formId;
     }
 
     public onMount(): void {
         this.state.items = [];
-        this.state.autoCompleteConfiguration =
-            FormService.getInstance().getAutoCompleteConfiguration() || new AutoCompleteConfiguration();
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
         this.loadContacts();
     }
 
@@ -45,7 +51,8 @@ class TicketInputContactComponent {
         } else {
             value = new FormFieldValue<Contact>(null);
         }
-        FormService.getInstance().provideFormFieldValue(this.state.field, value);
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, value);
     }
 
 }

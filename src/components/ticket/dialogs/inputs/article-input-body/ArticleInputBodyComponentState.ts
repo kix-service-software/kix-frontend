@@ -1,9 +1,5 @@
-import { FormField } from "@kix/core/dist/model";
+import { FormField, FormInputComponentState } from "@kix/core/dist/model";
 
-export class ArticleInputBodyComponentState {
-
-    public constructor(
-        public field: FormField = null
-    ) { }
+export class ArticleInputBodyComponentState extends FormInputComponentState {
 
 }

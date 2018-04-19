@@ -1,10 +1,9 @@
-import { FormField, FormDropdownItem } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/dist/model";
 
-export class TicketInputTypeComponentState {
+export class TicketInputTypeComponentState extends FormInputComponentState {
 
-    public constructor(
-        public items: FormDropdownItem[] = [],
-        public field: FormField = null
-    ) { }
+    public constructor(public items: FormDropdownItem[] = []) {
+        super();
+    }
 
 }
