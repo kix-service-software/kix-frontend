@@ -2,10 +2,12 @@
     color: @secondary-0;
     font-size: 0.625em;
     cursor: pointer;
-    &.overlay-shown {
+    &.overlay-shown,
+    &:hover {
         color: @tertiary-1;
     }
-    &.hint-icon.overlay-shown {
+    &.hint-icon.overlay-shown,
+    &.hint-icon:hover {
         color: @secondary-2;
     }
 }
