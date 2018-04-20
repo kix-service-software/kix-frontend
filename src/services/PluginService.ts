@@ -48,15 +48,6 @@ export class PluginService implements IPluginService {
         });
     }
 
-    public async getWidgetFactory(widgetId: string): Promise<IWidgetFactoryExtension> {
-        const widgetFactories = await this.getExtensions<IWidgetFactoryExtension>(KIXExtensions.WIDGET);
-        return widgetFactories.find((wf) => wf.widgetId === widgetId);
-    }
-
-    public async getWidgetFactories(): Promise<IWidgetFactoryExtension[]> {
-        return await this.getExtensions<IWidgetFactoryExtension>(KIXExtensions.WIDGET);
-    }
-
     public async getModuleFactory(moduleId: string): Promise<IModuleFactoryExtension> {
         const moduleFactories = await this.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
         return moduleFactories.find((mf) => mf.getModuleId() === moduleId);

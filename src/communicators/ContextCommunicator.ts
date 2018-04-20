@@ -14,7 +14,6 @@ import {
     SaveContextConfigurationRequest
 } from '@kix/core/dist/model';
 
-import { IWidgetFactoryExtension } from '@kix/core/dist/extensions/';
 import { CommunicatorResponse } from '@kix/core/dist/common';
 
 export class ContextCommunicator<T extends ContextConfiguration> extends KIXCommunicator {
@@ -46,10 +45,7 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
             configuration = moduleDefaultConfiguration;
         }
 
-        const availableWidgets = await this.widgetRepositoryService.getAvailableWidgets(data.contextId);
-
         configuration.contextId = data.contextId;
-        configuration.availableWidgets = availableWidgets;
 
         const response = new LoadContextConfigurationResponse(configuration);
         return new CommunicatorResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
