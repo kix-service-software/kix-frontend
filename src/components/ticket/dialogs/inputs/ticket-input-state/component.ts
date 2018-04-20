@@ -22,7 +22,7 @@ class TicketInputStateComponent {
         );
     }
 
-    public itemChanged(item: FormDropdownItem): void {
+    private itemChanged(item: FormDropdownItem): void {
         this.state.pending = false;
         this.state.currentItem = item;
         if (item) {
@@ -34,7 +34,6 @@ class TicketInputStateComponent {
             }
         }
     }
-
 }
 
 module.exports = TicketInputStateComponent;

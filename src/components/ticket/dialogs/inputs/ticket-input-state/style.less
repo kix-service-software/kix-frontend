@@ -1,28 +1,16 @@
 .pending-state {
     display: grid;
-    grid-template-columns: max-content 14rem 0.5rem 14rem;
-    grid-column-gap: 0.5rem;
-    margin-top: 0.5rem;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    grid-gap: @margin-small;
+    margin-top: @margin-small;
     align-items: center;
-    .pending-time,
-    .pending-calendar {
-        display: grid;
-        grid-template-columns: 12rem 12rem;
-        grid-column-gap: 0.5rem;
-        align-items: center;
-        >input[type="date"] {
-            font: unset;
-            height: 1.75rem;
-            border: 1px solid @secondary-3;
-            padding-left: 0.5rem;
-        }
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
+        color: @secondary-1;
     }
-    .pending-time {
-        >select {
-            height: 1.75rem;
-            background-color: @secondary-6;
-            border: 1px solid @secondary-3;
-            padding-left: 0.5rem;
-        }
+    >input.date-input,
+    >select.time-input {
+        font: unset;
     }
 }

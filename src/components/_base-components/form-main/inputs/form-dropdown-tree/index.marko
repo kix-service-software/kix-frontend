@@ -1,18 +1,24 @@
-<div.dropdown dropDownId=state.dropdownId>
-    <div.input-style on-click('toggleList', false)>
+<div.dropdown-tree dropDownId=state.dropdownId on-click('toggleList', false)>
+    <div.dropdown-input-container class={"list-shown": state.expanded}>
         <if(state.selectedNode)>
-            <span.selected-item-container>
-                <div.selected-item>
-                    <icon icon=state.selectedNode.icon showUnknown=true/>
-                    <span.item-text>${state.selectedNode.label}</span>
-                    <span.kix-icon-close on-click('removeSelectedItem')/>
-                </div>
-            </span>
+            <div.input-style>
+                <span.selected-item-container>
+                    <div.selected-item>
+                        <icon icon=state.selectedNode.icon showUnknown=true/>
+                        <span.item-text>${state.selectedNode.label}</span>
+                        <if(state.selectedNode.secondaryIcon)>
+                            <icon icon=state.selectedNode.secondaryIcon showUnknown=true/>
+                        </if>
+                        <span.kix-icon-close on-click('removeSelectedItem')/>
+                    </div>
+                </span>
+            </div>
         </if>
         <else>
-            <input.input-style id=state.treeId type="text" placeholder=input.placeholder value=state.filterValue/>
+            <input.input-style id=state.treeId type="text" placeholder=input.placeholder value=state.filterValue
+                required=input.required/>
         </else>
-        <span.dropdown-button.kix-icon-nook-down on-click('toggleList')/>
+        <span.dropdown-button.kix-icon-sort-down/>
     </div>
     <if(state.expanded)>
         <tree tree=state.nodes on-nodeClicked('nodeClicked') filterInputId=state.treeId/>
