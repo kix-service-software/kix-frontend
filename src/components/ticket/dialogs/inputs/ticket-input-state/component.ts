@@ -24,6 +24,7 @@ class TicketInputStateComponent {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.pending = false;
+        this.state.currentItem = item;
         if (item) {
             const objectData = ContextService.getInstance().getObjectData();
             const state = objectData.states.find((s) => s.ID === item.id);

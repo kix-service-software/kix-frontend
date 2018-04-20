@@ -1,5 +1,5 @@
 <form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
-    on-itemChanged('itemChanged') required=state.field.required/>
+    on-itemChanged('itemChanged') selectedItem=state.currentItem required=state.field.required/>
 <if(state.pending)>
     <div.pending-state>
         <input.input-style.date-input type="date" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"/>
