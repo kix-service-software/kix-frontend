@@ -12,7 +12,7 @@ class FormDropdownComponent {
     public onInput(input: any): void {
         this.state.items = input.items;
         this.state.filteredItems = input.items;
-        this.state.selectedItem = null;
+        this.state.selectedItem = input.selectedItem;
         this.state.preSelectedItem = null;
         this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
         if (this.state.filteredItems.length === 1) {
