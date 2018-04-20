@@ -39,21 +39,20 @@ class FormDropdownTreeComponent {
         });
     }
 
-    private toggleList(close: boolean = true): void {
-        if (!this.preventToggle) {
-            if (this.state.expanded && close) {
+    private toggleList(): void {
+        if (this.preventToggle) {
+            this.preventToggle = false;
+        } else {
+            if (this.state.expanded) {
                 this.state.expanded = false;
             } else {
                 this.state.expanded = true;
             }
-        } else {
-            this.preventToggle = false;
         }
     }
 
     private nodeClicked(node: TreeNode): void {
         this.state.selectedNode = node;
-        this.toggleList();
     }
 
     private itemHovered(item: TreeNode): void {
