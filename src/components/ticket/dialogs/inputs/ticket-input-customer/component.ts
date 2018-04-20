@@ -35,15 +35,19 @@ class TicketInputTypeComponent {
         this.state.items = customers.map(
             (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.CustomerCompanyName)
         );
+
+        this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
     }
 
     private formChanged(event: FormFieldValueChangeEvent<Contact>): void {
         if (event.formField.property === TicketProperty.CUSTOMER_USER_ID) {
             if (event.formFieldValue.value) {
                 const contact = event.formFieldValue.value;
+                this.state.primaryCustomerId = contact.UserCustomerID;
                 this.loadCustomers([contact.UserCustomerID]);
                 this.state.hasContact = true;
             } else {
+                this.state.currentItem = null;
                 this.state.hasContact = false;
                 this.state.items = [];
             }
@@ -58,6 +62,10 @@ class TicketInputTypeComponent {
         }
 
         return placeholder;
+    }
+
+    private itemChanged(item: FormDropdownItem): void {
+        this.state.currentItem = item;
     }
 
 }

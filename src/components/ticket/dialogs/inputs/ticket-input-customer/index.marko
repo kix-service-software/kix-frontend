@@ -1,1 +1,2 @@
-<form-dropdown enabled=state.hasContact items=state.items placeholder=component.getPlaceholder()/>
+<form-dropdown enabled=state.hasContact selectedItem=state.currentItem items=state.items
+    placeholder=component.getPlaceholder() on-itemChanged('itemChanged')/>
