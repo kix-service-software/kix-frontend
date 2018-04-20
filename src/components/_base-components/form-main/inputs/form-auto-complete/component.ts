@@ -1,18 +1,21 @@
 import { FormAutoCompleteComponentState } from "./FormAutoCompleteComponentState";
-import { FormDropdownItem, ObjectIcon } from "@kix/core/dist/model";
+import { FormDropdownItem, ObjectIcon, AutoCompleteConfiguration } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class FormAutoCompleteComponent {
 
     private state: FormAutoCompleteComponentState;
 
+    private timeout: any;
+    private currentSearchValue: string;
+
     public onCreate(input: any): void {
         this.state = new FormAutoCompleteComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.items = input.items;
-        this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
+        this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
+        this.state.searchCallback = input.searchCallback;
     }
 
     public onMount(): void {
@@ -38,13 +41,9 @@ class FormAutoCompleteComponent {
         });
     }
 
-    private toggleList(): void {
-        this.state.expanded = !this.state.expanded;
-        this.resetFilter();
-    }
-
     private itemSelected(item: FormDropdownItem): void {
         this.state.selectedItem = item;
+        this.state.expanded = false;
         this.resetFilter();
         (this as any).emit('itemChanged', item);
     }
@@ -58,16 +57,42 @@ class FormAutoCompleteComponent {
         this.itemSelected(null);
     }
 
-    private filterValueChanged(event: any): void {
+    private searchValueChanged(event: any): void {
         if (!this.navigationKeyPressed(event)) {
-            //
+            this.state.searchValue = event.target.value;
+            this.startSearch();
         }
+    }
 
-        (this as any).setStateDirty('filterValue');
+    private startSearch(): void {
+        const hasMinLength = this.state.searchValue.length >= this.state.autoCompleteConfiguration.charCount;
+        if (this.state.searchValue && hasMinLength && !this.state.isLoading) {
+            this.currentSearchValue = this.state.searchValue;
+            window.clearTimeout(this.timeout);
+            this.timeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
+        } else {
+            this.state.items = [];
+        }
+    }
+
+    private async loadData(): Promise<void> {
+        this.state.isLoading = true;
+        this.state.expanded = true;
+        if (this.state.searchCallback) {
+            this.state.items = await this.state.searchCallback(
+                this.state.autoCompleteConfiguration.limit, this.state.searchValue
+            );
+
+            this.state.isLoading = false;
+
+            if (this.currentSearchValue !== this.state.searchValue) {
+                this.startSearch();
+            }
+        }
     }
 
     private resetFilter(): void {
-        this.state.filterValue = null;
+        this.state.searchValue = null;
     }
 
     private keyDown(event: any): void {
@@ -90,7 +115,7 @@ class FormAutoCompleteComponent {
                 case 13: // enter
                     this.itemSelected(this.state.preSelectedItem);
                     this.state.preSelectedItem = null;
-                    this.toggleList();
+                    this.state.expanded = false;
                     break;
                 default:
             }

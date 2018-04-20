@@ -23,24 +23,9 @@ class TicketInputContactComponent {
     }
 
     public onMount(): void {
-        this.state.items = [];
+        this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
-        this.loadContacts();
-    }
-
-    private async loadContacts(): Promise<void> {
-        this.state.isLoading = true;
-
-        this.state.contacts = await ContactService.getInstance().loadContacts(
-            this.state.autoCompleteConfiguration.limit
-        );
-
-        this.state.items = this.state.contacts.map(
-            (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.UserEmail)
-        );
-
-        this.state.isLoading = false;
     }
 
     private contactChanged(item: FormDropdownItem): void {
@@ -53,6 +38,19 @@ class TicketInputContactComponent {
         }
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.provideFormFieldValue(this.state.field, value);
+    }
+
+    private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
+        this.state.contacts = await ContactService.getInstance().loadContacts(limit);
+
+        let items = [];
+        if (searchValue && searchValue !== '') {
+            items = this.state.contacts.map(
+                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.UserEmail)
+            );
+        }
+
+        return items;
     }
 
 }

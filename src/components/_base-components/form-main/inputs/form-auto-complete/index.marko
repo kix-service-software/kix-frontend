@@ -1,4 +1,4 @@
-<div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
+<div.dropdown dropDownId=state.dropdownId>
     <div.input-style>
         <if(state.selectedItem)>
             <span.selected-item-container>
@@ -13,8 +13,8 @@
             </span>
         </if>
         <else>
-            <input.input-style type="text" placeholder=input.placeholder value=state.filterValue on-keydown('keyDown')
-                on-keyup('filterValueChanged')/>
+            <input.input-style type="text" placeholder=input.placeholder value=state.searchValue on-keydown('keyDown')
+                on-keyup('searchValueChanged')/>
         </else>
     </div>
     <if(state.expanded || state.isLoading)>
@@ -24,7 +24,7 @@
                     <loading-spinner/>
                 </li>
             </if>
-            <else>
+            <else-if(state.items && state.items.length)>
                 <for(item in state.items)>
                     <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
                         on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
@@ -35,6 +35,13 @@
                         </if>
                     </li>
                 </for>
+            </else-if>
+            <else>
+                <li.dropdown-item>
+                    <span>
+                        Keine Ansprechpartner gefunden (mind. ${state.autoCompleteConfiguration.charCount} Zeichen für die Suche eingeben)
+                    </span>
+                </li>
             </else>
         </ul>
     </if>

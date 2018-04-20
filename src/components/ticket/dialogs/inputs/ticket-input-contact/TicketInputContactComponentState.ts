@@ -5,10 +5,10 @@ import {
 export class TicketInputContactComponentState extends FormInputComponentState {
 
     public constructor(
-        public items: FormDropdownItem[] = [],
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public isLoading: boolean = false,
-        public contacts: Contact[] = []
+        public contacts: Contact[] = [],
+        public searchCallback: (limit: number, searchValue: string) => Promise<FormDropdownItem[]> = null
     ) {
         super();
     }
