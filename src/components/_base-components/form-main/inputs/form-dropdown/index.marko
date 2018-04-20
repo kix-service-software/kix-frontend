@@ -1,7 +1,7 @@
-<div.dropdown dropDownId=state.dropdownId on-click('toggleList', false)>
+<div.dropdown dropDownId=state.dropdownId>
     <div.dropdown-input-container class={"list-shown": state.expanded}>
         <if(state.selectedItem)>
-            <div.input-style class={"read-only": !state.enabled}>
+            <div.input-style class={"read-only": !state.enabled} on-click('toggleList', false)>
                 <span.selected-item-container>
                     <div.selected-item>
                         <icon icon=state.selectedItem.icon showUnknown=true/>
@@ -16,9 +16,10 @@
         </if>
         <else>
             <input.input-style type="text" readonly=(!state.enabled) placeholder=input.placeholder value=state.filterValue
-                on-keydown('keyDown') on-keyup('filterValueChanged') required=input.required/>
+                on-keydown('keyDown') on-keyup('filterValueChanged') required=input.required
+                on-click('toggleList', false)/>
         </else>
-        <span.dropdown-button.kix-icon-sort-down/>
+        <span.dropdown-button.kix-icon-sort-down on-click('toggleList')/>
     </div>
     <if(state.expanded)>
         <ul.dropdown-list>

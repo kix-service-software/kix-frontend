@@ -1,7 +1,7 @@
-<div.dropdown-tree dropDownId=state.dropdownId on-click('toggleList')>
+<div.dropdown-tree dropDownId=state.dropdownId>
     <div.dropdown-input-container class={"list-shown": state.expanded}>
         <if(state.selectedNode)>
-            <div.input-style>
+            <div.input-style on-click('toggleList', false)>
                 <span.selected-item-container>
                     <div.selected-item>
                         <icon icon=state.selectedNode.icon showUnknown=true/>
@@ -16,9 +16,9 @@
         </if>
         <else>
             <input.input-style id=state.treeId type="text" placeholder=input.placeholder value=state.filterValue
-                required=input.required/>
+                required=input.required on-click('toggleList', false)/>
         </else>
-        <span.dropdown-button.kix-icon-sort-down/>
+        <span.dropdown-button.kix-icon-sort-down on-click('toggleList')/>
     </div>
     <if(state.expanded)>
         <tree tree=state.nodes on-nodeClicked('nodeClicked') filterInputId=state.treeId/>
