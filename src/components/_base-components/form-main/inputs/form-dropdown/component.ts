@@ -15,9 +15,6 @@ class FormDropdownComponent {
         this.state.selectedItem = input.selectedItem;
         this.state.preSelectedItem = null;
         this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
-        if (this.state.filteredItems.length === 1) {
-            this.itemSelected(this.state.filteredItems[0]);
-        }
     }
 
     public onMount(): void {
