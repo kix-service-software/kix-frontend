@@ -1,22 +1,24 @@
-<div.dropdown dropDownId=state.dropdownId on-click('toggleList')>
-    <div.input-style class=(!state.enabled ? "read-only" : "")>
+<div.dropdown dropDownId=state.dropdownId on-click('toggleList', false)>
+    <div.dropdown-input-container class={"list-shown": state.expanded}>
         <if(state.selectedItem)>
-            <span.selected-item-container>
-                <div.selected-item>
-                    <icon icon=state.selectedItem.icon showUnknown=true/>
-                    <span.item-text>${state.selectedItem.label}</span>
-                    <if(state.selectedItem.secondaryIcon)>
-                        <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
-                    </if>
-                    <span.kix-icon-close on-click('removeSelectedItem')/>
-                </div>
-            </span>
+            <div.input-style class={"read-only": !state.enabled}>
+                <span.selected-item-container>
+                    <div.selected-item>
+                        <icon icon=state.selectedItem.icon showUnknown=true/>
+                        <span.item-text>${state.selectedItem.label}</span>
+                        <if(state.selectedItem.secondaryIcon)>
+                            <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
+                        </if>
+                        <span.kix-icon-close on-click('removeSelectedItem')/>
+                    </div>
+                </span>
+            </div>
         </if>
         <else>
             <input.input-style type="text" readonly=(!state.enabled) placeholder=input.placeholder value=state.filterValue
-                on-keydown('keyDown') on-keyup('filterValueChanged')/>
+                on-keydown('keyDown') on-keyup('filterValueChanged') required=input.required/>
         </else>
-        <span.dropdown-button.kix-icon-nook-down/>
+        <span.dropdown-button.kix-icon-sort-down/>
     </div>
     <if(state.expanded)>
         <ul.dropdown-list>

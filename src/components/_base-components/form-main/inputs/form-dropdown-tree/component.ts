@@ -4,6 +4,7 @@ import { FormDropdownItem, ObjectIcon, TreeNode } from "@kix/core/dist/model";
 class FormDropdownTreeComponent {
 
     private state: FormDropdownTreeComponentState;
+    private preventToggle: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new FormDropdownTreeComponentState();
@@ -39,10 +40,14 @@ class FormDropdownTreeComponent {
     }
 
     private toggleList(close: boolean = true): void {
-        if (this.state.expanded && close) {
-            this.state.expanded = false;
+        if (!this.preventToggle) {
+            if (this.state.expanded && close) {
+                this.state.expanded = false;
+            } else {
+                this.state.expanded = true;
+            }
         } else {
-            this.state.expanded = true;
+            this.preventToggle = false;
         }
     }
 
@@ -57,6 +62,7 @@ class FormDropdownTreeComponent {
 
     private removeSelectedItem(): void {
         this.state.selectedNode = null;
+        this.preventToggle = true;
     }
 
     private isSelected(item: FormDropdownItem): boolean {

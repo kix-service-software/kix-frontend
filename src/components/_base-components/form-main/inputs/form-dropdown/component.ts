@@ -4,6 +4,7 @@ import { FormDropdownItem, ObjectIcon } from "@kix/core/dist/model";
 class FormDropdownComponent {
 
     private state: FormDropdownComponentState;
+    private preventToggle: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new FormDropdownComponentState();
@@ -44,9 +45,13 @@ class FormDropdownComponent {
     }
 
     private toggleList(): void {
-        if (this.state.enabled) {
-            this.state.expanded = !this.state.expanded;
-            this.resetFilter();
+        if (!this.preventToggle) {
+            if (this.state.enabled) {
+                this.state.expanded = !this.state.expanded;
+                this.resetFilter();
+            }
+        } else {
+            this.preventToggle = false;
         }
     }
 
@@ -63,6 +68,7 @@ class FormDropdownComponent {
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
         this.itemSelected(null);
+        this.preventToggle = true;
     }
 
     private filterValueChanged(event: any): void {

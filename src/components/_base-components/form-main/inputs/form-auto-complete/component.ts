@@ -5,6 +5,7 @@ import { FormService } from "@kix/core/dist/browser/form";
 class FormAutoCompleteComponent {
 
     private state: FormAutoCompleteComponentState;
+    private preventToggle: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new FormAutoCompleteComponentState();
@@ -39,8 +40,12 @@ class FormAutoCompleteComponent {
     }
 
     private toggleList(): void {
-        this.state.expanded = !this.state.expanded;
-        this.resetFilter();
+        if (!this.preventToggle) {
+            this.state.expanded = !this.state.expanded;
+            this.resetFilter();
+        } else {
+            this.preventToggle = false;
+        }
     }
 
     private itemSelected(item: FormDropdownItem): void {
@@ -56,6 +61,7 @@ class FormAutoCompleteComponent {
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
         this.itemSelected(null);
+        this.preventToggle = true;
     }
 
     private filterValueChanged(event: any): void {
