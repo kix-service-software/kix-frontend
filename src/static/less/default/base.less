@@ -58,15 +58,15 @@ html {
         color: @border-color;
         border-color: @border-color;
     }
-    &:hover {
-        background-color: darken(@button-bg-color, 20%);
-        color: darken(@button-font-color, 20%);
-        border-color: darken(@border-color, 20%);
+    &:hover:not(:disabled) {
+        background-color: darken(@button-bg-color, 10%);
+        color: darken(@button-font-color, 10%);
+        border-color: darken(@border-color, 10%);
         & span[class^="kix-icon-"],
         & span[class*=" kix-icon-"] {
-            background-color: darken(@button-icon-bg-color, 20%);
-            color: darken(@border-color, 20%);
-            border-color: darken(@border-color, 20%);
+            background-color: darken(@button-icon-bg-color, 10%);
+            color: darken(@border-color, 10%);
+            border-color: darken(@border-color, 10%);
         }
     }
     &:disabled {
