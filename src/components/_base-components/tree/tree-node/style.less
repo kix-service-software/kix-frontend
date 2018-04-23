@@ -4,6 +4,12 @@
 @tree-icon-color: @secondary-0;
 .tree-list {
     .tree-node {
+        display: grid;
+        grid-template-columns: 0.75rem auto;
+        align-items: center;
+        >.tree-icon {
+            font-size: 0.75rem;
+        }
         >.node-value {
             display: grid;
             grid-template-columns: @tree-icon-size @tree-icon-size max-content @tree-icon-size;
@@ -30,6 +36,13 @@
         }
         >.tree-list {
             margin-left: @tree-column-gap+@tree-icon-size;
+        }
+        &.active {
+            >.node-value {
+                background: @secondary-1;
+                font-weight: bold;
+                cursor: pointer;
+            }
         }
     }
 }

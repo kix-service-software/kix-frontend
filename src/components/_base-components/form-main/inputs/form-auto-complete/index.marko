@@ -1,7 +1,7 @@
 <div.dropdown-auto-complete dropDownId=state.dropdownId>
     <div.dropdown-input-container class={"list-shown": state.expanded}>
         <if(state.selectedItem)>
-            <div.input-style>
+            <div.input-style on-click('toggleList', false)>
                 <span.selected-item-container>
                     <div.selected-item>
                         <icon icon=state.selectedItem.icon showUnknown=true/>
@@ -16,7 +16,7 @@
         </if>
         <else>
             <input.input-style type="text" placeholder=input.placeholder value=state.searchValue on-keydown('keyDown')
-                on-keyup('searchValueChanged') required=input.required/>
+                on-keyup('searchValueChanged') required=input.required on-click('toggleList', false)/>
         </else>
     </div>
     <if(state.expanded || state.isLoading)>

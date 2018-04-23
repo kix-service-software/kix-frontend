@@ -16,6 +16,7 @@ class FormAutoCompleteComponent {
     public onInput(input: any): void {
         this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
         this.state.searchCallback = input.searchCallback;
+        this.state.selectedItem = input.selectedItem;
     }
 
     public onMount(): void {
@@ -150,6 +151,14 @@ class FormAutoCompleteComponent {
 
     private hasIconClass(icon: any): boolean {
         return !(icon instanceof ObjectIcon);
+    }
+
+    private toggleList(close: boolean = false): void {
+        if (this.state.expanded && close) {
+            this.state.expanded = false;
+        } else {
+            this.state.expanded = true;
+        }
     }
 }
 
