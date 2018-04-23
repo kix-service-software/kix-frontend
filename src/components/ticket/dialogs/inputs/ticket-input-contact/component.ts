@@ -46,7 +46,7 @@ class TicketInputContactComponent {
         let items = [];
         if (searchValue && searchValue !== '') {
             items = this.state.contacts.map(
-                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.UserEmail)
+                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.DisplayValue)
             );
         }
 

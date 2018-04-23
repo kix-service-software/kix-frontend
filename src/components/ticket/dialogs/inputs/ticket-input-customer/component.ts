@@ -33,7 +33,7 @@ class TicketInputTypeComponent {
     private async loadCustomers(customerIds: string[]): Promise<void> {
         const customers = await CustomerService.getInstance().loadContacts(customerIds);
         this.state.items = customers.map(
-            (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.CustomerCompanyName)
+            (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue)
         );
 
         this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
