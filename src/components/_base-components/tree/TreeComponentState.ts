@@ -8,7 +8,8 @@ export class TreeComponentState {
         public filterValue: string = null,
         public treeId: string = null,
         public activeNode: TreeNode = null,
-        public subTree: boolean = false
+        public subTree: boolean = false,
+        public filterInputId: string = null
     ) { }
 
 }

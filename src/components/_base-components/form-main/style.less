@@ -46,13 +46,13 @@
                 width: 100%;
                 color: @default-dark-font-color;
                 &:hover,
-                &:focus:not(:read-only) {
+                &:focus:not(:disabled) {
                     border-color: darken(@secondary-3, 20%);
                 }
             }
             input[type="text"].input-style {
                 padding-top: .25rem;
-                &:read-only {
+                &:disabled {
                     background-color: @secondary-4;
                 }
             }
@@ -70,45 +70,41 @@
                             border-color: darken(@secondary-3, 20%);
                         }
                     }
-                    >input.input-style:focus:not(:read-only)+.dropdown-button {
+                    >input.input-style:focus:not(:disabled)~.dropdown-button {
                         border-color: darken(@secondary-3, 20%);
                     }
-                    >input.input-style:not(:read-only)+.dropdown-button:hover,
-                    >div.input-style:not(.read-only)+.dropdown-button:hover {
+                    >input.input-style:not(:disabled)~.dropdown-button:hover {
                         background-color: darken(@secondary-4, 20%);
                         color: darken(@secondary-2, 20%);
                         cursor: pointer;
                     }
-                    >div.input-style {
-                        &.read-only {
-                            background-color: @secondary-4;
-                        }
-                        >.selected-item-container {
-                            display: inline-block;
-                            margin: .25rem 0;
-                            >.selected-item {
-                                display: grid;
-                                grid-auto-flow: column;
-                                align-items: center;
-                                grid-gap: @margin-small;
-                                grid-template-rows: 1.5rem;
-                                background-color: @secondary-5;
-                                border-radius: @border-radius;
-                                padding: 0 @margin-small;
-                                span:first-child[class^="kix-icon-"],
-                                span:first-child[class*=" kix-icon-"] {
-                                    font-size: .875rem;
-                                }
-                                .item-text {
-                                    align-self: end;
-                                }
-                                .kix-icon-close {
-                                    font-size: .75rem;
-                                    color: @secondary-2;
-                                    cursor: pointer;
-                                    &:hover {
-                                        color: darken(@secondary-2, 20%);
-                                    }
+                    >.selected-item-container {
+                        display: inline-block;
+                        position: absolute;
+                        top: .25rem;
+                        left: .25rem;
+                        >.selected-item {
+                            display: grid;
+                            grid-auto-flow: column;
+                            align-items: center;
+                            grid-gap: @margin-small;
+                            grid-template-rows: 1.5rem;
+                            background-color: @secondary-5;
+                            border-radius: @border-radius;
+                            padding: 0 @margin-small;
+                            span:first-child[class^="kix-icon-"],
+                            span:first-child[class*=" kix-icon-"] {
+                                font-size: .875rem;
+                            }
+                            .item-text {
+                                align-self: end;
+                            }
+                            .kix-icon-close {
+                                font-size: .75rem;
+                                color: @secondary-2;
+                                cursor: pointer;
+                                &:hover {
+                                    color: darken(@secondary-2, 20%);
                                 }
                             }
                         }

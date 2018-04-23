@@ -29,6 +29,7 @@ class TreeNodeComponent {
     private toggleNode(): void {
         this.state.node.expanded = !this.state.node.expanded;
         (this as any).setStateDirty();
+        (this as any).emit('nodeToggled', this.state.node);
     }
 
     private nodeClicked(): void {

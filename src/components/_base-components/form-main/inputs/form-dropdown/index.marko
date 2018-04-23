@@ -1,9 +1,11 @@
-<div.dropdown dropDownId=state.dropdownId on-click('toggleList', false)>
+<div.dropdown dropDownId=state.dropdownId on-click('setKeepExpanded')>
     <div.dropdown-input-container class={"list-shown": state.expanded}>
-        <input.input-style type="text" readonly=(!state.enabled) placeholder=input.placeholder value=state.filterValue
-            on-keydown('keyDown') on-keyup('filterValueChanged') required=input.required/>
+        <input.input-style type="text" readonly=(!state.enabled) disabled=(!state.enabled)
+            placeholder=(state.selectedItem ? "" : input.placeholder) value=state.filterValue on-keydown('keyDown')
+            on-keyup('filterValueChanged') required=input.required on-click('toggleList', false)
+            on-focus('toggleList', false) key="dropdown-input"/>
         <if(state.selectedItem)>
-            <span.selected-item-container>
+            <span.selected-item-container on-click('toggleList', false)>
                 <div.selected-item>
                     <icon icon=state.selectedItem.icon showUnknown=true/>
                     <span.item-text>${state.selectedItem.label}</span>
@@ -14,7 +16,7 @@
                 </div>
             </span>
         </if>
-        <span.dropdown-button.kix-icon-sort-down/>
+        <span.dropdown-button.kix-icon-sort-down on-click('focusInput')/>
     </div>
     <if(state.expanded)>
         <ul.dropdown-list>

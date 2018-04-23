@@ -17,13 +17,13 @@ class TreeComponent {
         } else {
             this.state.tree = TreeUtil.cloneTree(null, input.tree, this.state.activeNode);
             this.initTree(false, null, false);
-            if (input.filterInputId) {
-                const filterElement = document.getElementById(input.filterInputId);
-                if (filterElement) {
-                    filterElement.addEventListener('keyup', this.filterValueChanged.bind(this));
-                    filterElement.addEventListener('keydown', this.navigateTree.bind(this));
-                }
-            }
+            // if (input.filterInputId) {
+            //     const filterElement = document.getElementById(input.filterInputId);
+            //     if (filterElement) {
+            //         filterElement.addEventListener('keyup', this.filterValueChanged.bind(this));
+            //         filterElement.addEventListener('keydown', this.navigateTree.bind(this));
+            //     }
+            // }
             this.state.activeNode = null;
         }
     }
@@ -39,6 +39,10 @@ class TreeComponent {
         this.state.displayTree = tree;
     }
 
+    private nodeToggled(node: TreeNode): void {
+        (this as any).emit('nodeToggled', node);
+    }
+
     private nodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
@@ -52,23 +56,23 @@ class TreeComponent {
 
     private navigateTree(event: any): void {
         if (this.navigationKeyPressed(event)) {
-            switch (event.keyCode) {
-                case 13: // Enter
+            switch (event.key) {
+                case 'Enter':
                     this.nodeClicked(this.state.activeNode);
                     break;
-                case 27: // Escape
+                case 'Escape':
                     this.nodeClicked(null);
                     break;
-                case 37: // Left
+                case 'ArrowLeft':
                     this.state.activeNode.expanded = false;
                     break;
-                case 38: // Up
+                case 'ArrowUp':
                     this.state.activeNode = TreeUtil.navigateUp(this.state.activeNode, this.state.displayTree);
                     break;
-                case 39: // Right
+                case 'ArrowRight':
                     this.state.activeNode.expanded = true;
                     break;
-                case 40: // Down
+                case 'ArrowDown':
                     this.state.activeNode = TreeUtil.navigateDown(this.state.activeNode, this.state.displayTree);
                     break;
                 default:
@@ -79,12 +83,12 @@ class TreeComponent {
     }
 
     private navigationKeyPressed(event: any): boolean {
-        return event.keyCode === 13
-            || event.keyCode === 27
-            || event.keyCode === 37
-            || event.keyCode === 38
-            || event.keyCode === 39
-            || event.keyCode === 40;
+        return event.key === 'ArrowUp' ||
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowLeft' ||
+            event.key === 'ArrowRight' ||
+            event.key === 'Escape' ||
+            event.key === 'Enter';
     }
 
     private nodeHovered(node: TreeNode): void {

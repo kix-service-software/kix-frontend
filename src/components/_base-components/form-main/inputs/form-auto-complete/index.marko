@@ -1,23 +1,21 @@
-<div.dropdown-auto-complete dropDownId=state.dropdownId>
+<div.dropdown-auto-complete dropDownId=state.dropdownId on-click('setKeepExpanded')>
     <div.dropdown-input-container class={"list-shown": state.expanded}>
+        <input.input-style type="text" readonly=(!state.enabled) disabled=(!state.enabled)
+            placeholder=(state.selectedItem ? "" : input.placeholder) value=state.searchValue on-keydown('keyDown')
+            on-keyup('searchValueChanged') required=input.required on-click('toggleList', false)
+            on-focus('toggleList', false) key="dropdown-auto-complete-input"/>
         <if(state.selectedItem)>
-            <div.input-style on-click('toggleList', false)>
-                <span.selected-item-container>
-                    <div.selected-item>
-                        <icon icon=state.selectedItem.icon showUnknown=true/>
-                        <span.item-text>${state.selectedItem.label}</span>
-                        <if(state.selectedItem.secondaryIcon)>
-                            <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
-                        </if>
-                        <span.kix-icon-close on-click('removeSelectedItem')/>
-                    </div>
-                </span>
-            </div>
+            <span.selected-item-container on-click('toggleList', false)>
+                <div.selected-item>
+                    <icon icon=state.selectedItem.icon showUnknown=true/>
+                    <span.item-text>${state.selectedItem.label}</span>
+                    <if(state.selectedItem.secondaryIcon)>
+                        <icon icon=state.selectedItem.secondaryIcon showUnknown=true/>
+                    </if>
+                    <span.kix-icon-close on-click('removeSelectedItem')/>
+                </div>
+            </span>
         </if>
-        <else>
-            <input.input-style type="text" placeholder=input.placeholder value=state.searchValue on-keydown('keyDown')
-                on-keyup('searchValueChanged') required=input.required on-click('toggleList', false)/>
-        </else>
     </div>
     <if(state.expanded || state.isLoading)>
         <ul.dropdown-list>
