@@ -1,4 +1,5 @@
 import { ArticleInputBodyComponentState } from "./ArticleInputBodyComponentState";
+import { FormInputComponentState } from "@kix/core/dist/model";
 
 class ArticleInputBodyComponent {
 
@@ -8,8 +9,9 @@ class ArticleInputBodyComponent {
         this.state = new ArticleInputBodyComponentState();
     }
 
-    public onInput(input): void {
+    public onInput(input: FormInputComponentState): void {
         this.state.field = input.field;
+        this.state.formId = input.formId;
     }
 
 }

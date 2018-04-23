@@ -1,6 +1,6 @@
 import { TicketInputOwnerComponentState } from "./TicketInputOwnerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem } from "@kix/core/dist/model";
+import { FormDropdownItem, FormInputComponentState } from "@kix/core/dist/model";
 
 class TicketInputOwnerComponent {
 
@@ -10,8 +10,9 @@ class TicketInputOwnerComponent {
         this.state = new TicketInputOwnerComponentState();
     }
 
-    public onInput(input): void {
+    public onInput(input: FormInputComponentState): void {
         this.state.field = input.field;
+        this.state.formId = input.formId;
     }
 
     public onMount(): void {

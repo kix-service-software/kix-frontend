@@ -3,7 +3,7 @@
     "extensions": {
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
-            "main-menu": "../../dist/registry-modules/main-menu/marko-dependencies.extension"
+            "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -13,35 +13,12 @@
         },
         "kix:menu:main": {
             "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
-            "tickets-menu-main": "../../dist/registry-modules/tickets/menu.main.extension",
-            "cmdb-menu-main": "../../dist/registry-modules/cmdb/menu.main.extension",
-            "cutsomers-menu-main": "../../dist/registry-modules/customers/menu.main.extension",
-            "faq-menu-main": "../../dist/registry-modules/faq/menu.main.extension",
-            "reports-menu-main": "../../dist/registry-modules/reports/menu.main.extension",
-            "search-menu-main": "../../dist/registry-modules/search/menu.main.extension"
+            "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension"
         },
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
-            "tickets-module": "../../dist/registry-modules/tickets/module.extension",
-            "ticket-details-module": "../../dist/registry-modules/tickets/ticket-details-module.extension",
-            "cmdb-module": "../../dist/registry-modules/cmdb/module.extension",
-            "customers-module": "../../dist/registry-modules/customers/module.extension",
-            "faq-module": "../../dist/registry-modules/faq/module.extension",
-            "reports-module": "../../dist/registry-modules/reports/module.extension",
-            "search-module": "../../dist/registry-modules/search/module.extension"
-        },
-        "kix:widget": {
-            "chart": "../../dist/registry-modules/widgets/chart/widget-factory.extension",
-            "search-templates": "../../dist/registry-modules/widgets/search-templates/widget-factory.extension",
-            "notes": "../../dist/registry-modules/widgets/notes/widget-factory.extension",
-            "ticket-list-widget": "../../dist/registry-modules/tickets/ticket-list-widget/widget-factory.extension",
-            "ticket-info-widget": "../../dist/registry-modules/tickets/ticket-info-widget/widget-factory.extension",
-            "ticket-dynamic-field-widget": "../../dist/registry-modules/tickets/ticket-info-widget/widget-factory.extension",
-            "ticket-customer-info-widget": "../../dist/registry-modules/tickets/ticket-customer-info-widget/widget-factory.extension",
-            "ticket-contact-info-widget": "../../dist/registry-modules/tickets/ticket-contact-info-widget/widget-factory.extension",
-            "ticket-description-widget": "../../dist/registry-modules/tickets/ticket-description-widget/widget-factory.extension",
-            "queue-explorer": "../../dist/registry-modules/tickets/queue-explorer/widget-factory.extension",
-            "service-explorer": "../../dist/registry-modules/tickets/service-explorer/widget-factory.extension"
+            "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
+            "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension"
         }
     }
 }

@@ -1,5 +1,5 @@
 <if(state.show)>
-    <div.object-info-overlay class={"over-dialog": component.isDialogShown()} key="overlay" infoOverlay=true
+    <div.main-overlay class={"over-dialog": component.isDialogShown()} key="overlay" infoOverlay=true
         on-click("overlayClicked")>
         <if(component.isHintOverlay())>
             <widget instanceId=state.instanceId title=state.data.title minimizable=false>
@@ -14,6 +14,5 @@
         <else>
             <include(state.content, state.data)/>
         </else>
-        <span.kix-icon-close on-click('closeOverlay')/>
     </div>
 </if>

@@ -1,2 +1,3 @@
-<form-auto-complete isLoading=state.isLoading items=state.items
-    placeholder=(state.field.required ? state.field.label : "") on-itemChanged('contactChanged')/>
+<form-auto-complete placeholder=(state.field.required ? state.field.label : "") searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration on-itemChanged('contactChanged')
+    required=state.field.required/>

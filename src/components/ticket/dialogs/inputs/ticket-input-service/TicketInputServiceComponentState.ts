@@ -1,10 +1,9 @@
-import { FormField, FormDropdownItem, TreeNode } from "@kix/core/dist/model";
+import { FormField, FormDropdownItem, TreeNode, FormInputComponentState } from "@kix/core/dist/model";
 
-export class TicketInputServiceComponentState {
+export class TicketInputServiceComponentState extends FormInputComponentState {
 
-    public constructor(
-        public nodes: TreeNode[] = [],
-        public field: FormField = null
-    ) { }
+    public constructor(public nodes: TreeNode[] = []) {
+        super();
+    }
 
 }

@@ -10,7 +10,6 @@ import {
     IServiceService, ISysConfigService,
     ITicketService,
     IUserService,
-    IWidgetRepositoryService,
     IProfilingService,
     IMarkoService,
 } from '@kix/core/dist/services';
@@ -34,7 +33,6 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IServiceService') protected serviceService: IServiceService,
         @inject('IDynamicFieldService') protected dynamicFieldService: IDynamicFieldService,
         @inject('ISysConfigService') protected sysConfigService: ISysConfigService,
-        @inject('IWidgetRepositoryService') protected widgetRepositoryService: IWidgetRepositoryService,
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
         @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
         @inject('IProfilingService') protected profilingService: IProfilingService,

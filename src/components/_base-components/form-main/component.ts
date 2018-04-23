@@ -11,21 +11,15 @@ class FormularComponent {
 
     public onCreate(input: any): void {
         this.state = new FormComponentState(input.formId);
-        FormService.getInstance().setDefaultInputComponent("form-text-input");
     }
 
     public onMount(): void {
-        this.state.form = FormService.getInstance().getForm(this.state.formId, true);
+        this.state.formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
     }
 
     private getInputComponent(field: FormField): any {
         const component = FormService.getInstance().getFormInputComponent(field.property);
         return ComponentsService.getInstance().getComponentTemplate(component);
-    }
-
-    private getFieldHint(field: FormField): string {
-        const hint = FormService.getInstance().getFormFieldHint(field);
-        return hint ? hint : field.property;
     }
 
     public doCancel(): void {

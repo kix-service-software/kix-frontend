@@ -8,10 +8,11 @@ export class FormAutoCompleteComponentState {
         public selectedItem: FormDropdownItem = null,
         public expanded: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId(),
-        public filterValue: string = null,
+        public searchValue: string = null,
         public preSelectedItem: FormDropdownItem = null,
+        public isLoading: boolean = false,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
-        public isLoading: boolean = false
+        public searchCallback: (limit: number, searchValue: string) => Promise<FormDropdownItem[]> = null,
     ) { }
 
 }
