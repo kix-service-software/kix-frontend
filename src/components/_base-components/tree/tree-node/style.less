@@ -1,12 +1,18 @@
-@tree-icon-size: 0.875rem;
-@tree-column-gap: 0.5rem;
+@tree-icon-size: .875rem;
+@tree-column-gap: @margin-small;
 @tree-icon-background-color: @secondary-2;
 @tree-icon-color: @secondary-0;
 .tree-list {
     .tree-node {
+        display: grid;
+        grid-template-columns: 0.75rem auto;
+        align-items: center;
+        >.tree-icon {
+            font-size: 0.75rem;
+        }
         >.node-value {
             display: grid;
-            grid-template-columns: @tree-icon-size @tree-icon-size max-content @tree-icon-size;
+            grid-template-columns: @tree-icon-size max-content @tree-icon-size;
             grid-column-gap: @tree-column-gap;
             align-items: center;
             height: 1.5rem;
@@ -15,14 +21,10 @@
                 font-size: @tree-icon-size;
                 color: @tree-icon-color;
                 line-height: @tree-icon-size;
-                grid-column: 1;
-                >span&[class^="kix-icon-"] {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
                     background-color: @tree-icon-background-color;
                 }
-            }
-            >span&.kix-icon {}
-            >.node-title {
-                grid-column: 3;
             }
             &.active {
                 font-weight: bold;
@@ -30,6 +32,13 @@
         }
         >.tree-list {
             margin-left: @tree-column-gap+@tree-icon-size;
+        }
+        &.active {
+            >.node-value {
+                background: @secondary-1;
+                font-weight: bold;
+                cursor: pointer;
+            }
         }
     }
 }

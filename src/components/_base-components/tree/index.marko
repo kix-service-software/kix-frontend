@@ -1,5 +1,5 @@
 <ul.tree-list id=state.treeId>
     <for(node in state.displayTree)>
-        <tree-node node=node on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered')/>
+        <tree-node node=node on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered')/>
     </for>
 </ul>

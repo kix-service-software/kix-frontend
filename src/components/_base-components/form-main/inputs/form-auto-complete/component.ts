@@ -6,6 +6,7 @@ class FormAutoCompleteComponent {
 
     private state: FormAutoCompleteComponentState;
 
+    private keepExpanded: boolean = false;
     private timeout: any;
     private currentSearchValue: string;
 
@@ -16,35 +17,40 @@ class FormAutoCompleteComponent {
     public onInput(input: any): void {
         this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
         this.state.searchCallback = input.searchCallback;
+        this.state.selectedItem = input.selectedItem;
+        this.state.preSelectedItem = null;
+        this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
     }
 
     public onMount(): void {
         document.addEventListener("click", (event) => {
-            let element: any = event.target;
-
-            let foundId = false;
-            while (element !== null) {
-                const dropDownId = element.getAttribute('dropDownId');
-                if (dropDownId) {
-                    if (dropDownId !== this.state.dropdownId) {
-                        this.state.expanded = false;
-                    }
-                    foundId = true;
-                    break;
-                }
-                element = element.parentElement;
-            }
-
-            if (!foundId) {
+            if (!this.keepExpanded) {
                 this.state.expanded = false;
+            } else {
+                this.keepExpanded = false;
             }
         });
     }
 
+    private setKeepExpanded(): void {
+        this.keepExpanded = true;
+    }
+
+    private toggleList(close: boolean = true): void {
+        if (this.state.expanded && close) {
+            this.state.expanded = false;
+            this.state.preSelectedItem = null;
+            this.resetFilter();
+        } else if (this.state.enabled) {
+            this.state.expanded = true;
+            this.state.preSelectedItem = this.state.selectedItem;
+        }
+    }
+
     private itemSelected(item: FormDropdownItem): void {
         this.state.selectedItem = item;
-        this.state.expanded = false;
-        this.resetFilter();
+        this.state.items = [];
+        this.toggleList();
         (this as any).emit('itemChanged', item);
     }
 
@@ -55,9 +61,16 @@ class FormAutoCompleteComponent {
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
         this.itemSelected(null);
+        const input = (this as any).getEl('dropdown-auto-complete-input');
+        if (input) {
+            input.focus();
+        }
     }
 
     private searchValueChanged(event: any): void {
+        if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
+            this.toggleList();
+        }
         if (!this.navigationKeyPressed(event)) {
             this.state.searchValue = event.target.value;
             this.startSearch();
@@ -97,25 +110,36 @@ class FormAutoCompleteComponent {
 
     private keyDown(event: any): void {
         if (this.state.expanded && this.navigationKeyPressed(event)) {
-            switch (event.keyCode) {
-                case 40: // down
+            switch (event.key) {
+                case 'ArrowDown':
                     if (this.state.preSelectedItem) {
                         this.navigate();
                     } else if (this.state.items && this.state.items.length) {
                         this.state.preSelectedItem = this.state.items[0];
                     }
                     break;
-                case 38: // up
+                case 'ArrowUp':
                     if (this.state.preSelectedItem) {
                         this.navigate(true);
                     } else if (this.state.items && this.state.items.length) {
                         this.state.preSelectedItem = this.state.items[this.state.items.length - 1];
                     }
                     break;
-                case 13: // enter
+                case 'Tab':
+                    if (this.state.preSelectedItem) {
+                        this.itemSelected(this.state.preSelectedItem);
+                        this.state.preSelectedItem = null;
+                    } else {
+                        this.toggleList();
+                    }
+                    break;
+                case 'Enter':
                     this.itemSelected(this.state.preSelectedItem);
                     this.state.preSelectedItem = null;
-                    this.state.expanded = false;
+                    break;
+                case 'Escape':
+                    this.state.preSelectedItem = null;
+                    this.toggleList();
                     break;
                 default:
             }
@@ -138,10 +162,14 @@ class FormAutoCompleteComponent {
         element.scrollIntoView(true);
     }
 
-
     private navigationKeyPressed(event: any): boolean {
-        return event.keyCode === 13 || event.keyCode === 33 || event.keyCode === 34
-            || event.keyCode === 38 || event.keyCode === 40;
+        return event.key === 'ArrowUp' ||
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowLeft' ||
+            event.key === 'ArrowRight' ||
+            event.key === 'Tab' ||
+            event.key === 'Escape' ||
+            event.key === 'Enter';
     }
 
     private isSelected(item: FormDropdownItem): boolean {

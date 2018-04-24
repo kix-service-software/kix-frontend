@@ -4,7 +4,8 @@ import { FormDropdownItem, ObjectIcon } from "@kix/core/dist/model";
 class FormDropdownComponent {
 
     private state: FormDropdownComponentState;
-    private preventToggle: boolean = false;
+
+    private keepExpanded: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new FormDropdownComponentState();
@@ -20,41 +21,43 @@ class FormDropdownComponent {
 
     public onMount(): void {
         document.addEventListener("click", (event) => {
-            let element: any = event.target;
-
-            let foundId = false;
-            while (element !== null) {
-                const dropDownId = element.getAttribute('dropDownId');
-                if (dropDownId) {
-                    if (dropDownId !== this.state.dropdownId) {
-                        this.state.expanded = false;
-                    }
-                    foundId = true;
-                    break;
-                }
-                element = element.parentElement;
-            }
-
-            if (!foundId) {
+            if (!this.keepExpanded) {
                 this.state.expanded = false;
+            } else {
+                this.keepExpanded = false;
             }
         });
     }
 
-    private toggleList(): void {
-        if (!this.preventToggle) {
-            if (this.state.enabled) {
-                this.state.expanded = !this.state.expanded;
-                this.resetFilter();
-            }
+    private setKeepExpanded(): void {
+        this.keepExpanded = true;
+    }
+
+    private toggleList(close: boolean = true): void {
+        if (this.state.expanded && close) {
+            this.state.expanded = false;
+            this.state.preSelectedItem = null;
+            this.resetFilter();
+        } else if (this.state.enabled) {
+            this.state.expanded = true;
+            this.state.preSelectedItem = this.state.selectedItem;
+        }
+    }
+
+    private focusInput(): void {
+        if (this.state.expanded) {
+            this.toggleList();
         } else {
-            this.preventToggle = false;
+            const input = (this as any).getEl('dropdown-input');
+            if (input) {
+                input.focus();
+            }
         }
     }
 
     private itemSelected(item: FormDropdownItem): void {
         this.state.selectedItem = item;
-        this.resetFilter();
+        this.toggleList();
         (this as any).emit('itemChanged', item);
     }
 
@@ -65,26 +68,33 @@ class FormDropdownComponent {
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
         this.itemSelected(null);
-        this.preventToggle = true;
+        const input = (this as any).getEl('dropdown-input');
+        if (input) {
+            input.focus();
+        }
     }
 
     private filterValueChanged(event: any): void {
-        if (!this.navigationKeyPressed(event)) {
-            this.state.filterValue = event.target.value;
+        if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
+            this.toggleList();
+        }
+        if (!this.state.selectedItem) {
+            if (!this.navigationKeyPressed(event)) {
+                this.state.filterValue = event.target.value;
 
-            if (this.state.filterValue && this.state.filterValue !== '') {
-                this.state.filteredItems = this.state.items.filter(
-                    (i) => i.label.toLocaleLowerCase().indexOf(this.state.filterValue.toLocaleLowerCase()) !== -1
-                );
-            } else {
-                this.resetFilter();
+                if (this.state.filterValue && this.state.filterValue !== '') {
+                    this.state.filteredItems = this.state.items.filter(
+                        (i) => i.label.toLocaleLowerCase().indexOf(this.state.filterValue.toLocaleLowerCase()) !== -1
+                    );
+                } else {
+                    this.resetFilter();
+                }
+
+                this.state.preSelectedItem = null;
             }
 
-            this.state.preSelectedItem = null;
-            this.keyDown({ keyCode: 40 });
+            (this as any).setStateDirty('filterValue');
         }
-
-        (this as any).setStateDirty('filterValue');
     }
 
     private resetFilter(): void {
@@ -94,23 +104,34 @@ class FormDropdownComponent {
 
     private keyDown(event: any): void {
         if (this.state.expanded && this.navigationKeyPressed(event)) {
-            switch (event.keyCode) {
-                case 40: // down
+            switch (event.key) {
+                case 'ArrowDown':
                     if (this.state.preSelectedItem) {
                         this.navigate();
                     } else if (this.state.filteredItems && this.state.filteredItems.length) {
                         this.state.preSelectedItem = this.state.filteredItems[0];
                     }
                     break;
-                case 38: // up
+                case 'ArrowUp':
                     if (this.state.preSelectedItem) {
                         this.navigate(true);
                     } else if (this.state.filteredItems && this.state.filteredItems.length) {
                         this.state.preSelectedItem = this.state.filteredItems[this.state.filteredItems.length - 1];
                     }
                     break;
-                case 13: // enter
+                case 'Tab':
+                    if (this.state.preSelectedItem) {
+                        this.itemSelected(this.state.preSelectedItem);
+                        this.state.preSelectedItem = null;
+                    } else {
+                        this.toggleList();
+                    }
+                    break;
+                case 'Enter':
                     this.itemSelected(this.state.preSelectedItem);
+                    this.state.preSelectedItem = null;
+                    break;
+                case 'Escape':
                     this.state.preSelectedItem = null;
                     this.toggleList();
                     break;
@@ -132,13 +153,17 @@ class FormDropdownComponent {
         }
 
         const element = document.getElementById(this.state.dropdownId + '-item-' + this.state.preSelectedItem.id);
-        element.scrollIntoView(true);
+        element.scrollIntoView();
     }
 
-
     private navigationKeyPressed(event: any): boolean {
-        return event.keyCode === 13 || event.keyCode === 33 || event.keyCode === 34
-            || event.keyCode === 38 || event.keyCode === 40;
+        return event.key === 'ArrowUp' ||
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowLeft' ||
+            event.key === 'ArrowRight' ||
+            event.key === 'Tab' ||
+            event.key === 'Escape' ||
+            event.key === 'Enter';
     }
 
     private isSelected(item: FormDropdownItem): boolean {
