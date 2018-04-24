@@ -129,4 +129,24 @@ export class TreeUtil {
         return foundNode;
     }
 
+    public static isNodeVisible(node: TreeNode, filterValue: string): boolean {
+        let canShow = true;
+        if (filterValue && filterValue !== '') {
+            if (!TreeUtil.hasChildrenToShow(node, filterValue)) {
+                const label = node.label.toLocaleLowerCase();
+                canShow = label.indexOf(filterValue.toLocaleLowerCase()) !== -1;
+            }
+        }
+        return canShow;
+    }
+
+    private static hasChildrenToShow(node: TreeNode, filterValue: string): boolean {
+        for (const child of node.children) {
+            if (TreeUtil.isNodeVisible(child, filterValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

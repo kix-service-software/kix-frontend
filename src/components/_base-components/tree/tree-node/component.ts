@@ -1,5 +1,6 @@
 import { TreeNodeComponentState } from './TreeNodeComponentState';
 import { TreeNode, ObjectIcon } from '@kix/core/dist/model';
+import { TreeUtil } from '../TreeUtil';
 
 class TreeNodeComponent {
 
@@ -11,6 +12,7 @@ class TreeNodeComponent {
 
     public onInput(input: any): void {
         this.state.node = input.node;
+        this.state.filterValue = input.filterValue;
     }
 
     private hasChildren(): boolean {
@@ -26,26 +28,38 @@ class TreeNodeComponent {
         return title;
     }
 
+    private canShow(node: TreeNode): boolean {
+        return TreeUtil.isNodeVisible(node, this.state.filterValue);
+    }
+
+    private isExpanded(): boolean {
+        return this.state.node.expanded ||
+            (this.state.filterValue !== null && this.state.filterValue !== undefined && this.state.filterValue !== '');
+    }
+
     private toggleNode(): void {
         this.state.node.expanded = !this.state.node.expanded;
         (this as any).setStateDirty();
-        (this as any).emit('nodeToggled', this.state.node);
     }
 
     private nodeClicked(): void {
         (this as any).emit('nodeClicked', this.state.node);
     }
 
-    private treeNodeClicked(node: TreeNode): void {
-        (this as any).emit('nodeClicked', node);
-    }
-
     private nodeHovered(): void {
         (this as any).emit('nodeHovered', this.state.node);
     }
 
-    private treeNodeHovered(node: TreeNode): void {
+    private childNodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
+    }
+
+    private childNodeToggled(node: TreeNode): void {
+        (this as any).emit('nodeToggled', node);
+    }
+
+    private childNodeClicked(node: TreeNode): void {
+        (this as any).emit('nodeClicked', node);
     }
 
 }

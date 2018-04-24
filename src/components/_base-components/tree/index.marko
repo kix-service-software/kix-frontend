@@ -1,5 +1,8 @@
 <ul.tree-list id=state.treeId>
-    <for(node in state.displayTree)>
-        <tree-node node=node on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered')/>
+    <for(node in state.tree)>
+        <if(component.canShow(node))>
+            <tree-node node=node activeNode=state.activeNode filterValue=state.filterValue on-nodeToggled('nodeToggled')
+                on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered')/>
+        </if>
     </for>
 </ul>

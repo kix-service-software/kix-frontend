@@ -62,6 +62,10 @@ class FormDropdownTreeComponent {
         }
     }
 
+    private keyUp(event: any): void {
+        this.state.filterValue = event.target.value;
+    }
+
     private nodeToggled(): void {
         const input = (this as any).getEl('dropdown-tree-input');
         if (input) {
