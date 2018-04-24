@@ -1,0 +1,10 @@
+<button.form-button type="button" on-click("showFileUpload")>
+    <span.kix-icon-attachement/>Datei wählen
+</button>
+<input.file-upload style="display:none" type="file" multiple=state.multiple/>
+<span>
+    <if(state.attachmentString)>
+        ${state.attachmentString}<span.kix-icon-check/>
+    </if>
+</span>
+<div.result-list/>
