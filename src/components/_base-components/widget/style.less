@@ -174,6 +174,25 @@
     }
 }
 
+.warning-overlay-widget {
+    .widget(@secondary-2, @secondary-0, @overlay-widget-header-height);
+    width: 24.25rem;
+    min-height: 12.25rem;
+    >.widget-header {
+        background-color: @tertiary-0;
+        color: @secondary-6;
+    }
+    >.widget-content {
+        .font-size-small();
+        border: 2px solid @tertiary-0;
+        background-color: @secondary-6;
+        color: @secondary-0;
+        overflow: hidden;
+        padding: 1.875rem;
+        min-height: 12.25rem - @overlay-widget-header-height;
+    }
+}
+
 .sidebar-widget {
     .widget(@primary-2, @default-light-font-color);
     >.widget-content {
