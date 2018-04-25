@@ -3,17 +3,28 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2rem max-content;
-    grid-column-gap: 3rem;
+    grid-column-gap: @margin-default;
     grid-row-gap: @margin-small;
+    align-items: center;
     >.file-upload-button {
         width: 100%;
         .file-upload-input {
             display: none;
         }
     }
-    >.file-upload-line {
+    >.file-upload-notice {
         width: 100%;
-        border-bottom: 1px solid @secondary-2;
+        display: grid;
+        grid-template-columns: max-content auto;
+        grid-gap: .25rem;
+        align-items: center;
+        grid-template-rows: 2rem;
+        color: @secondary-1;
+        >.file-upload-line {
+            background-color: @secondary-3;
+            height: 1px;
+            margin-top: .375rem;
+        }
     }
     >.file-upload-file-list {
         width: unset;
