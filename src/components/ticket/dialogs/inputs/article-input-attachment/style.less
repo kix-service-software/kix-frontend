@@ -15,7 +15,7 @@
     >.file-upload-notice {
         width: 100%;
         display: grid;
-        grid-template-columns: max-content auto;
+        grid-template-columns: max-content auto max-content;
         grid-gap: .25rem;
         align-items: center;
         grid-template-rows: 2rem;
@@ -24,6 +24,13 @@
             background-color: @secondary-3;
             height: 1px;
             margin-top: .375rem;
+        }
+        >.minimize-icon-container {
+            margin: .375rem 0 0 .75rem;
+            [class^="kix-icon-"].no-files,
+            [class*=" kix-icon-"].no-files {
+                color: @secondary-3;
+            }
         }
     }
     >.file-upload-file-list {

@@ -58,6 +58,10 @@ class ArticleInputAttachmentComponent {
         this.state.dragging = false;
     }
 
+    private minimize(): void {
+        this.state.minimized = !this.state.minimized;
+    }
+
     private getFileIcon(file: File): ObjectIcon {
         let fileIcon = null;
         const idx = file.name.lastIndexOf('.');

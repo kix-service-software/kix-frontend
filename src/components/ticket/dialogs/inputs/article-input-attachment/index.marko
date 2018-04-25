@@ -11,8 +11,19 @@
             </if>
         </span>
         <span.file-upload-line/>
+        <span.minimize-icon-container>
+            <if(state.minimized)>
+                <span.kix-icon-sort-down class={"no-files": state.files.length === 0} on-click('minimize')/>
+            </if>
+            <else>
+                <span.kix-icon-triangle-up on-click('minimize')>
+                    <span.path1/>
+                    <span.path2/>
+                </span>
+            </else>
+        </span>
     </span>
-    <if(state.files.length)>
+    <if(!state.minimized)>
         <div.file-upload-file-list>
             <for(file in state.files)>
                 <span.file-upload-file-container title=file.name>
