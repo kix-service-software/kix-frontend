@@ -22,6 +22,10 @@ class WidgetComponent {
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
+
+        if (this.isOverlayWidget()) {
+            this.state.closable = true;
+        }
     }
 
     public onMount(): void {
@@ -157,7 +161,11 @@ class WidgetComponent {
     }
 
     private closeClicked(): void {
-        (this as any).emit('closeWidget');
+        if (this.isOverlayWidget()) {
+            ApplicationService.getInstance().toggleOverlay();
+        } else {
+            (this as any).emit('closeWidget');
+        }
     }
 
 }
