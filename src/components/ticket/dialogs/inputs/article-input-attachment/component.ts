@@ -14,6 +14,26 @@ class ArticleInputAttachmentComponent {
         this.state.formId = input.formId;
     }
 
+    private triggerFileUpload(): void {
+        const uploadInput = (this as any).getEl('fileUploadInput');
+        if (uploadInput) {
+            uploadInput.click();
+        }
+    }
+
+    private setAttachments(): void {
+        const uploadInput = (this as any).getEl('fileUploadInput');
+        if (uploadInput && uploadInput.files) {
+            const files = Array.from(uploadInput.files);
+            files.forEach((f: File) => {
+                if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
+                    this.state.files.push(f);
+                }
+            });
+            (this as any).setStateDirty('files');
+        }
+    }
+
 }
 
 module.exports = ArticleInputAttachmentComponent;
