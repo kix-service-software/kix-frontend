@@ -62,6 +62,10 @@ class FormDropdownTreeComponent {
         }
     }
 
+    private keyUp(event: any): void {
+        this.state.filterValue = event.target.value;
+    }
+
     private nodeToggled(): void {
         const input = (this as any).getEl('dropdown-tree-input');
         if (input) {
@@ -71,6 +75,7 @@ class FormDropdownTreeComponent {
 
     private nodeClicked(node: TreeNode): void {
         this.state.selectedNode = node;
+        this.state.filterValue = null;
         this.toggleList();
         (this as any).emit('itemChanged', node);
     }
@@ -81,6 +86,7 @@ class FormDropdownTreeComponent {
 
     private removeSelectedItem(): void {
         this.state.selectedNode = null;
+        this.state.filterValue = null;
         this.nodeClicked(null);
         const input = (this as any).getEl('dropdown-tree-input');
         if (input) {

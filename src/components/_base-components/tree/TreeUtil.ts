@@ -3,130 +3,112 @@ import { TreeComponentState } from "./TreeComponentState";
 
 export class TreeUtil {
 
-    public static cloneTree(parent: TreeNode, tree: TreeNode[], activeNode: TreeNode): TreeNode[] {
-        const newTree = [];
+    public static linkTreeNodes(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
         if (tree) {
             let previousNode: TreeNode = null;
             for (const node of tree) {
 
-                const newNode = new TreeNode(
-                    node.id,
-                    node.label,
-                    node.icon,
-                    node.secondaryIcon,
-                    this.cloneTree(node, node.children, activeNode),
-                    parent,
-                    null,
-                    null,
-                    node.properties,
-                    node.expanded,
-                    node.active
-                );
+                if (TreeUtil.isNodeVisible(node, filterValue)) {
 
-                if (activeNode && activeNode.id === newNode.id) {
-                    newNode.active = activeNode.active;
-                    newNode.expanded = activeNode.expanded;
-                } else {
-                    newNode.active = false;
-                }
+                    node.visible = true;
 
-                newTree.push(newNode);
-
-                if (previousNode) {
-                    newNode.previousNode = previousNode;
-                    previousNode.nextNode = newNode;
-                }
-
-                previousNode = newNode;
-            }
-        }
-        return newTree;
-    }
-
-    public static buildTree(
-        nodes: TreeNode[], filterValue: string, expandNodes: boolean = false
-    ): TreeNode[] {
-        const displayTree = [];
-
-        if (nodes) {
-            for (const node of nodes) {
-                node.children = TreeUtil.buildTree([...node.children], filterValue, expandNodes);
-                if (node.children.length || this.checkNodeLabel(node.label, filterValue)) {
-                    if (expandNodes) {
+                    if (TreeUtil.isFilterValueDefined(filterValue)) {
                         node.expanded = true;
                     }
-                    displayTree.push(node);
-                }
-            }
-        }
 
-        return displayTree;
-    }
+                    if (previousNode) {
+                        node.previousNode = previousNode;
+                        previousNode.nextNode = node;
+                    }
 
-    private static checkNodeLabel(label: string, filterValue: string): boolean {
-        let match = true;
-
-        if (filterValue && filterValue !== '') {
-            match = label.toLocaleLowerCase().indexOf(filterValue.toLocaleLowerCase()) !== -1;
-        }
-
-        return match;
-    }
-
-    public static navigateDown(currentNode: TreeNode, tree: TreeNode[]): TreeNode {
-        let activeNode = currentNode;
-        if (!currentNode && tree.length) {
-            activeNode = tree[0];
-        } else {
-            currentNode.active = false;
-            if (currentNode.expanded) {
-                activeNode = currentNode.children[0];
-            } else if (currentNode.nextNode) {
-                activeNode = currentNode.nextNode;
-            } else if (currentNode.parent && currentNode.parent.nextNode) {
-                activeNode = currentNode.parent.nextNode;
-            }
-        }
-
-        activeNode.active = true;
-        return activeNode;
-    }
-
-    public static navigateUp(currentNode: TreeNode, tree: TreeNode[]): TreeNode {
-        let activeNode = currentNode;
-        if (currentNode) {
-            currentNode.active = false;
-
-            if (currentNode.previousNode) {
-                if (currentNode.previousNode.expanded) {
-                    activeNode = currentNode.previousNode.children[currentNode.previousNode.children.length - 1];
+                    node.parent = parent;
+                    previousNode = node;
+                    if (node.expanded) {
+                        TreeUtil.linkTreeNodes(node.children, filterValue, node);
+                    }
                 } else {
-                    activeNode = currentNode.previousNode;
+                    node.visible = false;
                 }
-            } else if (currentNode.parent) {
-                activeNode = currentNode.parent;
             }
         }
-
-        activeNode.active = true;
-        return activeNode;
     }
 
-    public static findNode(treeNode: TreeNode, tree: TreeNode[]): TreeNode {
-        let foundNode = null;
-        for (const node of tree) {
-            if (node.id === treeNode.id) {
-                foundNode = node;
-            } else if (node.children) {
-                foundNode = TreeUtil.findNode(treeNode, node.children);
+    public static linkParents(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
+        if (tree.length && parent) {
+            const firstNode = TreeUtil.getFirstVisibleNode(tree, filterValue);
+            const lastNode = tree[tree.length - 1];
+
+            firstNode.previousNode = parent;
+
+            const nextParent = TreeUtil.getNextParentNode(parent);
+            lastNode.nextNode = nextParent;
+            if (nextParent) {
+                nextParent.previousNode = lastNode;
             }
 
-            if (foundNode) {
-                break;
+            if (parent.expanded) {
+                parent.nextNode = firstNode;
             }
         }
 
-        return foundNode;
+        for (const node of tree) {
+            if (node.visible && node.expanded) {
+                TreeUtil.linkParents(node.children, filterValue, node);
+            }
+        }
+    }
+
+    private static getNextParentNode(parent: TreeNode): TreeNode {
+        let nextNode = parent.nextNode;
+
+        if (!nextNode && parent.parent) {
+            nextNode = TreeUtil.getNextParentNode(parent.parent);
+        }
+
+        return nextNode;
+    }
+
+    public static getFirstVisibleNode(tree: TreeNode[], filterValue: string): TreeNode {
+        for (const node of tree) {
+            if (node.visible) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public static getLastVisibleNode(tree: TreeNode[], filterValue: string): TreeNode {
+        for (let i = tree.length - 1; i >= 0; i--) {
+            const node = tree[i];
+            if (node && node.visible) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public static isNodeVisible(node: TreeNode, filterValue: string): boolean {
+        let canShow = true;
+        if (TreeUtil.isFilterValueDefined(filterValue)) {
+            if (!TreeUtil.hasChildrenToShow(node, filterValue)) {
+                const label = node.label.toLocaleLowerCase();
+                canShow = label.indexOf(filterValue.toLocaleLowerCase()) !== -1;
+            }
+        }
+        return canShow;
+    }
+
+    private static hasChildrenToShow(node: TreeNode, filterValue: string): boolean {
+        for (const child of node.children) {
+            if (TreeUtil.isNodeVisible(child, filterValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static isFilterValueDefined(filterValue: string): boolean {
+        return filterValue && filterValue !== undefined && filterValue !== null && filterValue !== '';
     }
 
 }

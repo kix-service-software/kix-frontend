@@ -2,7 +2,7 @@
     <div.dropdown-input-container class={"list-shown": state.expanded}>
         <input.input-style type="text" readonly=(!state.enabled) disabled=(!state.enabled)
             placeholder=(state.selectedNode ? "" : input.placeholder) value=state.filterValue on-keydown('keyDown')
-            required=input.required on-click('toggleList', false) on-focus('toggleList', false)
+            on-keyup('keyUp') required=input.required on-click('toggleList', false) on-focus('toggleList', false)
             key="dropdown-tree-input" id=state.treeId/>
         <if(state.selectedNode)>
             <span.selected-item-container on-click('toggleList', false)>
@@ -19,7 +19,7 @@
         <span.dropdown-button.kix-icon-sort-down on-click('focusInput')/>
     </div>
     <if(state.expanded)>
-        <tree tree=state.nodes on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered')
-            filterInputId=state.treeId/>
+        <tree tree=state.nodes filterValue=state.filterValue activeNode=state.preSelectedNode on-nodeToggled('nodeToggled')
+            on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered') filterInputId=state.treeId/>
     </if>
 </div>
