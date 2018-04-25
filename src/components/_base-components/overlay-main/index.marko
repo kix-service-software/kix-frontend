@@ -2,7 +2,7 @@
     <div.main-overlay class={"over-dialog": component.isDialogShown()} key="overlay" infoOverlay=true
         on-click("overlayClicked")>
         <if(component.isHintOverlay())>
-            <widget instanceId=state.instanceId title=state.data.title minimizable=false>
+            <widget instanceId=state.instanceId title=state.data.title minimizable=false closable=true on-closeWidget('closeOverlay')>
                 <@icon>
                     <icon icon="kix-icon-Question"/>
                 </@icon>
