@@ -54,7 +54,7 @@ class ObjectInfoOverlayComponent {
             const overlay = ApplicationService.getInstance().getCurrentOverlay();
             if (overlay[0]) {
                 this.state.content = overlay[0].content;
-                this.state.data = overlay[0].data;
+                this.state.data = { ...overlay[0].data, closable: true };
                 this.state.position = overlay[1];
             }
             this.state.keepShow = true;
@@ -88,6 +88,10 @@ class ObjectInfoOverlayComponent {
 
     private isHintOverlay(): boolean {
         return ApplicationService.getInstance().isHintOverlay();
+    }
+
+    private closeOverlay(): void {
+        ApplicationService.getInstance().toggleOverlay();
     }
 
 }

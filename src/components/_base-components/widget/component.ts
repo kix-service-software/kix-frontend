@@ -19,8 +19,13 @@ class WidgetComponent {
         this.state.explorer = input.explorer;
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+        this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
+
+        if (this.isOverlayWidget()) {
+            this.state.closable = true;
+        }
     }
 
     public onMount(): void {
@@ -131,6 +136,9 @@ class WidgetComponent {
                 case WidgetType.HINT_OVERLAY:
                     typeClass = 'hint-overlay-widget';
                     break;
+                case WidgetType.WARNING_OVERLAY:
+                    typeClass = 'warning-overlay-widget';
+                    break;
                 default:
                     typeClass = 'content-widget';
             }
@@ -153,7 +161,11 @@ class WidgetComponent {
     }
 
     private closeClicked(): void {
-        ApplicationService.getInstance().toggleOverlay();
+        if (this.isOverlayWidget()) {
+            ApplicationService.getInstance().toggleOverlay();
+        } else {
+            (this as any).emit('closeWidget');
+        }
     }
 
 }
