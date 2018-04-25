@@ -1,10 +1,14 @@
-<button.form-button type="button" on-click("showFileUpload")>
-    <span.kix-icon-attachement/>Datei wählen
-</button>
-<input.file-upload style="display:none" type="file" multiple=state.multiple/>
-<span>
-    <if(state.attachmentString)>
-        ${state.attachmentString}<span.kix-icon-check/>
+<div.file-upload>
+    <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Datei wählen">
+        <span.kix-icon-attachement/>Datei wählen
+        <input.file-upload-input type="file" multiple key="fileUploadInput" on-change("setAttachments")/>
+    </button>
+    <span.file-upload-line>
+        <if(state.files.length)>
+            ${state.files.length} Dateien angehangen<span.kix-icon-check/>
+        </if>
+    </span>
+    <if(state.files.length)>
+        <div.input-style.file-upload-file-list/>
     </if>
-</span>
-<div.result-list/>
+</div>

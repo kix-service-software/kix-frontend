@@ -1,0 +1,23 @@
+.file-upload {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2rem max-content;
+    grid-column-gap: 3rem;
+    grid-row-gap: @margin-small;
+    >.file-upload-button {
+        width: 100%;
+        .file-upload-input {
+            display: none;
+        }
+    }
+    >.file-upload-line {
+        width: 100%;
+        border-bottom: 1px solid @secondary-2;
+    }
+    >.file-upload-file-list {
+        width: unset;
+        grid-column: 1 / span 2;
+        margin: 0 @default-button-icon-width;
+    }
+}

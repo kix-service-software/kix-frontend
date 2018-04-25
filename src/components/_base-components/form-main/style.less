@@ -45,10 +45,6 @@
                 height: @default-input-height;
                 width: 100%;
                 color: @default-dark-font-color;
-                &:hover,
-                &:focus:not(:disabled) {
-                    border-color: darken(@secondary-3, 20%);
-                }
             }
             input[type="text"].input-style {
                 padding-top: .25rem;
@@ -65,8 +61,8 @@
                     padding: 0;
                     &:hover,
                     &.list-shown {
-                        >.input-style,
-                        >.dropdown-button {
+                        >input.input-style:not(:disabled),
+                        >input.input-style:not(:disabled)~.dropdown-button {
                             border-color: darken(@secondary-3, 20%);
                         }
                     }
@@ -74,8 +70,8 @@
                         border-color: darken(@secondary-3, 20%);
                     }
                     >input.input-style:not(:disabled)~.dropdown-button:hover {
-                        background-color: darken(@secondary-4, 20%);
-                        color: darken(@secondary-2, 20%);
+                        background-color: darken(@secondary-4, 10%);
+                        color: darken(@secondary-2, 10%);
                         cursor: pointer;
                     }
                     >.selected-item-container {
