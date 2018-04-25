@@ -82,6 +82,7 @@ html {
     }
 }
 
+@default-button-icon-width: @default-input-height;
 button {
     .button-color();
     cursor: pointer;
@@ -91,13 +92,13 @@ button {
     line-height: @default-input-height;
     border-radius: @border-radius;
     border: 1px solid;
-    padding-left: @default-input-height + .625rem;
+    padding-left: @default-button-icon-width + .625rem;
     padding-right: .625rem;
     position: relative;
     & span[class^="kix-icon-"],
     & span[class*=" kix-icon-"] {
         border-right: 1px solid;
-        width: @default-input-height;
+        width: @default-button-icon-width;
         height: 100%;
         line-height: @default-input-height;
         text-align: center;

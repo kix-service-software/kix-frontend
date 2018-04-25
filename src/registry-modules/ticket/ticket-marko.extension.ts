@@ -6,6 +6,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         const dialog = [
             'ticket/dialogs/new-ticket-dialog',
             'ticket/dialogs/inputs/article-input-body',
+            'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
             'ticket/dialogs/inputs/ticket-input-priority',
@@ -59,6 +60,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
         const inputs: Array<[string, string]> = [
             ['article-input-body', 'ticket/dialogs/inputs/article-input-body'],
+            ['article-input-attachment', 'ticket/dialogs/inputs/article-input-attachment'],
             ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
