@@ -6,7 +6,8 @@ export class TreeComponentState {
         public tree: TreeNode[] = [],
         public filterValue: string = null,
         public treeId: string = null,
-        public activeNode: TreeNode = null
+        public activeNode: TreeNode = null,
+        public treeParent: any = null
     ) { }
 
 }
