@@ -1,10 +1,13 @@
 <if(state.show)>
-    <div.overlay-dialog>
-        <widget instanceId="overlay-dialog" title=state.title minimizable=false closable=true on-closeWidget('closeDialog')>
-            <@icon>
-                <icon icon=state.icon/>
-            </@icon>
-            <@content/>
-        </widget>
+    <div.overlay-dialog-container>
+        <div.shield-overlay/>
+        <div.overlay-dialog>
+            <widget instanceId="overlay-dialog" title=state.title minimizable=false closable=true on-closeWidget('closeDialog')>
+                <@icon>
+                    <icon icon=state.icon/>
+                </@icon>
+                <@content/>
+            </widget>
+        </div>
     </div>
 </if>
