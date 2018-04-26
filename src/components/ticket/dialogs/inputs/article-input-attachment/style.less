@@ -43,11 +43,13 @@
         color: @default-dark-font-color;
         grid-column: 1 / span 2;
         margin: @margin-small @default-button-icon-width 0;
+        overflow: hidden;
         >.file-upload-file-container {
             height: 1.5rem;
             overflow: hidden;
-            margin-right: .25rem;
+            margin-right: .5rem;
             display: inline-block;
+            max-width: 100%;
             >.file-upload-file {
                 display: grid;
                 grid-auto-flow: column;
