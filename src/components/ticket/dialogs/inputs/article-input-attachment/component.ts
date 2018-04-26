@@ -1,7 +1,9 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
-import { FormInputComponentState, ObjectIcon, AttachmentError, MessageType } from "@kix/core/dist/model";
+import {
+    FormInputComponentState, ObjectIcon, AttachmentError, MessageType, OverlayType, StringContent
+} from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
-import { MessageOverlayService } from "@kix/core/dist/browser/application/MessageOverlayService";
+import { OverlayService } from "@kix/core/dist/browser/OverlayService";
 
 class ArticleInputAttachmentComponent {
 
@@ -55,8 +57,8 @@ class ArticleInputAttachmentComponent {
             errorMessages.forEach((e) => message += `<li>${e}</li>`);
             message += '</ul>';
 
-            MessageOverlayService.getInstance().openMessageOverlay(
-                'Fehler', message, MessageType.WARNING
+            OverlayService.getInstance().openOverlay(
+                OverlayType.WARNING, new StringContent(message), 'Fehler', [], true
             );
         }
 

@@ -1,35 +1,27 @@
 <div class=component.getWidgetClasses()>
     <div.widget-header>
         <span.header-right>
-            <if(component.isConfigMode() && !input.isNotConfigurable)>
-                <if(state.configChanged)>
-                    <span.kix-icon.icon-dummy on-click('resetConfiguration')/>
-                </if>
-                <span.kix-icon-gear on-click('showConfiguration')/>
+            <if(component.isInputDefined(input.actions))>
+                <action-list list=input.actions/>
             </if>
-            <else>
-                <if(component.isInputDefined(input.actions))>
-                    <action-list list=input.actions/>
-                </if>
-                <if(state.minimizable)>
-                    <span.minimize-icon-wrapper>
-                        <if(state.minimized)>
-                            <span.kix-icon-sort-down on-click('minimizeWidget')/>
-                        </if>
-                        <else>
-                            <span.kix-icon-triangle-up on-click('minimizeWidget')>
-                                <span.path1/>
-                                <span.path2/>
-                            </span>
-                        </else>
-                    </span>
-                </if>
-                <if(state.closable)>
-                    <span.close-icon-wrapper>
-                        <span.kix-icon-close on-click('closeClicked')/>
-                    </span>
-                </if>
-            </else>
+            <if(state.minimizable)>
+                <span.minimize-icon-wrapper>
+                    <if(state.minimized)>
+                        <span.kix-icon-sort-down on-click('minimizeWidget')/>
+                    </if>
+                    <else>
+                        <span.kix-icon-triangle-up on-click('minimizeWidget')>
+                            <span.path1/>
+                            <span.path2/>
+                        </span>
+                    </else>
+                </span>
+            </if>
+            <if(state.closable)>
+                <span.close-icon-wrapper>
+                    <span.kix-icon-close on-click('closeClicked')/>
+                </span>
+            </if>
         </span>
         <span.header-left>
             <if(input.explorer)>
@@ -72,9 +64,4 @@
             </div>
         </if>
     </div>
-    <if(component.hasConfigurationOverlay())>
-        <div.widget-overlay class=(input.drop ? "drop-element" : "") data-id=(input.data_id ? data.data_id : "")>
-            <div.widget-overlay-content/>
-        </div>
-    </if>
 </div>

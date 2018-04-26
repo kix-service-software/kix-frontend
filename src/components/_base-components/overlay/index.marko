@@ -1,0 +1,24 @@
+<if(state.show)>
+    <div.overlay class=state.overlayClass key="overlay">
+        <widget instanceId=state.instanceId title=state.title minimizable=false closable=true actions=state.actions
+            on-closeWidget('closeOverlay')>
+            <@icon>
+                <icon icon=state.icon/>
+            </@icon>
+            <@content>
+                <if(component.isComponentContent())>
+                    <include(component.getTemplate(), state.content.contentData)/>
+                </if>
+                <else>
+                    <span>${state.content.getValue()}</span>
+                </else>
+                <if(state.hasCloseButton)>
+                    <button.message-button type="button" on-click("closeOverlay") title="Fenster schließen">
+                        <span.kix-icon-check/>
+                        Fenster schließen
+                    </button>
+                </if>
+            </@content>
+        </widget>
+    </div>
+</if>
