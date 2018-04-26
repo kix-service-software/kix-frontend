@@ -15,6 +15,11 @@ class ArticleInputAttachmentComponent {
         this.state.field = input.field;
         this.state.formId = input.formId;
     }
+
+    private openTicketLinkDialog(): void {
+        alert('Verknüpfung zuordnen');
+    }
+
 }
 
 module.exports = ArticleInputAttachmentComponent;
