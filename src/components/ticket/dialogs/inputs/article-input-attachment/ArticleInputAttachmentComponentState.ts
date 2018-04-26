@@ -4,7 +4,8 @@ export class ArticleInputAttachmentComponentState extends FormInputComponentStat
 
     public constructor(
         public files: File[] = [],
-        public dragging: boolean = false
+        public dragging: boolean = false,
+        public minimized: boolean = false
     ) {
         super();
     }

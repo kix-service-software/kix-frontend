@@ -1,4 +1,4 @@
-<div.file-upload class={dragging: state.dragging}>
+<div.file-upload class={dragging: state.dragging} on-drop("drop")>
     <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Datei wählen">
         <span.kix-icon-attachement/>Datei wählen
         <input.file-upload-input type="file" multiple key="fileUploadInput" on-change("setAttachments")/>
@@ -11,8 +11,29 @@
             </if>
         </span>
         <span.file-upload-line/>
+        <span.minimize-icon-container>
+            <if(state.minimized)>
+                <span.kix-icon-sort-down class={"no-files": state.files.length === 0} on-click('minimize')/>
+            </if>
+            <else>
+                <span.kix-icon-triangle-up on-click('minimize')>
+                    <span.path1/>
+                    <span.path2/>
+                </span>
+            </else>
+        </span>
     </span>
-    <if(state.files.length)>
-        <div.input-style.file-upload-file-list/>
+    <if(!state.minimized)>
+        <div.file-upload-file-list>
+            <for(file in state.files)>
+                <span.file-upload-file-container title=file.name>
+                    <div.file-upload-file>
+                        <icon icon=component.getFileIcon(file) showUnknown=true/>
+                        <span.file-name>${file.name}</span>
+                        <span.kix-icon-close on-click('removeFile', file)/>
+                    </div>
+                </span>
+            </for>
+        </div>
     </if>
 </div>

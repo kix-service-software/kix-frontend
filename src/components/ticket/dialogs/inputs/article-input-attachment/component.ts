@@ -1,5 +1,5 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
-import { FormInputComponentState } from "@kix/core/dist/model";
+import { FormInputComponentState, ObjectIcon } from "@kix/core/dist/model";
 
 class ArticleInputAttachmentComponent {
 
@@ -16,7 +16,6 @@ class ArticleInputAttachmentComponent {
 
     public onMount(): void {
         document.addEventListener("dragover", this.dragOver.bind(this), false);
-        document.addEventListener("drop", this.drop.bind(this), false);
     }
 
     private triggerFileUpload(): void {
@@ -59,6 +58,27 @@ class ArticleInputAttachmentComponent {
         this.state.dragging = false;
     }
 
+    private minimize(): void {
+        this.state.minimized = !this.state.minimized;
+    }
+
+    private getFileIcon(file: File): ObjectIcon {
+        let fileIcon = null;
+        const idx = file.name.lastIndexOf('.');
+        if (idx >= 0) {
+            const extension = file.name.substring(idx + 1, file.name.length);
+            fileIcon = new ObjectIcon("Filetype", extension);
+        }
+        return fileIcon;
+    }
+
+    private removeFile(file: File): void {
+        const fileIndex = this.state.files.findIndex((sf) => sf.name === file.name);
+        if (fileIndex > -1) {
+            this.state.files.splice(fileIndex, 1);
+            (this as any).setStateDirty('files');
+        }
+    }
 }
 
 module.exports = ArticleInputAttachmentComponent;

@@ -15,7 +15,7 @@
     >.file-upload-notice {
         width: 100%;
         display: grid;
-        grid-template-columns: max-content auto;
+        grid-template-columns: max-content auto max-content;
         grid-gap: .25rem;
         align-items: center;
         grid-template-rows: 2rem;
@@ -25,11 +25,56 @@
             height: 1px;
             margin-top: .375rem;
         }
+        >.minimize-icon-container {
+            margin: .375rem 0 0 .75rem;
+            [class^="kix-icon-"].no-files,
+            [class*=" kix-icon-"].no-files {
+                color: @secondary-3;
+            }
+        }
     }
     >.file-upload-file-list {
-        width: unset;
+        .font-size-normal();
+        box-sizing: border-box;
+        border: 1px solid @secondary-3;
+        border-radius: @border-radius;
+        padding: .25rem;
+        background-color: @secondary-6;
+        min-height: @default-input-height;
+        color: @default-dark-font-color;
         grid-column: 1 / span 2;
         margin: 0 @default-button-icon-width;
+        >.file-upload-file-container {
+            height: 1.5rem;
+            overflow: hidden;
+            margin-right: .25rem;
+            display: inline-block;
+            >.file-upload-file {
+                display: grid;
+                grid-auto-flow: column;
+                align-items: center;
+                grid-gap: @margin-small;
+                grid-template-rows: 1.5rem;
+                background-color: @secondary-5;
+                border-radius: @border-radius;
+                padding: 0 @margin-small;
+                span:first-child[class^="kix-icon-"],
+                span:first-child[class*=" kix-icon-"] {
+                    font-size: .875rem;
+                }
+                .file-name {
+                    align-self: end;
+                }
+                .kix-icon-close {
+                    font-size: .75rem;
+                    color: @secondary-2;
+                    cursor: pointer;
+                    &:hover {
+                        color: darken(@secondary-2, 20%);
+                    }
+                }
+            }
+        }
     }
     &.dragging {
         border: 2px dotted @secondary-3;
