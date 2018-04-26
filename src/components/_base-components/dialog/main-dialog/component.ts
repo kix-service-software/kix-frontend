@@ -1,5 +1,6 @@
 import { DialogService } from '@kix/core/dist/browser/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
+import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 export class MainDialogComponent {
 
@@ -25,6 +26,7 @@ export class MainDialogComponent {
 
     private closeDialog(): void {
         this.state.show = false;
+        ApplicationService.getInstance().toggleShieldOverlay(false);
     }
 
 }
