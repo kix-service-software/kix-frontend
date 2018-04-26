@@ -58,12 +58,15 @@
                 background-color: @secondary-5;
                 border-radius: @border-radius;
                 padding: 0 @margin-small;
+                white-space: nowrap;
                 span:first-child[class^="kix-icon-"],
                 span:first-child[class*=" kix-icon-"] {
                     font-size: .875rem;
                 }
                 .file-name {
                     align-self: end;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
                 .kix-icon-close {
                     font-size: .75rem;

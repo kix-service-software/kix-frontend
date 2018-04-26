@@ -51,7 +51,7 @@ class ArticleInputAttachmentComponent {
         if (fileErrors.length) {
             const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
             let message = '<b>Fehler beim Hinzufügen von Anlagen:</b>';
-            message += '<ul>';
+            message += '<ul style="margin-left: 1rem;">';
             errorMessages.forEach((e) => message += `<li>${e}</li>`);
             message += '</ul>';
 
@@ -96,16 +96,7 @@ class ArticleInputAttachmentComponent {
     }
 
     private getFileSize(file: File): string {
-        let sizeString = file.size + ' Byte';
-        const siteUnits = ["KB", "MB", "GB", "TB"];
-        for (
-            let fileSize = file.size / 1024, sizeUnit = 0;
-            fileSize > 1;
-            fileSize /= 1024, sizeUnit++
-        ) {
-            sizeString = fileSize.toFixed(1) + " " + siteUnits[sizeUnit];
-        }
-        return sizeString;
+        return AttachmentUtil.getFileSize(file.size);
     }
 
     private removeFile(file: File): void {
