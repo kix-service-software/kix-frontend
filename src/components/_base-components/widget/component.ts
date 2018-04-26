@@ -115,6 +115,9 @@ class WidgetComponent {
                 case WidgetType.DIALOG:
                     typeClass = "dialog-widget";
                     break;
+                case WidgetType.OVERLAY_DIALOG:
+                    typeClass = 'overlay-dialog-widget';
+                    break;
                 case WidgetType.SIDEBAR:
                     typeClass = 'sidebar-widget';
                     break;

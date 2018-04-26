@@ -5,6 +5,7 @@
     "tags-dir": [
         "_base-template",
         "_base-components",
+        "_base-components/dialog",
         "_base-components/form-main/inputs",
         "home",
         "ticket"
