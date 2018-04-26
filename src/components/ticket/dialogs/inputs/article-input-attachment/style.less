@@ -4,7 +4,6 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2rem max-content;
     grid-column-gap: @margin-default;
-    grid-row-gap: @margin-small;
     align-items: center;
     >.file-upload-button {
         width: 100%;
@@ -43,7 +42,7 @@
         min-height: @default-input-height;
         color: @default-dark-font-color;
         grid-column: 1 / span 2;
-        margin: 0 @default-button-icon-width;
+        margin: @margin-small @default-button-icon-width 0;
         >.file-upload-file-container {
             height: 1.5rem;
             overflow: hidden;
