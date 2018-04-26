@@ -42,7 +42,7 @@ class BaseTemplateComponent {
         });
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
+        ApplicationService.getInstance().registerShieldOverlayListener(this.toggleShieldOverlay.bind(this));
 
         const context = ContextService.getInstance().getContext();
         this.state.hasExplorer = context && context.isExplorerBarShown();
@@ -53,8 +53,8 @@ class BaseTemplateComponent {
         this.state.configurationMode = !this.state.configurationMode;
     }
 
-    private async  applicationStateChanged(): Promise<void> {
-        this.state.showShieldOverlay = ApplicationService.getInstance().isShowShieldOverlay();
+    private toggleShieldOverlay(show: boolean): void {
+        this.state.showShieldOverlay = show;
     }
 
     public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
