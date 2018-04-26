@@ -1,4 +1,8 @@
 // default "css"
+@border-radius: 3px;
+@shadow-color: @secondary-3;
+@shadow-1: 0 0 2px @shadow-color;
+@shadow-2: 0 0 2em @secondary-0;
 html {
     height: 100%;
     box-sizing: border-box;
@@ -19,33 +23,11 @@ html {
     transform: perspective(1px) translateY(-50%);
 }
 
-@border-radius: 3px;
-@shadow-color: @secondary-3;
-@shadow-1: 0 0 2px @shadow-color;
-@shadow-2: 0 0 2em @secondary-0;
-.dialog-header {
-    background: @primary-1;
-    color: @default-light-font-color;
-    margin-bottom: 2.5em;
-    height: 87px;
-    border-bottom: 6px solid @primary-6;
-    & #kix-logo {
-        background: @secondary-6;
-        top: 10px;
-        position: relative;
-        padding: 3px 3px 3px 15px;
-        width: 60px;
-        height: 60px;
-        border-top-right-radius: 14px;
-        border-bottom-right-radius: 14px;
-        & img {
-            height: 60px;
-        }
-    }
-}
-
-.dialog-header {
-    margin-bottom: 0;
+.shield {
+    .full-size();
+    position: fixed;
+    background-color: @secondary-6;
+    opacity: 0.8;
 }
 
 .button-color(@button-bg-color: @secondary-5, @button-icon-bg-color: @secondary-3, @button-font-color: @default-dark-font-color, @border-color: @secondary-7) {
@@ -120,6 +102,9 @@ button {
     }
     &.login-button {
         .button-color(@primary-6, @secondary-6, @secondary-6, @primary-6);
+    }
+    &::-moz-focus-inner {
+        border: none;
     }
 }
 
