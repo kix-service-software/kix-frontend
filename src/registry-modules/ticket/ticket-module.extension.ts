@@ -36,7 +36,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Betreff", TicketProperty.TITLE, true, "Betreff"));
             fields.push(new FormField("Ticketbeschreibung", ArticleProperty.BODY, true, "Beschreibung"));
             fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, false, "Anlagen"));
-            fields.push(new FormField("Ticket verknüpfen mit", "LinkTicket", false, "Verknüpfungen"));
+            fields.push(new FormField("Ticket verknüpfen mit", TicketProperty.LINK, false, "Verknüpfungen"));
             fields.push(new FormField("Bearbeiter", TicketProperty.OWNER_ID, false, "Bearbeiter"));
             fields.push(new FormField("Verantwortlicher", TicketProperty.RESPONSIBLE_ID, false, "Verantwortlicher"));
             fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
