@@ -30,6 +30,7 @@
                     <div.file-upload-file>
                         <icon icon=component.getFileIcon(file) showUnknown=true/>
                         <span.file-name>${file.name}</span>
+                        <span.file-size>${component.getFileSize(file)}</span>
                         <span.kix-icon-close on-click('removeFile', file)/>
                     </div>
                 </span>

@@ -46,6 +46,7 @@ class ArticleInputAttachmentComponent {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
         this.state.dragging = true;
+        this.state.minimized = false;
     }
 
     private drop(event: any): void {
@@ -70,6 +71,19 @@ class ArticleInputAttachmentComponent {
             fileIcon = new ObjectIcon("Filetype", extension);
         }
         return fileIcon;
+    }
+
+    private getFileSize(file: File): string {
+        let sizeString = file.size + ' Byte';
+        const siteUnits = ["KB", "MB", "GB", "TB"];
+        for (
+            let fileSize = file.size / 1024, sizeUnit = 0;
+            fileSize > 1;
+            fileSize /= 1024, sizeUnit++
+        ) {
+            sizeString = fileSize.toFixed(1) + " " + siteUnits[sizeUnit];
+        }
+        return sizeString;
     }
 
     private removeFile(file: File): void {
