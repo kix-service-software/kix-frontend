@@ -1,5 +1,5 @@
 <if(state.show)>
-    <div.main-overlay key="overlay" infoOverlay=true on-click("overlayClicked")>
+    <div.overlay.main-overlay key="overlay" infoOverlay=true on-click("overlayClicked")>
         <if(component.isHintOverlay())>
             <widget instanceId=state.instanceId title=state.data.title minimizable=false closable=true
                 on-closeWidget('closeOverlay')>
