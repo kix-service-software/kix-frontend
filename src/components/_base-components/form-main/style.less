@@ -51,6 +51,10 @@
                 &:disabled {
                     background-color: @secondary-4;
                 }
+                &:invalid {
+                    // TODO: eigenes Styling nutzen? Firefox setzt box-shadow
+                    box-shadow: none;
+                }
             }
             >.dropdown,
             >.dropdown-tree,
