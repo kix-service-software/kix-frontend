@@ -1,5 +1,7 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
-import { FormInputComponentState, ObjectIcon } from "@kix/core/dist/model";
+import { FormInputComponentState, ObjectIcon, AttachmentError, MessageType } from "@kix/core/dist/model";
+import { AttachmentUtil } from "@kix/core/dist/browser";
+import { MessageOverlayService } from "@kix/core/dist/browser/application/MessageOverlayService";
 
 class ArticleInputAttachmentComponent {
 
@@ -33,11 +35,31 @@ class ArticleInputAttachmentComponent {
     }
 
     private appendFiles(files: File[]): void {
+        const fileErrors: Array<[File, AttachmentError]> = [];
+
         files.forEach((f: File) => {
             if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
-                this.state.files.push(f);
+                const fileError = AttachmentUtil.checkFile(f);
+                if (fileError) {
+                    fileErrors.push([f, fileError]);
+                } else {
+                    this.state.files.push(f);
+                }
             }
         });
+
+        if (fileErrors.length) {
+            const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
+            let message = '<b>Fehler beim Hinzufügen von Anlagen:</b>';
+            message += '<ul>';
+            errorMessages.forEach((e) => message += `<li>${e}</li>`);
+            message += '</ul>';
+
+            MessageOverlayService.getInstance().openMessageOverlay(
+                'Fehler', message, MessageType.WARNING
+            );
+        }
+
         (this as any).setStateDirty('files');
     }
 
