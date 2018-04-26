@@ -51,7 +51,7 @@ class ArticleInputAttachmentComponent {
         if (fileErrors.length) {
             const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
             let message = '<b>Fehler beim Hinzufügen von Anlagen:</b>';
-            message += '<ul>';
+            message += '<ul style="margin-left: 1rem;">';
             errorMessages.forEach((e) => message += `<li>${e}</li>`);
             message += '</ul>';
 
@@ -68,6 +68,7 @@ class ArticleInputAttachmentComponent {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
         this.state.dragging = true;
+        this.state.minimized = false;
     }
 
     private drop(event: any): void {
@@ -92,6 +93,10 @@ class ArticleInputAttachmentComponent {
             fileIcon = new ObjectIcon("Filetype", extension);
         }
         return fileIcon;
+    }
+
+    private getFileSize(file: File): string {
+        return AttachmentUtil.getFileSize(file.size);
     }
 
     private removeFile(file: File): void {
