@@ -23,7 +23,7 @@ class FormularComponent {
     }
 
     public doCancel(): void {
-        DialogService.getInstance().toggleMainDialog();
+        DialogService.getInstance().openMainDialog();
     }
 
 }

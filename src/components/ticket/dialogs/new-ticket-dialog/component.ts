@@ -9,7 +9,7 @@ class NewTicketDialogComponent {
     }
 
     public onMount(): void {
-        DialogService.getInstance().setDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
 }

@@ -1,5 +1,6 @@
 {
     "tags-dir": [
+        "./dialog",
         "./tree",
         "./form-main/inputs"
     ]

@@ -5,6 +5,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     public getDependencies(): string[] {
         const dialog = [
             'ticket/dialogs/new-ticket-dialog',
+            'ticket/dialogs/link-ticket-dialog',
             'ticket/dialogs/inputs/article-input-body',
             'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
@@ -80,6 +81,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
+            ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
             ...inputs,
             ...widgets,
         ];

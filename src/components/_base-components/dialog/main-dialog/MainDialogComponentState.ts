@@ -1,6 +1,6 @@
 import { ConfiguredWidget } from "@kix/core/dist/model";
 
-export class DialogMainComponentState {
+export class MainDialogComponentState {
 
     public constructor(
         public show: boolean = false,

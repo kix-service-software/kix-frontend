@@ -82,10 +82,6 @@ class ObjectInfoOverlayComponent {
         }
     }
 
-    private isDialogShown(): boolean {
-        return DialogService.getInstance().isShowMainDialog();
-    }
-
     private isHintOverlay(): boolean {
         return ApplicationService.getInstance().isHintOverlay();
     }

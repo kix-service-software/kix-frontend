@@ -10,7 +10,7 @@ class KIXHeaderComponent {
     }
 
     private openDialog(): void {
-        DialogService.getInstance().toggleMainDialog();
+        DialogService.getInstance().openMainDialog();
     }
 
     private logout(): void {

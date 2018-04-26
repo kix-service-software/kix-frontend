@@ -324,3 +324,14 @@
         }
     }
 }
+
+.overlay-dialog-widget {
+    .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
+    .full-size();
+    >.widget-content {
+        .full-size();
+        top: @overlay-widget-header-height;
+        border: 2px solid @primary-0;
+        padding: @margin-middle @margin-default;
+    }
+}
