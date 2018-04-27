@@ -14,7 +14,7 @@ import {
     TableToggleLayer,
     ActionFactory
 } from '@kix/core/dist/browser';
-import { TicketHistory } from '@kix/core/dist/model';
+import { TicketHistory, ArticleProperty } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TicketHistoryWidgetComponent {
@@ -90,7 +90,7 @@ class TicketHistoryWidgetComponent {
     }
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
-        if (columnId === 'ArticleID' && historyEntry[columnId]) {
+        if (columnId === ArticleProperty.ARTICLE_ID && historyEntry[columnId]) {
             ContextService.getInstance().notifyListener(
                 TicketDetailsContext.CONTEXT_ID, ContextNotification.GO_TO_ARTICLE, historyEntry[columnId]
             );
