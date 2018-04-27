@@ -1,4 +1,4 @@
-import { OverlayWidgetData } from '@kix/core/dist/model';
+import { OverlayWidgetData, ComponentContent, StringContent } from '@kix/core/dist/model';
 
 export class OverlayIconComponentState {
 
@@ -6,7 +6,8 @@ export class OverlayIconComponentState {
         public show: boolean = false,
         public overlayId: string = '',
         public overlayWidgetData: OverlayWidgetData = null,
-        public isHintOverlay: boolean = false
+        public isHintOverlay: boolean = false,
+        public content: StringContent<any> | ComponentContent<any> = null
     ) { }
 
 }

@@ -7,6 +7,7 @@
         "_base-components",
         "_base-components/dialog",
         "_base-components/form-main/inputs",
+        "_base-components/base-html-components",
         "home",
         "ticket"
     ]

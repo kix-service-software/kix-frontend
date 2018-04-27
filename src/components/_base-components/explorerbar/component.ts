@@ -49,10 +49,6 @@ class ExplorerbarComponent {
         ContextService.getInstance().getContext().toggleExplorerBar();
     }
 
-    private isConfigMode(): boolean {
-        return ApplicationService.getInstance().isConfigurationMode();
-    }
-
     private explorerAvailable(instanceId: string): boolean {
         return this.state.explorer.some((r) => r.instanceId === instanceId);
     }

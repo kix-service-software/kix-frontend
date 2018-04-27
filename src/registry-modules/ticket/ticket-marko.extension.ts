@@ -20,7 +20,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-link'
         ];
         const widgets = [
-            'ticket/widgets/article-attachment-widget',
             'ticket/widgets/article-receiver-list-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-info-widget',
@@ -38,6 +37,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-dynamic-fields-container',
             'ticket/ticket-article-details',
             'ticket/ticket-article-attachment-list',
+            'ticket/ticket-contact-info',
+            'ticket/ticket-customer-info',
             ...dialog,
             ...widgets
         ];
@@ -45,7 +46,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getComponentTags(): Array<[string, string]> {
         const widgets: Array<[string, string]> = [
-            ['article-attachment-widget', 'ticket/widgets/article-attachment-widget'],
             ['article-receiver-list-widget', 'ticket/widgets/article-receiver-list-widget'],
             ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
             ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
@@ -82,6 +82,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
             ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
+            ['ticket-contact-info', 'ticket/ticket-contact-info'],
+            ['ticket-customer-info', 'ticket/ticket-customer-info'],
             ...inputs,
             ...widgets,
         ];

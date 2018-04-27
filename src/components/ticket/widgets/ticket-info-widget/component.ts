@@ -87,8 +87,7 @@ class TicketInfoWidgetComponent {
         return ContextService.getInstance().getContext()
             && ContextService.getInstance().getContext().isExplorerBarShown()
             && ContextService.getInstance().getContext().explorerBarExpanded
-            && (ContextService.getInstance().getContext().isSidebarShown()
-                || ApplicationService.getInstance().isConfigurationMode());
+            && ContextService.getInstance().getContext().isSidebarShown();
     }
 
     private getIcon(object: string, objectId: string): ObjectIcon {
