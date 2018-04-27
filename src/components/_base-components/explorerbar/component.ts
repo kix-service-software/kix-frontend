@@ -1,4 +1,3 @@
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
 import { ConfiguredWidget, WidgetType } from '@kix/core/dist/model/';
