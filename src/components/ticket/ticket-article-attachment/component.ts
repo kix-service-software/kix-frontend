@@ -1,7 +1,6 @@
 import { Attachment, ObjectIcon } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 
 declare var window: any;
 

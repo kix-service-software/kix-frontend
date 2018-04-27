@@ -1,6 +1,5 @@
 import { SocketEvent } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
@@ -42,7 +41,6 @@ class BaseTemplateComponent {
         });
 
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        ApplicationService.getInstance().registerShieldOverlayListener(this.toggleShieldOverlay.bind(this));
 
         const context = ContextService.getInstance().getContext();
         this.state.hasExplorer = context && context.isExplorerBarShown();
@@ -51,10 +49,6 @@ class BaseTemplateComponent {
 
     public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
-    }
-
-    private toggleShieldOverlay(show: boolean): void {
-        this.state.showShieldOverlay = show;
     }
 
     public contextServiceNotified(id: string, type: ContextNotification, ...args): void {

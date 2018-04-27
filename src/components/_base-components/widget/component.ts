@@ -1,4 +1,3 @@
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -22,10 +21,6 @@ class WidgetComponent {
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
-
-        if (this.isOverlayWidget()) {
-            this.state.closable = true;
-        }
     }
 
     public onMount(): void {
@@ -72,21 +67,12 @@ class WidgetComponent {
         this.state.configChanged = false;
     }
 
-    private isConfigMode(): boolean {
-        return ApplicationService.getInstance().isConfigurationMode();
-    }
-
     private hasHeaderContent(headerContent: any): boolean {
-        // TODO: ConfigMode blendet nur Filter aus, aber wahrscheinlich nicht den anderen "HeaderContent"
-        return this.isInputDefined(headerContent) && !this.isConfigMode();
+        return this.isInputDefined(headerContent);
     }
 
     private isInputDefined(input: any): boolean {
         return input && Boolean(Object.keys(input).length);
-    }
-
-    private hasConfigurationOverlay(): boolean {
-        return this.isConfigMode() && this.state.hasConfigOverlay && this.state.configurationTagId !== undefined;
     }
 
     private getWidgetClasses(): string[] {
@@ -133,14 +119,8 @@ class WidgetComponent {
                 case WidgetType.GROUP:
                     typeClass = 'group-widget';
                     break;
-                case WidgetType.INFO_OVERLAY:
-                    typeClass = 'info-overlay-widget';
-                    break;
-                case WidgetType.HINT_OVERLAY:
-                    typeClass = 'hint-overlay-widget';
-                    break;
-                case WidgetType.WARNING_OVERLAY:
-                    typeClass = 'warning-overlay-widget';
+                case WidgetType.OVERLAY:
+                    typeClass = 'overlay-widget';
                     break;
                 default:
                     typeClass = 'content-widget';
@@ -159,16 +139,8 @@ class WidgetComponent {
         return this.state.widgetType === WidgetType.LANE || this.state.widgetType === WidgetType.LANE_TAB;
     }
 
-    private isOverlayWidget(): boolean {
-        return this.state.widgetType === WidgetType.HINT_OVERLAY || this.state.widgetType === WidgetType.INFO_OVERLAY;
-    }
-
     private closeClicked(): void {
-        if (this.isOverlayWidget()) {
-            ApplicationService.getInstance().toggleOverlay();
-        } else {
-            (this as any).emit('closeWidget');
-        }
+        (this as any).emit('closeWidget');
     }
 
 }

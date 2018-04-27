@@ -3,7 +3,6 @@ import {
     HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
 } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable, ITableClickListener,

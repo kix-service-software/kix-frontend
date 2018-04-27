@@ -1,7 +1,6 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { SysconfigUtil, ObjectIcon } from '@kix/core/dist/model';
 import { ActionFactory } from '@kix/core/dist/browser';
 
@@ -87,8 +86,7 @@ class TicketInfoWidgetComponent {
         return ContextService.getInstance().getContext()
             && ContextService.getInstance().getContext().isExplorerBarShown()
             && ContextService.getInstance().getContext().explorerBarExpanded
-            && (ContextService.getInstance().getContext().isSidebarShown()
-                || ApplicationService.getInstance().isConfigurationMode());
+            && ContextService.getInstance().getContext().isSidebarShown();
     }
 
     private getIcon(object: string, objectId: string): ObjectIcon {

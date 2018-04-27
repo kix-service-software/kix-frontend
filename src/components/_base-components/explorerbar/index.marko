@@ -1,9 +1,9 @@
 <if(state.explorer.length)>
-    <div.explorerbar class=(component.isExplorerBarExpanded() || component.isConfigMode() ? "expanded" : "collapsed")>
+    <div.explorerbar class=(component.isExplorerBarExpanded() ? "expanded" : "collapsed")>
         <for(widget in state.explorer)>
             <if(component.explorerAvailable(widget.instanceId))>
-                <if(component.isExplorerBarExpanded() || component.isConfigMode())>
-                    <div class=[component.isConfigMode() ? "config-mode" : "", component.isConfigDialogShown() ? "config-dialog-shown" : ""]>
+                <if(component.isExplorerBarExpanded())>
+                    <div>
                         <include(component.getWidgetTemplate(widget), {
                             instanceId: widget.instanceId,
                             minimizable: false,

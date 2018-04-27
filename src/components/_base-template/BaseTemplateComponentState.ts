@@ -9,7 +9,6 @@ export class BaseTemplateComponentState {
         public objectData: ObjectData,
         public objectId: string,
         public configurationMode: boolean = false,
-        public showShieldOverlay: boolean = false,
         public gridColumns: string = null,
         public hasExplorer: boolean = false
     ) { }

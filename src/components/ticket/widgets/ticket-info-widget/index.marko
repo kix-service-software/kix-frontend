@@ -13,7 +13,7 @@
                         <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
                             <@info>
                                 <if(state.ticket.customer)>
-                                    <overlay-icon content="ticket-customer-info-widget" data={instanceId: "customer-info-overlay"}/>
+                                    <overlay-icon content="ticket-customer-info" instanceId="customer-info-overlay"/>
                                 </if>
                             </@info>
                         </object-property-label>
@@ -22,7 +22,7 @@
                         <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider>
                             <@info>
                                 <if(state.ticket.contact)>
-                                    <overlay-icon content="ticket-contact-info-widget" data={instanceId: "contact-info-overlay"}/>
+                                    <overlay-icon content="ticket-contact-info" instanceId="contact-info-overlay"/>
                                 </if>
                             </@info>
                         </object-property-label>

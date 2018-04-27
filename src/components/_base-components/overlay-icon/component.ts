@@ -1,10 +1,10 @@
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { IdService } from '@kix/core/dist/browser/IdService';
-import { OverlayWidgetData } from '@kix/core/dist/model';
+import { OverlayWidgetData, OverlayType, ComponentContent, StringContent } from '@kix/core/dist/model';
 
 import { OverlayIconComponentState } from './OverlayIconComponentState';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { OverlayService } from '@kix/core/dist/browser';
 
 class OverlayInfoIconComponent {
 
@@ -17,29 +17,24 @@ class OverlayInfoIconComponent {
     public onInput(input: any): void {
         this.state.isHintOverlay = input.isHint || false;
         if (this.state.isHintOverlay) {
-            this.state.overlayWidgetData = new OverlayWidgetData(input.content, input.data);
+            this.state.content = new StringContent(input.content);
         } else {
-            const content = ComponentsService.getInstance().getComponentTemplate(input.content);
-            this.state.overlayWidgetData = new OverlayWidgetData(content, input.data);
+            this.state.content = new ComponentContent(input.content, input.data);
         }
-    }
 
-    public onMount(): void {
-        ApplicationService.getInstance().addServiceListener(this.applicationStateChanged.bind(this));
-        this.state.overlayId = IdService.generateDateBasedId('overlay-');
+        this.state.instanceId = input.instanceId;
+        this.state.title = input.title;
     }
 
     private showOverlay(event: any) {
-        ApplicationService.getInstance().toggleOverlay(
-            this.state.overlayId,
-            this.state.overlayWidgetData,
-            [event.pageX, event.pageY],
-            this.state.isHintOverlay ? true : false
+        OverlayService.getInstance().openOverlay(
+            this.state.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
+            this.state.instanceId,
+            this.state.content,
+            this.state.title,
+            false,
+            [event.pageX, event.pageY]
         );
-    }
-
-    private applicationStateChanged() {
-        this.state.show = ApplicationService.getInstance().isShowOverlay(this.state.overlayId);
     }
 
     private getOverlayIcon(): string {
@@ -50,6 +45,7 @@ class OverlayInfoIconComponent {
         }
         return icon;
     }
+
 }
 
 module.exports = OverlayInfoIconComponent;

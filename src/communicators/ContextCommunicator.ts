@@ -6,7 +6,6 @@ import {
     SocketEvent,
     User,
     WidgetConfiguration,
-    WidgetTemplate,
     ContextEvent,
     LoadContextConfigurationRequest,
     LoadContextConfigurationResponse,

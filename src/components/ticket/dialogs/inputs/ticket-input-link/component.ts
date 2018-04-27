@@ -1,7 +1,6 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
-import { FormInputComponentState, ObjectIcon, AttachmentError, MessageType } from "@kix/core/dist/model";
+import { FormInputComponentState, ObjectIcon, AttachmentError } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
-import { MessageOverlayService } from "@kix/core/dist/browser/application/MessageOverlayService";
 import { DialogService } from "@kix/core/dist/browser/DialogService";
 
 class ArticleInputAttachmentComponent {

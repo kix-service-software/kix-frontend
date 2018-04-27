@@ -192,7 +192,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             );
         const articleAttachmentOverlay =
             new ConfiguredWidget("article-attachment-widget", new WidgetConfiguration(
-                "article-receiver-list-widget", "Anlagen", [], {},
+                "article-attachment-widget", "Anlagen", ['article-attachment-zip-download'], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-attachement', false)
             );
         const infoOverlayWidgets = [
