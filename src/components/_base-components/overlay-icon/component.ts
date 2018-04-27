@@ -21,14 +21,17 @@ class OverlayInfoIconComponent {
         } else {
             this.state.content = new ComponentContent(input.content, input.data);
         }
+
+        this.state.instanceId = input.instanceId;
+        this.state.title = input.title;
     }
 
     private showOverlay(event: any) {
         OverlayService.getInstance().openOverlay(
             this.state.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
-            null,
+            this.state.instanceId,
             this.state.content,
-            'Info',
+            this.state.title,
             false,
             [event.pageX, event.pageY]
         );
