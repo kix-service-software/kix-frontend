@@ -75,9 +75,10 @@ class ArticleInputAttachmentComponent {
         event.stopPropagation();
         event.preventDefault();
 
-        const files = event.dataTransfer.files;
-        this.appendFiles(Array.from(files));
-
+        if (event.dataTransfer.files) {
+            const files: File[] = Array.from(event.dataTransfer.files);
+            this.appendFiles(files.filter((f) => f.type !== ''));
+        }
         this.state.dragging = false;
     }
 
