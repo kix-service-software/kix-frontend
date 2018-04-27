@@ -1,6 +1,6 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
 import {
-    FormInputComponentState, ObjectIcon, AttachmentError, MessageType, OverlayType, StringContent
+    FormInputComponentState, ObjectIcon, AttachmentError, MessageType, OverlayType, StringContent, ComponentContent
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
@@ -52,13 +52,19 @@ class ArticleInputAttachmentComponent {
 
         if (fileErrors.length) {
             const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
-            let message = '<b>Fehler beim Hinzufügen von Anlagen:</b>';
-            message += '<ul style="margin-left: 1rem;">';
-            errorMessages.forEach((e) => message += `<li>${e}</li>`);
-            message += '</ul>';
+            const content = new ComponentContent('list-with-title',
+                {
+                    title: 'Fehler beim Hinzufügen von Anlagen:',
+                    list: errorMessages
+                }
+            );
 
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, new StringContent(message), 'Fehler', true
+                OverlayType.WARNING,
+                null,
+                content,
+                'Fehler',
+                true
             );
         }
 

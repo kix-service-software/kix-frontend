@@ -11,7 +11,9 @@
                 </@icon>
                 <@content>
                     <if(component.isComponentContent())>
-                        <include(component.getTemplate(), state.content.getComponentData())/>
+                        <div>
+                            <include(component.getTemplate(), state.content.getComponentData())/>
+                        </div>
                     </if>
                     <else>
                         <span>${state.content.getValue()}</span>
