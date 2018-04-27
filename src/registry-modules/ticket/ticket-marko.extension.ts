@@ -37,6 +37,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/ticket-dynamic-fields-container',
             'ticket/ticket-article-details',
             'ticket/ticket-article-attachment-list',
+            'ticket/ticket-contact-info',
+            'ticket/ticket-customer-info',
             ...dialog,
             ...widgets
         ];
@@ -80,6 +82,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
             ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
+            ['ticket-contact-info', 'ticket/ticket-contact-info'],
+            ['ticket-customer-info', 'ticket/ticket-customer-info'],
             ...inputs,
             ...widgets,
         ];
