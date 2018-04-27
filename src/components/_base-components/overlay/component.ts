@@ -17,7 +17,22 @@ class OverlayComponent {
     public onMount(): void {
         OverlayService.getInstance().registerOverlayListener(this.openOverlay.bind(this));
         ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
+
+        document.addEventListener("click", (event: any) => {
+            if (this.state.show && !this.showShield()) {
+                if (this.state.keepShow) {
+                    this.state.keepShow = false;
+                } else {
+                    this.closeOverlay();
+                }
+            }
+        }, false);
     }
+
+    private overlayClicked(): void {
+        this.state.keepShow = true;
+    }
+
 
     public onUpdate(): void {
         if (this.state.position && this.state.position.length === 2) {
@@ -40,10 +55,12 @@ class OverlayComponent {
         this.state.content = content;
         this.state.hasCloseButton = closeButton;
         this.state.position = position;
+        this.state.type = type;
         this.state.overlayClass = this.getOverlayTypeClass(type);
 
         this.applyWidgetConfiguration(instanceId);
 
+        this.state.keepShow = true;
         this.state.show = true;
     }
 
@@ -121,6 +138,10 @@ class OverlayComponent {
             return ComponentsService.getInstance().getComponentTemplate(content.getValue());
         }
 
+    }
+
+    private showShield(): boolean {
+        return this.state.type === OverlayType.WARNING;
     }
 
 }
