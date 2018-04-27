@@ -7,7 +7,7 @@ export class OverlayIconComponentState {
         public overlayId: string = '',
         public overlayWidgetData: OverlayWidgetData = null,
         public isHintOverlay: boolean = false,
-        public content: StringContent | ComponentContent = null
+        public content: StringContent<any> | ComponentContent<any> = null
     ) { }
 
 }

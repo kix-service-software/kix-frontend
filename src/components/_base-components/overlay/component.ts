@@ -1,6 +1,8 @@
 import { OverlayComponentState } from "./OverlayComponentState";
-import { OverlayService } from "@kix/core/dist/browser";
-import { OverlayType, IWidgetContent, ObjectIcon, ComponentContent, Context, WidgetType } from "@kix/core/dist/model";
+import { OverlayService, ActionFactory } from "@kix/core/dist/browser";
+import {
+    OverlayType, IWidgetContent, ObjectIcon, ComponentContent, Context, WidgetType, KIXObject
+} from "@kix/core/dist/model";
 import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -29,22 +31,39 @@ class OverlayComponent {
         }
     }
 
-    private openOverlay(
-        type: OverlayType, content: IWidgetContent, title: string,
-        actions: string[], closeButton: boolean, position: [number, number]
+    private openOverlay<T extends KIXObject<T>>(
+        type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
+        closeButton: boolean, position: [number, number]
     ): void {
         this.state.title = title;
         this.state.icon = this.getWidgetIcon(type);
-        this.state.actions = actions;
         this.state.content = content;
         this.state.hasCloseButton = closeButton;
         this.state.position = position;
         this.state.overlayClass = this.getOverlayTypeClass(type);
+
+        this.applyWidgetConfiguration(instanceId);
+
         this.state.show = true;
+    }
+
+    private applyWidgetConfiguration(instanceId: string): void {
+        if (instanceId && instanceId !== '') {
+            const context = ContextService.getInstance().getContext();
+            const widgetConfiguration = context.getWidgetConfiguration(instanceId);
+            if (widgetConfiguration) {
+                this.state.actions = ActionFactory.getInstance().generateActions(
+                    widgetConfiguration.actions, false, this.state.content.getActionObject()
+                );
+                this.state.title = widgetConfiguration.title;
+                this.state.icon = widgetConfiguration.icon;
+            }
+        }
     }
 
     private closeOverlay(): void {
         this.state.show = false;
+        this.state = new OverlayComponentState();
     }
 
     private setOverlayPosition(): void {
@@ -98,7 +117,7 @@ class OverlayComponent {
 
     private getTemplate(): any {
         if (this.isComponentContent()) {
-            const content = (this.state.content as ComponentContent);
+            const content = (this.state.content as ComponentContent<any>);
             return ComponentsService.getInstance().getComponentTemplate(content.getValue());
         }
 

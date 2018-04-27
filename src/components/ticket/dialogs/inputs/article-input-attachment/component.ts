@@ -58,7 +58,7 @@ class ArticleInputAttachmentComponent {
             message += '</ul>';
 
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, new StringContent(message), 'Fehler', [], true
+                OverlayType.WARNING, null, new StringContent(message), 'Fehler', true
             );
         }
 

@@ -27,9 +27,9 @@ class OverlayInfoIconComponent {
     private showOverlay(event: any) {
         OverlayService.getInstance().openOverlay(
             this.state.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
+            null,
             this.state.content,
             'Info',
-            [],
             false,
             [event.pageX, event.pageY]
         );

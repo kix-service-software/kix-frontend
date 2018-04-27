@@ -7,7 +7,7 @@
             </@icon>
             <@content>
                 <if(component.isComponentContent())>
-                    <include(component.getTemplate(), state.content.contentData)/>
+                    <include(component.getTemplate(), state.content.getComponentData())/>
                 </if>
                 <else>
                     <span>${state.content.getValue()}</span>
