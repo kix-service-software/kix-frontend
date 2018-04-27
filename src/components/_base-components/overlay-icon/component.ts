@@ -1,4 +1,3 @@
-import { ApplicationService } from '@kix/core/dist/browser/application/ApplicationService';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { OverlayWidgetData, OverlayType, ComponentContent, StringContent } from '@kix/core/dist/model';
