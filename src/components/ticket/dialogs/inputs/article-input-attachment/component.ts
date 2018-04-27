@@ -1,6 +1,6 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
 import {
-    FormInputComponentState, ObjectIcon, AttachmentError, MessageType, OverlayType, StringContent, ComponentContent
+    FormInputComponentState, ObjectIcon, AttachmentError, OverlayType, StringContent, ComponentContent
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
