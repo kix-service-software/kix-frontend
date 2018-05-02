@@ -25,7 +25,7 @@ class TicketInputTypeComponent {
 
         const formFieldValue = formInstance.getFormFieldValue<Contact>(TicketProperty.CUSTOMER_USER_ID);
         if (formFieldValue && formFieldValue.value) {
-            this.loadCustomers([formFieldValue.value.UserCustomerID]);
+            this.loadCustomers(formFieldValue.value.UserCustomerIDs);
             this.state.hasContact = true;
         }
     }
