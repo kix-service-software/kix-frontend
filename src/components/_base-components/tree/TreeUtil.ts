@@ -5,26 +5,37 @@ export class TreeUtil {
 
     public static linkTreeNodes(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
         if (tree) {
-            let previousNode: TreeNode = null;
-            for (const node of tree) {
+            TreeUtil.removeNodeLinks(tree);
+            for (let i = 0; i < tree.length; i++) {
+                const node = tree[i];
 
                 if (TreeUtil.isNodeVisible(node, filterValue)) {
-
                     node.visible = true;
 
                     if (TreeUtil.isFilterValueDefined(filterValue)) {
                         node.expanded = true;
                     }
 
-                    if (previousNode) {
+                    node.parent = parent;
+                    node.nextNode = tree[i + 1];
+
+                    if (i > 0) {
+                        const previousNode = tree[i - 1];
                         node.previousNode = previousNode;
-                        previousNode.nextNode = node;
+                        if (previousNode && !previousNode.expanded) {
+                            previousNode.nextNode = node;
+                        }
+                    } else if (i === 0) {
+                        node.previousNode = parent;
                     }
 
-                    node.parent = parent;
-                    previousNode = node;
+                    if (i === tree.length - 1 && !node.expanded) {
+                        node.nextNode = TreeUtil.getNextParentNode(node.parent);
+                    }
+
                     if (node.expanded) {
                         TreeUtil.linkTreeNodes(node.children, filterValue, node);
+                        node.nextNode = TreeUtil.getFirstVisibleNode(node.children, filterValue);
                     }
                 } else {
                     node.visible = false;
@@ -33,35 +44,18 @@ export class TreeUtil {
         }
     }
 
-    public static linkParents(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
-        if (tree.length && parent) {
-            const firstNode = TreeUtil.getFirstVisibleNode(tree, filterValue);
-            const lastNode = tree[tree.length - 1];
-
-            firstNode.previousNode = parent;
-
-            const nextParent = TreeUtil.getNextParentNode(parent);
-            lastNode.nextNode = nextParent;
-            if (nextParent) {
-                nextParent.previousNode = lastNode;
-            }
-
-            if (parent.expanded) {
-                parent.nextNode = firstNode;
-            }
-        }
-
+    private static removeNodeLinks(tree: TreeNode[]): void {
         for (const node of tree) {
-            if (node.visible && node.expanded) {
-                TreeUtil.linkParents(node.children, filterValue, node);
-            }
+            node.previousNode = null;
+            node.nextNode = null;
+            node.parent = null;
         }
     }
 
     private static getNextParentNode(parent: TreeNode): TreeNode {
-        let nextNode = parent.nextNode;
+        let nextNode = parent ? parent.nextNode : null;
 
-        if (!nextNode && parent.parent) {
+        if (!nextNode && parent && parent.parent) {
             nextNode = TreeUtil.getNextParentNode(parent.parent);
         }
 

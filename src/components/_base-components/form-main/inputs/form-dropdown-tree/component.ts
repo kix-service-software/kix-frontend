@@ -42,12 +42,12 @@ class FormDropdownTreeComponent {
 
     private focusInput(): void {
         if (this.state.expanded) {
-            this.toggleList();
-        } else {
             const input = (this as any).getEl('dropdown-tree-input');
             if (input) {
                 input.focus();
             }
+        } else {
+            this.toggleList();
         }
     }
 
