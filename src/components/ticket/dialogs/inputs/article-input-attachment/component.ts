@@ -85,7 +85,7 @@ class ArticleInputAttachmentComponent {
 
         if (event.dataTransfer.files) {
             const files: File[] = Array.from(event.dataTransfer.files);
-            this.appendFiles(files.filter((f) => f.type !== ''));
+            this.appendFiles(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
         }
         this.state.dragging = false;
     }
