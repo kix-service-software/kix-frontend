@@ -1,8 +1,8 @@
 <div.form>
     <if(state.formInstance && state.formInstance.form)>
         <for(field in state.formInstance.form.fields)>
-            <div.form-field>
-                <div.field-label title=field.label>
+            <div.form-field title=field.label>
+                <div.field-label>
                     <span.label-text>
                         <if(field.required)>
                             <span.required-field>*</span>
@@ -10,7 +10,7 @@
                     </span>
                 </div>
                 <div.field-icon>
-                    <overlay-icon isHint=true content=field.hint title=field.label/>
+                    <overlay-icon isHint=true content=field.hint/>
                 </div>
                 <div.field-input>
                     <include(component.getInputComponent(field), { field, formId: state.formId })/>

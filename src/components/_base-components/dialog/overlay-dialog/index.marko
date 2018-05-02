@@ -6,7 +6,11 @@
                 <@icon>
                     <icon icon=state.icon/>
                 </@icon>
-                <@content/>
+                <@content>
+                    <if(state.dialogTemplate)>
+                        <include(state.dialogTemplate, state.dialogInput)/>
+                    </if>
+                </@content>
             </widget>
         </div>
     </div>

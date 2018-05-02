@@ -4,6 +4,7 @@ import {
 } from '@kix/core/dist/model';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { HomeContextConfiguration } from '@kix/core/dist/browser/home';
+import { TicketProperty } from '@kix/core/dist/model/';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -20,17 +21,17 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     displayLimit: 15,
                     showTotalCount: true,
                     tableColumns: [
-                        new TableColumnConfiguration('TicketNumber', true, false, true, true, 130),
-                        new TableColumnConfiguration('PriorityID', false, true, false, false, 100),
-                        new TableColumnConfiguration('StateID', false, true, true, true, 100),
-                        new TableColumnConfiguration('QueueID', true, true, true, true, 200),
-                        new TableColumnConfiguration('TypeID', true, true, true, true, 100),
-                        new TableColumnConfiguration('Title', true, false, true, true, 200),
+                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
+                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, false, 100),
+                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 100),
+                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, true, true, true, 200),
+                        new TableColumnConfiguration(TicketProperty.TYPE_ID, true, true, true, true, 100),
+                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
                         new TableColumnConfiguration(
-                            'Created', true, false, true, true, 100, DataType.DATE_TIME
+                            TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
                         ),
                         new TableColumnConfiguration(
-                            'Age', true, false, true, true, 100, DataType.DATE_TIME
+                            TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
                         ),
                     ]
                 },
@@ -43,7 +44,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         return new HomeContextConfiguration(this.getModuleId(), [], [], [], [], content, contentWidgets, []);
     }
 
-    public createFormularDefinitions(): void {
+    public createFormDefinitions(): void {
         // do nothing
     }
 

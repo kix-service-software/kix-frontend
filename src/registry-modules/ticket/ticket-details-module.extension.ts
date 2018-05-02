@@ -1,6 +1,13 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, ContextConfiguration, ConfiguredWidget, WidgetSize, DataType
+    WidgetConfiguration,
+    WidgetType,
+    ContextConfiguration,
+    ConfiguredWidget,
+    WidgetSize,
+    DataType,
+    TicketProperty,
+    ArticleProperty
 } from '@kix/core/dist/model/';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
@@ -25,7 +32,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     tableColumns: [
                         new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
                         new TableColumnConfiguration('Name', true, false, true, true, 200),
-                        new TableColumnConfiguration('ArticleID', true, false, true, true, 100),
+                        new TableColumnConfiguration(ArticleProperty.ARTICLE_ID, true, false, true, true, 100),
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
                         new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
                     ]
@@ -61,19 +68,15 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                         [
                             "Ticket", [
                                 new TableColumnConfiguration(
-                                    'TicketNumber', true, false, true, true, 100, DataType.STRING),
-                                new TableColumnConfiguration('Title', true, false, true, true, 100),
-                                new TableColumnConfiguration('TypeID', true, false, true, true, 100),
-                                new TableColumnConfiguration('QueueID', true, false, true, true, 100),
+                                    TicketProperty.TICKET_NUMBER, true, false, true, true, 100, DataType.STRING),
+                                new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 100),
+                                new TableColumnConfiguration(TicketProperty.TYPE_ID, true, false, true, true, 100),
+                                new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
+                                new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 100),
                                 new TableColumnConfiguration(
-                                    'StateID', false, true, true, true, 100
+                                    TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
                                 ),
-                                new TableColumnConfiguration(
-                                    'Created', true, false, true, true, 100, DataType.DATE_TIME
-                                ),
-                                new TableColumnConfiguration(
-                                    'LinkedAs', true, false, true, true, 100
-                                )
+                                new TableColumnConfiguration(TicketProperty.LINKED_AS, true, false, true, true, 100)
                             ]
                         ]
                     ]
@@ -144,16 +147,18 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                         new TableColumnConfiguration(
                             'Number', true, false, false, true, 50, DataType.NUMBER
                         ),
-                        new TableColumnConfiguration('ArticleInformation', false, true, false, false, 50),
-                        new TableColumnConfiguration('SenderTypeID', true, false, true, true, 100),
-                        new TableColumnConfiguration('ArticleTypeID', false, true, false, true, 50),
-                        new TableColumnConfiguration('ArticleTag', false, true, true, false, 50),
-                        new TableColumnConfiguration('From', true, false, true, true, 225),
-                        new TableColumnConfiguration('Subject', true, false, true, true, 500),
                         new TableColumnConfiguration(
-                            'IncomingTime', true, false, true, true, 120, DataType.DATE_TIME
+                            ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
                         ),
-                        new TableColumnConfiguration('Attachment', true, false, true, false, 50),
+                        new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
+                        new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
+                        new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
+                        new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
+                        new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
+                        new TableColumnConfiguration(
+                            ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
+                        ),
+                        new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
                     ]
                 },
                 false, true, WidgetSize.LARGE, null, false)
@@ -213,7 +218,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         );
     }
 
-    public createFormularDefinitions(): void {
+    public createFormDefinitions(): void {
         // do nothing
     }
 
