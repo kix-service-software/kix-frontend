@@ -14,7 +14,6 @@ class TreeComponent {
         this.state.tree = input.tree;
         this.state.filterValue = input.filterValue;
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
-        TreeUtil.linkParents(this.state.tree, this.state.filterValue);
         this.state.activeNode = input.activeNode;
     }
 
@@ -27,7 +26,6 @@ class TreeComponent {
 
     private nodeToggled(node: TreeNode): void {
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
-        TreeUtil.linkParents(this.state.tree, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
     }
 
