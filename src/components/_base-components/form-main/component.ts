@@ -1,11 +1,11 @@
 import { ContextService } from '@kix/core/dist/browser/context';
-import { FormComponentState } from './FormularComponentState';
+import { FormComponentState } from './FormComponentState';
 import { FormField } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { FormService } from '@kix/core/dist/browser/form';
 import { DialogService } from '@kix/core/dist/browser/DialogService';
 
-class FormularComponent {
+class FormComponent {
 
     private state: FormComponentState;
 
@@ -28,4 +28,4 @@ class FormularComponent {
 
 }
 
-module.exports = FormularComponent;
+module.exports = FormComponent;

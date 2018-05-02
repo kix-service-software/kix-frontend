@@ -74,7 +74,7 @@ class Startup {
     private async registerModules(): Promise<void> {
         const pluginService = ServiceContainer.getInstance().getClass<IPluginService>('IPluginService');
         const moduleFactories = await pluginService.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
-        moduleFactories.forEach((mf) => mf.createFormularDefinitions());
+        moduleFactories.forEach((mf) => mf.createFormDefinitions());
     }
 
 }

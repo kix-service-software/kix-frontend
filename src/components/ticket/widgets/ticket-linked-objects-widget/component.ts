@@ -8,7 +8,7 @@ import {
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { Link, Ticket, WidgetType } from '@kix/core/dist/model';
+import { Link, Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable,
@@ -67,14 +67,18 @@ class LinkedObjectsWidgetComponent {
             if (this.state.ticket) {
 
                 const linkedTickets = this.state.ticket.Links.filter((link) => {
-                    return (link.SourceObject === 'Ticket' && link.SourceKey !== this.state.ticketId.toString()) ||
-                        (link.TargetObject === 'Ticket' && link.TargetKey !== this.state.ticketId.toString());
+                    return (link.SourceObject === KIXObjectType.TICKET &&
+                        link.SourceKey !== this.state.ticketId.toString()) ||
+                        (link.TargetObject === KIXObjectType.TICKET &&
+                            link.TargetKey !== this.state.ticketId.toString());
                 });
 
                 if (linkedTickets.length) {
                     const ticketTableConfiguration = this.getTicketTableConfiguration(linkedTickets);
                     this.state.linkCount += linkedTickets.length;
-                    this.state.linkedObjectGroups.push(['Ticket', linkedTickets.length, ticketTableConfiguration]);
+                    this.state.linkedObjectGroups.push([
+                        KIXObjectType.TICKET, linkedTickets.length, ticketTableConfiguration
+                    ]);
                 }
             }
         }
@@ -84,7 +88,9 @@ class LinkedObjectsWidgetComponent {
         if (this.state.widgetConfiguration) {
             const labelProvider = new TicketTableLabelLayer();
 
-            const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
+            const groupEntry = this.state.widgetConfiguration.settings.groups.find(
+                (g) => g[0] === KIXObjectType.TICKET
+            );
             const columnConfig = groupEntry ? groupEntry[1] : [];
 
             const contentProvider = new LinkedTicketTableContentLayer(
@@ -113,7 +119,7 @@ class LinkedObjectsWidgetComponent {
     }
 
     private columnConfigurationChanged(column: TableColumn): void {
-        const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === "Ticket");
+        const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === KIXObjectType.TICKET);
         if (groupEntry) {
             const index = groupEntry[1].findIndex((tc) => tc.columnId === column.id);
 
