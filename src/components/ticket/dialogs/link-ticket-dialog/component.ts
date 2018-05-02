@@ -1,6 +1,6 @@
 import { ContextService } from "@kix/core/dist/browser/context";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
-import { KIXObjectType, ObjectData, FormContext, FormDropdownItem } from "@kix/core/dist/model";
+import { KIXObjectType, ObjectData, FormContext, FormDropdownItem, WidgetType } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class LinkTicketDialogComponent {
@@ -21,6 +21,9 @@ class LinkTicketDialogComponent {
                 this.state.currentItem = this.state.linkableObjects[0];
             }
         }
+
+        const context = ContextService.getInstance().getContext();
+        context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
     }
 
     public setLinkableObjects(): void {
@@ -48,6 +51,10 @@ class LinkTicketDialogComponent {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
+    }
+
+    private doSearch(): void {
+        alert('Starte Suche...');
     }
 }
 

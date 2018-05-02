@@ -23,9 +23,9 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
-        const newTicketFormId = 'new-ticket-form';
-        const newTicketExistingForm = configurationService.getModuleConfiguration(newTicketFormId, null);
-        if (!newTicketExistingForm) {
+        const formIdNewTicket = 'new-ticket-form';
+        const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
+        if (!existingFormNewTicket) {
             const fields = [];
             fields.push(new FormField("Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, true, "Ansprechpartner"));
             fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, true, "Kunde"));
@@ -42,14 +42,14 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
             fields.push(new FormField("Status des Tickets", TicketProperty.STATE_ID, false, "Status"));
 
-            const form = new Form(newTicketFormId, 'Neues Ticket', fields);
+            const form = new Form(formIdNewTicket, 'Neues Ticket', fields);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, newTicketFormId);
+        configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
 
-        const linkWithTicketFormId = 'link-with-ticket-form';
-        const linkWithTicketExistingForm = configurationService.getModuleConfiguration(linkWithTicketFormId, null);
-        if (!linkWithTicketExistingForm) {
+        const formIdLinkWithTicket = 'link-with-ticket-form';
+        const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
+        if (!existingFormLinkWithTicket) {
             const fields = [];
             fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, false, "Ticketnummer"));
             fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
@@ -58,16 +58,16 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Status", TicketProperty.STATE_ID, false, "Status"));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, false, "Typ"));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, false, "Queue"));
-            fields.push(new FormField("Archiv", 'Archiv', false, "Archiv"));
+            fields.push(new FormField("Archiv", 'ArchiveSearch', false, "Archiv"));
             fields.push(new FormField("Service", TicketProperty.SERVICE_ID, false, "Service"));
             fields.push(new FormField("SLA", TicketProperty.SLA_ID, false, "SLA"));
 
-            const form = new Form(linkWithTicketFormId, 'Verknüpfen mit ticket', fields);
+            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', fields);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 
         configurationService.registerForm(
-            [FormContext.LINK, FormContext.SEARCH], KIXObjectType.TICKET, linkWithTicketFormId
+            [FormContext.LINK, FormContext.SEARCH], KIXObjectType.TICKET, formIdLinkWithTicket
         );
     }
 

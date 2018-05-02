@@ -1,7 +1,8 @@
 .linkable-objects-dropdown {
     display: grid;
-    grid-template-columns: max-content max-content;
-    grid-gap: @margin-default;
+    grid-template-columns: 8rem auto;
+    grid-gap: 2rem;
+    margin-bottom: 1rem;
     .linkable-objects-dropdown-label {
         white-space: nowrap;
         margin-top: .25rem;
@@ -15,5 +16,19 @@
         &:after {
             content: ":"
         }
+    }
+}
+
+.linkable-objects-form {
+    .group-widget>.widget-content {
+        margin-left: 0;
+        >.form>.form-field {
+            grid-template-columns: 7rem 2rem auto;
+        }
+    }
+    .linkable-objects-form-button-container {
+        justify-content: end;
+        display: grid;
+        margin-top: 1rem;
     }
 }

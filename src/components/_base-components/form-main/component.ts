@@ -21,11 +21,6 @@ class FormComponent {
         const component = FormService.getInstance().getFormInputComponent(field.property);
         return ComponentsService.getInstance().getComponentTemplate(component);
     }
-
-    public doCancel(): void {
-        DialogService.getInstance().openMainDialog();
-    }
-
 }
 
 module.exports = FormComponent;

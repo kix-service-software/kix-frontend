@@ -4,3 +4,18 @@
     </div>
     <form-dropdown items=state.linkableObjects on-itemChanged('itemChanged') selectedItem=state.currentItem/>
 </div>
+<div.linkable-objects-form>
+    <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
+        <@content>
+            <if(state.currentItem)>
+                <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
+                <div.linkable-objects-form-button-container>
+                    <button.submit-button type="button" on-click("doSearch") title="Abbrechen">
+                        <span.kix-icon-search/>
+                        Suche starten
+                    </button>
+                </div>
+            </if>
+        </@content>
+    </widget>
+</div>
