@@ -1,0 +1,19 @@
+.linkable-objects-dropdown {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-gap: @margin-default;
+    .linkable-objects-dropdown-label {
+        white-space: nowrap;
+        margin-top: .25rem;
+        display: grid;
+        grid-template-columns: auto max-content;
+        >span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: right;
+        }
+        &:after {
+            content: ":"
+        }
+    }
+}
