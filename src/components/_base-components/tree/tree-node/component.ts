@@ -1,6 +1,5 @@
 import { TreeNodeComponentState } from './TreeNodeComponentState';
 import { TreeNode, ObjectIcon } from '@kix/core/dist/model';
-import { TreeUtil } from '../TreeUtil';
 
 class TreeNodeComponent {
 
