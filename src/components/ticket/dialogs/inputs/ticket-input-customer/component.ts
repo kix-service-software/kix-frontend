@@ -22,12 +22,6 @@ class TicketInputTypeComponent {
     public onMount(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.registerListener(this.formChanged.bind(this));
-
-        const formFieldValue = formInstance.getFormFieldValue<Contact>(TicketProperty.CUSTOMER_USER_ID);
-        if (formFieldValue && formFieldValue.value) {
-            this.loadCustomers(formFieldValue.value.UserCustomerIDs);
-            this.state.hasContact = true;
-        }
     }
 
     private async loadCustomers(customerIds: string[]): Promise<void> {
