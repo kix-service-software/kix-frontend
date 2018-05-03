@@ -40,7 +40,7 @@ export class TicketCommunicator extends KIXCommunicator {
             data.properties.push(TicketProperty.TICKET_ID);
         }
 
-        const tickets = await this.ticketService.loadTickets(data.token, data.properties, data.limit, data.filter)
+        const tickets = await this.ticketService.loadTickets(data.token, data.properties, data.limit, data.filter, true)
             .catch((error) => {
                 return new CommunicatorResponse(TicketEvent.LOAD_TICKET_ERROR, error.errorMessage.body);
             });

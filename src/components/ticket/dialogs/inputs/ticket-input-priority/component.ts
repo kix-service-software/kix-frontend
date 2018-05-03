@@ -1,6 +1,9 @@
 import { TicketInputPriorityComponentState } from "./TicketInputPriorityComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState } from "@kix/core/dist/model";
+import {
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue
+} from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputPriorityComponent {
 
@@ -20,6 +23,11 @@ class TicketInputPriorityComponent {
         this.state.items = objectData.priorities.map((p) =>
             new FormDropdownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
         );
+    }
+
+    private itemChanged(item: FormDropdownItem): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
     }
 
 }

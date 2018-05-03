@@ -1,6 +1,9 @@
 import { TicketInputArchiveSearchComponentState } from "./TicketInputArchiveSearchCompontentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState } from "@kix/core/dist/model";
+import {
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue, ArchiveFlag
+} from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputArchiveSearch {
 
@@ -17,14 +20,16 @@ class TicketInputArchiveSearch {
 
     public onMount(): void {
         this.state.items = [
-            new FormDropdownItem('all', '', 'Alle Tickets'),
-            new FormDropdownItem('archived', '', 'Archivierte Tickets'),
-            new FormDropdownItem('notArchived', '', 'Nicht archivierte Tickets')
+            new FormDropdownItem(ArchiveFlag.ALL, '', 'Alle Tickets'),
+            new FormDropdownItem(ArchiveFlag.ARCHIVED, '', 'Archivierte Tickets'),
+            new FormDropdownItem(ArchiveFlag.NOT_ARCHIVED, '', 'Nicht archivierte Tickets')
         ];
     }
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
     }
 }
 

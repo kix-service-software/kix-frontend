@@ -1,6 +1,9 @@
 import { TicketInputStateComponentState } from "./TicketInputStateComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState } from "@kix/core/dist/model";
+import {
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue
+} from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputStateComponent {
 
@@ -32,6 +35,9 @@ class TicketInputStateComponent {
                 const stateType = objectData.stateTypes.find((t) => t.ID === state.TypeID);
                 this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
             }
+
+            const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+            formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
         }
     }
 }

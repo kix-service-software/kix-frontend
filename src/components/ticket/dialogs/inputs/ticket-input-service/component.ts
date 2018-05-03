@@ -1,8 +1,9 @@
 import { TicketInputServiceComponentState } from "./TicketInputServiceComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponentState
+    FormDropdownItem, ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponentState, FormFieldValue
 } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputServiceComponent {
 
@@ -38,6 +39,11 @@ class TicketInputServiceComponent {
             });
         }
         return nodes;
+    }
+
+    private itemChanged(item: FormDropdownItem): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
     }
 
 }

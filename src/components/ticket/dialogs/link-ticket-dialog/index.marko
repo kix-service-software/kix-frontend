@@ -11,10 +11,15 @@
                 <if(state.currentItem)>
                     <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
                     <div.linkable-objects-form-button-container>
-                        <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
-                            <span.kix-icon-search/>
-                            Suche starten
-                        </button>
+                        <if(state.loading)>
+                            <loading-spinner/>
+                        </if>
+                        <else>
+                            <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
+                                <span.kix-icon-search/>
+                                Suche starten
+                            </button>
+                        </else>
                     </div>
                 </if>
             </@content>

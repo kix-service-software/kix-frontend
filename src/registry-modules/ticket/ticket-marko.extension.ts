@@ -8,6 +8,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/link-ticket-dialog',
             'ticket/dialogs/inputs/article-input-body',
             'ticket/dialogs/inputs/article-input-attachment',
+            'ticket/dialogs/inputs/article-input-subject',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
             'ticket/dialogs/inputs/ticket-input-priority',
@@ -18,7 +19,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-contact',
             'ticket/dialogs/inputs/ticket-input-customer',
             'ticket/dialogs/inputs/ticket-input-link',
-            'ticket/dialogs/inputs/ticket-input-archive-search'
+            'ticket/dialogs/inputs/ticket-input-archive-search',
+            'ticket/dialogs/inputs/ticket-input-fulltext'
         ];
         const widgets = [
             'ticket/widgets/article-receiver-list-widget',
@@ -64,6 +66,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         const inputs: Array<[string, string]> = [
             ['article-input-body', 'ticket/dialogs/inputs/article-input-body'],
             ['article-input-attachment', 'ticket/dialogs/inputs/article-input-attachment'],
+            ['article-input-subject', 'ticket/dialogs/inputs/article-input-subject'],
             ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
@@ -74,7 +77,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
             ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
             ['ticket-input-link', 'ticket/dialogs/inputs/ticket-input-link'],
-            ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search']
+            ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
+            ['ticket-input-fulltext', 'ticket/dialogs/inputs/ticket-input-fulltext']
         ];
 
         return [

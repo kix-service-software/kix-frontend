@@ -52,12 +52,18 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
+        if (item) {
+            const formInstance = FormService.getInstance().getOrCreateFormInstance(item.id.toString());
+            formInstance.reset();
+        }
     }
 
     private async executeSearch(): Promise<void> {
+        this.state.loading = true;
         this.state.searchResult = await KIXObjectSearchService.getInstance().executeFormSearch<T>(
             KIXObjectType.TICKET, this.state.currentItem.id.toString()
         );
+        this.state.loading = false;
     }
 }
 

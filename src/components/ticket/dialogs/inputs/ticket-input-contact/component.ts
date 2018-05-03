@@ -36,6 +36,7 @@ class TicketInputContactComponent {
         } else {
             value = new FormFieldValue<Contact>(null);
         }
+
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.provideFormFieldValue(this.state.field, value);
     }

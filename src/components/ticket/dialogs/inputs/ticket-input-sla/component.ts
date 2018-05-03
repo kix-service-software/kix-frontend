@@ -1,6 +1,9 @@
 import { TicketInputSLAComponentState } from "./TicketInputSLAComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState } from "@kix/core/dist/model";
+import {
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue
+} from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputSLAComponent {
 
@@ -20,6 +23,11 @@ class TicketInputSLAComponent {
         this.state.items = objectData.slas.map((s) =>
             new FormDropdownItem(s.ID, new ObjectIcon(TicketProperty.SLA_ID, s.ID), s.Name)
         );
+    }
+
+    private itemChanged(node: FormDropdownItem): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(node.id)));
     }
 
 }
