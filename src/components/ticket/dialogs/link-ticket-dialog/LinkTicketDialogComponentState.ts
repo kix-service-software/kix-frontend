@@ -1,9 +1,10 @@
-import { FormDropdownItem } from "@kix/core/dist/model";
+import { FormDropdownItem, KIXObject } from "@kix/core/dist/model";
 
-export class LinkTicketDialogComponentState {
+export class LinkTicketDialogComponentState<T extends KIXObject> {
 
     public constructor(
         public linkableObjects: FormDropdownItem[] = [],
-        public currentItem: FormDropdownItem = null
+        public currentItem: FormDropdownItem = null,
+        public searchResult: T[] = []
     ) { }
 }

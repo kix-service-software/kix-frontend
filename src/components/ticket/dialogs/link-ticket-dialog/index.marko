@@ -10,7 +10,7 @@
             <if(state.currentItem)>
                 <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
                 <div.linkable-objects-form-button-container>
-                    <button.submit-button type="button" on-click("doSearch") title="Abbrechen">
+                    <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
                         <span.kix-icon-search/>
                         Suche starten
                     </button>

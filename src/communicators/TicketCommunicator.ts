@@ -32,6 +32,10 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     private async loadTickets(data: SearchTicketsRequest): Promise<CommunicatorResponse<SearchTicketsResponse>> {
+        if (!data.properties) {
+            data.properties = [];
+        }
+
         if (!data.properties.find((p) => p === TicketProperty.TICKET_ID)) {
             data.properties.push(TicketProperty.TICKET_ID);
         }
