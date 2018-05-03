@@ -33,63 +33,72 @@
                 <div.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
-            <for(row in state.standardTable.getTableRows() | status-var=loop)>
-                <div.row data-id=((state.tableId + "row") + loop.getIndex()) class={opened: row.isToggled}>
-                    <div.row-columns class=row.classes
-                        style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
-                        <if(state.standardTable.selection)>
-                            <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
-                                <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
-                                    checked=component.isSelected(row)/>
-                            </div>
-                        </if>
-                        <for(value in row.values)>
-                            $ let column = component.getColumn(value);
-                            <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
-                                title=value.displayValue>
-                                <if(column.showIcon)>
-                                    <icon icon=component.getValueIcon(column, value) showUnknown=true/>
-                                </if>
-                                <if(column.showIcon && column.showText)>&nbsp;</if>
-                                <if(column.showText)>
-                                    <span>${value.displayValue}</span>
-                                </if>
-                            </div>
-                        </for>
-                        <if(state.standardTable.toggle)>
-                            <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
-                                <if(row.isToggled)>
-                                    <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
-                                        <span.path1/>
-                                        <span.path2/>
-                                    </span>
-                                </if>
-                                <else>
-                                    <span.kix-icon-sort-down key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")/>
-                                </else>
+            <if(state.standardTable.getTableRows().length)>
+                <for(row in state.standardTable.getTableRows() | status-var=loop)>
+                    <div.row data-id=((state.tableId + "row") + loop.getIndex()) class={opened: row.isToggled}>
+                        <div.row-columns class=row.classes
+                            style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
+                            <if(state.standardTable.selection)>
+                                <div.table-cell.checkbox-column.row-column data-id=(state.tableId + "checkbox-column")>
+                                    <input type="checkbox" on-click('selectRow', row) data-id=(state.tableId + "checkbox-input")
+                                        checked=component.isSelected(row)/>
+                                </div>
+                            </if>
+                            <for(value in row.values)>
+                                $ let column = component.getColumn(value);
+                                <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
+                                    data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
+                                    title=value.displayValue>
+                                    <if(column.showIcon)>
+                                        <icon icon=component.getValueIcon(column, value) showUnknown=true/>
+                                    </if>
+                                    <if(column.showIcon && column.showText)>&nbsp;</if>
+                                    <if(column.showText)>
+                                        <span>${value.displayValue}</span>
+                                    </if>
+                                </div>
+                            </for>
+                            <if(state.standardTable.toggle)>
+                                <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
+                                    <if(row.isToggled)>
+                                        <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
+                                            <span.path1/>
+                                            <span.path2/>
+                                        </span>
+                                    </if>
+                                    <else>
+                                        <span.kix-icon-sort-down key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")/>
+                                    </else>
+                                </div>
+                            </if>
+                        </div>
+                        <if(row.isToggled)>
+                            <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
+                                data-id=(state.tableId + "row-toggle-content-wrapper")>
+                                <ul.toggle-actions>
+                                    <for(action in component.getToggleActions(row.object))>
+                                        <li>
+                                            <action action=action/>
+                                        </li>
+                                    </for>
+                                </ul>
+                                <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                    key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
+                                    <include(component.getToggleTemplate(), component.getToggleInput(row))/>
+                                </div>
                             </div>
                         </if>
                     </div>
-                    <if(row.isToggled)>
-                        <div.row-toggle-content-wrapper key=(state.tableId + "row-toggle-content-wrapper[]")
-                            data-id=(state.tableId + "row-toggle-content-wrapper")>
-                            <ul.toggle-actions>
-                                <for(action in component.getToggleActions(row.object))>
-                                    <li>
-                                        <action action=action/>
-                                    </li>
-                                </for>
-                            </ul>
-                            <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
-                                key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
-                                <include(component.getToggleTemplate(), component.getToggleInput(row))/>
-                            </div>
-                        </div>
-                    </if>
+                </for>
+                <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
+            </if>
+            <else>
+                <div.row>
+                    <div.row-columns style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
+                        ${input.emptyString ? input.emptyString : '0 Datensätze gefunden'}
+                    </div>
                 </div>
-            </for>
-            <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
+            </else>
         </div>
     </div>
 </if>
