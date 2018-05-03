@@ -1,5 +1,3 @@
-@form-label-columm: 14.5rem;
-@form-hint-icon-column: 2rem;
 .form {
     padding-left: @margin-widget-content;
     .form-field {
@@ -8,7 +6,7 @@
         }
         min-height: 2em;
         display: grid;
-        grid-template-columns: @form-label-columm @form-hint-icon-column auto;
+        grid-template-columns: 14.5rem 2rem auto;
         >.field-label {
             white-space: nowrap;
             font-weight: bold;
@@ -32,20 +30,6 @@
         >.field-icon {
             margin-top: .25rem;
             margin-left: .25rem;
-        }
-    }
-    .button-container {
-        margin-top: @margin-default;
-        margin-left: @form-label-columm + @form-hint-icon-column;
-        display: grid;
-        grid-auto-columns: 1fr;
-        justify-items: center;
-        grid-auto-flow: column;
-        button:last-child {
-            justify-self: right
-        }
-        button:first-child {
-            justify-self: left;
         }
     }
 }

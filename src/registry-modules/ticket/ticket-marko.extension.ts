@@ -17,7 +17,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'ticket/dialogs/inputs/ticket-input-queue',
             'ticket/dialogs/inputs/ticket-input-contact',
             'ticket/dialogs/inputs/ticket-input-customer',
-            'ticket/dialogs/inputs/ticket-input-link'
+            'ticket/dialogs/inputs/ticket-input-link',
+            'ticket/dialogs/inputs/ticket-input-archive-search'
         ];
         const widgets = [
             'ticket/widgets/article-receiver-list-widget',
@@ -72,7 +73,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue'],
             ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
             ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
-            ['ticket-input-link', 'ticket/dialogs/inputs/ticket-input-link']
+            ['ticket-input-link', 'ticket/dialogs/inputs/ticket-input-link'],
+            ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search']
         ];
 
         return [
