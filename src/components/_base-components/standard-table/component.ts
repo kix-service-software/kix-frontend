@@ -244,7 +244,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 this.state.standardTable.displayLimit : rows.length;
             const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
             const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
-            let height = (minElements + 1) * rowHeight;
+            let height = ((minElements === 0 ? 1 : minElements) + 1) * rowHeight;
             const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
             openedRowsContent.forEach((rC) => {
                 height += rC.offsetHeight;
