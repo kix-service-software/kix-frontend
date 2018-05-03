@@ -1,21 +1,28 @@
-<div.linkable-objects-dropdown title="Verknüpfen mit">
-    <div.linkable-objects-dropdown-label>
-        <span>Verknüpfen mit</span>
+<div.linkable-objects-dialog>
+    <div.linkable-objects-dropdown title="Verknüpfen mit">
+        <div.linkable-objects-dropdown-label>
+            <span>Verknüpfen mit</span>
+        </div>
+        <form-dropdown items=state.linkableObjects on-itemChanged('itemChanged') selectedItem=state.currentItem/>
     </div>
-    <form-dropdown items=state.linkableObjects on-itemChanged('itemChanged') selectedItem=state.currentItem/>
-</div>
-<div.linkable-objects-form>
-    <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
-        <@content>
-            <if(state.currentItem)>
-                <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
-                <div.linkable-objects-form-button-container>
-                    <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
-                        <span.kix-icon-search/>
-                        Suche starten
-                    </button>
-                </div>
-            </if>
-        </@content>
-    </widget>
+    <div.linkable-objects-form>
+        <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
+            <@content>
+                <if(state.currentItem)>
+                    <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
+                    <div.linkable-objects-form-button-container>
+                        <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
+                            <span.kix-icon-search/>
+                            Suche starten
+                        </button>
+                    </div>
+                </if>
+            </@content>
+        </widget>
+    </div>
+    <div.linkable-objects-result>
+        <div.result-title>Ergebnisse ${state.searchResult.length}</div>
+        <!--TODO: ersetzten mit Tabelle-->
+        <div style="width: 100%; height: 200px; border:1px solid black"/>
+    </div>
 </div>
