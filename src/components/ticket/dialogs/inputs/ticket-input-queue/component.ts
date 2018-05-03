@@ -1,8 +1,9 @@
 import { TicketInputQueueComponentState } from "./TicketInputQueueComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponentState
+    FormDropdownItem, ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponentState, FormFieldValue
 } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputTypeComponent {
 
@@ -36,6 +37,11 @@ class TicketInputTypeComponent {
             });
         }
         return nodes;
+    }
+
+    private queueChanged(node: TreeNode): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(node.id));
     }
 
 }

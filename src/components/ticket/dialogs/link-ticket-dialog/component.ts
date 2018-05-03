@@ -1,11 +1,12 @@
 import { ContextService } from "@kix/core/dist/browser/context";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
-import { KIXObjectType, ObjectData, FormContext, FormDropdownItem, WidgetType } from "@kix/core/dist/model";
+import { KIXObjectType, ObjectData, FormContext, FormDropdownItem, WidgetType, KIXObject } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
+import { KIXObjectSearchService } from "@kix/core/dist/browser";
 
-class LinkTicketDialogComponent {
+class LinkTicketDialogComponent<T extends KIXObject> {
 
-    private state: LinkTicketDialogComponentState;
+    private state: LinkTicketDialogComponentState<T>;
 
     public onCreate(): void {
         this.state = new LinkTicketDialogComponentState();
@@ -53,8 +54,10 @@ class LinkTicketDialogComponent {
         this.state.currentItem = item;
     }
 
-    private doSearch(): void {
-        alert('Starte Suche...');
+    private async executeSearch(): Promise<void> {
+        this.state.searchResult = await KIXObjectSearchService.getInstance().executeFormSearch<T>(
+            KIXObjectType.TICKET, this.state.currentItem.id.toString()
+        );
     }
 }
 
