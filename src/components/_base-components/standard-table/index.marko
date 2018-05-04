@@ -33,7 +33,10 @@
                 <div.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
-            <if(state.standardTable.getTableRows().length)>
+            <if(state.standardTable.isLoading())>
+                <loading-spinner/>
+            </if>
+            <else-if(state.standardTable.getTableRows().length)>
                 <for(row in state.standardTable.getTableRows() | status-var=loop)>
                     <div.row data-id=((state.tableId + "row") + loop.getIndex()) class={opened: row.isToggled}>
                         <div.row-columns class=row.classes
@@ -82,7 +85,7 @@
                                         </li>
                                     </for>
                                 </ul>
-                                <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                <div.row-toggle-content style={"min-height": component.calculateToggleContentMinHeight(loop.getIndex())}
                                     key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                     <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                                 </div>
@@ -91,11 +94,11 @@
                     </div>
                 </for>
                 <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
-            </if>
+            </else-if>
             <else>
                 <div.row>
                     <div.row-columns style={minHeight: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
-                        ${input.emptyString ? input.emptyString : '0 Datensätze gefunden'}
+                        <span.empty-result-hint>${state.standardTable.getEmptyResultHint()}</span>
                     </div>
                 </div>
             </else>
