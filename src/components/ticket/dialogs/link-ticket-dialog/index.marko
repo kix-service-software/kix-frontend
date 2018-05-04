@@ -26,8 +26,11 @@
         </widget>
     </div>
     <div.linkable-objects-result>
-        <div.result-title>Ergebnisse ${state.searchResult.length}</div>
-        <!--TODO: ersetzten mit Tabelle-->
-        <div style="width: 100%; height: 200px; border:1px solid black"/>
+        <if(state.currentItem)>
+            <div.result-title>Ergebnisse ${state.resultCount}</div>
+            <if(state.standardTable)>
+                <standard-table standardTable=state.standardTable/>
+            </if>
+        </if>
     </div>
 </div>

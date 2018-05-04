@@ -1,8 +1,8 @@
+import { KIXObjectSearchService, IFormTableLayer } from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
-import { KIXObjectType, ObjectData, FormContext, FormDropdownItem, WidgetType, KIXObject } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
-import { KIXObjectSearchService } from "@kix/core/dist/browser";
+import { FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType } from "@kix/core/dist/model";
+import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
 
 class LinkTicketDialogComponent<T extends KIXObject> {
 
@@ -25,6 +25,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
         const context = ContextService.getInstance().getContext();
         context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
+        this.getStandardTable();
     }
 
     public setLinkableObjects(): void {
@@ -52,9 +53,14 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        if (item) {
+        this.getStandardTable();
+
+        if (this.state.currentItem) {
             const formInstance = FormService.getInstance().getOrCreateFormInstance(item.id.toString());
             formInstance.reset();
+        } else {
+            this.state.standardTable = null;
+            this.state.resultCount = 0;
         }
     }
 
@@ -64,6 +70,23 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             KIXObjectType.TICKET, this.state.currentItem.id.toString()
         );
         this.state.loading = false;
+
+        if (this.state.standardTable && this.state.currentItem) {
+            (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(this.state.currentItem.id.toString());
+            await this.state.standardTable.loadRows();
+            this.state.resultCount = this.state.standardTable.getTableRows().length;
+        }
+    }
+
+    private getStandardTable(): void {
+        if (this.state.currentItem) {
+            this.state.standardTable =
+                KIXObjectSearchService.getInstance().getFormResultTable<T>(
+                    (this.state.currentItem.label as KIXObjectType)
+                );
+        }
+        (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
+        this.state.standardTable.loadRows();
     }
 }
 
