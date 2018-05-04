@@ -129,10 +129,8 @@ class FormDropdownComponent {
                     break;
                 case 'Enter':
                     this.itemSelected(this.state.preSelectedItem);
-                    this.state.preSelectedItem = null;
                     break;
                 case 'Escape':
-                    this.state.preSelectedItem = null;
                     this.toggleList();
                     break;
                 default:

@@ -58,18 +58,33 @@ class FormDropdownTreeComponent {
     }
 
     private keyDown(event: any): void {
-        if (this.state.expanded && event.key === 'Tab') {
-            if (this.state.preSelectedNode) {
-                this.nodeClicked(this.state.preSelectedNode);
-                this.state.preSelectedNode = null;
-            } else {
+        if (this.state.expanded) {
+            if (event.key === 'Escape') {
                 this.toggleList();
+            } else if (event.key === 'Enter' || event.key === 'Tab') {
+                this.nodeClicked(this.state.preSelectedNode);
             }
         }
     }
 
     private keyUp(event: any): void {
-        this.state.filterValue = event.target.value;
+        if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
+            this.toggleList();
+        }
+
+        if (!this.state.selectedNode && !this.navigationKeyPressed(event)) {
+            this.state.filterValue = event.target.value;
+        }
+    }
+
+    private navigationKeyPressed(event: any): boolean {
+        return event.key === 'ArrowLeft'
+            || event.key === 'ArrowRight'
+            || event.key === 'ArrowUp'
+            || event.key === 'ArrowDown'
+            || event.key === 'Tab'
+            || event.key === 'Escape'
+            || event.key === 'Enter';
     }
 
     private focusInput(): void {
