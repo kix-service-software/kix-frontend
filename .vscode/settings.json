@@ -18,6 +18,7 @@
     "**/.vscode/**"
   ],
   "less.lint.important": "warning",
+  "less.lint.float": "warning",
   "marko.beautify.indent": "    ",
   "marko.beautify.maxLen": 120,
   "marko.beautify.syntax": "html",
