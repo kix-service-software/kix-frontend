@@ -1,5 +1,5 @@
 import { TreeNodeComponentState } from './TreeNodeComponentState';
-import { TreeNode, ObjectIcon } from '@kix/core/dist/model';
+import { TreeNode, ObjectIcon, TreeUtil } from '@kix/core/dist/model';
 
 class TreeNodeComponent {
 
@@ -14,6 +14,8 @@ class TreeNodeComponent {
         this.state.node = input.node;
         this.state.filterValue = input.filterValue;
         this.state.activeNode = input.activeNode;
+        this.state.treeId = input.treeId;
+        this.state.nodeId = this.state.treeId + '-node-' + this.state.node.id;
         if (!this.hasListener && input.treeParent) {
             this.state.treeParent = input.treeParent;
             this.state.treeParent.addEventListener('keydown', this.navigateTree.bind(this));
@@ -89,11 +91,13 @@ class TreeNodeComponent {
                     break;
                 case 'ArrowUp':
                     if (this.state.node.previousNode) {
+                        this.scrollToNode(this.state.node.previousNode);
                         this.childNodeHovered(this.state.node.previousNode);
                     }
                     break;
                 case 'ArrowDown':
                     if (this.state.node.nextNode) {
+                        this.scrollToNode(this.state.node.nextNode);
                         this.childNodeHovered(this.state.node.nextNode);
                     }
                     break;
@@ -103,9 +107,11 @@ class TreeNodeComponent {
                     (this as any).setStateDirty();
                     break;
                 case 'ArrowRight':
-                    this.state.node.expanded = true;
-                    this.childNodeToggled(this.state.node);
-                    (this as any).setStateDirty();
+                    if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
+                        this.state.node.expanded = true;
+                        this.childNodeToggled(this.state.node);
+                        (this as any).setStateDirty();
+                    }
                     break;
                 default:
             }
@@ -119,6 +125,13 @@ class TreeNodeComponent {
             || event.key === 'ArrowDown'
             || event.key === 'Escape'
             || event.key === 'Enter';
+    }
+
+    private scrollToNode(node: TreeNode): void {
+        const element = document.getElementById(this.state.treeId + "-node-" + node.id);
+        if (element) {
+            element.scrollIntoView();
+        }
     }
 }
 

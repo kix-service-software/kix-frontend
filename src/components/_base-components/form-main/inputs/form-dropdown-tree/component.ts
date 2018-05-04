@@ -42,15 +42,19 @@ class FormDropdownTreeComponent {
         }
     }
 
-    private focusInput(): void {
+    private dropdownClicked(): void {
         if (this.state.expanded) {
-            const input = (this as any).getEl('dropdown-tree-input');
-            if (input) {
-                input.focus();
-            }
+            this.state.expanded = false;
+            this.state.preSelectedNode = null;
         } else {
-            this.toggleList();
+            this.state.expanded = true;
+            this.state.preSelectedNode = this.state.selectedNode;
+            this.focusInput();
         }
+    }
+
+    private nodeToggled(): void {
+        this.focusInput();
     }
 
     private keyDown(event: any): void {
@@ -68,7 +72,7 @@ class FormDropdownTreeComponent {
         this.state.filterValue = event.target.value;
     }
 
-    private nodeToggled(): void {
+    private focusInput(): void {
         const input = (this as any).getEl('dropdown-tree-input');
         if (input) {
             input.focus();
