@@ -59,6 +59,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         this.getStandardTable();
+        this.state.selectedObjects = [];
 
         if (this.state.currentItem) {
             const formInstance = FormService.getInstance().getOrCreateFormInstance(item.id.toString());
@@ -88,6 +89,19 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         }
         (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
         this.state.standardTable.loadRows();
+        this.state.standardTable.selectionListener.addListener(this.objectSelectionChanged.bind(this));
+    }
+
+    private objectSelectionChanged(objects: T[]): void {
+        this.state.selectedObjects = objects;
+    }
+
+    private canSubmit(): boolean {
+        return this.state.selectedObjects.length > 0;
+    }
+
+    private submitClicked(): void {
+        alert('Yeaahaaa');
     }
 }
 
