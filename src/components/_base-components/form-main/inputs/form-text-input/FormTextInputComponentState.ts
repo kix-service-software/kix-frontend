@@ -3,7 +3,8 @@ import { FormField } from '@kix/core/dist/model';
 export class FormTextInputComponentState {
 
     public constructor(
-        public formField: FormField = null
+        public formField: FormField = null,
+        public currentValue: string = null
     ) { }
 
 }

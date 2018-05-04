@@ -2,7 +2,10 @@ import { FormField, FormDropdownItem, TreeNode, FormInputComponentState } from "
 
 export class TicketInputServiceComponentState extends FormInputComponentState {
 
-    public constructor(public nodes: TreeNode[] = []) {
+    public constructor(
+        public nodes: TreeNode[] = [],
+        public currentNode: TreeNode = null
+    ) {
         super();
     }
 

@@ -1,2 +1,2 @@
 <form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
-    required=state.field.required/>
+    selectedItem=state.currentItem required=state.field.required on-itemChanged('itemChanged')/>

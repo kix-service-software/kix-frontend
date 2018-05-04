@@ -6,7 +6,9 @@ export class LinkTicketDialogComponentState<T extends KIXObject> {
     public constructor(
         public linkableObjects: FormDropdownItem[] = [],
         public currentItem: FormDropdownItem = null,
+        public searchResult: T[] = [],
+        public loading: boolean = false,
         public standardTable: StandardTable<T> = null,
-        public resultCount: number = null
+        public resultCount: number = 0
     ) { }
 }

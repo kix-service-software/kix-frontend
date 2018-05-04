@@ -21,6 +21,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             } else {
                 this.state.currentItem = this.state.linkableObjects[0];
             }
+
+            const formInstance = FormService.getInstance().getOrCreateFormInstance(
+                this.state.currentItem.id.toString()
+            );
+            formInstance.reset();
         }
 
         const context = ContextService.getInstance().getContext();
@@ -54,7 +59,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         this.getStandardTable();
-        if (!this.state.currentItem) {
+
+        if (this.state.currentItem) {
+            const formInstance = FormService.getInstance().getOrCreateFormInstance(item.id.toString());
+            formInstance.reset();
+        } else {
             this.state.standardTable = null;
             this.state.resultCount = null;
         }
@@ -64,7 +73,9 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.state.resultCount = null;
         if (this.state.standardTable && this.state.currentItem) {
             (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(this.state.currentItem.id.toString());
+            this.state.loading = true;
             await this.state.standardTable.loadRows();
+            this.state.loading = false;
             const count = this.state.standardTable.getTableRows().length;
             this.state.resultCount = count > 0 ? count : null;
         }

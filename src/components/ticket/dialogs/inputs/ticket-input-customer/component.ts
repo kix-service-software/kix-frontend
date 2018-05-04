@@ -1,7 +1,8 @@
 import { TicketInputTypeComponentState } from "./TicketInputTypeComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, Contact, FormInputComponentState, FormFieldValueChangeEvent
+    FormDropdownItem, ObjectIcon, TicketProperty, Contact, FormInputComponentState,
+    FormFieldValueChangeEvent, FormFieldValue
 } from "@kix/core/dist/model";
 import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
@@ -22,6 +23,13 @@ class TicketInputTypeComponent {
     public onMount(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.registerListener(this.formChanged.bind(this));
+
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue(this.state.field.property);
+            if (value) {
+                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+            }
+        }
     }
 
     private async loadCustomers(customerIds: string[]): Promise<void> {
@@ -60,6 +68,8 @@ class TicketInputTypeComponent {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
     }
 
 }

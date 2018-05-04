@@ -1,1 +1,2 @@
-<form-dropdown items=state.items placeholder=(state.field.required ? "Tickettyp zuordnen" : "")/>
+<form-dropdown items=state.items selectedItem=state.currentItem
+    placeholder=(state.field.required ? "Tickettyp zuordnen" : "") on-itemChanged("itemChanged")/>

@@ -1,7 +1,7 @@
 import { TicketInputQueueComponentState } from "./TicketInputQueueComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponentState, FormFieldValue
+    TreeUtil, FormDropdownItem, ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponentState, FormFieldValue
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
@@ -21,6 +21,14 @@ class TicketInputTypeComponent {
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.queuesHierarchy);
+
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue<number>(this.state.field.property);
+            if (value) {
+                this.state.currentNode = TreeUtil.findNode(this.state.nodes, value.value);
+            }
+        }
     }
 
     private prepareTree(queues: Queue[]): TreeNode[] {
@@ -40,8 +48,9 @@ class TicketInputTypeComponent {
     }
 
     private queueChanged(node: TreeNode): void {
+        this.state.currentNode = node;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(node.id));
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(node ? node.id : null));
     }
 
 }

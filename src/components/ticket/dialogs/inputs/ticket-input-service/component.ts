@@ -1,8 +1,9 @@
 import { TicketInputServiceComponentState } from "./TicketInputServiceComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponentState
+    FormDropdownItem, ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponentState, FormFieldValue, TreeUtil
 } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputServiceComponent {
 
@@ -20,6 +21,14 @@ class TicketInputServiceComponent {
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
+
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue<number>(this.state.field.property);
+            if (value) {
+                this.state.currentNode = TreeUtil.findNode(this.state.nodes, value.value);
+            }
+        }
     }
 
     private prepareTree(services: Service[]): TreeNode[] {
@@ -38,6 +47,12 @@ class TicketInputServiceComponent {
             });
         }
         return nodes;
+    }
+
+    private itemChanged(node: TreeNode): void {
+        this.state.currentNode = node;
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(node ? node.id : null));
     }
 
 }
