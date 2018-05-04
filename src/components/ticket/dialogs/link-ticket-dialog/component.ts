@@ -65,7 +65,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             formInstance.reset();
         } else {
             this.state.standardTable = null;
-            this.state.resultCount = 0;
+            this.state.resultCount = null;
         }
     }
 
@@ -79,7 +79,8 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         if (this.state.standardTable && this.state.currentItem) {
             (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(this.state.currentItem.id.toString());
             await this.state.standardTable.loadRows();
-            this.state.resultCount = this.state.standardTable.getTableRows().length;
+            const count = this.state.standardTable.getTableRows().length;
+            this.state.resultCount = count > 0 ? count : null;
         }
     }
 
