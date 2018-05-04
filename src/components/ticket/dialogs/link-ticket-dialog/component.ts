@@ -70,15 +70,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private async executeSearch(): Promise<void> {
-        this.state.loading = true;
-        this.state.searchResult = await KIXObjectSearchService.getInstance().executeFormSearch<T>(
-            KIXObjectType.TICKET, this.state.currentItem.id.toString()
-        );
-        this.state.loading = false;
-
         if (this.state.standardTable && this.state.currentItem) {
             (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(this.state.currentItem.id.toString());
+            this.state.loading = true;
             await this.state.standardTable.loadRows();
+            this.state.loading = false;
             const count = this.state.standardTable.getTableRows().length;
             this.state.resultCount = count > 0 ? count : null;
         }
