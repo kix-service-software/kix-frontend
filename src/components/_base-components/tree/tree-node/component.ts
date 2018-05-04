@@ -82,13 +82,6 @@ class TreeNodeComponent {
             }
 
             switch (event.key) {
-                case 'Tab':
-                case 'Enter':
-                    this.childNodeClicked(this.state.node);
-                    break;
-                case 'Escape':
-                    this.childNodeClicked(null);
-                    break;
                 case 'ArrowUp':
                     if (this.state.node.previousNode) {
                         this.scrollToNode(this.state.node.previousNode);
@@ -122,9 +115,7 @@ class TreeNodeComponent {
         return event.key === 'ArrowLeft'
             || event.key === 'ArrowRight'
             || event.key === 'ArrowUp'
-            || event.key === 'ArrowDown'
-            || event.key === 'Escape'
-            || event.key === 'Enter';
+            || event.key === 'ArrowDown';
     }
 
     private scrollToNode(node: TreeNode): void {
