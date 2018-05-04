@@ -34,7 +34,7 @@
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
             <if(state.standardTable.isLoading())>
-                <loading-spinner height=component.getRowHeight()/>
+                <loading-spinner/>
             </if>
             <else-if(state.standardTable.getTableRows().length)>
                 <for(row in state.standardTable.getTableRows() | status-var=loop)>
@@ -85,7 +85,7 @@
                                         </li>
                                     </for>
                                 </ul>
-                                <div.row-toggle-content style={"min-height": component.calculateMinHeight(loop.getIndex())}
+                                <div.row-toggle-content style={"min-height": component.calculateToggleContentMinHeight(loop.getIndex())}
                                     key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
                                     <include(component.getToggleTemplate(), component.getToggleInput(row))/>
                                 </div>

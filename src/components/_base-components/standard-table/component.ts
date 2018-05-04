@@ -239,17 +239,20 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public setTableHeight(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
         if (table) {
-            const rows = this.state.standardTable.getTableRows();
-            const minElements = rows.length > this.state.standardTable.displayLimit ?
-                this.state.standardTable.displayLimit : rows.length;
-            const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
-            const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
-            let height = ((minElements === 0 ? 1 : minElements) + 1) * rowHeight;
-            const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
-            openedRowsContent.forEach((rC) => {
-                height += rC.offsetHeight;
-            });
-            table.style.height = height + 'px';
+            table.style.height = 'unset';
+            if (!this.state.standardTable.isLoading()) {
+                const rows = this.state.standardTable.getTableRows();
+                const minElements = rows.length > this.state.standardTable.displayLimit ?
+                    this.state.standardTable.displayLimit : rows.length;
+                const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
+                const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
+                let height = ((minElements === 0 ? 1 : minElements) + 1) * rowHeight;
+                const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
+                openedRowsContent.forEach((rC) => {
+                    height += rC.offsetHeight;
+                });
+                table.style.height = height + 'px';
+            }
         }
     }
 
@@ -318,7 +321,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return column;
     }
 
-    private calculateMinHeight(index: number): string {
+    private calculateToggleContentMinHeight(index: number): string {
         const minHeight = "10em";
         setTimeout(() => {
             if (this.state.standardTable.toggleOptions.actions.length > 5) {
