@@ -13,6 +13,8 @@ class FormDropdownTreeComponent {
 
     public onInput(input: any): void {
         this.state.nodes = input.nodes;
+        this.state.selectedNode = input.selectedNode;
+        this.state.preSelectedNode = input.selectedNode;
         this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
     }
 

@@ -1,3 +1,4 @@
 <if(state.formField)>
-    <input.input-style type="text" placeholder=input.placeholder required=input.required on-change('valueChanged')/>
+    <input.input-style value=state.currentValue type="text" placeholder=input.placeholder required=input.required
+        on-change('valueChanged')/>
 </if>

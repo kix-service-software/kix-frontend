@@ -23,11 +23,20 @@ class TicketInputSLAComponent {
         this.state.items = objectData.slas.map((s) =>
             new FormDropdownItem(s.ID, new ObjectIcon(TicketProperty.SLA_ID, s.ID), s.Name)
         );
+
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue(this.state.field.property);
+            if (value) {
+                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+            }
+        }
     }
 
-    private itemChanged(node: FormDropdownItem): void {
+    private itemChanged(item: FormDropdownItem): void {
+        this.state.currentItem = item;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(node.id)));
+        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(item ? Number(item.id) : null));
     }
 
 }

@@ -9,8 +9,13 @@ class FormTextInputComponent {
         this.state = new FormTextInputComponentState(input.field);
     }
 
+    public onInput(input: any): void {
+        this.state.currentValue = input.currentValue;
+    }
+
     private valueChanged(event: any): void {
-        (this as any).emit('valueChanged', event.target.value);
+        this.state.currentValue = event.target.value;
+        (this as any).emit('valueChanged', this.state.currentValue);
     }
 
 }

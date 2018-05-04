@@ -23,11 +23,20 @@ class TicketInputStateComponent {
         this.state.items = objectData.states.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
         );
+
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue(this.state.field.property);
+            if (value) {
+                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+            }
+        }
     }
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.pending = false;
         this.state.currentItem = item;
+
         if (item) {
             const objectData = ContextService.getInstance().getObjectData();
             const state = objectData.states.find((s) => s.ID === item.id);
@@ -35,10 +44,12 @@ class TicketInputStateComponent {
                 const stateType = objectData.stateTypes.find((t) => t.ID === state.TypeID);
                 this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
             }
-
-            const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-            formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
         }
+
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.provideFormFieldValue(
+            this.state.field, new FormFieldValue<number>(item ? Number(item.id) : null)
+        );
     }
 }
 

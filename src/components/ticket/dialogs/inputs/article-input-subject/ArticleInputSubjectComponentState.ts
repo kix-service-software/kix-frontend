@@ -2,7 +2,10 @@ import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/
 
 export class ArticleInputSubjectComponentState extends FormInputComponentState {
 
-    public constructor(public items: FormDropdownItem[] = []) {
+    public constructor(
+        public items: FormDropdownItem[] = [],
+        public currentValue: string = null
+    ) {
         super();
     }
 

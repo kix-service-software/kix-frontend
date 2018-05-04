@@ -29,6 +29,7 @@ class TicketInputContactComponent {
     }
 
     private contactChanged(item: FormDropdownItem): void {
+        this.state.currentItem = item;
         let value;
         if (item) {
             const contact = this.state.contacts.find((c) => c.ContactID === item.id);

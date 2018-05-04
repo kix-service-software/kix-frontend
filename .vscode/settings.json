@@ -12,15 +12,11 @@
   },
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
-  "todohighlight.exclude": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/.vscode/**"
-  ],
   "less.lint.important": "warning",
   "less.lint.float": "warning",
-  "marko.beautify.indent": "    ",
-  "marko.beautify.maxLen": 120,
-  "marko.beautify.syntax": "html",
-  "sortImports.onSave": false
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  }
 }

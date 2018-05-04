@@ -1,16 +1,16 @@
-import { ArticleInputSubjectComponentState } from "./ArticleInputSubjectComponentState";
+import { TicketInputTicketNumberComponentState } from "./TicketInputTicketNumberComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class ArticleInputSubjectComponent {
+class TicketInputFulltextComponent {
 
-    private state: ArticleInputSubjectComponentState;
+    private state: TicketInputTicketNumberComponentState;
 
     public onCreate(): void {
-        this.state = new ArticleInputSubjectComponentState();
+        this.state = new TicketInputTicketNumberComponentState();
     }
 
     public onInput(input: FormInputComponentState): void {
@@ -34,4 +34,4 @@ class ArticleInputSubjectComponent {
 
 }
 
-module.exports = ArticleInputSubjectComponent;
+module.exports = TicketInputFulltextComponent;

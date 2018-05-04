@@ -2,7 +2,10 @@ import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/
 
 export class TicketInputPriorityComponentState extends FormInputComponentState {
 
-    public constructor(public items: FormDropdownItem[] = []) {
+    public constructor(
+        public items: FormDropdownItem[] = [],
+        public currentItem: FormDropdownItem = null
+    ) {
         super();
     }
 
