@@ -5,7 +5,6 @@ import {
     FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription
 } from "@kix/core/dist/model";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
-import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants";
 
 class LinkTicketDialogComponent<T extends KIXObject> {
 
