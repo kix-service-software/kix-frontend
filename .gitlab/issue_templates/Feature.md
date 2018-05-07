@@ -2,6 +2,6 @@
 
 
 ## Kriterien
-* ...
+* [ ] ...
 
 /label ~Feature 
