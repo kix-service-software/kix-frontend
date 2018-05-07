@@ -11,7 +11,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private state: LinkTicketDialogComponentState<T>;
 
-    public onCreate(input: any): void {
+    public onCreate(): void {
         this.state = new LinkTicketDialogComponentState();
     }
 
