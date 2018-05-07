@@ -30,6 +30,10 @@ class ArticleInputAttachmentComponent {
         this.state.linkDescriptions = linkDescriptions;
     }
 
+    private minimize(): void {
+        this.state.minimized = !this.state.minimized;
+    }
+
 }
 
 module.exports = ArticleInputAttachmentComponent;

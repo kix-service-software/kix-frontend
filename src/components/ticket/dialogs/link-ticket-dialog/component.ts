@@ -107,10 +107,12 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private submitClicked(): void {
-        const linkDescriptions = this.state.selectedObjects.map(
-            (so) => new CreateLinkDescription(so, this.state.currentLinkType)
-        );
-        DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
+        if (this.canSubmit()) {
+            const linkDescriptions = this.state.selectedObjects.map(
+                (so) => new CreateLinkDescription(so, this.state.currentLinkType)
+            );
+            DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
+        }
     }
 
     public setLinkTypes(): void {
