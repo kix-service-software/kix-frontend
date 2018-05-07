@@ -57,9 +57,9 @@ html {
         border-color: lighten(@border-color, 20%);
         & span[class^="kix-icon-"],
         & span[class*=" kix-icon-"] {
-            background-color: lighten(@button-icon-bg-color, 20%);
-            color: lighten(@border-color, 20%);
-            border-color: lighten(@border-color, 20%);
+            background-color: lighten(@button-icon-bg-color, 70%);
+            color: lighten(@border-color, 70%);
+            border-color: lighten(@border-color, 70%);
         }
     }
 }
@@ -67,14 +67,16 @@ html {
 @default-button-icon-width: @default-input-height;
 button {
     .button-color();
-    cursor: pointer;
+    &:not(:disabled) {
+        cursor: pointer;
+    }
     height: @default-input-height;
     min-width: 10rem;
     box-sizing: border-box;
     line-height: @default-input-height;
     border-radius: @border-radius;
     border: 1px solid;
-    padding-left: @default-button-icon-width + .625rem;
+    padding-left: .625rem+@default-button-icon-width;
     padding-right: .625rem;
     position: relative;
     & span[class^="kix-icon-"],

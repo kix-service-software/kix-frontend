@@ -1,5 +1,5 @@
 import { StandardTable } from "@kix/core/dist/browser";
-import { FormDropdownItem, KIXObject, Ticket, LinkType } from "@kix/core/dist/model";
+import { FormDropdownItem, KIXObject, Ticket, LinkType, CreateLinkDescription } from "@kix/core/dist/model";
 
 export class LinkTicketDialogComponentState<T extends KIXObject> {
 
@@ -11,6 +11,7 @@ export class LinkTicketDialogComponentState<T extends KIXObject> {
                 public selectedObjects: T[] = [],
                 public linkTypes: FormDropdownItem[] = [],
                 public currentLinkType: LinkType = null,
-                public currentDropDownItem: FormDropdownItem = null
+                public currentDropDownItem: FormDropdownItem = null,
+                public linkDescriptions: CreateLinkDescription[] = []
         ) { }
 }

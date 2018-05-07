@@ -19,7 +19,15 @@ class ArticleInputAttachmentComponent {
     }
 
     private openTicketLinkDialog(): void {
-        DialogService.getInstance().openOverlayDialog('link-ticket-dialog', {}, 'Ticket verknüpfen', 'kix-icon-link');
+        DialogService.getInstance().openOverlayDialog(
+            'link-ticket-dialog',
+            {
+                linkDescriptions: this.state.linkDescriptions,
+                resultListenerId: 'ticket-input-link'
+            },
+            'Ticket verknüpfen',
+            'kix-icon-link'
+        );
         DialogService.getInstance()
             .registerDialogResultListener<CreateLinkDescription[]>(
                 'link-ticket-dialog', this.ticketLinksChanged.bind(this)

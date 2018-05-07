@@ -5,13 +5,15 @@ import {
     FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription
 } from "@kix/core/dist/model";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
+import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants";
 
 class LinkTicketDialogComponent<T extends KIXObject> {
 
     private state: LinkTicketDialogComponentState<T>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
         this.state = new LinkTicketDialogComponentState();
+        this.state.linkDescriptions = input.linkDescriptions || [];
     }
 
     public onMount(): void {
@@ -33,6 +35,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         const context = ContextService.getInstance().getContext();
         context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
         this.getStandardTable();
+        this.setPreventSelectionFilterOfStandardTable();
         this.setLinkTypes();
     }
 
@@ -96,6 +99,15 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
         this.state.standardTable.loadRows();
         this.state.standardTable.selectionListener.addListener(this.objectSelectionChanged.bind(this));
+    }
+
+    private setPreventSelectionFilterOfStandardTable(): void {
+        if (this.state.linkDescriptions.length > 0) {
+            const objects = this.state.linkDescriptions.map(
+                (alo: CreateLinkDescription) => alo.targetObject
+            );
+            this.state.standardTable.preventSelectionLayer.setPreventSelectionFilter(objects);
+        }
     }
 
     private objectSelectionChanged(objects: T[]): void {

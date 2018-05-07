@@ -68,6 +68,7 @@ class TicketListWidgetComponent {
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
                 null,
+                null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
                 new TicketTableSelectionListener(),
                 new TicketTableClickListener(),
