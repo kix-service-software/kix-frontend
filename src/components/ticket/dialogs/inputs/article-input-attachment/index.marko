@@ -24,17 +24,6 @@
         </span>
     </span>
     <if(!state.minimized)>
-        <div.file-upload-file-list>
-            <for(file in state.files)>
-                <span.file-upload-file-container title=file.name>
-                    <div.file-upload-file>
-                        <icon icon=component.getFileIcon(file) showUnknown=true/>
-                        <span.file-name>${file.name}</span>
-                        <span.file-size>${component.getFileSize(file)}</span>
-                        <span.kix-icon-close on-click('removeFile', file)/>
-                    </div>
-                </span>
-            </for>
-        </div>
+        <label-list labels=state.labels on-removeLabel('removeFile')/>
     </if>
 </div>

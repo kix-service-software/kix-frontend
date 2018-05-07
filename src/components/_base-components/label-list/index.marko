@@ -1,0 +1,12 @@
+<div.label-list>
+    <for(label in state.labels)>
+        <span.label-list-container title=label.tooltip>
+            <div.label-item>
+                <icon icon=label.icon showUnknown=true/>
+                <span.label-text>${label.text}</span>
+                <span>${label.additionalText}</span>
+                <span.kix-icon-close on-click('removeLabel', label)/>
+            </div>
+        </span>
+    </for>
+</div>

@@ -22,4 +22,7 @@
             </else>
         </span>
     </span>
+    <if(!state.minimized)>
+        <label-list labels=state.labels on-removeLabel('removeLink')/>
+    </if>
 </div>

@@ -2,7 +2,7 @@ import { KIXObjectSearchService, IFormTableLayer, DialogService } from "@kix/cor
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
-    FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription
+    FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription
 } from "@kix/core/dist/model";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
 import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants";
@@ -13,7 +13,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     public onCreate(input: any): void {
         this.state = new LinkTicketDialogComponentState();
+    }
+
+    public onInput(input: any): void {
         this.state.linkDescriptions = input.linkDescriptions || [];
+        this.setPreventSelectionFilterOfStandardTable();
     }
 
     public onMount(): void {
@@ -102,10 +106,8 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private setPreventSelectionFilterOfStandardTable(): void {
-        if (this.state.linkDescriptions.length > 0) {
-            const objects = this.state.linkDescriptions.map(
-                (alo: CreateLinkDescription) => alo.targetObject
-            );
+        if (this.state.standardTable && this.state.linkDescriptions) {
+            const objects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
             this.state.standardTable.preventSelectionLayer.setPreventSelectionFilter(objects);
         }
     }
@@ -115,15 +117,16 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private canSubmit(): boolean {
-        return this.state.selectedObjects.length > 0 && this.state.currentLinkType !== null;
+        return this.state.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
     }
 
     private submitClicked(): void {
         if (this.canSubmit()) {
             const linkDescriptions = this.state.selectedObjects.map(
-                (so) => new CreateLinkDescription(so, this.state.currentLinkType)
+                (so) => new CreateLinkDescription(so, this.state.currentLinkTypeDescription)
             );
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
+            this.state.standardTable.selectionListener.selectNone();
         }
     }
 
@@ -137,16 +140,22 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                         (lt.Target === KIXObjectType.TICKET && lt.Source === this.state.currentLinkableObject.label)
                     ) {
                         if (!this.state.linkTypes.some((lo) => lo.label === lt.SourceName)) {
-                            this.state.linkTypes.push(new FormDropdownItem(lt.SourceName, '', lt.SourceName, null, lt));
+                            const dropdpwnItem = new FormDropdownItem(
+                                lt.SourceName, '', lt.SourceName, null, new LinkTypeDescription(lt, true)
+                            );
+                            this.state.linkTypes.push(dropdpwnItem);
                         }
                         if (lt.Pointed !== 0 && !this.state.linkTypes.some((lo) => lo.label === lt.TargetName)) {
-                            this.state.linkTypes.push(new FormDropdownItem(lt.TargetName, '', lt.TargetName, null, lt));
+                            const dropdownItem = new FormDropdownItem(
+                                lt.TargetName, '', lt.TargetName, null, new LinkTypeDescription(lt, false)
+                            );
+                            this.state.linkTypes.push(dropdownItem);
                         }
                     }
                 });
             } else {
                 this.state.linkTypes = [];
-                this.state.currentLinkType = null;
+                this.state.currentLinkTypeDescription = null;
             }
             (this as any).setStateDirty('linkTypes');
         }
@@ -154,7 +163,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private linkTypeChanged(item: FormDropdownItem): void {
         this.state.currentDropDownItem = item;
-        this.state.currentLinkType = item ? item.object : null;
+        this.state.currentLinkTypeDescription = item ? item.object : null;
     }
 }
 
