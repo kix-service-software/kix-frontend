@@ -48,6 +48,7 @@
             position: absolute;
             top: .25rem;
             left: .25rem;
+            max-width: 96%;
             >.selected-item {
                 display: grid;
                 grid-auto-flow: column;
@@ -63,6 +64,9 @@
                 }
                 .item-text {
                     align-self: end;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
                 .kix-icon-close {
                     font-size: .75rem;
