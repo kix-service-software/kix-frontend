@@ -1,12 +1,11 @@
 .linkable-objects-dialog {
-    >div {
-        margin-bottom: 1rem;
-    }
-    >.linkable-objects-dropdown {
+    >.linkable-objects-selection,
+    .linkable-objects-link-type-selection {
         display: grid;
         grid-template-columns: 8rem auto;
         grid-gap: 2rem;
-        .linkable-objects-dropdown-label {
+        margin-bottom: 1rem;
+        .linkable-objects-selection-label {
             white-space: nowrap;
             margin-top: .25rem;
             display: grid;
@@ -22,6 +21,7 @@
         }
     }
     >.linkable-objects-form {
+        margin-bottom: 1rem;
         .group-widget>.widget-content {
             margin-left: 0;
             >.form>.form-field {
@@ -35,9 +35,23 @@
         }
     }
     >.linkable-objects-result {
+        margin-bottom: @margin-default;
         .result-title {
             font-weight: bold;
             margin-bottom: @margin-small;
+        }
+    }
+    >.linkable-objects-submit {
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+        grid-gap: 2rem;
+        >.linkable-objects-link-type-selection {
+            grid-template-columns: max-content auto;
+            justify-self: left;
+        }
+        >button {
+            justify-self: right
         }
     }
 }

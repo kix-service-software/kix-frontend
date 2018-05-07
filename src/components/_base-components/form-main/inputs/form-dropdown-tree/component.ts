@@ -44,11 +44,8 @@ class FormDropdownTreeComponent {
 
     private dropdownClicked(): void {
         if (this.state.expanded) {
-            this.state.expanded = false;
-            this.state.preSelectedNode = null;
+            this.toggleList();
         } else {
-            this.state.expanded = true;
-            this.state.preSelectedNode = this.state.selectedNode;
             this.focusInput();
         }
     }
