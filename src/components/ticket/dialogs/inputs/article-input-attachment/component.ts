@@ -4,6 +4,7 @@ import {
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
+import { Label } from "@kix/core/dist/browser/components";
 
 class ArticleInputAttachmentComponent {
 
@@ -49,6 +50,8 @@ class ArticleInputAttachmentComponent {
                 }
             }
         });
+
+        this.createLabels();
 
         if (fileErrors.length) {
             const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
@@ -108,12 +111,18 @@ class ArticleInputAttachmentComponent {
         return AttachmentUtil.getFileSize(file.size);
     }
 
-    private removeFile(file: File): void {
-        const fileIndex = this.state.files.findIndex((sf) => sf.name === file.name);
+    private removeFile(label: Label): void {
+        const fileIndex = this.state.files.findIndex((sf) => sf.name === label.id);
         if (fileIndex > -1) {
             this.state.files.splice(fileIndex, 1);
-            (this as any).setStateDirty('files');
+            this.createLabels();
         }
+    }
+
+    private createLabels(): void {
+        this.state.labels = this.state.files.map(
+            (f) => new Label(null, f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name)
+        );
     }
 }
 
