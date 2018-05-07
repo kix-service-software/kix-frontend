@@ -20,6 +20,10 @@ class ArticleInputAttachmentComponent {
         DialogService.getInstance().openOverlayDialog('link-ticket-dialog', {}, 'Ticket verknüpfen', 'kix-icon-link');
     }
 
+    private minimize(): void {
+        this.state.minimized = !this.state.minimized;
+    }
+
 }
 
 module.exports = ArticleInputAttachmentComponent;
