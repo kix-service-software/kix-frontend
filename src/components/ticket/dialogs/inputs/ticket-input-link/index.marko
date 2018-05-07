@@ -4,15 +4,15 @@
     </button>
     <span.link-ticket-notice>
         <span>
-            <if(state.links.length)>
-                ${state.links.length} Verknüpfungen angelegt
+            <if(state.linkDescriptions.length)>
+                ${state.linkDescriptions.length} Verknüpfungen angelegt
                 <span.kix-icon-check/>
             </if>
         </span>
         <span.link-ticket-line/>
         <span.minimize-icon-container>
             <if(state.minimized)>
-                <span.kix-icon-sort-down class={"no-links": state.links.length === 0} on-click('minimize')/>
+                <span.kix-icon-sort-down class={"no-links": state.linkDescriptions.length === 0} on-click('minimize')/>
             </if>
             <else>
                 <span.kix-icon-triangle-up on-click('minimize')>
