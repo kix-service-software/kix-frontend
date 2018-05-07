@@ -1,15 +1,16 @@
 <div.linkable-objects-dialog>
-    <div.linkable-objects-dropdown title="Verknüpfen mit">
-        <div.linkable-objects-dropdown-label>
+    <div.linkable-objects-selection title="Verknüpfen mit">
+        <div.linkable-objects-selection-label>
             <span>Verknüpfen mit</span>
         </div>
-        <form-dropdown items=state.linkableObjects on-itemChanged('itemChanged') selectedItem=state.currentItem/>
+        <form-dropdown items=state.linkableObjects on-itemChanged('linkableObjectChanged')
+            selectedItem=state.currentLinkableObject/>
     </div>
     <div.linkable-objects-form>
         <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
             <@content>
-                <if(state.currentItem)>
-                    <form-main formId=state.currentItem.id key=("FormMain" + Math.random())/>
+                <if(state.currentLinkableObject)>
+                    <form-main formId=state.currentLinkableObject.id key=("FormMain" + Math.random())/>
                     <div.linkable-objects-form-button-container>
                         <button.submit-button type="button" on-click("executeSearch") title="Abbrechen">
                             <span.kix-icon-search/>
@@ -21,11 +22,20 @@
         </widget>
     </div>
     <div.linkable-objects-result>
-        <if(state.currentItem)>
+        <if(state.currentLinkableObject)>
             <div.result-title>Ergebnisse ${state.resultCount}</div>
             <if(state.standardTable)>
                 <standard-table standardTable=state.standardTable/>
             </if>
         </if>
+    </div>
+    <div.linkable-objects-submit>
+        <div.linkable-objects-link-type-selection>
+            <div.linkable-objects-selection-label>
+                <span>Art der Verknüpfung</span>
+            </div>
+            <form-dropdown items=state.linkTypes on-itemChanged('linkTypeChanged') selectedItem=state.currentLinkType/>
+        </div>
+        <button.button>Übernehmen</button>
     </div>
 </div>
