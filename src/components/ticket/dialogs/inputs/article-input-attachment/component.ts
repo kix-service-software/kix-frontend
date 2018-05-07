@@ -1,9 +1,10 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
 import {
-    FormInputComponentState, ObjectIcon, AttachmentError, OverlayType, StringContent, ComponentContent, Label
+    FormInputComponentState, ObjectIcon, AttachmentError, OverlayType, StringContent, ComponentContent
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
+import { Label } from "@kix/core/dist/browser/components";
 
 class ArticleInputAttachmentComponent {
 
@@ -120,7 +121,7 @@ class ArticleInputAttachmentComponent {
 
     private createLabels(): void {
         this.state.labels = this.state.files.map(
-            (f) => new Label(f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name)
+            (f) => new Label(null, f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name)
         );
     }
 }

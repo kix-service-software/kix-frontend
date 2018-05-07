@@ -1,5 +1,5 @@
 import { LabelComponentState } from './LabelComponentState';
-import { Label } from '@kix/core/dist/model';
+import { Label } from '@kix/core/dist/browser/components';
 
 class LabelListComponent {
 

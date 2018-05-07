@@ -1,4 +1,5 @@
-import { FormField, FormInputComponentState, Label } from "@kix/core/dist/model";
+import { FormField, FormInputComponentState } from "@kix/core/dist/model";
+import { Label } from "@kix/core/dist/browser/components";
 
 export class ArticleInputAttachmentComponentState extends FormInputComponentState {
 
