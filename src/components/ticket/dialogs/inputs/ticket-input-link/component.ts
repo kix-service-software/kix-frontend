@@ -1,5 +1,7 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
-import { FormInputComponentState, ObjectIcon, AttachmentError } from "@kix/core/dist/model";
+import {
+    FormInputComponentState, ObjectIcon, AttachmentError, CreateLinkDescription, Ticket
+} from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { DialogService } from "@kix/core/dist/browser/DialogService";
 
@@ -18,6 +20,14 @@ class ArticleInputAttachmentComponent {
 
     private openTicketLinkDialog(): void {
         DialogService.getInstance().openOverlayDialog('link-ticket-dialog', {}, 'Ticket verknüpfen', 'kix-icon-link');
+        DialogService.getInstance()
+            .registerDialogResultListener<CreateLinkDescription[]>(
+                'link-ticket-dialog', this.ticketLinksChanged.bind(this)
+            );
+    }
+
+    private ticketLinksChanged(linkDescriptions: CreateLinkDescription[]): void {
+        this.state.linkDescriptions = linkDescriptions;
     }
 
 }

@@ -34,7 +34,7 @@
             <div.linkable-objects-selection-label>
                 <span>Art der Verknüpfung</span>
             </div>
-            <form-dropdown items=state.linkTypes on-itemChanged('linkTypeChanged') selectedItem=state.currentLinkType/>
+            <form-dropdown items=state.linkTypes on-itemChanged('linkTypeChanged') selectedItem=state.currentDropDownItem/>
         </div>
         <button.submit-button disabled=(!component.canSubmit()) on-click('submitClicked')>
             <span.kix-icon-check/>
