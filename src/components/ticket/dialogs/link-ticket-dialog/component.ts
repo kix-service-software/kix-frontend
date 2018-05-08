@@ -127,6 +127,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
             this.state.standardTable.selectionListener.selectNone();
             this.setSuccessHint(linkDescriptions.length);
+            this.state.standardTable.notifyListener();
         }
     }
 

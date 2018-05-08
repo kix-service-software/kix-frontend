@@ -55,8 +55,12 @@ class ArticleInputAttachmentComponent {
     }
 
     private removeLink(label: Label): void {
-        this.updateField();
-        this.createLabels();
+        const index = this.state.linkDescriptions.findIndex((ld) => ld.linkableObject === label.object);
+        if (index !== -1) {
+            this.state.linkDescriptions.splice(index, 1);
+            this.updateField();
+            this.createLabels();
+        }
     }
 
     private updateField(): void {
