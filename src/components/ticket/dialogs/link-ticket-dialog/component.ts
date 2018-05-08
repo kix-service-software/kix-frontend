@@ -132,6 +132,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             this.setSuccessHint(linkDescriptions.length);
             this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
             this.state.standardTable.selectionListener.selectNone();
+            this.state.standardTable.notifyListener();
         }
     }
 
