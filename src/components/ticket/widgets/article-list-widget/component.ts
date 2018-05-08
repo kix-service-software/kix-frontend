@@ -81,6 +81,7 @@ export class ArticleListWidgetComponent {
                 [new TableSortLayer()],
                 new ArticleTableToggleLayer(new ArticleTableToggleListener(), true),
                 null,
+                null,
                 columns,
                 new ArticleTableSelectionListener(),
                 new ArticleTableClickListener(),
