@@ -110,6 +110,7 @@ class LinkedObjectsWidgetComponent {
                 [new TableSortLayer()],
                 null,
                 null,
+                null,
                 columnConfig,
                 null,
                 clickListener,

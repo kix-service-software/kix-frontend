@@ -40,6 +40,10 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.getStandardTable();
         this.setPreventSelectionFilterOfStandardTable();
         this.setLinkTypes();
+        // TODO: nur temporär, später ggf. über eine TableFactory neue Tabellen-Instanz erstellen
+        if (this.state.standardTable) {
+            this.state.standardTable.highlightLayer.setHighlightedObjects([]);
+        }
     }
 
     public setLinkableObjects(): void {
@@ -125,8 +129,9 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 (so) => new CreateLinkDescription(so, this.state.currentLinkTypeDescription)
             );
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
-            this.state.standardTable.selectionListener.selectNone();
             this.setSuccessHint(linkDescriptions.length);
+            this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
+            this.state.standardTable.selectionListener.selectNone();
         }
     }
 
