@@ -14,6 +14,7 @@ export class LinkTicketDialogComponentState<T extends KIXObject> {
                 public linkTypes: FormDropdownItem[] = [],
                 public currentLinkTypeDescription: LinkTypeDescription = null,
                 public currentDropDownItem: FormDropdownItem = null,
-                public linkDescriptions: CreateLinkDescription[] = []
+                public linkDescriptions: CreateLinkDescription[] = [],
+                public successHint: string = null
         ) { }
 }
