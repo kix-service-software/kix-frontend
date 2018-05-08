@@ -345,6 +345,14 @@ class StandardTableComponent<T extends KIXObject<T>> {
     private getValueIcon(column: TableColumn, value: TableValue): ObjectIcon {
         return new ObjectIcon(column.id, value.objectValue);
     }
+
+    private getRowClasses(row: TableRow<T>): string[] {
+        const classes = [...row.classes];
+        if (!row.selectable) {
+            classes.push('row-not-selectable');
+        }
+        return classes;
+    }
 }
 
 module.exports = StandardTableComponent;

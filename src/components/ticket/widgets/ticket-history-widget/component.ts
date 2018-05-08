@@ -79,6 +79,7 @@ class TicketHistoryWidgetComponent {
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
                 null,
+                null,
                 columnConfig,
                 null,
                 clickListener,

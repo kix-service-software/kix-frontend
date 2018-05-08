@@ -14,6 +14,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.state = new LinkTicketDialogComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.linkDescriptions = input.linkDescriptions || [];
+        this.setPreventSelectionFilterOfStandardTable();
+    }
+
     public onMount(): void {
         this.setLinkableObjects();
         if (this.state.linkableObjects.length) {
@@ -33,11 +38,8 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         const context = ContextService.getInstance().getContext();
         context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
         this.getStandardTable();
+        this.setPreventSelectionFilterOfStandardTable();
         this.setLinkTypes();
-    }
-
-    public onInput(input: any): void {
-        this.state.linkDescriptions = input.linkDescriptions;
     }
 
     public setLinkableObjects(): void {
@@ -100,6 +102,13 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
         this.state.standardTable.loadRows();
         this.state.standardTable.selectionListener.addListener(this.objectSelectionChanged.bind(this));
+    }
+
+    private setPreventSelectionFilterOfStandardTable(): void {
+        if (this.state.standardTable && this.state.linkDescriptions) {
+            const objects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
+            this.state.standardTable.preventSelectionLayer.setPreventSelectionFilter(objects);
+        }
     }
 
     private objectSelectionChanged(objects: T[]): void {

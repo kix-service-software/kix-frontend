@@ -72,7 +72,7 @@ class ArticleInputAttachmentComponent {
             const linkLabel = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName
                 : ld.linkTypeDescription.linkType.TargetName;
-            return new Label(ld.targetObject, null, null, null, `(${linkLabel})`);
+            return new Label(ld.linkableObject, null, null, null, `(${linkLabel})`);
         });
     }
 
