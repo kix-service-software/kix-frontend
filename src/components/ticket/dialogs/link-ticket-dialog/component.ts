@@ -126,10 +126,15 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             );
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
             this.state.standardTable.selectionListener.selectNone();
+            this.setSuccessHint(linkDescriptions.length);
         }
     }
 
-    public setLinkTypes(): void {
+    private setSuccessHint(count: number): void {
+        this.state.successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
+    }
+
+    private setLinkTypes(): void {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
             if (this.state.currentLinkableObject) {
