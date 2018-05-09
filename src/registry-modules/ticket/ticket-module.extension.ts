@@ -7,7 +7,7 @@ import { TicketContextConfiguration, ArticleLabelProvider } from '@kix/core/dist
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
-import { FormGroup } from '../../../../core/dist/model/components/form/FormGroup';
+import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
