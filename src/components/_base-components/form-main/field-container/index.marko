@@ -1,0 +1,17 @@
+<for(field in input.fields)>
+    <div.form-field title=field.label>
+        <div.field-label>
+            <span.label-text>
+                <if(field.required)>
+                    <span.required-field>*</span>
+                </if>${field.label}
+            </span>
+        </div>
+        <div.field-icon>
+            <overlay-icon isHint=true content=field.hint/>
+        </div>
+        <div.field-input>
+            <include(component.getInputComponent(field), { field, formId: input.formId })/>
+        </div>
+    </div>
+</for>

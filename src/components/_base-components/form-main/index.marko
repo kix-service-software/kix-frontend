@@ -1,21 +1,16 @@
 <div.form>
     <if(state.formInstance && state.formInstance.form)>
-        <for(field in state.formInstance.form.fields)>
-            <div.form-field title=field.label>
-                <div.field-label>
-                    <span.label-text>
-                        <if(field.required)>
-                            <span.required-field>*</span>
-                        </if>${field.label}
-                    </span>
-                </div>
-                <div.field-icon>
-                    <overlay-icon isHint=true content=field.hint/>
-                </div>
-                <div.field-input>
-                    <include(component.getInputComponent(field), { field, formId: state.formId })/>
-                </div>
-            </div>
+        <for(group in state.formInstance.form.groups)>
+            <if(state.formInstance.form.groups.length > 1)>
+                <widget instanceId="form-group" title=group.name>
+                    <@content>
+                        <field-container fields=group.formFields/>
+                    </@content>
+                </widget>
+            </if>
+            <else>
+                <field-container fields=group.formFields formId=state.formId/>
+            </else>
         </for>
     </if>
 </div>
