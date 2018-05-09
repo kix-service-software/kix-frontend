@@ -5,7 +5,6 @@ export class FormDropdownTreeComponentState {
 
     public constructor(
         public nodes: TreeNode[] = [],
-        public treeNodes: TreeNode[] = [],
         public selectedNode: TreeNode = null,
         public expanded: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId(),
