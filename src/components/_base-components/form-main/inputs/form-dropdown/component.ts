@@ -17,6 +17,7 @@ class FormDropdownComponent {
         this.state.selectedItem = input.selectedItem;
         this.state.preSelectedItem = input.selectedItem;
         this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
     public onMount(): void {
