@@ -25,6 +25,9 @@ class TreeNodeComponent {
 
     public onDestroy(): void {
         this.state.treeParent.removeEventListener('keydown', this.navigateTree);
+        this.state.node = null;
+        this.state.filterValue = null;
+        this.state.activeNode = null;
     }
 
     private hasChildren(): boolean {
@@ -40,13 +43,8 @@ class TreeNodeComponent {
         return title;
     }
 
-    private isExpanded(): boolean {
-        return this.state.node.expanded ||
-            (this.state.filterValue !== null && this.state.filterValue !== undefined && this.state.filterValue !== '');
-    }
-
     private isActiveNode(): boolean {
-        return this.state.activeNode && (this.state.activeNode.id === this.state.node.id);
+        return this.state.activeNode && this.state.activeNode.id === this.state.node.id;
     }
 
     private toggleNode(): void {
@@ -60,7 +58,9 @@ class TreeNodeComponent {
     }
 
     private nodeHovered(): void {
-        (this as any).emit('nodeHovered', this.state.node);
+        if (!this.isActiveNode()) {
+            (this as any).emit('nodeHovered', this.state.node);
+        }
     }
 
     private childNodeHovered(node: TreeNode): void {
@@ -76,21 +76,20 @@ class TreeNodeComponent {
     }
 
     private navigateTree(event: any): void {
-        if (this.navigationKeyPressed(event) && this.isActiveNode()) {
+        if (this.state.node && this.navigationKeyPressed(event) && this.isActiveNode()) {
             if (event.preventDefault) {
                 event.preventDefault();
+                event.stopPropagation();
             }
 
             switch (event.key) {
                 case 'ArrowUp':
                     if (this.state.node.previousNode) {
-                        this.scrollToNode(this.state.node.previousNode);
                         this.childNodeHovered(this.state.node.previousNode);
                     }
                     break;
                 case 'ArrowDown':
                     if (this.state.node.nextNode) {
-                        this.scrollToNode(this.state.node.nextNode);
                         this.childNodeHovered(this.state.node.nextNode);
                     }
                     break;
@@ -116,13 +115,6 @@ class TreeNodeComponent {
             || event.key === 'ArrowRight'
             || event.key === 'ArrowUp'
             || event.key === 'ArrowDown';
-    }
-
-    private scrollToNode(node: TreeNode): void {
-        const element = document.getElementById(this.state.treeId + "-node-" + node.id);
-        if (element) {
-            element.scrollIntoView();
-        }
     }
 }
 
