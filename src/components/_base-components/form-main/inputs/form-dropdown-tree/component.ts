@@ -38,7 +38,7 @@ class FormDropdownTreeComponent {
             this.state.preSelectedNode = null;
         } else if (this.state.enabled) {
             this.state.expanded = true;
-            this.state.preSelectedNode = this.state.selectedNode;
+            this.state.preSelectedNode = this.state.preSelectedNode;
         }
     }
 

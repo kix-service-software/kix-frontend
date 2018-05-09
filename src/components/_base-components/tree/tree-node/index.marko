@@ -1,8 +1,7 @@
-<li.tree-node class=(component.isActiveNode() ? "active" : "") id=state.nodeId>
+<li.tree-node class=(component.isActiveNode() ? "active" : "") id=state.nodeId key=state.nodeId>
     <span.tree-icon>
         <if(component.hasChildren())>
-            <span id="tree-expand" class=(component.isExpanded() ? "kix-icon-minus" : "kix-icon-plus-blank")
-                on-click('toggleNode')/>
+            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleNode')/>
         </if>
     </span>
     <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
@@ -20,12 +19,12 @@
             <icon icon=state.node.secondaryIcon/>
         </if>
     </div>
-    <if(component.isExpanded())>
+    <if(state.node.expanded)>
         <ul.tree-list>
             <for(node in state.node.children)>
                 <if(node.visible)>
                     <tree-node node=node filterValue=state.filterValue activeNode=state.activeNode treeParent=input.treeParent
-                        on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
+                        treeId=state.treeId on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
                         on-nodeHovered('childNodeHovered')/>
                 </if>
             </for>

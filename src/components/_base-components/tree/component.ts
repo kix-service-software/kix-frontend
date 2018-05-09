@@ -14,13 +14,11 @@ class TreeComponent {
         this.state.filterValue = input.filterValue;
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         this.state.activeNode = input.activeNode;
+        this.scrollToNode();
     }
 
     public onMount(): void {
         this.state.treeParent = (this as any).getEl(this.state.treeId).parentElement;
-        if (!this.state.activeNode) {
-            this.state.activeNode = TreeUtil.getFirstVisibleNode(this.state.tree, this.state.filterValue);
-        }
     }
 
     private nodeToggled(node: TreeNode): void {
@@ -33,8 +31,25 @@ class TreeComponent {
     }
 
     private nodeHovered(node: TreeNode): void {
-        this.state.activeNode = node;
         (this as any).emit('nodeHovered', node);
+    }
+
+    private scrollToNode(): void {
+        if (this.state.activeNode) {
+            const container = document.getElementById(this.state.treeId);
+            const element = document.getElementById(this.state.treeId + '-node-' + this.state.activeNode.id);
+            if (element && container) {
+                if (element.offsetTop < container.scrollTop) {
+                    container.scrollTop = element.offsetTop;
+                } else {
+                    const offsetBottom = element.offsetTop + element.offsetHeight;
+                    const scrollBottom = container.scrollTop + container.offsetHeight;
+                    if (offsetBottom > scrollBottom) {
+                        container.scrollTop = offsetBottom - container.offsetHeight;
+                    }
+                }
+            }
+        }
     }
 
 }
