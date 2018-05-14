@@ -9,6 +9,7 @@ import { ComponentsService } from "@kix/core/dist/browser/components";
 class OverlayComponent {
 
     private state: OverlayComponentState;
+    private toastTimeout: any;
 
     public onCreate(): void {
         this.state = new OverlayComponentState();
@@ -32,7 +33,6 @@ class OverlayComponent {
     private overlayClicked(): void {
         this.state.keepShow = true;
     }
-
 
     public onUpdate(): void {
         if (this.state.position && this.state.position.length === 2) {
@@ -62,6 +62,32 @@ class OverlayComponent {
 
         this.state.keepShow = true;
         this.state.show = true;
+
+        // TODO: Prüfen auf "einfachere" Methode bzw. Umbauen, falls es anders funktionieren soll
+        if (type === OverlayType.TOAST) {
+            this.toastTimeout = setTimeout(() => {
+                const toast = (this as any).getEl('overlay');
+                if (toast) {
+                    // TODO: ggf. über Marko triggern (Funktionen implementieren), falls es so bleibt
+                    toast.addEventListener('mouseover', (e) => {
+                        clearTimeout(this.toastTimeout);
+                    });
+                    toast.addEventListener('mouseleave', (e) => {
+                        this.state.overlayClass = 'toast-overlay';
+                        this.toastTimeout = setTimeout(() => {
+                            this.closeOverlay();
+                        }, 200);
+                    });
+                }
+                this.state.overlayClass += ' show-toast';
+                this.toastTimeout = setTimeout(() => {
+                    this.state.overlayClass = 'toast-overlay';
+                    this.toastTimeout = setTimeout(() => {
+                        this.closeOverlay();
+                    }, 200);
+                }, 2000);
+            }, 100);
+        }
     }
 
     private applyWidgetConfiguration(instanceId: string): void {
@@ -81,6 +107,9 @@ class OverlayComponent {
     private closeOverlay(): void {
         this.state.show = false;
         this.state = new OverlayComponentState();
+        if (this.toastTimeout) {
+            clearTimeout(this.toastTimeout);
+        }
     }
 
     private setOverlayPosition(): void {
@@ -110,6 +139,8 @@ class OverlayComponent {
                 return 'info-overlay';
             case OverlayType.WARNING:
                 return 'warning-overlay';
+            case OverlayType.TOAST:
+                return 'toast-overlay';
             default:
                 return '';
         }
@@ -144,6 +175,9 @@ class OverlayComponent {
         return this.state.type === OverlayType.WARNING;
     }
 
+    private isToast(): boolean {
+        return this.state.type === OverlayType.TOAST;
+    }
 }
 
 module.exports = OverlayComponent;
