@@ -15,8 +15,7 @@ export class TicketInputStateComponentState extends FormInputComponentState {
         ],
         public invalid: boolean = false,
         public selectedDate: string = '',
-        public selectedTime: string = '',
-        public invalidPendingTime: boolean = false
+        public selectedTime: string = ''
     ) {
         super();
     }
