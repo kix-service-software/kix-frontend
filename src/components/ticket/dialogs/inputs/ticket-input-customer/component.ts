@@ -2,7 +2,7 @@ import { TicketInputTypeComponentState } from "./TicketInputTypeComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     FormDropdownItem, ObjectIcon, TicketProperty, Contact, FormInputComponentState,
-    FormFieldValueChangeEvent, FormFieldValue
+    FormFieldValueChangeEvent, FormFieldValue, IFormEvent
 } from "@kix/core/dist/model";
 import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
@@ -39,19 +39,22 @@ class TicketInputTypeComponent {
         );
 
         this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
+        this.itemChanged(this.state.currentItem);
     }
 
-    private formChanged(event: FormFieldValueChangeEvent<Contact>): void {
-        if (event.formField.property === TicketProperty.CUSTOMER_USER_ID) {
-            if (event.formFieldValue.value) {
-                const contact = event.formFieldValue.value;
-                this.state.primaryCustomerId = contact.UserCustomerID;
-                this.loadCustomers(contact.UserCustomerIDs);
-                this.state.hasContact = true;
-            } else {
-                this.state.currentItem = null;
-                this.state.hasContact = false;
-                this.state.items = [];
+    private formChanged(event: IFormEvent): void {
+        if (event instanceof FormFieldValueChangeEvent) {
+            if (event.formField.property === TicketProperty.CUSTOMER_USER_ID) {
+                if (event.formFieldValue.value) {
+                    const contact = event.formFieldValue.value;
+                    this.state.primaryCustomerId = contact.UserCustomerID;
+                    this.loadCustomers(contact.UserCustomerIDs);
+                    this.state.hasContact = true;
+                } else {
+                    this.state.currentItem = null;
+                    this.state.hasContact = false;
+                    this.state.items = [];
+                }
             }
         }
     }

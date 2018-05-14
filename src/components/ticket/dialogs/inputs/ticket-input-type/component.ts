@@ -23,17 +23,23 @@ class TicketInputTypeComponent {
         this.state.items = objectData.types.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.TYPE_ID, t.ID), t.Name)
         );
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
+    }
 
+    public formUpdated(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
                 this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+                this.state.invalid = !value.valid;
             }
         }
     }
 
     private itemChanged(item: FormDropdownItem): void {
+        this.state.currentItem = item;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.provideFormFieldValue<number>(this.state.field.property, item ? Number(item.id) : null);
         const fieldValue = formInstance.getFormFieldValue(this.state.field.property);

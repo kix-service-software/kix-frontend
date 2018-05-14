@@ -1,4 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/DialogService";
+import { FormValidationService, OverlayService, FormService } from "@kix/core/dist/browser";
+import { ValidationSeverity, OverlayType, ComponentContent, StringContent } from "@kix/core/dist/model";
 
 class NewTicketDialogComponent {
 
@@ -13,7 +15,25 @@ class NewTicketDialogComponent {
     }
 
     private submit(): void {
-        alert('Ticket wird angelegt');
+        const result = FormValidationService.getInstance().validateForm('new-ticket-form');
+        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+        if (validationError) {
+            const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+            const content = new ComponentContent('list-with-title',
+                {
+                    title: 'Fehler beim Validieren des Formulars:',
+                    list: errorMessages
+                }
+            );
+
+            OverlayService.getInstance().openOverlay(
+                OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            );
+        } else {
+            OverlayService.getInstance().openOverlay(
+                OverlayType.TOAST, null, new StringContent('Ticket erfolgreich angelegt.'), 'Erfolg!'
+            );
+        }
     }
 
 }

@@ -15,6 +15,21 @@ class ArticleInputBodyComponent {
         this.state.formId = input.formId;
     }
 
+    public onMount(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
+    }
+
+    public formUpdated(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue<string>(this.state.field.property);
+            if (value) {
+                this.state.invalid = !value.valid;
+            }
+        }
+    }
+
     private valueChanged(value: string): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.provideFormFieldValue<string>(this.state.field.property, value);

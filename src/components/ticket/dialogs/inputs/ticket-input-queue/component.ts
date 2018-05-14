@@ -21,12 +21,17 @@ class TicketInputTypeComponent {
     public onMount(): void {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.queuesHierarchy);
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
+    }
 
+    public formUpdated(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<number>(this.state.field.property);
             if (value) {
                 this.state.currentNode = TreeUtil.findNode(this.state.nodes, value.value);
+                this.state.invalid = !value.valid;
             }
         }
     }

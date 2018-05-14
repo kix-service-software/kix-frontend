@@ -21,10 +21,16 @@ class ArticleInputAttachmentComponent {
 
     public onMount(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
+    }
+
+    public formUpdated(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
             if (value) {
                 this.state.linkDescriptions = value.value ? value.value : [];
+                this.state.invalid = !value.valid;
             }
         }
     }

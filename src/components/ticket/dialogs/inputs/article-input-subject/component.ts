@@ -26,6 +26,22 @@ class ArticleInputSubjectComponent {
         }
     }
 
+    public onMount(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.onUpdate.bind(this));
+    }
+
+    public onUpdate(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue<string>(this.state.field.property);
+            if (value) {
+                this.state.currentValue = value.value;
+                this.state.invalid = !value.valid;
+            }
+        }
+    }
+
     private valueChanged(value: string): void {
         this.state.currentValue = value;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);

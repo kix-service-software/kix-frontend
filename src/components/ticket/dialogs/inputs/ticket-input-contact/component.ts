@@ -25,7 +25,18 @@ class TicketInputContactComponent {
     public onMount(): void {
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
+    }
+
+    public formUpdated(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue(this.state.field.property);
+            if (value) {
+                this.state.invalid = !value.valid;
+            }
+        }
     }
 
     private contactChanged(item: FormDropdownItem): void {

@@ -23,12 +23,17 @@ class TicketInputPriorityComponent {
         this.state.items = objectData.priorities.map((p) =>
             new FormDropdownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
         );
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.registerListener(this.formUpdated.bind(this));
+    }
 
+    public formUpdated(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
                 this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+                this.state.invalid = !value.valid;
             }
         }
     }
