@@ -64,6 +64,7 @@ class TicketInputStateComponent {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         const stateValue = new PendingTimeFormValue(
             (this.state.currentItem ? Number(this.state.currentItem.id) : null),
+            this.state.pending,
             new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
         );
 
