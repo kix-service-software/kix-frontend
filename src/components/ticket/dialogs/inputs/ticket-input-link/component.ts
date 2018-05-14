@@ -46,7 +46,7 @@ class ArticleInputAttachmentComponent {
     }
 
     private ticketLinksChanged(linkDescriptions: CreateLinkDescription[]): void {
-        this.state.linkDescriptions = [...this.state.linkDescriptions, ...linkDescriptions];
+        this.state.linkDescriptions = linkDescriptions;
         this.updateField();
     }
 

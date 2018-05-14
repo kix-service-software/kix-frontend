@@ -4,7 +4,7 @@
             <if(state.formInstance.form.groups.length > 1)>
                 <widget instanceId="form-group" title=group.name>
                     <@content>
-                        <field-container fields=group.formFields/>
+                        <field-container fields=group.formFields formId=state.formId/>
                     </@content>
                 </widget>
             </if>

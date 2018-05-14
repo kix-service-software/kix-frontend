@@ -125,14 +125,16 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private submitClicked(): void {
         if (this.canSubmit()) {
-            const linkDescriptions = this.state.selectedObjects.map(
+            const newLinks = this.state.selectedObjects.map(
                 (so) => new CreateLinkDescription(so, this.state.currentLinkTypeDescription)
             );
-            DialogService.getInstance().publishDialogResult('link-ticket-dialog', linkDescriptions);
-            this.setSuccessHint(linkDescriptions.length);
+            this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
+            DialogService.getInstance().publishDialogResult('link-ticket-dialog', this.state.linkDescriptions);
+            this.setSuccessHint(newLinks.length);
             this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
+            this.setPreventSelectionFilterOfStandardTable();
             this.state.standardTable.selectionListener.selectNone();
-            this.state.standardTable.notifyListener();
+            this.state.standardTable.loadRows(true);
         }
     }
 
