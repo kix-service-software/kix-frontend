@@ -46,7 +46,7 @@ class TicketInputTypeComponent {
             if (event.formFieldValue.value) {
                 const contact = event.formFieldValue.value;
                 this.state.primaryCustomerId = contact.UserCustomerID;
-                this.loadCustomers([contact.UserCustomerID]);
+                this.loadCustomers(contact.UserCustomerIDs);
                 this.state.hasContact = true;
             } else {
                 this.state.currentItem = null;
