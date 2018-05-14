@@ -19,6 +19,12 @@
             box-shadow: none;
         }
     }
+    &.invalid {
+        border-color: red;
+        &::placeholder {
+            color: red;
+        }
+    }
 }
 
 .dropdown,
@@ -34,9 +40,6 @@
             >input.input-style:not(:disabled)~.dropdown-button {
                 border-color: darken(@secondary-3, 20%);
             }
-        }
-        >input.input-style.invalid {
-            border-color: red;
         }
         >input.input-style:focus:not(:disabled)~.dropdown-button {
             border-color: darken(@secondary-3, 20%);

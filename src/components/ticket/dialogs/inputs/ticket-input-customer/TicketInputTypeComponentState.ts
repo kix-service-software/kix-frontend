@@ -6,7 +6,8 @@ export class TicketInputTypeComponentState extends FormInputComponentState {
         public items: FormDropdownItem[] = [],
         public currentItem: FormDropdownItem = null,
         public primaryCustomerId: string = null,
-        public hasContact: boolean = false
+        public hasContact: boolean = false,
+        public invalid: boolean = false
     ) {
         super();
     }

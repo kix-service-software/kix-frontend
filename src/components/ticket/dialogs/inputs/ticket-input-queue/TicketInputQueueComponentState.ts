@@ -4,7 +4,8 @@ export class TicketInputQueueComponentState extends FormInputComponentState {
 
     public constructor(
         public nodes: TreeNode[] = [],
-        public currentNode: TreeNode = null
+        public currentNode: TreeNode = null,
+        public invalid: boolean = false
     ) {
         super();
     }

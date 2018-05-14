@@ -179,6 +179,10 @@ class FormDropdownComponent {
     private hasIconClass(icon: any): boolean {
         return !(icon instanceof ObjectIcon);
     }
+
+    private focusLost(): void {
+        (this as any).emit('itemChanged', this.state.selectedItem);
+    }
 }
 
 module.exports = FormDropdownComponent;

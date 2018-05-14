@@ -30,16 +30,15 @@ class TicketInputContactComponent {
 
     private contactChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        let value;
+        let contact;
         if (item) {
-            const contact = this.state.contacts.find((c) => c.ContactID === item.id);
-            value = new FormFieldValue<Contact>(contact);
-        } else {
-            value = new FormFieldValue<Contact>(null);
+            contact = this.state.contacts.find((c) => c.ContactID === item.id);
         }
 
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, value);
+        formInstance.provideFormFieldValue<Contact>(this.state.field.property, contact);
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.invalid = !fieldValue.valid;
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {

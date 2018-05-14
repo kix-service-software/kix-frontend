@@ -13,7 +13,8 @@ export class FormAutoCompleteComponentState {
         public isLoading: boolean = false,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<FormDropdownItem[]> = null,
-        public enabled: boolean = true
+        public enabled: boolean = true,
+        public invalid: boolean = false
     ) { }
 
 }

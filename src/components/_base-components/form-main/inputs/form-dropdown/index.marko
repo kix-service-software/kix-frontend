@@ -3,7 +3,7 @@
         <input.input-style class={invalid: state.invalid} type="text" readonly=(!state.enabled) disabled=(!state.enabled)
             placeholder=(state.selectedItem ? "" : input.placeholder) value=state.filterValue on-keydown('keyDown')
             on-keyup('filterValueChanged') required=input.required on-click('toggleList', false)
-            on-focus('toggleList', false) key="dropdown-input"/>
+            on-focus('toggleList', false) on-blur('focusLost') key="dropdown-input"/>
         <if(state.selectedItem)>
             <span.selected-item-container on-click('toggleList', false)>
                 <div.selected-item>

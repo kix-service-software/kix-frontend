@@ -29,7 +29,9 @@ class TicketInputFulltextComponent {
     private valueChanged(value: string): void {
         this.state.currentValue = value;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<string>(value));
+        formInstance.provideFormFieldValue<string>(this.state.field.property, value);
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.invalid = !fieldValue.valid;
     }
 
 }
