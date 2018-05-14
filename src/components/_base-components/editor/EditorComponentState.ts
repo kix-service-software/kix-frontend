@@ -18,6 +18,7 @@ export class EditorComponentState {
         public inline: boolean = false,
         public simple: boolean = false,
         public readOnly: boolean = false,
+        public invalid: boolean = false,
         resize?: boolean,
         resizeDir?: string
     ) {

@@ -29,7 +29,7 @@ class TicketInputArchiveSearch {
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(Number(item.id)));
+        formInstance.provideFormFieldValue(this.state.field.property, new FormFieldValue<number>(Number(item.id)));
     }
 }
 

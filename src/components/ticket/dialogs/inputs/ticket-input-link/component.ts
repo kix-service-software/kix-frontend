@@ -24,7 +24,7 @@ class ArticleInputAttachmentComponent {
         if (formInstance) {
             const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
             if (value) {
-                this.state.linkDescriptions = value.value;
+                this.state.linkDescriptions = value.value ? value.value : [];
             }
         }
     }
@@ -66,9 +66,11 @@ class ArticleInputAttachmentComponent {
     private updateField(): void {
         this.createLabels();
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(
-            this.state.field, new FormFieldValue<CreateLinkDescription[]>(this.state.linkDescriptions)
+        formInstance.provideFormFieldValue<CreateLinkDescription[]>(
+            this.state.field.property, this.state.linkDescriptions
         );
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.invalid = !fieldValue.valid;
     }
 
     private createLabels(): void {

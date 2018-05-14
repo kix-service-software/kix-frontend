@@ -1,4 +1,4 @@
-import { EditorComponentState } from './model/EditorComponentState';
+import { EditorComponentState } from './EditorComponentState';
 
 declare var CKEDITOR: any;
 
@@ -30,6 +30,8 @@ class EditorComponent {
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
             }
         }
+
+        this.state.invalid = typeof input.invlaid !== 'undefined' ? input.invalid : false;
     }
 
     public onMount(): void {

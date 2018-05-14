@@ -31,12 +31,13 @@ class TicketInputTypeComponent {
                 this.state.currentItem = this.state.items.find((i) => i.id === value.value);
             }
         }
-
     }
 
     private itemChanged(item: FormDropdownItem): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(item ? Number(item.id) : null));
+        formInstance.provideFormFieldValue<number>(this.state.field.property, item ? Number(item.id) : null);
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.invalid = !fieldValue.valid;
     }
 
 }

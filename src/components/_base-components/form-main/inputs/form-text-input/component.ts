@@ -11,10 +11,15 @@ class FormTextInputComponent {
 
     public onInput(input: any): void {
         this.state.currentValue = input.currentValue;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
     private valueChanged(event: any): void {
         this.state.currentValue = event.target.value;
+        (this as any).emit('valueChanged', this.state.currentValue);
+    }
+
+    private focusLost(): void {
         (this as any).emit('valueChanged', this.state.currentValue);
     }
 

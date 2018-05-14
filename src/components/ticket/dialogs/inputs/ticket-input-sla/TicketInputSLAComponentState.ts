@@ -4,7 +4,8 @@ export class TicketInputSLAComponentState extends FormInputComponentState {
 
     public constructor(
         public items: FormDropdownItem[] = [],
-        public currentItem: FormDropdownItem = null
+        public currentItem: FormDropdownItem = null,
+        public invalid: boolean = false
     ) {
         super();
     }

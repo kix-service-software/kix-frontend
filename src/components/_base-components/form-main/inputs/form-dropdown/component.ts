@@ -17,6 +17,7 @@ class FormDropdownComponent {
         this.state.selectedItem = input.selectedItem;
         this.state.preSelectedItem = input.selectedItem;
         this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
     public onMount(): void {
@@ -177,6 +178,10 @@ class FormDropdownComponent {
 
     private hasIconClass(icon: any): boolean {
         return !(icon instanceof ObjectIcon);
+    }
+
+    private focusLost(): void {
+        (this as any).emit('itemChanged', this.state.selectedItem);
     }
 }
 

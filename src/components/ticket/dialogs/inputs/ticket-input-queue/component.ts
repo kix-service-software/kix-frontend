@@ -50,7 +50,11 @@ class TicketInputTypeComponent {
     private queueChanged(node: TreeNode): void {
         this.state.currentNode = node;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue(this.state.field, new FormFieldValue<number>(node ? node.id : null));
+        formInstance.provideFormFieldValue<number>(
+            this.state.field.property, (node ? node.id : null)
+        );
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.invalid = !fieldValue.valid;
     }
 
 }

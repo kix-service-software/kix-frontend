@@ -9,7 +9,8 @@ export class TicketInputContactComponentState extends FormInputComponentState {
         public isLoading: boolean = false,
         public contacts: Contact[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<FormDropdownItem[]> = null,
-        public currentItem: FormDropdownItem = null
+        public currentItem: FormDropdownItem = null,
+        public invalid: boolean = false
     ) {
         super();
     }
