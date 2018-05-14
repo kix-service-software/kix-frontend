@@ -4,6 +4,7 @@ import {
     FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
+import { PendingTimeFormValue } from "@kix/core/dist/browser/ticket";
 
 class TicketInputStateComponent {
 
@@ -46,10 +47,27 @@ class TicketInputStateComponent {
             }
         }
 
+        this.provideValue();
+    }
+
+    private dateChanged(event: any): void {
+        this.state.selectedDate = event.target.value;
+        this.provideValue();
+    }
+
+    private timeChanged(event: any): void {
+        this.state.selectedTime = event.target.value;
+        this.provideValue();
+    }
+
+    private provideValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<number>(
-            this.state.field.property, (item ? Number(item.id) : null)
+        const stateValue = new PendingTimeFormValue(
+            (this.state.currentItem ? Number(this.state.currentItem.id) : null),
+            new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
         );
+
+        formInstance.provideFormFieldValue(this.state.field.property, stateValue);
         const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
         this.state.invalid = !fieldValue.valid;
     }

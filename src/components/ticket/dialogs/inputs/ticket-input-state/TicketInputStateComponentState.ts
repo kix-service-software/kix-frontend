@@ -13,7 +13,10 @@ export class TicketInputStateComponentState extends FormInputComponentState {
             "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
             "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30", "23:59"
         ],
-        public invalid: boolean = false
+        public invalid: boolean = false,
+        public selectedDate: string = '',
+        public selectedTime: string = '',
+        public invalidPendingTime: boolean = false
     ) {
         super();
     }
