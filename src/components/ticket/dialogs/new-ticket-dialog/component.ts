@@ -12,6 +12,10 @@ class NewTicketDialogComponent {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
+    private submit(): void {
+        alert('Ticket wird angelegt');
+    }
+
 }
 
 module.exports = NewTicketDialogComponent;
