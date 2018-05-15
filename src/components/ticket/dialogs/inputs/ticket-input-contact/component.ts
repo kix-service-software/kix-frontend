@@ -4,41 +4,36 @@ import {
     AutoCompleteConfiguration,
     Contact,
     FormDropdownItem, FormInputComponentState,
-    ObjectIcon, Form, FormFieldValue
+    ObjectIcon, Form, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputContactComponent {
-
-    private state: TicketInputContactComponentState;
+class TicketInputContactComponent extends FormInputComponent<Contact, TicketInputContactComponentState> {
 
     public onCreate(): void {
         this.state = new TicketInputContactComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
     }
 
+    protected setCurrentValue(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+    }
+
     private contactChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        let contact;
-        if (item) {
-            contact = this.state.contacts.find((c) => c.ContactID === item.id);
-        }
-
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<Contact>(this.state.field.property, contact);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        const contact: Contact = item ? this.state.contacts.find((c) => c.ContactID === item.id) : undefined;
+        super.provideValue(contact);
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {

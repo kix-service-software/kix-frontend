@@ -1,25 +1,27 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
 import {
-    FormInputComponentState, ObjectIcon, AttachmentError, CreateLinkDescription, Ticket, FormFieldValue
+    FormInputComponentState, ObjectIcon, AttachmentError, CreateLinkDescription,
+    Ticket, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { AttachmentUtil, FormService } from "@kix/core/dist/browser";
 import { DialogService } from "@kix/core/dist/browser/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
 
-class ArticleInputAttachmentComponent {
-
-    private state: LinkTicketComponentState;
+class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], LinkTicketComponentState> {
 
     public onCreate(): void {
         this.state = new LinkTicketComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
+    }
+
+    public setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
@@ -65,12 +67,7 @@ class ArticleInputAttachmentComponent {
 
     private updateField(): void {
         this.createLabels();
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<CreateLinkDescription[]>(
-            this.state.field.property, this.state.linkDescriptions
-        );
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(this.state.linkDescriptions);
     }
 
     private createLabels(): void {

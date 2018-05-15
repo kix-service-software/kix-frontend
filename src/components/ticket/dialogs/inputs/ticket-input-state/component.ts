@@ -5,26 +5,27 @@ import {
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 import { PendingTimeFormValue } from "@kix/core/dist/browser/ticket";
+import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
 
-class TicketInputStateComponent {
-
-    private state: TicketInputStateComponentState;
+class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue, TicketInputStateComponentState> {
 
     public onCreate(): void {
         this.state = new TicketInputStateComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.states.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
         );
+    }
 
+    protected setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
@@ -47,20 +48,20 @@ class TicketInputStateComponent {
             }
         }
 
-        this.provideValue();
+        this.setValue();
     }
 
     private dateChanged(event: any): void {
         this.state.selectedDate = event.target.value;
-        this.provideValue();
+        this.setValue();
     }
 
     private timeChanged(event: any): void {
         this.state.selectedTime = event.target.value;
-        this.provideValue();
+        this.setValue();
     }
 
-    private provideValue(): void {
+    private setValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         const stateValue = new PendingTimeFormValue(
             (this.state.currentItem ? Number(this.state.currentItem.id) : null),
@@ -68,9 +69,7 @@ class TicketInputStateComponent {
             new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
         );
 
-        formInstance.provideFormFieldValue(this.state.field.property, stateValue);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(stateValue);
     }
 }
 

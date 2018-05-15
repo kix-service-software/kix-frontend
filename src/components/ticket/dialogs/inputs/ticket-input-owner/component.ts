@@ -1,25 +1,25 @@
 import { TicketInputOwnerComponentState } from "./TicketInputOwnerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, FormInputComponentState, FormFieldValue } from "@kix/core/dist/model";
+import { FormDropdownItem, FormInputComponentState, FormFieldValue, FormInputComponent } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputOwnerComponent {
-
-    private state: TicketInputOwnerComponentState;
+class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOwnerComponentState> {
 
     public onCreate(): void {
         this.state = new TicketInputOwnerComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.agents.map((a) => new FormDropdownItem(a.UserID, 'kix-icon-man', a.UserFullname));
+    }
 
+    public setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
@@ -31,12 +31,7 @@ class TicketInputOwnerComponent {
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<number>(
-            this.state.field.property, (item ? Number(item.id) : null)
-        );
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(item ? Number(item.id) : null);
     }
 
 }

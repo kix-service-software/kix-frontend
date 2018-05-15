@@ -1,26 +1,28 @@
 import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
 import {
-    FormInputComponentState, ObjectIcon, AttachmentError, OverlayType, StringContent, ComponentContent
+    ObjectIcon, AttachmentError, OverlayType, StringContent, ComponentContent, FormInputComponent
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
 import { Label } from "@kix/core/dist/browser/components";
 
-class ArticleInputAttachmentComponent {
-
-    private state: ArticleInputAttachmentComponentState;
+class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInputAttachmentComponentState> {
 
     public onCreate(): void {
         this.state = new ArticleInputAttachmentComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         document.addEventListener("dragover", this.dragOver.bind(this), false);
+    }
+
+    protected setCurrentValue(): void {
+        //
     }
 
     private triggerFileUpload(): void {
