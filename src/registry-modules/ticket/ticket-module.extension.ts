@@ -54,6 +54,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
             const fields: FormField[] = [];
+            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, false, "Volltext"));
             fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, false, "Ticketnummer"));
             fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
             fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
@@ -66,11 +67,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
             const group = new FormGroup('Ticketattribute', fields);
 
-            const fullTextGroup = new FormGroup(
-                'Volltextsuche', [new FormField("Volltext", TicketProperty.FULLTEXT, false, "Volltext")]
-            );
-
-            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [fullTextGroup, group]);
+            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group]);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 
