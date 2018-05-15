@@ -35,15 +35,16 @@ class EditorComponent {
     }
 
     public onMount(): void {
-        if (this.state.inline) {
-            CKEDITOR.inline(this.state.id, {
-                ...this.state.config
-            });
-        } else {
-            CKEDITOR.replace(this.state.id, {
-                ...this.state.config
-            });
-        }
+        CKEDITOR.inline(this.state.id, {
+            ...this.state.config
+        });
+        // if (this.state.inline) {
+        //     ;
+        // } else {
+        //     CKEDITOR.replace(this.state.id, {
+        //         ...this.state.config
+        //     });
+        // }
 
         // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
         // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
@@ -55,9 +56,9 @@ class EditorComponent {
     }
 
     public onDestroy(): void {
-        if (CKEDITOR.instances[this.state.id]) {
-            CKEDITOR.instances[this.state.id].destroy();
-        }
+        // if (CKEDITOR.instances[this.state.id]) {
+        //     CKEDITOR.instances[this.state.id].destroy();
+        // }
     }
 
     /**

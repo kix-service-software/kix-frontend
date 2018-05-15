@@ -8,10 +8,12 @@ import {
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketRequest, LoadTicketResponse,
     SetArticleSeenFlagRequest,
     SearchTicketsRequest, SearchTicketsResponse,
-    Ticket, TicketCreationEvent, TicketCreationRequest, TicketEvent, TicketCreationResponse, TicketCreationError,
+    Ticket, TicketEvent,
     TicketProperty,
     LoadArticleZipAttachmentRequest,
-    TicketFactory
+    TicketFactory,
+    CreateTicketRequest,
+    CreateTicketResponse
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -24,11 +26,26 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     protected registerEvents(): void {
+        this.registerEventHandler(TicketEvent.CREATE_TICKET, this.createTicket.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_TICKETS, this.loadTickets.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this));
         this.registerEventHandler(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
+    }
+
+    private async createTicket(data: CreateTicketRequest): Promise<CommunicatorResponse<CreateTicketResponse>> {
+        let response;
+        await this.ticketService.createTicket(data.token, data.parameter)
+            .then((ticketId) => {
+                response = new CreateTicketResponse(ticketId);
+                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_FINISHED, response);
+            })
+            .catch((error) => {
+                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_ERROR, error);
+            });
+
+        return response;
     }
 
     private async loadTickets(data: SearchTicketsRequest): Promise<CommunicatorResponse<SearchTicketsResponse>> {
@@ -45,6 +62,7 @@ export class TicketCommunicator extends KIXCommunicator {
         ).catch((error) => {
             return new CommunicatorResponse(TicketEvent.LOAD_TICKET_ERROR, error.errorMessage.body);
         });
+
         const response = new SearchTicketsResponse(data.requestId, tickets as Ticket[]);
         return new CommunicatorResponse(TicketEvent.LOAD_TICKETS_FINISHED, response);
     }
