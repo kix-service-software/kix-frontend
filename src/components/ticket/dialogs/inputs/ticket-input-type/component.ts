@@ -1,49 +1,37 @@
 import { TicketInputTypeComponentState } from "./TicketInputTypeComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputTypeComponent {
-
-    private state: TicketInputTypeComponentState;
+class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTypeComponentState> {
 
     public onCreate(): void {
         this.state = new TicketInputTypeComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.types.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.TYPE_ID, t.ID), t.Name)
         );
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.registerListener(this.formUpdated.bind(this));
     }
 
-    public formUpdated(): void {
+    protected setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
-                this.state.invalid = !value.valid;
-            }
-        }
+        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
+        this.state.currentItem = this.state.items.find((i) => i.id === fieldValue.value);
     }
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<number>(this.state.field.property, item ? Number(item.id) : null);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(item ? Number(item.id) : null);
     }
 
 }

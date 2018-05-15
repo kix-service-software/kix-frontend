@@ -1,11 +1,10 @@
 import { FormField, TreeNode, FormInputComponentState } from "@kix/core/dist/model";
 
-export class TicketInputQueueComponentState extends FormInputComponentState {
+export class TicketInputQueueComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public nodes: TreeNode[] = [],
-        public currentNode: TreeNode = null,
-        public invalid: boolean = false
+        public currentNode: TreeNode = null
     ) {
         super();
     }

@@ -1,37 +1,34 @@
 import { TicketInputTicketNumberComponentState } from "./TicketInputTicketNumberComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputFulltextComponent {
-
-    private state: TicketInputTicketNumberComponentState;
+class TicketInputFulltextComponent extends FormInputComponent<string, TicketInputTicketNumberComponentState> {
 
     public onCreate(): void {
         this.state = new TicketInputTicketNumberComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
+    }
 
+    public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
+    }
+
+    protected setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<string>(this.state.field.property);
-            if (value) {
-                this.state.currentValue = value.value;
-            }
-        }
+        const value = formInstance.getFormFieldValue<string>(this.state.field.property);
+        this.state.currentValue = value.value;
     }
 
     private valueChanged(value: string): void {
         this.state.currentValue = value;
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<string>(this.state.field.property, value);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(value);
     }
 
 }

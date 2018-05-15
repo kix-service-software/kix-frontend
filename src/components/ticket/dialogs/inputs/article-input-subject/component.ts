@@ -1,53 +1,37 @@
 import { ArticleInputSubjectComponentState } from "./ArticleInputSubjectComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class ArticleInputSubjectComponent {
-
-    private state: ArticleInputSubjectComponentState;
+class ArticleInputSubjectComponent extends FormInputComponent<string, ArticleInputSubjectComponentState> {
 
     public onCreate(): void {
         this.state = new ArticleInputSubjectComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
-
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<string>(this.state.field.property);
-            if (value) {
-                this.state.currentValue = value.value;
-            }
-        }
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.registerListener(this.onUpdate.bind(this));
+        FormInputComponent.prototype.onMount.call(this);
     }
 
-    public onUpdate(): void {
+    public setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<string>(this.state.field.property);
             if (value) {
                 this.state.currentValue = value.value;
-                this.state.invalid = !value.valid;
             }
         }
     }
 
     private valueChanged(value: string): void {
         this.state.currentValue = value;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<string>(this.state.field.property, value);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(value);
     }
 
 }

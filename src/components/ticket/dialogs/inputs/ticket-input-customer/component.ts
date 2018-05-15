@@ -1,48 +1,29 @@
-import { TicketInputTypeComponentState } from "./TicketInputTypeComponentState";
+import { TicketInputCustomerComponentState } from "./TicketInputCustomerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     FormDropdownItem, ObjectIcon, TicketProperty, Contact, FormInputComponentState,
-    FormFieldValueChangeEvent, FormFieldValue, IFormEvent
+    FormFieldValueChangeEvent, FormFieldValue, IFormEvent, UpdateFormEvent, FormInputComponent
 } from "@kix/core/dist/model";
 import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputTypeComponent {
-
-    private state: TicketInputTypeComponentState;
+class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCustomerComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputTypeComponentState();
+        this.state = new TicketInputCustomerComponentState();
     }
 
-    public onInput(input: FormInputComponentState): void {
-        this.state.field = input.field;
-        this.state.formId = input.formId;
+    public onInput(input: any): void {
+        FormInputComponent.prototype.onInput.call(this, input);
     }
 
     public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.registerListener(this.formChanged.bind(this));
-
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
-            }
-        }
     }
 
-    private async loadCustomers(customerIds: string[]): Promise<void> {
-        const customers = await CustomerService.getInstance().loadContacts(customerIds);
-        this.state.items = customers.map(
-            (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue)
-        );
-
-        this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
-        this.itemChanged(this.state.currentItem);
-    }
-
-    private formChanged(event: IFormEvent): void {
+    protected formChanged(event: IFormEvent): void {
         if (event instanceof FormFieldValueChangeEvent) {
             if (event.formField.property === TicketProperty.CUSTOMER_USER_ID) {
                 if (event.formFieldValue.value) {
@@ -59,6 +40,14 @@ class TicketInputTypeComponent {
         }
     }
 
+    protected setCurrentValue(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = formInstance.getFormFieldValue(this.state.field.property);
+            this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+        }
+    }
+
     private getPlaceholder(): string {
         let placeholder = (this.state.field.required ? this.state.field.label : "");
 
@@ -69,12 +58,19 @@ class TicketInputTypeComponent {
         return placeholder;
     }
 
+    private async loadCustomers(customerIds: string[]): Promise<void> {
+        const customers = await CustomerService.getInstance().loadContacts(customerIds);
+        this.state.items = customers.map(
+            (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue)
+        );
+
+        this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
+        this.itemChanged(this.state.currentItem);
+    }
+
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<number>(this.state.field.property, item ? Number(item.id) : null);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+        super.provideValue(item ? Number(item.id) : null);
     }
 
 }

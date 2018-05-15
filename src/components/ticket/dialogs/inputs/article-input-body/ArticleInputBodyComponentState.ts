@@ -1,9 +1,9 @@
 import { FormField, FormInputComponentState } from "@kix/core/dist/model";
 
-export class ArticleInputBodyComponentState extends FormInputComponentState {
+export class ArticleInputBodyComponentState extends FormInputComponentState<string> {
 
     public constructor(
-        public invalid: boolean = false
+        public currentValue: string = null
     ) {
         super();
     }

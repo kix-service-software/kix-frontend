@@ -1,11 +1,10 @@
 import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/dist/model";
 
-export class TicketInputSLAComponentState extends FormInputComponentState {
+export class TicketInputSLAComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public items: FormDropdownItem[] = [],
-        public currentItem: FormDropdownItem = null,
-        public invalid: boolean = false
+        public currentItem: FormDropdownItem = null
     ) {
         super();
     }
