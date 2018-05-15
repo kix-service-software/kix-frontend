@@ -25,11 +25,18 @@ class NewTicketDialogComponent {
         if (validationError) {
             this.showValidationError(result);
         } else {
-            await TicketService.getInstance().createTicketByForm(this.state.formId);
-            OverlayService.getInstance().openOverlay(
-                OverlayType.TOAST, null,
-                new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
-            );
+            await TicketService.getInstance().createTicketByForm(this.state.formId)
+                .then((ticketId) => {
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.TOAST, null,
+                        new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
+                    );
+                }).catch((error) => {
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null,
+                        new StringContent(error), 'Fehler!'
+                    );
+                });
         }
     }
 
