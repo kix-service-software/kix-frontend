@@ -1,8 +1,9 @@
-import { KIXObjectSearchService, IFormTableLayer, DialogService } from "@kix/core/dist/browser";
+import { KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService } from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
-    FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription
+    FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType,
+    CreateLinkDescription, LinkTypeDescription, OverlayType, StringContent
 } from "@kix/core/dist/model";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
 
@@ -130,7 +131,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', this.state.linkDescriptions);
-            this.setSuccessHint(newLinks.length);
+            this.showSuccessHint(newLinks.length);
             this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
             this.setPreventSelectionFilterOfStandardTable();
             this.state.standardTable.selectionListener.selectNone();
@@ -138,8 +139,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         }
     }
 
-    private setSuccessHint(count: number): void {
+    private showSuccessHint(count: number): void {
         this.state.successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
+        OverlayService.getInstance().openOverlay(
+            OverlayType.TOAST, null, new StringContent(this.state.successHint), 'Verknüpfungen zugeordnet'
+        );
     }
 
     private setLinkTypes(): void {
