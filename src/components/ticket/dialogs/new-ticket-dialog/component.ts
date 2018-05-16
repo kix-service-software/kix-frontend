@@ -27,17 +27,18 @@ class NewTicketDialogComponent {
         } else {
             await TicketService.getInstance().createTicketByForm(this.state.formId)
                 .then((ticketId) => {
-                    OverlayService.getInstance().openOverlay(
-                        OverlayType.TOAST, null,
-                        new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
-                    );
+                    this.showSuccessHint();
                 }).catch((error) => {
-                    OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null,
-                        new StringContent(error), 'Fehler!'
-                    );
+                    this.showError(error);
                 });
         }
+    }
+
+    private showSuccessHint(): void {
+        OverlayService.getInstance().openOverlay(
+            OverlayType.TOAST, null,
+            new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
+        );
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -52,6 +53,10 @@ class NewTicketDialogComponent {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
+    }
+
+    private showError(error: any): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!');
     }
 
 }
