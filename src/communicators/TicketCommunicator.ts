@@ -38,8 +38,8 @@ export class TicketCommunicator extends KIXCommunicator {
         let response;
         await this.ticketService.createTicket(data.token, data.parameter)
             .then((ticketId) => {
-                response = new CreateTicketResponse(ticketId);
-                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_FINISHED, response);
+                const createTicketResponse = new CreateTicketResponse(ticketId);
+                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_FINISHED, createTicketResponse);
             })
             .catch((error) => {
                 response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_ERROR, error);
