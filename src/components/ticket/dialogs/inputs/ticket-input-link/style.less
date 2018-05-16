@@ -23,9 +23,12 @@
         }
         >.minimize-icon-container {
             margin: .375rem 0 0 .75rem;
-            [class^="kix-icon-"].no-links,
-            [class*=" kix-icon-"].no-linkss {
-                color: @secondary-3;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                cursor: pointer;
+                >.no-links {
+                    color: @secondary-3;
+                }
             }
         }
     }
