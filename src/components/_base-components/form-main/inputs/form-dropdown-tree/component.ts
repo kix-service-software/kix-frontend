@@ -35,8 +35,7 @@ class FormDropdownTreeComponent {
 
     private toggleList(close: boolean = true): void {
         if (this.state.expanded && close) {
-            this.state.expanded = false;
-            this.state.preSelectedNode = null;
+            this.closeList();
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedNode = this.state.selectedNode;
@@ -122,7 +121,13 @@ class FormDropdownTreeComponent {
     }
 
     private focusLost(): void {
-        (this as any).emit('itemChanged', this.state.selectedNode);
+        this.nodeClicked(this.state.preSelectedNode);
+        this.closeList();
+    }
+
+    private closeList(): void {
+        this.state.expanded = false;
+        this.state.preSelectedNode = null;
     }
 }
 
