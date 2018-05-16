@@ -2,6 +2,7 @@ import { TicketsComponentState } from './TicketsComponentState';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BreadcrumbDetails, Context } from '@kix/core/dist/model/';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 
 class TicketsComponent {
 
@@ -12,14 +13,12 @@ class TicketsComponent {
     }
 
     public onInput(input: any) {
-        this.state.ticketId = input.objectId;
+        this.state.ticketId = Number(input.objectId);
     }
 
     public onMount(): void {
         if (this.state.ticketId) {
-            ComponentRouterService.getInstance().navigate(
-                'base-router', 'ticket-details', { ticketId: this.state.ticketId }, this.state.ticketId
-            );
+            TicketService.getInstance().openTicket(this.state.ticketId);
         }
     }
 }

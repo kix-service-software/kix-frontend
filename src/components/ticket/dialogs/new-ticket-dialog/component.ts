@@ -35,6 +35,7 @@ class NewTicketDialogComponent {
                 .then((ticketId) => {
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
+                    TicketService.getInstance().openTicket(ticketId);
                 }).catch((error) => {
                     this.showError(error);
                 });
