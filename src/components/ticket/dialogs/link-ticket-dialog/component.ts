@@ -1,4 +1,6 @@
-import { KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService } from "@kix/core/dist/browser";
+import {
+    KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService, ILinkDescriptionLabelLayer
+} from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
@@ -135,6 +137,8 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
             this.setPreventSelectionFilterOfStandardTable();
             this.state.standardTable.selectionListener.selectNone();
+            const labelLayer = (this.state.standardTable.labelLayer as ILinkDescriptionLabelLayer);
+            labelLayer.setLinkDescriptions(this.state.linkDescriptions);
             this.state.standardTable.loadRows(true);
         }
     }
