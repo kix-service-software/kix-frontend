@@ -1,6 +1,4 @@
 <div.editor-container no-update>
     <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
-    <div id=state.id class={"editor-inline": state.inline, "editor-invalid": state.invalid} contenteditable="true">
-        $!{state.value}
-    </div>
+    <div.editor-inline id=state.id class={"editor-invalid": state.invalid} contenteditable="true">$!{state.value}</div>
 </div>

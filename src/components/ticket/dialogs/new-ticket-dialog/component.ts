@@ -3,30 +3,50 @@ import { FormValidationService, OverlayService, FormService } from "@kix/core/di
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
 } from "@kix/core/dist/model";
+import { TicketService } from "@kix/core/dist/browser/ticket";
+import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
 
 class NewTicketDialogComponent {
 
-    private state: any;
+    private state: NewTicketDialogComponentState;
 
     public onCreate(): void {
-        this.state = {};
+        this.state = new NewTicketDialogComponentState();
     }
 
     public onMount(): void {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    private submit(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance('new-ticket-form');
+    private cancel(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        formInstance.reset();
+        DialogService.getInstance().closeMainDialog();
+    }
+
+    private async  submit(): Promise<void> {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             this.showValidationError(result);
         } else {
-            OverlayService.getInstance().openOverlay(
-                OverlayType.TOAST, null, new StringContent('Ticket erfolgreich angelegt.'), 'Erfolg!'
-            );
+            await TicketService.getInstance().createTicketByForm(this.state.formId)
+                .then((ticketId) => {
+                    this.showSuccessHint();
+                    DialogService.getInstance().closeMainDialog();
+                    TicketService.getInstance().openTicket(ticketId);
+                }).catch((error) => {
+                    this.showError(error);
+                });
         }
+    }
+
+    private showSuccessHint(): void {
+        OverlayService.getInstance().openOverlay(
+            OverlayType.TOAST, null,
+            new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
+        );
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -41,6 +61,10 @@ class NewTicketDialogComponent {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
+    }
+
+    private showError(error: any): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!');
     }
 
 }

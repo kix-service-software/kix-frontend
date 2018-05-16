@@ -10,13 +10,17 @@ export class MainDialogComponent {
     }
 
     public onMount(): void {
-        DialogService.getInstance().registerMainDialogListener(this.openMainDialog.bind(this));
+        DialogService.getInstance().registerMainDialogListener(this.toggleMainDialog.bind(this));
         DialogService.getInstance().registerMainDialogHintListener(this.setMainDialogHint.bind(this));
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
     }
 
-    private async  openMainDialog(): Promise<void> {
-        this.state.show = true;
+    private async toggleMainDialog(dialogTagId?: string, input?: any, close?: boolean): Promise<void> {
+        if (close) {
+            this.state.show = false;
+        } else {
+            this.state.show = true;
+        }
     }
 
     private setMainDialogHint(hint: string): void {

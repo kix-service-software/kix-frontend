@@ -53,6 +53,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
             }
         });
 
+        super.provideValue(this.state.files);
         this.createLabels();
 
         if (fileErrors.length) {

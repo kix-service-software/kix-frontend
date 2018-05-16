@@ -3,9 +3,9 @@
         <span.kix-icon-new-ticket/>
     </@icon>
     <@content>
-        <form-main formId="new-ticket-form"/>
+        <form-main formId=state.formId/>
         <div.new-ticket-dialog-button-container>
-            <button.cancel-button type="button" on-click("doCancel") title="Abbrechen">
+            <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
                 <span.kix-icon-close/>
                 Abbrechen
             </button>
