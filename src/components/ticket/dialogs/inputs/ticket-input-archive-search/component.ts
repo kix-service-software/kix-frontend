@@ -31,7 +31,7 @@ class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArc
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        super.provideValue(Number(item.id));
+        super.provideValue(item ? Number(item.id) : null);
     }
 }
 
