@@ -1,5 +1,5 @@
 import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
-import { DialogService } from "@kix/core/dist/browser/DialogService";
+import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 
 class KIXHeaderComponent {
 
