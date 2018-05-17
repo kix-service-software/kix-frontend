@@ -12,6 +12,7 @@ class SidebarMenuComponent {
 
     public onMount(): void {
         ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        this.setSidebarMenu();
     }
 
     public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
@@ -20,9 +21,13 @@ class SidebarMenuComponent {
             || type === ContextNotification.SIDEBAR_BAR_TOGGLED
             && id === ContextService.getInstance().getActiveContextId()
         ) {
-            const context = ContextService.getInstance().getContext();
-            this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+            this.setSidebarMenu();
         }
+    }
+
+    private setSidebarMenu(): void {
+        const context = ContextService.getInstance().getContext();
+        this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
     }
 
     private toggleSidebar(instanceId: string): void {

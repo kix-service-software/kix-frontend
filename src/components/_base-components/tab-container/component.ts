@@ -14,6 +14,8 @@ class TabLaneComponent {
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
 
+        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : false;
+
         const context = ContextService.getInstance().getContext();
         context.setWidgetType("tab-widget", WidgetType.LANE);
         this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
@@ -41,6 +43,15 @@ class TabLaneComponent {
     private getLaneTabWidgetType(): number {
         return WidgetType.LANE_TAB;
     }
+
+    private hasSidebars(): boolean {
+        if (this.state.showSidebar) {
+            const context = ContextService.getInstance().getContext();
+            return context.getSidebars().length > 0;
+        }
+        return false;
+    }
+
 }
 
 module.exports = TabLaneComponent;
