@@ -1,5 +1,5 @@
 <div.dropdown-auto-complete dropDownId=state.dropdownId on-click('setKeepExpanded')>
-    <div.dropdown-input-container class={"list-shown": state.expanded}>
+    <div.dropdown-input-container class={"list-shown": state.expanded} key="dropdown-input-container">
         <input.input-style type="text" class={invalid: state.invalid} readonly=(!state.enabled) disabled=(!state.enabled)
             placeholder=(state.selectedItem ? "" : input.placeholder) value=state.searchValue on-keydown('keyDown')
             on-keyup('searchValueChanged') required=input.required on-click('toggleList', false)
@@ -18,7 +18,7 @@
         </if>
     </div>
     <if(state.expanded || state.isLoading)>
-        <ul.dropdown-list>
+        <ul.dropdown-list style=state.dropdownListStyle key="dropdown-list">
             <if(state.isLoading)>
                 <li.loading-item>
                     <loading-spinner/>
