@@ -4,7 +4,7 @@ import {
     Ticket, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { AttachmentUtil, FormService } from "@kix/core/dist/browser";
-import { DialogService } from "@kix/core/dist/browser/DialogService";
+import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], LinkTicketComponentState> {

@@ -1,4 +1,4 @@
-import { DialogService } from "@kix/core/dist/browser/DialogService";
+import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { FormValidationService, OverlayService, FormService } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
@@ -31,12 +31,15 @@ class NewTicketDialogComponent {
         if (validationError) {
             this.showValidationError(result);
         } else {
+            DialogService.getInstance().setMainDialogLoading(true);
             await TicketService.getInstance().createTicketByForm(this.state.formId)
                 .then((ticketId) => {
+                    DialogService.getInstance().setMainDialogLoading(false);
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
                     TicketService.getInstance().openTicket(ticketId);
                 }).catch((error) => {
+                    DialogService.getInstance().setMainDialogLoading(false);
                     this.showError(error);
                 });
         }
