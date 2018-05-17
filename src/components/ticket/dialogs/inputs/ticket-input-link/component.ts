@@ -29,6 +29,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
                 this.state.linkDescriptions = value.value ? value.value : [];
             }
         }
+        this.setCurrentValue();
     }
 
     private openTicketLinkDialog(): void {

@@ -17,6 +17,7 @@ class ArticleInputSubjectComponent extends FormInputComponent<string, ArticleInp
 
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
+        this.setCurrentValue();
     }
 
     public setCurrentValue(): void {

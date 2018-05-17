@@ -28,6 +28,7 @@ class TicketInputFulltextComponent extends FormInputComponent<string, TicketInpu
                 this.state.currentValue = value.value;
             }
         }
+        this.setCurrentValue();
     }
 
     private valueChanged(value: string): void {

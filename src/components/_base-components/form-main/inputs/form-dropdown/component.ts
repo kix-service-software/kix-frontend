@@ -47,10 +47,7 @@ class FormDropdownComponent {
         if (this.state.expanded) {
             this.toggleList();
         } else {
-            const input = (this as any).getEl('dropdown-input');
-            if (input) {
-                input.focus();
-            }
+            this.focusInput();
         }
     }
 
@@ -74,10 +71,7 @@ class FormDropdownComponent {
     private removeSelectedItem(): void {
         this.state.selectedItem = null;
         this.itemSelected(null);
-        const input = (this as any).getEl('dropdown-input');
-        if (input) {
-            input.focus();
-        }
+        this.focusInput();
     }
 
     private filterValueChanged(event: any): void {
