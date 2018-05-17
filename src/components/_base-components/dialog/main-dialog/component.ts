@@ -1,7 +1,8 @@
-import { DialogService } from '@kix/core/dist/browser/DialogService';
+import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
+import { IMainDialogListener } from '@kix/core/dist/browser';
 
-export class MainDialogComponent {
+export class MainDialogComponent implements IMainDialogListener {
 
     private state: MainDialogComponentState;
 
@@ -10,26 +11,26 @@ export class MainDialogComponent {
     }
 
     public onMount(): void {
-        DialogService.getInstance().registerMainDialogListener(this.toggleMainDialog.bind(this));
-        DialogService.getInstance().registerMainDialogHintListener(this.setMainDialogHint.bind(this));
+        DialogService.getInstance().registerMainDialogListener(this);
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
     }
 
-    private async toggleMainDialog(dialogTagId?: string, input?: any, close?: boolean): Promise<void> {
-        if (close) {
-            this.state.show = false;
-        } else {
-            this.state.show = true;
-        }
+    public open(dialogTagId?: string, input?: any): void {
+        this.state.show = true;
     }
 
-    private setMainDialogHint(hint: string): void {
+    public close(): void {
+        this.state.show = false;
+    }
+
+    public setHint(hint: string): void {
         this.state.dialogHint = hint;
     }
 
-    private closeDialog(): void {
-        this.state.show = false;
+    public setLoading(isLoading: boolean): void {
+        this.state.isLoading = isLoading;
     }
+
 
 }
 

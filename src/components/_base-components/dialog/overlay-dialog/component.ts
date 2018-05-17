@@ -1,4 +1,4 @@
-import { DialogService } from '@kix/core/dist/browser/DialogService';
+import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { OverlayDialogComponentState } from './OverlayDialogComponentState';
 import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';

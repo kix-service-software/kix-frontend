@@ -5,7 +5,8 @@ export class MainDialogComponentState {
     public constructor(
         public show: boolean = false,
         public dialogWidgets: ConfiguredWidget[] = [],
-        public dialogHint: string = ""
+        public dialogHint: string = "",
+        public isLoading: boolean = false
     ) { }
 
 }

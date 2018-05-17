@@ -37,7 +37,7 @@
                         background-color: @secondary-5;
                         border-width: 2px;
                         margin: 0;
-                        padding: @margin-default 0;
+                        padding: @margin-default @margin-default @margin-default 0;
                         overflow: hidden;
                         >.tab-content {
                             margin: 0;
@@ -66,6 +66,21 @@
         cursor: pointer;
         &:hover {
             color: darken(@primary-3, 10%);
+        }
+    }
+    >.loading-shield {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: #000;
+        opacity: 0.2;
+        >.loading-spinner {
+            width: 10em;
+            height: 10em;
+            top: 50%;
+            transform: translateY(-50%);
         }
     }
 }

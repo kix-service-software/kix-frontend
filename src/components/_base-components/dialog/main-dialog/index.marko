@@ -11,7 +11,14 @@
                     </div>
                 </@content>
             </widget>
-            <span.kix-icon-close.close-button on-click('closeDialog')/>
+            <if(state.isLoading)>
+                <div.loading-shield>
+                    <loading-spinner/>
+                </div>
+            </if>
+            <else>
+                <span.kix-icon-close.close-button on-click('close')/>
+            </else>
         </div>
     </div>
 </if>
