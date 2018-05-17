@@ -7,6 +7,9 @@ class FormDropdownComponent {
 
     private keepExpanded: boolean = false;
 
+    private timeout: any;
+    private delay: number = 5000;
+
     public onCreate(input: any): void {
         this.state = new FormDropdownComponentState();
     }
@@ -35,6 +38,7 @@ class FormDropdownComponent {
     }
 
     private toggleList(close: boolean = true): void {
+        this.delay = 30000;
         if (this.state.expanded && close) {
             this.state.expanded = false;
             this.state.preSelectedItem = null;
@@ -42,6 +46,8 @@ class FormDropdownComponent {
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedItem = this.state.selectedItem;
+            // window.clearTimeout(this.timeout);
+            this.timeout = setTimeout(this.getDropdownStyle(), this.delay);
         }
     }
 
@@ -182,6 +188,17 @@ class FormDropdownComponent {
 
     private focusLost(): void {
         (this as any).emit('itemChanged', this.state.selectedItem);
+    }
+
+    private getDropdownStyle(): void {
+        console.log('get dropdown style');
+        const input = (this as any).getEl('dropdown-list');
+        let transformValue = 0;
+        if (input) {
+            const elementHeight = input.scrollHeight;
+            transformValue = elementHeight;
+        }
+        this.state.dropdownListStyle = 'transform: translate(0em,-' + transformValue + 'em)';
     }
 }
 

@@ -19,7 +19,7 @@
         <span.dropdown-button.kix-icon-sort-down on-click('dropdownClicked')/>
     </div>
     <if(state.expanded)>
-        <ul.dropdown-list>
+        <ul.dropdown-list style=state.dropdownListStyle>
             <for(item in state.filteredItems)>
                 <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
                     on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>
