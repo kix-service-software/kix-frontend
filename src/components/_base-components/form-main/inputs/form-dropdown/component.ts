@@ -40,9 +40,7 @@ class FormDropdownComponent {
     private toggleList(close: boolean = true): void {
         this.delay = 30000;
         if (this.state.expanded && close) {
-            this.state.expanded = false;
-            this.state.preSelectedItem = null;
-            this.resetFilter();
+            this.closeList();
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedItem = this.state.selectedItem;
@@ -187,7 +185,14 @@ class FormDropdownComponent {
     }
 
     private focusLost(): void {
-        (this as any).emit('itemChanged', this.state.selectedItem);
+        this.itemSelected(this.state.preSelectedItem);
+        this.closeList();
+    }
+
+    private closeList(): void {
+        this.state.expanded = false;
+        this.state.preSelectedItem = null;
+        this.resetFilter();
     }
 
     private getDropdownStyle(): void {

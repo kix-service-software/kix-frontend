@@ -11,8 +11,8 @@ const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
-    target: "es6",
-    lib: ["es6", "dom"],
+    target: "es5",
+    lib: ["ES2015", "es5", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -24,7 +24,7 @@ const devTSCConfig = {
 };
 
 const prodTSCConfig = {
-    target: "es6",
+    target: "es5",
     lib: ["es2015", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
