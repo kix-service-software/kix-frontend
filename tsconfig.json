@@ -5,15 +5,15 @@
     "sourceMap": true,
     "outDir": "dist",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "es5",
+      "es2015"
+    ],
   },
   "types": [
     "node",
     "reflect-metadata"
-  ],
-  "lib": [
-    "es5",
-    "es2015"
   ],
   "include": [
     "src/**/*.ts"

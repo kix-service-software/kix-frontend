@@ -19,6 +19,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
         document.addEventListener("dragover", this.dragOver.bind(this), false);
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {

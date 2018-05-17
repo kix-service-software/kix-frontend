@@ -27,6 +27,7 @@ class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOw
                 this.state.currentItem = this.state.items.find((i) => i.id === value.value);
             }
         }
+        this.setCurrentValue();
     }
 
     private itemChanged(item: FormDropdownItem): void {

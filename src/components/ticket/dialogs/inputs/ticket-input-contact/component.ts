@@ -24,6 +24,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {
