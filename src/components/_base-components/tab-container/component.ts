@@ -1,4 +1,4 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { Context, WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
 import { TabContainerComponentState } from './TabContainerComponentState';
@@ -28,6 +28,12 @@ class TabLaneComponent {
         if (!this.state.activeTab && this.state.tabWidgets.length) {
             this.state.activeTab = this.state.tabWidgets[0];
         }
+
+        ContextService.getInstance().addStateListener(this.contextChanged.bind(this));
+    }
+
+    private contextChanged(id: string, type: ContextNotification, ...args: any[]): void {
+        this.state.hasSidebars = this.hasSidebars();
     }
 
     private tabClicked(tab: ConfiguredWidget): void {

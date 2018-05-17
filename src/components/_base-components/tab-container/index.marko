@@ -14,13 +14,13 @@
             </ul>
         </@headerContent>
         <@content>
-            <div class={"tab-sidebar-grid": component.hasSidebars()}>
+            <div class={"tab-sidebar-grid": state.hasSidebars}>
                 <div.tab-content>
                     <if(state.activeTab)>
                         <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
                     </if>
                 </div>
-                <if(component.hasSidebars())>
+                <if(state.hasSidebars)>
                     <sidebar/>
                     <div.site-menu-wrapper>
                         <sidebar-menu/>

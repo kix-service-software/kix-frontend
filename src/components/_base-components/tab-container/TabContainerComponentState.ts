@@ -7,7 +7,8 @@ export class TabContainerComponentState {
         public activeTab: ConfiguredWidget = null,
         public title: string = "",
         public minimizable: boolean = true,
-        public showSidebar: boolean = false
+        public showSidebar: boolean = false,
+        public hasSidebars: boolean = false
     ) { }
 
 }

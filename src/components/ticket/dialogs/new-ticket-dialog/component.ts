@@ -1,9 +1,13 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { FormValidationService, OverlayService, FormService } from "@kix/core/dist/browser";
+import {
+    FormValidationService, OverlayService, FormService, ContextService, ContextNotification
+} from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
 } from "@kix/core/dist/model";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import {
+    TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
+} from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
 
 class NewTicketDialogComponent {
@@ -16,6 +20,25 @@ class NewTicketDialogComponent {
 
     public onMount(): void {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+
+        ContextService.getInstance().addStateListener(this.contextChanged.bind(this));
+
+        const context = new NewTicketDialogContext();
+        ContextService.getInstance().provideContext(context, true);
+    }
+
+    private contextChanged(id: string, type: ContextNotification, ...args: any[]): void {
+        if (type === ContextNotification.CONTEXT_CHANGED) {
+            const context = ContextService.getInstance()
+                .getContext<NewTicketDialogContextConfiguration, NewTicketDialogContext>();
+            if (context) {
+                this.state.configuration = context.contextConfiguration;
+            }
+        }
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().setPreviousContext();
     }
 
     private cancel(): void {
