@@ -23,6 +23,7 @@ class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArc
             new FormDropdownItem(ArchiveFlag.ARCHIVED, '', 'Archivierte Tickets'),
             new FormDropdownItem(ArchiveFlag.NOT_ARCHIVED, '', 'Nicht archivierte Tickets')
         ];
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {

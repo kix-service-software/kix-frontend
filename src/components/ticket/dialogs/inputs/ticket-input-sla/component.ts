@@ -21,6 +21,7 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
         this.state.items = objectData.slas.map((s) =>
             new FormDropdownItem(s.ID, new ObjectIcon(TicketProperty.SLA_ID, s.ID), s.Name)
         );
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {

@@ -23,14 +23,15 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
         this.state.items = objectData.states.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
         );
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+            const value = formInstance.getFormFieldValue<PendingTimeFormValue>(this.state.field.property);
+            if (value && value.value) {
+                this.state.currentItem = this.state.items.find((i) => i.id === value.value.stateId);
             }
         }
     }

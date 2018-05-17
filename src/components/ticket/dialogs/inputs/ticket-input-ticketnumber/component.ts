@@ -17,6 +17,7 @@ class TicketInputFulltextComponent extends FormInputComponent<string, TicketInpu
 
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {

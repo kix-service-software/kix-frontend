@@ -77,10 +77,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.getStandardTable();
         this.state.selectedObjects = [];
 
-        if (this.state.currentLinkableObject) {
-            const formInstance = FormService.getInstance().getOrCreateFormInstance(item.id.toString());
-            formInstance.reset();
-        } else {
+        if (!this.state.currentLinkableObject) {
             this.state.standardTable = null;
             this.state.resultCount = null;
         }
@@ -93,9 +90,11 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(
                 this.state.currentLinkableObject.id.toString()
             );
+            this.state.isSearching = true;
             await this.state.standardTable.loadRows();
             const count = this.state.standardTable.getTableRows().length;
             this.state.resultCount = count > 0 ? count : null;
+            this.state.isSearching = false;
         }
     }
 
@@ -140,6 +139,12 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             const labelLayer = (this.state.standardTable.labelLayer as ILinkDescriptionLabelLayer);
             labelLayer.setLinkDescriptions(this.state.linkDescriptions);
             this.state.standardTable.loadRows(true);
+        }
+    }
+
+    private keyDown(event: any): void {
+        if (event.key === 'Enter') {
+            this.executeSearch();
         }
     }
 

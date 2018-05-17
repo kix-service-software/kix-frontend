@@ -19,6 +19,12 @@ class FormTextInputComponent {
         (this as any).emit('valueChanged', this.state.currentValue);
     }
 
+    private keyDown(event: any): void {
+        if (event.key === 'Enter') {
+            this.valueChanged(event);
+        }
+    }
+
     private focusLost(): void {
         (this as any).emit('valueChanged', this.state.currentValue);
     }
