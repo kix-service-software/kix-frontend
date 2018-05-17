@@ -1,5 +1,5 @@
 <div.dropdown dropDownId=state.dropdownId on-click('setKeepExpanded')>
-    <div.dropdown-input-container class={"list-shown": state.expanded}>
+    <div.dropdown-input-container class={"list-shown": state.expanded} key="dropdown-input-container">
         <input.input-style class={invalid: state.invalid} type="text" readonly=(!state.enabled) disabled=(!state.enabled)
             placeholder=(state.selectedItem ? "" : input.placeholder) value=state.filterValue on-keydown('keyDown')
             on-keyup('filterValueChanged') required=input.required on-click('toggleList', false)
@@ -19,7 +19,7 @@
         <span.dropdown-button.kix-icon-sort-down on-click('dropdownClicked')/>
     </div>
     <if(state.expanded)>
-        <ul.dropdown-list style=state.dropdownListStyle>
+        <ul.dropdown-list style=state.dropdownListStyle key="dropdown-list">
             <for(item in state.filteredItems)>
                 <li.dropdown-item id=((state.dropdownId + "-item-") + item.id) on-click('itemSelected', item)
                     on-mousemove('itemHovered', item) class=(component.isSelected(item) ? "active" : "")>

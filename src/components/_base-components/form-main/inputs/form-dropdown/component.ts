@@ -8,7 +8,7 @@ class FormDropdownComponent {
     private keepExpanded: boolean = false;
 
     private timeout: any;
-    private delay: number = 5000;
+    private delay: number;
 
     public onCreate(input: any): void {
         this.state = new FormDropdownComponentState();
@@ -38,14 +38,13 @@ class FormDropdownComponent {
     }
 
     private toggleList(close: boolean = true): void {
-        this.delay = 30000;
+        this.delay = 100;
         if (this.state.expanded && close) {
             this.closeList();
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedItem = this.state.selectedItem;
-            // window.clearTimeout(this.timeout);
-            this.timeout = setTimeout(this.getDropdownStyle(), this.delay);
+            this.timeout = setTimeout(this.getDropdownStyle.bind(this), this.delay);
         }
     }
 
@@ -196,14 +195,27 @@ class FormDropdownComponent {
     }
 
     private getDropdownStyle(): void {
-        console.log('get dropdown style');
-        const input = (this as any).getEl('dropdown-list');
+        const inputList = (this as any).getEl('dropdown-list');
         let transformValue = 0;
-        if (input) {
-            const elementHeight = input.scrollHeight;
-            transformValue = elementHeight;
+        if (inputList) {
+            const inputContainer = (this as any).getEl('dropdown-input-container');
+            const tabContent = document.getElementsByClassName('tab-content');
+            const dropdownListDOMRect = inputList.getBoundingClientRect();
+            const tabContainerDOMRect = tabContent[0].getBoundingClientRect();
+            const inputContainerDOMRect = inputContainer.getBoundingClientRect();
+
+            const tabSize = tabContainerDOMRect.top + tabContainerDOMRect.height;
+            const dropdownListEnd = inputContainerDOMRect.top
+                + inputContainerDOMRect.height
+                + dropdownListDOMRect.height;
+
+            if (tabSize < dropdownListEnd) {
+                transformValue = inputContainerDOMRect.height + dropdownListDOMRect.height;
+            } else {
+                transformValue = 0;
+            }
         }
-        this.state.dropdownListStyle = 'transform: translate(0em,-' + transformValue + 'em)';
+        this.state.dropdownListStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
 }
 
