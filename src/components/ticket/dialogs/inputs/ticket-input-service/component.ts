@@ -20,6 +20,7 @@ class TicketInputServiceComponent extends FormInputComponent<number, TicketInput
         FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {

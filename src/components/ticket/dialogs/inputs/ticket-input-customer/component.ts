@@ -21,6 +21,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
         FormInputComponent.prototype.onMount.call(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.registerListener(this.formChanged.bind(this));
+        this.setCurrentValue();
     }
 
     protected formChanged(event: IFormEvent): void {

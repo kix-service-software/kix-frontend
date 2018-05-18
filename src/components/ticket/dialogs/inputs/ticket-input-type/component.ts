@@ -21,6 +21,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTyp
         this.state.items = objectData.types.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.TYPE_ID, t.ID), t.Name)
         );
+        this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {
