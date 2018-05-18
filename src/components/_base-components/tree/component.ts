@@ -1,5 +1,6 @@
 import { TreeComponentState } from './TreeComponentState';
 import { TreeUtil, TreeNode } from '@kix/core/dist/model';
+import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TreeComponent {
 
@@ -12,6 +13,7 @@ class TreeComponent {
     public onInput(input: any): void {
         this.state.tree = input.tree;
         this.state.filterValue = input.filterValue;
+        this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         this.state.activeNode = input.activeNode;
         this.scrollToNode();
