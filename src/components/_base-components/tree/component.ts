@@ -13,9 +13,10 @@ class TreeComponent {
     public onInput(input: any): void {
         this.state.tree = input.tree;
         this.state.filterValue = input.filterValue;
-        this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
+        this.state.treeId = input.treeId ? 'tree-' + input.treeId : 'tree-' + IdService.generateDateBasedId();
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         this.state.activeNode = input.activeNode;
+        this.state.treeStyle = input.treeStyle;
         this.scrollToNode();
     }
 

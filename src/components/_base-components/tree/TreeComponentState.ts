@@ -8,7 +8,8 @@ export class TreeComponentState {
         public filterValue: string = null,
         public treeId: string = 'tree-' + IdService.generateDateBasedId(),
         public activeNode: TreeNode = null,
-        public treeParent: any = null
+        public treeParent: any = null,
+        public treeStyle: string = null
     ) { }
 
 }
