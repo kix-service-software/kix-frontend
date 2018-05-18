@@ -1,4 +1,5 @@
 <if(state.formField)>
-    <input.input-style class={invalid: state.invalid} value=state.currentValue type="text" placeholder=input.placeholder
-        required=input.required on-keydown('keyDown') on-change('valueChanged') on-blur('focusLost')/>
+    <input.input-style class={invalid: state.invalid} value=state.currentValue type="text" invalid=state.invalid
+        placeholder=input.placeholder required=input.required on-keydown('keyDown') on-change('valueChanged')
+        on-blur('focusLost')/>
 </if>
