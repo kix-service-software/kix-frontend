@@ -1,5 +1,5 @@
 <div.dropdown-tree dropDownId=state.dropdownId on-click('setKeepExpanded')>
-    <div.dropdown-input-container class={"list-shown": state.expanded}>
+    <div.dropdown-input-container class={"list-shown": state.expanded} key="dropdown-input-container">
         <input.input-style class={invalid: state.invalid} type="text" readonly=(!state.enabled) disabled=(!state.enabled)
             placeholder=(state.selectedNode ? "" : input.placeholder) value=state.filterValue on-keydown('keyDown')
             on-keyup('keyUp') required=input.required on-click('toggleList', false) on-focus('toggleList', false)
@@ -20,6 +20,7 @@
     </div>
     <if(state.expanded)>
         <tree tree=state.nodes filterValue=state.filterValue activeNode=state.preSelectedNode on-nodeToggled('nodeToggled')
-            on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered') filterInputId=state.treeId/>
+            on-nodeClicked('nodeClicked') on-nodeHovered('nodeHovered') filterInputId=state.treeId treeId=state.treeId
+            treeStyle=state.treeStyle/>
     </if>
 </div>

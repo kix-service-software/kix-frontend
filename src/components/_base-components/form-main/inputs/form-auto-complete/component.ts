@@ -10,6 +10,8 @@ class FormAutoCompleteComponent {
     private timeout: any;
     private currentSearchValue: string;
 
+    private delay: number;
+
     public onCreate(input: any): void {
         this.state = new FormAutoCompleteComponentState();
     }
@@ -38,6 +40,7 @@ class FormAutoCompleteComponent {
     }
 
     private toggleList(close: boolean = true): void {
+        this.delay = 100;
         if (this.state.expanded && close) {
             this.state.expanded = false;
             this.state.preSelectedItem = null;
@@ -45,6 +48,7 @@ class FormAutoCompleteComponent {
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedItem = this.state.selectedItem;
+            this.timeout = setTimeout(this.getDropdownStyle.bind(this), this.delay);
         }
     }
 
@@ -183,6 +187,29 @@ class FormAutoCompleteComponent {
 
     private focusLost(): void {
         (this as any).emit('itemChanged', this.state.selectedItem);
+    }
+    private getDropdownStyle(): void {
+        const inputList = (this as any).getEl('dropdown-list');
+        let transformValue = 0;
+        if (inputList) {
+            const inputContainer = (this as any).getEl('dropdown-input-container');
+            const tabContent = document.getElementsByClassName('tab-content');
+            const dropdownListDOMRect = inputList.getBoundingClientRect();
+            const tabContainerDOMRect = tabContent[0].getBoundingClientRect();
+            const inputContainerDOMRect = inputContainer.getBoundingClientRect();
+
+            const tabSize = tabContainerDOMRect.top + tabContainerDOMRect.height;
+            const dropdownListEnd = inputContainerDOMRect.top
+                + inputContainerDOMRect.height
+                + dropdownListDOMRect.height;
+
+            if (tabSize < dropdownListEnd) {
+                transformValue = inputContainerDOMRect.height + dropdownListDOMRect.height;
+            } else {
+                transformValue = 0;
+            }
+        }
+        this.state.dropdownListStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
 }
 
