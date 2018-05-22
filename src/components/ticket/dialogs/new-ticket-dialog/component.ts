@@ -15,6 +15,11 @@ class NewTicketDialogComponent {
     }
 
     public onMount(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.reset();
+        }
+
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
@@ -31,7 +36,7 @@ class NewTicketDialogComponent {
         if (validationError) {
             this.showValidationError(result);
         } else {
-            DialogService.getInstance().setMainDialogLoading(true);
+            DialogService.getInstance().setMainDialogLoading(true, "Ticket wird angelegt");
             await TicketService.getInstance().createTicketByForm(this.state.formId)
                 .then((ticketId) => {
                     DialogService.getInstance().setMainDialogLoading(false);
