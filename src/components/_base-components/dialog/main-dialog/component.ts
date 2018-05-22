@@ -27,8 +27,9 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.dialogHint = hint;
     }
 
-    public setLoading(isLoading: boolean): void {
+    public setLoading(isLoading: boolean, loadingHint?: string): void {
         this.state.isLoading = isLoading;
+        this.state.loadingHint = loadingHint;
     }
 
 
