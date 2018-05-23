@@ -1,11 +1,16 @@
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ActionListComponentState } from './ActionListComponentState';
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
+import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
+import { Context } from '@kix/core/dist/model';
+import { IContextListener } from '../../../../../core/dist/browser/context/IContextListener';
 
 export class ActionListComponent {
 
     private state: ActionListComponentState;
     private resizeTimeout: any = null;
+
+    private context: Context<any> = null;
+    private contextListener: ComponentContextListener = null;
 
     private static MODULE_ID: string = 'ticket-details';
 
@@ -27,19 +32,14 @@ export class ActionListComponent {
             }
         }, false);
         this.prepareLists();
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
+        this.contextListener = new ComponentContextListener(this);
         window.addEventListener("resize", this.windowResizeThrottler.bind(this), false);
     }
 
-    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (
-            type === ContextNotification.EXPLORER_BAR_TOGGLED ||
-            type === ContextNotification.SIDEBAR_BAR_TOGGLED
-        ) {
-            setTimeout(() => {
-                this.prepareLists();
-            }, 50);
-        }
+    public setContext(context: Context<any>): void {
+        this.context = context;
+        context.registerListener(this.contextListener);
     }
 
     private windowResizeThrottler() {
@@ -51,7 +51,7 @@ export class ActionListComponent {
         }
     }
 
-    private prepareLists() {
+    public prepareLists() {
         const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
         if (listWidth > 0 && this.state.actionList) {
             // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 50px Puffer (... + margin/padding)
@@ -66,5 +66,37 @@ export class ActionListComponent {
         this.state.keepShow = !this.state.keepShow;
     }
 }
+
+// tslint:disable-next-line:max-classes-per-file
+class ComponentContextServiceListener extends AbstractContextServiceListener {
+
+    public constructor(private actionListComponent: ActionListComponent) {
+        super();
+    }
+
+    public contextChanged(contextId: string, context: Context<any>): void {
+        this.actionListComponent.setContext(context);
+    }
+
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class ComponentContextListener implements IContextListener {
+
+    public constructor(private actionListComponent: ActionListComponent) { }
+
+    public sidebarToggled(): void {
+        setTimeout(() => {
+            this.actionListComponent.prepareLists();
+        }, 50);
+    }
+
+    public explorerBarToggled(): void {
+        setTimeout(() => {
+            this.actionListComponent.prepareLists();
+        }, 50);
+    }
+}
+
 
 module.exports = ActionListComponent;

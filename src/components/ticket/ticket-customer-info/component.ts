@@ -1,5 +1,5 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { ContextService } from "@kix/core/dist/browser/context";
 import { Customer } from "@kix/core/dist/model";
 
 class CustomerInfoComponent {
@@ -15,13 +15,13 @@ class CustomerInfoComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext();
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-        this.loadCustomer(context.contextObjectId);
+        this.loadCustomer(context.objectId);
     }
 
     private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
         const context = ContextService.getInstance().getContext();
-        if (type === TicketNotification.TICKET_LOADED && id === context.contextObjectId) {
-            this.loadCustomer(context.contextObjectId);
+        if (type === TicketNotification.TICKET_LOADED && id === context.objectId) {
+            this.loadCustomer(context.objectId);
         }
     }
 

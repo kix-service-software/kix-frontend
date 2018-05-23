@@ -1,4 +1,4 @@
-<if(state.configuration)>
+<if(!state.loading)>
     <widget instanceId="new-ticket-dialog">
         <@icon>
             <span.kix-icon-new-ticket/>
@@ -18,3 +18,6 @@
         </@content>
     </widget>
 </if>
+<else>
+    <loading-spinner/>
+</else>

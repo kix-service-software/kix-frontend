@@ -1,9 +1,9 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    FormValidationService, OverlayService, FormService, ContextService, ContextNotification
+    FormValidationService, OverlayService, FormService, ContextService
 } from "@kix/core/dist/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
+    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, ContextType
 } from "@kix/core/dist/model";
 import {
     TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
@@ -18,7 +18,7 @@ class NewTicketDialogComponent {
         this.state = new NewTicketDialogComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
@@ -26,24 +26,10 @@ class NewTicketDialogComponent {
 
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
 
-        ContextService.getInstance().addStateListener(this.contextChanged.bind(this));
-
         const context = new NewTicketDialogContext();
-        ContextService.getInstance().provideContext(context, true);
-    }
-
-    private contextChanged(id: string, type: ContextNotification, ...args: any[]): void {
-        if (type === ContextNotification.CONTEXT_CHANGED) {
-            const context = ContextService.getInstance()
-                .getContext<NewTicketDialogContextConfiguration, NewTicketDialogContext>();
-            if (context) {
-                this.state.configuration = context.contextConfiguration;
-            }
-        }
-    }
-
-    public onDestroy(): void {
-        ContextService.getInstance().setPreviousContext();
+        this.state.loading = true;
+        await ContextService.getInstance().provideContext(context, true, ContextType.DIALOG);
+        this.state.loading = false;
     }
 
     private cancel(): void {

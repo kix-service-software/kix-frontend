@@ -1,5 +1,5 @@
 import {
-    KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService, ILinkDescriptionLabelLayer
+    KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService, ILinkDescriptionLabelLayer, WidgetService
 } from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
@@ -38,8 +38,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             formInstance.reset();
         }
 
-        const context = ContextService.getInstance().getContext();
-        context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
         this.getStandardTable();
         this.setPreventSelectionFilterOfStandardTable();
         this.setLinkTypes();

@@ -1,6 +1,6 @@
 import { SidebarMenuComponentState } from './SidebarMenuComponentState';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { Context, WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { ContextService } from '@kix/core/dist/browser/context';
+import { Context, WidgetType, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
 
 class SidebarMenuComponent {
 
@@ -10,24 +10,38 @@ class SidebarMenuComponent {
         this.state = new SidebarMenuComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
+    }
+
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        this.setSidebarMenu();
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                if (type === this.state.contextType) {
+                    this.setContext(context);
+                }
+            },
+            objectListUpdated: () => { return; },
+            objectUpdated: () => { return; }
+        });
     }
 
-    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED
-            || type === ContextNotification.CONTEXT_CHANGED
-            || type === ContextNotification.SIDEBAR_BAR_TOGGLED
-            && id === ContextService.getInstance().getActiveContextId()
-        ) {
-            this.setSidebarMenu();
+    private setContext(context: Context<any>): void {
+        if (context) {
+            context.registerListener({
+                sidebarToggled: () => {
+                    this.setSidebarMenu(context);
+                },
+                explorerBarToggled: () => { return; }
+            });
         }
+        this.setSidebarMenu(context);
     }
 
-    private setSidebarMenu(): void {
-        const context = ContextService.getInstance().getContext();
-        this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+    private setSidebarMenu(context: Context<any>): void {
+        if (context) {
+            this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+        }
     }
 
     private toggleSidebar(instanceId: string): void {

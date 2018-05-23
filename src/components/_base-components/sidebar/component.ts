@@ -1,7 +1,7 @@
 import { SidebarComponentState } from './SidebarComponentState';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { WidgetType } from '@kix/core/dist/model';
+import { WidgetType, Context, ContextType } from '@kix/core/dist/model';
 
 class SidebarComponent {
 
@@ -11,22 +11,35 @@ class SidebarComponent {
         this.state = new SidebarComponentState();
     }
 
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
+    }
+
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        this.updateSidebars();
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                if (type === this.state.contextType) {
+                    this.setContext(context);
+                }
+            },
+            objectListUpdated: () => { return; },
+            objectUpdated: () => { return; }
+        });
     }
 
-    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (type === ContextNotification.SIDEBAR_BAR_TOGGLED
-            || type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED
-            || type === ContextNotification.CONTEXT_CHANGED
-            && id === ContextService.getInstance().getActiveContextId()) {
-            this.updateSidebars();
+    private setContext(context: Context<any>): void {
+        if (context) {
+            context.registerListener({
+                sidebarToggled: () => {
+                    this.updateSidebars(context);
+                },
+                explorerBarToggled: () => { return; }
+            });
         }
+        this.updateSidebars(context);
     }
 
-    private updateSidebars(): void {
-        const context = ContextService.getInstance().getContext();
+    private updateSidebars(context: Context<any>): void {
         this.state.sidebars = context ? (context.getSidebars(true) || []) : [];
         this.state.showSidebar = context ? context.isSidebarShown() : false;
     }

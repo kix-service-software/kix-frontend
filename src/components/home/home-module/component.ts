@@ -1,7 +1,7 @@
 import { HomeComponentState } from './HomeComponentState';
-import { BreadcrumbDetails, Context, ConfiguredWidget } from '@kix/core/dist/model/';
+import { BreadcrumbDetails, Context, ConfiguredWidget, ObjectIcon, ContextType } from '@kix/core/dist/model/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
-import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
+import { ContextService } from '@kix/core/dist/browser/context/';
 import { HomeContext, HomeContextConfiguration } from '@kix/core/dist/browser/home';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
@@ -14,17 +14,16 @@ class HomeComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        ContextService.getInstance().provideContext(new HomeContext(), true);
-    }
-
-    private contextServiceNotified(id: string, type: ContextNotification, ...args: any[]): void {
-        if (type === ContextNotification.CONTEXT_CHANGED && id === HomeContext.CONTEXT_ID) {
-            const context = ContextService.getInstance().getContext<HomeContextConfiguration, HomeContext>();
-            if (context) {
-                this.state.contentWidgets = context.getContent();
-            }
-        }
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: HomeContext) => {
+                if (contextId === HomeContext.CONTEXT_ID) {
+                    this.state.contentWidgets = context.getContent();
+                }
+            },
+            objectListUpdated: () => { return; },
+            objectUpdated: () => { return; }
+        });
+        ContextService.getInstance().provideContext(new HomeContext(), true, ContextType.MAIN);
     }
 
     private getTemplate(widget: ConfiguredWidget): any {

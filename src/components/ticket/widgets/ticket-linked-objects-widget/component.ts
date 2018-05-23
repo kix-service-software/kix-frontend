@@ -1,4 +1,4 @@
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import {
     LinkedTicketTableContentLayer,
     TicketService,
@@ -12,7 +12,7 @@ import { Link, Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable,
-    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory
+    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory, WidgetService
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -31,23 +31,26 @@ class LinkedObjectsWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
+        ContextService.getInstance().registerListener({
+            objectUpdated: (id: string | number) => {
+                if (id === this.state.ticketId) {
+                    this.setLinkedObjects();
+                }
+            },
+            objectListUpdated: () => { return; },
+            contextChanged: () => { return; }
+        });
+
         const context = ContextService.getInstance().getContext();
 
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)
             : undefined;
 
-        context.setWidgetType('ticket-linked-objects', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('ticket-linked-objects', WidgetType.GROUP);
 
         this.setLinkedObjects();
         this.setActions();
-    }
-
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.setLinkedObjects();
-        }
     }
 
     private setActions(): void {

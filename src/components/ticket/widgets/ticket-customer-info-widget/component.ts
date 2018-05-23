@@ -1,5 +1,5 @@
 import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { ContextService } from "@kix/core/dist/browser/context";
 import { Customer } from "@kix/core/dist/model";
 import { CustomerWidgetComponentState } from './CustomerWidgetComponentState';
 

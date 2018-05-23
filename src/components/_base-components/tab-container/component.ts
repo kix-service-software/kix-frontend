@@ -1,7 +1,8 @@
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { Context, WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { Context, WidgetType, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
 import { TabContainerComponentState } from './TabContainerComponentState';
+import { WidgetService } from '@kix/core/dist/browser';
 
 class TabLaneComponent {
 
@@ -14,11 +15,11 @@ class TabLaneComponent {
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
 
-        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : false;
-
-        const context = ContextService.getInstance().getContext();
-        context.setWidgetType("tab-widget", WidgetType.LANE);
-        this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
+        WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
+        this.state.tabWidgets.forEach(
+            (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
+        );
+        (this as any).setStateDirty("title");
 
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
@@ -28,12 +29,6 @@ class TabLaneComponent {
         if (!this.state.activeTab && this.state.tabWidgets.length) {
             this.state.activeTab = this.state.tabWidgets[0];
         }
-
-        ContextService.getInstance().addStateListener(this.contextChanged.bind(this));
-    }
-
-    private contextChanged(id: string, type: ContextNotification, ...args: any[]): void {
-        this.state.hasSidebars = this.hasSidebars();
     }
 
     private tabClicked(tab: ConfiguredWidget): void {
@@ -51,8 +46,8 @@ class TabLaneComponent {
     }
 
     private hasSidebars(): boolean {
-        if (this.state.showSidebar) {
-            const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(ContextType.DIALOG);
+        if (context) {
             return context.getSidebars().length > 0;
         }
         return false;

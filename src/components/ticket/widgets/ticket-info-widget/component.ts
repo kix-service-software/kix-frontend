@@ -1,7 +1,7 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
-import { SysconfigUtil, ObjectIcon } from '@kix/core/dist/model';
+import { ContextService, AbstractContextServiceListener } from '@kix/core/dist/browser/context';
+import { SysconfigUtil, ObjectIcon, Context } from '@kix/core/dist/model';
 import { ActionFactory } from '@kix/core/dist/browser';
 
 class TicketInfoWidgetComponent {
@@ -18,23 +18,15 @@ class TicketInfoWidgetComponent {
 
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
+        ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
         const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
+            explorerBarToggled: () => { (this as any).setStateDirty('ticket'); }
+        });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getTicket();
         this.setActions();
-    }
-
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (type === ContextNotification.OBJECT_UPDATED) {
-            this.getTicket();
-        }
-        if (
-            type === ContextNotification.SIDEBAR_BAR_TOGGLED
-            || type === ContextNotification.EXPLORER_BAR_TOGGLED
-        ) {
-            (this as any).setStateDirty('ticket');
-        }
     }
 
     private setActions(): void {
@@ -49,10 +41,10 @@ class TicketInfoWidgetComponent {
         this.getTicket();
     }
 
-    private getTicket(): void {
+    public getTicket(): void {
         const context = ContextService.getInstance().getContext();
-        if (context.contextObjectId) {
-            this.state.ticket = TicketService.getInstance().getTicket(context.contextObjectId);
+        if (context.objectId) {
+            this.state.ticket = TicketService.getInstance().getTicket(context.objectId);
             if (this.state.ticket) {
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
@@ -91,6 +83,19 @@ class TicketInfoWidgetComponent {
 
     private getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
+    }
+
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class ComponentContextServiceListener extends AbstractContextServiceListener {
+
+    public constructor(private component: TicketInfoWidgetComponent) {
+        super();
+    }
+
+    public objectUpdated(): void {
+        this.component.getTicket();
     }
 
 }

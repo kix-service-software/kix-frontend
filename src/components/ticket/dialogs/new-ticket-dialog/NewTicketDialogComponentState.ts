@@ -1,10 +1,12 @@
-import { NewTicketDialogContextConfiguration } from "@kix/core/dist/browser/ticket";
+import { NewTicketDialogContextConfiguration, NewTicketDialogContext } from "@kix/core/dist/browser/ticket";
 
 export class NewTicketDialogComponentState {
 
     public constructor(
         public formId: string = 'new-ticket-form',
-        public configuration: NewTicketDialogContextConfiguration = null
+        public contextId: string = NewTicketDialogContext.CONTEXT_ID,
+        public hasSidebars: boolean = false,
+        public loading: boolean = false
     ) { }
 
 }

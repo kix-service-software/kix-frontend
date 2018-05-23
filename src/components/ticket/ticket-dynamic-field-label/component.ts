@@ -1,6 +1,6 @@
 import { TicketNotification, TicketService } from "@kix/core/dist/browser/ticket/";
 import { TicketProperty, DateTimeUtil } from "@kix/core/dist/model/";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context/";
+import { ContextService } from "@kix/core/dist/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
 
 export class TicketPriorityLabelComponent {

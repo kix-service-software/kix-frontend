@@ -3,10 +3,10 @@ import {
 } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    BreadcrumbDetails, Ticket, Context, WidgetType
+    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context/';
+import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
@@ -19,38 +19,33 @@ export class TicketDetailsComponent {
         this.state = new TicketDetailsComponentState(Number(input.ticketId));
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.setBreadcrumbDetails();
 
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext) => {
+                this.state.ticketDetailsConfiguration = ticketDeatilsContext.configuration;
+                if (contextId === TicketDetailsContext.CONTEXT_ID && this.state.ticketDetailsConfiguration) {
+                    this.state.loadingConfig = false;
+                    this.state.lanes = ticketDeatilsContext.getLanes();
+                    this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
+                    (this as any).update();
+
+                }
+            },
+            objectListUpdated: () => { return; },
+            objectUpdated: () => { return; }
+        });
         TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
-        ContextService.getInstance().provideContext(context, true);
+        await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
         this.loadTicket();
     }
 
     private loadTicket(): void {
         TicketService.getInstance().loadTicket(this.state.ticketId);
-    }
-
-    private contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED
-            || type === ContextNotification.CONTEXT_CHANGED
-            && id === TicketDetailsContext.CONTEXT_ID
-        ) {
-            const context = ContextService.getInstance()
-                .getContext<TicketDetailsContextConfiguration, TicketDetailsContext>(TicketDetailsContext.CONTEXT_ID);
-
-            this.state.ticketDetailsConfiguration = context.contextConfiguration;
-            if (this.state.ticketDetailsConfiguration) {
-                this.state.loadingConfig = false;
-                this.state.lanes = context.getLanes();
-                this.state.tabWidgets = context.getLaneTabs();
-                (this as any).update();
-            }
-        }
     }
 
     private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {

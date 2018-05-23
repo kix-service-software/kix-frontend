@@ -1,8 +1,8 @@
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
-import { ContextNotification } from '@kix/core/dist/browser/context';
 import { WidgetType } from '@kix/core/dist/model';
+import { WidgetService } from '@kix/core/dist/browser';
 
 class WidgetComponent {
 
@@ -24,10 +24,9 @@ class WidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
 
-        this.state.widgetType = context.getWidgetType(this.state.instanceId);
+        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
 
         const config = context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
@@ -40,12 +39,6 @@ class WidgetComponent {
                 this.state.minimizable = config.minimizable;
                 this.state.minimized = config.minimized;
             }
-        }
-    }
-
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.instanceId && type === ContextNotification.TOGGLE_WIDGET) {
-            this.state.minimized = args[0];
         }
     }
 

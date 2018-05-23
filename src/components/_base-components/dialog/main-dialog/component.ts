@@ -1,6 +1,7 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
-import { IMainDialogListener } from '@kix/core/dist/browser';
+import { IMainDialogListener, ContextService } from '@kix/core/dist/browser';
+import { ContextType } from '@kix/core/dist/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -15,12 +16,14 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
     }
 
-    public open(dialogTagId?: string, input?: any): void {
+    public open(): void {
+        ContextService.getInstance().setActiveContextType(ContextType.DIALOG);
         this.state.show = true;
     }
 
     public close(): void {
         this.state.show = false;
+        ContextService.getInstance().setActiveContextType();
     }
 
     public setHint(hint: string): void {
