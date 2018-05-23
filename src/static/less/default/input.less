@@ -14,16 +14,6 @@
         &:disabled {
             background-color: @secondary-4;
         }
-        &:invalid {
-            // TODO: eigenes Styling nutzen? Firefox setzt box-shadow
-            box-shadow: none;
-        }
-    }
-    &.invalid {
-        border-color: red;
-        &::placeholder {
-            color: red;
-        }
     }
 }
 
@@ -48,6 +38,10 @@
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
+        }
+        >input.input-style:invalid {
+            border-color: @tertiary-0;
+            color: @tertiary-0;
         }
         >input.input-style:invalid~.dropdown-button {
             border-color: @tertiary-0;
