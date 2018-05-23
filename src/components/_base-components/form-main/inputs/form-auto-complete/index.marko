@@ -18,7 +18,7 @@
         </if>
     </div>
     <if(state.expanded || state.isLoading)>
-        <ul.dropdown-list>
+        <ul.dropdown-list style=state.dropdownListStyle key="dropdown-list">
             <if(state.isLoading)>
                 <li.loading-item>
                     <loading-spinner/>
