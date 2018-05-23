@@ -13,7 +13,10 @@
             </widget>
             <if(state.isLoading)>
                 <div.loading-shield>
-                    <loading-spinner/>
+                    <div.loading-info>
+                        <loading-spinner/>
+                        <span.loading-hint>${state.loadingHint}</span>
+                    </div>
                 </div>
             </if>
             <else>

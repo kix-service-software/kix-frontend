@@ -12,7 +12,8 @@ export class FormDropdownTreeComponentState {
         public preSelectedNode: TreeNode = null,
         public treeId: string = IdService.generateDateBasedId(),
         public enabled: boolean = true,
-        public invalid: boolean = false
+        public invalid: boolean = false,
+        public treeStyle: string = null
     ) { }
 
 }

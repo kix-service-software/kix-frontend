@@ -12,7 +12,8 @@ export class FormDropdownComponentState {
         public filterValue: string = null,
         public preSelectedItem: FormDropdownItem = null,
         public enabled: boolean = true,
-        public invalid: boolean = false
+        public invalid: boolean = false,
+        public dropdownListStyle: string = null
     ) { }
 
 }

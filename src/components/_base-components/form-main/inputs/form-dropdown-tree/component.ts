@@ -6,6 +6,8 @@ class FormDropdownTreeComponent {
     private state: FormDropdownTreeComponentState;
 
     private keepExpanded: boolean = false;
+    private timeout: any;
+    private delay: number;
 
     public onCreate(input: any): void {
         this.state = new FormDropdownTreeComponentState();
@@ -34,11 +36,13 @@ class FormDropdownTreeComponent {
     }
 
     private toggleList(close: boolean = true): void {
+        this.delay = 100;
         if (this.state.expanded && close) {
             this.closeList();
         } else if (this.state.enabled) {
             this.state.expanded = true;
             this.state.preSelectedNode = this.state.selectedNode;
+            this.timeout = setTimeout(this.getDropdownStyle.bind(this), this.delay);
         }
     }
 
@@ -128,6 +132,31 @@ class FormDropdownTreeComponent {
     private closeList(): void {
         this.state.expanded = false;
         this.state.preSelectedNode = null;
+    }
+
+    private getDropdownStyle(): void {
+        // const inputList = (this as any).getEl(this.state.treeId);
+        const inputList = document.getElementById('tree-' + this.state.treeId);
+        let transformValue = 0;
+        if (inputList) {
+            const inputContainer = (this as any).getEl('dropdown-input-container');
+            const tabContent = document.getElementsByClassName('tab-content');
+            const dropdownListDOMRect = inputList.getBoundingClientRect();
+            const tabContainerDOMRect = tabContent[0].getBoundingClientRect();
+            const inputContainerDOMRect = inputContainer.getBoundingClientRect();
+
+            const tabSize = tabContainerDOMRect.top + tabContainerDOMRect.height;
+            const dropdownListEnd = inputContainerDOMRect.top
+                + inputContainerDOMRect.height
+                + dropdownListDOMRect.height;
+
+            if (tabSize < dropdownListEnd) {
+                transformValue = inputContainerDOMRect.height + dropdownListDOMRect.height;
+            } else {
+                transformValue = 0;
+            }
+        }
+        this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
 }
 

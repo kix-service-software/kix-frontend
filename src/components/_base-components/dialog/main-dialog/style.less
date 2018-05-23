@@ -76,11 +76,21 @@
         left: 0;
         background-color: #000;
         opacity: 0.2;
-        >.loading-spinner {
-            width: 10em;
-            height: 10em;
+        >.loading-info {
+            position: absolute;
             top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            >.loading-spinner {
+                width: 10em;
+                height: 10em;
+            }
+            >.loading-hint {
+                font-weight: bold;
+                font-size: 3em;
+                color: @secondary-6;
+                display: block;
+            }
         }
     }
 }

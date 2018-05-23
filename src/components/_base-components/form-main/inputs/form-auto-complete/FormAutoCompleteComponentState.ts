@@ -14,7 +14,8 @@ export class FormAutoCompleteComponentState {
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<FormDropdownItem[]> = null,
         public enabled: boolean = true,
-        public invalid: boolean = false
+        public invalid: boolean = false,
+        public dropdownListStyle: string = null
     ) { }
 
 }
