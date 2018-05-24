@@ -12,7 +12,7 @@
                 <if(state.currentLinkableObject)>
                     <form-main formId=state.currentLinkableObject.id key=("FormMain" + Math.random())/>
                     <div.linkable-objects-form-button-container>
-                        <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=state.isSearching>
+                        <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
                             <span.kix-icon-search/>
                             Suche starten
                         </button>
