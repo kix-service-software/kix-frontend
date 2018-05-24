@@ -11,7 +11,7 @@
             <overlay-icon isHint=true content=field.hint/>
         </div>
         <div.field-input>
-            <include(component.getInputComponent(field), { field, formId: input.formId })/>
+            <include(component.getInputComponent(field), { required: field.required, field, formId: input.formId })/>
         </div>
     </div>
 </for>
