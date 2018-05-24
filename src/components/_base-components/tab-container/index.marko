@@ -14,9 +14,17 @@
             </ul>
         </@headerContent>
         <@content>
-            <div.tab-content>
-                <if(state.activeTab)>
-                    <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
+            <div class={"tab-sidebar-grid": state.hasSidebars}>
+                <div.tab-content>
+                    <if(state.activeTab)>
+                        <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
+                    </if>
+                </div>
+                <if(state.hasSidebars)>
+                    <sidebar contextType=state.contextType/>
+                    <div.site-menu-wrapper>
+                        <sidebar-menu contextType=state.contextType/>
+                    </div>
                 </if>
             </div>
         </@content>

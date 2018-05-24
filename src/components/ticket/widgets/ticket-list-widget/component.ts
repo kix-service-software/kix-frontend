@@ -2,9 +2,9 @@ import { TicketListComponentState } from './TicketListComponentState';
 import {
     ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
 } from '@kix/core/dist/model/';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import {
-    TicketNotification, TicketService, TicketTableContentLayer, TicketTableLabelLayer,
+    TicketService, TicketTableContentLayer, TicketTableLabelLayer,
     TicketTableSelectionListener, TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
@@ -17,8 +17,6 @@ class TicketListWidgetComponent {
 
     public state: TicketListComponentState;
 
-    protected store: any;
-
     private componentInitialized: boolean = false;
 
     public onCreate(input: any): void {
@@ -30,28 +28,19 @@ class TicketListWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-        const context = ContextService.getInstance().getContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: Context<any>) => {
+                this.state.widgetConfiguration =
+                    context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+                this.setTableConfiguration();
+            }
+        });
+        const currentContext = ContextService.getInstance().getContext();
+        this.state.widgetConfiguration = currentContext
+            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         this.setTableConfiguration();
-    }
-
-    private contextServiceNotified(requestId: string, type: ContextNotification, ...args) {
-        if (type === ContextNotification.CONTEXT_FILTER_CHANGED) {
-            const contextFilter: ContextFilter = args[0];
-            if (contextFilter && contextFilter.objectType === ObjectType.QUEUE && contextFilter.objectValue) {
-                this.state.contextFilter = contextFilter;
-                this.filter();
-            } else {
-                this.state.contextFilter = null;
-            }
-        } else if (type === ContextNotification.CONTEXT_CHANGED) {
-            const context = ContextService.getInstance().getContext();
-            this.state.widgetConfiguration =
-                context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-            this.setTableConfiguration();
-        }
     }
 
     private setTableConfiguration(): void {

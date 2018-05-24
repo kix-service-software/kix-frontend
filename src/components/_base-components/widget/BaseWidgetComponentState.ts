@@ -1,4 +1,4 @@
-import { WidgetComponentState, WidgetType } from "@kix/core/dist/model";
+import { WidgetComponentState, WidgetType, ContextType } from "@kix/core/dist/model";
 
 export class BaseWidgetComponentState extends WidgetComponentState {
 
@@ -7,7 +7,8 @@ export class BaseWidgetComponentState extends WidgetComponentState {
         public hasConfigOverlay: boolean = true,
         public isLoading: boolean = false,
         public widgetType: WidgetType = null,
-        public isDialog: WidgetType = null
+        public isDialog: WidgetType = null,
+        public contextType: ContextType = null
     ) {
         super();
     }

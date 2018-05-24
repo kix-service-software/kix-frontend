@@ -1,9 +1,9 @@
 import { OverlayComponentState } from "./OverlayComponentState";
-import { OverlayService, ActionFactory } from "@kix/core/dist/browser";
+import { OverlayService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import {
     OverlayType, IWidgetContent, ObjectIcon, ComponentContent, Context, WidgetType, KIXObject
 } from "@kix/core/dist/model";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { ContextService } from "@kix/core/dist/browser/context";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
 class OverlayComponent {
@@ -17,7 +17,8 @@ class OverlayComponent {
 
     public onMount(): void {
         OverlayService.getInstance().registerOverlayListener(this.openOverlay.bind(this));
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
+
+        WidgetService.getInstance().setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
 
         document.addEventListener("click", (event: any) => {
             if (this.state.show && !this.showShield()) {
@@ -37,12 +38,6 @@ class OverlayComponent {
     public onUpdate(): void {
         if (this.state.position && this.state.position.length === 2) {
             this.setOverlayPosition();
-        }
-    }
-
-    private contextNotified(contextId: string, type: ContextNotification, context: Context<any>): void {
-        if (type === ContextNotification.CONTEXT_CHANGED) {
-            context.setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
         }
     }
 

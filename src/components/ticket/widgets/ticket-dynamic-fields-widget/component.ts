@@ -1,6 +1,6 @@
 import { ActionFactory } from '@kix/core/dist/browser';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ContextNotification, ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
@@ -20,8 +20,16 @@ class DynamicFieldWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: () => (objectId: string | number, object: any) => {
+                if (objectId === this.state.ticketId) {
+                    this.setDynamicFields();
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
 
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)
@@ -31,12 +39,6 @@ class DynamicFieldWidgetComponent {
 
         this.state.configuredDynamicFields = this.state.widgetConfiguration.settings.dynamicFields;
         this.setDynamicFields();
-    }
-
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.setDynamicFields();
-        }
     }
 
     private setActions(): void {

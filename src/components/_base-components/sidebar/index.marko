@@ -2,7 +2,7 @@
     <div.sidebar-area>
         <for(sidebar in state.sidebars)>
             <div.sidebar key=("sidebar" + Math.random())>
-                <include(component.getSidebarTemplate(sidebar.instanceId), { type: component.getWidgetType(), instanceId: sidebar.instanceId, minimizable: false })/>
+                <include(component.getSidebarTemplate(sidebar.instanceId), { instanceId: sidebar.instanceId, minimizable: false, contextType: state.contextType })/>
             </div>
         </for>
     </div>

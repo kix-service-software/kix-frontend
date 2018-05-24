@@ -12,7 +12,7 @@ import {
     ArticleTableToggleLayer,
     TicketDetailsContext
 } from "@kix/core/dist/browser/ticket";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { ContextService } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
     TableSortLayer, ToggleOptions, ActionFactory
@@ -29,8 +29,19 @@ export class ArticleListWidgetComponent {
 
     public onMount(): void {
         this.getArticles();
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: () => (objectId: string | number, object: any) => {
+                if (objectId === this.state.ticketId) {
+                    this.getArticles();
+                    this.setActions();
+                    this.setArticleTableConfiguration();
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
+
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setActions();
         this.setArticleTableConfiguration();
@@ -46,24 +57,21 @@ export class ArticleListWidgetComponent {
         }
     }
 
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.getArticles();
-            this.setActions();
-            this.setArticleTableConfiguration();
-        } else if (id === TicketDetailsContext.CONTEXT_ID && type === ContextNotification.GO_TO_ARTICLE) {
-            ContextService.getInstance().notifyListener(
-                this.state.instanceId, ContextNotification.TOGGLE_WIDGET, false
-            );
+    // private contextNotified(id: string | number, type: ContextNotification, ...args): void {
+    //     if (id === TicketDetailsContext.CONTEXT_ID && type === ContextNotification.GO_TO_ARTICLE) {
+    //         // FIXME: Nicht über Context togglen
+    //         // ContextService.getInstance().notifyListener(
+    //         //     this.state.instanceId, ContextNotification.TOGGLE_WIDGET, false
+    //         // );
 
-            setTimeout(() => {
-                ContextService.getInstance().notifyListener(
-                    TicketDetailsContext.CONTEXT_ID, ContextNotification.SCROLL_TO_ARTICLE, args[0]
-                );
-                this.state.standardTable.loadRows();
-            }, 500);
-        }
-    }
+    //         // setTimeout(() => {
+    //         //     ContextService.getInstance().notifyListener(
+    //         //         TicketDetailsContext.CONTEXT_ID, ContextNotification.SCROLL_TO_ARTICLE, args[0]
+    //         //     );
+    //         //     this.state.standardTable.loadRows();
+    //         // }, 500);
+    //     }
+    // }
 
     private setArticleTableConfiguration(): void {
         if (this.state.widgetConfiguration) {

@@ -1,5 +1,5 @@
-import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
+import { TicketService } from "@kix/core/dist/browser/ticket/";
+import { ContextService } from "@kix/core/dist/browser/context";
 import { Customer } from "@kix/core/dist/model";
 import { CustomerWidgetComponentState } from './CustomerWidgetComponentState';
 
@@ -11,8 +11,12 @@ class CustomerInfoWidgetComponent {
         this.state = new CustomerWidgetComponentState(input.instanceId);
     }
 
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
+    }
+
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 

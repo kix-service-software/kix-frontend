@@ -12,7 +12,12 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane key=component.getLaneKey()>
-                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId, ticketId: state.ticketId, type: component.getLaneWidgetType()})/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN", 
+                                instanceId: lane.instanceId, 
+                                ticketId: state.ticketId, 
+                                type: component.getLaneWidgetType()
+                                })/>
                         </li>
                     </for>
                 </ul>
