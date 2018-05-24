@@ -53,6 +53,7 @@ class FormDropdownComponent {
             this.toggleList(true);
         } else {
             this.toggleList();
+            this.focusInput();
         }
     }
 
