@@ -1,9 +1,12 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize, Form,
-    FormField, TicketProperty, ArticleProperty, DataType, FormContext, KIXObjectType
+    FormField, TicketProperty, ArticleProperty, DataType, FormContext, KIXObjectType, FormFieldOption
 } from '@kix/core/dist/model';
-import { TicketContextConfiguration, ArticleLabelProvider } from '@kix/core/dist/browser/ticket';
+import {
+    TicketContextConfiguration, ArticleLabelProvider,
+    TicketStateOptions
+} from '@kix/core/dist/browser/ticket';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
@@ -58,7 +61,9 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, false, "Ticketnummer"));
             fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
             fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
-            fields.push(new FormField("Status", TicketProperty.STATE_ID, false, "Status"));
+            fields.push(new FormField("Status", TicketProperty.STATE_ID, false, "Status", [
+                new FormFieldOption(TicketStateOptions.SHOW_PENDING_TIME, false)
+            ]));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, false, "Typ"));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, false, "Queue"));
             fields.push(new FormField("Archiv", TicketProperty.ARCHIVE_FLAG, false, "Archiv"));
@@ -67,7 +72,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
             const group = new FormGroup('Ticketattribute', fields);
 
-            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group]);
+            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group], false);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 
