@@ -36,6 +36,13 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 this.state.currentLinkableObject.id.toString()
             );
             formInstance.reset();
+
+            formInstance.registerListener({
+                formValueChanged: () => {
+                    this.state.canSearch = formInstance.hasValues();
+                },
+                updateForm: () => { return; }
+            });
         }
 
         WidgetService.getInstance().setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
@@ -86,14 +93,14 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     private async executeSearch(): Promise<void> {
         this.state.resultCount = null;
         if (this.state.standardTable && this.state.currentLinkableObject) {
-            (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(
-                this.state.currentLinkableObject.id.toString()
-            );
-            this.state.isSearching = true;
+            (this.state.standardTable.contentLayer as IFormTableLayer)
+                .setFormId(this.state.currentLinkableObject.id.toString());
+
+            this.state.canSearch = false;
             await this.state.standardTable.loadRows();
             const count = this.state.standardTable.getTableRows().length;
             this.state.resultCount = count > 0 ? count : null;
-            this.state.isSearching = false;
+            this.state.canSearch = true;
         }
     }
 
