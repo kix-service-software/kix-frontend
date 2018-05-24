@@ -2,7 +2,7 @@ import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageServic
 import { ActionListComponentState } from './ActionListComponentState';
 import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
 import { Context, KIXObject } from '@kix/core/dist/model';
-import { IContextListener } from '../../../../../core/dist/browser/context/IContextListener';
+import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
 
 export class ActionListComponent {
 
