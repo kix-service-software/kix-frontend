@@ -20,10 +20,10 @@ class SidebarMenuComponent {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
+
+        this.setContext(ContextService.getInstance().getContext(this.state.contextType));
     }
 
     private setContext(context: Context<any>): void {
@@ -32,7 +32,8 @@ class SidebarMenuComponent {
                 sidebarToggled: () => {
                     this.setSidebarMenu(context);
                 },
-                explorerBarToggled: () => { return; }
+                explorerBarToggled: () => { return; },
+                objectChanged: () => { return; }
             });
         }
         this.setSidebarMenu(context);
@@ -45,11 +46,11 @@ class SidebarMenuComponent {
     }
 
     private toggleSidebar(instanceId: string): void {
-        ContextService.getInstance().getContext().toggleSidebar(instanceId);
+        ContextService.getInstance().getContext(this.state.contextType).toggleSidebar(instanceId);
     }
 
     private isShown(sidebar: ConfiguredWidget): boolean {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(this.state.contextType);
         const sidebars = context.getSidebars(true) || [];
         return (sidebars.findIndex((sb) => sb.instanceId === sidebar.instanceId) !== -1);
     }

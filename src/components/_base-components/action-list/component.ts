@@ -1,7 +1,7 @@
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ActionListComponentState } from './ActionListComponentState';
 import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
-import { Context } from '@kix/core/dist/model';
+import { Context, KIXObject } from '@kix/core/dist/model';
 import { IContextListener } from '../../../../../core/dist/browser/context/IContextListener';
 
 export class ActionListComponent {
@@ -95,6 +95,13 @@ class ComponentContextListener implements IContextListener {
         setTimeout(() => {
             this.actionListComponent.prepareLists();
         }, 50);
+    }
+
+    public objectChanged(objectId: string | number, object: KIXObject<any>): void {
+        //
+    }
+    public objectProvided(objectId: string | number, object: KIXObject<any>): void {
+        //
     }
 }
 

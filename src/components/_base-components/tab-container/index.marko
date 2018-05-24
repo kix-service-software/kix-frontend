@@ -21,9 +21,9 @@
                     </if>
                 </div>
                 <if(state.hasSidebars)>
-                    <sidebar contextType="DIALOG"/>
+                    <sidebar contextType=state.contextType/>
                     <div.site-menu-wrapper>
-                        <sidebar-menu contextType="DIALOG"/>
+                        <sidebar-menu contextType=state.contextType/>
                     </div>
                 </if>
             </div>

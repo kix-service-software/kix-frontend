@@ -3,7 +3,8 @@ import {
     FormValidationService, OverlayService, FormService, ContextService
 } from "@kix/core/dist/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, ContextType
+    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
+    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact
 } from "@kix/core/dist/model";
 import {
     TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
@@ -22,6 +23,23 @@ class NewTicketDialogComponent {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
+            formInstance.registerListener({
+                formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
+                    const dialogContext = ContextService.getInstance().getContext(
+                        null, NewTicketDialogContext.CONTEXT_ID
+                    );
+                    if (dialogContext && value.value) {
+                        if (formField.property === TicketProperty.CUSTOMER_ID) {
+                            const customer: Customer = value.value;
+                            dialogContext.provideObject(customer.CustomerID, customer);
+                        } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
+                            const contact: Contact = value.value;
+                            dialogContext.provideObject(contact.ContactID, contact);
+                        }
+                    }
+                },
+                updateForm: () => { return; }
+            });
         }
 
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");

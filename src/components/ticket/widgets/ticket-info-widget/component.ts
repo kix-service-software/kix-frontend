@@ -22,7 +22,8 @@ class TicketInfoWidgetComponent {
         const context = ContextService.getInstance().getContext();
         context.registerListener({
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
-            explorerBarToggled: () => { (this as any).setStateDirty('ticket'); }
+            explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
+            objectChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getTicket();

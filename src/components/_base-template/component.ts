@@ -43,9 +43,7 @@ class BaseTemplateComponent {
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, context: Context<any>) => {
                 this.setContext(context);
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
 
         this.setContext();

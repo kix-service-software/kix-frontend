@@ -31,17 +31,16 @@ class LinkedObjectsWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().registerListener({
-            objectUpdated: (id: string | number) => {
+        const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: (id: string | number) => {
                 if (id === this.state.ticketId) {
                     this.setLinkedObjects();
                 }
             },
-            objectListUpdated: () => { return; },
-            contextChanged: () => { return; }
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
         });
-
-        const context = ContextService.getInstance().getContext();
 
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<LinkedObjectsSettings>(this.state.instanceId)

@@ -1,5 +1,5 @@
 import {
-    TicketService, TicketNotification, TicketDetailsContext, TicketDetailsContextConfiguration
+    TicketService, TicketDetailsContext, TicketDetailsContextConfiguration
 } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
@@ -23,20 +23,16 @@ export class TicketDetailsComponent {
         this.setBreadcrumbDetails();
 
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext) => {
-                this.state.ticketDetailsConfiguration = ticketDeatilsContext.configuration;
-                if (contextId === TicketDetailsContext.CONTEXT_ID && this.state.ticketDetailsConfiguration) {
+            contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext, type: ContextType) => {
+                if (type === ContextType.MAIN && contextId === TicketDetailsContext.CONTEXT_ID) {
+                    this.state.ticketDetailsConfiguration = ticketDeatilsContext.configuration;
                     this.state.loadingConfig = false;
                     this.state.lanes = ticketDeatilsContext.getLanes();
                     this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
                     (this as any).update();
-
                 }
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
 
         const contextURL = 'tickets/' + this.state.ticketId;
         const context = new TicketDetailsContext(this.state.ticketId);
@@ -44,16 +40,14 @@ export class TicketDetailsComponent {
         this.loadTicket();
     }
 
-    private loadTicket(): void {
-        TicketService.getInstance().loadTicket(this.state.ticketId);
-    }
-
-    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
-        if (type === TicketNotification.TICKET_LOADED && id === this.state.ticketId) {
-            this.state.loadingTicket = false;
-            this.setBreadcrumbDetails();
-            this.setTicketHookInfo();
-        }
+    private async loadTicket(): Promise<void> {
+        const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
+        this.state.loadingTicket = false;
+        this.setBreadcrumbDetails();
+        this.setTicketHookInfo();
+        const context = ContextService.getInstance().getContext(null, TicketDetailsContext.CONTEXT_ID);
+        context.provideObject(ticket.contact.ContactID, ticket.contact);
+        context.provideObject(ticket.customer.CustomerID, ticket.customer);
     }
 
     private getActions(): string[] {

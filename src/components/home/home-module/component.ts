@@ -19,9 +19,7 @@ class HomeComponent {
                 if (contextId === HomeContext.CONTEXT_ID) {
                     this.state.contentWidgets = context.getContent();
                 }
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
         ContextService.getInstance().provideContext(new HomeContext(), true, ContextType.MAIN);
     }

@@ -4,7 +4,7 @@ import {
 } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context';
 import {
-    TicketNotification, TicketService, TicketTableContentLayer, TicketTableLabelLayer,
+    TicketService, TicketTableContentLayer, TicketTableLabelLayer,
     TicketTableSelectionListener, TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
@@ -16,8 +16,6 @@ import { IdService } from '@kix/core/dist/browser/IdService';
 class TicketListWidgetComponent {
 
     public state: TicketListComponentState;
-
-    protected store: any;
 
     private componentInitialized: boolean = false;
 
@@ -35,9 +33,7 @@ class TicketListWidgetComponent {
                 this.state.widgetConfiguration =
                     context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
                 this.setTableConfiguration();
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
         const currentContext = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = currentContext

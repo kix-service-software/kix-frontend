@@ -21,10 +21,11 @@ class WidgetComponent {
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(this.state.contextType);
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
 
@@ -53,7 +54,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        ContextService.getInstance().getContext().toggleExplorerBar();
+        ContextService.getInstance().getContext(this.state.contextType).toggleExplorerBar();
     }
 
     private resetConfiguration(): void {

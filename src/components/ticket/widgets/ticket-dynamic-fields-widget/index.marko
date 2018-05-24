@@ -2,7 +2,8 @@
     contentActions=state.actions>
     <@content>
         <div.dynamic-fields-container>
-            <ticket-dynamic-fields-container ticketId=state.ticketId dynamicFields=state.filteredDynamicFields/>
+            <ticket-dynamic-fields-container ticketId=state.ticketId dynamicFields=state.filteredDynamicFields
+                contextType=input.contextType/>
         </div>
     </@content>
 </widget>

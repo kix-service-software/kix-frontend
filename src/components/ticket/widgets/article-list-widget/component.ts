@@ -29,18 +29,19 @@ export class ArticleListWidgetComponent {
 
     public onMount(): void {
         this.getArticles();
-        ContextService.getInstance().registerListener({
-            objectUpdated: (objectId: string | number, object: any) => {
+        const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: () => (objectId: string | number, object: any) => {
                 if (objectId === this.state.ticketId) {
                     this.getArticles();
                     this.setActions();
                     this.setArticleTableConfiguration();
                 }
             },
-            objectListUpdated: () => { return; },
-            contextChanged: () => { return; }
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
         });
-        const context = ContextService.getInstance().getContext();
+
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setActions();
         this.setArticleTableConfiguration();

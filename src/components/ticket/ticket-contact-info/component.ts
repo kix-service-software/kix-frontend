@@ -1,35 +1,32 @@
-import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
+import { TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { Contact } from "@kix/core/dist/model";
+import { Contact, KIXObjectType } from "@kix/core/dist/model";
+import { ContactInfoComponentState } from "./ContactInfoComponentState";
 
 class ContactInfoComponent {
 
-    private state: any;
+    private state: ContactInfoComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            contact: null
-        };
+        this.state = new ContactInfoComponentState();
+    }
+
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-        this.loadContact(context.objectId);
-    }
-
-    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
-        const context = ContextService.getInstance().getContext();
-        if (type === TicketNotification.TICKET_LOADED && id === context.objectId) {
-            this.loadContact(context.objectId);
-        }
-    }
-
-    private loadContact(ticketId: number): void {
-        const ticket = TicketService.getInstance().getTicket(ticketId);
-        if (ticket && this.contactChanged(ticket.contact)) {
-            this.state.contact = ticket.contact;
-        }
+        const context = ContextService.getInstance().getContext(this.state.contextType);
+        context.registerListener({
+            objectChanged: (objectId: number, contact: Contact) => {
+                if (contact instanceof Contact && this.contactChanged(contact)) {
+                    this.state.contact = contact;
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
+        this.state.contact = context.getObjectByType<Contact>(KIXObjectType.CONTACT);
     }
 
     private contactChanged(contact: Contact): boolean {

@@ -31,16 +31,17 @@ class TicketHistoryWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().registerListener({
-            objectUpdated: (objectId: string | number, object: any) => {
+        const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: () => (objectId: string | number, object: any) => {
                 if (objectId === this.state.ticketId) {
                     this.setHistoryTableConfiguration();
                 }
             },
-            objectListUpdated: () => { return; },
-            contextChanged: () => { return; }
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
         });
-        const context = ContextService.getInstance().getContext();
+
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.setActions();

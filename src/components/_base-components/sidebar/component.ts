@@ -21,10 +21,9 @@ class SidebarComponent {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
-            },
-            objectListUpdated: () => { return; },
-            objectUpdated: () => { return; }
+            }
         });
+        this.setContext(ContextService.getInstance().getContext(this.state.contextType));
     }
 
     private setContext(context: Context<any>): void {
@@ -33,7 +32,8 @@ class SidebarComponent {
                 sidebarToggled: () => {
                     this.updateSidebars(context);
                 },
-                explorerBarToggled: () => { return; }
+                explorerBarToggled: () => { return; },
+                objectChanged: () => { return; },
             });
         }
         this.updateSidebars(context);

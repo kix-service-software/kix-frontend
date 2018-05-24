@@ -1,5 +1,5 @@
-import { TicketNotification, TicketService } from "@kix/core/dist/browser/ticket/";
-import { TicketProperty, DateTimeUtil } from "@kix/core/dist/model/";
+import { TicketService } from "@kix/core/dist/browser/ticket/";
+import { TicketProperty, DateTimeUtil, Ticket } from "@kix/core/dist/model/";
 import { ContextService } from "@kix/core/dist/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
 
@@ -14,17 +14,22 @@ export class TicketPriorityLabelComponent {
     public onInput(input: any): void {
         this.state.fieldId = Number(input.value);
         this.state.ticketId = Number(input.ticketId);
+        const context = ContextService.getInstance().getContext(input.contextType);
+        if (context) {
+            context.registerListener({
+                objectChanged: (id: number, ticket: Ticket) => {
+                    if (id === this.state.ticketId) {
+                        this.setDisplayValue();
+                    }
+                },
+                sidebarToggled: () => { return; },
+                explorerBarToggled: () => { return; }
+            });
+        }
     }
 
     public onMount(): void {
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
         this.setDisplayValue();
-    }
-
-    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
-        if (id === this.state.ticketId && type === TicketNotification.TICKET_LOADED) {
-            this.setDisplayValue();
-        }
     }
 
     private setDisplayValue(): void {

@@ -17,13 +17,11 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public open(): void {
-        ContextService.getInstance().setActiveContextType(ContextType.DIALOG);
         this.state.show = true;
     }
 
     public close(): void {
         this.state.show = false;
-        ContextService.getInstance().setActiveContextType();
     }
 
     public setHint(hint: string): void {

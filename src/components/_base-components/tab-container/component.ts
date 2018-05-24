@@ -23,11 +23,24 @@ class TabLaneComponent {
 
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
         if (!this.state.activeTab && this.state.tabWidgets.length) {
             this.state.activeTab = this.state.tabWidgets[0];
+        }
+
+        if (this.state.contextType) {
+            this.setSidebars();
+
+            ContextService.getInstance().registerListener({
+                contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                    if (type === this.state.contextType) {
+                        this.setSidebars();
+                    }
+                }
+            });
         }
     }
 
@@ -45,12 +58,9 @@ class TabLaneComponent {
         return WidgetType.LANE_TAB;
     }
 
-    private hasSidebars(): boolean {
-        const context = ContextService.getInstance().getContext(ContextType.DIALOG);
-        if (context) {
-            return context.getSidebars().length > 0;
-        }
-        return false;
+    private setSidebars(): void {
+        const context = ContextService.getInstance().getContext(this.state.contextType);
+        this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
     }
 
 }
