@@ -1,5 +1,5 @@
 import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentState";
-import { DialogService, ContextService } from "@kix/core/dist/browser";
+import { DialogService, ContextService, FormService } from "@kix/core/dist/browser";
 import { ContextType } from "@kix/core/dist/model";
 import { NewCustomerDialogContext } from "@kix/core/dist/browser/customer";
 
@@ -18,6 +18,14 @@ class NewCustomerDialogComponent {
         this.state.loading = true;
         await ContextService.getInstance().provideContext(context, true, ContextType.DIALOG);
         this.state.loading = false;
+    }
+
+    private cancel(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.reset();
+        }
+        DialogService.getInstance().closeMainDialog();
     }
 }
 
