@@ -9,6 +9,7 @@
         "_base-components/form-main",
         "_base-components/form-main/inputs",
         "_base-components/base-html-components",
+        "customer",
         "home",
         "ticket"
     ]

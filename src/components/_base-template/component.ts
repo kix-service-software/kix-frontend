@@ -4,6 +4,8 @@ import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { CustomerService } from '@kix/core/dist/browser/customer';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 
 declare var io: any;
 
@@ -18,6 +20,7 @@ class BaseTemplateComponent {
     }
 
     public async onMount(): Promise<void> {
+        this.bootstrapServices();
         ContextService.getInstance().setObjectData(this.state.objectData);
 
         await ComponentsService.getInstance().init();
@@ -47,6 +50,11 @@ class BaseTemplateComponent {
         });
 
         this.setContext();
+    }
+
+    private bootstrapServices(): void {
+        TicketService.getInstance();
+        CustomerService.getInstance();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getContext()): void {

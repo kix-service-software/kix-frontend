@@ -1,6 +1,6 @@
 import { IMarkoDependencyExtension } from '@kix/core/dist/extensions';
 
-export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
+export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         const dialog = [
@@ -104,5 +104,5 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new KIXMarkoDependencyExtension();
+    return new TicketMarkoDependencyExtension();
 };
