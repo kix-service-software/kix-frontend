@@ -1,4 +1,5 @@
 import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction } from "@kix/core/dist/model";
+import { IdService } from "@kix/core/dist/browser";
 
 export class OverlayComponentState {
 
@@ -13,7 +14,8 @@ export class OverlayComponentState {
         public keepShow: boolean = true,
         public show: boolean = false,
         public overlayClass: string = null,
-        public instanceId: string = 'overlay-widget'
+        public instanceId: string = 'overlay-widget',
+        public overlayId: string = IdService.generateDateBasedId()
     ) { }
 
 }
