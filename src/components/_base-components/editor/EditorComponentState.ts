@@ -27,80 +27,76 @@ export class EditorComponentState {
         let toolbar = [];
         if (this.simple) {
             toolbar = [
-                {
-                    name: 'basicstyles', items: [
-                        'Bold', 'Italic'
-                    ]
-                },
-                {
-                    name: 'paragraph', items: [
-                        'NumberedList', 'BulletedList', 'Outdent', 'Indent'
-                    ]
-                }
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'colors', items: ['TextColor'] },
+                { name: 'links', items: ['Link'] },
+                { name: 'insert', items: ['base64image'] }
             ];
 
-        } else if (this.inline) {
-            toolbar = [
-                {
-                    name: 'basicstyles', items: [
-                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript',
-                    ]
-                },
-                {
-                    name: 'paragraph', items: [
-                        'NumberedList', 'BulletedList', 'Outdent', 'Indent', '-',
-                        'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-                    ]
-                },
-                '/',
-                { name: 'links', items: ['Link', 'Unlink'] },
-                { name: 'undo', items: ['Undo', 'Redo'] },
-                {
-                    name: 'insert', items: [
-                        'Image', 'Table', 'HorizontalRule', 'PasteText', 'PasteFromWord', 'SpecialChar'
-                    ]
-                },
-                '/',
-                { name: 'colors', items: ['TextColor', 'BGColor'] },
-                { name: 'cleanup', items: ['RemoveFormat'] },
-                { name: 'styles', items: ['Font', 'FontSize'] },
-            ];
+            // } else if (this.inline) {
+            //     toolbar = [
+            //         {
+            //             name: 'basicstyles', items: [
+            //                 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript',
+            //             ]
+            //         },
+            //         {
+            //             name: 'paragraph', items: [
+            //                 'NumberedList', 'BulletedList', 'Outdent', 'Indent', '-',
+            //                 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+            //             ]
+            //         },
+            //         '/',
+            //         { name: 'links', items: ['Link', 'Unlink'] },
+            //         { name: 'undo', items: ['Undo', 'Redo'] },
+            //         {
+            //             name: 'insert', items: [
+            //                 'Image', 'Table', 'HorizontalRule', 'PasteText', 'PasteFromWord', 'SpecialChar'
+            //             ]
+            //         },
+            //         '/',
+            //         { name: 'colors', items: ['TextColor', 'BGColor'] },
+            //         { name: 'cleanup', items: ['RemoveFormat'] },
+            //         { name: 'styles', items: ['Font', 'FontSize'] },
+            //     ];
         } else {
             toolbar = [
                 {
                     name: 'basicstyles', items: [
-                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript',
+                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-',
+                        'RemoveFormat'
                     ]
                 },
+                { name: 'clipboard', items: ['Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
                 {
                     name: 'paragraph', items: [
-                        'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-',
+                        'NumberedList', 'BulletedList', '-',
+                        'Outdent', 'Indent', '-', 'Blockquote', '-',
                         'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
                     ]
                 },
-                { name: 'links', items: ['Link', 'Unlink'] },
-                { name: 'undo', items: ['Undo', 'Redo', 'SelectAll'] },
-                { name: 'quote', items: ['Blockquote'] },
+                { name: 'document', items: ['Source', '-', 'Print'] },
+                { name: 'tools', items: ['Maximize'] },
                 '/',
+                { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                { name: 'colors', items: ['TextColor', 'BGColor'] },
+                { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+                { name: 'links', items: ['Link', 'Unlink'] },
                 {
                     name: 'insert', items: [
-                        'Image', 'Table', 'HorizontalRule', 'PasteText', 'PasteFromWord', 'SpecialChar'
+                        'base64image', 'Table', 'CodeSnippet',
+                        'HorizontalRule', 'Smiley', 'SpecialChar'
                     ]
-                },
-                { name: 'editing', items: ['Find', 'Replace'] },
-                { name: 'colors', items: ['TextColor', 'BGColor'] },
-                { name: 'cleanup', items: ['RemoveFormat'] },
-                { name: 'document', items: ['ShowBlocks', 'Source', 'Maximize'] },
-                '/',
-                { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
-                { name: 'tools', items: [] }
+                }
             ];
         }
 
         this.config = {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
-            // toolbar,
+            // TODO: language from user config?
+            language: 'de',
+            toolbar,
             width: '100%',
             height: '100%',
             resize_minWidth: 200,
@@ -109,7 +105,9 @@ export class EditorComponentState {
             resize_maxHeight: 1000,
             extraAllowedContent: 'div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
             toolbarCanCollapse: true,
-            readOnly: this.readOnly
+            readOnly: this.readOnly,
+            removeButtons: '',
+            codeSnippet_theme: 'default'
         };
         if (resize || resize === undefined) {
             this.config['resize_dir'] = resizeDir || 'vertical';
