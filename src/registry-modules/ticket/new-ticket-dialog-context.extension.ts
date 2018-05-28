@@ -7,7 +7,7 @@ import { ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
 export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
     public getModuleId(): string {
-        return "new-ticket-dialog-context";
+        return NewTicketDialogContext.CONTEXT_ID;
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
