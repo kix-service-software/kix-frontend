@@ -31,7 +31,7 @@ class EditorComponent {
             }
         }
 
-        this.state.invalid = typeof input.invlaid !== 'undefined' ? input.invalid : false;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
     public async onMount(): Promise<void> {
@@ -56,6 +56,8 @@ class EditorComponent {
         }
     }
 
+    // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
+    // weil der Editor schon kurz nach Instanziierung wieder zerstört wird)
     public async onDestroy(): Promise<void> {
         if (this.instanceExists()) {
             CKEDITOR.instances[this.state.id].destroy();

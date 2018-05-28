@@ -18,11 +18,25 @@
             // TODO: eigenes Styling nutzen? Firefox setzt box-shadow
             box-shadow: none;
         }
+        &:focus:not(:disabled) {
+            border-color: darken(@secondary-3, 20%);
+        }
     }
     &.invalid {
-        border-color: red;
+        border-color: @tertiary-0;
         &::placeholder {
-            color: red;
+            color: @tertiary-0;
+        }
+    }
+    &.editor-container {
+        height: unset;
+        padding: 0;
+        >div {
+            overflow: auto;
+            max-height: 100%;
+            &.cke {
+                border: none;
+            }
         }
     }
 }
