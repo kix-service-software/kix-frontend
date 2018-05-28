@@ -33,8 +33,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
 
     private contactChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        const contact: Contact = item ? this.state.contacts.find((c) => c.ContactID === item.id) : undefined;
-        super.provideValue(contact);
+        super.provideValue(item ? item.object : null);
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
@@ -43,7 +42,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
         let items = [];
         if (searchValue && searchValue !== '') {
             items = this.state.contacts.map(
-                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.DisplayValue)
+                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.DisplayValue, null, c)
             );
         }
 

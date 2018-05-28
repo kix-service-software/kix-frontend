@@ -1,9 +1,14 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { FormValidationService, OverlayService, FormService } from "@kix/core/dist/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
+    FormValidationService, OverlayService, FormService, ContextService
+} from "@kix/core/dist/browser";
+import {
+    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
+    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact
 } from "@kix/core/dist/model";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import {
+    TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
+} from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
 
 class NewTicketDialogComponent {
@@ -14,13 +19,35 @@ class NewTicketDialogComponent {
         this.state = new NewTicketDialogComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
+            formInstance.registerListener({
+                formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
+                    const dialogContext = ContextService.getInstance().getContext(
+                        null, NewTicketDialogContext.CONTEXT_ID
+                    );
+                    if (dialogContext && value.value) {
+                        if (formField.property === TicketProperty.CUSTOMER_ID) {
+                            const customer: Customer = value.value;
+                            dialogContext.provideObject(customer.CustomerID, customer);
+                        } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
+                            const contact: Contact = value.value;
+                            dialogContext.provideObject(contact.ContactID, contact);
+                        }
+                    }
+                },
+                updateForm: () => { return; }
+            });
         }
 
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+
+        const context = new NewTicketDialogContext();
+        this.state.loading = true;
+        await ContextService.getInstance().provideContext(context, true, ContextType.DIALOG);
+        this.state.loading = false;
     }
 
     private cancel(): void {

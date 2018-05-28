@@ -3,7 +3,8 @@
     "extensions": {
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
-            "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension"
+            "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension",
+            "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -18,7 +19,9 @@
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
             "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
-            "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension"
+            "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension",
+            "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
+            "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension"
         }
     }
 }

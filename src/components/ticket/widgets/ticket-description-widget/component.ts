@@ -1,9 +1,9 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { Attachment, WidgetType } from '@kix/core/dist/model/';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ActionFactory } from '@kix/core/dist/browser';
+import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 
 class TicketDescriptionWidgetComponent {
 
@@ -22,8 +22,8 @@ class TicketDescriptionWidgetComponent {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.setWidgetType('ticket-description-widget', WidgetType.GROUP);
-        context.setWidgetType('ticket-description-notes', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
         this.getFirstArticle();
         this.setActions();

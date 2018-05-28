@@ -1,7 +1,8 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { Context, WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { Context, WidgetType, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
 import { TabContainerComponentState } from './TabContainerComponentState';
+import { WidgetService } from '@kix/core/dist/browser';
 
 class TabLaneComponent {
 
@@ -14,17 +15,32 @@ class TabLaneComponent {
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
 
-        const context = ContextService.getInstance().getContext();
-        context.setWidgetType("tab-widget", WidgetType.LANE);
-        this.state.tabWidgets.forEach((tab) => context.setWidgetType(tab.instanceId, WidgetType.LANE_TAB));
+        WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
+        this.state.tabWidgets.forEach(
+            (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
+        );
+        (this as any).setStateDirty("title");
 
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
         if (!this.state.activeTab && this.state.tabWidgets.length) {
             this.state.activeTab = this.state.tabWidgets[0];
+        }
+
+        if (this.state.contextType) {
+            this.setSidebars();
+
+            ContextService.getInstance().registerListener({
+                contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                    if (type === this.state.contextType) {
+                        this.setSidebars();
+                    }
+                }
+            });
         }
     }
 
@@ -41,6 +57,12 @@ class TabLaneComponent {
     private getLaneTabWidgetType(): number {
         return WidgetType.LANE_TAB;
     }
+
+    private setSidebars(): void {
+        const context = ContextService.getInstance().getContext(this.state.contextType);
+        this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
+    }
+
 }
 
 module.exports = TabLaneComponent;

@@ -1,5 +1,5 @@
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ContextNotification, ContextService } from '@kix/core/dist/browser/context/';
+import { ContextService } from '@kix/core/dist/browser/context/';
 import { ConfiguredWidget, WidgetType } from '@kix/core/dist/model/';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
@@ -11,23 +11,6 @@ class ExplorerbarComponent {
         this.state = {
             explorer: []
         };
-    }
-
-    public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
-    }
-
-    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (id === ContextService.getInstance().getActiveContextId()) {
-            if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED ||
-                type === ContextNotification.CONTEXT_CHANGED) {
-                const context = ContextService.getInstance().getContext();
-                this.state.explorer = context ? (context.getExplorer() || []) : [];
-            } else if (type === ContextNotification.EXPLORER_TOGGLED ||
-                type === ContextNotification.EXPLORER_BAR_TOGGLED) {
-                (this as any).setStateDirty('explorer');
-            }
-        }
     }
 
     private getWidgetTemplate(widget: ConfiguredWidget): any {

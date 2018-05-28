@@ -1,35 +1,33 @@
-import { TicketService, TicketNotification } from "@kix/core/dist/browser/ticket/";
-import { ContextService, ContextNotification } from "@kix/core/dist/browser/context";
-import { Customer } from "@kix/core/dist/model";
+import { TicketService } from "@kix/core/dist/browser/ticket/";
+import { ContextService } from "@kix/core/dist/browser/context";
+import { Customer, KIXObjectType } from "@kix/core/dist/model";
+import { CustomerInfoComponentState } from "./CustomerInfoComponentState";
 
 class CustomerInfoComponent {
 
-    private state: any;
+    private state: CustomerInfoComponentState;
 
     public onCreate(input: any): void {
-        this.state = {
-            customer: null
-        };
+        this.state = new CustomerInfoComponentState();
+    }
+
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
-        TicketService.getInstance().addServiceListener(this.ticketServiceNotified.bind(this));
-        this.loadCustomer(context.contextObjectId);
-    }
+        const context = ContextService.getInstance().getContext(this.state.contextType);
+        context.registerListener({
+            objectChanged: (objectId: string | number, customer: Customer) => {
+                if (customer instanceof Customer && this.customerChanged(customer)) {
+                    this.state.customer = customer;
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
 
-    private ticketServiceNotified(id: number, type: TicketNotification, ...args): void {
-        const context = ContextService.getInstance().getContext();
-        if (type === TicketNotification.TICKET_LOADED && id === context.contextObjectId) {
-            this.loadCustomer(context.contextObjectId);
-        }
-    }
-
-    private loadCustomer(ticketId: number): void {
-        const ticket = TicketService.getInstance().getTicket(ticketId);
-        if (ticket && this.customerChanged(ticket.customer)) {
-            this.state.customer = ticket.customer;
-        }
+        this.state.customer = context.getObjectByType<Customer>(KIXObjectType.CUSTOMER);
     }
 
     private customerChanged(customer: Customer): boolean {

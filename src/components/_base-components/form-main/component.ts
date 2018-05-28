@@ -2,6 +2,7 @@ import { ContextService } from '@kix/core/dist/browser/context';
 import { FormComponentState } from './FormComponentState';
 import { WidgetType, IFormEvent, UpdateFormEvent } from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
+import { WidgetService } from '@kix/core/dist/browser';
 
 class FormComponent {
 
@@ -13,7 +14,7 @@ class FormComponent {
 
     public onMount(): void {
         this.state.formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        ContextService.getInstance().getContext().setWidgetType('form-group', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
     }
 
 }

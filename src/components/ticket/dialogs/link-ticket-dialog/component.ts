@@ -1,5 +1,5 @@
 import {
-    KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService, ILinkDescriptionLabelLayer
+    KIXObjectSearchService, IFormTableLayer, DialogService, OverlayService, ILinkDescriptionLabelLayer, WidgetService
 } from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
@@ -36,10 +36,16 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 this.state.currentLinkableObject.id.toString()
             );
             formInstance.reset();
+
+            formInstance.registerListener({
+                formValueChanged: () => {
+                    this.state.canSearch = formInstance.hasValues();
+                },
+                updateForm: () => { return; }
+            });
         }
 
-        const context = ContextService.getInstance().getContext();
-        context.setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('link-ticket-dialog-form-widget', WidgetType.GROUP);
         this.getStandardTable();
         this.setPreventSelectionFilterOfStandardTable();
         this.setLinkTypes();
@@ -87,14 +93,14 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     private async executeSearch(): Promise<void> {
         this.state.resultCount = null;
         if (this.state.standardTable && this.state.currentLinkableObject) {
-            (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(
-                this.state.currentLinkableObject.id.toString()
-            );
-            this.state.isSearching = true;
+            (this.state.standardTable.contentLayer as IFormTableLayer)
+                .setFormId(this.state.currentLinkableObject.id.toString());
+
+            this.state.canSearch = false;
             await this.state.standardTable.loadRows();
             const count = this.state.standardTable.getTableRows().length;
             this.state.resultCount = count > 0 ? count : null;
-            this.state.isSearching = false;
+            this.state.canSearch = true;
         }
     }
 

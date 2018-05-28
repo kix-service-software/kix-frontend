@@ -19,6 +19,7 @@
                         line-height: unset;
                         min-width: 13em;
                         box-sizing: border-box;
+                        float: left;
                         cursor: pointer;
                         &.active {
                             background-color: @secondary-6;
@@ -56,13 +57,24 @@
             }
         }
         >.widget-content {
-            >.tab-content {
-                >.lane-tab-widget {
-                    >.widget-header {
-                        display: none;
+            >div {
+                >.tab-content {
+                    >.lane-tab-widget {
+                        >.widget-header {
+                            display: none;
+                        }
+                        >.widget-content {
+                            background-color: unset;
+                        }
                     }
                 }
             }
         }
     }
+}
+
+.tab-sidebar-grid {
+    display: grid;
+    grid-template-columns: auto 15em 2.25em;
+    grid-column-gap: 2.25em;
 }

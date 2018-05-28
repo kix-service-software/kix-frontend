@@ -1,9 +1,11 @@
-import { SocketEvent } from '@kix/core/dist/model';
+import { SocketEvent, Context } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { CustomerService } from '@kix/core/dist/browser/customer';
+import { TicketService } from '@kix/core/dist/browser/ticket';
 
 declare var io: any;
 
@@ -18,6 +20,7 @@ class BaseTemplateComponent {
     }
 
     public async onMount(): Promise<void> {
+        this.bootstrapServices();
         ContextService.getInstance().setObjectData(this.state.objectData);
 
         await ComponentsService.getInstance().init();
@@ -40,28 +43,27 @@ class BaseTemplateComponent {
             window.location.replace('/auth');
         });
 
-        ContextService.getInstance().addStateListener(this.contextServiceNotified.bind(this));
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: Context<any>) => {
+                this.setContext(context);
+            }
+        });
 
-        const context = ContextService.getInstance().getContext();
+        this.setContext();
+    }
+
+    private bootstrapServices(): void {
+        TicketService.getInstance();
+        CustomerService.getInstance();
+    }
+
+    private setContext(context: Context<any> = ContextService.getInstance().getContext()): void {
         this.state.hasExplorer = context && context.isExplorerBarShown();
         this.setGridColumns();
     }
 
     public toggleConfigurationMode(): void {
         this.state.configurationMode = !this.state.configurationMode;
-    }
-
-    public contextServiceNotified(id: string, type: ContextNotification, ...args): void {
-        if (id === ContextService.getInstance().getActiveContextId()) {
-            if (type === ContextNotification.CONTEXT_CONFIGURATION_CHANGED ||
-                type === ContextNotification.CONTEXT_CHANGED ||
-                type === ContextNotification.SIDEBAR_BAR_TOGGLED
-            ) {
-                const context = ContextService.getInstance().getContext();
-                this.state.hasExplorer = context && context.isExplorerBarShown();
-                this.setGridColumns();
-            }
-        }
     }
 
     private setGridColumns(): void {

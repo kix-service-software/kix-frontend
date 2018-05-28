@@ -50,8 +50,9 @@ class FormDropdownComponent {
 
     private dropdownClicked(): void {
         if (this.state.expanded) {
-            this.toggleList();
+            this.toggleList(true);
         } else {
+            this.toggleList();
             this.focusInput();
         }
     }

@@ -97,6 +97,7 @@ export class Server {
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
         server.listen(httpsPort, () => {
+            console.log("KIXng running on *:" + httpsPort);
             this.loggingService.info("KIXng running on *:" + httpsPort);
         });
     }

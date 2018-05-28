@@ -1,4 +1,4 @@
-import { ContextService, ContextNotification } from '@kix/core/dist/browser/context';
+import { ContextService } from '@kix/core/dist/browser/context';
 import {
     HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
 } from '@kix/core/dist/browser/ticket';
@@ -31,18 +31,21 @@ class TicketHistoryWidgetComponent {
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
         const context = ContextService.getInstance().getContext();
+        context.registerListener({
+            objectChanged: () => (objectId: string | number, object: any) => {
+                if (objectId === this.state.ticketId) {
+                    this.setHistoryTableConfiguration();
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
+
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.setActions();
         this.setHistoryTableConfiguration();
-    }
-
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.ticketId && type === ContextNotification.OBJECT_UPDATED) {
-            this.setHistoryTableConfiguration();
-        }
     }
 
     private setActions(): void {
@@ -92,9 +95,10 @@ class TicketHistoryWidgetComponent {
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
         if (columnId === ArticleProperty.ARTICLE_ID && historyEntry[columnId]) {
-            ContextService.getInstance().notifyListener(
-                TicketDetailsContext.CONTEXT_ID, ContextNotification.GO_TO_ARTICLE, historyEntry[columnId]
-            );
+            // FIXME: GO_TO_ARTICLE
+            // ContextService.getInstance().notifyListener(
+            //     TicketDetailsContext.CONTEXT_ID, ContextNotification.GO_TO_ARTICLE, historyEntry[columnId]
+            // );
         }
     }
 

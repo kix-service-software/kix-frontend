@@ -1,4 +1,4 @@
-import { ConfiguredWidget } from '@kix/core/dist/model';
+import { ConfiguredWidget, ContextType } from '@kix/core/dist/model';
 
 export class SidebarComponentState {
 
@@ -8,5 +8,6 @@ export class SidebarComponentState {
     public context: string = "dashboard";
     public sidebarBarExpanded: boolean = false;
     public showSidebar: boolean = false;
+    public contextType: ContextType = null;
 
 }

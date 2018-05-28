@@ -1,4 +1,4 @@
-import { ConfiguredWidget } from "@kix/core/dist/model";
+import { ConfiguredWidget, ContextType } from "@kix/core/dist/model";
 
 export class TabContainerComponentState {
 
@@ -6,7 +6,9 @@ export class TabContainerComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public activeTab: ConfiguredWidget = null,
         public title: string = "",
-        public minimizable: boolean = true
+        public minimizable: boolean = true,
+        public hasSidebars: boolean = false,
+        public contextType: ContextType = null
     ) { }
 
 }

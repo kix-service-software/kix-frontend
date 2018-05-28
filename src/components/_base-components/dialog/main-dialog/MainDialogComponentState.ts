@@ -7,7 +7,8 @@ export class MainDialogComponentState {
         public dialogWidgets: ConfiguredWidget[] = [],
         public dialogHint: string = "",
         public isLoading: boolean = false,
-        public loadingHint: string = null
+        public loadingHint: string = null,
+        public contextId: string = null
     ) { }
 
 }

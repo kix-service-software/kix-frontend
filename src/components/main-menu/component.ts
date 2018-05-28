@@ -27,7 +27,7 @@ class KIXMenuComponent {
     }
 
     private stateChanged(): void {
-        const contextId = ContextService.getInstance().getActiveContextId();
+        const contextId = ContextService.getInstance().getCurrentContextId();
         for (const entry of this.state.primaryMenuEntries) {
             entry.active = entry.contextId === contextId;
         }

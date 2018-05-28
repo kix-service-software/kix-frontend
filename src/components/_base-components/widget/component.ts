@@ -1,8 +1,8 @@
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
-import { ContextNotification } from '@kix/core/dist/browser/context';
 import { WidgetType } from '@kix/core/dist/model';
+import { WidgetService } from '@kix/core/dist/browser';
 
 class WidgetComponent {
 
@@ -21,13 +21,13 @@ class WidgetComponent {
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
+        this.state.contextType = input.contextType;
     }
 
     public onMount(): void {
-        ContextService.getInstance().addStateListener(this.contextNotified.bind(this));
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(this.state.contextType);
 
-        this.state.widgetType = context.getWidgetType(this.state.instanceId);
+        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
 
         const config = context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
@@ -43,12 +43,6 @@ class WidgetComponent {
         }
     }
 
-    private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-        if (id === this.state.instanceId && type === ContextNotification.TOGGLE_WIDGET) {
-            this.state.minimized = args[0];
-        }
-    }
-
     private minimizeWidget(): void {
         if (this.state.minimizable) {
             if (this.state.explorer) {
@@ -60,7 +54,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        ContextService.getInstance().getContext().toggleExplorerBar();
+        ContextService.getInstance().getContext(this.state.contextType).toggleExplorerBar();
     }
 
     private resetConfiguration(): void {
