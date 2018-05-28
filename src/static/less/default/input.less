@@ -15,6 +15,15 @@
             background-color: @secondary-4;
         }
     }
+    &.invalid {
+        border-color: @tertiary-0;
+        &::placeholder {
+            color: @tertiary-0;
+        }
+        &~.dropdown-button {
+            color: @tertiary-0;
+        }
+    }
 }
 
 .dropdown,
@@ -39,13 +48,9 @@
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
-        >input.input-style:invalid {
-            border-color: @tertiary-0;
+        >input.invalid~.dropdown-button {
             color: @tertiary-0;
-        }
-        >input.input-style:invalid~.dropdown-button {
             border-color: @tertiary-0;
-            color: @tertiary-0;
         }
         >.selected-item-container {
             display: inline-block;
