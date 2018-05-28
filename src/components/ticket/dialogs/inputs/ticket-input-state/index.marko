@@ -3,7 +3,7 @@
 <if(state.pending)>
     <div.pending-state class={invalid: state.invalid}>
         <span>*Warten bis:</span>
-        <input.input-style.date-input type="date" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" on-change('dateChanged')
+        <input.input-style.date-input type="date" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" on-change('dateChanged')
             value=state.selectedDate/>
         <span.kix-icon-calendar/>
         <span>-</span>

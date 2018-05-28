@@ -53,6 +53,12 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         if (this.state.standardTable) {
             this.state.standardTable.highlightLayer.setHighlightedObjects([]);
         }
+
+        document.addEventListener('keydown', (event: any) => {
+            if (event.key === 'Enter') {
+                this.executeSearch();
+            }
+        });
     }
 
     public setLinkableObjects(): void {
@@ -145,12 +151,6 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             const labelLayer = (this.state.standardTable.labelLayer as ILinkDescriptionLabelLayer);
             labelLayer.setLinkDescriptions(this.state.linkDescriptions);
             this.state.standardTable.loadRows(true);
-        }
-    }
-
-    private keyDown(event: any): void {
-        if (event.key === 'Enter') {
-            this.executeSearch();
         }
     }
 
