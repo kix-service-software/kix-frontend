@@ -6,7 +6,6 @@
     >.overlay-content {
         position: absolute;
         left: 50%;
-        transform: translateX(-50%);
         &.info-overlay {
             transform: unset;
             >.overlay-widget {
@@ -83,17 +82,26 @@
                 opacity: 100;
             }
             >.overlay-widget {
-                .widget(@tertiary-5, @secondary-6, @overlay-widget-header-height);
-                width: 24.25rem;
+                .widget(@tertiary-5, @secondary-6, 0);
+                width: 17.5rem;
                 min-height: 6rem;
+                border: none;
+                box-shadow: @shadow-2;
+                border-radius: @border-radius;
                 >.widget-content {
                     .font-size-small();
-                    border: 2px solid @tertiary-5;
-                    background-color: @secondary-6;
-                    color: @secondary-0;
+                    background-color: lighten(@tertiary-4, 20%);
+                    color: darken(@tertiary-4, 20%);
                     overflow: hidden;
-                    padding: 1.875rem 1.875rem 0;
-                    min-height: 6rem - @overlay-widget-header-height;
+                    padding: 1.5rem 1.5rem 0;
+                    min-height: 6rem;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                }
+                >.widget-header {
+                    display: none;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
                 }
             }
         }
