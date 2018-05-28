@@ -139,6 +139,8 @@ class FormAutoCompleteComponent {
                     }
                     break;
                 case 'Enter':
+                    event.stopPropagation();
+                    event.preventDefault();
                     this.itemSelected(this.state.preSelectedItem);
                     this.state.preSelectedItem = null;
                     break;

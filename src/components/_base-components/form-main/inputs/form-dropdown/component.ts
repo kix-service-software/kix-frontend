@@ -134,6 +134,8 @@ class FormDropdownComponent {
                     }
                     break;
                 case 'Enter':
+                    event.stopPropagation();
+                    event.preventDefault();
                     this.itemSelected(this.state.preSelectedItem);
                     break;
                 case 'Escape':
