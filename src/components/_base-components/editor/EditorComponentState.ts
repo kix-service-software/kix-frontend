@@ -67,7 +67,7 @@ export class EditorComponentState {
                         'RemoveFormat'
                     ]
                 },
-                { name: 'clipboard', items: ['Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                { name: 'clipboard', items: ['Undo', 'Redo'] },
                 {
                     name: 'paragraph', items: [
                         'NumberedList', 'BulletedList', '-',
@@ -91,11 +91,12 @@ export class EditorComponentState {
             ];
         }
 
+
         this.config = {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
             // TODO: language from user config?
-            language: 'de',
+            language: navigator.language || 'de',
             toolbar,
             width: '100%',
             height: '100%',
@@ -107,7 +108,7 @@ export class EditorComponentState {
             toolbarCanCollapse: true,
             readOnly: this.readOnly,
             removeButtons: '',
-            codeSnippet_theme: 'default'
+            codeSnippet_theme: 'github'
         };
         if (resize || resize === undefined) {
             this.config['resize_dir'] = resizeDir || 'vertical';
