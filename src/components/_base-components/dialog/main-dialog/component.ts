@@ -16,7 +16,8 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
     }
 
-    public open(): void {
+    public open(dialogId?: string): void {
+        this.state.dialogId = dialogId;
         this.state.show = true;
     }
 

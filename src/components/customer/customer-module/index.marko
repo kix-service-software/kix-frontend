@@ -1,1 +1,5 @@
-<h1>Kunden</h1>
+<div.dashboard.customer>
+    <for(widget in state.contentWidgets)>
+        <include(component.getTemplate(widget), { instanceId: widget.instanceId })/>
+    </for>
+</div>
