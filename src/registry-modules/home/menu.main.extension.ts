@@ -1,4 +1,5 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
+import { HomeContext } from '@kix/core/dist/browser/home';
 
 export class DashboardMainMenuExtension implements IMainMenuExtension {
 
@@ -15,7 +16,7 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
     }
 
     public getContextId(): string {
-        return "home";
+        return HomeContext.CONTEXT_ID;
     }
 
 }
