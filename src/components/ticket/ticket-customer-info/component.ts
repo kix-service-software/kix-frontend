@@ -18,8 +18,8 @@ class CustomerInfoComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext(this.state.contextType);
         context.registerListener({
-            objectChanged: (objectId: string | number, customer: Customer) => {
-                if (customer instanceof Customer && this.customerChanged(customer)) {
+            objectChanged: (objectId: string | number, customer: Customer, type: KIXObjectType) => {
+                if (type === KIXObjectType.CUSTOMER && this.customerChanged(customer)) {
                     this.state.customer = customer;
                 }
             },
@@ -33,8 +33,10 @@ class CustomerInfoComponent {
     private customerChanged(customer: Customer): boolean {
         let changed = true;
 
-        if (this.state.customer) {
+        if (this.state.customer && customer) {
             changed = !this.state.customer.equals(customer);
+        } else {
+            changed = true;
         }
 
         return changed;

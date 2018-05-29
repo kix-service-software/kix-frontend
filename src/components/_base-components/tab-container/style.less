@@ -58,6 +58,16 @@
         }
         >.widget-content {
             >div {
+                &.tab-sidebar-grid {
+                    display: grid;
+                    grid-template-columns: auto;
+                    grid-column-gap: @margin-default;
+                    grid-auto-columns: max-content;
+                    grid-auto-flow: column;
+                    .site-menu-wrapper {
+                        width: 2.25rem
+                    }
+                }
                 >.tab-content {
                     >.lane-tab-widget {
                         >.widget-header {
@@ -71,10 +81,4 @@
             }
         }
     }
-}
-
-.tab-sidebar-grid {
-    display: grid;
-    grid-template-columns: auto 15em 2.25em;
-    grid-column-gap: 2.25em;
 }
