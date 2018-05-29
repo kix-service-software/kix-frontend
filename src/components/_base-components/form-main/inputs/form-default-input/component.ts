@@ -12,10 +12,15 @@ class FormTextInputComponent {
     public onInput(input: any): void {
         this.state.currentValue = input.currentValue;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
+        this.state.formId = input.formId;
     }
 
     private valueChanged(event: any): void {
         this.state.currentValue = event.target.value;
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.provideFormFieldValue(this.state.formField.property, this.state.currentValue);
+        }
         (this as any).emit('valueChanged', this.state.currentValue);
     }
 
