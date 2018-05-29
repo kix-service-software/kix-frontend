@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact
+    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact, KIXObjectType
 } from "@kix/core/dist/model";
 import {
     TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
@@ -24,17 +24,31 @@ class NewTicketDialogComponent {
         if (formInstance) {
             formInstance.reset();
             formInstance.registerListener({
-                formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
+                formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
                     const dialogContext = ContextService.getInstance().getContext(
                         null, NewTicketDialogContext.CONTEXT_ID
                     );
-                    if (dialogContext && value.value) {
+                    if (dialogContext) {
                         if (formField.property === TicketProperty.CUSTOMER_ID) {
-                            const customer: Customer = value.value;
-                            dialogContext.provideObject(customer.CustomerID, customer);
+                            if ((value.value === null || value.value === undefined)) {
+                                const customer: Customer = oldValue;
+                                if (customer) {
+                                    dialogContext.provideObject(customer.CustomerID, null, KIXObjectType.CUSTOMER);
+                                }
+                            } else {
+                                const customer: Customer = value.value;
+                                dialogContext.provideObject(customer.CustomerID, customer, KIXObjectType.CUSTOMER);
+                            }
                         } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
-                            const contact: Contact = value.value;
-                            dialogContext.provideObject(contact.ContactID, contact);
+                            if ((value.value === null || value.value === undefined)) {
+                                const contact: Contact = oldValue;
+                                if (contact) {
+                                    dialogContext.provideObject(contact.ContactID, null, KIXObjectType.CONTACT);
+                                }
+                            } else {
+                                const contact: Contact = value.value;
+                                dialogContext.provideObject(contact.ContactID, contact, KIXObjectType.CONTACT);
+                            }
                         }
                     }
                 },
@@ -99,7 +113,7 @@ class NewTicketDialogComponent {
     }
 
     private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!');
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

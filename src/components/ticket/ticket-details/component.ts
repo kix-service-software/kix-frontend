@@ -3,7 +3,7 @@ import {
 } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType
+    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
@@ -46,8 +46,8 @@ export class TicketDetailsComponent {
         this.setBreadcrumbDetails();
         this.setTicketHookInfo();
         const context = ContextService.getInstance().getContext(null, TicketDetailsContext.CONTEXT_ID);
-        context.provideObject(ticket.contact.ContactID, ticket.contact);
-        context.provideObject(ticket.customer.CustomerID, ticket.customer);
+        context.provideObject(ticket.contact.ContactID, ticket.contact, KIXObjectType.CONTACT);
+        context.provideObject(ticket.customer.CustomerID, ticket.customer, KIXObjectType.CUSTOMER);
     }
 
     private getActions(): string[] {

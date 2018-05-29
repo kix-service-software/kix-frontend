@@ -63,6 +63,8 @@ class FormDropdownTreeComponent {
             if (event.key === 'Escape') {
                 this.toggleList();
             } else if (event.key === 'Enter' || event.key === 'Tab') {
+                event.stopPropagation();
+                event.preventDefault();
                 this.nodeClicked(this.state.preSelectedNode);
             }
         }

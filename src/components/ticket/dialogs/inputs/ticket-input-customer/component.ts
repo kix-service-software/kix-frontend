@@ -32,6 +32,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
                         this.state.currentItem = null;
                         this.state.hasContact = false;
                         this.state.items = [];
+                        super.provideValue(null);
                     }
                 }
             },

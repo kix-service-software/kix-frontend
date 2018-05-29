@@ -9,7 +9,7 @@ class FormComponent {
     private state: FormComponentState;
 
     public onCreate(input: any): void {
-        this.state = new FormComponentState(input.formId);
+        this.state = new FormComponentState(input.formId, input.objectType);
     }
 
     public onMount(): void {

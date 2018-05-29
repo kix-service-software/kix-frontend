@@ -18,8 +18,8 @@ class ContactInfoComponent {
     public onMount(): void {
         const context = ContextService.getInstance().getContext(this.state.contextType);
         context.registerListener({
-            objectChanged: (objectId: number, contact: Contact) => {
-                if (contact instanceof Contact && this.contactChanged(contact)) {
+            objectChanged: (objectId: number, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT && this.contactChanged(contact)) {
                     this.state.contact = contact;
                 }
             },
@@ -32,8 +32,10 @@ class ContactInfoComponent {
     private contactChanged(contact: Contact): boolean {
         let changed = true;
 
-        if (this.state.contact) {
+        if (this.state.contact && contact) {
             changed = contact && !this.state.contact.equals(contact);
+        } else {
+            changed = true;
         }
 
         return changed;

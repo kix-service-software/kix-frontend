@@ -1,4 +1,4 @@
-<div.linkable-objects-dialog on-keydown('keyDown')>
+<div.linkable-objects-dialog>
     <div.linkable-objects-selection title="Verknüpfen mit">
         <div.linkable-objects-selection-label>
             <span>Verknüpfen mit</span>
@@ -10,7 +10,8 @@
         <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
             <@content>
                 <if(state.currentLinkableObject)>
-                    <form-main formId=state.currentLinkableObject.id key=("FormMain" + Math.random())/>
+                    <form-main formId=state.currentLinkableObject.id objectType=state.currentLinkableObject.object.ObjectType
+                        key=("FormMain" + Math.random())/>
                     <div.linkable-objects-form-button-container>
                         <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
                             <span.kix-icon-search/>
