@@ -88,17 +88,17 @@
                 border: none;
                 box-shadow: @shadow-2;
                 border-radius: @border-radius;
+                >.widget-header {
+                    display: none;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                }
                 >.widget-content {
                     .font-size-small();
                     background-color: lighten(@tertiary-4, 20%);
                     color: darken(@tertiary-4, 20%);
                     overflow: hidden;
                     padding: 1.5rem;
-                    border-top-left-radius: 0px;
-                    border-top-right-radius: 0px;
-                }
-                >.widget-header {
-                    display: none;
                     border-top-left-radius: 0px;
                     border-top-right-radius: 0px;
                 }
