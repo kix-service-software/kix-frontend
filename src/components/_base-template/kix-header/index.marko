@@ -5,7 +5,7 @@
         <!-- Neues Objekt -->
         <ul>
             <li>
-                <span.kix-icon-plus title=state.title on-click('openDialog')>
+                <span.kix-icon-plus.as-button title=state.title on-click('openDialog')>
                     <span.path1/>
                     <span.path2/>
                     <span.path3/>
@@ -74,26 +74,26 @@
             <li>
                 <ul>
                     <li>
-                        <span.kix-icon-man title="Dummy"/>
+                        <span.kix-icon-man.as-button title="Dummy"/>
                     </li>
                     <li>
-                        <span.kix-icon-man title="Dummy"/>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <span.kix-icon-eye title="Dummy"/>
-                    </li>
-                    <li>
-                        <span.kix-icon-eye title="Dummy"/>
+                        <span.kix-icon-man.as-button title="Dummy"/>
                     </li>
                 </ul>
                 <ul>
                     <li>
-                        <span.kix-icon-lock-close title="Dummy"/>
+                        <span.kix-icon-eye.as-button title="Dummy"/>
                     </li>
                     <li>
-                        <span.kix-icon-lock-close title="Dummy"/>
+                        <span.kix-icon-eye.as-button title="Dummy"/>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <span.kix-icon-lock-close.as-button title="Dummy"/>
+                    </li>
+                    <li>
+                        <span.kix-icon-lock-close.as-button title="Dummy"/>
                     </li>
                 </ul>
             </li>
@@ -101,13 +101,13 @@
         <!-- Sonderfunktionen -->
         <ul.kix-toolbar>
             <li>
-                <span.kix-icon-gear title=state.title/>
+                <span.kix-icon-gear.as-button title=state.title/>
             </li>
             <li>
-                <span.kix-icon-exchange title="Wechsel Portalfrontend"/>
+                <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend"/>
             </li>
             <li>
-                <span.kix-icon-query title="Hilfe"/>
+                <span.kix-icon-query.as-button title="Hilfe"/>
             </li>
             <li>
                 <a href="/auth?logout" on-click('logout')>
