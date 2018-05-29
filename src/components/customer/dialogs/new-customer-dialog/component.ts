@@ -1,7 +1,7 @@
 import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentState";
 import { DialogService, ContextService, FormService } from "@kix/core/dist/browser";
 import { ContextType } from "@kix/core/dist/model";
-import { NewCustomerDialogContext } from "@kix/core/dist/browser/customer";
+import { NewCustomerDialogContext, CustomerService } from "@kix/core/dist/browser/customer";
 
 class NewCustomerDialogComponent {
 
@@ -25,6 +25,13 @@ class NewCustomerDialogComponent {
         if (formInstance) {
             formInstance.reset();
         }
+        DialogService.getInstance().closeMainDialog();
+    }
+
+    private async submit(): Promise<void> {
+        DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
+        await CustomerService.getInstance().createCustomerByForm(this.state.formId);
+        DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().closeMainDialog();
     }
 }
