@@ -5,6 +5,7 @@ import {
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty, WidgetSize
 } from '@kix/core/dist/model';
+import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -18,7 +19,25 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 "customer-list-widget", "Kunden-Liste", [
                     'customer-search-action',
                     'customer-create-action'
-                ], {},
+                ], {
+                    displayLimit: 10,
+                    tableColumns: [
+                        new TableColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, true, 130),
+                        new TableColumnConfiguration(
+                            CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, true, 130
+                        ),
+                        new TableColumnConfiguration(
+                            CustomerProperty.CUSTOMER_COMPANY_STREET, true, false, true, true, 130
+                        ),
+                        new TableColumnConfiguration(
+                            CustomerProperty.CUSTOMER_COMPANY_City, true, false, true, true, 130
+                        ),
+                        new TableColumnConfiguration(
+                            CustomerProperty.CUSTOMER_COMPANY_COUNTRY, true, false, true, true, 130
+                        ),
+                        new TableColumnConfiguration(CustomerProperty.VALID_ID, true, false, true, true, 130),
+                    ]
+                },
                 false, true, WidgetSize.LARGE, null, true)
             );
 
