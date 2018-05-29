@@ -1,6 +1,8 @@
 <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     actions=state.actions>
     <@content>
-        <h2>Kunden-Liste</h2>
+        <if(state.standardTable)>
+            <standard-table standardTable=state.standardTable/>
+        </if>
     </@content>
 </widget>
