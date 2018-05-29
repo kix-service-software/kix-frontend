@@ -35,7 +35,7 @@ export class CustomerCommunicator extends KIXCommunicator {
                 response = new CommunicatorResponse(CustomerEvent.CREATE_CUSTOMER_FINISHED, createTicketResponse);
             })
             .catch((error) => {
-                response = new CommunicatorResponse(CustomerEvent.CREATE_CUSTOMER_ERROR, error);
+                response = new CommunicatorResponse(CustomerEvent.CREATE_CUSTOMER_ERROR, error.message);
             });
 
         return response;

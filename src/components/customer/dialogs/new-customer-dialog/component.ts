@@ -1,6 +1,9 @@
 import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentState";
-import { DialogService, ContextService, FormService } from "@kix/core/dist/browser";
-import { ContextType } from "@kix/core/dist/model";
+import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
+import {
+    ContextType, OverlayType, StringContent, ComponentContent,
+    ValidationSeverity, ValidationResult
+} from "@kix/core/dist/model";
 import { NewCustomerDialogContext, CustomerService } from "@kix/core/dist/browser/customer";
 
 class NewCustomerDialogComponent {
@@ -29,10 +32,48 @@ class NewCustomerDialogComponent {
     }
 
     private async submit(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
-        await CustomerService.getInstance().createCustomerByForm(this.state.formId);
-        DialogService.getInstance().setMainDialogLoading(false);
-        DialogService.getInstance().closeMainDialog();
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const result = formInstance.validateForm();
+        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+        if (validationError) {
+            this.showValidationError(result);
+        } else {
+            DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
+            await CustomerService.getInstance().createCustomerByForm(this.state.formId)
+                .then((customerId) => {
+                    DialogService.getInstance().setMainDialogLoading(false);
+                    this.showSuccessHint();
+                    DialogService.getInstance().closeMainDialog();
+                }).catch((error) => {
+                    DialogService.getInstance().setMainDialogLoading(false);
+                    this.showError(error);
+                });
+        }
+    }
+
+    private showSuccessHint(): void {
+        OverlayService.getInstance().openOverlay(
+            OverlayType.TOAST, null,
+            new StringContent('Kunde wurde erfolgreich angelegt.'), 'Kunde wurde erfolgreich angelegt'
+        );
+    }
+
+    private showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Fehler beim Validieren des Formulars:',
+                list: errorMessages
+            }
+        );
+
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+        );
+    }
+
+    private showError(error: any): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 }
 

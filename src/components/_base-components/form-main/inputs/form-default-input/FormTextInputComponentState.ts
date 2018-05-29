@@ -6,7 +6,8 @@ export class FormTextInputComponentState {
         public formField: FormField = null,
         public currentValue: string = null,
         public invalid: boolean = false,
-        public formId: string = null
+        public formId: string = null,
+        public placeholder: string = null
     ) { }
 
 }

@@ -42,7 +42,7 @@ export class TicketCommunicator extends KIXCommunicator {
                 response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_FINISHED, createTicketResponse);
             })
             .catch((error) => {
-                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_ERROR, error);
+                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_ERROR, error.message);
             });
 
         return response;
