@@ -8,7 +8,8 @@ export class MainDialogComponentState {
         public dialogHint: string = "",
         public isLoading: boolean = false,
         public loadingHint: string = null,
-        public contextId: string = null
+        public contextId: string = null,
+        public dialogId: string = null
     ) { }
 
 }
