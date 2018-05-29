@@ -6,6 +6,7 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
         const dialog = [
             'customer/customer-module',
             'customer/widgets/customer-list-widget',
+            'customer/widgets/contact-list-widget',
             'customer/dialogs/new-customer-dialog',
             'customer/dialogs/inputs/customer-input-valid'
         ];
@@ -19,6 +20,7 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
         return [
             ['customers', 'customer/customer-module'],
             ['customer-list-widget', 'customer/widgets/customer-list-widget'],
+            ['contact-list-widget', 'customer/widgets/contact-list-widget'],
             ['new-customer-dialog', 'customer/dialogs/new-customer-dialog'],
             ['customer-input-valid', 'customer/dialogs/inputs/customer-input-valid']
         ];

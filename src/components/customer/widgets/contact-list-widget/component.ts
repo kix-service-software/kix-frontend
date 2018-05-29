@@ -3,8 +3,8 @@ import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Customer } from "@kix/core/dist/model";
-import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
+import { WidgetConfiguration, Contact } from "@kix/core/dist/model";
+import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -34,14 +34,14 @@ class Component {
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
 
-            const configurationListener: ITableConfigurationListener<Customer> = {
+            const configurationListener: ITableConfigurationListener<Contact> = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new CustomerTableContentLayer(this.state.instanceId),
-                new CustomerTableLabelLayer(),
+                new ContactTableContentLayer(this.state.instanceId),
+                new ContactTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
                 null, null, null,
