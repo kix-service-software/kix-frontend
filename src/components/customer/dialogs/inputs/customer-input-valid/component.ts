@@ -18,11 +18,8 @@ class TicketInputArchiveSearch extends FormInputComponent<number, CustomerInputV
 
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
-        this.state.items = [
-            new FormDropdownItem(1, '', 'gültig'),
-            new FormDropdownItem(2, '', 'ungültig'),
-            new FormDropdownItem(3, '', 'temporär ungültig'),
-        ];
+        const objectData = ContextService.getInstance().getObjectData();
+        this.state.items = objectData.validObjects.map((vo) => new FormDropdownItem(vo.ID, '', vo.Name));
         this.setCurrentValue();
     }
 
