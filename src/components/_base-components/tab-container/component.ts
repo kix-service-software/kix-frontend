@@ -14,7 +14,6 @@ class TabLaneComponent {
 
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
-        this.state.activeTab = this.state.tabWidgets.find((tw) => tw.instanceId === input.activeTab);
 
         WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
         this.state.tabWidgets.forEach(
