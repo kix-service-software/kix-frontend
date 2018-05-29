@@ -20,15 +20,15 @@ class OverlayComponent {
 
         WidgetService.getInstance().setWidgetType(this.state.instanceId, WidgetType.OVERLAY);
 
-        document.addEventListener("click", (event: any) => {
-            if (this.state.show && !this.showShield()) {
-                if (this.state.keepShow) {
-                    this.state.keepShow = false;
-                } else {
-                    this.closeOverlay();
-                }
-            }
-        }, false);
+        // document.addEventListener("click", (event: any) => {
+        //     if (this.state.show && !this.showShield()) {
+        //         if (this.state.keepShow) {
+        //             this.state.keepShow = false;
+        //         } else {
+        //             this.closeOverlay();
+        //         }
+        //     }
+        // }, false);
     }
 
     private overlayClicked(): void {
@@ -62,25 +62,25 @@ class OverlayComponent {
         if (type === OverlayType.TOAST) {
             this.toastTimeout = setTimeout(() => {
                 const toast = (this as any).getEl('overlay');
-                if (toast) {
-                    // TODO: ggf. über Marko triggern (Funktionen implementieren), falls es so bleibt
-                    toast.addEventListener('mouseover', (e) => {
-                        clearTimeout(this.toastTimeout);
-                    });
-                    toast.addEventListener('mouseleave', (e) => {
-                        this.state.overlayClass = 'toast-overlay';
-                        this.toastTimeout = setTimeout(() => {
-                            this.closeOverlay();
-                        }, 200);
-                    });
-                }
+                // if (toast) {
+                //     // TODO: ggf. über Marko triggern (Funktionen implementieren), falls es so bleibt
+                //     toast.addEventListener('mouseover', (e) => {
+                //         clearTimeout(this.toastTimeout);
+                //     });
+                //     toast.addEventListener('mouseleave', (e) => {
+                //         this.state.overlayClass = 'toast-overlay';
+                //         this.toastTimeout = setTimeout(() => {
+                //             // this.closeOverlay();
+                //         }, 200);
+                //     });
+                // }
                 this.state.overlayClass += ' show-toast';
                 this.toastTimeout = setTimeout(() => {
                     this.state.overlayClass = 'toast-overlay';
                     this.toastTimeout = setTimeout(() => {
-                        this.closeOverlay();
+                        // this.closeOverlay();
                     }, 200);
-                }, 2000);
+                }, 20000000);
             }, 100);
         }
     }
