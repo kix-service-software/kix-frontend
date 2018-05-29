@@ -23,7 +23,8 @@
             "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension",
             "customer-module": "../../dist/registry-modules/customer/customer-module.extension",
             "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
-            "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension"
+            "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
+            "new-contact-dialog-context": "../../dist/registry-modules/contact/new-contact-dialog-context.extension"
         }
     }
 }

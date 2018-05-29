@@ -63,6 +63,9 @@ class TabLaneComponent {
         this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
     }
 
+    private isActiveTab(tabId: string): boolean {
+        return this.state.activeTab && this.state.activeTab.instanceId === tabId;
+    }
 }
 
 module.exports = TabLaneComponent;
