@@ -31,34 +31,37 @@ class EditorComponent {
             }
         }
 
-        this.state.invalid = typeof input.invlaid !== 'undefined' ? input.invalid : false;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
-    public onMount(): void {
-        CKEDITOR.inline(this.state.id, {
-            ...this.state.config
-        });
-        // if (this.state.inline) {
-        //     ;
-        // } else {
-        //     CKEDITOR.replace(this.state.id, {
-        //         ...this.state.config
-        //     });
-        // }
+    public async onMount(): Promise<void> {
+        if (!this.instanceExists()) {
+            if (this.state.inline) {
+                CKEDITOR.inline(this.state.id, {
+                    ...this.state.config
+                });
+            } else {
+                CKEDITOR.replace(this.state.id, {
+                    ...this.state.config
+                });
+            }
 
-        // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
-        // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
-        // - siehe bei Notes-Sidebar (toggleEditMode))
-        CKEDITOR.instances[this.state.id].on('blur', (event) => {
-            this.state.value = event.editor.getData();
-            (this as any).emit('valueChanged', this.state.value);
-        });
+            // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
+            // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
+            // - siehe bei Notes-Sidebar (toggleEditMode))
+            CKEDITOR.instances[this.state.id].on('blur', (event) => {
+                this.state.value = event.editor.getData();
+                (this as any).emit('valueChanged', this.state.value);
+            });
+        }
     }
 
-    public onDestroy(): void {
-        // if (CKEDITOR.instances[this.state.id]) {
-        //     CKEDITOR.instances[this.state.id].destroy();
-        // }
+    // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
+    // weil der Editor schon kurz nach Instanziierung wieder zerstört wird)
+    public async onDestroy(): Promise<void> {
+        if (this.instanceExists()) {
+            CKEDITOR.instances[this.state.id].destroy();
+        }
     }
 
     /**
@@ -70,8 +73,8 @@ class EditorComponent {
      */
     private async isEditorReady(retryCount: number = 1): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
-            if (CKEDITOR.instances &&
-                CKEDITOR.instances[this.state.id] &&
+            if (
+                this.instanceExists() &&
                 CKEDITOR.instances[this.state.id].status === 'ready'
             ) {
                 resolve(true);
@@ -83,6 +86,15 @@ class EditorComponent {
                 resolve(false);
             }
         });
+    }
+
+    /**
+     * Checks if an instance exists
+     *
+     * @return boolean (promise)
+     */
+    private instanceExists(): boolean {
+        return CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[this.state.id];
     }
 
 }

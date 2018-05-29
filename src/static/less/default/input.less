@@ -19,10 +19,25 @@
             box-shadow: none;
         }
     }
+    &:focus:not(:disabled),
+    &:hover:not(:disabled) {
+        border-color: darken(@secondary-3, 20%);
+    }
     &.invalid {
-        border-color: red;
+        border-color: @tertiary-0;
         &::placeholder {
-            color: red;
+            color: @tertiary-0;
+        }
+    }
+    &.article-body {
+        padding: 0;
+        height: unset;
+        overflow: hidden;
+        >.editor-container {
+            >.cke {
+                overflow: auto;
+                border: none;
+            }
         }
     }
 }
