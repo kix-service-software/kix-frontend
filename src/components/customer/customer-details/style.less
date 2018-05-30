@@ -1,0 +1,40 @@
+@tab-container-border-size-tdetails: 1px;
+.customer-details {
+    >.content-widget {
+        margin-top: 1.5em;
+        &:first-of-type {
+            margin-top: 0;
+        }
+        >.widget-header {
+            .action-list-expansion-container {
+                background: @secondary-2;
+                color: @secondary-0;
+                .action-list-expansion {
+                    li {
+                        border-top: 1px solid @secondary-1;
+                    }
+                }
+            }
+        }
+        >.widget-content {
+            background-color: transparent;
+        }
+        .action-list-wrapper {
+            li.list-button {
+                span {
+                    // TODO: Schatten mixin nutzen?
+                    box-shadow: 0px 0px 3px 0px @secondary-0
+                }
+                &.active {
+                    span {
+                        box-shadow: inset 0px 0px 2px 0px @secondary-0;
+                    }
+                }
+            }
+        }
+        .lane-list {
+            list-style: none;
+            margin-bottom: 1.5em;
+        }
+    }
+}
