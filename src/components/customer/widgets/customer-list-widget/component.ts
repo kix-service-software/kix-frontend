@@ -4,7 +4,10 @@ import {
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
 import { WidgetConfiguration, Customer } from "@kix/core/dist/model";
-import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
+import {
+    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
+} from "@kix/core/dist/browser/customer";
+import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -46,7 +49,17 @@ class Component {
                 [new TableSortLayer()],
                 null, null, null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
-                null, null,
+                null,
+                {
+                    rowClicked: (customer: Customer, columnId: string): void => {
+                        ComponentRouterService.getInstance().navigate(
+                            'base-router',
+                            CustomerDetailsContext.CONTEXT_ID,
+                            { customerId: customer.CustomerID },
+                            customer.CustomerID
+                        );
+                    }
+                },
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,
