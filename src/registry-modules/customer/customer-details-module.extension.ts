@@ -14,7 +14,33 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        return new CustomerDetialsContextConfiguration(this.getModuleId(), [], [], [], [], [], [], [], [], [], [], []);
+        const ticketDetailsWidget = new ConfiguredWidget('customer-details-widget', new WidgetConfiguration(
+            'customer-details-widget', 'Kunden Details', [], null,
+            false, true, WidgetSize.BOTH, null, false
+        ));
+        const lanes = [];
+
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            ticketDetailsWidget
+        ];
+
+        const customerInfoLane =
+            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
+                'customer-info-widget', 'Kundeninformationen', [], {},
+                false, true, WidgetSize.SMALL, null, false)
+            );
+
+        const laneTabs = ['customer-information-lane'];
+        const laneTabWidgets = [customerInfoLane];
+
+        const customerActions = [
+            'customer-edit-action', 'customer-create-contact-action', 'customer-create-ticket-action',
+            'customer-create-ci-action', 'customer-print-action'
+        ];
+
+        return new CustomerDetialsContextConfiguration(
+            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, [], customerActions, []
+        );
     }
 
     public createFormDefinitions(): void {
