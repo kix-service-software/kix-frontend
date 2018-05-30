@@ -1,0 +1,12 @@
+<widget instanceId=state.instanceId configurationTagId="ticket-info-configuration"
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") contentActions=state.actions>
+    <@content>
+        <if(state.customer && state.contactTable)>
+            <div.contact-filter>
+                <span.header>Zugeordnete Kontakte</span>
+                <filter filterValue=state.filterValue on-filter('filter')/>
+            </div>
+            <standard-table standardTable=state.contactTable/>
+        </if>
+    </@content>
+</widget>
