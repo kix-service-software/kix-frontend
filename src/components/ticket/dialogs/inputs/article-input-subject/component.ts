@@ -30,11 +30,6 @@ class ArticleInputSubjectComponent extends FormInputComponent<string, ArticleInp
         }
     }
 
-    private valueChanged(value: string): void {
-        this.state.currentValue = value;
-        super.provideValue(value);
-    }
-
 }
 
 module.exports = ArticleInputSubjectComponent;

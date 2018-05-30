@@ -1,6 +1,13 @@
-<b>${input.title}</b>
-<ul.list-with-title>
-    <for(text in input.list)>
-        <li>${text}</li>
-    </for>
-</ul>
+<div.list-with-title-and-icon>
+    <div>
+        <icon icon=input.icon/>
+    </div>
+    <div>
+        <b>${input.title}</b>
+        <ul.list-with-title>
+            <for(text in input.list)>
+                <li>${text}</li>
+            </for>
+        </ul>
+    </div>
+</div>

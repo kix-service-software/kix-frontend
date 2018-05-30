@@ -13,6 +13,7 @@ class FieldContainerComponent {
 
     public onInput(input: any): void {
         this.state.objectType = input.objectType;
+        this.state.formId = input.formId;
     }
 
     private getInputComponent(field: FormField): any {
