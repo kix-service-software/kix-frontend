@@ -1,5 +1,3 @@
-import { KIXObjectType } from "@kix/core/dist/model";
-
 export class NewCustomerDialogComponentState {
 
     public constructor(

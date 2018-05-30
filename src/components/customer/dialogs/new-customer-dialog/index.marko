@@ -1,11 +1,8 @@
 <if(!state.loading)>
     <widget instanceId="new-customer-dialog">
-        <@icon>
-            <span.kix-icon-man/>
-        </@icon>
         <@content>
             <form-main formId=state.formId objectType=state.objectType/>
-            <div.new-customer-dialog-button-container>
+            <div.dialog-button-container>
                 <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
                     <span.kix-icon-close/>
                     Abbrechen
