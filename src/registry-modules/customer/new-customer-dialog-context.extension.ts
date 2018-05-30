@@ -36,7 +36,7 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
 
             const labelProvider = new CustomerLabelProvider();
 
-            for (const attribute of mapping) {
+            mapping.forEach((attribute) => {
                 let group = groups.find((g) => g.name === attribute.DisplayGroup);
                 if (!group) {
                     if (attribute.DisplayGroup) {
@@ -55,7 +55,7 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                 group.formFields.push(
                     new FormField(label, attribute.Attribute, attribute.Required, label)
                 );
-            }
+            });
 
             const form = new Form(formId, 'Neuer Kunde', [...groups, lastGroup], KIXObjectType.CUSTOMER);
             await configurationService.saveModuleConfiguration(form.id, null, form);

@@ -1,5 +1,5 @@
 import {
-    ContextConfiguration, FormField, ContactSourceAttributeMapping, Form, FormContext, KIXObjectType
+    ContextConfiguration, FormField, ContactSourceAttributeMapping, Form, FormContext, KIXObjectType, ContactProperty
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
@@ -23,39 +23,43 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
-        const formId = 'new-customer-form';
+        const formId = 'new-contact-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
         if (!existingForm) {
-            const customerService =
+            const contactService =
                 ServiceContainer.getInstance().getClass<IContactService>("IContactService");
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
-            const mapping: ContactSourceAttributeMapping[] = await customerService.getAttributeMapping(token);
+            const mapping: ContactSourceAttributeMapping[] = await contactService.getAttributeMapping(token);
             const groups: FormGroup[] = [];
             const lastGroup = new FormGroup("Default", []);
 
             const labelProvider = new ContactLabelProvider();
 
-            for (const attribute of mapping) {
-                let group = groups.find((g) => g.name === attribute.DisplayGroup);
-                if (!group) {
-                    if (attribute.DisplayGroup) {
-                        group = new FormGroup(attribute.DisplayGroup, []);
-                        groups.push(group);
-                    } else {
-                        group = lastGroup;
+            mapping.forEach((attribute) => {
+                // TODO: USER_CUSTOMER_IDS Behandlung - neuer Feldtyp?
+                if (attribute.Attribute !== ContactProperty.USER_CUSTOMER_IDS) {
+
+                    let group = groups.find((g) => g.name === attribute.DisplayGroup);
+                    if (!group) {
+                        if (attribute.DisplayGroup) {
+                            group = new FormGroup(attribute.DisplayGroup, []);
+                            groups.push(group);
+                        } else {
+                            group = lastGroup;
+                        }
                     }
-                }
 
-                let label = labelProvider.getPropertyText(attribute.Attribute);
-                if (label === attribute.Attribute) {
-                    label = attribute.Label;
-                }
+                    let label = labelProvider.getPropertyText(attribute.Attribute);
+                    if (label === attribute.Attribute) {
+                        label = attribute.Label;
+                    }
 
-                group.formFields.push(
-                    new FormField(label, attribute.Attribute, attribute.Required, label)
-                );
-            }
+                    group.formFields.push(
+                        new FormField(label, attribute.Attribute, attribute.Required, label)
+                    );
+                }
+            });
 
             const form = new Form(formId, 'Neuer Ansprechpartner', [...groups, lastGroup], KIXObjectType.CONTACT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
