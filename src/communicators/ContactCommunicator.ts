@@ -22,7 +22,9 @@ export class ContactCommunicator extends KIXCommunicator {
     }
 
     private async loadContacts(data: ContactsLoadRequest): Promise<CommunicatorResponse<ContactsLoadResponse>> {
-        const contacts = await this.contactService.getContacts(data.token, data.limit, data.searchValue);
+        const contacts = await this.contactService.getContacts(
+            data.token, data.limit, data.searchValue, data.customerId
+        );
         const response = new ContactsLoadResponse(data.requestId, contacts);
         return new CommunicatorResponse(ContactEvent.CONTACTS_LOADED, response);
     }

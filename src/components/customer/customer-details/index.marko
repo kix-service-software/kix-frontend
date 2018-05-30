@@ -1,1 +1,27 @@
-<h1>Kunden Details</h1>
+<if(state.loadingCustomer || state.loadingConfig)>
+    <loading-spinner/>
+</if>
+<else>
+    <div.customer-details>
+        <widget actions=component.getActions() minimizable=true title=component.getTitle()
+            contentActions=component.getCustomerActions()>
+            <@content>
+                <ul.lane-list no-update>
+                    <li key=component.getLaneKey()>
+                        <tab-container tabWidgets=state.tabWidgets title="Kundeninformationen"/>
+                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane key=component.getLaneKey()>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN", 
+                                instanceId: lane.instanceId, 
+                                ticketId: state.ticketId, 
+                                type: component.getLaneWidgetType()
+                                })/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+    </div>
+</else>

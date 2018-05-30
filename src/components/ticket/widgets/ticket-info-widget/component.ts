@@ -45,7 +45,7 @@ class TicketInfoWidgetComponent {
     public getTicket(): void {
         const context = ContextService.getInstance().getContext();
         if (context.objectId) {
-            this.state.ticket = TicketService.getInstance().getTicket(context.objectId);
+            this.state.ticket = TicketService.getInstance().getTicket(Number(context.objectId));
             if (this.state.ticket) {
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
