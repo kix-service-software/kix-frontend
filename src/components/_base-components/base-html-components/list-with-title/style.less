@@ -1,5 +1,17 @@
-.list-with-title {
-    >li {
-        margin-left: 1rem;
+.list-with-title-and-icon {
+    display: grid;
+    grid-template-columns: 4rem auto;
+    grid-auto-flow: column;
+    >div {
+        justify-self: center;
+        align-self: center;
+        >.list-with-title {
+            >li {
+                margin-left: 1rem;
+            }
+        }
+        >[class*="kix-icon-"] {
+            font-size: 1.75rem;
+        }
     }
 }

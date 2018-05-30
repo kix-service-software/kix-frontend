@@ -5,7 +5,7 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
     FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType,
-    CreateLinkDescription, LinkTypeDescription, OverlayType, StringContent
+    CreateLinkDescription, LinkTypeDescription, OverlayType, StringContent, ComponentContent, ObjectIcon
 } from "@kix/core/dist/model";
 import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
 
@@ -156,9 +156,13 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     private showSuccessHint(count: number): void {
         this.state.successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
-        OverlayService.getInstance().openOverlay(
-            OverlayType.TOAST, null, new StringContent(this.state.successHint), 'Verknüpfungen zugeordnet'
-        );
+        const content = new ComponentContent('list-with-title', {
+            title: 'Erfolgreich ausgeführt',
+            list: ['Verknüpfungen zugeordnet'],
+            icon: 'kix-icon-check'
+        });
+
+        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
     }
 
     private setLinkTypes(): void {
