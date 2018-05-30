@@ -30,12 +30,7 @@ class FormTextInputComponent {
     }
 
     private valueChanged(event: any): void {
-        this.state.currentValue = event.target.value;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.provideFormFieldValue(this.state.formField.property, this.state.currentValue);
-        }
-        (this as any).emit('valueChanged', this.state.currentValue);
+        this.provideValue();
     }
 
     private keyDown(event: any): void {
@@ -45,6 +40,14 @@ class FormTextInputComponent {
     }
 
     private focusLost(): void {
+        this.provideValue();
+    }
+
+    private provideValue(): void {
+        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.provideFormFieldValue(this.state.formField.property, this.state.currentValue);
+        }
         (this as any).emit('valueChanged', this.state.currentValue);
     }
 

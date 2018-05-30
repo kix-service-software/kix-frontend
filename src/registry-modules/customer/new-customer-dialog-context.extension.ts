@@ -57,7 +57,7 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                 );
             }
 
-            const form = new Form(formId, 'Neues Ticket', [...groups, lastGroup]);
+            const form = new Form(formId, 'Neues Ticket', [...groups, lastGroup], KIXObjectType.CUSTOMER);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CUSTOMER, formId);

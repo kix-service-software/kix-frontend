@@ -48,7 +48,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
             const group = new FormGroup('Ticketdaten', fields);
 
-            const form = new Form(formIdNewTicket, 'Neues Ticket', [group]);
+            const form = new Form(formIdNewTicket, 'Neues Ticket', [group], KIXObjectType.TICKET);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
@@ -72,7 +72,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
             const group = new FormGroup('Ticketattribute', fields);
 
-            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group], false);
+            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group], KIXObjectType.TICKET, false);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 

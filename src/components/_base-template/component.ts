@@ -6,6 +6,7 @@ import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
+import { ContactService } from '@kix/core/dist/browser/contact';
 
 declare var io: any;
 
@@ -55,6 +56,7 @@ class BaseTemplateComponent {
     private bootstrapServices(): void {
         TicketService.getInstance();
         CustomerService.getInstance();
+        ContactService.getInstance();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getContext()): void {

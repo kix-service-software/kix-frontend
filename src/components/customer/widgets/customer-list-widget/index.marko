@@ -1,0 +1,11 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    actions=state.actions>
+    <@headerContent>
+        <filter on-filter('filter')/>
+    </@headerContent>
+    <@content>
+        <if(state.standardTable)>
+            <standard-table standardTable=state.standardTable/>
+        </if>
+    </@content>
+</widget>
