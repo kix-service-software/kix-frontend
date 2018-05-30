@@ -18,10 +18,24 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             'customer-details-widget', 'Kunden Details', [], null,
             false, true, WidgetSize.BOTH, null, false
         ));
-        const lanes = [];
+
+        const assignedContactsLane = new ConfiguredWidget('customer-contact-list-widget', new WidgetConfiguration(
+            'customer-contact-list-widget', 'Zugeordnete Ansprechpartner', [], {
+                displayLimit: 10,
+                tableColumns: [
+                    new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 130)
+                ]
+            },
+            false, true, WidgetSize.BOTH, null, false
+        ));
+
+        const lanes = ['customer-contact-list-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            ticketDetailsWidget
+            ticketDetailsWidget, assignedContactsLane
         ];
 
         const customerInfoLane =

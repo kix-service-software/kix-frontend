@@ -26,7 +26,7 @@ class Component {
             }
         });
 
-        const contextURL = 'tickets/' + this.state.customerId;
+        const contextURL = CustomerDetailsContext.CONTEXT_ID + '/' + this.state.customerId;
         const context = new CustomerDetailsContext(this.state.customerId);
         await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
         await this.loadCustomer();
