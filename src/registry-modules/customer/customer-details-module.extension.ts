@@ -1,6 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    CustomerContextConfiguration, CustomerDetialsContextConfiguration, CustomerDetailsContext
+    CustomerContextConfiguration, CustomerDetailsContextConfiguration, CustomerDetailsContext
 } from '@kix/core/dist/browser/customer';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty, WidgetSize, ContactProperty
@@ -53,7 +53,7 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             'customer-create-ci-action', 'customer-print-action'
         ];
 
-        return new CustomerDetialsContextConfiguration(
+        return new CustomerDetailsContextConfiguration(
             this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, [], customerActions, []
         );
     }
