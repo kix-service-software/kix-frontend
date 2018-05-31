@@ -22,7 +22,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     }
 
     protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        return;
     }
 
     private customerChanged(item: FormDropdownItem): void {

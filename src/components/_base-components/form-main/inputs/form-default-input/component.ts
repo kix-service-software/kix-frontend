@@ -1,38 +1,34 @@
-import { FormTextInputComponentState } from './FormTextInputComponentState';
+import { ComponentState } from './ComponentState';
 import { FormService } from '@kix/core/dist/browser/form';
-import { FormFieldValue, FormField } from '@kix/core/dist/model';
+import { FormFieldValue, FormField, FormInputComponent } from '@kix/core/dist/model';
 
-class FormTextInputComponent {
-
-    private state: FormTextInputComponentState;
+class Component extends FormInputComponent<string, ComponentState> {
 
     public onCreate(input: any): void {
-        this.state = new FormTextInputComponentState(input.field);
+        this.state = new ComponentState(input.field);
     }
 
     public onInput(input: any): void {
-        this.state.currentValue = input.currentValue;
-        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
-        this.state.formId = input.formId;
-        this.state.placeholder = input.placeholder ? input.placeholder : this.state.formField.label;
+        FormInputComponent.prototype.onInput.call(this, input);
+        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
+        this.state.currentValue = typeof input.currentValue !== 'undefined' ? input.currentValue : '';
+        // this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
+    }
 
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.registerListener({
-                formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                    if (formField.property === this.state.formField.property) {
-                        this.state.invalid = !value.valid;
-                    }
-                },
-                updateForm: () => { return; }
-            });
-        }
+    public onMount(): void {
+        FormInputComponent.prototype.onMount.call(this);
+        this.setCurrentValue();
+    }
+
+    public setCurrentValue(): void {
+        return;
     }
 
     private valueChanged(event: any): void {
         if (event) {
-            const value = event.target ? event.target.value : '';
-            this.provideValue(value);
+            this.state.currentValue = event.target ? event.target.value : '';
+            super.provideValue(this.state.currentValue);
+            (this as any).emit('valueChanged', this.state.currentValue);
         }
     }
 
@@ -45,16 +41,6 @@ class FormTextInputComponent {
     private focusLost(event: any): void {
         this.valueChanged(event);
     }
-
-    private provideValue(value: string = ''): void {
-        this.state.currentValue = value;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.provideFormFieldValue(this.state.formField.property, this.state.currentValue);
-        }
-        (this as any).emit('valueChanged', this.state.currentValue);
-    }
-
 }
 
-module.exports = FormTextInputComponent;
+module.exports = Component;
