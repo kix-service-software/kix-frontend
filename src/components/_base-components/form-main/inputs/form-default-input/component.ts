@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { FormService } from '@kix/core/dist/browser/form';
-import { FormFieldValue, FormField, FormInputComponent } from '@kix/core/dist/model';
+import { FormFieldValue, FormField, FormInputComponent, InputFieldTypes, FormFieldOptions } from '@kix/core/dist/model';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -12,7 +12,15 @@ class Component extends FormInputComponent<string, ComponentState> {
         FormInputComponent.prototype.onInput.call(this, input);
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
         this.state.currentValue = typeof input.currentValue !== 'undefined' ? input.currentValue : '';
-        // this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
+        if (this.state.field && this.state.field.options) {
+            const inputTypeOption = this.state.field.options.find(
+                (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
+            );
+            if (inputTypeOption) {
+                this.state.inputType = inputTypeOption.value.toString() || InputFieldTypes.TEXT;
+            }
+        }
     }
 
     public onMount(): void {

@@ -1,5 +1,7 @@
 import {
-    ContextConfiguration, FormField, ContactSourceAttributeMapping, Form, FormContext, KIXObjectType, ContactProperty
+    ContextConfiguration, FormField, ContactSourceAttributeMapping,
+    Form, FormContext, KIXObjectType,
+    ContactProperty, FormFieldOption, FormFieldOptions, InputFieldTypes
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
@@ -37,7 +39,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
             const labelProvider = new ContactLabelProvider();
 
             mapping.forEach((attribute) => {
-                // TODO: USER_CUSTOMER_IDS Behandlung - neuer Feldtyp?
+                // TODO: USER_CUSTOMER_IDS Behandlung - neuer Feldtyp (Multiselect)?
                 if (attribute.Attribute !== ContactProperty.USER_CUSTOMER_IDS) {
 
                     let group = groups.find((g) => g.name === attribute.DisplayGroup);
@@ -58,6 +60,15 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                     group.formFields.push(
                         new FormField(label, attribute.Attribute, attribute.Required, label)
                     );
+
+                    // TODO: eventuell wieder entfernen?
+                    if (attribute.Attribute === ContactProperty.USER_LOGIN) {
+                        group.formFields.push(
+                            new FormField('Password', ContactProperty.USER_PASSWORD, false, 'Password', [
+                                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                            ])
+                        );
+                    }
                 }
             });
 

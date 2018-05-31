@@ -1,14 +1,14 @@
-import { ArticleInputSubjectComponentState } from "./ArticleInputSubjectComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class ArticleInputSubjectComponent extends FormInputComponent<string, ArticleInputSubjectComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
 
     public onCreate(): void {
-        this.state = new ArticleInputSubjectComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -30,6 +30,10 @@ class ArticleInputSubjectComponent extends FormInputComponent<string, ArticleInp
         }
     }
 
+    private valueChanged(value: any): void {
+        this.state.currentValue = value || '';
+        super.provideValue(this.state.currentValue);
+    }
 }
 
-module.exports = ArticleInputSubjectComponent;
+module.exports = Component;
