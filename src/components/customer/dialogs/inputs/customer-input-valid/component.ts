@@ -4,12 +4,13 @@ import {
     FormFieldValue, ArchiveFlag, FormInputComponent, ValidObject
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
-import { CustomerInputValidCompontentState } from "./CustomerInputValidCompontentState";
+import { CompontentState } from "./CompontentState";
 
-class TicketInputArchiveSearch extends FormInputComponent<number, CustomerInputValidCompontentState> {
+// TODO: als allgemeines input-valid implementieren
+class Component extends FormInputComponent<number, CompontentState> {
 
     public onCreate(): void {
-        this.state = new CustomerInputValidCompontentState();
+        this.state = new CompontentState();
     }
 
     public onInput(input: any): void {
@@ -33,4 +34,4 @@ class TicketInputArchiveSearch extends FormInputComponent<number, CustomerInputV
     }
 }
 
-module.exports = TicketInputArchiveSearch;
+module.exports = Component;

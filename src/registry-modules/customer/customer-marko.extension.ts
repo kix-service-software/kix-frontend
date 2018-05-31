@@ -11,7 +11,9 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
             'customer/widgets/contact-list-widget',
             'customer/widgets/customer-contact-list-widget',
             'customer/dialogs/new-customer-dialog',
-            'customer/dialogs/inputs/customer-input-valid'
+            'customer/dialogs/new-contact-dialog',
+            'customer/dialogs/inputs/customer-input-valid',
+            'customer/dialogs/inputs/contact-input-customer'
         ];
 
         return [
@@ -28,7 +30,9 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
             ['customer-info-widget', 'customer/widgets/customer-info-widget'],
             ['contact-list-widget', 'customer/widgets/contact-list-widget'],
             ['new-customer-dialog', 'customer/dialogs/new-customer-dialog'],
-            ['customer-input-valid', 'customer/dialogs/inputs/customer-input-valid']
+            ['new-contact-dialog', 'customer/dialogs/new-contact-dialog'],
+            ['customer-input-valid', 'customer/dialogs/inputs/customer-input-valid'],
+            ['contact-input-customer', 'customer/dialogs/inputs/contact-input-customer']
         ];
     }
 

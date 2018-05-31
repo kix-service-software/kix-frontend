@@ -28,7 +28,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
     }
 
     protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        return;
     }
 
     private contactChanged(item: FormDropdownItem): void {
