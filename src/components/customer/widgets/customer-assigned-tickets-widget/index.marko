@@ -1,7 +1,11 @@
 <widget instanceId=state.instanceId title=component.getTitle() actions=state.actions>
     <@content>
-        <widget instanceId="overview-tickets-group" title="Offene Tickets">
-            <@content/>
+        <widget instanceId="customer-open-tickets-group" title="Offene Tickets">
+            <@content>
+                <if(state.openTicketsTable)>
+                    <standard-table standardTable=state.openTicketsTable/>
+                </if>
+            </@content>
         </widget>
         <widget instanceId="overview-tickets-group" title="Eskalierte Tickets">
             <@content/>

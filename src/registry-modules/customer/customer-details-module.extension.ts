@@ -3,7 +3,8 @@ import {
     CustomerContextConfiguration, CustomerDetialsContextConfiguration, CustomerDetailsContext
 } from '@kix/core/dist/browser/customer';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty, WidgetSize, ContactProperty
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty,
+    WidgetSize, ContactProperty, TicketProperty
 } from '@kix/core/dist/model';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
@@ -33,22 +34,36 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
+        const customerInfoLane =
+            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
+                'customer-info-widget', 'Kundeninformationen', [], {},
+                false, true, WidgetSize.SMALL, null, false)
+            );
+
         const assignedTicketsLane = new ConfiguredWidget('customer-assigned-tickets-widget', new WidgetConfiguration(
             'customer-assigned-tickets-widget', 'Übersicht Tickets', [], {},
             false, true, WidgetSize.BOTH, null, false
         ));
+
+        const openTicketsGroup =
+            new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
+                'customer-open-tickets-group', 'Offene Tickets', [], {
+                    displayLimit: 10,
+                    tableColumns: [
+                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
+                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
+                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
+                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 130)
+                    ]
+                },
+                false, true, WidgetSize.SMALL, null, false)
+            );
 
         const lanes = ['customer-contact-list-widget', 'customer-assigned-tickets-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
             ticketDetailsWidget, assignedContactsLane, assignedTicketsLane
         ];
-
-        const customerInfoLane =
-            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
-                'customer-info-widget', 'Kundeninformationen', [], {},
-                false, true, WidgetSize.SMALL, null, false)
-            );
 
         const laneTabs = ['customer-information-lane'];
         const laneTabWidgets = [customerInfoLane];
@@ -58,8 +73,11 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             'customer-create-ci-action', 'customer-print-action'
         ];
 
+        const groups = [openTicketsGroup];
+
         return new CustomerDetialsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, [], customerActions, []
+            this.getModuleId(), [], [], [], [], lanes, laneTabs,
+            laneWidgets, laneTabWidgets, [], customerActions, groups, []
         );
     }
 

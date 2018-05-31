@@ -1,10 +1,13 @@
 import { StandardTable } from "@kix/core/dist/browser";
-import { Customer, WidgetComponentState, AbstractAction } from "@kix/core/dist/model";
+import { Customer, WidgetComponentState, AbstractAction, Ticket, WidgetConfiguration } from "@kix/core/dist/model";
 
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
-        public ticketCount: number = 0
+        public customer: Customer = null,
+        public ticketCount: number = 0,
+        public openTicketsConfig: WidgetConfiguration = null,
+        public openTicketsTable: StandardTable<Ticket> = null
     ) {
         super();
     }
