@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, ITableClickListener, DialogService
 } from "@kix/core/dist/browser";
 import { WidgetConfiguration, Contact } from "@kix/core/dist/model";
 import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
