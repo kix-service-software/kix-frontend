@@ -22,7 +22,7 @@ export class CustomerCommunicator extends KIXCommunicator {
     }
 
     private async loadCustomers(data: CustomersLoadRequest): Promise<CommunicatorResponse<CustomersLoadResponse>> {
-        const customers = await this.customerService.getCustomers(data.token, data.customerIds);
+        const customers = await this.customerService.getCustomers(data.token, data.customerIds, data.searchValue);
         const response = new CustomersLoadResponse(data.requestId, customers);
         return new CommunicatorResponse(CustomerEvent.CUSTOMERS_LOADED, response);
     }

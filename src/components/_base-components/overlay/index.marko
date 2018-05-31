@@ -16,7 +16,7 @@
                         </div>
                     </if>
                     <else>
-                        <span>${state.content.getValue()}</span>
+                        <div>${state.content.getValue()}</div>
                     </else>
                     <if(state.hasCloseButton)>
                         <button.message-button type="button" on-click("closeOverlay") title="Fenster schließen">
