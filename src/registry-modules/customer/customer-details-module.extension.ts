@@ -33,10 +33,15 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        const lanes = ['customer-contact-list-widget'];
+        const assignedTicketsLane = new ConfiguredWidget('customer-assigned-tickets-widget', new WidgetConfiguration(
+            'customer-assigned-tickets-widget', 'Übersicht Tickets', [], {},
+            false, true, WidgetSize.BOTH, null, false
+        ));
+
+        const lanes = ['customer-contact-list-widget', 'customer-assigned-tickets-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            ticketDetailsWidget, assignedContactsLane
+            ticketDetailsWidget, assignedContactsLane, assignedTicketsLane
         ];
 
         const customerInfoLane =

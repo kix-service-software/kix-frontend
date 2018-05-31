@@ -1,0 +1,19 @@
+<widget instanceId=state.instanceId title=component.getTitle() actions=state.actions>
+    <@content>
+        <widget instanceId="overview-tickets-group" title="Offene Tickets">
+            <@content/>
+        </widget>
+        <widget instanceId="overview-tickets-group" title="Eskalierte Tickets">
+            <@content/>
+        </widget>
+        <widget instanceId="overview-tickets-group" title="Tickets in Wartestatus">
+            <@content/>
+        </widget>
+        <widget instanceId="overview-tickets-group" title="Neue Tickets">
+            <@content/>
+        </widget>
+        <widget instanceId="overview-tickets-group" title="Erinnerungstickets">
+            <@content/>
+        </widget>
+    </@content>
+</widget>
