@@ -1,8 +1,11 @@
 .list-with-title-and-icon {
     display: grid;
-    grid-template-columns: 4rem auto;
+    grid-template-columns: auto;
     grid-auto-flow: column;
     >div {
+        &:first-child:not(:last-child) {
+            width: 4rem;
+        }
         justify-self: center;
         align-self: center;
         >.list-with-title {

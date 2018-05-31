@@ -1,7 +1,9 @@
 <div.list-with-title-and-icon>
-    <div>
-        <icon icon=input.icon/>
-    </div>
+    <if(input.icon)>
+        <div>
+            <icon icon=input.icon/>
+        </div>
+    </if>
     <div>
         <b>${input.title}</b>
         <ul.list-with-title>
