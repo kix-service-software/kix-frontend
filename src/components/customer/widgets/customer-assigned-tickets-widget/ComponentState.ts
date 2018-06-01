@@ -5,9 +5,21 @@ export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
         public customer: Customer = null,
-        public ticketCount: number = 0,
         public openTicketsConfig: WidgetConfiguration = null,
-        public openTicketsTable: StandardTable<Ticket> = null
+        public openTicketsTable: StandardTable<Ticket> = null,
+        public escalatedTicketsConfig: WidgetConfiguration = null,
+        public escalatedTicketsTable: StandardTable<Ticket> = null,
+        public reminderTicketsConfig: WidgetConfiguration = null,
+        public reminderTicketsTable: StandardTable<Ticket> = null,
+        public newTicketsConfig: WidgetConfiguration = null,
+        public newTicketsTable: StandardTable<Ticket> = null,
+        public pendingTicketsConfig: WidgetConfiguration = null,
+        public pendingTicketsTable: StandardTable<Ticket> = null,
+        public loadEscalatedTickets: boolean = false,
+        public loadReminderTickets: boolean = false,
+        public loadOpenTickets: boolean = false,
+        public loadNewTickets: boolean = false,
+        public loadPendingTickets: boolean = false,
     ) {
         super();
     }

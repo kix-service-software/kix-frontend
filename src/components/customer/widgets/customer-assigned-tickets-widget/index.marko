@@ -1,23 +1,58 @@
-<widget instanceId=state.instanceId title=component.getTitle() actions=state.actions>
+<widget key=state.instanceId instanceId=state.instanceId title=component.getTitle() actions=state.actions>
     <@content>
-        <widget instanceId="customer-open-tickets-group" title="Offene Tickets">
+        <widget key="customer-escalated-tickets-group" instanceId="customer-escalated-tickets-group"
+            title=component.getEscalatedTicketsTitle()>
             <@content>
-                <if(state.openTicketsTable)>
-                    <standard-table standardTable=state.openTicketsTable/>
+                <if(state.escalatedTicketsTable && !state.loadEscalatedTickets)>
+                    <standard-table standardTable=state.escalatedTicketsTable/>
                 </if>
+                <else>
+                    <loading-spinner/>
+                </else>
             </@content>
         </widget>
-        <widget instanceId="overview-tickets-group" title="Eskalierte Tickets">
-            <@content/>
+        <widget key="customer-reminder-tickets-group" instanceId="customer-reminder-tickets-group"
+            title=component.getReminderTicketsTitle()>
+            <@content>
+                <if(state.reminderTicketsTable&& !state.loadReminderTickets)>
+                    <standard-table standardTable=state.reminderTicketsTable/>
+                </if>
+                <else>
+                    <loading-spinner/>
+                </else>
+            </@content>
         </widget>
-        <widget instanceId="overview-tickets-group" title="Tickets in Wartestatus">
-            <@content/>
+        <widget key="customer-new-tickets-group" instanceId="customer-new-tickets-group" title=component.getNewTicketsTitle()>
+            <@content>
+                <if(state.newTicketsTable && !state.loadNewTickets)>
+                    <standard-table standardTable=state.newTicketsTable/>
+                </if>
+                <else>
+                    <loading-spinner/>
+                </else>
+            </@content>
         </widget>
-        <widget instanceId="overview-tickets-group" title="Neue Tickets">
-            <@content/>
+        <widget key="customer-open-tickets-group" instanceId="customer-open-tickets-group"
+            title=component.getOpenTicketsTitle()>
+            <@content>
+                <if(state.openTicketsTable && !state.loadOpenTickets)>
+                    <standard-table standardTable=state.openTicketsTable/>
+                </if>
+                <else>
+                    <loading-spinner/>
+                </else>
+            </@content>
         </widget>
-        <widget instanceId="overview-tickets-group" title="Erinnerungstickets">
-            <@content/>
+        <widget key="customer-pending-tickets-group" instanceId="customer-pending-tickets-group"
+            title=component.getPendingTicketsTitle()>
+            <@content>
+                <if(state.pendingTicketsTable && !state.loadPendingTickets)>
+                    <standard-table standardTable=state.pendingTicketsTable/>
+                </if>
+                <else>
+                    <loading-spinner/>
+                </else>
+            </@content>
         </widget>
     </@content>
 </widget>
