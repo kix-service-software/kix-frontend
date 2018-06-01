@@ -40,7 +40,7 @@ class Component {
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new ContactTableContentLayer(this.state.instanceId),
+                new ContactTableContentLayer(),
                 new ContactTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
