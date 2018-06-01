@@ -1,0 +1,11 @@
+<widget instanceId=state.instanceId configurationTagId="constact-customer-list-configuration" title=state.title
+    contentActions=state.actions>
+    <@content>
+        <if(state.contact && state.customerTable)>
+            <div.customer-filter>
+                <filter filterValue=state.filterValue on-filter('filter')/>
+            </div>
+            <standard-table standardTable=state.customerTable/>
+        </if>
+    </@content>
+</widget>

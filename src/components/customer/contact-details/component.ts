@@ -63,7 +63,7 @@ class Component {
     private getTitle(): string {
         return this.state.contact
             ? this.state.contact.DisplayValue
-            : 'Kunde: ' + this.state.contactId;
+            : 'Ansprechpartner: ' + this.state.contactId;
 
     }
 

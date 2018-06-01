@@ -1,10 +1,13 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, ITableClickListener, DialogService
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
 import { WidgetConfiguration, Contact } from "@kix/core/dist/model";
-import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
+import {
+    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
+} from "@kix/core/dist/browser/contact";
+import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -40,13 +43,23 @@ class Component {
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new ContactTableContentLayer(this.state.instanceId),
+                new ContactTableContentLayer(),
                 new ContactTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
                 null, null, null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
-                null, null,
+                null,
+                {
+                    rowClicked: (contact: Contact, columnId: string): void => {
+                        ComponentRouterService.getInstance().navigate(
+                            'base-router',
+                            ContactDetailsContext.CONTEXT_ID,
+                            { contactId: contact.ContactID },
+                            contact.ContactID
+                        );
+                    }
+                },
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,

@@ -5,9 +5,10 @@ import {
     ITableConfigurationListener, ITableClickListener, DialogService
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
+import { ContactService, ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
 import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
-} from "@kix/core/dist/browser/contact";
+    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
+} from "@kix/core/dist/browser/customer";
 import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class Component {
@@ -25,46 +26,43 @@ class Component {
         context.registerListener({
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
-            objectChanged: (objectId: string | number, object: Customer, type: KIXObjectType) => {
-                if (type === KIXObjectType.CUSTOMER && (!this.state.customer || !this.state.customer.equals(object))) {
-                    this.state.customer = object;
+            objectChanged: (objectId: string | number, object: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT && (!this.state.contact || !this.state.contact.equals(object))) {
+                    this.state.contact = object;
                     this.setTable();
                 }
             }
         });
 
-        this.state.customer = (context.getObject(context.objectId) as Customer);
+        this.state.contact = (context.getObject(context.objectId) as Contact);
     }
 
-    public async onMount(): Promise<void> {
+    public onMount(): void {
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setTable();
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
-            if (this.state.contactTable) {
-                this.state.contactTable.setTableListener(() => {
-                    const count = this.state.contactTable.getTableRows().length;
-                    this.state.title += count > 0 ? ' (' + count + ')' : '';
-                });
+            if (this.state.contact && this.state.contact.UserCustomerIDs.length > 0) {
+                this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
             }
         }
     }
 
     private setTable(): void {
-        if (this.state.customer && this.state.widgetConfiguration) {
-            const configurationListener: ITableConfigurationListener<Contact> = {
+        if (this.state.contact && this.state.widgetConfiguration) {
+            const configurationListener: ITableConfigurationListener<Customer> = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            const clickListener: ITableClickListener<Contact> = {
+            const clickListener: ITableClickListener<Customer> = {
                 rowClicked: this.tableRowClicked.bind(this)
             };
 
-            this.state.contactTable = new StandardTable(
-                'assigned-contacts-' + IdService.generateDateBasedId(),
-                new ContactTableContentLayer(this.state.customer.CustomerID),
-                new ContactTableLabelLayer(),
+            this.state.customerTable = new StandardTable(
+                'assigned-customers-' + IdService.generateDateBasedId(),
+                new CustomerTableContentLayer(this.state.contact.UserCustomerIDs),
+                new CustomerTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
                 null, null, null,
@@ -90,15 +88,15 @@ class Component {
         }
     }
 
-    private tableRowClicked(contact: Contact, columnId: string): void {
-        if (columnId === 'contact-new-ticket') {
-            DialogService.getInstance().openMainDialog('new-ticket-dialog');
+    private tableRowClicked(customer: Customer, columnId: string): void {
+        if (columnId === 'customer-new-ticket') {
+            DialogService.getInstance().openMainDialog('new-customer-dialog');
         } else {
             ComponentRouterService.getInstance().navigate(
                 'base-router',
-                ContactDetailsContext.CONTEXT_ID,
-                { contactId: contact.ContactID },
-                contact.ContactID
+                CustomerDetailsContext.CONTEXT_ID,
+                { customerId: customer.CustomerID },
+                customer.CustomerID
             );
         }
     }
@@ -106,9 +104,9 @@ class Component {
     private filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         if (filterValue === '') {
-            this.state.contactTable.resetFilter();
+            this.state.customerTable.resetFilter();
         } else {
-            this.state.contactTable.setFilterSettings(filterValue);
+            this.state.customerTable.setFilterSettings(filterValue);
         }
     }
 }

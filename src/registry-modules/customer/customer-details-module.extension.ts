@@ -1,9 +1,7 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
+import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '@kix/core/dist/browser/customer';
 import {
-    CustomerContextConfiguration, CustomerDetailsContextConfiguration, CustomerDetailsContext
-} from '@kix/core/dist/browser/customer';
-import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty, WidgetSize, ContactProperty
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty
 } from '@kix/core/dist/model';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
@@ -14,9 +12,10 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        const ticketDetailsWidget = new ConfiguredWidget('customer-details-widget', new WidgetConfiguration(
-            'customer-details-widget', 'Kunden Details', [], null,
-            false, true, WidgetSize.BOTH, null, false
+        const generalActions = ['customer-create-action'];
+        const customerDetailsWidget = new ConfiguredWidget('customer-details-widget', new WidgetConfiguration(
+            'customer-details-widget', 'Kunden Details', generalActions, null,
+            false, true, WidgetSize.LARGE, null, false
         ));
 
         const assignedContactsLane = new ConfiguredWidget('customer-contact-list-widget', new WidgetConfiguration(
@@ -30,13 +29,13 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                     new TableColumnConfiguration('contact-new-ticket', true, false, true, false, 130)
                 ]
             },
-            false, true, WidgetSize.BOTH, null, false
+            false, true, WidgetSize.LARGE, null, false
         ));
 
         const lanes = ['customer-contact-list-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            ticketDetailsWidget, assignedContactsLane
+            customerDetailsWidget, assignedContactsLane
         ];
 
         const customerInfoLane =
@@ -54,7 +53,11 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
         ];
 
         return new CustomerDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, [], customerActions, []
+            this.getModuleId(),
+            [], [], [], [],
+            lanes, laneTabs, laneWidgets,
+            laneTabWidgets, generalActions, customerActions,
+            []
         );
     }
 

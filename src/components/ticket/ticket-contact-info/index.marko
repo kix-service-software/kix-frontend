@@ -2,9 +2,9 @@
     <for(groupTuple in state.contact.getContactInfoData())>
         <div.contact-attribute-group>
             <for(attributeTuple in groupTuple[1])>
-                <div title=((attributeTuple[0] + ": ") + attributeTuple[1])>
-                    <span>${attributeTuple[0]}:</span>
-                    ${attributeTuple[1]}
+                <div title=((state.labelProvider.getPropertyText(attributeTuple[0]) + ": ") + state.labelProvider.getDisplayText(state.contact, attributeTuple[0]))>
+                    <span>${state.labelProvider.getPropertyText(attributeTuple[0])}:</span>
+                    ${state.labelProvider.getDisplayText(state.contact, attributeTuple[0])}
                 </div>
             </for>
         </div>
