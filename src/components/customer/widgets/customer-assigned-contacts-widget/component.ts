@@ -1,7 +1,8 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer,
-    TableSortLayer, TableRowHeight, IdService, TableColumn, ITableConfigurationListener
+    TableSortLayer, TableRowHeight, IdService, TableColumn,
+    ITableConfigurationListener, ITableClickListener, DialogService
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
 import { ContactService, ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
@@ -45,6 +46,10 @@ class Component {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
+            const clickListener: ITableClickListener<Contact> = {
+                rowClicked: this.tableRowClicked.bind(this)
+            };
+
             this.state.contactTable = new StandardTable(
                 'assigned-contacts-' + IdService.generateDateBasedId(),
                 new ContactTableContentLayer(this.state.customer.CustomerID),
@@ -53,7 +58,8 @@ class Component {
                 [new TableSortLayer()],
                 null, null, null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
-                null, null,
+                null,
+                clickListener,
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,
@@ -70,6 +76,12 @@ class Component {
             ContextService.getInstance().saveWidgetConfiguration(
                 this.state.instanceId, this.state.widgetConfiguration
             );
+        }
+    }
+
+    private tableRowClicked(object: Contact, columnId: string): void {
+        if (columnId === 'contact-new-ticket') {
+            DialogService.getInstance().openMainDialog('new-ticket-dialog');
         }
     }
 

@@ -1,6 +1,7 @@
 import {
     SocketEvent, ContactEvent, ContactsLoadRequest, ContactsLoadResponse,
-    GetContactTicketCountRequest, GetContactTicketCountResponse, ContextEvent
+    GetContactTicketCountRequest, GetContactTicketCountResponse, ContextEvent,
+    CreateContactRequest, CreateContactResponse
 } from '@kix/core/dist/model';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -15,6 +16,7 @@ export class ContactCommunicator extends KIXCommunicator {
     protected registerEvents(): void {
         this.registerEventHandler(ContactEvent.GET_TICKET_COUNT, this.getTicketCount.bind(this));
         this.registerEventHandler(ContactEvent.LOAD_CONTACTS, this.loadContacts.bind(this));
+        this.registerEventHandler(ContactEvent.CREATE_CONTACT, this.createContact.bind(this));
     }
 
     private async loadContacts(data: ContactsLoadRequest): Promise<CommunicatorResponse<ContactsLoadResponse>> {
@@ -38,6 +40,20 @@ export class ContactCommunicator extends KIXCommunicator {
         });
 
         return new CommunicatorResponse(ContactEvent.GET_TICKET_COUNT_FINISHED, response);
+    }
+
+    private async createContact(data: CreateContactRequest): Promise<CommunicatorResponse<CreateContactResponse>> {
+        let response;
+        await this.contactService.createContact(data.token, data.parameter)
+            .then((contactId) => {
+                const createTicketResponse = new CreateContactResponse(contactId);
+                response = new CommunicatorResponse(ContactEvent.CREATE_CONTACT_FINISHED, createTicketResponse);
+            })
+            .catch((error) => {
+                response = new CommunicatorResponse(ContactEvent.CREATE_CONTACT_ERROR, error.message);
+            });
+
+        return response;
     }
 
 }
