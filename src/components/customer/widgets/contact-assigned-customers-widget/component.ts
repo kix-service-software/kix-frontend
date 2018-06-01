@@ -89,11 +89,7 @@ class Component {
     }
 
     private tableRowClicked(customer: Customer, columnId: string): void {
-        if (columnId === 'customer-new-ticket') {
-            DialogService.getInstance().openMainDialog('new-customer-dialog');
-        } else {
-            CustomerService.getInstance().openCustomer(customer.CustomerID, false);
-        }
+        CustomerService.getInstance().openCustomer(customer.CustomerID, false);
     }
 
     private filter(filterValue: string): void {
