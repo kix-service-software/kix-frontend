@@ -19,6 +19,12 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             false, true, WidgetSize.LARGE, null, false
         ));
 
+        const customerInfoLane =
+            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
+                'customer-info-widget', 'Kundeninformationen', [], {},
+                false, true, WidgetSize.LARGE, null, false)
+            );
+
         const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
             'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [], {
                 displayLimit: 10,
@@ -33,15 +39,9 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             false, true, WidgetSize.LARGE, null, false
         ));
 
-        const customerInfoLane =
-            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
-                'customer-info-widget', 'Kundeninformationen', [], {},
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
         const assignedTicketsLane = new ConfiguredWidget('customer-assigned-tickets-widget', new WidgetConfiguration(
             'customer-assigned-tickets-widget', 'Übersicht Tickets', [], {},
-            false, true, WidgetSize.BOTH, null, false
+            false, true, WidgetSize.LARGE, null, false
         ));
 
         const openTicketsGroup =

@@ -1,15 +1,15 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService,
     TableColumnConfiguration, ITableClickListener
-} from "@kix/core/dist/browser";
-import { WidgetConfiguration, Customer, WidgetType, KIXObjectType, Ticket } from "@kix/core/dist/model";
+} from '@kix/core/dist/browser';
+import { WidgetConfiguration, Contact, WidgetType, KIXObjectType, Ticket } from '@kix/core/dist/model';
 import {
-    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
-} from "@kix/core/dist/browser/customer";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
-import { TicketTableContentLayer, TicketTableLabelLayer, TicketService } from "@kix/core/dist/browser/ticket";
+    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
+} from '@kix/core/dist/browser/contact';
+import { ComponentRouterService } from '@kix/core/dist/browser/router';
+import { TicketTableContentLayer, TicketTableLabelLayer, TicketService } from '@kix/core/dist/browser/ticket';
 
 class Component {
 
@@ -38,33 +38,33 @@ class Component {
             : undefined;
 
         this.state.openTicketsConfig = context
-            ? context.getWidgetConfiguration('customer-open-tickets-group')
+            ? context.getWidgetConfiguration('contact-open-tickets-group')
             : undefined;
 
         this.state.escalatedTicketsConfig = context
-            ? context.getWidgetConfiguration('customer-escalated-tickets-group')
+            ? context.getWidgetConfiguration('contact-escalated-tickets-group')
             : undefined;
 
         this.state.reminderTicketsConfig = context
-            ? context.getWidgetConfiguration('customer-reminder-tickets-group')
+            ? context.getWidgetConfiguration('contact-reminder-tickets-group')
             : undefined;
 
         this.state.newTicketsConfig = context
-            ? context.getWidgetConfiguration('customer-new-tickets-group')
+            ? context.getWidgetConfiguration('contact-new-tickets-group')
             : undefined;
 
         this.state.pendingTicketsConfig = context
-            ? context.getWidgetConfiguration('customer-pending-tickets-group')
+            ? context.getWidgetConfiguration('contact-pending-tickets-group')
             : undefined;
 
-        this.state.customer = (context.getObject(context.objectId) as Customer);
+        this.state.contact = (context.getObject(context.objectId) as Contact);
 
         this.createTables();
         this.loadTickets();
     }
 
     private createTables(): void {
-        if (this.state.customer) {
+        if (this.state.contact) {
             this.configureOpenTicketsTable();
             this.configureEscalatedTicketsTable();
             this.configureReminderTicketsTable();
@@ -75,7 +75,7 @@ class Component {
 
     private configureOpenTicketsTable(): void {
         if (this.state.openTicketsConfig) {
-            const tableId = 'customer-open-tickets-' + IdService.generateDateBasedId();
+            const tableId = 'contact-open-tickets-' + IdService.generateDateBasedId();
             this.state.openTicketsTable = new StandardTable(
                 tableId,
                 new TicketTableContentLayer(tableId, []),
@@ -91,7 +91,7 @@ class Component {
 
     private configureEscalatedTicketsTable(): void {
         if (this.state.escalatedTicketsConfig) {
-            const tableId = 'customer-escalated-tickets-' + IdService.generateDateBasedId();
+            const tableId = 'contact-escalated-tickets-' + IdService.generateDateBasedId();
             this.state.escalatedTicketsTable = new StandardTable(
                 tableId,
                 new TicketTableContentLayer(tableId, []),
@@ -107,7 +107,7 @@ class Component {
 
     private configureReminderTicketsTable(): void {
         if (this.state.reminderTicketsConfig) {
-            const tableId = 'customer-reminder-tickets-' + IdService.generateDateBasedId();
+            const tableId = 'contact-reminder-tickets-' + IdService.generateDateBasedId();
             this.state.reminderTicketsTable = new StandardTable(
                 tableId,
                 new TicketTableContentLayer(tableId, []),
@@ -123,7 +123,7 @@ class Component {
 
     private configureNewTicketsTable(): void {
         if (this.state.newTicketsConfig) {
-            const tableId = 'customer-new-tickets-' + IdService.generateDateBasedId();
+            const tableId = 'contact-new-tickets-' + IdService.generateDateBasedId();
             this.state.newTicketsTable = new StandardTable(
                 tableId,
                 new TicketTableContentLayer(tableId, []),
@@ -139,7 +139,7 @@ class Component {
 
     private configurePendingTicketsTable(): void {
         if (this.state.pendingTicketsConfig) {
-            const tableId = 'customer-pending-tickets-' + IdService.generateDateBasedId();
+            const tableId = 'contact-pending-tickets-' + IdService.generateDateBasedId();
             this.state.pendingTicketsTable = new StandardTable(
                 tableId,
                 new TicketTableContentLayer(tableId, []),
@@ -168,7 +168,7 @@ class Component {
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getPendingTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
         (this.state.escalatedTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
@@ -183,7 +183,7 @@ class Component {
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getPendingTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
         (this.state.reminderTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
@@ -198,7 +198,7 @@ class Component {
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getOpenTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
         (this.state.openTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
@@ -213,7 +213,7 @@ class Component {
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getNewTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
         (this.state.newTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
@@ -228,7 +228,7 @@ class Component {
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getPendingTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
         (this.state.newTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
@@ -239,7 +239,7 @@ class Component {
     private getTitle(): string {
         const title = this.state.widgetConfiguration
             ? this.state.widgetConfiguration.title
-            : "";
+            : '';
 
         return `${title} (${this.getTicketCount()})`;
     }
@@ -286,7 +286,6 @@ class Component {
                 }
             });
         }
-
 
         return tickets.length;
     }

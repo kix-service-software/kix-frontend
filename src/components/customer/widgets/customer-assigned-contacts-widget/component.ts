@@ -6,7 +6,7 @@ import {
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
 import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
+    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext, ContactService
 } from "@kix/core/dist/browser/contact";
 import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
@@ -94,12 +94,7 @@ class Component {
         if (columnId === 'contact-new-ticket') {
             DialogService.getInstance().openMainDialog('new-ticket-dialog');
         } else {
-            ComponentRouterService.getInstance().navigate(
-                'base-router',
-                ContactDetailsContext.CONTEXT_ID,
-                { contactId: contact.ContactID },
-                contact.ContactID
-            );
+            ContactService.getInstance().openContact(contact.ContactID, false);
         }
     }
 
