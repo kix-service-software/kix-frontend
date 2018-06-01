@@ -1,9 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService, TableColumnConfiguration
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService,
+    TableColumnConfiguration, ITableClickListener
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Customer, WidgetType, KIXObjectType } from "@kix/core/dist/model";
+import { WidgetConfiguration, Customer, WidgetType, KIXObjectType, Ticket } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
 } from "@kix/core/dist/browser/customer";
@@ -14,6 +15,8 @@ class Component {
 
     private state: ComponentState;
 
+    private clickListener: ITableClickListener<Ticket>;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -23,6 +26,12 @@ class Component {
     }
 
     public onMount(): void {
+        this.clickListener = {
+            rowClicked: (object: Ticket, columnId: string) => {
+                TicketService.getInstance().openTicket(object.TicketID, true);
+            }
+        };
+
         const context = ContextService.getInstance().getContext();
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration(this.state.instanceId)
@@ -73,7 +82,7 @@ class Component {
                 new TicketTableLabelLayer(),
                 [], [], null, null, null,
                 this.state.openTicketsConfig.settings.tableColumns,
-                null, null, null,
+                null, this.clickListener, null,
                 this.state.openTicketsConfig.settings.displayLimit,
                 false, TableRowHeight.SMALL
             );
@@ -89,7 +98,7 @@ class Component {
                 new TicketTableLabelLayer(),
                 [], [], null, null, null,
                 this.state.escalatedTicketsConfig.settings.tableColumns,
-                null, null, null,
+                null, this.clickListener, null,
                 this.state.escalatedTicketsConfig.settings.displayLimit,
                 false, TableRowHeight.SMALL
             );
@@ -105,7 +114,7 @@ class Component {
                 new TicketTableLabelLayer(),
                 [], [], null, null, null,
                 this.state.reminderTicketsConfig.settings.tableColumns,
-                null, null, null,
+                null, this.clickListener, null,
                 this.state.reminderTicketsConfig.settings.displayLimit,
                 false, TableRowHeight.SMALL
             );
@@ -121,7 +130,7 @@ class Component {
                 new TicketTableLabelLayer(),
                 [], [], null, null, null,
                 this.state.newTicketsConfig.settings.tableColumns,
-                null, null, null,
+                null, this.clickListener, null,
                 this.state.newTicketsConfig.settings.displayLimit,
                 false, TableRowHeight.SMALL
             );
@@ -137,7 +146,7 @@ class Component {
                 new TicketTableLabelLayer(),
                 [], [], null, null, null,
                 this.state.pendingTicketsConfig.settings.tableColumns,
-                null, null, null,
+                null, this.clickListener, null,
                 this.state.pendingTicketsConfig.settings.displayLimit,
                 false, TableRowHeight.SMALL
             );
