@@ -3,11 +3,8 @@ import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Contact } from "@kix/core/dist/model";
-import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext, ContactService
-} from "@kix/core/dist/browser/contact";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
+import { Contact } from "@kix/core/dist/model";
+import { ContactTableContentLayer, ContactTableLabelLayer, ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
 
