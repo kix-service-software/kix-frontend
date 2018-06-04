@@ -18,7 +18,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTyp
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.types.map((t) =>
+        this.state.items = objectData.ticketTypes.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.TYPE_ID, t.ID), t.Name)
         );
         this.setCurrentValue();
