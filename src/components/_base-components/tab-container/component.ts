@@ -14,6 +14,13 @@ class TabLaneComponent {
 
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
+        this.state.tabId = input.tabId;
+        if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
+            const tab = this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId);
+            if (tab && tab.instanceId !== this.state.activeTab.instanceId) {
+                this.state.activeTab = tab;
+            }
+        }
 
         WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
         this.state.tabWidgets.forEach(
@@ -27,10 +34,14 @@ class TabLaneComponent {
     }
 
     public onMount(): void {
-        if (!this.state.activeTab && this.state.tabWidgets.length) {
-            this.state.activeTab = this.state.tabWidgets[0];
+        if (this.state.tabWidgets.length) {
+            if (this.state.tabId) {
+                this.state.activeTab = this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId);
+            }
+            if (!this.state.activeTab) {
+                this.state.activeTab = this.state.tabWidgets[0];
+            }
         }
-
         if (this.state.contextType) {
             this.setSidebars();
 

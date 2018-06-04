@@ -4,7 +4,8 @@
         <div.main-dialog>
             <widget isDialog=true title="Neues Objekt erstellen" minimizable=false>
                 <@content>
-                    <tab-container tabWidgets=state.dialogWidgets minimizable=false contextType="DIALOG" no-update-body/>
+                    <tab-container tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false contextType="DIALOG"
+                        no-update-body/>
                     <div.dialog-footer>
                         <span.dialog-hint>${state.dialogHint}</span>
                         <version/>
