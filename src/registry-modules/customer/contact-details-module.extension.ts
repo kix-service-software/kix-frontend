@@ -29,8 +29,12 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                 displayLimit: 10,
                 tableColumns: [
                     new TableColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, true, 130),
-                    new TableColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, true, 130)
-                    // TODO: ticket spalten
+                    new TableColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, true, 130),
+                    new TableColumnConfiguration(CustomerProperty.OPEN_TICKETS_COUNT, true, false, true, true, 130),
+                    new TableColumnConfiguration(
+                        CustomerProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 130
+                    ),
+                    new TableColumnConfiguration(CustomerProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 130),
                 ]
             },
             false, true, WidgetSize.LARGE, null, false

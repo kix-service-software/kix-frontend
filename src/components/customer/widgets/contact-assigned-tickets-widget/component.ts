@@ -80,7 +80,7 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [], null, null, null,
+                [], [new TableSortLayer()], null, null, null,
                 this.state.openTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.openTicketsConfig.settings.displayLimit,
@@ -96,7 +96,7 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [], null, null, null,
+                [], [new TableSortLayer()], null, null, null,
                 this.state.escalatedTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.escalatedTicketsConfig.settings.displayLimit,
@@ -112,7 +112,7 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [], null, null, null,
+                [], [new TableSortLayer()], null, null, null,
                 this.state.reminderTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.reminderTicketsConfig.settings.displayLimit,
@@ -128,7 +128,7 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [], null, null, null,
+                [], [new TableSortLayer()], null, null, null,
                 this.state.newTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.newTicketsConfig.settings.displayLimit,
@@ -144,7 +144,7 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [], null, null, null,
+                [], [new TableSortLayer()], null, null, null,
                 this.state.pendingTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.pendingTicketsConfig.settings.displayLimit,
@@ -255,7 +255,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.newTicketsTable) {
             this.state.newTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -263,7 +263,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.pendingTicketsTable) {
             this.state.pendingTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -271,7 +271,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.reminderTicketsTable) {
             this.state.reminderTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -279,7 +279,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.openTicketsTable) {
             this.state.openTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);

@@ -127,8 +127,8 @@ class FormDropdownTreeComponent {
     }
 
     private focusLost(): void {
-        this.nodeClicked(this.state.preSelectedNode);
-        this.closeList();
+        // this.nodeClicked(this.state.preSelectedNode);
+        // this.closeList();
     }
 
     private closeList(): void {
@@ -143,7 +143,7 @@ class FormDropdownTreeComponent {
             const dropdownInputContainer = (this as any).getEl('dropdown-input-container');
             const formElement = dropdownInputContainer.parentElement.parentElement.parentElement;
             let container = dropdownInputContainer;
-            let previousContainer = void 0;
+            let previousContainer;
             while (container
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
