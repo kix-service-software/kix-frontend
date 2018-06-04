@@ -14,6 +14,10 @@
         &:disabled {
             background-color: @secondary-4;
         }
+        &:invalid {
+            // TODO: eigenes Styling nutzen? Firefox setzt box-shadow
+            box-shadow: none;
+        }
     }
     &:focus:not(:disabled),
     &:hover:not(:disabled) {
