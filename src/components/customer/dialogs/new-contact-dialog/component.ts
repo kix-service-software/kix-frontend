@@ -52,12 +52,12 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        OverlayService.getInstance().openOverlay(
-            OverlayType.TOAST,
-            null,
-            new StringContent('Ansprechpartner wurde erfolgreich angelegt.'),
-            'Ansprechpartner wurde erfolgreich angelegt'
-        );
+        const content = new ComponentContent('list-with-title', {
+            title: 'Ansprechpartner wurde erfolgreich angelegt.',
+            list: ['Ansprechpartner wurde erfolgreich angelegt'],
+            icon: 'kix-icon-check'
+        });
+        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
