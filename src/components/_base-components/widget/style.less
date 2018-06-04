@@ -53,7 +53,15 @@
                 }
             }
             >.action-list-wrapper {
-                display: inline-block;
+                float: left;
+                >.action-list {
+                    >li {
+                        >div {
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                }
             }
         }
         >input[type=text] {
