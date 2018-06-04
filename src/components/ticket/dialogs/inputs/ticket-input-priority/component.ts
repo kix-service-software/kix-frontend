@@ -18,7 +18,7 @@ class TicketInputPriorityComponent extends FormInputComponent<number, TicketInpu
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.priorities.map((p) =>
+        this.state.items = objectData.ticketPriorities.map((p) =>
             new FormDropdownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
         );
         this.setCurrentValue();
