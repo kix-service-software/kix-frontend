@@ -37,7 +37,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
-        this.state.contacts = await ContactService.getInstance().loadContacts(limit, searchValue);
+        this.state.contacts = await ContactService.getInstance().loadContacts([], searchValue, null, limit);
 
         let items = [];
         if (searchValue && searchValue !== '') {

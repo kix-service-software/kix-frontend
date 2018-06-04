@@ -1,6 +1,6 @@
 <widget key=state.instanceId instanceId=state.instanceId title=component.getTitle() actions=state.actions>
     <@content>
-        <widget key="customer-escalated-tickets-group" instanceId="customer-escalated-tickets-group"
+        <widget key="contact-escalated-tickets-group" instanceId="contact-escalated-tickets-group"
             title=component.getEscalatedTicketsTitle()>
             <@content>
                 <if(state.escalatedTicketsTable && !state.loadEscalatedTickets)>
@@ -11,7 +11,7 @@
                 </else>
             </@content>
         </widget>
-        <widget key="customer-reminder-tickets-group" instanceId="customer-reminder-tickets-group"
+        <widget key="contact-reminder-tickets-group" instanceId="contact-reminder-tickets-group"
             title=component.getReminderTicketsTitle()>
             <@content>
                 <if(state.reminderTicketsTable && !state.loadReminderTickets)>
@@ -22,7 +22,7 @@
                 </else>
             </@content>
         </widget>
-        <widget key="customer-new-tickets-group" instanceId="customer-new-tickets-group" title=component.getNewTicketsTitle()>
+        <widget key="contact-new-tickets-group" instanceId="contact-new-tickets-group" title=component.getNewTicketsTitle()>
             <@content>
                 <if(state.newTicketsTable && !state.loadNewTickets)>
                     <standard-table standardTable=state.newTicketsTable/>
@@ -32,8 +32,7 @@
                 </else>
             </@content>
         </widget>
-        <widget key="customer-open-tickets-group" instanceId="customer-open-tickets-group"
-            title=component.getOpenTicketsTitle()>
+        <widget key="contact-open-tickets-group" instanceId="contact-open-tickets-group" title=component.getOpenTicketsTitle()>
             <@content>
                 <if(state.openTicketsTable && !state.loadOpenTickets)>
                     <standard-table standardTable=state.openTicketsTable/>
@@ -43,7 +42,7 @@
                 </else>
             </@content>
         </widget>
-        <widget key="customer-pending-tickets-group" instanceId="customer-pending-tickets-group"
+        <widget key="contact-pending-tickets-group" instanceId="contact-pending-tickets-group"
             title=component.getPendingTicketsTitle()>
             <@content>
                 <if(state.pendingTicketsTable && !state.loadPendingTickets)>

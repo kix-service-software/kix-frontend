@@ -1,7 +1,7 @@
 import {
-    SocketEvent, ContactEvent, ContactsLoadRequest, ContactsLoadResponse,
+    SocketEvent, ContactEvent, ContactsLoadResponse,
     GetContactTicketCountRequest, GetContactTicketCountResponse, ContextEvent,
-    CreateContactRequest, CreateContactResponse
+    CreateContactRequest, CreateContactResponse, Contact, ContactsLoadRequest
 } from '@kix/core/dist/model';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -20,9 +20,14 @@ export class ContactCommunicator extends KIXCommunicator {
     }
 
     private async loadContacts(data: ContactsLoadRequest): Promise<CommunicatorResponse<ContactsLoadResponse>> {
-        const contacts = await this.contactService.getContacts(
-            data.token, data.limit, data.searchValue, data.customerId
-        );
+        let contacts: Contact[] = [];
+        if (data.contactIds && data.contactIds.length === 1) {
+            contacts = [await this.contactService.getContact(data.token, data.contactIds[0])];
+        } else {
+            contacts = await this.contactService.getContacts(
+                data.token, data.contactIds, data.limit, data.searchValue, data.customerId
+            );
+        }
         const response = new ContactsLoadResponse(data.requestId, contacts);
         return new CommunicatorResponse(ContactEvent.CONTACTS_LOADED, response);
     }

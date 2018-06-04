@@ -5,16 +5,15 @@
     >div {
         &:first-child:not(:last-child) {
             width: 4rem;
+            >[class*="kix-icon-"] {
+                font-size: 1.75rem;
+            }
+            align-self: center;
         }
-        justify-self: center;
-        align-self: center;
         >.list-with-title {
             >li {
                 margin-left: 1rem;
             }
-        }
-        >[class*="kix-icon-"] {
-            font-size: 1.75rem;
         }
     }
 }

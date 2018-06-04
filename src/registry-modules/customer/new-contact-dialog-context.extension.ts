@@ -64,7 +64,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                     // TODO: eventuell wieder entfernen?
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {
                         group.formFields.push(
-                            new FormField('Password', ContactProperty.USER_PASSWORD, false, 'Password', [
+                            new FormField('Password', ContactProperty.USER_PASSWORD, true, 'Password', [
                                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                             ])
                         );

@@ -1,4 +1,4 @@
-<widget instanceId=state.instanceId configurationTagId="customer-info-configuration"
+<widget instanceId=state.instanceId configurationTagId="contact-info-configuration"
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") contentActions=state.actions>
     <@icon>
         <if(state.widgetConfiguration)>
@@ -6,12 +6,12 @@
         </if>
     </@icon>
     <@content>
-        <if(state.customer)>
-            <div.customer-info-container>
-                <for(groupTuple in state.customer.getCustomerInfoData())>
-                    <div.customer-group>
+        <if(state.contact)>
+            <div.contact-info-container>
+                <for(groupTuple in state.contact.getContactInfoData())>
+                    <div.contact-group>
                         <for(attributeTuple in groupTuple[1])>
-                            <object-property-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
+                            <object-property-label object=state.contact property=attributeTuple[0] labelProvider=state.labelProvider/>
                         </for>
                     </div>
                 </for>

@@ -1,55 +1,49 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '@kix/core/dist/browser/customer';
+import { ContactDetailsContextConfiguration, ContactDetailsContext } from '@kix/core/dist/browser/contact';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize, ContactProperty, TicketProperty
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, CustomerProperty, TicketProperty
 } from '@kix/core/dist/model';
 import { TableColumnConfiguration } from '@kix/core/dist/browser';
 
 export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
     public getModuleId(): string {
-        return CustomerDetailsContext.CONTEXT_ID;
+        return ContactDetailsContext.CONTEXT_ID;
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        const generalActions = ['customer-create-action'];
-        const customerDetailsWidget = new ConfiguredWidget('customer-details-widget', new WidgetConfiguration(
-            'customer-details-widget', 'Kunden Details', generalActions, null,
+        const generalActions = ['contact-create-action'];
+        const contactDetailsWidget = new ConfiguredWidget('contact-details-widget', new WidgetConfiguration(
+            'contact-details-widget', 'Ansprechpartner Details', generalActions, null,
             false, true, WidgetSize.LARGE, null, false
         ));
 
-        const customerInfoLane =
-            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
-                'customer-info-widget', 'Kundeninformationen', [], {},
+        const contactInfoLane =
+            new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
+                'contact-info-widget', 'Ansprechpartnerinformationen', [], {},
                 false, true, WidgetSize.LARGE, null, false)
             );
 
-        const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
-            'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [], {
+        const assignedCustomersLane = new ConfiguredWidget('contact-assigned-customers-widget', new WidgetConfiguration(
+            'contact-assigned-customers-widget', 'Zugeordnete Kunden', [], {
                 displayLimit: 10,
                 tableColumns: [
-                    new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 130),
-                    new TableColumnConfiguration(ContactProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 130),
-                    new TableColumnConfiguration('contact-new-ticket', true, false, true, false, 130)
+                    new TableColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, true, 130),
+                    new TableColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, true, 130)
+                    // TODO: ticket spalten
                 ]
             },
             false, true, WidgetSize.LARGE, null, false
         ));
 
-        const assignedTicketsLane = new ConfiguredWidget('customer-assigned-tickets-widget', new WidgetConfiguration(
-            'customer-assigned-tickets-widget', 'Übersicht Tickets', [], {},
+        const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget', new WidgetConfiguration(
+            'contact-assigned-tickets-widget', 'Übersicht Tickets', [], {},
             false, true, WidgetSize.LARGE, null, false
         ));
 
         const openTicketsGroup =
-            new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
-                'customer-open-tickets-group', 'Offene Tickets', [], {
+            new ConfiguredWidget('contact-open-tickets-group', new WidgetConfiguration(
+                'contact-open-tickets-group', 'Offene Tickets', [], {
                     displayLimit: 10,
                     tableColumns: [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
@@ -63,8 +57,8 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             );
 
         const escalatedTicketsGroup =
-            new ConfiguredWidget('customer-escalated-tickets-group', new WidgetConfiguration(
-                'customer-escalated-tickets-group', 'Eskalierte Tickets', [], {
+            new ConfiguredWidget('contact-escalated-tickets-group', new WidgetConfiguration(
+                'contact-escalated-tickets-group', 'Eskalierte Tickets', [], {
                     displayLimit: 10,
                     tableColumns: [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
@@ -87,8 +81,8 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             );
 
         const reminderTicketsGroup =
-            new ConfiguredWidget('customer-reminder-tickets-group', new WidgetConfiguration(
-                'customer-reminder-tickets-group', 'Erinnerungstickets', [], {
+            new ConfiguredWidget('contact-reminder-tickets-group', new WidgetConfiguration(
+                'contact-reminder-tickets-group', 'Erinnerungstickets', [], {
                     displayLimit: 10,
                     tableColumns: [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
@@ -103,8 +97,8 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             );
 
         const newTicketsGroup =
-            new ConfiguredWidget('customer-new-tickets-group', new WidgetConfiguration(
-                'customer-new-tickets-group', 'Neue Tickets', [], {
+            new ConfiguredWidget('contact-new-tickets-group', new WidgetConfiguration(
+                'contact-new-tickets-group', 'Neue Tickets', [], {
                     displayLimit: 10,
                     tableColumns: [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
@@ -118,8 +112,8 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
             );
 
         const pendingTicketsGroup =
-            new ConfiguredWidget('customer-pending-tickets-group', new WidgetConfiguration(
-                'customer-pending-tickets-group', 'Tickets in Wartestatus', [], {
+            new ConfiguredWidget('contact-pending-tickets-group', new WidgetConfiguration(
+                'contact-pending-tickets-group', 'Tickets in Wartestatus', [], {
                     displayLimit: 10,
                     tableColumns: [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
@@ -133,27 +127,27 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                 true, true, WidgetSize.SMALL, null, false)
             );
 
-        const lanes = ['customer-assigned-contacts-widget', 'customer-assigned-tickets-widget'];
+        const lanes = ['contact-assigned-customers-widget', 'contact-assigned-tickets-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            customerDetailsWidget, assignedContactsLane, assignedTicketsLane
+            contactDetailsWidget, assignedCustomersLane, assignedTicketsLane
         ];
 
-        const laneTabs = ['customer-information-lane'];
-        const laneTabWidgets = [customerInfoLane];
+        const laneTabs = ['contact-information-lane'];
+        const laneTabWidgets = [contactInfoLane];
 
-        const customerActions = [
-            'customer-edit-action', 'customer-create-contact-action', 'customer-create-ticket-action',
-            'customer-create-ci-action', 'customer-print-action'
+        const contactActions = [
+            'contact-edit-action', 'contact-create-customer-action', 'contact-create-ticket-action',
+            'contact-create-ci-action', 'contact-print-action'
         ];
 
         const groups = [
             openTicketsGroup, escalatedTicketsGroup, reminderTicketsGroup, newTicketsGroup, pendingTicketsGroup
         ];
 
-        return new CustomerDetailsContextConfiguration(
+        return new ContactDetailsContextConfiguration(
             this.getModuleId(), [], [], [], [], lanes, laneTabs,
-            laneWidgets, laneTabWidgets, generalActions, customerActions, groups, []
+            laneWidgets, laneTabWidgets, generalActions, contactActions, groups, []
         );
     }
 
