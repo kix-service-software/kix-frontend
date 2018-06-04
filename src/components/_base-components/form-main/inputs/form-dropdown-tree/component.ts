@@ -127,8 +127,8 @@ class FormDropdownTreeComponent {
     }
 
     private focusLost(): void {
-        this.nodeClicked(this.state.preSelectedNode);
-        this.closeList();
+        // this.nodeClicked(this.state.preSelectedNode);
+        // this.closeList();
     }
 
     private closeList(): void {
