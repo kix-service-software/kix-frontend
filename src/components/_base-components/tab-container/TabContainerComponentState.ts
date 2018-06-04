@@ -4,6 +4,7 @@ export class TabContainerComponentState {
 
     public constructor(
         public tabWidgets: ConfiguredWidget[] = [],
+        public tabId: string = null,
         public activeTab: ConfiguredWidget = null,
         public title: string = "",
         public minimizable: boolean = true,
