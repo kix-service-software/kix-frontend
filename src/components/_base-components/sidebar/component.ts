@@ -45,7 +45,7 @@ class SidebarComponent {
     }
 
     private getSidebarTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getContext(this.state.contextType);
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }

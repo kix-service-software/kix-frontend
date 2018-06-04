@@ -60,7 +60,19 @@ class BaseTemplateComponent {
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getContext()): void {
-        this.state.hasExplorer = context && context.isExplorerBarShown();
+        if (context) {
+            this.state.hasExplorer = context.isExplorerBarShown();
+            context.registerListener({
+                sidebarToggled: () => {
+                    this.setGridColumns();
+                },
+                explorerBarToggled: () => {
+                    this.state.hasExplorer = context.isExplorerBarShown();
+                    this.setGridColumns();
+                },
+                objectChanged: () => { return; }
+            });
+        }
         this.setGridColumns();
     }
 
