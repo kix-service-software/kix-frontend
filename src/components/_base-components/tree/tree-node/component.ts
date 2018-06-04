@@ -47,7 +47,9 @@ class TreeNodeComponent {
         return this.state.activeNode && this.state.activeNode.id === this.state.node.id;
     }
 
-    private toggleNode(): void {
+    private toggleNode(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         this.state.node.expanded = !this.state.node.expanded;
         (this as any).emit('nodeToggled', this.state.node);
         (this as any).setStateDirty();
