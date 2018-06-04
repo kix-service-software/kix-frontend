@@ -52,10 +52,12 @@ class NewCustomerDialogComponent {
     }
 
     private showSuccessHint(): void {
-        OverlayService.getInstance().openOverlay(
-            OverlayType.TOAST, null,
-            new StringContent('Kunde wurde erfolgreich angelegt.'), 'Kunde wurde erfolgreich angelegt'
-        );
+        const content = new ComponentContent('list-with-title', {
+            title: 'Kunde wurde erfolgreich angelegt.',
+            list: ['Kunde wurde erfolgreich angelegt'],
+            icon: 'kix-icon-check'
+        });
+        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
