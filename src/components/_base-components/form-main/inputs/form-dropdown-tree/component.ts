@@ -137,26 +137,32 @@ class FormDropdownTreeComponent {
     }
 
     private getDropdownStyle(): void {
-        // const inputList = (this as any).getEl(this.state.treeId);
-        const inputList = document.getElementById('tree-' + this.state.treeId);
+        const dropdownInputList = document.getElementById('tree-' + this.state.treeId);
         let transformValue = 0;
-        if (inputList) {
-            const inputContainer = (this as any).getEl('dropdown-input-container');
-            const tabContent = document.getElementsByClassName('tab-content');
-            const dropdownListDOMRect = inputList.getBoundingClientRect();
-            const tabContainerDOMRect = tabContent[0].getBoundingClientRect();
-            const inputContainerDOMRect = inputContainer.getBoundingClientRect();
-
-            const tabSize = tabContainerDOMRect.top + tabContainerDOMRect.height;
-            const dropdownListEnd = inputContainerDOMRect.top
-                + inputContainerDOMRect.height
+        if (dropdownInputList) {
+            const dropdownInputContainer = (this as any).getEl('dropdown-input-container');
+            const formElement = dropdownInputContainer.parentElement.parentElement.parentElement;
+            let container = dropdownInputContainer;
+            let previousContainer = void 0;
+            while (container
+                && container.parentNode.className !== 'overlay-dialog'
+                && container.parentNode.className !== 'lane-widget') {
+                previousContainer = container;
+                container = container.parentNode;
+            }
+            const dropdownListDOMRect = dropdownInputList.getBoundingClientRect();
+            const containerElementDOMRect = previousContainer.getBoundingClientRect();
+            const dropdownInputContainerDOMRect = dropdownInputContainer.getBoundingClientRect();
+            const containerEnd = containerElementDOMRect.top + containerElementDOMRect.height;
+            const dropdownListEnd = dropdownInputContainerDOMRect.top
+                + dropdownInputContainerDOMRect.height
                 + dropdownListDOMRect.height;
-
-            if (tabSize < dropdownListEnd) {
-                transformValue = inputContainerDOMRect.height + dropdownListDOMRect.height;
+            if (containerEnd < dropdownListEnd) {
+                transformValue = dropdownInputContainerDOMRect.height + dropdownListDOMRect.height;
             } else {
                 transformValue = 0;
             }
+
         }
         this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
