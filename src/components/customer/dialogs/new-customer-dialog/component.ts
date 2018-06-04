@@ -41,11 +41,11 @@ class NewCustomerDialogComponent {
             DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
             await CustomerService.getInstance().createCustomerByForm(this.state.formId)
                 .then((customerId) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
                 }).catch((error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
                 });
         }
