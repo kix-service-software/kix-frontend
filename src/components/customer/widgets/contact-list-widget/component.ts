@@ -1,10 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, ITableClickListener, DialogService
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Contact } from "@kix/core/dist/model";
-import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
+import { Contact } from "@kix/core/dist/model";
+import { ContactTableContentLayer, ContactTableLabelLayer, ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -46,7 +46,12 @@ class Component {
                 [new TableSortLayer()],
                 null, null, null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
-                null, null,
+                null,
+                {
+                    rowClicked: (contact: Contact, columnId: string): void => {
+                        ContactService.getInstance().openContact(contact.ContactID, false);
+                    }
+                },
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,

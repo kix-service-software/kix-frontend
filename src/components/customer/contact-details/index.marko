@@ -1,0 +1,27 @@
+<if(state.loadingContact || state.loadingConfig)>
+    <loading-spinner/>
+</if>
+<else>
+    <div.contact-details>
+        <widget actions=component.getActions() minimizable=true title=component.getTitle()
+            contentActions=component.getContactActions()>
+            <@content>
+                <ul.lane-list no-update>
+                    <li key=component.getLaneKey()>
+                        <tab-container tabWidgets=state.tabWidgets title="Ansprechpartnerinformationen"/>
+                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane key=component.getLaneKey()>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN", 
+                                instanceId: lane.instanceId, 
+                                ticketId: state.ticketId, 
+                                type: component.getLaneWidgetType()
+                                })/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+    </div>
+</else>

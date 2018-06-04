@@ -3,11 +3,8 @@ import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Customer } from "@kix/core/dist/model";
-import {
-    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
-} from "@kix/core/dist/browser/customer";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
+import { Customer } from "@kix/core/dist/model";
+import { CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService } from "@kix/core/dist/browser/customer";
 
 class Component {
 
@@ -43,7 +40,7 @@ class Component {
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new CustomerTableContentLayer(this.state.instanceId),
+                new CustomerTableContentLayer(),
                 new CustomerTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -52,12 +49,7 @@ class Component {
                 null,
                 {
                     rowClicked: (customer: Customer, columnId: string): void => {
-                        ComponentRouterService.getInstance().navigate(
-                            'base-router',
-                            CustomerDetailsContext.CONTEXT_ID,
-                            { customerId: customer.CustomerID },
-                            customer.CustomerID
-                        );
+                        CustomerService.getInstance().openCustomer(customer.CustomerID, false);
                     }
                 },
                 configurationListener,

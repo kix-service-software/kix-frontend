@@ -1,5 +1,5 @@
 import { ConfiguredWidget, AbstractAction, Customer } from "@kix/core/dist/model";
-import { CustomerDetialsContextConfiguration } from "@kix/core/dist/browser/customer";
+import { CustomerDetailsContextConfiguration } from "@kix/core/dist/browser/customer";
 
 export class ComponentState {
 
@@ -11,7 +11,7 @@ export class ComponentState {
         public customerActions: AbstractAction[] = [],
         public loadingCustomer: boolean = true,
         public loadingConfig: boolean = true,
-        public configuration: CustomerDetialsContextConfiguration = null,
+        public configuration: CustomerDetailsContextConfiguration = null,
         public customer: Customer = null
     ) { }
 
