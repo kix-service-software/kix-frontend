@@ -65,10 +65,10 @@ class Component {
 
     private createTables(): void {
         if (this.state.customer) {
-            this.configureOpenTicketsTable();
             this.configureEscalatedTicketsTable();
             this.configureReminderTicketsTable();
             this.configureNewTicketsTable();
+            this.configureOpenTicketsTable();
             this.configurePendingTicketsTable();
         }
     }
@@ -156,9 +156,9 @@ class Component {
     private async  loadTickets(): Promise<void> {
         this.loadEscalatedTickets();
         this.loadReminderTickets();
+        this.loadNewTickets();
         this.loadOpenTickets();
         this.loadPendingTickets();
-        this.loadNewTickets();
     }
 
     private async loadEscalatedTickets(): Promise<void> {
@@ -167,7 +167,7 @@ class Component {
         const properties = this.state.escalatedTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
-        const tickets = await TicketService.getInstance().getPendingTickets(
+        const tickets = await TicketService.getInstance().getEscalatedTickets(
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
@@ -182,28 +182,13 @@ class Component {
         const properties = this.state.reminderTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
-        const tickets = await TicketService.getInstance().getPendingTickets(
+        const tickets = await TicketService.getInstance().getReminderTickets(
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
         (this.state.reminderTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
         this.state.reminderTicketsTable.loadRows(true);
         this.state.loadReminderTickets = false;
-    }
-
-    private async loadOpenTickets(): Promise<void> {
-        this.state.loadOpenTickets = true;
-
-        const properties = this.state.openTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => tc.columnId);
-
-        const tickets = await TicketService.getInstance().getOpenTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        (this.state.openTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
-        this.state.openTicketsTable.loadRows(true);
-        this.state.loadOpenTickets = false;
     }
 
     private async loadNewTickets(): Promise<void> {
@@ -221,6 +206,21 @@ class Component {
         this.state.loadNewTickets = false;
     }
 
+    private async loadOpenTickets(): Promise<void> {
+        this.state.loadOpenTickets = true;
+
+        const properties = this.state.openTicketsConfig.settings.tableColumns
+            .map((tc: TableColumnConfiguration) => tc.columnId);
+
+        const tickets = await TicketService.getInstance().getOpenTickets(
+            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
+        );
+
+        (this.state.openTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.openTicketsTable.loadRows(true);
+        this.state.loadOpenTickets = false;
+    }
+
     private async loadPendingTickets(): Promise<void> {
         this.state.loadPendingTickets = true;
 
@@ -231,8 +231,8 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.newTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
-        this.state.newTicketsTable.loadRows(true);
+        (this.state.pendingTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.pendingTicketsTable.loadRows(true);
         this.state.loadPendingTickets = false;
     }
 
@@ -255,7 +255,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.newTicketsTable) {
             this.state.newTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -263,7 +263,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.pendingTicketsTable) {
             this.state.pendingTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -271,7 +271,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.reminderTicketsTable) {
             this.state.reminderTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);
@@ -279,7 +279,7 @@ class Component {
             });
         }
 
-        if (this.state.escalatedTicketsTable) {
+        if (this.state.openTicketsTable) {
             this.state.openTicketsTable.getTableRows().forEach((r) => {
                 if (!tickets.some((t) => t === r.object.TicketID)) {
                     tickets.push(r.object.TicketID);

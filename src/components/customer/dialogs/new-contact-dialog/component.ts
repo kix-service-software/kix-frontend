@@ -41,11 +41,11 @@ class Component {
             DialogService.getInstance().setMainDialogLoading(true, "Ansprechpartner wird angelegt");
             await ContactService.getInstance().createContactByForm(this.state.formId)
                 .then((contactId) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
                 }).catch((error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
                 });
         }
