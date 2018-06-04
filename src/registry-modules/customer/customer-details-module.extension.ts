@@ -33,6 +33,9 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                     new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 130),
                     new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 130),
                     new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 130),
+                    new TableColumnConfiguration(ContactProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 130),
                     new TableColumnConfiguration('contact-new-ticket', true, false, true, false, 130)
                 ]
             },
