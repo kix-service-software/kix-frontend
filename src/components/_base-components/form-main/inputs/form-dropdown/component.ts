@@ -192,22 +192,29 @@ class FormDropdownComponent {
     }
 
     private getDropdownStyle(): void {
-        const inputList = (this as any).getEl('dropdown-list');
+        const dropdownInputList = (this as any).getEl('dropdown-list');
         let transformValue = 0;
-        if (inputList) {
-            const inputContainer = (this as any).getEl('dropdown-input-container');
-            const tabContent = document.getElementsByClassName('tab-content');
-            const dropdownListDOMRect = inputList.getBoundingClientRect();
-            const tabContainerDOMRect = tabContent[0].getBoundingClientRect();
-            const inputContainerDOMRect = inputContainer.getBoundingClientRect();
+        if (dropdownInputList) {
+            const dropdownInputContainer = (this as any).getEl('dropdown-input-container');
+            const formElement = dropdownInputContainer.parentElement.parentElement.parentElement;
 
-            const tabSize = tabContainerDOMRect.top + tabContainerDOMRect.height;
-            const dropdownListEnd = inputContainerDOMRect.top
-                + inputContainerDOMRect.height
+            let container = dropdownInputContainer;
+            let previousContainer = void 0;
+            while (container
+                && container.parentNode.className !== 'overlay-dialog'
+                && container.parentNode.className !== 'lane-widget') {
+                previousContainer = container;
+                container = container.parentNode;
+            }
+            const dropdownListDOMRect = dropdownInputList.getBoundingClientRect();
+            const containerElementDOMRect = previousContainer.getBoundingClientRect();
+            const dropdownInputContainerDOMRect = dropdownInputContainer.getBoundingClientRect();
+            const containerEnd = containerElementDOMRect.top + containerElementDOMRect.height;
+            const dropdownListEnd = dropdownInputContainerDOMRect.top
+                + dropdownInputContainerDOMRect.height
                 + dropdownListDOMRect.height;
-
-            if (tabSize < dropdownListEnd) {
-                transformValue = inputContainerDOMRect.height + dropdownListDOMRect.height;
+            if (containerEnd < dropdownListEnd) {
+                transformValue = dropdownInputContainerDOMRect.height + dropdownListDOMRect.height;
             } else {
                 transformValue = 0;
             }
