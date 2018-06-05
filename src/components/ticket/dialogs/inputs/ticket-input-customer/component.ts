@@ -60,6 +60,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
     }
 
     private async loadCustomers(customerIds: string[]): Promise<void> {
+        this.state.loading = true;
         const customers = await CustomerService.getInstance().loadCustomers(customerIds);
         this.state.items = customers.map(
             (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue, null, c)
@@ -67,6 +68,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
 
         this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
         this.itemChanged(this.state.currentItem);
+        this.state.loading = false;
     }
 
     private itemChanged(item: FormDropdownItem): void {

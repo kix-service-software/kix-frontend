@@ -20,6 +20,7 @@ export class ComponentState extends WidgetComponentState<any> {
         public loadOpenTickets: boolean = false,
         public loadNewTickets: boolean = false,
         public loadPendingTickets: boolean = false,
+        public actions: AbstractAction[] = []
     ) {
         super();
     }

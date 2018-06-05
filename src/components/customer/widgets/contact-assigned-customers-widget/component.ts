@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer,
     TableSortLayer, TableRowHeight, IdService, TableColumn,
-    ITableConfigurationListener, ITableClickListener, DialogService
+    ITableConfigurationListener, ITableClickListener, DialogService, ActionFactory
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
 import { ContactService, ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
@@ -46,6 +46,15 @@ class Component {
             if (this.state.contact && this.state.contact.UserCustomerIDs.length > 0) {
                 this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
             }
+        }
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.contact) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.contact
+            );
         }
     }
 

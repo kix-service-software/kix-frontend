@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { KIXObjectType, KIXObject, Customer } from "@kix/core/dist/model";
 
 class Component {
@@ -24,6 +24,16 @@ class Component {
         });
 
         this.state.customer = (context.getObject(context.objectId) as Customer);
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.customer) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.customer
+            );
+        }
     }
 
     public onMount(): void {

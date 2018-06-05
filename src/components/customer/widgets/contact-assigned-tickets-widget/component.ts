@@ -61,6 +61,17 @@ class Component {
 
         this.createTables();
         this.loadTickets();
+
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.contact) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.contact
+            );
+        }
     }
 
     private createTables(): void {
@@ -167,7 +178,7 @@ class Component {
         const properties = this.state.escalatedTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
-        const tickets = await TicketService.getInstance().getPendingTickets(
+        const tickets = await TicketService.getInstance().getEscalatedTickets(
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
@@ -182,7 +193,7 @@ class Component {
         const properties = this.state.reminderTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
-        const tickets = await TicketService.getInstance().getPendingTickets(
+        const tickets = await TicketService.getInstance().getReminderTickets(
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
@@ -224,7 +235,7 @@ class Component {
     private async loadPendingTickets(): Promise<void> {
         this.state.loadPendingTickets = true;
 
-        const properties = this.state.newTicketsConfig.settings.tableColumns
+        const properties = this.state.pendingTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getPendingTickets(

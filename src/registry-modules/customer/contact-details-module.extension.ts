@@ -20,12 +20,16 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
         const contactInfoLane =
             new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
-                'contact-info-widget', 'Ansprechpartnerinformationen', [], {},
+                'contact-info-widget', 'Ansprechpartnerinformationen', [
+                    'contact-edit-action', 'contact-print-action'
+                ], {},
                 false, true, WidgetSize.LARGE, null, false)
             );
 
         const assignedCustomersLane = new ConfiguredWidget('contact-assigned-customers-widget', new WidgetConfiguration(
-            'contact-assigned-customers-widget', 'Zugeordnete Kunden', [], {
+            'contact-assigned-customers-widget', 'Zugeordnete Kunden', [
+                'contact-edit-action', 'contact-print-action'
+            ], {
                 displayLimit: 10,
                 tableColumns: [
                     new TableColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, true, 130),
@@ -41,7 +45,9 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
         ));
 
         const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget', new WidgetConfiguration(
-            'contact-assigned-tickets-widget', 'Übersicht Tickets', [], {},
+            'contact-assigned-tickets-widget', 'Übersicht Tickets', [
+                'contact-edit-action', 'contact-print-action'
+            ], {},
             false, true, WidgetSize.LARGE, null, false
         ));
 

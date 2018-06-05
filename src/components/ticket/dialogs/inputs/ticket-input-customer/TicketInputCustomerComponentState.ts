@@ -7,6 +7,7 @@ export class TicketInputCustomerComponentState extends FormInputComponentState<n
         public currentItem: FormDropdownItem = null,
         public primaryCustomerId: string = null,
         public hasContact: boolean = false,
+        public loading: boolean = false
     ) {
         super();
     }

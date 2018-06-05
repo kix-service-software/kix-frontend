@@ -61,6 +61,15 @@ class Component {
 
         this.createTables();
         this.loadTickets();
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.customer) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.customer
+            );
+        }
     }
 
     private createTables(): void {
@@ -224,7 +233,7 @@ class Component {
     private async loadPendingTickets(): Promise<void> {
         this.state.loadPendingTickets = true;
 
-        const properties = this.state.newTicketsConfig.settings.tableColumns
+        const properties = this.state.pendingTicketsConfig.settings.tableColumns
             .map((tc: TableColumnConfiguration) => tc.columnId);
 
         const tickets = await TicketService.getInstance().getPendingTickets(

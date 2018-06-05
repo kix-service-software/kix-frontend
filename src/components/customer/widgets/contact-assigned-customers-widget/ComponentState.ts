@@ -1,4 +1,4 @@
-import { WidgetComponentState, Contact, Customer } from "@kix/core/dist/model";
+import { WidgetComponentState, Contact, Customer, AbstractAction } from "@kix/core/dist/model";
 import { StandardTable } from "@kix/core/dist/browser";
 
 export class ComponentState extends WidgetComponentState {
@@ -7,7 +7,8 @@ export class ComponentState extends WidgetComponentState {
         public contact: Contact = null,
         public customerTable: StandardTable<Customer> = null,
         public filterValue: string = '',
-        public title: string = ''
+        public title: string = '',
+        public actions: AbstractAction[] = []
     ) {
         super();
     }

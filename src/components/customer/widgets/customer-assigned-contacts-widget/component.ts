@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer,
     TableSortLayer, TableRowHeight, IdService, TableColumn,
-    ITableConfigurationListener, ITableClickListener, DialogService
+    ITableConfigurationListener, ITableClickListener, DialogService, ActionFactory
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
 import {
@@ -48,6 +48,15 @@ class Component {
                     this.state.title += count > 0 ? ' (' + count + ')' : '';
                 });
             }
+        }
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration && this.state.customer) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.customer
+            );
         }
     }
 

@@ -1,3 +1,8 @@
-<form-dropdown enabled=state.hasContact selectedItem=state.currentItem items=state.items
-    placeholder=component.getPlaceholder() on-itemChanged('itemChanged') required=state.field.required
-    invalid=state.invalid/>
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
+    <form-dropdown enabled=state.hasContact selectedItem=state.currentItem items=state.items
+        placeholder=component.getPlaceholder() on-itemChanged('itemChanged') required=state.field.required
+        invalid=state.invalid/>
+</else>
