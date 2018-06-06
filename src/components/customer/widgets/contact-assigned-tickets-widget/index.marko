@@ -4,6 +4,9 @@
             title=component.getEscalatedTicketsTitle()>
             <@content>
                 <if(state.escalatedTicketsTable && !state.loadEscalatedTickets)>
+                    <div.ticket-filter>
+                        <filter filterValue=state.escalatedFilterValue on-filter('filterEscalated')/>
+                    </div>
                     <standard-table standardTable=state.escalatedTicketsTable/>
                 </if>
                 <else>
@@ -15,6 +18,9 @@
             title=component.getReminderTicketsTitle()>
             <@content>
                 <if(state.reminderTicketsTable && !state.loadReminderTickets)>
+                    <div.ticket-filter>
+                        <filter filterValue=state.reminderFilterValue on-filter('filterReminder')/>
+                    </div>
                     <standard-table standardTable=state.reminderTicketsTable/>
                 </if>
                 <else>
@@ -25,6 +31,9 @@
         <widget key="contact-new-tickets-group" instanceId="contact-new-tickets-group" title=component.getNewTicketsTitle()>
             <@content>
                 <if(state.newTicketsTable && !state.loadNewTickets)>
+                    <div.ticket-filter>
+                        <filter filterValue=state.newFilterValue on-filter('filterNew')/>
+                    </div>
                     <standard-table standardTable=state.newTicketsTable/>
                 </if>
                 <else>
@@ -35,6 +44,9 @@
         <widget key="contact-open-tickets-group" instanceId="contact-open-tickets-group" title=component.getOpenTicketsTitle()>
             <@content>
                 <if(state.openTicketsTable && !state.loadOpenTickets)>
+                    <div.ticket-filter>
+                        <filter filterValue=state.openFilterValue on-filter('filterOpen')/>
+                    </div>
                     <standard-table standardTable=state.openTicketsTable/>
                 </if>
                 <else>
@@ -46,6 +58,9 @@
             title=component.getPendingTicketsTitle()>
             <@content>
                 <if(state.pendingTicketsTable && !state.loadPendingTickets)>
+                    <div.ticket-filter>
+                        <filter filterValue=state.pendingFilterValue on-filter('filterPending')/>
+                    </div>
                     <standard-table standardTable=state.pendingTicketsTable/>
                 </if>
                 <else>
