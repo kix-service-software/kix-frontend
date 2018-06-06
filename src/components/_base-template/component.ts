@@ -1,4 +1,4 @@
-import { SocketEvent, Context } from '@kix/core/dist/model';
+import { SocketEvent, Context, ContextType } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
@@ -45,8 +45,10 @@ class BaseTemplateComponent {
         });
 
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>) => {
-                this.setContext(context);
+            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                if (type === ContextType.MAIN) {
+                    this.setContext(context);
+                }
             }
         });
 
