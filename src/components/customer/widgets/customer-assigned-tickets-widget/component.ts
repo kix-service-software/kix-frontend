@@ -89,7 +89,9 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [new TableSortLayer()], null, null, null,
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
+                null, null, null,
                 this.state.openTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.openTicketsConfig.settings.displayLimit,
@@ -105,7 +107,9 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [new TableSortLayer()], null, null, null,
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
+                null, null, null,
                 this.state.escalatedTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.escalatedTicketsConfig.settings.displayLimit,
@@ -121,7 +125,9 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [new TableSortLayer()], null, null, null,
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
+                null, null, null,
                 this.state.reminderTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.reminderTicketsConfig.settings.displayLimit,
@@ -137,7 +143,9 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [new TableSortLayer()], null, null, null,
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
+                null, null, null,
                 this.state.newTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.newTicketsConfig.settings.displayLimit,
@@ -153,7 +161,9 @@ class Component {
                 tableId,
                 new TicketTableContentLayer(tableId, []),
                 new TicketTableLabelLayer(),
-                [], [new TableSortLayer()], null, null, null,
+                [new TableFilterLayer()],
+                [new TableSortLayer()],
+                null, null, null,
                 this.state.pendingTicketsConfig.settings.tableColumns,
                 null, this.clickListener, null,
                 this.state.pendingTicketsConfig.settings.displayLimit,
@@ -339,6 +349,39 @@ class Component {
         const title = config ? config.title : defaultTitle;
         const count = table ? table.getTableRows().length : 0;
         return `${title} (${count})`;
+    }
+
+    private filterEscalated(filterValue: string): void {
+        this.state.escalatedFilterValue = filterValue;
+        this.filter(this.state.escalatedTicketsTable, filterValue);
+    }
+
+    private filterReminder(filterValue: string): void {
+        this.state.reminderFilterValue = filterValue;
+        this.filter(this.state.reminderTicketsTable, filterValue);
+    }
+
+    private filterNew(filterValue: string): void {
+        this.state.newFilterValue = filterValue;
+        this.filter(this.state.newTicketsTable, filterValue);
+    }
+
+    private filterOpen(filterValue: string): void {
+        this.state.openFilterValue = filterValue;
+        this.filter(this.state.openTicketsTable, filterValue);
+    }
+
+    private filterPending(filterValue: string): void {
+        this.state.pendingFilterValue = filterValue;
+        this.filter(this.state.pendingTicketsTable, filterValue);
+    }
+
+    private filter(table: StandardTable<Ticket>, filterValue: string) {
+        if (filterValue === '') {
+            table.resetFilter();
+        } else {
+            table.setFilterSettings(filterValue);
+        }
     }
 }
 
