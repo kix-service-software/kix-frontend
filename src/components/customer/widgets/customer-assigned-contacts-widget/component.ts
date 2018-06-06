@@ -100,7 +100,7 @@ class Component {
     }
 
     private tableRowClicked(contact: Contact, columnId: string): void {
-        if (columnId === 'contact-new-ticket') {
+        if (columnId === 'contact-new-ticket' && contact.ValidID === 1) {
             DialogService.getInstance().openMainDialog('new-ticket-dialog');
         } else {
             ContactService.getInstance().openContact(contact.ContactID, false);
