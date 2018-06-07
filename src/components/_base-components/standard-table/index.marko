@@ -3,7 +3,7 @@
         <div.standard-table class={"has-checkbox-column": state.standardTable.selection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
             key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
-                style={height: component.getRowHeight(), width: state.rowWidth, "line-height": component.getRowHeight()}>
+                style={width: state.rowWidth}>
                 <if(state.standardTable.selection)>
                     <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
