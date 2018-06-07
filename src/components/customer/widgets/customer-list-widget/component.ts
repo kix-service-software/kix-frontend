@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, TableHeaderHeight
 } from "@kix/core/dist/browser";
 import { Customer } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService } from "@kix/core/dist/browser/customer";
@@ -56,6 +56,7 @@ class Component {
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,
                 TableRowHeight.SMALL,
+                TableHeaderHeight.LARGE,
                 false
             );
         }

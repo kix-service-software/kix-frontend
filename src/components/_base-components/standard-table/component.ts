@@ -244,9 +244,18 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 const rows = this.state.standardTable.getTableRows();
                 const minElements = rows.length > this.state.standardTable.displayLimit ?
                     this.state.standardTable.displayLimit : rows.length;
-                const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
-                const rowHeight = Number(getComputedStyle(headerRow, null).height.replace('px', ''));
-                let height = ((minElements === 0 ? 1 : minElements) + 1) * rowHeight;
+                const rowCount = minElements === 0 ? 1 : minElements;
+
+                const browserFontSizeSetting = window
+                    .getComputedStyle(document.getElementsByTagName("body")[0], null)
+                    .getPropertyValue("font-size");
+
+                const browserFontSize = Number(browserFontSizeSetting.replace('px', ''));
+
+                const headerRowHeight = browserFontSize * Number(this.state.standardTable.headerHeight);
+                const rowHeight = browserFontSize * Number(this.state.standardTable.rowHeight);
+
+                let height = (rowCount * rowHeight) + headerRowHeight;
                 const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRowsContent.forEach((rC) => {
                     height += rC.offsetHeight;
@@ -258,6 +267,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public getRowHeight(): string {
         return this.state.standardTable.rowHeight + 'em';
+    }
+
+    public getHeaderHeight(): string {
+        return this.state.standardTable.headerHeight + 'em';
     }
 
     public getSpacerHeight(): string {
