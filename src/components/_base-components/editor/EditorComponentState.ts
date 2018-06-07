@@ -30,7 +30,7 @@ export class EditorComponentState {
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
                 { name: 'colors', items: ['TextColor'] },
                 { name: 'links', items: ['Link'] },
-                { name: 'insert', items: ['base64image'] }
+                // { name: 'insert', items: ['base64image'] }
             ];
 
             // } else if (this.inline) {
@@ -98,8 +98,6 @@ export class EditorComponentState {
             // TODO: language from user config?
             language: navigator.language || 'de',
             toolbar,
-            width: '100%',
-            height: '100%',
             resize_minWidth: 200,
             resize_minHeight: 200,
             resize_maxWidth: 1200,

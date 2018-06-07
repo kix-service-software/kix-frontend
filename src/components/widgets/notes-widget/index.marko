@@ -1,0 +1,21 @@
+<div.notes-container class={"note-editor-active": state.editorActive}>
+    <widget instanceId=input.instanceId minimizable=false actions=state.actions
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Notizen")>
+        <@icon>
+            <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")/>
+        </@icon>
+        <@content>
+            <editor value="Test123" on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)/>
+            <if(state.editorActive)>
+                <div.notes-editor-buttons>
+                    <button.form-button.button-without-text title="Abbrechen" on-click('hideEditor')>
+                        <span.kix-icon-close/>
+                    </button>
+                    <button.form-button title="Übernehmen" on-click('saveEditorValue')>
+                        <span.kix-icon-check/>Übernehmen
+                    </button>
+                </div>
+            </if>
+        </@content>
+    </widget>
+</div>

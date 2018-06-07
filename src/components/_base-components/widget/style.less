@@ -1,6 +1,6 @@
 @default-widget-header-height: @margin-default;
 @overlay-widget-header-height: 1.75rem;
-.widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height) {
+.widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height, @widget-header-action-separator-color: @secondary-1) {
     position: relative;
     box-sizing: border-box;
     overflow: hidden;
@@ -59,6 +59,15 @@
                         >div {
                             overflow: hidden;
                             text-overflow: ellipsis;
+                        }
+                    }
+                }
+                .action-list-expansion-container {
+                    background-color: @header-background;
+                    color: @header-color;
+                    .action-list-expansion {
+                        li {
+                            border-top: 1px solid @widget-header-action-separator-color;
                         }
                     }
                 }
@@ -146,7 +155,7 @@
 }
 
 .sidebar-widget {
-    .widget(@primary-2, @default-light-font-color);
+    .widget(@primary-2, @default-light-font-color, @widget-header-action-separator-color: @primary-4);
     >.widget-content {
         min-height: 160px;
         padding: 1em;

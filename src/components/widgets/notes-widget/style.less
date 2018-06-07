@@ -1,0 +1,24 @@
+.notes-container {
+    &.note-editor-active {
+        .widget-header {
+            >.header-right {
+                .action-list {
+                    li {
+                        color: @primary-4;
+                    }
+                }
+            }
+        }
+    }
+    .widget-content {
+        .notes-editor-buttons {
+            display: grid;
+            grid-template-columns: max-content auto;
+            grid-gap: @margin-widget-content + @margin-widget-content/2;
+            margin-top: @margin-widget-content;
+            >button {
+                min-width: unset;
+            }
+        }
+    }
+}
