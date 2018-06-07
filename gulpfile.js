@@ -26,7 +26,7 @@ const devTSCConfig = {
 };
 
 const prodTSCConfig = {
-    target: "es6",
+    target: "es5",
     lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
