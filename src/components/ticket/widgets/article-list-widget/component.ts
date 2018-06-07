@@ -15,7 +15,7 @@ import {
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ToggleOptions, ActionFactory
+    TableSortLayer, ToggleOptions, ActionFactory, TableHeaderHeight
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
 
@@ -97,6 +97,7 @@ export class ArticleListWidgetComponent {
                 this.state.articles.length,
                 true,
                 TableRowHeight.LARGE,
+                TableHeaderHeight.LARGE,
                 true,
                 new ToggleOptions(
                     'ticket-article-details',

@@ -9,10 +9,9 @@ import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
 import { Link, Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
-    TableColumnConfiguration, StandardTable,
-    ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight, ActionFactory, WidgetService
+    StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight,
+    ActionFactory, WidgetService, TableHeaderHeight
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -117,7 +116,10 @@ class LinkedObjectsWidgetComponent {
                 null,
                 clickListener,
                 configurationListener,
-                7
+                7,
+                null,
+                TableRowHeight.SMALL,
+                TableHeaderHeight.SMALL
             );
         }
     }
