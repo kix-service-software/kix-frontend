@@ -7,10 +7,10 @@
             selectedItem=state.currentLinkableObject/>
     </div>
     <div.linkable-objects-form>
-        <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key=("Widget" + Math.random())>
+        <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key="link-object-form-widget">
             <@content>
                 <if(state.currentLinkableObject)>
-                    <form-main formId=state.currentLinkableObject.id key=("FormMain" + Math.random())/>
+                    <form-main formId=state.currentLinkableObject.id key="link-object-form-widget-form"/>
                     <div.linkable-objects-form-button-container>
                         <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
                             <span.kix-icon-search/>
