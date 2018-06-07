@@ -9,7 +9,7 @@ import {
 } from '@kix/core/dist/browser/ticket/';
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener,
-    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions
+    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions, TableHeaderHeight
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -66,6 +66,7 @@ class TicketListWidgetComponent {
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
                 TableRowHeight.LARGE,
+                TableHeaderHeight.LARGE,
                 false,
                 new ToggleOptions('ticket-article-details', 'article')
             );
