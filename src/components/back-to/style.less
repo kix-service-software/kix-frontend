@@ -1,0 +1,44 @@
+.back-to {
+    position: relative;
+    >.back-to-button {
+        height: 1.75rem;
+        width: 15rem;
+        font-size: 1rem;
+        color: @secondary-6;
+        background-color: @primary-6;
+        box-shadow: @shadow-1;
+        display: grid;
+        grid-template-columns: 2rem auto 2rem;
+        align-items: center;
+        padding: 0 .5rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    >ul.back-to-list {
+        position: absolute;
+        top: 1.75rem;
+        width: 30rem;
+        border: 1px solid @primary-6;
+        max-height: 18rem;
+        padding: @margin-small;
+        z-index: 600;
+        background-color: #fff;
+        li.history-entry {
+            display: grid;
+            grid-template-columns: 1.5rem auto;
+            align-items: center;
+            height: 1.75rem;
+            color: @secondary-7;
+            &:hover {
+                font-weight: bold;
+                cursor: pointer;
+            }
+            span.history-text {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}

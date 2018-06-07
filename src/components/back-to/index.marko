@@ -1,0 +1,25 @@
+<div.back-to>
+    <div.back-to-button on-click('toggleList')>
+        <span.kix-icon-arrow-receive/>
+        <span>Zurück zu:</span>
+        <if(state.minimized)>
+            <span.kix-icon-sort-down/>
+        </if>
+        <else>
+            <span.kix-icon-triangle-up>
+                <span.path1/>
+                <span.path2/>
+            </span>
+        </else>
+    </div>
+    <if(!state.minimized)>
+        <ul.back-to-list>
+            <for(entry in state.history)>
+                <li.history-entry onClick('navigate', entry)>
+                    <icon icon=entry.icon/>
+                    <span.history-text>${entry.displayText}</span>
+                </li>
+            </for>
+        </ul>
+    </if>
+</div>
