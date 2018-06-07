@@ -12,7 +12,7 @@ const orgEnv = process.env.NODE_ENV;
 
 const devTSCConfig = {
     target: "es5",
-    lib: ["ES2015", "es5", "dom"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
@@ -20,12 +20,14 @@ const devTSCConfig = {
     emitDecoratorMetadata: true,
     sourceMap: true,
     declaration: true,
-    strict: true
+    strict: true,
+    exclude: ['node_modules'],
+    include: ['src/**/*.ts']
 };
 
 const prodTSCConfig = {
     target: "es5",
-    lib: ["es2015", "dom"],
+    lib: ["es6", "dom"],
     types: ["node", "reflect-metadata"],
     module: "commonjs",
     moduleResolution: "node",
