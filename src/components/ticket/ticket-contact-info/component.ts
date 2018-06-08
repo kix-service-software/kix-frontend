@@ -16,7 +16,7 @@ class ContactInfoComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         context.registerListener({
             objectChanged: (objectId: number, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT && this.contactChanged(contact)) {
@@ -26,7 +26,8 @@ class ContactInfoComponent {
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; }
         });
-        this.state.contact = context.getObjectByType<Contact>(KIXObjectType.CONTACT);
+        // FIXME: Context.load(...)
+        // this.state.contact = context.getObjectByType<Contact>(KIXObjectType.CONTACT);
     }
 
     private contactChanged(contact: Contact): boolean {

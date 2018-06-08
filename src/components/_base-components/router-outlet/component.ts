@@ -1,5 +1,4 @@
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { RouterComponentState } from './RouterComponentState';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 

@@ -26,19 +26,11 @@ class Component {
             }
         });
 
-        const contextURL = CustomerDetailsContext.CONTEXT_ID + '/' + this.state.customerId;
-        const context = new CustomerDetailsContext(this.state.customerId);
-        await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
         await this.loadCustomer();
     }
 
     private async loadCustomer(): Promise<void> {
         const customers = await CustomerService.getInstance().loadCustomers([this.state.customerId]);
-        if (customers && customers.length) {
-            this.state.customer = customers[0];
-            const context = ContextService.getInstance().getContext(null, CustomerDetailsContext.CONTEXT_ID);
-            context.provideObject(this.state.customer.CustomerID, this.state.customer, KIXObjectType.CUSTOMER);
-        }
         this.state.loadingCustomer = false;
     }
 
@@ -72,7 +64,7 @@ class Component {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }

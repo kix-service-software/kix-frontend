@@ -19,7 +19,7 @@ class TicketDescriptionWidgetComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);

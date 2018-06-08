@@ -19,7 +19,7 @@ class TicketInfoWidgetComponent {
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
         ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
@@ -43,7 +43,7 @@ class TicketInfoWidgetComponent {
     }
 
     public getTicket(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         if (context.objectId) {
             this.state.ticket = TicketService.getInstance().getTicket(Number(context.objectId));
             if (this.state.ticket) {
@@ -75,11 +75,13 @@ class TicketInfoWidgetComponent {
         return incidentStateId;
     }
 
+    // FIXME: Das Widget sollte eigentlich nichts von Sidebar und Explorer Wissen müssen.
+    // Das Styling sollte sich an Hand des verfügbaren Platzes anpassen
     private isExplorerAndSidebarShown(): boolean {
-        return ContextService.getInstance().getContext()
-            && ContextService.getInstance().getContext().isExplorerBarShown()
-            && ContextService.getInstance().getContext().explorerBarExpanded
-            && ContextService.getInstance().getContext().isSidebarShown();
+        return ContextService.getInstance().getActiveContext()
+            && ContextService.getInstance().getActiveContext().isExplorerBarShown()
+            && ContextService.getInstance().getActiveContext().explorerBarExpanded
+            && ContextService.getInstance().getActiveContext().isSidebarShown();
     }
 
     private getIcon(object: string, objectId: string): ObjectIcon {

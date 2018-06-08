@@ -30,7 +30,7 @@ class LinkedObjectsWidgetComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             objectChanged: (id: string | number) => {
                 if (id === this.state.ticketId) {

@@ -1,4 +1,4 @@
-import { SocketEvent, Context, ContextType } from '@kix/core/dist/model';
+import { SocketEvent, Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { BaseTemplateComponentState } from './BaseTemplateComponentState';
@@ -7,6 +7,7 @@ import { ComponentsService } from '@kix/core/dist/browser/components';
 import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
+import { HomeContext } from '@kix/core/dist/browser/home';
 
 declare var io: any;
 
@@ -26,12 +27,6 @@ class BaseTemplateComponent {
 
         await ComponentsService.getInstance().init();
         this.state.initialized = true;
-
-        if (this.state.contextId) {
-            ComponentRouterService.getInstance().navigate(
-                'base-router', this.state.contextId, { objectId: this.state.objectId }, this.state.objectId
-            );
-        }
 
         const token = ClientStorageService.getToken();
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
@@ -59,9 +54,16 @@ class BaseTemplateComponent {
         TicketService.getInstance();
         CustomerService.getInstance();
         ContactService.getInstance();
+
+        const homeContext = new ContextDescriptor(
+            HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextType.MAIN, ContextMode.LIST,
+            false, 'home', HomeContext
+        );
+        ContextService.getInstance().registerContext(homeContext);
+        ContextService.getInstance().setContext(KIXObjectType.ANY, ContextMode.LIST);
     }
 
-    private setContext(context: Context<any> = ContextService.getInstance().getContext()): void {
+    private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
             context.registerListener({
@@ -91,7 +93,7 @@ class BaseTemplateComponent {
 
         gridColumns += ' [content] minmax(40rem, auto)';
 
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         if ((context && context.isSidebarShown())) {
             gridColumns += ' [sidebar-area] min-content';
         }

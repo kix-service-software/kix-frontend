@@ -25,20 +25,11 @@ class Component {
                 }
             }
         });
-
-        const contextURL = ContactDetailsContext.CONTEXT_ID + '/' + this.state.contactId;
-        const context = new ContactDetailsContext(this.state.contactId);
-        await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
         await this.loadContact();
     }
 
     private async loadContact(): Promise<void> {
         const contacts = await ContactService.getInstance().loadContacts([this.state.contactId]);
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
-            const context = ContextService.getInstance().getContext(null, ContactDetailsContext.CONTEXT_ID);
-            context.provideObject(this.state.contact.ContactID, this.state.contact, KIXObjectType.CUSTOMER);
-        }
         this.state.loadingContact = false;
     }
 
@@ -72,7 +63,7 @@ class Component {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }

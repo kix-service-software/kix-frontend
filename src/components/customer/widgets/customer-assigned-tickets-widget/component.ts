@@ -32,7 +32,7 @@ class Component {
             }
         };
 
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -57,7 +57,8 @@ class Component {
             ? context.getWidgetConfiguration('customer-pending-tickets-group')
             : undefined;
 
-        this.state.customer = (context.getObject(context.objectId) as Customer);
+        // FIXME: context.load(...)
+        // this.state.customer = (context.getObject(context.objectId) as Customer);
 
         this.createTables();
         this.loadTickets();

@@ -70,7 +70,7 @@ class TabLaneComponent {
     }
 
     private setSidebars(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
     }
 

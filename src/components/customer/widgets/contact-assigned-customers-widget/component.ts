@@ -22,7 +22,7 @@ class Component {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
 
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
@@ -34,11 +34,12 @@ class Component {
             }
         });
 
-        this.state.contact = (context.getObject(context.objectId) as Contact);
+        // FIXME: Context.load(...)
+        // this.state.contact = (context.getObject(context.objectId) as Contact);
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setTable();
         if (this.state.widgetConfiguration) {

@@ -16,7 +16,7 @@ class ContactInfoWidgetComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 

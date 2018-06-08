@@ -14,7 +14,7 @@ export class TicketPriorityLabelComponent {
     public onInput(input: any): void {
         this.state.fieldId = Number(input.value);
         this.state.ticketId = Number(input.ticketId);
-        const context = ContextService.getInstance().getContext(input.contextType);
+        const context = ContextService.getInstance().getActiveContext(input.contextType);
         if (context) {
             context.registerListener({
                 objectChanged: (id: number, ticket: Ticket) => {

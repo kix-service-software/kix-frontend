@@ -23,7 +23,7 @@ class SidebarMenuComponent {
             }
         });
 
-        this.setContext(ContextService.getInstance().getContext(this.state.contextType));
+        this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }
 
     private setContext(context: Context<any>): void {
@@ -46,11 +46,11 @@ class SidebarMenuComponent {
     }
 
     private toggleSidebar(instanceId: string): void {
-        ContextService.getInstance().getContext(this.state.contextType).toggleSidebar(instanceId);
+        ContextService.getInstance().getActiveContext(this.state.contextType).toggleSidebar(instanceId);
     }
 
     private isShown(sidebar: ConfiguredWidget): boolean {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         const sidebars = context.getSidebars(true) || [];
         return (sidebars.findIndex((sb) => sb.instanceId === sidebar.instanceId) !== -1);
     }

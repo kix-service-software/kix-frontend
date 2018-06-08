@@ -13,7 +13,7 @@ class ArticleReceiverListWidget {
     public onInput(input: any): void {
         this.state.receiverList = input.receiver;
         this.state.configuration =
-            ContextService.getInstance().getContext().getWidgetConfiguration(input.instanceId);
+            ContextService.getInstance().getActiveContext().getWidgetConfiguration(input.instanceId);
         this.state.title = this.state.configuration ? this.state.configuration.title : 'Empfänger';
     }
 

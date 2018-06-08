@@ -25,7 +25,7 @@ class WidgetComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
 
@@ -54,7 +54,7 @@ class WidgetComponent {
     }
 
     private minimizeExplorer(): void {
-        ContextService.getInstance().getContext(this.state.contextType).toggleExplorerBar();
+        ContextService.getInstance().getActiveContext(this.state.contextType).toggleExplorerBar();
     }
 
     private resetConfiguration(): void {

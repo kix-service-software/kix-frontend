@@ -19,7 +19,7 @@ class Component {
     }
 
     public onMount(): void {
-        const currentContext = ContextService.getInstance().getContext();
+        const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;

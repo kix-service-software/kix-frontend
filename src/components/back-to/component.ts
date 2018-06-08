@@ -20,11 +20,7 @@ class Component implements IContextServiceListener {
     }
 
     public navigate(entry: ContextHistoryEntry): void {
-        const context = ContextService.getInstance().getContext(null, entry.contextId);
-        if (context) {
-            context.navigateTo(entry.objectId);
-            this.toggleList();
-        }
+        ContextService.getInstance().setContext(null, null, null, null, entry);
     }
 
     public contextChanged(contextId: string, context: Context<ContextConfiguration>, type: ContextType): void {

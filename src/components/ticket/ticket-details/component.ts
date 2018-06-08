@@ -34,21 +34,14 @@ export class TicketDetailsComponent {
             }
         });
 
-        const contextURL = 'tickets/' + this.state.ticketId;
-        const context = new TicketDetailsContext(this.state.ticketId);
-        await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
         this.loadTicket();
     }
 
     private async loadTicket(): Promise<void> {
-        const ticket = await TicketService.getInstance().loadTicket(this.state.ticketId);
+        await TicketService.getInstance().loadTicket(this.state.ticketId);
         this.state.loadingTicket = false;
         this.setBreadcrumbDetails();
         this.setTicketHookInfo();
-        const context = ContextService.getInstance().getContext(null, TicketDetailsContext.CONTEXT_ID);
-        context.provideObject(ticket.TicketID, ticket, KIXObjectType.TICKET);
-        context.provideObject(ticket.contact.ContactID, ticket.contact, KIXObjectType.CONTACT);
-        context.provideObject(ticket.customer.CustomerID, ticket.customer, KIXObjectType.CUSTOMER);
     }
 
     private getActions(): string[] {
@@ -96,7 +89,7 @@ export class TicketDetailsComponent {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }

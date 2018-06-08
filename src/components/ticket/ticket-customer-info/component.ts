@@ -16,7 +16,7 @@ class CustomerInfoComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         context.registerListener({
             objectChanged: (objectId: string | number, customer: Customer, type: KIXObjectType) => {
                 if (type === KIXObjectType.CUSTOMER && this.customerChanged(customer)) {
@@ -27,7 +27,8 @@ class CustomerInfoComponent {
             explorerBarToggled: () => { return; }
         });
 
-        this.state.customer = context.getObjectByType<Customer>(KIXObjectType.CUSTOMER);
+        // FIXME: context.load(...)
+        // this.state.customer = context.getObjectByType<Customer>(KIXObjectType.CUSTOMER);
     }
 
     private customerChanged(customer: Customer): boolean {

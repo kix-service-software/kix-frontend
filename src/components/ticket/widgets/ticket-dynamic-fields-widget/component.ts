@@ -20,7 +20,7 @@ class DynamicFieldWidgetComponent {
     }
 
     public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             objectChanged: () => (objectId: string | number, object: any) => {
                 if (objectId === this.state.ticketId) {
