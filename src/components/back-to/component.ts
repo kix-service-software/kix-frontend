@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, IContextServiceListener } from "@kix/core/dist/browser";
 import { ContextType, Context, ContextConfiguration } from "@kix/core/dist/model";
-import { ContextHistoryEntry } from "../../../../core/dist/browser/context/ContextHistoryEntry";
+import { ContextHistoryEntry } from "@kix/core/dist/browser/context/ContextHistoryEntry";
 
 class Component implements IContextServiceListener {
 
