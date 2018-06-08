@@ -92,10 +92,12 @@ class NewTicketDialogComponent {
     }
 
     private showSuccessHint(): void {
-        OverlayService.getInstance().openOverlay(
-            OverlayType.TOAST, null,
-            new StringContent('Ticket wurde erfolgreich angelegt.'), 'Ticket wurde erfolgreich angelegt'
-        );
+        const content = new ComponentContent('list-with-title', {
+            title: 'Ticket wurde erfolgreich angelegt.',
+            list: ['Ticket wurde erfolgreich angelegt'],
+            icon: 'kix-icon-check'
+        });
+        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

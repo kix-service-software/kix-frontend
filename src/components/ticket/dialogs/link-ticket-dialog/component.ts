@@ -158,7 +158,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.state.successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
         const content = new ComponentContent('list-with-title', {
             title: 'Erfolgreich ausgeführt',
-            list: ['Verknüpfungen zugeordnet'],
+            list: [this.state.successHint],
             icon: 'kix-icon-check'
         });
 

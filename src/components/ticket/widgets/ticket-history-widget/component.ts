@@ -11,7 +11,9 @@ import {
     TableColumn,
     TableFilterLayer,
     TableToggleLayer,
-    ActionFactory
+    ActionFactory,
+    TableRowHeight,
+    TableHeaderHeight
 } from '@kix/core/dist/browser';
 import { TicketHistory, ArticleProperty } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -88,7 +90,10 @@ class TicketHistoryWidgetComponent {
                 null,
                 clickListener,
                 configurationListener,
-                7
+                7,
+                null,
+                TableRowHeight.SMALL,
+                TableHeaderHeight.SMALL
             );
         }
     }
