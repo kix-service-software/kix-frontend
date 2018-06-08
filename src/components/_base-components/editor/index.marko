@@ -1,4 +1,5 @@
-<div.editor-container no-update>
+<div.editor-container key=("editor-of-" + (input.keyValue ? input.keyValue : ""))
+    class={"editor-readonly": state.readOnly} no-update-body>
     <!-- TODO: durch $! wird das standardmaßige Quotieren unterdrückt, ggf. unsicher, aber ansonsten ist es nur text, kein html -->
-    <div id=state.id contenteditable="true">$!{state.value}</div>
+    <div id=state.id>$!{state.value}</div>
 </div>

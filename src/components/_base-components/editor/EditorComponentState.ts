@@ -32,33 +32,6 @@ export class EditorComponentState {
                 { name: 'links', items: ['Link'] },
                 // { name: 'insert', items: ['base64image'] }
             ];
-
-            // } else if (this.inline) {
-            //     toolbar = [
-            //         {
-            //             name: 'basicstyles', items: [
-            //                 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript',
-            //             ]
-            //         },
-            //         {
-            //             name: 'paragraph', items: [
-            //                 'NumberedList', 'BulletedList', 'Outdent', 'Indent', '-',
-            //                 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-            //             ]
-            //         },
-            //         '/',
-            //         { name: 'links', items: ['Link', 'Unlink'] },
-            //         { name: 'undo', items: ['Undo', 'Redo'] },
-            //         {
-            //             name: 'insert', items: [
-            //                 'Image', 'Table', 'HorizontalRule', 'PasteText', 'PasteFromWord', 'SpecialChar'
-            //             ]
-            //         },
-            //         '/',
-            //         { name: 'colors', items: ['TextColor', 'BGColor'] },
-            //         { name: 'cleanup', items: ['RemoveFormat'] },
-            //         { name: 'styles', items: ['Font', 'FontSize'] },
-            //     ];
         } else {
             toolbar = [
                 {
@@ -103,7 +76,7 @@ export class EditorComponentState {
             resize_maxWidth: 1200,
             resize_maxHeight: 1000,
             extraAllowedContent: 'div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
-            toolbarCanCollapse: true,
+            toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
             codeSnippet_theme: 'github'

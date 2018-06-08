@@ -8,6 +8,7 @@ import { MainMenuCommunicator } from './MainMenuCommunicator';
 import { TicketCommunicator } from './TicketCommunicator';
 import { ContactCommunicator } from './ContactCommunicator';
 import { CustomerCommunicator } from './CustomerCommunicator';
+import { NotesCommunicatior } from './NotesCommunicator';
 
 export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
@@ -21,7 +22,8 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
             CustomerCommunicator,
             IconCommunicator,
             MainMenuCommunicator,
-            TicketCommunicator
+            TicketCommunicator,
+            NotesCommunicatior
         ];
     }
 

@@ -7,7 +7,9 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
         public actions: AbstractAction[] = [],
-        public editorActive: boolean = false
+        public editorActive: boolean = false,
+        public value: string = null,
+        public currentValue: string = null
     ) { }
 
 }

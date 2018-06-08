@@ -15,6 +15,6 @@ export class NotesEditAction extends AbstractAction {
     }
 
     public run(): void {
-        this.component.showEditor();
+        this.component.setEditorActive();
     }
 }

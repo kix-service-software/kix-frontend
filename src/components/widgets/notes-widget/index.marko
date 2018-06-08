@@ -5,13 +5,19 @@
             <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")/>
         </@icon>
         <@content>
-            <editor value="Test123" on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)/>
+            <if(state.currentValue || state.editorActive)>
+                <editor value=state.currentValue on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)
+                    keyValue="notes-sidebar"/>
+            </if>
+            <else>
+                <div.empty-notes>Platz für Notizen</div>
+            </else>
             <if(state.editorActive)>
                 <div.notes-editor-buttons>
-                    <button.form-button.button-without-text title="Abbrechen" on-click('hideEditor')>
+                    <button.form-button.button-without-text title="Abbrechen" on-click('cancelEditor')>
                         <span.kix-icon-close/>
                     </button>
-                    <button.form-button title="Übernehmen" on-click('saveEditorValue')>
+                    <button.form-button title="Übernehmen" on-click('submitEditor')>
                         <span.kix-icon-check/>Übernehmen
                     </button>
                 </div>
