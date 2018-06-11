@@ -15,7 +15,7 @@ class DynamicFieldsContainerComponent {
 
     public onInput(input: any): void {
         this.state.ticketDynamicFields = input.dynamicFields;
-        this.state.ticketId = Number(input.ticketId);
+        this.state.ticket = input.ticket;
     }
 
     public onMount(input: any): void {

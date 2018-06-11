@@ -1,4 +1,4 @@
-import { Article, ArticleProperty, Context, Ticket } from "@kix/core/dist/model";
+import { Article, ArticleProperty, Context, Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
 import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
 import {
@@ -27,33 +27,30 @@ export class ArticleListWidgetComponent {
         this.state = new ArticleListWidgetComponentState(Number(input.ticketId), 'article-list');
     }
 
-    public onMount(): void {
-        this.getArticles();
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
-            objectChanged: () => (objectId: string | number, object: any) => {
-                if (objectId === this.state.ticketId) {
-                    this.getArticles();
-                    this.setActions();
-                    this.setArticleTableConfiguration();
-                }
-            },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; }
-        });
-
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        await this.setTicket();
+        this.getArticles();
         this.setActions();
         this.setArticleTableConfiguration();
     }
 
+    public async setTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.objectId) {
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+        }
+    }
+
     private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                this.state.generalArticleActions = ActionFactory.getInstance()
-                    .generateActions(this.state.widgetConfiguration.settings.generalActions, true, ticket);
-            }
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.generalArticleActions = ActionFactory.getInstance()
+                .generateActions(this.state.widgetConfiguration.settings.generalActions, true, this.state.ticket);
         }
     }
 
@@ -83,7 +80,7 @@ export class ArticleListWidgetComponent {
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new ArticleTableContentLayer(this.state.ticketId),
+                new ArticleTableContentLayer(this.state.ticket),
                 new ArticleTableLabelLayer(),
                 [new ArticleTableFilterLayer()],
                 [new TableSortLayer()],
@@ -122,9 +119,8 @@ export class ArticleListWidgetComponent {
     }
 
     private getArticles(): void {
-        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-        if (ticket) {
-            this.state.articles = ticket.Articles;
+        if (this.state.ticket) {
+            this.state.articles = this.state.ticket.Articles;
         }
     }
 

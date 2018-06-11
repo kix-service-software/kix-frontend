@@ -3,19 +3,17 @@ import {
     HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
 } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import {
     TableColumnConfiguration, StandardTable, ITableClickListener,
     ITableConfigurationListener,
     TableSortLayer,
     TableColumn,
     TableFilterLayer,
-    TableToggleLayer,
     ActionFactory,
     TableRowHeight,
     TableHeaderHeight
 } from '@kix/core/dist/browser';
-import { TicketHistory, ArticleProperty } from '@kix/core/dist/model';
+import { TicketHistory, ArticleProperty, KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TicketHistoryWidgetComponent {
@@ -32,32 +30,30 @@ class TicketHistoryWidgetComponent {
         this.setHistoryTableConfiguration();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
-            objectChanged: () => (objectId: string | number, object: any) => {
-                if (objectId === this.state.ticketId) {
-                    this.setHistoryTableConfiguration();
-                }
-            },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; }
-        });
-
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        await this.setTicket();
         this.setActions();
         this.setHistoryTableConfiguration();
     }
 
+    private async setTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.objectId) {
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+        }
+    }
+
     private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                this.state.actions = ActionFactory.getInstance().generateActions(
-                    this.state.widgetConfiguration.actions, false, ticket
-                );
-            }
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 
@@ -67,7 +63,7 @@ class TicketHistoryWidgetComponent {
 
             const columnConfig: TableColumnConfiguration[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const contentProvider = new HistoryTableContentLayer(this.state.instanceId, this.state.ticketId);
+            const contentProvider = new HistoryTableContentLayer(this.state.instanceId, this.state.ticket);
 
             const clickListener: ITableClickListener<TicketHistory> = {
                 rowClicked: this.navigateToArticle.bind(this)

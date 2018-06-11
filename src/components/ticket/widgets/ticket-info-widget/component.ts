@@ -1,7 +1,7 @@
 import { TicketInfoComponentState } from './TicketInfoComponentState';
 import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService, AbstractContextServiceListener } from '@kix/core/dist/browser/context';
-import { SysconfigUtil, ObjectIcon, Context } from '@kix/core/dist/model';
+import { SysconfigUtil, ObjectIcon, Context, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
 import { ActionFactory } from '@kix/core/dist/browser';
 
 class TicketInfoWidgetComponent {
@@ -18,7 +18,6 @@ class TicketInfoWidgetComponent {
 
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
-        ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
@@ -38,14 +37,14 @@ class TicketInfoWidgetComponent {
         }
     }
 
-    private ticketStateChanged(): void {
-        this.getTicket();
-    }
-
-    public getTicket(): void {
+    public async getTicket(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context.objectId) {
-            this.state.ticket = TicketService.getInstance().getTicket(Number(context.objectId));
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
             if (this.state.ticket) {
                 this.state.isPending = this.state.ticket.hasPendingState();
                 this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
@@ -86,19 +85,6 @@ class TicketInfoWidgetComponent {
 
     private getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
-    }
-
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class ComponentContextServiceListener extends AbstractContextServiceListener {
-
-    public constructor(private component: TicketInfoWidgetComponent) {
-        super();
-    }
-
-    public objectUpdated(): void {
-        this.component.getTicket();
     }
 
 }

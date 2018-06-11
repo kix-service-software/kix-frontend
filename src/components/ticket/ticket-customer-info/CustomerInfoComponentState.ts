@@ -4,8 +4,8 @@ import { CustomerLabelProvider } from "@kix/core/dist/browser/customer";
 export class CustomerInfoComponentState {
 
     public constructor(
-        public contextType: ContextType = null,
         public customer: Customer = null,
+        public customerId: string = null,
         public labelProvider: CustomerLabelProvider = new CustomerLabelProvider()
     ) { }
 

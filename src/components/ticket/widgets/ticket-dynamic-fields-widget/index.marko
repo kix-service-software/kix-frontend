@@ -2,8 +2,13 @@
     contentActions=state.actions>
     <@content>
         <div.dynamic-fields-container>
-            <ticket-dynamic-fields-container ticketId=state.ticketId dynamicFields=state.filteredDynamicFields
-                contextType=input.contextType/>
+            <if(state.ticket)>
+                <ticket-dynamic-fields-container ticket=state.ticket dynamicFields=state.filteredDynamicFields
+                    contextType=input.contextType/>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
         </div>
     </@content>
 </widget>

@@ -1,6 +1,6 @@
 import { TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { Contact, KIXObjectType } from "@kix/core/dist/model";
+import { Contact, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { ContactInfoComponentState } from "./ContactInfoComponentState";
 
 class ContactInfoComponent {
@@ -12,34 +12,16 @@ class ContactInfoComponent {
     }
 
     public onInput(input: any): void {
-        this.state.contextType = input.contextType;
+        this.state.contactId = input.contactId;
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        context.registerListener({
-            objectChanged: (objectId: number, contact: Contact, type: KIXObjectType) => {
-                if (type === KIXObjectType.CONTACT && this.contactChanged(contact)) {
-                    this.state.contact = contact;
-                }
-            },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; }
-        });
-        // FIXME: Context.load(...)
-        // this.state.contact = context.getObjectByType<Contact>(KIXObjectType.CONTACT);
-    }
-
-    private contactChanged(contact: Contact): boolean {
-        let changed = true;
-
-        if (this.state.contact && contact) {
-            changed = contact && !this.state.contact.equals(contact);
-        } else {
-            changed = true;
+    public async onMount(): Promise<void> {
+        const contacts = await ContextService.getInstance().loadObjects<Contact>(
+            KIXObjectType.CUSTOMER, [this.state.contactId], ContextMode.DETAILS, null
+        );
+        if (contacts && contacts.length) {
+            this.state.contact = contacts[0];
         }
-
-        return changed;
     }
 
 }
