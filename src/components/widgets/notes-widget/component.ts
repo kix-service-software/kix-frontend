@@ -6,7 +6,7 @@ import { ComponentState } from './ComponentState';
 export class Component {
 
     private state: ComponentState;
-    private contextId: string;
+    private editorValue: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -18,15 +18,15 @@ export class Component {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getContext(this.state.contextType);
-        this.contextId = context.id;
+        this.state.contextId = context.id;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.state.actions = [new NotesEditAction(this)];
-        this.state.value = await NotesService.getInstance().loadNotes(this.contextId);
-        this.state.currentValue = this.state.value;
+        this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
+        this.editorValue = this.state.value;
     }
 
     private valueChanged(value): void {
-        this.state.currentValue = value;
+        this.editorValue = value;
     }
 
     // public for use in action
@@ -35,16 +35,15 @@ export class Component {
     }
 
     private cancelEditor() {
-        this.state.currentValue = this.state.value;
         this.state.editorActive = false;
     }
 
     private submitEditor() {
         setTimeout(() => {
-            this.state.value = this.state.currentValue;
-            NotesService.getInstance().saveNotes(this.contextId, this.state.value);
+            this.state.value = this.editorValue;
+            this.state.editorActive = false;
+            NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
         }, 200);
-        this.state.editorActive = false;
     }
 
 }

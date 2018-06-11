@@ -6,10 +6,10 @@ export class ComponentState {
         public instanceId: string = null,
         public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
+        public contextId: string = null,
         public actions: AbstractAction[] = [],
         public editorActive: boolean = false,
-        public value: string = null,
-        public currentValue: string = null
+        public value: string = null
     ) { }
 
 }

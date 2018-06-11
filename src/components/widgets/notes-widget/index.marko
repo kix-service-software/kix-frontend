@@ -5,8 +5,8 @@
             <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")/>
         </@icon>
         <@content>
-            <if(state.currentValue || state.editorActive)>
-                <editor value=state.currentValue on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)
+            <if(state.value || state.editorActive)>
+                <editor value=state.value on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)
                     keyValue="notes-sidebar"/>
             </if>
             <else>

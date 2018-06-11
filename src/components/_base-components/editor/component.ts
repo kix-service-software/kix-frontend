@@ -14,19 +14,20 @@ class EditorComponent {
             input.resize,
             input.resizeDir
         );
-        this.state.value = input.value || '';
     }
 
     public async onInput(input: any): Promise<void> {
-        if (input.value && input.value !== this.state.value) {
-            this.state.value = input.value || '';
-            if (await this.isEditorReady()) {
-                CKEDITOR.instances[this.state.id].insertHtml(this.state.value);
+        if (await this.isEditorReady()) {
+            if (input.addValue) {
+                CKEDITOR.instances[this.state.id].insertHtml(input.addValue);
+            } else if (input.value) {
+                const currentValue = CKEDITOR.instances[this.state.id].getData();
+                if (input.value !== currentValue) {
+                    CKEDITOR.instances[this.state.id].setData(input.value);
+                }
             }
-        }
-        if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
-            this.state.readOnly = input.readOnly;
-            if (await this.isEditorReady()) {
+            if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
+                this.state.readOnly = input.readOnly;
                 CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
             }
         }
@@ -50,8 +51,8 @@ class EditorComponent {
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
             // - siehe bei Notes-Sidebar (toggleEditMode))
             CKEDITOR.instances[this.state.id].on('blur', (event) => {
-                this.state.value = event.editor.getData();
-                (this as any).emit('valueChanged', this.state.value);
+                const value = event.editor.getData();
+                (this as any).emit('valueChanged', value);
             });
         }
     }

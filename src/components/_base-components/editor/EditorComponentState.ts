@@ -3,7 +3,6 @@ import { IdService } from '@kix/core/dist/browser/IdService';
 export class EditorComponentState {
 
     public id: string;
-    public value: string = '';
     public config: object = {};
 
     /**
