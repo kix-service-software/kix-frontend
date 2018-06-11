@@ -17,16 +17,21 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         let response;
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.kixObjectType);
-
-        await service.loadObjects(
-            data.token, data.objectIds, data.properties, data.filter, data.limit
-        ).then((objects: any[]) => {
-            response = new CommunicatorResponse(
-                KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
-            );
-        }).catch((error) => {
-            response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error.message);
-        });
+        if (service) {
+            await service.loadObjects(
+                data.token, data.objectIds, data.properties, data.filter, data.limit
+            ).then((objects: any[]) => {
+                response = new CommunicatorResponse(
+                    KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
+                );
+            }).catch((error) => {
+                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error.message);
+            });
+        } else {
+            const errorMessage = 'No service registered for' + data.kixObjectType;
+            this.loggingService.error(errorMessage);
+            response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, errorMessage);
+        }
 
         return response;
     }
