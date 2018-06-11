@@ -1,9 +1,7 @@
-import {
-    TicketService, TicketDetailsContext, TicketDetailsContextConfiguration
-} from '@kix/core/dist/browser/ticket/';
+import { TicketService, TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType
+    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType, ContextMode
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
@@ -16,12 +14,10 @@ export class TicketDetailsComponent {
     private state: TicketDetailsComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketDetailsComponentState(Number(input.ticketId));
+        this.state = new TicketDetailsComponentState(Number(input.objectId));
     }
 
     public async onMount(): Promise<void> {
-        this.setBreadcrumbDetails();
-
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext, type: ContextType) => {
                 if (type === ContextType.MAIN && contextId === TicketDetailsContext.CONTEXT_ID) {
@@ -38,20 +34,19 @@ export class TicketDetailsComponent {
     }
 
     private async loadTicket(): Promise<void> {
-        await TicketService.getInstance().loadTicket(this.state.ticketId);
+        const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+            KIXObjectType.TICKET, [this.state.ticketId], ContextMode.DETAILS, ['Ticket.*']
+        );
+        this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
         this.state.loadingTicket = false;
-        this.setBreadcrumbDetails();
         this.setTicketHookInfo();
     }
 
     private getActions(): string[] {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
-        if (config && this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                actions = ActionFactory.getInstance().generateActions(config.generalActions, true, ticket);
-            }
+        if (config && this.state.ticket) {
+            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.ticket);
         }
         return actions;
     }
@@ -59,11 +54,8 @@ export class TicketDetailsComponent {
     private getTicketActions(): string[] {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
-        if (config && this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, ticket);
-            }
+        if (config && this.state.ticket) {
+            actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, this.state.ticket);
         }
         return actions;
     }
@@ -76,18 +68,6 @@ export class TicketDetailsComponent {
         }
     }
 
-    private setBreadcrumbDetails(): void {
-        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-        const value = ticket ? ticket.TicketNumber : this.state.ticketId;
-
-        const breadcrumbDetails = new BreadcrumbDetails(
-            'tickets', TicketDetailsContext.CONTEXT_ID, this.state.ticketId.toString(),
-            'Ticket-Dashboard', '#' + value, null
-        );
-
-        ComponentRouterService.getInstance().prepareBreadcrumbDetails(breadcrumbDetails);
-    }
-
     private getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
@@ -95,9 +75,11 @@ export class TicketDetailsComponent {
     }
 
     private getTitle(): string {
-        const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-        const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + ticket.TicketNumber;
-        return titlePrefix + " - " + ticket.Title;
+        if (this.state.ticket) {
+            const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + this.state.ticket.TicketNumber;
+            return titlePrefix + " - " + this.state.ticket.Title;
+        }
+        return '';
     }
 
     private getLaneKey(): string {

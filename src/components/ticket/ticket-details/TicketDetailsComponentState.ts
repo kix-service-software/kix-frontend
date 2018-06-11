@@ -14,7 +14,8 @@ export class TicketDetailsComponentState {
         public ticketHookDivider: string = '',
         public loadingTicket: boolean = true,
         public loadingConfig: boolean = true,
-        public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null
+        public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null,
+        public ticket: Ticket = null
     ) { }
 
 }

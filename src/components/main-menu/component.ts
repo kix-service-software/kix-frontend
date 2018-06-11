@@ -36,7 +36,7 @@ class KIXMenuComponent implements IContextServiceListener {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ContextService.getInstance().setContext(menuEntry.kixObjectType, menuEntry.contextMode);
+        ContextService.getInstance().setContext(menuEntry.kixObjectType, menuEntry.contextMode, null, true);
     }
 
 }
