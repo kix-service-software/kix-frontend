@@ -4,6 +4,8 @@
         <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-man")/>
     </@icon>
     <@content>
-        <ticket-contact-info contextType=state.contextType/>
+        <if(state.contactId)>
+            <ticket-contact-info contactId=state.contactId/>
+        </if>
     </@content>
 </widget>

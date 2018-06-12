@@ -27,22 +27,6 @@ class CustomerInfoComponent {
         }
     }
 
-    public async getDisplayText(customer: Customer, property: string): Promise<string> {
-        return await this.state.labelProvider.getDisplayText(customer, property);
-    }
-
-    private customerChanged(customer: Customer): boolean {
-        let changed = true;
-
-        if (this.state.customer && customer) {
-            changed = !this.state.customer.equals(customer);
-        } else {
-            changed = true;
-        }
-
-        return changed;
-    }
-
 }
 
 module.exports = CustomerInfoComponent;
