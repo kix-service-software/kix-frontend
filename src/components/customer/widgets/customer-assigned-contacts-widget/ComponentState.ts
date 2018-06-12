@@ -4,6 +4,7 @@ import { StandardTable } from "@kix/core/dist/browser";
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
+        public customerId: string = null,
         public customer: Customer = null,
         public contactTable: StandardTable<Contact> = null,
         public filterValue: string = '',

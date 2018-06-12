@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { ContextType, KIXObjectType, WidgetType } from "@kix/core/dist/model";
+import { ContextType, KIXObjectType, WidgetType, ContextMode, Customer } from "@kix/core/dist/model";
 import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
 import { CustomerDetailsContext, CustomerService } from "@kix/core/dist/browser/customer";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -9,29 +9,25 @@ class Component {
     private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(input.customerId);
+        this.state = new ComponentState(input.objectId);
     }
 
     public async  onMount(): Promise<void> {
-
-        ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, customerDetailsCOntext: CustomerDetailsContext, type: ContextType) => {
-                if (type === ContextType.MAIN && contextId === CustomerDetailsContext.CONTEXT_ID) {
-                    this.state.configuration = customerDetailsCOntext.configuration;
-                    this.state.loadingConfig = false;
-                    this.state.lanes = customerDetailsCOntext.getLanes();
-                    this.state.tabWidgets = customerDetailsCOntext.getLaneTabs();
-                    (this as any).update();
-                }
-            }
-        });
-
+        const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
+        this.state.configuration = context.configuration;
+        this.state.loadingConfig = false;
+        this.state.lanes = context.getLanes();
+        this.state.tabWidgets = context.getLaneTabs();
         await this.loadCustomer();
     }
 
     private async loadCustomer(): Promise<void> {
-        const customers = await CustomerService.getInstance().loadCustomers([this.state.customerId]);
-        this.state.loadingCustomer = false;
+        const contacts = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null);
+        if (contacts && contacts.length) {
+            this.state.customer = contacts[0];
+            this.state.loadingCustomer = false;
+        }
     }
 
     private getActions(): string[] {

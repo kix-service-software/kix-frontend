@@ -4,7 +4,7 @@ import {
     TableSortLayer, TableRowHeight, IdService, TableColumn,
     ITableConfigurationListener, ITableClickListener, DialogService, ActionFactory
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
 import {
     ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext, ContactService
 } from "@kix/core/dist/browser/contact";
@@ -20,37 +20,26 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
-            objectChanged: (objectId: string | number, object: Customer, type: KIXObjectType) => {
-                if (type === KIXObjectType.CUSTOMER && (!this.state.customer || !this.state.customer.equals(object))) {
-                    this.state.customer = object;
-                    this.setTable();
-                }
-            }
-        });
-
-        // FIXME: context.load(...)
-        // this.state.customer = (context.getObject(context.objectId) as Customer);
+        this.state.customerId = input.customerId;
     }
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.setTable();
+
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
-            if (this.state.contactTable) {
-                this.state.contactTable.setTableListener(() => {
-                    const count = this.state.contactTable.getTableRows().length;
-                    this.state.title += count > 0 ? ' (' + count + ')' : '';
-                });
+
+            const customers = await ContextService.getInstance().loadObjects<Customer>(
+                KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
+            );
+
+            if (customers && customers.length) {
+                this.state.customer = customers[0];
+                this.setTable();
+                this.setActions();
             }
         }
-        this.setActions();
     }
 
     private setActions(): void {
@@ -85,6 +74,11 @@ class Component {
                 this.state.widgetConfiguration.settings.displayLimit,
                 false,
                 TableRowHeight.SMALL);
+
+            this.state.contactTable.setTableListener(() => {
+                const count = this.state.contactTable.getTableRows().length;
+                this.state.title += count > 0 ? ' (' + count + ')' : '';
+            });
         }
     }
 

@@ -2,14 +2,12 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer,
     TableSortLayer, TableRowHeight, IdService, TableColumn,
-    ITableConfigurationListener, ITableClickListener, DialogService, ActionFactory
+    ITableConfigurationListener, ITableClickListener, ActionFactory
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
-import { ContactService, ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
+import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
 import {
-    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext, CustomerService
+    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService
 } from "@kix/core/dist/browser/customer";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -21,31 +19,23 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
-            objectChanged: (objectId: string | number, object: Contact, type: KIXObjectType) => {
-                if (type === KIXObjectType.CONTACT && (!this.state.contact || !this.state.contact.equals(object))) {
-                    this.state.contact = object;
-                    this.setTable();
-                }
-            }
-        });
-
-        // FIXME: Context.load(...)
-        // this.state.contact = (context.getObject(context.objectId) as Contact);
+        this.state.contactId = input.contactId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.setTable();
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
-            if (this.state.contact && this.state.contact.UserCustomerIDs.length > 0) {
+
+            const contacts = await ContextService.getInstance().loadObjects<Contact>(
+                KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null
+            );
+
+            if (contacts && contacts.length) {
+                this.state.contact = contacts[0];
                 this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
+                this.setTable();
             }
         }
         this.setActions();

@@ -1,14 +1,13 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
+    ContextService, ActionFactory,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService,
     TableColumnConfiguration, ITableClickListener
 } from "@kix/core/dist/browser";
-import { WidgetConfiguration, Customer, WidgetType, KIXObjectType, Ticket } from "@kix/core/dist/model";
+import { WidgetConfiguration, Customer, KIXObjectType, Ticket, ContextMode } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
 } from "@kix/core/dist/browser/customer";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
 import { TicketTableContentLayer, TicketTableLabelLayer, TicketService } from "@kix/core/dist/browser/ticket";
 
 class Component {
@@ -25,7 +24,7 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.clickListener = {
             rowClicked: (object: Ticket, columnId: string) => {
                 TicketService.getInstance().openTicket(object.TicketID, true);
@@ -57,8 +56,13 @@ class Component {
             ? context.getWidgetConfiguration('customer-pending-tickets-group')
             : undefined;
 
-        // FIXME: context.load(...)
-        // this.state.customer = (context.getObject(context.objectId) as Customer);
+        const customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
+        );
+
+        if (customers && customers.length) {
+            this.state.customer = customers[0];
+        }
 
         this.createTables();
         this.loadTickets();

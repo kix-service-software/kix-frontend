@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObject, Customer } from "@kix/core/dist/model";
+import { KIXObjectType, KIXObject, Customer, ContextMode } from "@kix/core/dist/model";
 
 class Component {
     private state: ComponentState;
@@ -11,22 +11,24 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
+        this.state.customerId = input.customerId;
 
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
-            objectChanged: (objectId: string | number, object: Customer, type: KIXObjectType) => {
-                if (type === KIXObjectType.CUSTOMER) {
-                    this.state.customer = object;
-                }
-            }
-        });
-
-        // FIXME: context.load(...)
-        // this.state.customer = (context.getObject(context.objectId) as Customer);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.setActions();
+    }
+
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        const customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
+        );
+
+        if (customers && customers.length) {
+            this.state.customer = customers[0];
+            this.setActions();
+        }
     }
 
     private setActions(): void {
@@ -35,11 +37,6 @@ class Component {
                 this.state.widgetConfiguration.actions, false, this.state.customer
             );
         }
-    }
-
-    public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
 }
