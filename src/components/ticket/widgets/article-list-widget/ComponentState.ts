@@ -3,7 +3,7 @@ import { Article, IAction, WidgetComponentState } from '@kix/core/dist/model';
 
 import { ArticleListSettings } from './ArticleListSettings';
 
-export class ArticleListWidgetComponentState extends WidgetComponentState<ArticleListSettings> {
+export class ComponentState extends WidgetComponentState<ArticleListSettings> {
 
     public constructor(
         public ticketId: number = null,
@@ -12,7 +12,8 @@ export class ArticleListWidgetComponentState extends WidgetComponentState<Articl
         public articles: Article[] = [],
         public expandedArticles: number[] = [],
         public generalArticleActions: IAction[] = [],
-        public filterValue: string = ''
+        public filterValue: string = '',
+        public eventSubscriberWidgetPrefix: string = 'ArticleListWidget'
     ) {
         super();
     }

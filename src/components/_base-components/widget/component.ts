@@ -3,10 +3,12 @@ import { BaseWidgetComponentState } from './BaseWidgetComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { WidgetType } from '@kix/core/dist/model';
 import { WidgetService } from '@kix/core/dist/browser';
+import { IEventListener, EventService } from '@kix/core/dist/browser/event';
 
-class WidgetComponent {
+class WidgetComponent implements IEventListener {
 
     private state: BaseWidgetComponentState;
+    public eventSubscriberId: string;
 
     public onCreate(input: any): void {
         this.state = new BaseWidgetComponentState();
@@ -22,6 +24,8 @@ class WidgetComponent {
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;
+        this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined' ?
+            input.eventSubscriberPrefix : 'GeneralWidget';
     }
 
     public onMount(): void {
@@ -41,6 +45,13 @@ class WidgetComponent {
                 this.state.minimized = config.minimized;
             }
         }
+
+        // TODO: Enum für events nutzen (ohne Prefix), falls es mehrer geben sollte
+        EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
     }
 
     private minimizeWidget(): void {
@@ -137,6 +148,11 @@ class WidgetComponent {
         (this as any).emit('closeWidget');
     }
 
+    public eventPublished(data: any, eventId: string): void {
+        if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
+            this.state.minimized = false;
+        }
+    }
 }
 
 module.exports = WidgetComponent;
