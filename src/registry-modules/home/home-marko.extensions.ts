@@ -4,13 +4,13 @@ export class HomeMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            'home/home-module',
+            'home/home-module'
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['home', 'home/home-module'],
+            ['home', 'home/home-module']
         ];
     }
 
