@@ -1,6 +1,5 @@
-import { TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { Customer } from "@kix/core/dist/model";
+import { KIXObjectType, ContextMode, Ticket } from "@kix/core/dist/model";
 import { CustomerWidgetComponentState } from './CustomerWidgetComponentState';
 
 class CustomerInfoWidgetComponent {
@@ -15,9 +14,18 @@ class CustomerInfoWidgetComponent {
         this.state.contextType = input.contextType;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        const ticketId = context.objectId;
+        const tickets = await ContextService.getInstance().loadObjects<Ticket>(
+            KIXObjectType.TICKET, [ticketId], ContextMode.DETAILS, null
+        );
+
+        if (tickets && tickets.length) {
+            this.state.customerId = tickets[0].CustomerID;
+        }
     }
 
 }

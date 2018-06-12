@@ -6,7 +6,8 @@ export class CustomerInfoComponentState {
     public constructor(
         public customer: Customer = null,
         public customerId: string = null,
-        public labelProvider: CustomerLabelProvider = new CustomerLabelProvider()
+        public labelProvider: CustomerLabelProvider = new CustomerLabelProvider(),
+        public error: any = null
     ) { }
 
 }

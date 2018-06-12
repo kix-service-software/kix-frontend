@@ -2,6 +2,7 @@ import { KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse } from "@kix/co
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
 import { KIXObjectServiceRegistry } from "@kix/core/dist/services";
+import { HttpError } from "@kix/core/dist/api";
 
 export class KIXObjectCommunicator extends KIXCommunicator {
 
@@ -25,10 +26,10 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                     KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
                 );
             }).catch((error) => {
-                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error.message);
+                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error.errorMessage.body);
             });
         } else {
-            const errorMessage = 'No service registered for' + data.kixObjectType;
+            const errorMessage = 'No API service registered for object type ' + data.kixObjectType;
             this.loggingService.error(errorMessage);
             response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, errorMessage);
         }

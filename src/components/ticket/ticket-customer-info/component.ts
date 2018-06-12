@@ -18,10 +18,17 @@ class CustomerInfoComponent {
     public async onMount(): Promise<void> {
         const customers = await ContextService.getInstance().loadObjects<Customer>(
             KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
-        );
+        ).catch((error) => {
+            this.state.error = error;
+        });
+
         if (customers && customers.length) {
             this.state.customer = customers[0];
         }
+    }
+
+    public async getDisplayText(customer: Customer, property: string): Promise<string> {
+        return await this.state.labelProvider.getDisplayText(customer, property);
     }
 
     private customerChanged(customer: Customer): boolean {
