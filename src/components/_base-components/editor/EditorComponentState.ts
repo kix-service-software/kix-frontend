@@ -26,9 +26,7 @@ export class EditorComponentState {
         let toolbar = [];
         if (this.simple) {
             toolbar = [
-                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
-                { name: 'colors', items: ['TextColor'] },
-                { name: 'links', items: ['Link'] },
+                { name: 'simplestyles', items: ['Bold', 'Italic', 'Underline', 'TextColor', 'Link'] }
                 // { name: 'insert', items: ['base64image'] }
             ];
         } else {

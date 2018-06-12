@@ -11,7 +11,7 @@
         }
     }
     .widget-content {
-        .empty-notes {
+        >.empty-notes {
             border: 1px solid @secondary-2;
             box-shadow: @shadow-3;
             background-color: @secondary-5;
@@ -25,7 +25,25 @@
             align-content: center;
             border-radius: @border-radius;
         }
-        .notes-editor-buttons {
+        >.editor-container {
+            >.cke {
+                >.cke_inner {
+                    >.cke_top {
+                        >.cke_toolbar {
+                            >.cke_toolgroup {
+                                >a.cke_button {
+                                    padding: 4px;
+                                }
+                            }
+                        }
+                    }
+                    >.cke_bottom {
+                        display: none;
+                    }
+                }
+            }
+        }
+        >.notes-editor-buttons {
             display: grid;
             grid-template-columns: max-content auto;
             grid-gap: @margin-widget-content + @margin-widget-content/2;
