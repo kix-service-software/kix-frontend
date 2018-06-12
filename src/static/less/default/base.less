@@ -3,6 +3,7 @@
 @shadow-color: @secondary-3;
 @shadow-1: 0 0 2px @shadow-color;
 @shadow-2: 0 0 2em @secondary-0;
+@shadow-3: 0 0 10px @secondary-2;
 html {
     height: 100%;
     box-sizing: border-box;
@@ -38,8 +39,8 @@ span.error {
     background-color: @button-bg-color;
     color: @button-font-color;
     border-color: @border-color;
-    & span[class^="kix-icon-"],
-    & span[class*=" kix-icon-"] {
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
         background-color: @button-icon-bg-color;
         color: @border-color;
         border-color: @border-color;
@@ -48,8 +49,8 @@ span.error {
         background-color: darken(@button-bg-color, 10%);
         color: darken(@button-font-color, 10%);
         border-color: darken(@border-color, 10%);
-        & span[class^="kix-icon-"],
-        & span[class*=" kix-icon-"] {
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
             background-color: darken(@button-icon-bg-color, 10%);
             color: darken(@border-color, 10%);
             border-color: darken(@border-color, 10%);
@@ -59,8 +60,8 @@ span.error {
         background-color: lighten(@button-bg-color, 20%);
         color: lighten(@button-font-color, 20%);
         border-color: lighten(@border-color, 20%);
-        & span[class^="kix-icon-"],
-        & span[class*=" kix-icon-"] {
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
             background-color: lighten(@button-icon-bg-color, 70%);
             color: lighten(@border-color, 70%);
             border-color: lighten(@border-color, 70%);
@@ -75,26 +76,38 @@ button {
         cursor: pointer;
     }
     height: @default-input-height;
-    min-width: 10rem;
     box-sizing: border-box;
     line-height: @default-input-height;
     border-radius: @border-radius;
     border: 1px solid;
-    padding-left: .625rem+@default-button-icon-width;
-    padding-right: .625rem;
     position: relative;
-    & span[class^="kix-icon-"],
-    & span[class*=" kix-icon-"] {
-        border-right: 1px solid;
+    &:not(.button-without-text) {
+        min-width: 10rem;
+        padding-left: .625rem+@default-button-icon-width;
+        padding-right: .625rem;
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            border-right: 1px solid;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+    &.button-without-text {
+        padding: 0; // prevent browser default
+        >span[class^="kix-icon-"],
+        >span[class*=" kix-icon-"] {
+            display: block;
+        }
+    }
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
         width: @default-button-icon-width;
         height: 100%;
         line-height: @default-input-height;
         text-align: center;
         border-radius: @border-radius;
         box-sizing: border-box;
-        position: absolute;
-        left: 0;
-        top: 0;
         font-size: 1.125rem;
     }
     &.form-button {

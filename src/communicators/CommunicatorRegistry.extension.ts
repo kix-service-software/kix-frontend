@@ -9,6 +9,7 @@ import { TicketCommunicator } from './TicketCommunicator';
 import { ContactCommunicator } from './ContactCommunicator';
 import { CustomerCommunicator } from './CustomerCommunicator';
 import { KIXObjectCommunicator } from './KIXObjectCommunicator';
+import { NotesCommunicatior } from './NotesCommunicator';
 
 export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
@@ -23,7 +24,8 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
             IconCommunicator,
             KIXObjectCommunicator,
             MainMenuCommunicator,
-            TicketCommunicator
+            TicketCommunicator,
+            NotesCommunicatior
         ];
     }
 

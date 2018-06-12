@@ -15,6 +15,7 @@ import {
 } from '@kix/core/dist/browser';
 import { TicketHistory, ArticleProperty, KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { EventService } from '@kix/core/dist/browser/event';
 
 class TicketHistoryWidgetComponent {
 
@@ -96,10 +97,7 @@ class TicketHistoryWidgetComponent {
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
         if (columnId === ArticleProperty.ARTICLE_ID && historyEntry[columnId]) {
-            // FIXME: GO_TO_ARTICLE
-            // ContextService.getInstance().notifyListener(
-            //     TicketDetailsContext.CONTEXT_ID, ContextNotification.GO_TO_ARTICLE, historyEntry[columnId]
-            // );
+            EventService.getInstance().publish('ShowArticleInTicketDetails', historyEntry[columnId]);
         }
     }
 

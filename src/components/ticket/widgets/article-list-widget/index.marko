@@ -1,7 +1,7 @@
 <div.article-table-widget>
     <if(state.ticket)>
         <widget configurationTagId="article-list-configuration" instanceId=state.instanceId actions=state.generalArticleActions
-            title=component.getTitle()>
+            title=component.getTitle() eventSubscriberPrefix=state.eventSubscriberWidgetPrefix>
             <@headerContent>
                 <div.header-attachments on-click('attachmentsClicked')>
                     <span.kix-icon-attachement/>(${component.getAttachmentsCount()})

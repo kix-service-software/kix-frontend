@@ -1,0 +1,38 @@
+.notes-container {
+    &.note-editor-active {
+        .widget-header {
+            >.header-right {
+                .action-list {
+                    li {
+                        color: @primary-4;
+                    }
+                }
+            }
+        }
+    }
+    .widget-content {
+        .empty-notes {
+            border: 1px solid @secondary-2;
+            box-shadow: @shadow-3;
+            background-color: @secondary-5;
+            color: @secondary-2;
+            height: 7rem;
+            padding: @margin-small;
+            margin: @margin-middle @margin-widget-content;
+            box-sizing: border-box;
+            text-align: center;
+            display: grid;
+            align-content: center;
+            border-radius: @border-radius;
+        }
+        .notes-editor-buttons {
+            display: grid;
+            grid-template-columns: max-content auto;
+            grid-gap: @margin-widget-content + @margin-widget-content/2;
+            margin-top: @margin-widget-content;
+            >button {
+                min-width: unset;
+            }
+        }
+    }
+}

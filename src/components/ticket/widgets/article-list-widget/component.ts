@@ -1,16 +1,13 @@
-import { Article, ArticleProperty, Context, Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
-import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
-import { ArticleListWidgetComponentState } from './ArticleListWidgetComponentState';
+import { Article, Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
+import { ComponentState } from './ComponentState';
 import {
-    TicketService,
     ArticleTableContentLayer,
     ArticleTableFilterLayer,
     ArticleTableLabelLayer,
     ArticleTableClickListener,
     ArticleTableSelectionListener,
     ArticleTableToggleListener,
-    ArticleTableToggleLayer,
-    TicketDetailsContext
+    ArticleTableToggleLayer
 } from "@kix/core/dist/browser/ticket";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
@@ -18,13 +15,15 @@ import {
     TableSortLayer, ToggleOptions, ActionFactory, TableHeaderHeight
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
+import { IEventListener, EventService } from "@kix/core/dist/browser/event";
 
-export class ArticleListWidgetComponent {
+export class Component implements IEventListener {
 
-    private state: ArticleListWidgetComponentState;
+    private state: ComponentState;
+    public eventSubscriberId: string = 'ArticleList';
 
     public onCreate(input: any): void {
-        this.state = new ArticleListWidgetComponentState(Number(input.ticketId), 'article-list');
+        this.state = new ComponentState(Number(input.ticketId), 'article-list');
     }
 
     public async onMount(): Promise<void> {
@@ -35,6 +34,14 @@ export class ArticleListWidgetComponent {
         this.getArticles();
         this.setActions();
         this.setArticleTableConfiguration();
+
+        EventService.getInstance().subscribe('ShowArticleInTicketDetails', this);
+        EventService.getInstance().subscribe('ArticleTableRowToggled', this);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
+        EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
     }
 
     public async setTicket(): Promise<void> {
@@ -53,22 +60,6 @@ export class ArticleListWidgetComponent {
                 .generateActions(this.state.widgetConfiguration.settings.generalActions, true, this.state.ticket);
         }
     }
-
-    // private contextNotified(id: string | number, type: ContextNotification, ...args): void {
-    //     if (id === TicketDetailsContext.CONTEXT_ID && type === ContextNotification.GO_TO_ARTICLE) {
-    //         // FIXME: Nicht über Context togglen
-    //         // ContextService.getInstance().notifyListener(
-    //         //     this.state.instanceId, ContextNotification.TOGGLE_WIDGET, false
-    //         // );
-
-    //         // setTimeout(() => {
-    //         //     ContextService.getInstance().notifyListener(
-    //         //         TicketDetailsContext.CONTEXT_ID, ContextNotification.SCROLL_TO_ARTICLE, args[0]
-    //         //     );
-    //         //     this.state.standardTable.loadRows();
-    //         // }, 500);
-    //     }
-    // }
 
     private setArticleTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
@@ -150,6 +141,17 @@ export class ArticleListWidgetComponent {
     private getTitle(): string {
         return 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
     }
+
+    public eventPublished(data: any, eventId: string): void {
+        if (eventId === 'ArticleTableRowToggled') {
+            this.state.standardTable.loadRows();
+        } else {
+            EventService.getInstance().publish(this.state.eventSubscriberWidgetPrefix + 'SetMinimizedToFalse');
+            setTimeout(() => {
+                EventService.getInstance().publish('ScrollToArticleInArticleTable', data);
+            }, 500);
+        }
+    }
 }
 
-module.exports = ArticleListWidgetComponent;
+module.exports = Component;
