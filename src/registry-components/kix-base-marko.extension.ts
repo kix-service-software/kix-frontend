@@ -7,7 +7,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ...this.getDialogFormDependencies(),
             ...this.getGeneralWidgetDependencies(),
             'quick-search',
-            'home/home-module',
             '_base-components/base-html-components/list-with-title'
         ];
     }
@@ -29,7 +28,6 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
         return [
             ...this.getDialogFormTags(),
             ...this.getGeneralWidgetTags(),
-            ['home', 'home/home-module'],
             ['icon', '_base-components/icon'],
             ['list-with-title', '_base-components/base-html-components/list-with-title']
         ];
