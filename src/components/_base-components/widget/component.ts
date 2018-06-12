@@ -46,8 +46,12 @@ class WidgetComponent implements IEventListener {
             }
         }
 
-        // TODO: Enum für events nutzen (ohe Prefix), falls es mehrer geben sollte
+        // TODO: Enum für events nutzen (ohne Prefix), falls es mehrer geben sollte
         EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
     }
 
     private minimizeWidget(): void {
@@ -145,7 +149,7 @@ class WidgetComponent implements IEventListener {
     }
 
     public eventPublished(data: any, eventId: string): void {
-        if (eventId === (this.eventSubscriberId + 'SetMinimezedToFalse')) {
+        if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
             this.state.minimized = false;
         }
     }

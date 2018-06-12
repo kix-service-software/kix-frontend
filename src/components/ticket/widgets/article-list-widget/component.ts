@@ -45,7 +45,14 @@ export class Component implements IEventListener {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setActions();
         this.setArticleTableConfiguration();
+
         EventService.getInstance().subscribe('ShowArticleInTicketDetails', this);
+        EventService.getInstance().subscribe('ArticleTableRowToggled', this);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
+        EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
     }
 
     private setActions(): void {
@@ -140,11 +147,15 @@ export class Component implements IEventListener {
         return 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
     }
 
-    public eventPublished(data: any): void {
-        EventService.getInstance().publish(this.state.eventSubscriberWidgetPrefix + 'SetMinimizedToFalse');
-        setTimeout(() => {
-            EventService.getInstance().publish('ScrollToArticleInArticleTable', data);
-        }, 500);
+    public eventPublished(data: any, eventId: string): void {
+        if (eventId === 'ArticleTableRowToggled') {
+            this.state.standardTable.loadRows();
+        } else {
+            EventService.getInstance().publish(this.state.eventSubscriberWidgetPrefix + 'SetMinimizedToFalse');
+            setTimeout(() => {
+                EventService.getInstance().publish('ScrollToArticleInArticleTable', data);
+            }, 500);
+        }
     }
 }
 
