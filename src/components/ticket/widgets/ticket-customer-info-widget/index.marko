@@ -4,8 +4,6 @@
         <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-man")/>
     </@icon>
     <@content>
-        <if(state.customerId)>
-            <ticket-customer-info customerId=state.customerId/>
-        </if>
+        <ticket-customer-info customerId=state.customerId/>
     </@content>
 </widget>

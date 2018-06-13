@@ -1,10 +1,9 @@
 import { TicketInputCustomerComponentState } from "./TicketInputCustomerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, Contact, FormInputComponentState,
-    FormFieldValueChangeEvent, FormFieldValue, IFormEvent, UpdateFormEvent, FormInputComponent, FormField
+    FormDropdownItem, TicketProperty, FormFieldValue,
+    FormInputComponent, FormField, KIXObjectType, Customer, ContextMode
 } from "@kix/core/dist/model";
-import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCustomerComponentState> {
@@ -61,7 +60,9 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
 
     private async loadCustomers(customerIds: string[]): Promise<void> {
         this.state.loading = true;
-        const customers = await CustomerService.getInstance().loadCustomers(customerIds);
+        const customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, customerIds, ContextMode.DASHBOARD, null
+        );
         this.state.items = customers.map(
             (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue, null, c)
         );

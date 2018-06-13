@@ -1,6 +1,6 @@
 import { ContextService } from "@kix/core/dist/browser/context";
 import { ContactInfoWidgetComponentState } from './ContactInfoWidgetComponentState';
-import { Ticket, ContextMode, KIXObjectType } from "@kix/core/dist/model";
+import { KIXObjectType, Contact } from "@kix/core/dist/model";
 
 class ContactInfoWidgetComponent {
 
@@ -17,14 +17,26 @@ class ContactInfoWidgetComponent {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.setContactId();
 
-        const ticketId = context.objectId;
-        const tickets = await ContextService.getInstance().loadObjects<Ticket>(
-            KIXObjectType.TICKET, [ticketId], ContextMode.DETAILS, null
+        context.registerListener({
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.state.contactId = contact ? contact.ContactID : null;
+                }
+            },
+            explorerBarToggled: () => { return; },
+            sidebarToggled: () => { return; }
+        });
+    }
+
+    private async setContactId(): Promise<void> {
+        const contact = await ContextService.getInstance().getObject<Contact>(
+            KIXObjectType.CONTACT, this.state.contextType
         );
 
-        if (tickets && tickets.length) {
-            this.state.contactId = tickets[0].CustomerUserID;
+        if (contact) {
+            this.state.contactId = contact.ContactID;
         }
     }
 

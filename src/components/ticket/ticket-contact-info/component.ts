@@ -12,17 +12,27 @@ class ContactInfoComponent {
 
     public onInput(input: any): void {
         this.state.contactId = input.contactId;
+        this.loadContact();
     }
 
-    public async onMount(): Promise<void> {
-        const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null
-        ).catch((error) => {
-            this.state.error = error;
-        });
+    public onMount(): void {
+        this.loadContact();
+    }
 
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
+    private async loadContact(): Promise<void> {
+        this.state.error = null;
+        this.state.contact = null;
+
+        if (this.state.contactId) {
+            const contacts = await ContextService.getInstance().loadObjects<Contact>(
+                KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null
+            ).catch((error) => {
+                this.state.error = error;
+            });
+
+            if (contacts && contacts.length) {
+                this.state.contact = contacts[0];
+            }
         }
     }
 
