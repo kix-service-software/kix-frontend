@@ -1,15 +1,23 @@
 import { TicketListComponentState } from './TicketListComponentState';
 import {
-    ContextFilter, Context, ObjectType, Ticket, TicketState, TicketProperty
+    ContextFilter,
+    Context,
+    ObjectType,
+    Ticket,
+    TicketState,
+    TicketProperty
 } from '@kix/core/dist/model/';
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketService, TicketTableContentLayer, TicketTableLabelLayer,
-    TicketTableSelectionListener, TicketTableClickListener
+    TicketService,
+    TicketTableContentLayer,
+    TicketTableLabelLayer,
+    TicketTableSelectionListener,
+    TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener,
-    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions, TableHeaderHeight
+    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions, TableHeaderHeight, ActionFactory
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -41,6 +49,14 @@ class TicketListWidgetComponent {
             : undefined;
 
         this.setTableConfiguration();
+        this.setActions();
+    }
+
+    private setActions(): void {
+        if (this.state.widgetConfiguration) {
+            this.state.generalTicketActions = ActionFactory.getInstance()
+                .generateActions(this.state.widgetConfiguration.actions, true);
+        }
     }
 
     private setTableConfiguration(): void {

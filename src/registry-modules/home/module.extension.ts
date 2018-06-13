@@ -13,6 +13,35 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
+        const generalActions = [
+            'bulk-ticket-action'
+        ];
+        const ticketListWidget =
+            new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
+                "ticket-list-widget", "ToDo / Bearbeitung erforderlich", generalActions, {
+                    limit: 500,
+                    displayLimit: 15,
+                    showTotalCount: true,
+                    tableColumns: [
+                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
+                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, false, 100),
+                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 100),
+                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, true, true, true, 200),
+                        new TableColumnConfiguration(TicketProperty.TYPE_ID, true, true, true, true, 100),
+                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
+                        new TableColumnConfiguration(
+                            TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
+                        ),
+                        new TableColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
+                        ),
+                    ]
+                },
+                false, true, WidgetSize.LARGE, null, true)
+            );
+
+        const content: string[] = ['20180612-to-do-widget'];
+        const contentWidgets = [ticketListWidget];
 
         // sidebars
         const notesSidebar =
@@ -29,11 +58,10 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             [],
             sidebars,
             sidebarWidgets,
-
             [],
+            content,
+            contentWidgets,
             [],
-            [],
-            []
         );
     }
 
