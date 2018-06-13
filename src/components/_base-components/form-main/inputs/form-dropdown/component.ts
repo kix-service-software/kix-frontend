@@ -58,7 +58,7 @@ class FormDropdownComponent {
     }
 
     private focusInput(): void {
-        const input = (this as any).getEl('dropdown-tree-input');
+        const input = (this as any).getEl('dropdown-input');
         if (input) {
             input.focus();
         }
