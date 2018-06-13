@@ -14,19 +14,10 @@ export class MainDialogComponent implements IMainDialogListener {
     public onMount(): void {
         DialogService.getInstance().registerMainDialogListener(this);
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
+    }
 
-        let dialogWidget = this.state.dialogWidgets && this.state.dialogWidgets.length
-            ? this.state.dialogWidgets[0]
-            : null;
-
-        if (this.state.dialogId) {
-            dialogWidget =
-                this.state.dialogWidgets.find((dw) => dw.configuration.widgetId === this.state.dialogId);
-        }
-
-        if (dialogWidget) {
-            ContextService.getInstance().setDialogContext(dialogWidget.kixObjectType, dialogWidget.contextMode);
-        }
+    public tabChanged(tab: ConfiguredDialogWidget): void {
+        ContextService.getInstance().setDialogContext(tab.kixObjectType, tab.contextMode);
     }
 
     public open(dialogId?: string): void {
@@ -45,10 +36,6 @@ export class MainDialogComponent implements IMainDialogListener {
     public setLoading(isLoading: boolean, loadingHint: string): void {
         this.state.isLoading = isLoading;
         this.state.loadingHint = loadingHint;
-    }
-
-    public tabChanged(widget: ConfiguredDialogWidget): void {
-        ContextService.getInstance().setDialogContext(widget.kixObjectType, widget.contextMode);
     }
 
 }

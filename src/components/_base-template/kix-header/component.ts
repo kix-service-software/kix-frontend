@@ -1,5 +1,7 @@
 import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
+import { ContextService } from "@kix/core/dist/browser";
+import { ContextMode } from "@kix/core/dist/model";
 
 class KIXHeaderComponent {
 
@@ -10,7 +12,7 @@ class KIXHeaderComponent {
     }
 
     private openDialog(): void {
-        DialogService.getInstance().openMainDialog();
+        ContextService.getInstance().setDialogContext(null, ContextMode.CREATE);
     }
 
     private logout(): void {

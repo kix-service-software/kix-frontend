@@ -12,7 +12,7 @@ export class CustomerMainMenuExtension implements IMainMenuExtension {
 
     public contextId: string = CustomerContext.CONTEXT_ID;
 
-    public contextMode: ContextMode = ContextMode.LIST;
+    public contextMode: ContextMode = ContextMode.DASHBOARD;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CUSTOMER;
 }

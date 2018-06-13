@@ -56,11 +56,11 @@ class BaseTemplateComponent {
         ContactService.getInstance();
 
         const homeContext = new ContextDescriptor(
-            HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextType.MAIN, ContextMode.LIST,
+            HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
-        ContextService.getInstance().setContext(KIXObjectType.ANY, ContextMode.LIST);
+        ContextService.getInstance().setContext(KIXObjectType.ANY, ContextMode.DASHBOARD);
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

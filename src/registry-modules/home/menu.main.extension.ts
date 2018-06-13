@@ -12,7 +12,7 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
 
     public contextId: string = HomeContext.CONTEXT_ID;
 
-    public contextMode: ContextMode = ContextMode.LIST;
+    public contextMode: ContextMode = ContextMode.DASHBOARD;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
 

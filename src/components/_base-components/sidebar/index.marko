@@ -1,7 +1,7 @@
 <if(state.showSidebar)>
-    <div.sidebar-area>
+    <div.sidebar-area key=("sidebar-" + state.contextType)>
         <for(sidebar in state.sidebars)>
-            <div.sidebar key=("sidebar" + Math.random())>
+            <div.sidebar key=("sidebar-" + sidebar.instanceId)>
                 <include(component.getSidebarTemplate(sidebar.instanceId), { instanceId: sidebar.instanceId, minimizable: false, contextType: state.contextType })/>
             </div>
         </for>
