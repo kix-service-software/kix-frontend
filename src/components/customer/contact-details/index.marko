@@ -1,4 +1,4 @@
-<if(state.loadingContact || state.loadingConfig)>
+<if(!state.contact)>
     <loading-spinner/>
 </if>
 <else>
@@ -12,12 +12,7 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane key=component.getLaneKey()>
-                            <include(component.getWidgetTemplate(lane.instanceId), { 
-                                contextType: "MAIN", 
-                                instanceId: lane.instanceId, 
-                                contactId: state.contactId, 
-                                type: component.getLaneWidgetType()
-                                })/>
+                            <include(component.getWidgetTemplate(lane.instanceId), { instanceId: lane.instanceId })/>
                         </li>
                     </for>
                 </ul>

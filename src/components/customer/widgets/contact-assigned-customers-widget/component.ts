@@ -19,7 +19,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.contactId = input.contactId;
     }
 
     public async onMount(): Promise<void> {
@@ -27,18 +26,18 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
-
-            const contacts = await ContextService.getInstance().loadObjects<Contact>(
-                KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null
-            );
-
-            if (contacts && contacts.length) {
-                this.state.contact = contacts[0];
-                this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
-                this.setTable();
-            }
         }
-        this.setActions();
+
+        const contacts = await ContextService.getInstance().loadObjects<Contact>(
+            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS, null
+        );
+
+        if (contacts && contacts.length) {
+            this.state.contact = contacts[0];
+            this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
+            this.setTable();
+            this.setActions();
+        }
     }
 
     private setActions(): void {

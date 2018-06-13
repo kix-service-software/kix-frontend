@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObject, Customer, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
 
 class Component {
     private state: ComponentState;
@@ -11,10 +11,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.customerId = input.customerId;
-
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
     public async onMount(): Promise<void> {
@@ -22,7 +18,7 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
+            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS, null
         );
 
         if (customers && customers.length) {

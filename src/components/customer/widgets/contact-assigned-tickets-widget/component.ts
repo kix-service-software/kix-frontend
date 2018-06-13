@@ -23,7 +23,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.contactId = input.contactId;
     }
 
     public async onMount(): Promise<void> {
@@ -59,7 +58,7 @@ class Component {
             : undefined;
 
         const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null
+            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS, null
         );
 
         if (contacts && contacts.length) {

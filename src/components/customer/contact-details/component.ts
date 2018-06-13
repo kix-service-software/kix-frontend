@@ -9,13 +9,13 @@ class Component {
     private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(input.objectId);
+        this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as ContactDetailsContext);
+        this.state.contactId = context.objectId.toString();
         this.state.configuration = context.configuration;
-        this.state.loadingConfig = false;
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
         await this.loadContact();

@@ -20,7 +20,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.customerId = input.customerId;
     }
 
     public async onMount(): Promise<void> {
@@ -29,16 +28,16 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
+        }
 
-            const customers = await ContextService.getInstance().loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
-            );
+        const customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS, null
+        );
 
-            if (customers && customers.length) {
-                this.state.customer = customers[0];
-                this.setTable();
-                this.setActions();
-            }
+        if (customers && customers.length) {
+            this.state.customer = customers[0];
+            this.setTable();
+            this.setActions();
         }
     }
 

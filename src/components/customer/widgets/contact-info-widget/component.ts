@@ -11,9 +11,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
     public async onMount(): Promise<void> {

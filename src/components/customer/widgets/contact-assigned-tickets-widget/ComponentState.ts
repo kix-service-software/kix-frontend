@@ -4,7 +4,6 @@ import { Contact, WidgetComponentState, AbstractAction, Ticket, WidgetConfigurat
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
-        public contactId: string = null,
         public contact: Contact = null,
         public escalatedTicketsConfig: WidgetConfiguration = null,
         public escalatedTicketsTable: StandardTable<Ticket> = null,

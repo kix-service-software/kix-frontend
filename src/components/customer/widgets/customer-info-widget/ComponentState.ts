@@ -4,7 +4,6 @@ import { CustomerLabelProvider } from "@kix/core/dist/browser/customer";
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public customerId: string = null,
         public customer: Customer = null,
         public labelProvider: CustomerLabelProvider = new CustomerLabelProvider(),
         public actions: AbstractAction[] = []
