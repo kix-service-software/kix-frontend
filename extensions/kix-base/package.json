@@ -4,7 +4,8 @@
         "kix:marko:dependencies": {
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
             "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension",
-            "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension"
+            "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension",
+            "home-marko": "../../dist/registry-modules/home/home-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
