@@ -1,18 +1,15 @@
-<div>
-    <if(state.customer)>
-        <for(groupTuple in state.customer.getCustomerInfoData())>
-            <div.customer-attribute-group key=("ticket-customer-attribute-group-" + groupTuple[0])>
-                <for(attributeTuple in groupTuple[1])>
-                    <div title=((state.labelProvider.getPropertyText(attributeTuple[0]) + ": ") + state.labelProvider.getDisplayText(state.customer, attributeTuple[0]))
-                        key=("ticket-customer-attribute-" + attributeTuple[0])>
-                        <span>${state.labelProvider.getPropertyText(attributeTuple[0])}:</span>
-                        ${state.labelProvider.getDisplayText(state.customer, attributeTuple[0])}
-                    </div>
-                </for>
-            </div>
-        </for>
-    </if>
-    <else>
-        <span>Kein Kunde verfügbar</span>
-    </else>
-</div>
+<if(state.customer)>
+    <for(groupTuple in state.customer.getCustomerInfoData())>
+        <div.customer-attribute-group key=("ticket-customer-attribute-group-" + groupTuple[0])>
+            <for(attributeTuple in groupTuple[1])>
+                <customer-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
+            </for>
+        </div>
+    </for>
+</if>
+<else-if(state.error)>
+    <span.error>${state.error}</span>
+</else-if>
+<else>
+    <span>Kein Kunde verfügbar</span>
+</else>

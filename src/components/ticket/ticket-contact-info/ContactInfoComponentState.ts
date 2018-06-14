@@ -4,9 +4,10 @@ import { ContactLabelProvider } from "@kix/core/dist/browser/contact";
 export class ContactInfoComponentState {
 
     public constructor(
-        public contextType: ContextType = null,
         public contact: Contact = null,
-        public labelProvider: ContactLabelProvider = new ContactLabelProvider()
+        public contactId: string = null,
+        public labelProvider: ContactLabelProvider = new ContactLabelProvider(),
+        public error: any = null
     ) { }
 
 }

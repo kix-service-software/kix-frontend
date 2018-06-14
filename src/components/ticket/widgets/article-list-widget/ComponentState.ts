@@ -1,5 +1,5 @@
 import { StandardTable } from '@kix/core/dist/browser';
-import { Article, IAction, WidgetComponentState } from '@kix/core/dist/model';
+import { Article, IAction, WidgetComponentState, Ticket } from '@kix/core/dist/model';
 
 import { ArticleListSettings } from './ArticleListSettings';
 
@@ -13,6 +13,7 @@ export class ComponentState extends WidgetComponentState<ArticleListSettings> {
         public expandedArticles: number[] = [],
         public generalArticleActions: IAction[] = [],
         public filterValue: string = '',
+        public ticket: Ticket = null,
         public eventSubscriberWidgetPrefix: string = 'ArticleListWidget'
     ) {
         super();

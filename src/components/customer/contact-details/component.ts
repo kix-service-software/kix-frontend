@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { ContextType, KIXObjectType, WidgetType, Contact } from "@kix/core/dist/model";
+import { ContextType, KIXObjectType, WidgetType, Contact, ContextMode } from "@kix/core/dist/model";
 import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
 import { ContactDetailsContext, ContactService } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -9,37 +9,25 @@ class Component {
     private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(input.contactId);
+        this.state = new ComponentState();
     }
 
-    public async  onMount(): Promise<void> {
-
-        ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, contactDetailsCOntext: ContactDetailsContext, type: ContextType) => {
-                if (type === ContextType.MAIN && contextId === ContactDetailsContext.CONTEXT_ID) {
-                    this.state.configuration = contactDetailsCOntext.configuration;
-                    this.state.loadingConfig = false;
-                    this.state.lanes = contactDetailsCOntext.getLanes();
-                    this.state.tabWidgets = contactDetailsCOntext.getLaneTabs();
-                    (this as any).update();
-                }
-            }
-        });
-
-        const contextURL = ContactDetailsContext.CONTEXT_ID + '/' + this.state.contactId;
-        const context = new ContactDetailsContext(this.state.contactId);
-        await ContextService.getInstance().provideContext(context, true, ContextType.MAIN);
+    public async onMount(): Promise<void> {
+        const context = (ContextService.getInstance().getActiveContext() as ContactDetailsContext);
+        this.state.contactId = context.objectId.toString();
+        this.state.configuration = context.configuration;
+        this.state.lanes = context.getLanes();
+        this.state.tabWidgets = context.getLaneTabs();
         await this.loadContact();
     }
 
     private async loadContact(): Promise<void> {
-        const contacts = await ContactService.getInstance().loadContacts([this.state.contactId]);
+        const contacts = await ContextService.getInstance().loadObjects<Contact>(
+            KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS, null);
         if (contacts && contacts.length) {
             this.state.contact = contacts[0];
-            const context = ContextService.getInstance().getContext(null, ContactDetailsContext.CONTEXT_ID);
-            context.provideObject(this.state.contact.ContactID, this.state.contact, KIXObjectType.CUSTOMER);
+            this.state.loadingContact = false;
         }
-        this.state.loadingContact = false;
     }
 
     private getActions(): string[] {
@@ -72,7 +60,7 @@ class Component {
     }
 
     private getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }

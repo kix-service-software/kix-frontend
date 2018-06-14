@@ -7,15 +7,20 @@
     </@icon>
     <@content>
         <div.history-content>
-            <div.history-filter>
-                <span.header>Änderungsverlauf</span>
-                <filter filterValue=state.filterValue on-filter('filter')/>
-            </div>
-            <div.history-container>
-                <if(state.standardTable)>
-                    <standard-table standardTable=state.standardTable/>
-                </if>
-            </div>
+            <if(state.ticket)>
+                <div.history-filter>
+                    <span.header>Änderungsverlauf</span>
+                    <filter filterValue=state.filterValue on-filter('filter')/>
+                </div>
+                <div.history-container>
+                    <if(state.standardTable)>
+                        <standard-table standardTable=state.standardTable/>
+                    </if>
+                </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
         </div>
     </@content>
 </widget>

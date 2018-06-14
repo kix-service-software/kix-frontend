@@ -1,7 +1,7 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
 import { IMainDialogListener, ContextService } from '@kix/core/dist/browser';
-import { ContextType } from '@kix/core/dist/model';
+import { ContextType, ConfiguredWidget, ConfiguredDialogWidget } from '@kix/core/dist/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -14,6 +14,10 @@ export class MainDialogComponent implements IMainDialogListener {
     public onMount(): void {
         DialogService.getInstance().registerMainDialogListener(this);
         this.state.dialogWidgets = DialogService.getInstance().getRegisteredDialogs();
+    }
+
+    public tabChanged(tab: ConfiguredDialogWidget): void {
+        ContextService.getInstance().setDialogContext(tab.kixObjectType, tab.contextMode);
     }
 
     public open(dialogId?: string): void {
@@ -33,7 +37,6 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.isLoading = isLoading;
         this.state.loadingHint = loadingHint;
     }
-
 
 }
 

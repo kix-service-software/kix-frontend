@@ -1,7 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { FormDropdownItem, FormInputComponent, Customer } from "@kix/core/dist/model";
+import { FormDropdownItem, FormInputComponent, Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
+import { ContextService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 
@@ -31,7 +32,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     }
 
     private async searchCustomers(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
-        this.state.customers = await CustomerService.getInstance().loadCustomers(null, searchValue);
+        this.state.customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, null, ContextMode.DASHBOARD, null, null, searchValue, limit
+        );
 
         let items = [];
         if (searchValue && searchValue !== '') {

@@ -8,7 +8,7 @@
             <@content>
                 <ul.lane-list no-update>
                     <li key=component.getLaneKey()>
-                        <tab-container tabWidgets=state.tabWidgets title="Ticketinformationen"/>
+                        <tab-container tabWidgets=state.tabWidgets title="Ticketinformationen" showSidebar=false/>
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane key=component.getLaneKey()>

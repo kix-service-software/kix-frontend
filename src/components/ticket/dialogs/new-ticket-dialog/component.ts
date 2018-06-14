@@ -25,43 +25,13 @@ class NewTicketDialogComponent {
             formInstance.reset();
             formInstance.registerListener({
                 formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                    const dialogContext = ContextService.getInstance().getContext(
-                        null, NewTicketDialogContext.CONTEXT_ID
-                    );
-                    if (dialogContext) {
-                        if (formField.property === TicketProperty.CUSTOMER_ID) {
-                            if ((value.value === null || value.value === undefined)) {
-                                const customer: Customer = oldValue;
-                                if (customer) {
-                                    dialogContext.provideObject(customer.CustomerID, null, KIXObjectType.CUSTOMER);
-                                }
-                            } else {
-                                const customer: Customer = value.value;
-                                dialogContext.provideObject(customer.CustomerID, customer, KIXObjectType.CUSTOMER);
-                            }
-                        } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
-                            if ((value.value === null || value.value === undefined)) {
-                                const contact: Contact = oldValue;
-                                if (contact) {
-                                    dialogContext.provideObject(contact.ContactID, null, KIXObjectType.CONTACT);
-                                }
-                            } else {
-                                const contact: Contact = value.value;
-                                dialogContext.provideObject(contact.ContactID, contact, KIXObjectType.CONTACT);
-                            }
-                        }
-                    }
+                    // FIXME: Notify valueChange for sidebars
                 },
                 updateForm: () => { return; }
             });
         }
 
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
-
-        const context = new NewTicketDialogContext();
-        this.state.loading = true;
-        await ContextService.getInstance().provideContext(context, true, ContextType.DIALOG);
-        this.state.loading = false;
     }
 
     private cancel(): void {

@@ -3,7 +3,7 @@ import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, TableHeaderHeight
 } from "@kix/core/dist/browser";
-import { Customer } from "@kix/core/dist/model";
+import { Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService } from "@kix/core/dist/browser/customer";
 
 class Component {
@@ -19,7 +19,7 @@ class Component {
     }
 
     public onMount(): void {
-        const currentContext = ContextService.getInstance().getContext();
+        const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -49,7 +49,9 @@ class Component {
                 null,
                 {
                     rowClicked: (customer: Customer, columnId: string): void => {
-                        CustomerService.getInstance().openCustomer(customer.CustomerID, false);
+                        ContextService.getInstance().setContext(
+                            KIXObjectType.CUSTOMER, ContextMode.DETAILS, customer.CustomerID
+                        );
                     }
                 },
                 configurationListener,

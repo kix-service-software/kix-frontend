@@ -1,9 +1,9 @@
-import { DynamicField } from '@kix/core/dist/model';
+import { DynamicField, Ticket } from '@kix/core/dist/model';
 
 export class DynamicFieldLabelComponentState {
 
     public constructor(
-        public ticketId: number = null,
+        public ticket: Ticket = null,
         public fieldId: number = null,
         public field: DynamicField = null,
         public value: any = null,

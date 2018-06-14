@@ -1,22 +1,19 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
+import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
 
 export class TicketsMainMenuExtension implements IMainMenuExtension {
 
-    public getLink(): string {
-        return "/tickets";
-    }
+    public link: string = "/tickets";
 
-    public getIcon(): string {
-        return "ticket";
-    }
+    public icon: string = "ticket";
 
-    public getText(): string {
-        return "Tickets";
-    }
+    public text: string = "Tickets";
 
-    public getContextId(): string {
-        return "tickets";
-    }
+    public contextId: string = "tickets";
+
+    public contextMode: ContextMode = ContextMode.DASHBOARD;
+
+    public KIXObjectType: KIXObjectType = KIXObjectType.TICKET;
 
 }
 

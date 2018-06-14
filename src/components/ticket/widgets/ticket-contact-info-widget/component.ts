@@ -1,7 +1,6 @@
-import { TicketService } from "@kix/core/dist/browser/ticket/";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { Contact } from "@kix/core/dist/model";
 import { ContactInfoWidgetComponentState } from './ContactInfoWidgetComponentState';
+import { KIXObjectType, Contact } from "@kix/core/dist/model";
 
 class ContactInfoWidgetComponent {
 
@@ -15,9 +14,30 @@ class ContactInfoWidgetComponent {
         this.state.contextType = input.contextType;
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.setContactId();
+
+        context.registerListener({
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.state.contactId = contact ? contact.ContactID : null;
+                }
+            },
+            explorerBarToggled: () => { return; },
+            sidebarToggled: () => { return; }
+        });
+    }
+
+    private async setContactId(): Promise<void> {
+        const contact = await ContextService.getInstance().getObject<Contact>(
+            KIXObjectType.CONTACT, this.state.contextType
+        );
+
+        if (contact) {
+            this.state.contactId = contact.ContactID;
+        }
     }
 
 }
