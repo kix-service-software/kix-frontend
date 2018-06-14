@@ -31,12 +31,12 @@ class CustomerInfoWidgetComponent {
     }
 
     private async setCustomerId(): Promise<void> {
-        const contact = await ContextService.getInstance().getObject<Customer>(
-            KIXObjectType.CONTACT, this.state.contextType
+        const customer = await ContextService.getInstance().getObject<Customer>(
+            KIXObjectType.CUSTOMER, this.state.contextType
         );
 
-        if (contact) {
-            this.state.customerId = contact.CustomerID;
+        if (customer) {
+            this.state.customerId = customer.CustomerID;
         }
     }
 

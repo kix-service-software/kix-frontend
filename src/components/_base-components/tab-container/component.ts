@@ -12,6 +12,7 @@ class TabLaneComponent {
         this.state = new TabContainerComponentState(input.tabWidgets);
     }
 
+
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
         this.state.tabId = input.tabId;
@@ -30,6 +31,7 @@ class TabLaneComponent {
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
+        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
         this.setSidebars();
     }
 
@@ -64,8 +66,10 @@ class TabLaneComponent {
     }
 
     private setSidebars(): void {
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
+        if (this.state.showSidebar) {
+            const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+            this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
+        }
     }
 
     public isActiveTab(tabId: string): boolean {
