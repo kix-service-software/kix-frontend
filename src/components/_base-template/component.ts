@@ -62,7 +62,12 @@ class BaseTemplateComponent {
             false, 'home', HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
-        ContextService.getInstance().setContext(HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD);
+
+        if (this.state.contextId) {
+            ContextService.getInstance().setContext(this.state.contextId, null, null, this.state.objectId);
+        } else {
+            ContextService.getInstance().setContext(HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD);
+        }
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

@@ -29,6 +29,7 @@
             "contact-details-module": "../../dist/registry-modules/customer/contact-details-module.extension",
             "search-module": "../../dist/registry-modules/search/search-module.extension",
             "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
+            "search-ticket-dialog-context": "../../dist/registry-modules/ticket/search-ticket-dialog-context.extension",
             "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
             "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension"
         }
