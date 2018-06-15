@@ -18,8 +18,8 @@ class Component {
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
-        this.state.nodes = input.nodes;
-        this.state.selectedNodes = input.selectedNodes;
+        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : [];
+        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ? input.selectedNodes : [];
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
         }
