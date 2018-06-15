@@ -12,7 +12,7 @@ class KIXHeaderComponent {
     }
 
     private openDialog(): void {
-        ContextService.getInstance().setDialogContext(null, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
     }
 
     private logout(): void {

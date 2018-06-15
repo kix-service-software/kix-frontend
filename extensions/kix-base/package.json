@@ -5,7 +5,8 @@
             "kix-marko": "../../dist/registry-components/kix-base-marko.extension",
             "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension",
             "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension",
-            "home-marko": "../../dist/registry-modules/home/home-marko.extension"
+            "home-marko": "../../dist/registry-modules/home/home-marko.extension",
+            "search-marko": "../../dist/registry-modules/search/search-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -16,7 +17,8 @@
         "kix:menu:main": {
             "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
             "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension",
-            "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension"
+            "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
+            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension"
         },
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
@@ -25,6 +27,7 @@
             "customer-module": "../../dist/registry-modules/customer/customer-module.extension",
             "customer-details-module": "../../dist/registry-modules/customer/customer-details-module.extension",
             "contact-details-module": "../../dist/registry-modules/customer/contact-details-module.extension",
+            "search-module": "../../dist/registry-modules/search/search-module.extension",
             "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
             "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
             "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension"

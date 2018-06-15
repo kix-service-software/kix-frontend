@@ -8,6 +8,7 @@ import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { HomeContext } from '@kix/core/dist/browser/home';
+import { SearchService } from '@kix/core/dist/browser/search';
 
 declare var io: any;
 
@@ -54,13 +55,14 @@ class BaseTemplateComponent {
         TicketService.getInstance();
         CustomerService.getInstance();
         ContactService.getInstance();
+        SearchService.getInstance();
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
-        ContextService.getInstance().setContext(KIXObjectType.ANY, ContextMode.DASHBOARD);
+        ContextService.getInstance().setContext(HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD);
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

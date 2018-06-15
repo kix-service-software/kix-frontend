@@ -13,8 +13,8 @@ class HomeComponent {
         this.state = new HomeComponentState();
     }
 
-    public onMount(): void {
-        const context = (ContextService.getInstance().getContext(HomeContext.CONTEXT_ID) as HomeContext);
+    public async onMount(): Promise<void> {
+        const context = (await ContextService.getInstance().getContext(HomeContext.CONTEXT_ID) as HomeContext);
         this.state.contentWidgets = context.getContent();
     }
 

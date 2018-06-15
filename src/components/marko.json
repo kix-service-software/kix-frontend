@@ -12,6 +12,7 @@
         "customer",
         "home",
         "ticket",
-        "customer"
+        "customer",
+        "search"
     ]
 }

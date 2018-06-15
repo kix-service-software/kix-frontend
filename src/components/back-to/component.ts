@@ -20,7 +20,7 @@ class Component implements IContextServiceListener {
     }
 
     public navigate(entry: ContextHistoryEntry): void {
-        ContextService.getInstance().setContext(null, null, null, null, entry);
+        ContextService.getInstance().setContext(null, null, null, null, null, entry);
     }
 
     public contextChanged(contextId: string, context: Context<ContextConfiguration>, type: ContextType): void {
