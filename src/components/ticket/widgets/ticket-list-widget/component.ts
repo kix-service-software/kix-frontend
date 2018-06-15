@@ -20,6 +20,7 @@ import {
     TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions, TableHeaderHeight, ActionFactory
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { TicketListSettings } from './TicketListSettings';
 
 class TicketListWidgetComponent {
 
@@ -66,9 +67,13 @@ class TicketListWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
+            const tableSettings = (this.state.widgetConfiguration.settings as TicketListSettings);
+
+            const filter = tableSettings.filter && tableSettings.filter.length ? tableSettings.filter : null;
+
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new TicketTableContentLayer(this.state.instanceId, null, 100),
+                new TicketTableContentLayer(this.state.instanceId, null, filter, 100),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],

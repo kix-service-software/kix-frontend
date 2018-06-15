@@ -1,8 +1,16 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize, DataType, ContextConfiguration
+    WidgetConfiguration,
+    WidgetType,
+    ConfiguredWidget,
+    WidgetSize,
+    DataType,
+    ContextConfiguration,
+    FilterCriteria,
+    FilterDataType,
+    FilterType
 } from '@kix/core/dist/model';
-import { TableColumnConfiguration } from '@kix/core/dist/browser';
+import { TableColumnConfiguration, SearchOperator } from '@kix/core/dist/browser';
 import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
 import { TicketProperty } from '@kix/core/dist/model/';
 
@@ -23,18 +31,31 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     displayLimit: 15,
                     showTotalCount: true,
                     tableColumns: [
+                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
+                        new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, false, 100),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, true, true, true, 200),
-                        new TableColumnConfiguration(TicketProperty.TYPE_ID, true, true, true, true, 100),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
+                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 75),
+                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 75),
+                        new TableColumnConfiguration(TicketProperty.RESPONSIBLE_ID, true, false, true, true, 150),
+                        new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
+                        new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
                         new TableColumnConfiguration(
-                            TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
+                            TicketProperty.CHANGE_TIME, true, false, true, true, 100, DataType.DATE_TIME
                         ),
                         new TableColumnConfiguration(
                             TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
                         ),
+                    ],
+                    filter: [
+                        new FilterCriteria(
+                            TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                        ),
+                        new FilterCriteria(
+                            TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                        )
                     ]
                 },
                 false, true, WidgetSize.LARGE, null, true)
