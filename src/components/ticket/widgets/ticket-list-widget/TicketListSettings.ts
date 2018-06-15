@@ -1,4 +1,4 @@
-import { TableColumnConfiguration } from "@kix/core/dist/browser";
+import { TableColumnConfiguration, ToggleOptions } from "@kix/core/dist/browser";
 import { FilterCriteria } from "@kix/core/dist/model";
 
 export class TicketListSettings {
@@ -8,5 +8,6 @@ export class TicketListSettings {
 
     public tableColumns: TableColumnConfiguration[];
     public filter: FilterCriteria[];
+    public toggleOptions: ToggleOptions;
 
 }

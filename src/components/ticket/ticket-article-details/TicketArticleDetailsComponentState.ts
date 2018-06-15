@@ -1,9 +1,11 @@
-import { Article } from '@kix/core/dist/model';
+import { Article, Ticket } from '@kix/core/dist/model';
 
 export class TicketArticleDetailsComponentState {
 
     public constructor(
-        public article: Article = null
+        public inputObject: Ticket | Article = null,
+        public article: Article = null,
+        public loading: boolean = true
     ) { }
 
 }
