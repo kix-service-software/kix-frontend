@@ -11,6 +11,8 @@
         "_base-components/base-html-components",
         "customer",
         "home",
-        "ticket"
+        "ticket",
+        "customer",
+        "search"
     ]
 }

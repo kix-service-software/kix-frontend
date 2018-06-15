@@ -1,8 +1,6 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
-import { TicketService } from '@kix/core/dist/browser/ticket';
-import { Attachment, WidgetType } from '@kix/core/dist/model/';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { WidgetType, Ticket, KIXObjectType, ContextMode } from '@kix/core/dist/model/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 
 class TicketDescriptionWidgetComponent {
@@ -18,26 +16,34 @@ class TicketDescriptionWidgetComponent {
         this.state.ticketId = Number(input.ticketId);
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
+        await this.setTicket();
         this.getFirstArticle();
         this.setActions();
         this.getTicketNotes();
     }
 
+    public async setTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.objectId) {
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+        }
+    }
+
     private async getFirstArticle(): Promise<void> {
-        if (this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket && ticket.Articles && ticket.Articles.length) {
-                const articles = new Array(...ticket.Articles);
-                articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
-                this.state.firstArticle = articles[0];
-            }
+        if (this.state.ticket && this.state.ticket.Articles && this.state.ticket.Articles.length) {
+            const articles = new Array(...this.state.ticket.Articles);
+            articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
+            this.state.firstArticle = articles[0];
         }
     }
 
@@ -52,9 +58,8 @@ class TicketDescriptionWidgetComponent {
     private getTicketNotes(): void {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                const ticketNotesDF = ticket.DynamicFields.find(
+            if (this.state.ticket) {
+                const ticketNotesDF = this.state.ticket.DynamicFields.find(
                     (df) => df.ID === objectData.ticketNotesDFId
                 );
                 if (ticketNotesDF) {

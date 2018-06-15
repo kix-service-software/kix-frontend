@@ -16,11 +16,6 @@ class Component {
 
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
-
-        const context = new NewContactDialogContext();
-        this.state.loading = true;
-        await ContextService.getInstance().provideContext(context, true, ContextType.DIALOG);
-        this.state.loading = false;
     }
 
     private cancel(): void {

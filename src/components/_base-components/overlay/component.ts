@@ -87,7 +87,7 @@ class OverlayComponent {
 
     private applyWidgetConfiguration(instanceId: string): void {
         if (instanceId && instanceId !== '') {
-            const context = ContextService.getInstance().getContext();
+            const context = ContextService.getInstance().getActiveContext();
             const widgetConfiguration = context.getWidgetConfiguration(instanceId);
             if (widgetConfiguration) {
                 this.state.actions = ActionFactory.getInstance().generateActions(

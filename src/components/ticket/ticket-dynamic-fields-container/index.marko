@@ -7,7 +7,7 @@
                     <ul.field-container key=("field-container" + displayGroup.ItemID)>
                         <for(df in component.getDynamicFields(displayGroup.ItemID))>
                             <li.dynamic-field key=(("dynamic-field" + displayGroup.ItemID) + df.ID)>
-                                <ticket-dynamic-field-label ticketId=state.ticketId property="DynamicField" value=df.ID contextType=input.contextType/>
+                                <ticket-dynamic-field-label ticket=state.ticket property="DynamicField" value=df.ID contextType=input.contextType/>
                             </li>
                         </for>
                     </ul>

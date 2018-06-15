@@ -9,7 +9,8 @@ export class TabContainerComponentState {
         public title: string = "",
         public minimizable: boolean = true,
         public hasSidebars: boolean = false,
-        public contextType: ContextType = null
+        public contextType: ContextType = null,
+        public showSidebar: boolean = true
     ) { }
 
 }

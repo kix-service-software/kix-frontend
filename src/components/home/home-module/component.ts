@@ -13,18 +13,12 @@ class HomeComponent {
         this.state = new HomeComponentState();
     }
 
-    public onMount(): void {
-        ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: HomeContext) => {
-                if (contextId === HomeContext.CONTEXT_ID) {
-                    this.state.contentWidgets = context.getContent();
-                }
-            }
-        });
-        ContextService.getInstance().provideContext(new HomeContext(), true, ContextType.MAIN);
+    public async onMount(): Promise<void> {
+        const context = (await ContextService.getInstance().getContext(HomeContext.CONTEXT_ID) as HomeContext);
+        this.state.contentWidgets = context.getContent();
     }
 
-    private getTemplate(widget: ConfiguredWidget): any {
+    public getTemplate(widget: ConfiguredWidget): any {
         return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
     }
 }

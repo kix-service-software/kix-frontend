@@ -1,10 +1,11 @@
-import { MenuEntry } from '@kix/core/dist/model';
+import { MenuEntry, Context, ContextType } from '@kix/core/dist/model';
 import { MenuComponentState } from './MenuComponentState';
 import { ComponentRouterService } from '@kix/core/dist/browser/router/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
+import { IContextServiceListener } from '@kix/core/dist/browser';
 
-class KIXMenuComponent {
+class KIXMenuComponent implements IContextServiceListener {
 
     public state: MenuComponentState;
 
@@ -13,7 +14,7 @@ class KIXMenuComponent {
     }
 
     public onMount(): void {
-        ComponentRouterService.getInstance().addServiceListener(this.stateChanged.bind(this));
+        ContextService.getInstance().registerListener(this);
         this.loadEntries();
     }
 
@@ -25,25 +26,19 @@ class KIXMenuComponent {
             this.state.showText = entries[2];
         }
     }
-
-    private stateChanged(): void {
-        const contextId = ContextService.getInstance().getCurrentContextId();
-        for (const entry of this.state.primaryMenuEntries) {
-            entry.active = entry.contextId === contextId;
-        }
-
-        for (const entry of this.state.secondaryMenuEntries) {
-            entry.active = entry.contextId === contextId;
-        }
-
+    public contextChanged(contextId: string, context: Context, type: ContextType): void {
+        this.state.primaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
+        this.state.secondaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
         (this as any).setStateDirty('primaryMenuEntries');
     }
 
-    private menuClicked(contextId: string, event: any): void {
+    public menuClicked(menuEntry: MenuEntry, event: any): void {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        ComponentRouterService.getInstance().navigate('base-router', contextId, {});
+        ContextService.getInstance().setContext(
+            menuEntry.contextId, menuEntry.kixObjectType, menuEntry.contextMode, null, true
+        );
     }
 
 }

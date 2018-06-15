@@ -1,9 +1,9 @@
-<widget instanceId=input.instanceId minimizable=false
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Kunde")>
+<widget instanceId=input.instanceId minimizable=false contextType=state.contextType
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Kunde") key=input.instanceId>
     <@icon>
         <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-man")/>
     </@icon>
     <@content>
-        <ticket-customer-info contextType=state.contextType/>
+        <ticket-customer-info customerId=state.customerId/>
     </@content>
 </widget>

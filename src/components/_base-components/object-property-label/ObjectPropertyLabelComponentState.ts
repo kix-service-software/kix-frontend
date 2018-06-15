@@ -7,7 +7,8 @@ export class ObjectPropertyLabelComponentState<T> {
         public object: T = null,
         public property: string = null,
         public labelProvider: ILabelProvider<T> = null,
-        public showInfo: boolean = false
+        public showInfo: boolean = false,
+        public propertyDisplayText: string = ''
     ) { }
 
 }

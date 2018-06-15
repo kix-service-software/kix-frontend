@@ -5,6 +5,7 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
+import { KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
 
 class DynamicFieldWidgetComponent {
 
@@ -19,62 +20,52 @@ class DynamicFieldWidgetComponent {
         this.state.ticketId = Number(input.ticketId);
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getContext();
-        context.registerListener({
-            objectChanged: () => (objectId: string | number, object: any) => {
-                if (objectId === this.state.ticketId) {
-                    this.setDynamicFields();
-                }
-            },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; }
-        });
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
 
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)
             : undefined;
 
+        await this.setTicket();
         this.setActions();
 
         this.state.configuredDynamicFields = this.state.widgetConfiguration.settings.dynamicFields;
         this.setDynamicFields();
     }
 
+    private async setTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.objectId) {
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+        }
+    }
+
     private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                this.state.actions = ActionFactory.getInstance().generateActions(
-                    this.state.widgetConfiguration.actions, false, ticket
-                );
-            }
+        if (this.state.widgetConfiguration && this.state.ticket) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, false, this.state.ticket
+            );
         }
     }
 
     private setDynamicFields(): void {
-        if (this.state.ticketId) {
-            const ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (ticket) {
-                this.state.dynamicFields = ticket.DynamicFields;
-                this.state.filteredDynamicFields = [];
-                this.state.configuredDynamicFields.forEach((dfId) => {
-                    const ticketDf = this.state.dynamicFields.find((df) => df.ID === dfId);
-                    if (ticketDf) {
-                        this.state.filteredDynamicFields.push(ticketDf);
-                    }
-                });
-            }
+        if (this.state.ticket) {
+            this.state.dynamicFields = this.state.ticket.DynamicFields;
+            this.state.filteredDynamicFields = [];
+            this.state.configuredDynamicFields.forEach((dfId) => {
+                const ticketDf = this.state.dynamicFields.find((df) => df.ID === dfId);
+                if (ticketDf) {
+                    this.state.filteredDynamicFields.push(ticketDf);
+                }
+            });
         }
     }
 
     private expandWidget(): void {
-        // ApplicationService.getInstance().toggleMainDialog(
-        //     'ticket-dynamic-fields-container', {
-        //         dynamicFields: this.state.dynamicFields,
-        //         ticketId: this.state.ticketId
-        //     }
-        // );
         alert('Großansicht ...');
     }
 

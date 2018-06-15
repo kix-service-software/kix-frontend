@@ -16,6 +16,14 @@ export class ObjectPropertyLabelComponent<T> {
         this.state.labelProvider = input.labelProvider;
     }
 
+    public onMount(): void {
+        this.setValues();
+    }
+
+    private async setValues(): Promise<void> {
+        this.state.propertyDisplayText = await this.getPropertyDisplayText();
+    }
+
     private getPropertyName(): string {
         let name = this.state.property;
         if (this.state.labelProvider) {
@@ -24,10 +32,10 @@ export class ObjectPropertyLabelComponent<T> {
         return name;
     }
 
-    private getPropertyDisplayText(): string {
+    private async getPropertyDisplayText(): Promise<string> {
         let value = this.state.property;
         if (this.state.labelProvider && this.state.object) {
-            value = this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
+            value = await this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
         }
         return value;
     }

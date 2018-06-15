@@ -17,8 +17,8 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
-        this.state.contextId = context.id;
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        this.state.contextId = context.descriptor.contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.state.actions = [new NotesEditAction(this)];
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);

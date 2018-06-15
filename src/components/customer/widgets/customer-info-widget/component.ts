@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObject, Customer } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
 
 class Component {
     private state: ComponentState;
@@ -11,21 +11,20 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
+    }
 
-        const context = ContextService.getInstance().getContext();
-        context.registerListener({
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
-            objectChanged: (objectId: string | number, object: Customer, type: KIXObjectType) => {
-                if (type === KIXObjectType.CUSTOMER) {
-                    this.state.customer = object;
-                }
-            }
-        });
-
-        this.state.customer = (context.getObject(context.objectId) as Customer);
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.setActions();
+
+        const customers = await ContextService.getInstance().loadObjects<Customer>(
+            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS, null
+        );
+
+        if (customers && customers.length) {
+            this.state.customer = customers[0];
+            this.setActions();
+        }
     }
 
     private setActions(): void {
@@ -34,11 +33,6 @@ class Component {
                 this.state.widgetConfiguration.actions, false, this.state.customer
             );
         }
-    }
-
-    public onMount(): void {
-        const context = ContextService.getInstance().getContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
 }

@@ -12,6 +12,7 @@ class TabLaneComponent {
         this.state = new TabContainerComponentState(input.tabWidgets);
     }
 
+
     public onInput(input: any): void {
         this.state.tabWidgets = input.tabWidgets;
         this.state.tabId = input.tabId;
@@ -26,11 +27,12 @@ class TabLaneComponent {
         this.state.tabWidgets.forEach(
             (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
         );
-        (this as any).setStateDirty("title");
 
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
+        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
+        this.setSidebars();
     }
 
     public onMount(): void {
@@ -42,39 +44,35 @@ class TabLaneComponent {
                 this.state.activeTab = this.state.tabWidgets[0];
             }
         }
+
         if (this.state.contextType) {
             this.setSidebars();
-
-            ContextService.getInstance().registerListener({
-                contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
-                    if (type === this.state.contextType) {
-                        this.setSidebars();
-                    }
-                }
-            });
         }
     }
 
-    private tabClicked(tab: ConfiguredWidget): void {
+    public tabClicked(tab: ConfiguredWidget): void {
         this.state.activeTab = tab;
+        (this as any).emit('tabChanged', tab);
     }
 
-    private getWidgetTemplate(): any {
+    public getWidgetTemplate(): any {
         return this.state.activeTab
             ? ComponentsService.getInstance().getComponentTemplate(this.state.activeTab.configuration.widgetId)
             : undefined;
     }
 
-    private getLaneTabWidgetType(): number {
+    public getLaneTabWidgetType(): number {
         return WidgetType.LANE_TAB;
     }
 
     private setSidebars(): void {
-        const context = ContextService.getInstance().getContext(this.state.contextType);
-        this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
+        if (this.state.showSidebar) {
+            const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+            this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
+        }
     }
 
-    private isActiveTab(tabId: string): boolean {
+    public isActiveTab(tabId: string): boolean {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
     }
 }

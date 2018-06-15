@@ -1,14 +1,13 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import {
     LinkedTicketTableContentLayer,
-    TicketService,
     TicketTableLabelLayer,
     TicketTableClickListener
 } from '@kix/core/dist/browser/ticket';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
-import { Link, Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
+import { Link, Ticket, WidgetType, KIXObjectType, ContextMode } from '@kix/core/dist/model';
 import {
     StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight,
     ActionFactory, WidgetService, TableHeaderHeight
@@ -29,8 +28,8 @@ class LinkedObjectsWidgetComponent {
         this.setLinkedObjects();
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getContext();
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener({
             objectChanged: (id: string | number) => {
                 if (id === this.state.ticketId) {
@@ -47,8 +46,20 @@ class LinkedObjectsWidgetComponent {
 
         WidgetService.getInstance().setWidgetType('ticket-linked-objects', WidgetType.GROUP);
 
+        await this.setTicket();
         this.setLinkedObjects();
         this.setActions();
+    }
+
+    private async setTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.objectId) {
+            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
+                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS, null
+            );
+
+            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+        }
     }
 
     private setActions(): void {
@@ -63,24 +74,20 @@ class LinkedObjectsWidgetComponent {
         this.state.linkedObjectGroups = [];
         this.state.linkCount = 0;
 
-        if (this.state.ticketId) {
-            this.state.ticket = TicketService.getInstance().getTicket(this.state.ticketId);
-            if (this.state.ticket) {
+        if (this.state.ticket) {
+            const linkedTickets = this.state.ticket.Links.filter((link) => {
+                return (link.SourceObject === KIXObjectType.TICKET &&
+                    link.SourceKey !== this.state.ticketId.toString()) ||
+                    (link.TargetObject === KIXObjectType.TICKET &&
+                        link.TargetKey !== this.state.ticketId.toString());
+            });
 
-                const linkedTickets = this.state.ticket.Links.filter((link) => {
-                    return (link.SourceObject === KIXObjectType.TICKET &&
-                        link.SourceKey !== this.state.ticketId.toString()) ||
-                        (link.TargetObject === KIXObjectType.TICKET &&
-                            link.TargetKey !== this.state.ticketId.toString());
-                });
-
-                if (linkedTickets.length) {
-                    const ticketTableConfiguration = this.getTicketTableConfiguration(linkedTickets);
-                    this.state.linkCount += linkedTickets.length;
-                    this.state.linkedObjectGroups.push([
-                        KIXObjectType.TICKET, linkedTickets.length, ticketTableConfiguration
-                    ]);
-                }
+            if (linkedTickets.length) {
+                const ticketTableConfiguration = this.getTicketTableConfiguration(linkedTickets);
+                this.state.linkCount += linkedTickets.length;
+                this.state.linkedObjectGroups.push([
+                    KIXObjectType.TICKET, linkedTickets.length, ticketTableConfiguration
+                ]);
             }
         }
     }

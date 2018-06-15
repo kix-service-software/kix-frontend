@@ -4,7 +4,7 @@ import {
     TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService,
     TableColumnConfiguration, ITableClickListener
 } from '@kix/core/dist/browser';
-import { WidgetConfiguration, Contact, WidgetType, KIXObjectType, Ticket } from '@kix/core/dist/model';
+import { WidgetConfiguration, Contact, WidgetType, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
 import {
     ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
 } from '@kix/core/dist/browser/contact';
@@ -25,14 +25,14 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.clickListener = {
             rowClicked: (object: Ticket, columnId: string) => {
                 TicketService.getInstance().openTicket(object.TicketID, true);
             }
         };
 
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -57,13 +57,18 @@ class Component {
             ? context.getWidgetConfiguration('contact-pending-tickets-group')
             : undefined;
 
-        this.state.contact = (context.getObject(context.objectId) as Contact);
+        const contacts = await ContextService.getInstance().loadObjects<Contact>(
+            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS, null
+        );
 
-        this.createTables();
-        this.loadTickets();
+        if (contacts && contacts.length) {
+            this.state.contact = contacts[0];
+            this.setActions();
+            this.createTables();
+            this.loadTickets();
+        }
 
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.setActions();
     }
 
     private setActions(): void {

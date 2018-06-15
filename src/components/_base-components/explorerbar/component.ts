@@ -18,17 +18,17 @@ class ExplorerbarComponent {
     }
 
     private isExplorerBarExpanded(instanceId: string): boolean {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         return context.explorerBarExpanded;
     }
 
     private isExplorerMinimized(instanceId: string): boolean {
-        const context = ContextService.getInstance().getContext();
+        const context = ContextService.getInstance().getActiveContext();
         return context.isExplorerExpanded(instanceId);
     }
 
     private toggleExplorerBar(): void {
-        ContextService.getInstance().getContext().toggleExplorerBar();
+        ContextService.getInstance().getActiveContext().toggleExplorerBar();
     }
 
     private explorerAvailable(instanceId: string): boolean {
