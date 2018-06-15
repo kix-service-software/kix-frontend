@@ -50,7 +50,7 @@ class Component {
                 {
                     rowClicked: (contact: Contact, columnId: string): void => {
                         ContextService.getInstance().setContext(
-                            KIXObjectType.CONTACT, ContextMode.DETAILS, contact.ContactID
+                            null, KIXObjectType.CONTACT, ContextMode.DETAILS, contact.ContactID
                         );
                     }
                 },

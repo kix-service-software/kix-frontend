@@ -1,7 +1,7 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
 import { IMainDialogListener, ContextService } from '@kix/core/dist/browser';
-import { ContextType, ConfiguredWidget, ConfiguredDialogWidget } from '@kix/core/dist/model';
+import { ConfiguredDialogWidget } from '@kix/core/dist/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -17,7 +17,7 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public tabChanged(tab: ConfiguredDialogWidget): void {
-        ContextService.getInstance().setDialogContext(tab.kixObjectType, tab.contextMode);
+        ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
     }
 
     public open(dialogId?: string): void {
