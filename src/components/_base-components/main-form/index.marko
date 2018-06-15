@@ -1,5 +1,5 @@
 <div.form>
-    <if(state.formInstance && state.formInstance.form)>
+    <if(state.formInstance && state.formInstance.form && state.formId)>
         <for(group in state.formInstance.form.groups)>
             <if(state.formInstance.form.groups.length > 1)>
                 <widget instanceId="form-group" title=group.name>
@@ -12,5 +12,12 @@
                 <field-container fields=group.formFields formId=state.formId objectType=state.objectType/>
             </else>
         </for>
+        <if(state.isSearchContext)>
+            <widget instanceId="form-group" title="Suchattribute">
+                <@content>
+                    <form-search-input formId=state.formId objectType=state.objectType/>
+                </@content>
+            </widget>
+        </if>
     </if>
 </div>

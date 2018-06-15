@@ -25,7 +25,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTyp
     }
 
     protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
         this.state.currentItem = this.state.items.find((i) => i.id === fieldValue.value);
     }

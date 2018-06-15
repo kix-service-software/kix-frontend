@@ -19,7 +19,7 @@ class NewCustomerDialogComponent {
     }
 
     private cancel(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
@@ -27,7 +27,7 @@ class NewCustomerDialogComponent {
     }
 
     private async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {

@@ -18,7 +18,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
 
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.registerListener({
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
@@ -41,7 +41,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
     }
 
     protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             this.state.currentItem = this.state.items.find((i) => i.id === value.value);

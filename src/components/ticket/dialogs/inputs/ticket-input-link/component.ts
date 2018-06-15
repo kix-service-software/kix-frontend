@@ -22,7 +22,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
     }
 
     public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
             if (value) {

@@ -5,8 +5,6 @@ export class NewTicketDialogComponentState {
 
     public constructor(
         public formId: string = 'new-ticket-form',
-        public contextId: string = NewTicketDialogContext.CONTEXT_ID,
-        public hasSidebars: boolean = false,
         public loading: boolean = false
     ) { }
 

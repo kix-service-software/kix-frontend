@@ -10,7 +10,7 @@
         <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key="link-object-form-widget">
             <@content>
                 <if(state.currentLinkableObject)>
-                    <form-main formId=state.currentLinkableObject.id key="link-object-form-widget-form"/>
+                    <main-form formId=state.currentLinkableObject.id key="link-object-form-widget-form"/>
                     <div.linkable-objects-form-button-container>
                         <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
                             <span.kix-icon-search/>

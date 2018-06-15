@@ -17,7 +17,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
         this.state.searchCallback = this.searchCustomers.bind(this);
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
         this.setCurrentValue();
     }

@@ -25,7 +25,7 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
     }
 
     protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
@@ -36,7 +36,7 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
 
     private itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.provideFormFieldValue<number>(
             this.state.field.property, (item ? Number(item.id) : null)
         );

@@ -32,7 +32,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 this.state.currentLinkableObject = this.state.linkableObjects[0];
             }
 
-            const formInstance = FormService.getInstance().getOrCreateFormInstance(
+            const formInstance = FormService.getInstance().getFormInstance(
                 this.state.currentLinkableObject.id.toString()
             );
             formInstance.reset();
@@ -72,6 +72,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                     linkableObject = lt.Source;
                 }
                 if (linkableObject && !this.state.linkableObjects.some((lo) => lo.label === linkableObject)) {
+                    // TODO: FormContext sollte Search sein
                     const formId = FormService.getInstance().getFormIdByContext(FormContext.LINK, linkableObject);
                     if (formId) {
                         this.state.linkableObjects.push(new FormDropdownItem(formId, '', linkableObject));

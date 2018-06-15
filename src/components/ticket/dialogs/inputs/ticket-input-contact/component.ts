@@ -22,7 +22,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
     public onMount(): void {
         FormInputComponent.prototype.onMount.call(this);
         this.state.searchCallback = this.searchContacts.bind(this);
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
         this.setCurrentValue();
     }

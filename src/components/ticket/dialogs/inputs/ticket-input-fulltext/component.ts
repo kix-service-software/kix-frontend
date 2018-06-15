@@ -21,7 +21,7 @@ class TicketInputFulltextComponent extends FormInputComponent<string, TicketInpu
 
 
     public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue<string>(this.state.field.property);
             if (value) {

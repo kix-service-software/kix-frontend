@@ -2,7 +2,7 @@
     "tags-dir": [
         "./dialog",
         "./tree",
-        "./form-main",
-        "./form-main/inputs"
+        "./main-form",
+        "./main-form/inputs"
     ]
 }
