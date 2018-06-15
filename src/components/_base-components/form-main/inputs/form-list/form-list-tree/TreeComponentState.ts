@@ -7,7 +7,7 @@ export class TreeComponentState {
         public tree: TreeNode[] = [],
         public filterValue: string = null,
         public treeId: string = 'tree-' + IdService.generateDateBasedId(),
-        public activeNode: TreeNode = null,
+        public activeNodes: TreeNode[] = null,
         public treeParent: any = null,
         public treeStyle: string = null
     ) { }

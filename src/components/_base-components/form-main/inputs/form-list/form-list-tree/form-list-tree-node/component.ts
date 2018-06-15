@@ -13,7 +13,8 @@ class TreeNodeComponent {
     public onInput(input: any): void {
         this.state.node = input.node;
         this.state.filterValue = input.filterValue;
-        this.state.activeNode = input.activeNode;
+        this.state.activeNodes = input.activeNodes;
+        (this as any).setStateDirty('activeNodes');
         this.state.treeId = input.treeId;
         this.state.nodeId = this.state.treeId + '-node-' + this.state.node.id;
         if (!this.hasListener && input.treeParent) {
@@ -27,7 +28,6 @@ class TreeNodeComponent {
         this.state.treeParent.removeEventListener('keydown', this.navigateTree);
         this.state.node = null;
         this.state.filterValue = null;
-        this.state.activeNode = null;
     }
 
     private hasChildren(): boolean {
@@ -43,8 +43,8 @@ class TreeNodeComponent {
         return title;
     }
 
-    private isActiveNode(): boolean {
-        return this.state.activeNode && this.state.activeNode.id === this.state.node.id;
+    private isNodeActive(): boolean {
+        return this.state.activeNodes && this.state.activeNodes.some((n) => n.id === this.state.node.id);
     }
 
     private toggleNode(event: any): void {
@@ -60,7 +60,7 @@ class TreeNodeComponent {
     }
 
     private nodeHovered(): void {
-        if (!this.isActiveNode()) {
+        if (!this.isNodeActive()) {
             (this as any).emit('nodeHovered', this.state.node);
         }
     }
@@ -78,7 +78,7 @@ class TreeNodeComponent {
     }
 
     private navigateTree(event: any): void {
-        if (this.state.node && this.navigationKeyPressed(event) && this.isActiveNode()) {
+        if (this.state.node && this.navigationKeyPressed(event) && this.isNodeActive()) {
             if (event.preventDefault) {
                 event.preventDefault();
                 event.stopPropagation();

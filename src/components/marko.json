@@ -1,14 +1,11 @@
 {
     "taglibImports": [
-        "@lasso/marko-taglib/marko.json"
+        "@lasso/marko-taglib/marko.json",
+        "./_base-components/marko.json"
     ],
     "tags-dir": [
         "_base-template",
         "_base-components",
-        "_base-components/dialog",
-        "_base-components/form-main",
-        "_base-components/form-main/inputs",
-        "_base-components/base-html-components",
         "customer",
         "home",
         "ticket",

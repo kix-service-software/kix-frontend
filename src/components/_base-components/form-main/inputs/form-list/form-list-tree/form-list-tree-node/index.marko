@@ -1,4 +1,4 @@
-<li.tree-node class=(component.isActiveNode() ? "active" : "") id=state.nodeId key=state.nodeId>
+<li.tree-node class=(component.isNodeActive() ? "active" : "") id=state.nodeId key=state.nodeId>
     <span.tree-icon on-click('toggleNode')>
         <if(component.hasChildren())>
             <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank")/>
@@ -20,10 +20,10 @@
         </if>
     </div>
     <if(state.node.expanded)>
-        <ul.tree-list>
+        <ul.form-list-tree>
             <for(node in state.node.children)>
                 <if(node.visible)>
-                    <tree-node node=node filterValue=state.filterValue activeNode=state.activeNode treeParent=input.treeParent
+                    <form-list-tree-node node=node filterValue=state.filterValue activeNodes=state.activeNodes treeParent=input.treeParent
                         treeId=state.treeId on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
                         on-nodeHovered('childNodeHovered')/>
                 </if>

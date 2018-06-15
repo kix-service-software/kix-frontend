@@ -1,4 +1,9 @@
+<!--
 <form-auto-complete placeholder=(state.field.required ? "Ansprechpartner zuordnen" : "")
-    searchCallback=state.searchCallback autoCompleteConfiguration=state.autoCompleteConfiguration
-    on-itemChanged('contactChanged') required=state.field.required selectedItem=state.currentItem
-    invalid=state.invalid/>
+searchCallback=state.searchCallback autoCompleteConfiguration=state.autoCompleteConfiguration
+on-itemChanged('contactChanged') required=state.field.required selectedItem=state.currentItem
+invalid=state.invalid/>
+-->
+<form-list placeholder=(state.field.required ? "Ansprechpartner zuordnen" : "") searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration required=state.field.required
+    selectedNodes=[state.currentItem] invalid=state.invalid autocomplete=true/>

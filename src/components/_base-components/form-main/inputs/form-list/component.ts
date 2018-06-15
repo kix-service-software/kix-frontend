@@ -20,6 +20,7 @@ class Component {
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
         this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : [];
         this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ? input.selectedNodes : [];
+        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && n.id);
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
         }
@@ -56,7 +57,11 @@ class Component {
         if (this.state.expanded) {
             this.toggleList();
         } else {
-            this.focusInput();
+            if (this.state.selectedNodes.length && this.state.selectedNodes.length) {
+                this.toggleList(false);
+            } else {
+                this.focusInput();
+            }
         }
     }
 
@@ -65,7 +70,7 @@ class Component {
     }
 
     private focusInput(): void {
-        const input = (this as any).getEl('form-list-input');
+        const input = (this as any).getEl('form-list-input-' + this.state.listId);
         if (input) {
             input.focus();
         }
@@ -93,7 +98,7 @@ class Component {
         //     this.toggleList();
         // }
 
-        if (!this.state.selectedNodes && !this.navigationKeyPressed(event)) {
+        if (!this.state.selectedNodes.length && !this.navigationKeyPressed(event)) {
             this.state.filterValue = event.target.value;
             if (this.state.asAutocomplete && this.state.filterValue && this.state.searchCallback) {
                 this.startSearch();
@@ -118,7 +123,10 @@ class Component {
         } else {
             this.state.selectedNodes.push(node);
         }
-        this.state.filterValue = null;
+        if (this.state.selectedNodes.length) {
+            this.state.filterValue = null;
+        }
+        (this as any).setStateDirty('selectedNodes');
         (this as any).emit('itemsChanged', this.state.selectedNodes);
     }
 
@@ -129,11 +137,9 @@ class Component {
         }
         if (!this.state.selectedNodes.length) {
             this.state.filterValue = null;
-            const input = (this as any).getEl('form-list-input');
-            if (input) {
-                input.focus();
-            }
+            this.focusInput();
         }
+        (this as any).setStateDirty('selectedNodes');
     }
 
     private startSearch(): void {
@@ -165,11 +171,10 @@ class Component {
     }
 
     private setDropdownStyle(): void {
-        const dropdownInputList = document.getElementById('tree-' + this.state.treeId);
+        const dropdownInputList = document.getElementById(this.state.treeId + '-tree');
         let transformValue = 0;
         if (dropdownInputList) {
-            const dropdownInputContainer = (this as any).getEl('dropdown-input-container');
-            const formElement = dropdownInputContainer.parentElement.parentElement.parentElement;
+            const dropdownInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = dropdownInputContainer;
             let previousContainer;
             while (container

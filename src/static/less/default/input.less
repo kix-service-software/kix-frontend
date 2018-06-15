@@ -28,7 +28,8 @@
         &::placeholder {
             color: @tertiary-0;
         }
-        &~.dropdown-button {
+        &~.dropdown-button,
+        &~.form-list-button {
             color: @tertiary-0;
         }
     }
@@ -41,30 +42,36 @@
 
 .dropdown,
 .dropdown-tree,
-.dropdown-auto-complete {
+.dropdown-auto-complete,
+.form-list {
     position: relative;
-    >div.dropdown-input-container {
+    >div.dropdown-input-container,
+    >div.form-list-input-container {
         position: relative;
         padding: 0;
         &:hover,
         &.list-shown {
             >input.input-style:not(:disabled),
-            >input.input-style:not(:disabled)~.dropdown-button {
+            >input.input-style:not(:disabled)~.dropdown-button,
+            >input.input-style:not(:disabled)~.form-list-button {
                 border-color: darken(@secondary-3, 20%);
             }
         }
-        >input.input-style:focus:not(:disabled)~.dropdown-button {
+        >input.input-style:focus:not(:disabled)~.dropdown-button,
+        >input.input-style:focus:not(:disabled)~.form-list-button {
             border-color: darken(@secondary-3, 20%);
         }
-        >input.input-style:not(:disabled)~.dropdown-button:hover {
+        >input.input-style:not(:disabled)~.dropdown-button:hover,
+        >input.input-style:not(:disabled)~.form-list-button:hover {
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
-        >input.invalid~.dropdown-button {
+        >input.invalid~.dropdown-button,
+        >input.invalid~.form-list-button {
             color: @tertiary-0;
             border-color: @tertiary-0;
-        }
+        } // TODO: später mit dem aus form-list ersetzen
         >.selected-item-container {
             display: inline-block;
             position: absolute;
@@ -100,7 +107,8 @@
                 }
             }
         }
-        >.dropdown-button {
+        >.dropdown-button,
+        >.form-list-button {
             background-color: @secondary-4;
             color: @secondary-2;
             width: @default-input-height;
@@ -116,7 +124,6 @@
         }
     }
     >.dropdown-list {
-        // TODO: Styling anpassen, sobald verfügbar
         z-index: 1;
         position: absolute;
         top: @default-input-height;

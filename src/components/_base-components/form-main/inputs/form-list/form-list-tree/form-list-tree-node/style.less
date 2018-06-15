@@ -1,12 +1,13 @@
 @tree-icon-size: .875rem;
 @tree-column-gap: @margin-small;
-.tree-list {
+.form-list-tree {
     .tree-node {
         display: grid;
         grid-template-columns: @tree-icon-size auto;
         grid-gap: @tree-column-gap;
         align-items: center;
         margin-bottom: .25rem;
+        cursor: pointer;
         >.tree-icon {
             font-size: .625rem;
             color: @secondary-0;
@@ -26,9 +27,6 @@
             grid-gap: @tree-column-gap;
             align-items: center;
             height: 1.5rem;
-            &.active {
-                font-weight: bold;
-            }
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 font-size: @tree-icon-size;
@@ -37,11 +35,21 @@
         >.tree-list {
             margin-left: @tree-icon-size;
         }
-        &.active {
+        &:hover {
             >.node-value {
                 background: @secondary-1;
                 font-weight: bold;
-                cursor: pointer;
+            }
+        }
+        &.active {
+            >.node-value {
+                background: @tertiary-4;
+                font-weight: bold;
+            }
+            &:hover {
+                >.node-value {
+                    background: darken(@tertiary-4, 20%);
+                }
             }
         }
     }
