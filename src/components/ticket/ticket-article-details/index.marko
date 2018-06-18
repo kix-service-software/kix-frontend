@@ -1,8 +1,16 @@
-<div.article-grid>
-    <div.article-metadata-container>
-        <ticket-article-metadata article=state.article/>
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else-if(state.article)>
+    <div.article-grid>
+        <div.article-metadata-container>
+            <ticket-article-metadata article=state.article/>
+        </div>
+        <div.article-content-container>
+            <ticket-article-content article=state.article/>
+        </div>
     </div>
-    <div.article-content-container>
-        <ticket-article-content article=state.article/>
-    </div>
-</div>
+</else-if>
+<else>
+    <span.error>Keine Daten verfügbar</span>
+</else>

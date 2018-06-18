@@ -1,31 +1,27 @@
 import { TicketListComponentState } from './TicketListComponentState';
 import {
-    ContextFilter,
     Context,
-    ObjectType,
     Ticket,
-    TicketState,
-    TicketProperty
 } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketService,
     TicketTableContentLayer,
     TicketTableLabelLayer,
     TicketTableSelectionListener,
     TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
-    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener,
-    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions, TableHeaderHeight, ActionFactory
+    StandardTable, TableRowHeight, ITableConfigurationListener,
+    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions,
+    TableHeaderHeight, ActionFactory, TableToggleLayer, ITableToggleLayer, TableRow, ITableToggleListener
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { TicketListSettings } from './TicketListSettings';
 
-class TicketListWidgetComponent {
+class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
+
 
     public state: TicketListComponentState;
-
-    private componentInitialized: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new TicketListComponentState();
@@ -48,6 +44,8 @@ class TicketListWidgetComponent {
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
+        this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
+
         this.setTableConfiguration();
         this.setActions();
     }
@@ -66,13 +64,17 @@ class TicketListWidgetComponent {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
+            const tableSettings = (this.state.widgetConfiguration.settings as TicketListSettings);
+
+            const filter = tableSettings.filter && tableSettings.filter.length ? tableSettings.filter : null;
+
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new TicketTableContentLayer(this.state.instanceId, null, 100),
+                new TicketTableContentLayer(this.state.instanceId, null, filter, tableSettings.sortOrder, 100),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
-                null,
+                new TableToggleLayer(this, false),
                 null,
                 null,
                 this.state.widgetConfiguration.settings.tableColumns || [],
@@ -83,9 +85,13 @@ class TicketListWidgetComponent {
                 true,
                 TableRowHeight.LARGE,
                 TableHeaderHeight.LARGE,
-                false,
-                new ToggleOptions('ticket-article-details', 'article')
+                tableSettings.toggleOptions ? true : false,
+                tableSettings.toggleOptions
             );
+
+            this.state.standardTable.setTableListener(() => {
+                this.state.title = this.getTitle();
+            });
 
             this.filter();
         }
@@ -109,6 +115,19 @@ class TicketListWidgetComponent {
         } else {
             this.state.standardTable.resetFilter();
         }
+    }
+
+    private getTitle(): string {
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        if (this.state.standardTable) {
+            title = `${title} (${this.state.standardTable.getTableRows(true).length})`;
+        }
+        return title;
+    }
+
+    // Toggle Listener
+    public rowToggled(row: TableRow<Ticket>, rowIndex: number, tableId: string): void {
+        console.log('row toggled');
     }
 
 }
