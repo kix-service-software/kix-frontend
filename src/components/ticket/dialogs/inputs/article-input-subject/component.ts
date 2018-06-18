@@ -31,7 +31,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private valueChanged(value: any): void {
-        this.state.currentValue = value || '';
+        this.state.currentValue = value && value !== '' ? value : null;
         super.provideValue(this.state.currentValue);
     }
 }

@@ -55,7 +55,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         }
 
         document.addEventListener('keydown', (event: any) => {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && this.state.canSearch) {
                 this.executeSearch();
             }
         });
