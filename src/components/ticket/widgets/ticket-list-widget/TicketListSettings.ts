@@ -1,4 +1,4 @@
-import { TableColumnConfiguration, ToggleOptions } from "@kix/core/dist/browser";
+import { TableColumnConfiguration, ToggleOptions, TableRowHeight, TableHeaderHeight } from "@kix/core/dist/browser";
 import { FilterCriteria } from "@kix/core/dist/model";
 
 export class TicketListSettings {
@@ -11,5 +11,7 @@ export class TicketListSettings {
     public filter: FilterCriteria[];
     public toggleOptions: ToggleOptions;
     public sortOrder: string;
+    public rowHeight: TableRowHeight;
+    public headerHeight: TableHeaderHeight;
 
 }
