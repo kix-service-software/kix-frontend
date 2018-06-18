@@ -33,7 +33,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     private async searchCustomers(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
         this.state.customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, null, ContextMode.DASHBOARD, null, null, searchValue, limit
+            KIXObjectType.CUSTOMER, null, ContextMode.DASHBOARD, null, null, null, searchValue, limit
         );
 
         let items = [];

@@ -1,8 +1,12 @@
 {
+    "taglibImports": [
+        "./form-main/inputs/marko.json"
+    ],
     "tags-dir": [
-        "./dialog",
-        "./tree",
-        "./main-form",
-        "./main-form/inputs"
+        "base-html-components",
+        "dialog",
+        "tree",
+        "form-main",
+        "form-main/inputs"
     ]
 }

@@ -46,7 +46,7 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
         const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget', new WidgetConfiguration(
             'contact-assigned-tickets-widget', 'Übersicht Tickets', [
-                'contact-edit-action', 'contact-print-action'
+                'contact-create-ticket-action', 'contact-print-action'
             ], {},
             false, true, WidgetSize.LARGE, null, false
         ));

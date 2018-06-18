@@ -8,5 +8,6 @@ export class TicketListComponentState extends WidgetComponentState<TicketListSet
     public standardTable: StandardTable<Ticket> = null;
     public contextFilter: ContextFilter = null;
     public generalTicketActions: IAction[] = [];
+    public title: string = '';
 
 }

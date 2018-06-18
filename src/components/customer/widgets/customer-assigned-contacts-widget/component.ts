@@ -75,8 +75,8 @@ class Component {
                 TableRowHeight.SMALL);
 
             this.state.contactTable.setTableListener(() => {
-                const count = this.state.contactTable.getTableRows().length;
-                this.state.title += count > 0 ? ' (' + count + ')' : '';
+                const count = this.state.contactTable.getTableRows(true).length;
+                this.state.title = "Zugeordnete Ansprechpartner " + (count > 0 ? ' (' + count + ')' : '');
             });
         }
     }

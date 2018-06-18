@@ -1,0 +1,48 @@
+<div.form-list on-click('setKeepExpanded') key=state.listId>
+    <div.form-list-input-container.input-style class={"list-shown": state.expanded}
+        key=("form-list-input-container-" + state.listId)>
+        <if(state.selectedNodes && state.selectedNodes.length)>
+            <div.selected-nodes key=("form-list-selected-items-" + state.listId) on-click('toggleList', false)>
+                <for(node in state.selectedNodes)>
+                    <span.selected-node-container key=(("form-list-selected-item-container-" + state.listId) + "[]")>
+                        <div.selected-node>
+                            <icon icon=node.icon showUnknown=true/>
+                            <span.item-text>${node.label}</span>
+                            <if(node.secondaryIcon)>
+                                <icon icon=node.secondaryIcon showUnknown=true/>
+                            </if>
+                            <span.kix-icon-close on-click('removeSelectedItem', node)/>
+                        </div>
+                    </span>
+                </for>
+            </div>
+        </if>
+        <else>
+            <input.input-style type="text" class={invalid: state.invalid} readonly=(!state.enabled) disabled=(!state.enabled)
+                placeholder=(state.selectedNodes && state.selectedNodes.length ? "" : input.placeholder)
+                value=state.filterValue on-keydown('keyDown') on-keyup('keyUp') on-click('toggleList', false)
+                on-focus('toggleList', false) on-blur('focusLost') key=("form-list-input-" + state.listId)
+                id=state.treeId/>
+        </else>
+        <if(!state.asAutocomplete)>
+            <span.form-list-button.kix-icon-sort-down on-click('listButtonClicked')/>
+        </if>
+    </div>
+    <if(state.expanded)>
+        <if(state.isLoading)>
+            <div.form-list-loading>
+                <loading-spinner/>
+            </div>
+        </if>
+        <else-if(state.nodes && state.nodes.length)>
+            <form-list-tree nodes=state.nodes filterValue=state.filterValue activeNodes=state.selectedNodes
+                on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked') filterInputId=state.treeId
+                treeId=state.treeId treeStyle=state.treeStyle/>
+        </else-if>
+        <else-if(state.asAutocomplete)>
+            <div.form-list-autocomplete-no-results>
+                <span>${component.getAutocompleteNotFoundText()}</span>
+            </div>
+        </else-if>
+    </if>
+</div>

@@ -1,0 +1,56 @@
+@tree-icon-size: .875rem;
+@tree-column-gap: @margin-small;
+.form-list-tree {
+    .tree-node {
+        display: grid;
+        grid-template-columns: @tree-icon-size auto;
+        grid-gap: @tree-column-gap;
+        align-items: center;
+        margin-bottom: .25rem;
+        cursor: pointer;
+        >.tree-icon {
+            font-size: .625rem;
+            color: @secondary-0;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                background-color: @secondary-2;
+                width: @tree-icon-size;
+                height: @tree-icon-size;
+                display: inline-block;
+                box-sizing: border-box;
+                padding: .125rem;
+            }
+        }
+        >.node-value {
+            display: grid;
+            grid-template-columns: @tree-icon-size max-content @tree-icon-size;
+            grid-gap: @tree-column-gap;
+            align-items: center;
+            height: 1.5rem;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                font-size: @tree-icon-size;
+            }
+        }
+        >.form-list-tree {
+            margin-left: @tree-icon-size;
+        }
+        &:hover {
+            >.node-value {
+                background: @secondary-1;
+                font-weight: bold;
+            }
+        }
+        &.active {
+            >.node-value {
+                background: @tertiary-4;
+                font-weight: bold;
+            }
+            &:hover {
+                >.node-value {
+                    background: darken(@tertiary-4, 20%);
+                }
+            }
+        }
+    }
+}

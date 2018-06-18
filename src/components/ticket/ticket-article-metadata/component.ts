@@ -7,14 +7,11 @@ class TicketArticleMetadataComponent {
 
     public onCreate(): void {
         this.state = new TicketArticleMetadataComponentState();
+        this.state.labelProvider = new ArticleLabelProvider();
     }
 
     public onInput(input: any): void {
         this.state.article = input.article;
-    }
-
-    public onMount(): void {
-        this.state.labelProvider = new ArticleLabelProvider();
     }
 
 }

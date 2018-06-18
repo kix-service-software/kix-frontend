@@ -2,7 +2,6 @@ import { KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse } from "@kix/co
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
 import { KIXObjectServiceRegistry } from "@kix/core/dist/services";
-import { HttpError } from "@kix/core/dist/api";
 
 export class KIXObjectCommunicator extends KIXCommunicator {
 
@@ -20,7 +19,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.kixObjectType);
         if (service) {
             await service.loadObjects(
-                data.token, data.objectIds, data.properties, data.filter, data.searchValue, data.limit
+                data.token, data.objectIds, data.properties, data.filter, data.sortOrder, data.searchValue, data.limit
             ).then((objects: any[]) => {
                 response = new CommunicatorResponse(
                     KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
