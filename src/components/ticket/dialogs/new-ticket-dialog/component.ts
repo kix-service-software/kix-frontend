@@ -64,7 +64,7 @@ class NewTicketDialogComponent {
     private showSuccessHint(): void {
         const content = new ComponentContent('list-with-title', {
             title: 'Ticket wurde erfolgreich angelegt.',
-            list: ['Ticket wurde erfolgreich angelegt'],
+            list: [],
             icon: 'kix-icon-check'
         });
         OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
