@@ -70,7 +70,7 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new TicketTableContentLayer(this.state.instanceId, null, filter, 100),
+                new TicketTableContentLayer(this.state.instanceId, null, filter, tableSettings.sortOrder, 100),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
