@@ -75,8 +75,6 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
     }
 
     private setValue(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-
         if (this.state.currentItem) {
             const stateValue = new PendingTimeFormValue(
                 (this.state.currentItem ? Number(this.state.currentItem.id) : null),

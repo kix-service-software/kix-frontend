@@ -11,7 +11,7 @@
             <overlay-icon isHint=true content=field.hint title=field.label/>
         </div>
         <div.field-input>
-            <include(component.getInputComponent(field), { field, formId: state.formId })/>
+            <include(component.getInputComponent(field), { fieldId: field.property, formId: state.formId })/>
         </div>
     </div>
 </for>
