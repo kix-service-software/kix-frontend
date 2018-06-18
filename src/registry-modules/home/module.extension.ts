@@ -58,7 +58,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         )
                     ],
                     toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                    sortOrder: "Ticket.Age"
+                    sortOrder: "-Ticket.Age"
                 },
                 false, true, WidgetSize.LARGE, null, true)
             );
