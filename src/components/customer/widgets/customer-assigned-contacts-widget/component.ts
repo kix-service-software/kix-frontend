@@ -103,11 +103,7 @@ class Component {
 
     private filter(filterValue: string): void {
         this.state.filterValue = filterValue;
-        if (filterValue === '') {
-            this.state.contactTable.resetFilter();
-        } else {
-            this.state.contactTable.setFilterSettings(filterValue);
-        }
+        this.state.contactTable.setFilterSettings(filterValue);
     }
 }
 

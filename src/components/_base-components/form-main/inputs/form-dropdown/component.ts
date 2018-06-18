@@ -201,6 +201,7 @@ class FormDropdownComponent {
             let container = dropdownInputContainer;
             let previousContainer;
             while (container
+                && container.parentNode
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
                 previousContainer = container;

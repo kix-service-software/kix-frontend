@@ -77,11 +77,7 @@ class Component {
     }
 
     private filter(filterValue?: string): void {
-        if (filterValue !== null && filterValue !== "") {
-            this.state.standardTable.setFilterSettings(filterValue);
-        } else {
-            this.state.standardTable.resetFilter();
-        }
+        this.state.standardTable.resetFilter();
     }
 
 }

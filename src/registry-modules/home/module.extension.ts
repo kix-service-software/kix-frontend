@@ -8,7 +8,9 @@ import {
     ContextConfiguration,
     FilterCriteria,
     FilterDataType,
-    FilterType
+    FilterType,
+    KIXObjectPropertyFilter,
+    TableFilterCriteria
 } from '@kix/core/dist/model';
 import { TableColumnConfiguration, SearchOperator, ToggleOptions } from '@kix/core/dist/browser';
 import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
@@ -21,48 +23,55 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        const todoTicketList =
-            new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
-                "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], {
-                    limit: 500,
-                    displayLimit: 10,
-                    showTotalCount: true,
-                    tableColumns: [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
-                        new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 75),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 75),
-                        new TableColumnConfiguration(TicketProperty.RESPONSIBLE_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 100, DataType.DATE_TIME
-                        ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
-                        ),
-                    ],
-                    filter: [
-                        new FilterCriteria(
-                            TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
-                        ),
-                        new FilterCriteria(
-                            TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
-                        ),
-                        new FilterCriteria(
-                            TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.OR, 2
-                        )
-                    ],
-                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                    sortOrder: "Ticket.Age"
-                },
-                false, true, WidgetSize.LARGE, null, true)
-            );
+        const predefinedToDoTableFilter = [
+            new KIXObjectPropertyFilter('Verantwortliche Tickets', [
+                new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+            ]),
+            new KIXObjectPropertyFilter('Bearbeiter', [
+                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+            ]),
+        ];
+        const todoTicketList = new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
+            "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], {
+                limit: 500,
+                displayLimit: 10,
+                showTotalCount: true,
+                tableColumns: [
+                    new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
+                    new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
+                    new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
+                    new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
+                    new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 75),
+                    new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 75),
+                    new TableColumnConfiguration(TicketProperty.RESPONSIBLE_ID, true, false, true, true, 150),
+                    new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
+                    new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
+                    new TableColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 100, DataType.DATE_TIME
+                    ),
+                    new TableColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
+                    ),
+                ],
+                filter: [
+                    new FilterCriteria(
+                        TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                    ),
+                    new FilterCriteria(
+                        TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                    ),
+                    new FilterCriteria(
+                        TicketProperty.LOCK_ID, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.OR, 2
+                    )
+                ],
+                toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
+                sortOrder: "Ticket.Age"
+            },
+            false, true, WidgetSize.LARGE, null, true, predefinedToDoTableFilter)
+        );
 
         const newTicketsListWidget =
             new ConfiguredWidget("20180612-new-tickets-widget", new WidgetConfiguration(

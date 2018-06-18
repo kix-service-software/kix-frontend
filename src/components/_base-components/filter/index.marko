@@ -1,3 +1,11 @@
-<input.filter type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('filterValueChanged')
-    on-keydown('keyDown')/>
-<span.kix-icon-filter on-click('filter')/>
+<span.filter>
+    <if(state.predefinedFilterList && state.predefinedFilterList.length)>
+        <span.predefined-filter>
+            <form-list nodes=state.predefinedFilterList placeholder="Alle Tickets" on-nodesChanged('predefinedFilterChanged')
+                selectedNodes=[state.currentFilter] multiselect=true/>
+        </span>
+    </if>
+    <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('filterValueChanged')
+        on-keydown('keyDown')/>
+    <span.kix-icon-filter on-click('filter')/>
+</span>

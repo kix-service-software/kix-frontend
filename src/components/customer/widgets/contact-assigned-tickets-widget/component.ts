@@ -383,11 +383,7 @@ class Component {
     }
 
     private filter(table: StandardTable<Ticket>, filterValue: string) {
-        if (filterValue === '') {
-            table.resetFilter();
-        } else {
-            table.setFilterSettings(filterValue);
-        }
+        table.setFilterSettings(filterValue);
     }
 }
 

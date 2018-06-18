@@ -19,8 +19,9 @@ class Component {
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
         this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ? input.selectedNodes : [];
-        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && n.id);
+        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
+            input.selectedNodes : this.state.selectedNodes;
+        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
         }
@@ -33,7 +34,7 @@ class Component {
     public onMount(): void {
         document.addEventListener("click", (event) => {
             if (!this.keepExpanded) {
-                this.state.expanded = false;
+                this.toggleList();
             } else {
                 this.keepExpanded = false;
             }
@@ -135,7 +136,7 @@ class Component {
             this.state.filterValue = null;
         }
         (this as any).setStateDirty('selectedNodes');
-        (this as any).emit('itemsChanged', this.state.selectedNodes);
+        (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     private removeSelectedItem(node: TreeNode): void {
@@ -182,6 +183,7 @@ class Component {
             let container = dropdownInputContainer;
             let previousContainer;
             while (container
+                && container.parentNode
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
                 previousContainer = container;

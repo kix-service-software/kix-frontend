@@ -93,11 +93,7 @@ class Component {
 
     private filter(filterValue: string): void {
         this.state.filterValue = filterValue;
-        if (filterValue === '') {
-            this.state.customerTable.resetFilter();
-        } else {
-            this.state.customerTable.setFilterSettings(filterValue);
-        }
+        this.state.customerTable.setFilterSettings(filterValue);
     }
 }
 
