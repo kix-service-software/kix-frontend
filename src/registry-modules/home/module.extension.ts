@@ -1,7 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration,
-    WidgetType,
     ConfiguredWidget,
     WidgetSize,
     DataType,
@@ -55,7 +54,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         ),
                         new FilterCriteria(
                             TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.OR, 2
+                            FilterDataType.NUMERIC, FilterType.AND, 2
                         )
                     ],
                     toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
