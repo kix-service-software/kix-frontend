@@ -18,7 +18,7 @@ class Component {
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
-        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : [];
+        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
         this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ? input.selectedNodes : [];
         this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && n.id);
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
@@ -76,14 +76,16 @@ class Component {
         }
     }
 
+    // TODO: kann ggf. entfallen
     private focusLost(): void {
         // this.nodeClicked(this.state.preSelectedNode);
         // this.toggleList();
     }
 
+    // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
     private keyDown(event: any): void {
         // if (this.state.expanded) {
-        //     if (event.key === 'Escape') {
+        //     if (event.key === 'Escape' || event.key === 'Tab') {
         //         this.toggleList();
         //     } else if (event.key === 'Enter' || event.key === 'Tab') {
         //         event.stopPropagation();
@@ -94,6 +96,7 @@ class Component {
     }
 
     private keyUp(event: any): void {
+        // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren
         // if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
         //     this.toggleList();
         // }
@@ -121,7 +124,12 @@ class Component {
         if (nodeIndex !== -1) {
             this.state.selectedNodes.splice(nodeIndex, 1);
         } else {
-            this.state.selectedNodes.push(node);
+            if (!this.state.asMultiselect) {
+                this.state.selectedNodes = [node];
+                this.toggleList();
+            } else {
+                this.state.selectedNodes.push(node);
+            }
         }
         if (this.state.selectedNodes.length) {
             this.state.filterValue = null;
@@ -164,10 +172,6 @@ class Component {
         );
         this.state.isLoading = false;
         this.timeout = null;
-
-        // if (this.currentSearchValue !== this.state.filterValue) {
-        //     this.startSearch();
-        // }
     }
 
     private setDropdownStyle(): void {
@@ -198,6 +202,12 @@ class Component {
 
         }
         this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
+    }
+
+    private getAutocompleteNotFoundText(): string {
+        const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objekte';
+        return `Keine ${objectName} gefunden (mind. ${this.state.autoCompleteConfiguration.charCount} ` +
+            'Zeichen für die Suche eingeben).';
     }
 }
 

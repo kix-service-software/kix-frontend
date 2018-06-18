@@ -11,10 +11,10 @@ class TreeComponent {
     }
 
     public onInput(input: any): void {
-        this.state.tree = input.tree;
+        this.state.nodes = input.nodes;
         this.state.filterValue = input.filterValue;
         this.state.treeId = input.treeId ? input.treeId + '-tree' : 'tree-' + IdService.generateDateBasedId();
-        TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
+        TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
         this.state.activeNodes = input.activeNodes;
         (this as any).setStateDirty('activeNodes');
         this.state.treeStyle = input.treeStyle;
@@ -25,7 +25,7 @@ class TreeComponent {
     }
 
     private nodeToggled(node: TreeNode): void {
-        TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
+        TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
     }
 

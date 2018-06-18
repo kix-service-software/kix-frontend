@@ -77,39 +77,40 @@ class TreeNodeComponent {
         (this as any).emit('nodeClicked', node);
     }
 
+    // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren
     private navigateTree(event: any): void {
-        if (this.state.node && this.navigationKeyPressed(event) && this.isNodeActive()) {
-            if (event.preventDefault) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        // if (this.state.node && this.navigationKeyPressed(event) && this.isNodeActive()) {
+        //     if (event.preventDefault) {
+        //         event.preventDefault();
+        //         event.stopPropagation();
+        //     }
 
-            switch (event.key) {
-                case 'ArrowUp':
-                    if (this.state.node.previousNode) {
-                        this.childNodeHovered(this.state.node.previousNode);
-                    }
-                    break;
-                case 'ArrowDown':
-                    if (this.state.node.nextNode) {
-                        this.childNodeHovered(this.state.node.nextNode);
-                    }
-                    break;
-                case 'ArrowLeft':
-                    this.state.node.expanded = false;
-                    this.childNodeToggled(this.state.node);
-                    (this as any).setStateDirty();
-                    break;
-                case 'ArrowRight':
-                    if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
-                        this.state.node.expanded = true;
-                        this.childNodeToggled(this.state.node);
-                        (this as any).setStateDirty();
-                    }
-                    break;
-                default:
-            }
-        }
+        //     switch (event.key) {
+        //         case 'ArrowUp':
+        //             if (this.state.node.previousNode) {
+        //                 this.childNodeHovered(this.state.node.previousNode);
+        //             }
+        //             break;
+        //         case 'ArrowDown':
+        //             if (this.state.node.nextNode) {
+        //                 this.childNodeHovered(this.state.node.nextNode);
+        //             }
+        //             break;
+        //         case 'ArrowLeft':
+        //             this.state.node.expanded = false;
+        //             this.childNodeToggled(this.state.node);
+        //             (this as any).setStateDirty();
+        //             break;
+        //         case 'ArrowRight':
+        //             if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
+        //                 this.state.node.expanded = true;
+        //                 this.childNodeToggled(this.state.node);
+        //                 (this as any).setStateDirty();
+        //             }
+        //             break;
+        //         default:
+        //     }
+        // }
     }
 
     private navigationKeyPressed(event: any): boolean {
