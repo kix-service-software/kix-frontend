@@ -1,11 +1,13 @@
-<if(state.content)>
-    <if(state.base64)>
-        <img.svg-icon src=state.content title=input.title key=state.iconId/>
+<span.icon>
+    <if(state.content)>
+        <if(state.base64)>
+            <img.svg-icon src=state.content title=input.title key=state.iconId/>
+        </if>
+        <else>
+            <span class=state.content title=input.title key=state.iconId>
+                <span.path1/>
+                <span.path2/>
+            </span>
+        </else>
     </if>
-    <else>
-        <span class=state.content title=input.title key=state.iconId>
-            <span.path1/>
-            <span.path2/>
-        </span>
-    </else>
-</if>
+</span>
