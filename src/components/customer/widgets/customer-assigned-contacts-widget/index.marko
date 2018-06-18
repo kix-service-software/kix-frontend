@@ -3,7 +3,7 @@
     <@content>
         <if(state.customer && state.contactTable)>
             <div.contact-filter>
-                <filter filterValue=state.filterValue on-filter('filter')/>
+                <filter on-filter('filter')/>
             </div>
             <standard-table standardTable=state.contactTable/>
         </if>
