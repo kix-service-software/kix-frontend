@@ -58,7 +58,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                             FilterDataType.NUMERIC, FilterType.OR, 2
                         )
                     ],
-                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true)
+                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
+                    sortOrder: "Ticket.Age"
                 },
                 false, true, WidgetSize.LARGE, null, true)
             );
@@ -86,7 +87,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                             FilterDataType.NUMERIC, FilterType.OR, 1
                         )
                     ],
-                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true)
+                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
+                    sortOrder: "Ticket.Age"
                 },
                 false, true, WidgetSize.LARGE, null, true)
             );
