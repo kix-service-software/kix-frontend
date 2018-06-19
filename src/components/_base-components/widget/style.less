@@ -1,5 +1,6 @@
 @default-widget-header-height: @margin-default;
 @overlay-widget-header-height: 1.75rem;
+@widget-header-grid-gap: .75rem;
 .widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height, @widget-header-action-separator-color: @secondary-1) {
     position: relative;
     box-sizing: border-box;
@@ -10,13 +11,14 @@
         box-sizing: border-box;
         padding: 0 .75em;
         height: @widget-header-height;
-        overflow: hidden;
         white-space: nowrap;
         border-top-left-radius: @border-radius;
         border-top-right-radius: @border-radius;
+        display: grid;
+        grid-template-columns: 6fr 4fr;
+        grid-gap: @widget-header-grid-gap;
         >.header-left {
             line-height: @widget-header-height;
-            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             >[class^="kix-icon-"],
@@ -27,20 +29,21 @@
             display: grid;
             grid-auto-columns: max-content;
             grid-auto-flow: column;
-            grid-gap: .75rem;
+            grid-gap: @widget-header-grid-gap;
             >h3 {
                 display: inline;
                 &.minimizable {
                     cursor: pointer;
                 }
             }
-            max-width: 60%;
         }
         >.header-right {
-            float: right;
+            justify-self: right;
+            display: grid;
+            grid-gap: @widget-header-grid-gap;
+            grid-template-columns: 8fr 2fr;
             line-height: @widget-header-height;
             text-align: right;
-            width: 35%;
             >.minimize-icon-wrapper,
             >.close-icon-wrapper {
                 [class^="kix-icon-"],
@@ -55,7 +58,6 @@
                 }
             }
             >.action-list-wrapper {
-                float: left;
                 >.action-list {
                     >li {
                         >div {
@@ -163,6 +165,7 @@
         min-height: 160px;
         padding: 1em;
         overflow-x: auto;
+        width: 100%;
     }
 }
 

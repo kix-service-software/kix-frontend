@@ -33,10 +33,12 @@ class Component {
 
     public onMount(): void {
         document.addEventListener("click", (event) => {
-            if (!this.keepExpanded) {
-                this.toggleList();
-            } else {
-                this.keepExpanded = false;
+            if (this.state.expanded) {
+                if (this.keepExpanded) {
+                    this.keepExpanded = false;
+                } else {
+                    this.toggleList();
+                }
             }
         });
     }

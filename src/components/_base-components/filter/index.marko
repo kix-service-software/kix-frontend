@@ -5,7 +5,7 @@
                 selectedNodes=[state.currentFilter]/>
         </span>
     </if>
-    <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('filterValueChanged')
+    <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('textFilterValueChanged')
         on-keydown('keyDown')/>
     <span.kix-icon-filter on-click('filter')/>
 </span>

@@ -3,7 +3,8 @@
 .form-list-tree {
     .tree-node {
         display: grid;
-        grid-template-columns: @tree-icon-size auto;
+        grid-auto-columns: max-content;
+        grid-auto-flow: column;
         grid-gap: @tree-column-gap;
         align-items: center;
         margin-bottom: .25rem;
