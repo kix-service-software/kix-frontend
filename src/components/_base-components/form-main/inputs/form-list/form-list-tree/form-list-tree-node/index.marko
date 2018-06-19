@@ -1,4 +1,4 @@
-<li.tree-node class=(component.isNodeActive() ? "active" : "") id=state.nodeId key=state.nodeId>
+<li.tree-node class={active: component.isNodeActive()} id=state.nodeId key=state.nodeId>
     <span.tree-icon on-click('toggleNode')>
         <if(component.hasChildren())>
             <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank")/>

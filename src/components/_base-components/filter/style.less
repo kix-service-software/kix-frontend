@@ -1,13 +1,21 @@
-input.filter {
-    // TODO: prüfen ob Angaben stimmen
-    margin: 0 .5em 0 1em;
-    border: 0;
-    border-radius: 3px;
-    box-sizing: border-box;
-    padding: 2px 5px;
-    color: @secondary-0;
-}
-
-span.kix-icon-filter {
-    cursor: pointer;
+.filter {
+    display: grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    align-items: center;
+    >span.predefined-filter {
+        width: 220px;
+    }
+    >input {
+        // TODO: prüfen ob Angaben stimmen
+        margin: 0 .5em 0 1em;
+        border: 0;
+        border-radius: 3px;
+        box-sizing: border-box;
+        padding: 2px 5px;
+        color: @secondary-0;
+    }
+    >span.kix-icon-filter {
+        cursor: pointer;
+    }
 }
