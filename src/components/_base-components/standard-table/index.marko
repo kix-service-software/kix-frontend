@@ -54,7 +54,7 @@
                                 <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
                                     data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
                                     title=value.displayValue>
-                                    <if(column.showIcon)>
+                                    <if(column.showIcon && value.objectValue)>
                                         <icon icon=component.getValueIcon(column, value) showUnknown=true/>
                                     </if>
                                     <if(column.showIcon && column.showText)>&nbsp;</if>

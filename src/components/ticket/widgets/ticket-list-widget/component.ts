@@ -86,8 +86,8 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
-                TableRowHeight.LARGE,
-                TableHeaderHeight.LARGE,
+                tableSettings.rowHeight ? tableSettings.rowHeight : TableRowHeight.LARGE,
+                tableSettings.headerHeight ? tableSettings.headerHeight : TableHeaderHeight.LARGE,
                 tableSettings.toggleOptions ? true : false,
                 tableSettings.toggleOptions
             );

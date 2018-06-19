@@ -24,6 +24,7 @@ export class TicketArticleDetailsComponent {
             );
 
             if (tickets && tickets.length && tickets[0].Articles && tickets[0].Articles.length) {
+                tickets[0].Articles.sort((a, b) => b.IncomingTime - a.IncomingTime);
                 this.state.article = tickets[0].Articles[0];
             }
         }

@@ -1,7 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration,
-    WidgetType,
     ConfiguredWidget,
     WidgetSize,
     DataType,
@@ -12,7 +11,10 @@ import {
     KIXObjectPropertyFilter,
     TableFilterCriteria
 } from '@kix/core/dist/model';
-import { TableColumnConfiguration, SearchOperator, ToggleOptions } from '@kix/core/dist/browser';
+import {
+    TableColumnConfiguration, SearchOperator, ToggleOptions, TableHeaderHeight,
+    TableRowHeight
+} from '@kix/core/dist/browser';
 import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
 import { TicketProperty } from '@kix/core/dist/model/';
 
@@ -68,7 +70,9 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     )
                 ],
                 toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                sortOrder: "Ticket.Age"
+                sortOrder: "-Ticket.Age",
+                headerHeight: TableHeaderHeight.LARGE,
+                rowHeight: TableRowHeight.SMALL
             },
             false, true, WidgetSize.LARGE, null, true, predefinedToDoTableFilter)
         );
@@ -97,7 +101,9 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         )
                     ],
                     toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                    sortOrder: "Ticket.Age"
+                    sortOrder: "Ticket.Age",
+                    headerHeight: TableHeaderHeight.LARGE,
+                    rowHeight: TableRowHeight.SMALL
                 },
                 false, true, WidgetSize.LARGE, null, true)
             );

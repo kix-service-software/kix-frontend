@@ -25,13 +25,13 @@ class FilterComponent {
         this.state.textFilterValue = event.target.value;
     }
 
-    private predefinedFilterChanged(nodes: TreeNode[]): void {
+    public predefinedFilterChanged(nodes: TreeNode[]): void {
         this.state.currentFilter = nodes && nodes.length ? nodes[0] : null;
         (this as any).setStateDirty('currentFilter');
         this.filter();
     }
 
-    private keyDown(event: any): void {
+    public keyDown(event: any): void {
         if (event.keyCode === 13 || event.key === 'Enter') {
             this.textFilterValueChanged(event);
             this.filter();

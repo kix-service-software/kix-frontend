@@ -2,7 +2,7 @@
     <if(state.predefinedFilterList && state.predefinedFilterList.length)>
         <span.predefined-filter>
             <form-list nodes=state.predefinedFilterList placeholder="Alle Tickets" on-nodesChanged('predefinedFilterChanged')
-                selectedNodes=[state.currentFilter] multiselect=true/>
+                selectedNodes=[state.currentFilter]/>
         </span>
     </if>
     <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('filterValueChanged')
