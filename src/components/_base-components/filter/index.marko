@@ -1,8 +1,8 @@
 <span.filter>
     <if(state.predefinedFilterList && state.predefinedFilterList.length)>
         <span.predefined-filter>
-            <form-list nodes=state.predefinedFilterList placeholder="Alle Tickets" on-nodesChanged('predefinedFilterChanged')
-                selectedNodes=[state.currentFilter]/>
+            <form-list nodes=state.predefinedFilterList placeholder=state.predefinedFilterPlaceholder
+                on-nodesChanged('predefinedFilterChanged') selectedNodes=[state.currentFilter]/>
         </span>
     </if>
     <input type="text" placeholder="Filtern in Liste" value=state.filterValue on-change('textFilterValueChanged')

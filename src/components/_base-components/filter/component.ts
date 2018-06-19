@@ -19,6 +19,8 @@ class FilterComponent {
             this.state.predefinedFilter = [];
             this.state.predefinedFilterList = [];
         }
+        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
+            input.predefinedFilterPlaceholder : "Alle Objekte";
     }
 
     private textFilterValueChanged(event: any): void {
