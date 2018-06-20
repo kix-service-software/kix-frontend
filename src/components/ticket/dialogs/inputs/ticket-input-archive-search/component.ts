@@ -1,10 +1,6 @@
 import { TicketInputArchiveSearchComponentState } from "./TicketInputArchiveSearchCompontentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState,
-    FormFieldValue, ArchiveFlag, FormInputComponent
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
+import { FormDropdownItem, ArchiveFlag, FormInputComponent } from "@kix/core/dist/model";
+
 
 class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArchiveSearchComponentState> {
 
@@ -13,11 +9,11 @@ class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArc
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         this.state.items = [
             new FormDropdownItem(ArchiveFlag.ALL, '', 'Alle Tickets'),
             new FormDropdownItem(ArchiveFlag.ARCHIVED, '', 'Archivierte Tickets'),
@@ -30,7 +26,7 @@ class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArc
         //
     }
 
-    private itemChanged(item: FormDropdownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         super.provideValue(item ? Number(item.id) : null);
     }

@@ -1,12 +1,8 @@
 import { TicketInputContactComponentState } from "./TicketInputContactComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    AutoCompleteConfiguration,
-    Contact,
-    FormDropdownItem, FormInputComponentState,
-    ObjectIcon, Form, FormFieldValue, FormInputComponent, KIXObjectType, ContextMode
+    Contact, FormDropdownItem, FormInputComponent, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
-import { ContactService } from "@kix/core/dist/browser/contact";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputContactComponent extends FormInputComponent<Contact, TicketInputContactComponentState> {
@@ -16,11 +12,11 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
@@ -31,7 +27,7 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
         return;
     }
 
-    private contactChanged(item: FormDropdownItem): void {
+    public contactChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         super.provideValue(item ? item.object : null);
     }

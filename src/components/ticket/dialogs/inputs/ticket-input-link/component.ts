@@ -1,9 +1,6 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
-import {
-    FormInputComponentState, ObjectIcon, AttachmentError, CreateLinkDescription,
-    Ticket, FormFieldValue, FormInputComponent
-} from "@kix/core/dist/model";
-import { AttachmentUtil, FormService } from "@kix/core/dist/browser";
+import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
 
@@ -14,11 +11,11 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
     }
 
     public setCurrentValue(): void {
@@ -32,7 +29,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         this.setCurrentValue();
     }
 
-    private openTicketLinkDialog(): void {
+    public openTicketLinkDialog(): void {
         DialogService.getInstance().openOverlayDialog(
             'link-ticket-dialog',
             {
@@ -53,11 +50,11 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         this.updateField();
     }
 
-    private minimize(): void {
+    public minimize(): void {
         this.state.minimized = !this.state.minimized;
     }
 
-    private removeLink(label: Label): void {
+    public removeLink(label: Label): void {
         const index = this.state.linkDescriptions.findIndex((ld) => ld.linkableObject === label.object);
         if (index !== -1) {
             this.state.linkDescriptions.splice(index, 1);
