@@ -2,6 +2,7 @@ import { TicketListComponentState } from './TicketListComponentState';
 import {
     Context,
     Ticket,
+    KIXObjectPropertyFilter,
 } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
@@ -45,6 +46,8 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
             : undefined;
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
+        this.state.predefinedTableFilter = this.state.widgetConfiguration ?
+            this.state.widgetConfiguration.predefinedTableFilters : [];
 
         this.setTableConfiguration();
         this.setActions();
@@ -83,8 +86,8 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
                 configurationListener,
                 this.state.widgetConfiguration.settings.displayLimit,
                 true,
-                TableRowHeight.LARGE,
-                TableHeaderHeight.LARGE,
+                tableSettings.rowHeight ? tableSettings.rowHeight : TableRowHeight.LARGE,
+                tableSettings.headerHeight ? tableSettings.headerHeight : TableHeaderHeight.LARGE,
                 tableSettings.toggleOptions ? true : false,
                 tableSettings.toggleOptions
             );
@@ -109,12 +112,8 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
         }
     }
 
-    private filter(filterValue?: string): void {
-        if (filterValue !== null && filterValue !== "") {
-            this.state.standardTable.setFilterSettings(filterValue);
-        } else {
-            this.state.standardTable.resetFilter();
-        }
+    private filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
+        this.state.standardTable.setFilterSettings(textFilterValue, filter);
     }
 
     private getTitle(): string {

@@ -10,7 +10,7 @@
             <if(state.ticket)>
                 <div.history-filter>
                     <span.header>Änderungsverlauf</span>
-                    <filter filterValue=state.filterValue on-filter('filter')/>
+                    <filter on-filter('filter')/>
                 </div>
                 <div.history-container>
                     <if(state.standardTable)>

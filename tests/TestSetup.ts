@@ -1,17 +1,9 @@
 import { ServiceContainer, IService } from "@kix/core/dist/common";
 import {
-    IMarkoService,
-    IPluginService,
-    IConfigurationService,
-    ISocketCommunicationService,
-    IWidgetRepositoryService,
     SocketCommunicationService,
-    WidgetRepositoryService,
     ConfigurationService,
     LoggingService,
-    ILoggingService,
     ProfilingService,
-    IProfilingService
 } from "@kix/core/dist/services";
 
 import {

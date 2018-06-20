@@ -1,5 +1,19 @@
 <div class=component.getWidgetClasses()>
     <div.widget-header>
+        <span.header-left>
+            <if(input.explorer)>
+                <span.kix-icon-close-left on-click('minimizeExplorer')/>
+            </if>
+            <else-if(component.isInputDefined(input.icon))>
+                <include(input.icon)/>
+            </else-if>
+            <if(input.title)>
+                <h3 title=input.title class={minimizable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
+            </if>
+            <if(component.hasHeaderContent(input.headerContent))>
+                <include(input.headerContent)/>
+            </if>
+        </span>
         <span.header-right>
             <if(component.isInputDefined(input.actions))>
                 <action-list list=input.actions/>
@@ -21,20 +35,6 @@
                 <span.close-icon-wrapper>
                     <span.kix-icon-close on-click('closeClicked')/>
                 </span>
-            </if>
-        </span>
-        <span.header-left>
-            <if(input.explorer)>
-                <span.kix-icon-close-left on-click('minimizeExplorer')/>
-            </if>
-            <else-if(component.isInputDefined(input.icon))>
-                <include(input.icon)/>
-            </else-if>
-            <if(input.title)>
-                <h3 title=input.title class={minimizable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
-            </if>
-            <if(component.hasHeaderContent(input.headerContent))>
-                <include(input.headerContent)/>
             </if>
         </span>
     </div>

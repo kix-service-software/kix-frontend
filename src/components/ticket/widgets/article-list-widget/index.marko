@@ -6,7 +6,7 @@
                 <div.header-attachments on-click('attachmentsClicked')>
                     <span.kix-icon-attachement/>(${component.getAttachmentsCount()})
                 </div>
-                <filter filterValue=state.filterValue on-filter('filter')/>
+                <filter on-filter('filter')/>
             </@headerContent>
             <@content>
                 <div.article-table-wrapper>

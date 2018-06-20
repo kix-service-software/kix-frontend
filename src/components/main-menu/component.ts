@@ -1,6 +1,5 @@
 import { MenuEntry, Context, ContextType } from '@kix/core/dist/model';
 import { MenuComponentState } from './MenuComponentState';
-import { ComponentRouterService } from '@kix/core/dist/browser/router/';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
 import { IContextServiceListener } from '@kix/core/dist/browser';
@@ -13,9 +12,11 @@ class KIXMenuComponent implements IContextServiceListener {
         this.state = new MenuComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         ContextService.getInstance().registerListener(this);
-        this.loadEntries();
+        await this.loadEntries();
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        this.setActiveMenuEntry(context);
     }
 
     private async loadEntries(): Promise<void> {
@@ -27,9 +28,9 @@ class KIXMenuComponent implements IContextServiceListener {
         }
     }
     public contextChanged(contextId: string, context: Context, type: ContextType): void {
-        this.state.primaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
-        this.state.secondaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
-        (this as any).setStateDirty('primaryMenuEntries');
+        if (type === ContextType.MAIN) {
+            this.setActiveMenuEntry(context);
+        }
     }
 
     public menuClicked(menuEntry: MenuEntry, event: any): void {
@@ -39,6 +40,12 @@ class KIXMenuComponent implements IContextServiceListener {
         ContextService.getInstance().setContext(
             menuEntry.contextId, menuEntry.kixObjectType, menuEntry.contextMode, null, true
         );
+    }
+
+    private setActiveMenuEntry(context: Context): void {
+        this.state.primaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
+        this.state.secondaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
+        (this as any).setStateDirty('primaryMenuEntries');
     }
 
 }
