@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
 import {
     ContextType, OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult
+    ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
 } from "@kix/core/dist/model";
 import { NewContactDialogContext, ContactService } from "@kix/core/dist/browser/contact";
 
@@ -39,6 +39,9 @@ class Component {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
+                    ContextService.getInstance().setContext(
+                        null, KIXObjectType.CONTACT, ContextMode.DETAILS, contactId
+                    );
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
@@ -49,7 +52,7 @@ class Component {
     private showSuccessHint(): void {
         const content = new ComponentContent('list-with-title', {
             title: 'Ansprechpartner wurde erfolgreich angelegt.',
-            list: ['Ansprechpartner wurde erfolgreich angelegt'],
+            list: [],
             icon: 'kix-icon-check'
         });
         OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
