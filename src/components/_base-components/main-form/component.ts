@@ -14,7 +14,7 @@ class FormComponent {
     public onMount(): void {
         this.state.formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         this.state.objectType = this.state.formInstance.getObjectType();
-        this.state.isSearchContext = this.state.formInstance.formContext === FormContext.SEARCH;
+        this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
         WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
     }
 

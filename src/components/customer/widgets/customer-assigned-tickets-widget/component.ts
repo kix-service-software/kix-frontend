@@ -92,7 +92,7 @@ class Component {
             const tableId = 'customer-open-tickets-' + IdService.generateDateBasedId();
             this.state.openTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -110,7 +110,7 @@ class Component {
             const tableId = 'customer-escalated-tickets-' + IdService.generateDateBasedId();
             this.state.escalatedTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -128,7 +128,7 @@ class Component {
             const tableId = 'customer-reminder-tickets-' + IdService.generateDateBasedId();
             this.state.reminderTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -146,7 +146,7 @@ class Component {
             const tableId = 'customer-new-tickets-' + IdService.generateDateBasedId();
             this.state.newTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -164,7 +164,7 @@ class Component {
             const tableId = 'customer-pending-tickets-' + IdService.generateDateBasedId();
             this.state.pendingTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -195,7 +195,7 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.escalatedTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.escalatedTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.escalatedTicketsTable.loadRows(true);
         this.state.loadEscalatedTickets = false;
     }
@@ -210,7 +210,7 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.reminderTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.reminderTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.reminderTicketsTable.loadRows(true);
         this.state.loadReminderTickets = false;
     }
@@ -225,7 +225,7 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.newTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.newTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.newTicketsTable.loadRows(true);
         this.state.loadNewTickets = false;
     }
@@ -240,7 +240,7 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.openTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.openTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.openTicketsTable.loadRows(true);
         this.state.loadOpenTickets = false;
     }
@@ -255,7 +255,7 @@ class Component {
             this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
         );
 
-        (this.state.pendingTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.pendingTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.pendingTicketsTable.loadRows(true);
         this.state.loadPendingTickets = false;
     }

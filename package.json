@@ -27,7 +27,7 @@
     "lasso-less": "3.0.1",
     "lasso-marko": "2.4.2",
     "logform": "1.9.0",
-    "marko": "4.11.0",
+    "marko": "^4.11.1",
     "marko-loader": "1.3.3",
     "reflect-metadata": "0.1.12",
     "request": "2.87.0",

@@ -18,7 +18,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
 
     public onMount(): void {
         super.onMount();
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.registerListener({
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
