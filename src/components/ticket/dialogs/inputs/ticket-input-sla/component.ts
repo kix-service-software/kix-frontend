@@ -1,7 +1,7 @@
 import { TicketInputSLAComponentState } from "./TicketInputSLAComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue, FormInputComponent
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
@@ -12,11 +12,11 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.slas.map((s) =>
             new FormDropdownItem(s.ID, new ObjectIcon(TicketProperty.SLA_ID, s.ID), s.Name)
@@ -34,7 +34,7 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
         }
     }
 
-    private itemChanged(item: FormDropdownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.provideFormFieldValue<number>(

@@ -1,8 +1,6 @@
 import { TicketInputStateComponentState } from "./TicketInputStateComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, FormFieldValue
-} from "@kix/core/dist/model";
+import { FormDropdownItem, ObjectIcon, TicketProperty, } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
 import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
@@ -14,11 +12,11 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.ticketStates.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
@@ -36,7 +34,7 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
         }
     }
 
-    private itemChanged(item: FormDropdownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         this.state.pending = false;
         this.state.currentItem = item;
 

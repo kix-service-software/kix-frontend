@@ -9,11 +9,11 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         this.setCurrentValue();
     }
 
@@ -27,7 +27,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    private valueChanged(value: any): void {
+    public valueChanged(value: any): void {
         this.state.currentValue = value && value !== '' ? value : null;
         super.provideValue(this.state.currentValue);
     }

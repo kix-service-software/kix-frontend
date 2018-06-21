@@ -3,7 +3,8 @@ import {
     OverlayService, FormService, ContextService
 } from "@kix/core/dist/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, FormFieldValue, FormField
+    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
+    FormFieldValue, FormField, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
 import { TicketService } from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
@@ -50,7 +51,7 @@ class NewTicketDialogComponent {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    TicketService.getInstance().openTicket(ticketId);
+                    ContextService.getInstance().setContext(null, KIXObjectType.TICKET, ContextMode.DETAILS, ticketId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showError(error);
