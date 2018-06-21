@@ -1,15 +1,16 @@
-import { TicketInputCustomerComponentState } from "./TicketInputCustomerComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, TicketProperty, FormFieldValue,
-    FormInputComponent, FormField, KIXObjectType, Customer, ContextMode
+    TicketProperty, FormFieldValue, FormInputComponent, FormField, KIXObjectType, Customer, ContextMode, TreeNode
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCustomerComponentState> {
+class Component extends FormInputComponent<Customer, ComponentState> {
+
+    private customers: Customer[] = [];
 
     public onCreate(): void {
-        this.state = new TicketInputCustomerComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -28,9 +29,9 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
                         this.loadCustomers(contact.UserCustomerIDs);
                         this.state.hasContact = true;
                     } else {
-                        this.state.currentItem = null;
+                        this.state.currentNode = null;
                         this.state.hasContact = false;
-                        this.state.items = [];
+                        this.state.nodes = [];
                         super.provideValue(null);
                     }
                 }
@@ -44,7 +45,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
-            this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+            this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
         }
     }
 
@@ -60,23 +61,26 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
 
     private async loadCustomers(customerIds: string[]): Promise<void> {
         this.state.loading = true;
-        const customers = await ContextService.getInstance().loadObjects<Customer>(
+        this.customers = await ContextService.getInstance().loadObjects<Customer>(
             KIXObjectType.CUSTOMER, customerIds, ContextMode.DASHBOARD, null
         );
-        this.state.items = customers.map(
-            (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue, null, c)
+        this.state.nodes = this.customers.map(
+            (c) => new TreeNode(c.CustomerID, c.DisplayValue, 'kix-icon-man-house')
         );
 
-        this.state.currentItem = this.state.items.find((i) => i.id === this.state.primaryCustomerId);
-        this.itemChanged(this.state.currentItem);
+        this.state.currentNode = this.state.nodes.find((i) => i.id === this.state.primaryCustomerId);
+        this.customerChanged([this.state.currentNode]);
         this.state.loading = false;
     }
 
-    private itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? item.object : null);
+    private customerChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        const customer = this.state.currentNode ? this.customers.find(
+            (cu) => cu.CustomerID === this.state.currentNode.id
+        ) : null;
+        super.provideValue(customer);
     }
 
 }
 
-module.exports = TicketInputTypeComponent;
+module.exports = Component;

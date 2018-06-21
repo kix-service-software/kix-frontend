@@ -1,5 +1,5 @@
-<form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
-    on-itemChanged('itemChanged') selectedItem=state.currentItem required=state.field.required invalid=state.invalid/>
+<form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
+    on-nodesChanged('stateChanged') selectedNodes=[state.currentNode] invalid=state.invalid/>
 <if(state.pending)>
     <div.pending-state class={invalid: state.invalid}>
         <span>*Warten bis:</span>

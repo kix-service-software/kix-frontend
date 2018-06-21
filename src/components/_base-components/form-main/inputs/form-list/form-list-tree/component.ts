@@ -8,12 +8,12 @@ class TreeComponent {
 
     public onCreate(input: any): void {
         this.state = new TreeComponentState();
+        this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
     }
 
     public onInput(input: any): void {
         this.state.nodes = input.nodes;
         this.state.filterValue = input.filterValue;
-        this.state.treeId = input.treeId ? input.treeId + '-tree' : 'tree-' + IdService.generateDateBasedId();
         TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
         this.state.activeNodes = input.activeNodes;
         (this as any).setStateDirty('activeNodes');
@@ -21,20 +21,24 @@ class TreeComponent {
     }
 
     public onMount(): void {
-        this.state.treeParent = (this as any).getEl(this.state.treeId).parentElement;
+        this.state.treeParent = (this as any).getEl().parentElement;
     }
 
-    private nodeToggled(node: TreeNode): void {
+    public nodeToggled(node: TreeNode): void {
         TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
     }
 
-    private nodeClicked(node: TreeNode): void {
+    public nodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
 
-    private nodeHovered(node: TreeNode): void {
+    public nodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
+    }
+
+    public getTreeDOMElement(): any {
+        return (this as any).getEl();
     }
 }
 

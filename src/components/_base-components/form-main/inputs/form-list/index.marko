@@ -25,7 +25,7 @@
                 id=state.treeId/>
         </else>
         <if(!state.asAutocomplete)>
-            <span.form-list-button.kix-icon-sort-down on-click('listButtonClicked')/>
+            <span.form-list-button.kix-icon-sort-down on-click('listToggleButtonClicked')/>
         </if>
     </div>
     <if(state.expanded)>
@@ -35,9 +35,9 @@
             </div>
         </if>
         <else-if(state.nodes && state.nodes.length)>
-            <form-list-tree nodes=state.nodes filterValue=state.filterValue activeNodes=state.selectedNodes
+            <form-list-tree key=state.treeId nodes=state.nodes filterValue=state.filterValue activeNodes=state.selectedNodes
                 on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked') filterInputId=state.treeId
-                treeId=state.treeId treeStyle=state.treeStyle/>
+                treeStyle=state.treeStyle/>
         </else-if>
         <else-if(state.asAutocomplete)>
             <div.form-list-autocomplete-no-results>

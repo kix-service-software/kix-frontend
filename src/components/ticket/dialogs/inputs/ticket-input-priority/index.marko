@@ -1,2 +1,2 @@
-<form-dropdown items=state.items placeholder=(state.field.required ? state.field.label : "")
-    selectedItem=state.currentItem required=state.field.required on-itemChanged('itemChanged') invalid=state.invalid/>
+<form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
+    selectedNodes=[state.currentNode] on-nodesChanged('priorityChanged') invalid=state.invalid/>

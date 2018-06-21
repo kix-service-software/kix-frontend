@@ -1,14 +1,14 @@
-import { TicketInputSLAComponentState } from "./TicketInputSLAComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent, TreeNode
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAComponentState>  {
+class Component extends FormInputComponent<number, ComponentState>  {
 
     public onCreate(): void {
-        this.state = new TicketInputSLAComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -18,9 +18,11 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
     public onMount(): void {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.slas.map((s) =>
-            new FormDropdownItem(s.ID, new ObjectIcon(TicketProperty.SLA_ID, s.ID), s.Name)
-        );
+        if (objectData) {
+            this.state.nodes = objectData.slas.map((s) =>
+                new TreeNode(s.ID, s.Name, new ObjectIcon(TicketProperty.SLA_ID, s.ID))
+            );
+        }
         this.setCurrentValue();
     }
 
@@ -29,21 +31,16 @@ class TicketInputSLAComponent extends FormInputComponent<number, TicketInputSLAC
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
             }
         }
     }
 
-    public itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<number>(
-            this.state.field.property, (item ? Number(item.id) : null)
-        );
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.invalid = !fieldValue.valid;
+    public slaChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
 }
 
-module.exports = TicketInputSLAComponent;
+module.exports = Component;

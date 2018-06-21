@@ -1,11 +1,11 @@
-import { TicketInputArchiveSearchComponentState } from "./TicketInputArchiveSearchCompontentState";
-import { FormDropdownItem, ArchiveFlag, FormInputComponent } from "@kix/core/dist/model";
+import { ComponentState } from "./CompontentState";
+import { FormDropdownItem, ArchiveFlag, FormInputComponent, TreeNode } from "@kix/core/dist/model";
 
 
-class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArchiveSearchComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputArchiveSearchComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -14,22 +14,22 @@ class TicketInputArchiveSearch extends FormInputComponent<number, TicketInputArc
 
     public onMount(): void {
         super.onMount();
-        this.state.items = [
-            new FormDropdownItem(ArchiveFlag.ALL, '', 'Alle Tickets'),
-            new FormDropdownItem(ArchiveFlag.ARCHIVED, '', 'Archivierte Tickets'),
-            new FormDropdownItem(ArchiveFlag.NOT_ARCHIVED, '', 'Nicht archivierte Tickets')
+        this.state.nodes = [
+            new TreeNode(ArchiveFlag.ALL, 'Alle Tickets'),
+            new TreeNode(ArchiveFlag.ARCHIVED, 'Archivierte Tickets'),
+            new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Nicht archivierte Tickets')
         ];
         this.setCurrentValue();
     }
 
     protected setCurrentValue(): void {
-        //
+        return;
     }
 
-    public itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? Number(item.id) : null);
+    public nodesChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 }
 
-module.exports = TicketInputArchiveSearch;
+module.exports = Component;
