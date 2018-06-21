@@ -1,14 +1,12 @@
-import { TicketInputContactComponentState } from "./TicketInputContactComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    Contact, FormDropdownItem, FormInputComponent, KIXObjectType, ContextMode
-} from "@kix/core/dist/model";
+import { Contact, FormInputComponent, KIXObjectType, ContextMode, TreeNode } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputContactComponent extends FormInputComponent<Contact, TicketInputContactComponentState> {
+class Component extends FormInputComponent<Contact, ComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputContactComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -27,26 +25,29 @@ class TicketInputContactComponent extends FormInputComponent<Contact, TicketInpu
         return;
     }
 
-    public contactChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? item.object : null);
+    public contactChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        const contact = this.state.currentNode ? this.state.contacts.find(
+            (cu) => cu.ContactID === this.state.currentNode.id
+        ) : null;
+        super.provideValue(contact);
     }
 
-    private async searchContacts(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
+    private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         this.state.contacts = await ContextService.getInstance().loadObjects<Contact>(
             KIXObjectType.CONTACT, null, ContextMode.DETAILS, null, null, null, searchValue, limit
         );
 
-        let items = [];
+        let treeNodes = [];
         if (searchValue && searchValue !== '') {
-            items = this.state.contacts.map(
-                (c) => new FormDropdownItem(c.ContactID, 'kix-icon-man-bubble', c.DisplayValue, null, c)
+            treeNodes = this.state.contacts.map(
+                (c) => new TreeNode(c.ContactID, c.DisplayValue, 'kix-icon-man-bubble')
             );
         }
 
-        return items;
+        return treeNodes;
     }
 
 }
 
-module.exports = TicketInputContactComponent;
+module.exports = Component;

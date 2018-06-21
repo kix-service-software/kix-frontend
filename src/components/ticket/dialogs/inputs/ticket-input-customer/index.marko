@@ -2,7 +2,6 @@
     <loading-spinner/>
 </if>
 <else>
-    <form-dropdown enabled=state.hasContact selectedItem=state.currentItem items=state.items
-        placeholder=component.getPlaceholder() on-itemChanged('itemChanged') required=state.field.required
-        invalid=state.invalid/>
+    <form-list enabled=state.hasContact selectedNodes=[state.currentNode] nodes=state.nodes
+        placeholder=component.getPlaceholder() on-nodesChanged('customerChanged') invalid=state.invalid/>
 </else>

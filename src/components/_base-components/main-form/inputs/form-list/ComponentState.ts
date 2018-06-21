@@ -9,7 +9,7 @@ export class ComponentState {
         public expanded: boolean = false,
         public listId: string = IdService.generateDateBasedId('form-list-'),
         public filterValue: string = null,
-        public treeId: string = listId,
+        public treeId: string = listId + '-tree',
         public enabled: boolean = true,
         public invalid: boolean = false,
         public treeStyle: string = null,

@@ -1,11 +1,11 @@
-import { FormField, FormDropdownItem, FormInputComponentState } from "@kix/core/dist/model";
+import { FormInputComponentState, TreeNode } from "@kix/core/dist/model";
 import { PendingTimeFormValue } from "@kix/core/dist/browser/ticket";
 
-export class TicketInputStateComponentState extends FormInputComponentState<PendingTimeFormValue> {
+export class ComponentState extends FormInputComponentState<PendingTimeFormValue> {
 
     public constructor(
-        public items: FormDropdownItem[] = [],
-        public currentItem: FormDropdownItem = null,
+        public nodes: TreeNode[] = [],
+        public currentNode: TreeNode = null,
         public pending: boolean = false,
         public times: string[] = [
             "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30",

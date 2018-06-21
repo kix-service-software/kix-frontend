@@ -27,8 +27,7 @@ class ArticleInputBodyComponent extends FormInputComponent<string, ArticleInputB
         }
     }
 
-    private valueChanged(value: string): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public valueChanged(value: string): void {
         super.provideValue(value);
     }
 

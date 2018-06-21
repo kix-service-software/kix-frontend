@@ -1,12 +1,12 @@
-import { TicketInputOwnerComponentState } from "./TicketInputOwnerComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, FormInputComponent } from "@kix/core/dist/model";
+import { FormDropdownItem, FormInputComponent, TreeNode } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOwnerComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputOwnerComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -16,7 +16,8 @@ class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOw
     public onMount(): void {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.agents.map((a) => new FormDropdownItem(a.UserID, 'kix-icon-man', a.UserFullname));
+        this.state.nodes = objectData.agents.map((a) => new TreeNode(a.UserID, a.UserFullname, 'kix-icon-man'));
+        this.setCurrentValue();
     }
 
     public setCurrentValue(): void {
@@ -24,17 +25,16 @@ class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOw
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
             }
         }
-        this.setCurrentValue();
     }
 
-    public itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? Number(item.id) : null);
+    public ownerChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
 }
 
-module.exports = TicketInputOwnerComponent;
+module.exports = Component;

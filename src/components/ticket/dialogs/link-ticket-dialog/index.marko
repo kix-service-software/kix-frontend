@@ -3,14 +3,14 @@
         <div.linkable-objects-selection-label>
             <span>Verknüpfen mit</span>
         </div>
-        <form-dropdown items=state.linkableObjects on-itemChanged('linkableObjectChanged')
-            selectedItem=state.currentLinkableObject/>
+        <form-list nodes=state.linkableObjectNodes on-nodesChanged('linkableObjectChanged')
+            selectedNodes=[state.currentLinkableObjectNode]/>
     </div>
     <div.linkable-objects-form>
         <widget instanceId="link-ticket-dialog-form-widget" title="Suche" key="link-object-form-widget">
             <@content>
-                <if(state.currentLinkableObject)>
-                    <main-form formId=state.currentLinkableObject.id key="link-object-form-widget-form"/>
+                <if(state.currentLinkableObjectNode)>
+                    <main-form formId=state.currentLinkableObjectNode.id key="link-object-form-widget-form"/>
                     <div.linkable-objects-form-button-container>
                         <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
                             <span.kix-icon-search/>
@@ -22,7 +22,7 @@
         </widget>
     </div>
     <div.linkable-objects-result>
-        <if(state.currentLinkableObject)>
+        <if(state.currentLinkableObjectNode)>
             <div.result-title>Trefferliste (${state.resultCount})</div>
             <if(state.standardTable)>
                 <standard-table standardTable=state.standardTable/>
@@ -34,7 +34,7 @@
             <div.linkable-objects-selection-label>
                 <span>Art der Verknüpfung</span>
             </div>
-            <form-dropdown items=state.linkTypes on-itemChanged('linkTypeChanged') selectedItem=state.currentDropDownItem
+            <form-list nodes=state.linkTypeNodes on-nodesChanged('linkTypeChanged') selectedNodes=[state.currentLinkTypeNode]
                 placeholder="Art der Verknüpfung"/>
         </div>
         <button.submit-button disabled=(!component.canSubmit()) on-click('submitClicked')>

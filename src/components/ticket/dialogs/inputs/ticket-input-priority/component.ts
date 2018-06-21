@@ -1,14 +1,12 @@
-import { TicketInputPriorityComponentState } from "./TicketInputPriorityComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent
-} from "@kix/core/dist/model";
+import { ObjectIcon, TicketProperty, FormInputComponent, TreeNode } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
-class TicketInputPriorityComponent extends FormInputComponent<number, TicketInputPriorityComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputPriorityComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -18,8 +16,8 @@ class TicketInputPriorityComponent extends FormInputComponent<number, TicketInpu
     public onMount(): void {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.ticketPriorities.map((p) =>
-            new FormDropdownItem(p.ID, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID), p.Name)
+        this.state.nodes = objectData.ticketPriorities.map((p) =>
+            new TreeNode(p.ID, p.Name, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID))
         );
         this.setCurrentValue();
     }
@@ -29,16 +27,16 @@ class TicketInputPriorityComponent extends FormInputComponent<number, TicketInpu
         if (formInstance) {
             const value = formInstance.getFormFieldValue(this.state.field.property);
             if (value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value);
+                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
             }
         }
     }
 
-    public itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? Number(item.id) : null);
+    public priorityChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
 }
 
-module.exports = TicketInputPriorityComponent;
+module.exports = Component;

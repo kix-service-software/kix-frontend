@@ -1,14 +1,14 @@
-import { TicketInputStateComponentState } from "./TicketInputStateComponentState";
+import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, ObjectIcon, TicketProperty, } from "@kix/core/dist/model";
+import { ObjectIcon, TicketProperty, TreeNode, } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
 import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
 
-class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue, TicketInputStateComponentState> {
+class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
 
     public onCreate(): void {
-        this.state = new TicketInputStateComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -18,8 +18,8 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
     public onMount(): void {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.ticketStates.map((t) =>
-            new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.STATE_ID, t.ID), t.Name)
+        this.state.nodes = objectData.ticketStates.map((t) =>
+            new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.STATE_ID, t.ID))
         );
         this.setCurrentValue();
     }
@@ -29,18 +29,18 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
         if (formInstance) {
             const value = formInstance.getFormFieldValue<PendingTimeFormValue>(this.state.field.property);
             if (value && value.value) {
-                this.state.currentItem = this.state.items.find((i) => i.id === value.value.stateId);
+                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value.stateId);
             }
         }
     }
 
-    public itemChanged(item: FormDropdownItem): void {
+    public stateChanged(nodes: TreeNode[]): void {
         this.state.pending = false;
-        this.state.currentItem = item;
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
 
-        if (item && this.showPendingTime()) {
+        if (this.state.currentNode && this.showPendingTime()) {
             const objectData = ContextService.getInstance().getObjectData();
-            const state = objectData.ticketStates.find((s) => s.ID === item.id);
+            const state = objectData.ticketStates.find((s) => s.ID === this.state.currentNode.id);
             if (state) {
                 const stateType = objectData.ticketStateTypes.find((t) => t.ID === state.TypeID);
                 this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
@@ -62,20 +62,20 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
         return true;
     }
 
-    private dateChanged(event: any): void {
+    public dateChanged(event: any): void {
         this.state.selectedDate = event.target.value;
         this.setValue();
     }
 
-    private timeChanged(event: any): void {
+    public timeChanged(event: any): void {
         this.state.selectedTime = event.target.value;
         this.setValue();
     }
 
     private setValue(): void {
-        if (this.state.currentItem) {
+        if (this.state.currentNode) {
             const stateValue = new PendingTimeFormValue(
-                (this.state.currentItem ? Number(this.state.currentItem.id) : null),
+                (this.state.currentNode ? Number(this.state.currentNode.id) : null),
                 this.state.pending,
                 new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
             );
@@ -86,4 +86,4 @@ class TicketInputStateComponent extends FormInputComponent<PendingTimeFormValue,
     }
 }
 
-module.exports = TicketInputStateComponent;
+module.exports = Component;
