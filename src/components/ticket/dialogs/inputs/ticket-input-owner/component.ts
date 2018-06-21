@@ -1,6 +1,6 @@
 import { TicketInputOwnerComponentState } from "./TicketInputOwnerComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, FormInputComponentState, FormFieldValue, FormInputComponent } from "@kix/core/dist/model";
+import { FormDropdownItem, FormInputComponent } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOwnerComponentState> {
@@ -10,11 +10,11 @@ class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOw
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.agents.map((a) => new FormDropdownItem(a.UserID, 'kix-icon-man', a.UserFullname));
     }
@@ -30,7 +30,7 @@ class TicketInputOwnerComponent extends FormInputComponent<number, TicketInputOw
         this.setCurrentValue();
     }
 
-    private itemChanged(item: FormDropdownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         super.provideValue(item ? Number(item.id) : null);
     }

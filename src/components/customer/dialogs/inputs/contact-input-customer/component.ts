@@ -1,6 +1,5 @@
 import { ComponentState } from "./ComponentState";
 import { FormDropdownItem, FormInputComponent, Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
-import { CustomerService } from "@kix/core/dist/browser/customer";
 import { FormService } from "@kix/core/dist/browser/form";
 import { ContextService } from "@kix/core/dist/browser";
 
@@ -11,11 +10,11 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         this.state.searchCallback = this.searchCustomers.bind(this);
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
@@ -26,7 +25,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         return;
     }
 
-    private customerChanged(item: FormDropdownItem): void {
+    public customerChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         super.provideValue(item ? item.object : null);
     }

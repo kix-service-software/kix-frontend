@@ -1,17 +1,17 @@
 import { ComponentState } from './ComponentState';
-import { FormService } from '@kix/core/dist/browser/form';
-import { FormFieldValue, FormField, FormInputComponent, InputFieldTypes, FormFieldOptions } from '@kix/core/dist/model';
+import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '@kix/core/dist/model';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
-    public onCreate(input: any): void {
-        this.state = new ComponentState(input.field);
+    public onCreate(): void {
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
-        this.state.currentValue = typeof input.currentValue !== 'undefined' ? input.currentValue : '';
+        this.state.currentValue = typeof input.currentValue !== 'undefined' ?
+            input.currentValue : this.state.currentValue;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
         if (this.state.field && this.state.field.options) {
             const inputTypeOption = this.state.field.options.find(
@@ -24,7 +24,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         this.setCurrentValue();
     }
 
@@ -40,13 +40,13 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    private keyDown(event: any): void {
+    public keyDown(event: any): void {
         if (event.key === 'Enter') {
             this.valueChanged(event);
         }
     }
 
-    private focusLost(event: any): void {
+    public focusLost(event: any): void {
         this.valueChanged(event);
     }
 }

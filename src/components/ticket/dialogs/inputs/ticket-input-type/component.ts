@@ -1,7 +1,7 @@
 import { TicketInputTypeComponentState } from "./TicketInputTypeComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponentState, TreeNode, FormFieldValue, FormInputComponent
+    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
@@ -12,11 +12,11 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTyp
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.items = objectData.ticketTypes.map((t) =>
             new FormDropdownItem(t.ID, new ObjectIcon(TicketProperty.TYPE_ID, t.ID), t.Name)
@@ -30,7 +30,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputTyp
         this.state.currentItem = this.state.items.find((i) => i.id === fieldValue.value);
     }
 
-    private itemChanged(item: FormDropdownItem): void {
+    public itemChanged(item: FormDropdownItem): void {
         this.state.currentItem = item;
         super.provideValue(item ? Number(item.id) : null);
     }

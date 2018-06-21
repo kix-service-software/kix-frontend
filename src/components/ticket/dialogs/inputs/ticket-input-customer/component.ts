@@ -13,11 +13,11 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
     }
 
     public onInput(input: any): void {
-        FormInputComponent.prototype.onInput.call(this, input);
+        super.onInput(input);
     }
 
     public onMount(): void {
-        FormInputComponent.prototype.onMount.call(this);
+        super.onMount();
         const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
         formInstance.registerListener({
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
@@ -48,7 +48,7 @@ class TicketInputTypeComponent extends FormInputComponent<number, TicketInputCus
         }
     }
 
-    private getPlaceholder(): string {
+    public getPlaceholder(): string {
         let placeholder = (this.state.field.required ? this.state.field.label : "");
 
         if (!this.state.hasContact) {
