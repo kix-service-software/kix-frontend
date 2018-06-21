@@ -2,7 +2,7 @@ import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentSta
 import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
 import {
     ContextType, OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult
+    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
 import { NewCustomerDialogContext, CustomerService } from "@kix/core/dist/browser/customer";
 
@@ -39,6 +39,9 @@ class NewCustomerDialogComponent {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
+                    ContextService.getInstance().setContext(
+                        null, KIXObjectType.CUSTOMER, ContextMode.DETAILS, customerId
+                    );
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
@@ -49,7 +52,7 @@ class NewCustomerDialogComponent {
     private showSuccessHint(): void {
         const content = new ComponentContent('list-with-title', {
             title: 'Kunde wurde erfolgreich angelegt.',
-            list: ['Kunde wurde erfolgreich angelegt'],
+            list: [],
             icon: 'kix-icon-check'
         });
         OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');

@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact, KIXObjectType
+    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
 import {
     TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
@@ -53,7 +53,7 @@ class NewTicketDialogComponent {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    TicketService.getInstance().openTicket(ticketId);
+                    ContextService.getInstance().setContext(null, KIXObjectType.TICKET, ContextMode.DETAILS, ticketId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showError(error);
