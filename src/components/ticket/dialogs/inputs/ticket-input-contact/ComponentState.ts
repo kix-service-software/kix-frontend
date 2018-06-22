@@ -1,11 +1,11 @@
-import { AutoCompleteConfiguration, FormInputComponentState, Customer, TreeNode } from "@kix/core/dist/model";
+import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "@kix/core/dist/model";
 
-export class ComponentState extends FormInputComponentState<Customer> {
+export class ComponentState extends FormInputComponentState<Contact> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public isLoading: boolean = false,
-        public customers: Customer[] = [],
+        public contacts: Contact[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public currentNode: TreeNode = null
     ) {

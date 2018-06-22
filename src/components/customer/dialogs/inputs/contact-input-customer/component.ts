@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { FormDropdownItem, FormInputComponent, Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
+import { FormInputComponent, Customer, KIXObjectType, ContextMode, TreeNode } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 import { ContextService } from "@kix/core/dist/browser";
 
@@ -25,24 +25,27 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         return;
     }
 
-    public customerChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? item.object : null);
+    public customerChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        const customer = this.state.currentNode ? this.state.customers.find(
+            (cu) => cu.CustomerID === this.state.currentNode.id
+        ) : null;
+        super.provideValue(customer);
     }
 
-    private async searchCustomers(limit: number, searchValue: string): Promise<FormDropdownItem[]> {
+    private async searchCustomers(limit: number, searchValue: string): Promise<TreeNode[]> {
         this.state.customers = await ContextService.getInstance().loadObjects<Customer>(
             KIXObjectType.CUSTOMER, null, ContextMode.DASHBOARD, null, null, null, searchValue, limit
         );
 
-        let items = [];
+        let treeNodes = [];
         if (searchValue && searchValue !== '') {
-            items = this.state.customers.map(
-                (c) => new FormDropdownItem(c.CustomerID, 'kix-icon-man-house', c.DisplayValue, null, c)
+            treeNodes = this.state.customers.map(
+                (c) => new TreeNode(c.CustomerID, c.DisplayValue, 'kix-icon-man-house')
             );
         }
 
-        return items;
+        return treeNodes;
     }
 
 }

@@ -1,2 +1,3 @@
-<form-dropdown-tree nodes=state.nodes placeholder=(state.field.required ? "Bereich / Queue des Tickets zuordnen" : "")
-    selectedNode=state.currentNode required=state.field.required on-itemChanged('queueChanged') invalid=state.invalid/>
+<form-list nodes=state.nodes placeholder=(state.field.required ? "Bereich / Queue des Tickets zuordnen" : "")
+    selectedNodes=[state.currentNode] required=state.field.required on-nodesChanged('queueChanged')
+    invalid=state.invalid/>

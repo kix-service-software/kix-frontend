@@ -22,53 +22,53 @@
     >.form-list-tree {
         max-height: 15rem;
         overflow: auto;
+        border-radius: @border-radius;
     }
     >div.form-list-input-container {
         height: unset;
         min-height: 2rem;
-        padding-right: 2.25rem;
+        padding-right: 1.75rem;
         >.selected-nodes {
-            margin: .25rem 0 0 .25rem;
-            >.selected-node-container {
-                overflow: hidden;
-                margin-right: .5rem;
-                display: inline-block;
-                max-width: 100%;
-                >.selected-node {
-                    display: grid;
-                    grid-auto-flow: column;
-                    align-items: center;
-                    grid-gap: @margin-small;
-                    grid-template-rows: 1.5rem;
-                    background-color: @secondary-5;
-                    border-radius: @border-radius;
-                    padding: 0 @margin-small;
-                    span:first-child[class^="kix-icon-"],
-                    span:first-child[class*=" kix-icon-"] {
-                        font-size: .875rem;
-                    }
-                    .item-text {
-                        align-self: end;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                    .kix-icon-close {
-                        font-size: .75rem;
-                        color: @secondary-2;
-                        cursor: pointer;
-                        &:hover {
-                            color: darken(@secondary-2, 20%);
-                        }
+            padding: .25rem .25rem 0 .25rem;
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            >.selected-node {
+                display: grid;
+                grid-auto-flow: column;
+                align-items: center;
+                grid-gap: @margin-small;
+                grid-template-rows: 1.5rem;
+                background-color: @secondary-5;
+                border-radius: @border-radius;
+                padding: 0 @margin-small;
+                height: 1.5rem;
+                box-sizing: border-box;
+                margin: 0 .25rem .25rem 0;
+                span:first-child[class^="kix-icon-"],
+                span:first-child[class*=" kix-icon-"] {
+                    font-size: .875rem;
+                }
+                .item-text {
+                    align-self: end;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+                .kix-icon-close {
+                    font-size: .75rem;
+                    color: @secondary-2;
+                    cursor: pointer;
+                    &:hover {
+                        color: darken(@secondary-2, 20%);
                     }
                 }
             }
         }
         >input {
             border-right: none;
-            position: absolute;
-            top: -1px;
-            left: -1px;
+            margin: -1px;
         }
         >.form-list-button {
             top: -1px;

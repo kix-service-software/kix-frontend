@@ -1,6 +1,6 @@
 import { FormInputComponentState, TreeNode } from "@kix/core/dist/model";
 
-export class CompontentState extends FormInputComponentState<number> {
+export class ComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public nodes: TreeNode[] = [],

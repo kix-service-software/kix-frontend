@@ -4,17 +4,18 @@ import {
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
-    FormContext, FormDropdownItem, KIXObject, KIXObjectType, WidgetType,
-    CreateLinkDescription, LinkTypeDescription, OverlayType, StringContent, ComponentContent, ObjectIcon
+    FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
+    OverlayType, ComponentContent, TreeNode
 } from "@kix/core/dist/model";
-import { LinkTicketDialogComponentState } from './LinkTicketDialogComponentState';
+import { ComponentState } from './ComponentState';
 
 class LinkTicketDialogComponent<T extends KIXObject> {
 
-    private state: LinkTicketDialogComponentState<T>;
+    private state: ComponentState<T>;
+    public linkTypeDescriptions: LinkTypeDescription[] = [];
 
     public onCreate(): void {
-        this.state = new LinkTicketDialogComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -24,16 +25,16 @@ class LinkTicketDialogComponent<T extends KIXObject> {
 
     public onMount(): void {
         this.setLinkableObjects();
-        if (this.state.linkableObjects.length) {
-            const linkableTicket = this.state.linkableObjects.find((lo) => lo.label === KIXObjectType.TICKET);
+        if (this.state.linkableObjectNodes.length) {
+            const linkableTicket = this.state.linkableObjectNodes.find((lo) => lo.label === KIXObjectType.TICKET);
             if (linkableTicket) {
-                this.state.currentLinkableObject = linkableTicket;
+                this.state.currentLinkableObjectNode = linkableTicket;
             } else {
-                this.state.currentLinkableObject = this.state.linkableObjects[0];
+                this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
             const formInstance = FormService.getInstance().getOrCreateFormInstance(
-                this.state.currentLinkableObject.id.toString()
+                this.state.currentLinkableObjectNode.id.toString()
             );
             formInstance.reset();
 
@@ -71,36 +72,37 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 } else if (lt.Target === KIXObjectType.TICKET) {
                     linkableObject = lt.Source;
                 }
-                if (linkableObject && !this.state.linkableObjects.some((lo) => lo.label === linkableObject)) {
+                if (linkableObject && !this.state.linkableObjectNodes.some((lo) => lo.label === linkableObject)) {
                     const formId = FormService.getInstance().getFormIdByContext(FormContext.LINK, linkableObject);
                     if (formId) {
-                        this.state.linkableObjects.push(new FormDropdownItem(formId, '', linkableObject));
+                        this.state.linkableObjectNodes.push(new TreeNode(formId, linkableObject));
                     }
                 }
             });
-            if (this.state.linkableObjects.length) {
-                (this as any).setStateDirty('linkableObjects');
+            if (this.state.linkableObjectNodes.length) {
+                (this as any).setStateDirty('linkableObjectNodes');
             }
         }
     }
 
-    private linkableObjectChanged(item: FormDropdownItem): void {
-        this.state.currentLinkableObject = item;
-        this.getStandardTable();
+    public linkableObjectChanged(nodes: TreeNode[]): void {
+        this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.state.selectedObjects = [];
 
-        if (!this.state.currentLinkableObject) {
+        if (!this.state.currentLinkableObjectNode) {
             this.state.standardTable = null;
             this.state.resultCount = null;
+        } else {
+            this.getStandardTable();
         }
         this.setLinkTypes();
     }
 
     private async executeSearch(): Promise<void> {
         this.state.resultCount = null;
-        if (this.state.standardTable && this.state.currentLinkableObject) {
+        if (this.state.standardTable && this.state.currentLinkableObjectNode) {
             (this.state.standardTable.contentLayer as IFormTableLayer)
-                .setFormId(this.state.currentLinkableObject.id.toString());
+                .setFormId(this.state.currentLinkableObjectNode.id.toString());
 
             this.state.canSearch = false;
             await this.state.standardTable.loadRows();
@@ -111,10 +113,10 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private getStandardTable(): void {
-        if (this.state.currentLinkableObject) {
+        if (this.state.currentLinkableObjectNode) {
             this.state.standardTable =
                 KIXObjectSearchService.getInstance().getFormResultTable<T>(
-                    (this.state.currentLinkableObject.label as KIXObjectType)
+                    (this.state.currentLinkableObjectNode.label as KIXObjectType)
                 );
         }
         (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
@@ -137,7 +139,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         return this.state.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
     }
 
-    private submitClicked(): void {
+    public submitClicked(): void {
         if (this.canSubmit()) {
             const newLinks = this.state.selectedObjects.map(
                 (so) => new CreateLinkDescription(so, this.state.currentLinkTypeDescription)
@@ -166,39 +168,47 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private setLinkTypes(): void {
+        this.linkTypeDescriptions = [];
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
-            if (this.state.currentLinkableObject) {
+            if (this.state.currentLinkableObjectNode) {
                 objectData.linkTypes.forEach((lt) => {
                     if (
-                        (lt.Source === KIXObjectType.TICKET && lt.Target === this.state.currentLinkableObject.label) ||
-                        (lt.Target === KIXObjectType.TICKET && lt.Source === this.state.currentLinkableObject.label)
+                        (
+                            lt.Source === KIXObjectType.TICKET &&
+                            lt.Target === this.state.currentLinkableObjectNode.label
+                        ) ||
+                        (
+                            lt.Target === KIXObjectType.TICKET &&
+                            lt.Source === this.state.currentLinkableObjectNode.label
+                        )
                     ) {
-                        if (!this.state.linkTypes.some((lo) => lo.label === lt.SourceName)) {
-                            const dropdpwnItem = new FormDropdownItem(
-                                lt.SourceName, '', lt.SourceName, null, new LinkTypeDescription(lt, true)
-                            );
-                            this.state.linkTypes.push(dropdpwnItem);
+                        if (!this.state.linkTypeNodes.some((lo) => lo.label === lt.SourceName)) {
+                            const id = this.linkTypeDescriptions.length;
+                            this.linkTypeDescriptions.push(new LinkTypeDescription(lt, true));
+                            const node = new TreeNode(id, lt.SourceName);
+                            this.state.linkTypeNodes.push(node);
                         }
-                        if (lt.Pointed !== 0 && !this.state.linkTypes.some((lo) => lo.label === lt.TargetName)) {
-                            const dropdownItem = new FormDropdownItem(
-                                lt.TargetName, '', lt.TargetName, null, new LinkTypeDescription(lt, false)
-                            );
-                            this.state.linkTypes.push(dropdownItem);
+                        if (lt.Pointed !== 0 && !this.state.linkTypeNodes.some((lo) => lo.label === lt.TargetName)) {
+                            const id = this.linkTypeDescriptions.length;
+                            this.linkTypeDescriptions.push(new LinkTypeDescription(lt, false));
+                            const node = new TreeNode(id, lt.TargetName);
+                            this.state.linkTypeNodes.push(node);
                         }
                     }
                 });
             } else {
-                this.state.linkTypes = [];
+                this.state.linkTypeNodes = [];
                 this.state.currentLinkTypeDescription = null;
             }
-            (this as any).setStateDirty('linkTypes');
+            (this as any).setStateDirty('linkTypeNodes');
         }
     }
 
-    private linkTypeChanged(item: FormDropdownItem): void {
-        this.state.currentDropDownItem = item;
-        this.state.currentLinkTypeDescription = item ? item.object : null;
+    public linkTypeChanged(nodes: TreeNode[]): void {
+        this.state.currentLinkTypeNode = nodes && nodes.length ? nodes[0] : null;
+        this.state.currentLinkTypeDescription = this.state.currentLinkTypeNode ?
+            this.linkTypeDescriptions[this.state.currentLinkableObjectNode.id] : null;
     }
 }
 

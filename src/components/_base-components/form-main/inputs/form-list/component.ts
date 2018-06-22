@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { FormDropdownItem, ObjectIcon, TreeNode, AutoCompleteConfiguration } from "@kix/core/dist/model";
+import { TreeNode, AutoCompleteConfiguration } from "@kix/core/dist/model";
 
 class Component {
 
@@ -7,9 +7,8 @@ class Component {
 
     private keepExpanded: boolean = false;
     private timeout: any;
-    private currentSearchValue: string;
 
-    public onCreate(input: any): void {
+    public onCreate(): void {
         this.state = new ComponentState();
     }
 
@@ -43,7 +42,7 @@ class Component {
         });
     }
 
-    private setKeepExpanded(): void {
+    public setKeepExpanded(): void {
         this.keepExpanded = true;
     }
 
@@ -56,7 +55,7 @@ class Component {
         }
     }
 
-    private listButtonClicked(): void {
+    public listToggleButtonClicked(): void {
         if (this.state.expanded) {
             this.toggleList();
         } else {
@@ -68,7 +67,7 @@ class Component {
         }
     }
 
-    private nodeToggled(): void {
+    public nodeToggled(): void {
         this.focusInput();
     }
 
@@ -79,10 +78,11 @@ class Component {
         }
     }
 
-    // TODO: kann ggf. entfallen
-    private focusLost(): void {
-        // this.nodeClicked(this.state.preSelectedNode);
-        // this.toggleList();
+    public focusLost(): void {
+        // timeout necessary because focus-lost comes before node-clicked and blocks it on first click (rerender)
+        setTimeout(() => {
+            (this as any).emit('nodesChanged', this.state.selectedNodes);
+        }, 100);
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
@@ -98,7 +98,7 @@ class Component {
         // }
     }
 
-    private keyUp(event: any): void {
+    public keyUp(event: any): void {
         // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren
         // if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
         //     this.toggleList();
@@ -122,7 +122,7 @@ class Component {
             || event.key === 'Enter';
     }
 
-    private nodeClicked(node: TreeNode): void {
+    public nodeClicked(node: TreeNode): void {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
         if (nodeIndex !== -1) {
             this.state.selectedNodes.splice(nodeIndex, 1);
@@ -141,7 +141,7 @@ class Component {
         (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
-    private removeSelectedItem(node: TreeNode): void {
+    public removeSelectedItem(node: TreeNode): void {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
         if (nodeIndex !== -1) {
             this.state.selectedNodes.splice(nodeIndex, 1);
@@ -151,6 +151,7 @@ class Component {
             this.focusInput();
         }
         (this as any).setStateDirty('selectedNodes');
+        (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     private startSearch(): void {
@@ -160,7 +161,6 @@ class Component {
         }
         const hasMinLength = this.state.filterValue.length >= this.state.autoCompleteConfiguration.charCount;
         if (this.state.filterValue && hasMinLength && !this.state.isLoading) {
-            this.currentSearchValue = this.state.filterValue;
             this.timeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
         } else {
             this.state.nodes = [];
@@ -178,28 +178,29 @@ class Component {
     }
 
     private setDropdownStyle(): void {
-        const dropdownInputList = document.getElementById(this.state.treeId + '-tree');
+        const formListTree = (this as any).getComponent(this.state.treeId) ?
+            (this as any).getComponent(this.state.treeId).getTreeDOMElement() : null;
         let transformValue = 0;
-        if (dropdownInputList) {
-            const dropdownInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
-            let container = dropdownInputContainer;
-            let previousContainer;
+        if (formListTree) {
+            const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
+            let container = formListInputContainer;
+            let relevantContainer;
             while (container
                 && container.parentNode
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
-                previousContainer = container;
+                relevantContainer = container;
                 container = container.parentNode;
             }
-            const dropdownListDOMRect = dropdownInputList.getBoundingClientRect();
-            const containerElementDOMRect = previousContainer.getBoundingClientRect();
-            const dropdownInputContainerDOMRect = dropdownInputContainer.getBoundingClientRect();
+            const fromListTreeDOMRect = formListTree.getBoundingClientRect();
+            const containerElementDOMRect = relevantContainer.getBoundingClientRect();
+            const formListInputContainerDOMRect = formListInputContainer.getBoundingClientRect();
             const containerEnd = containerElementDOMRect.top + containerElementDOMRect.height;
-            const dropdownListEnd = dropdownInputContainerDOMRect.top
-                + dropdownInputContainerDOMRect.height
-                + dropdownListDOMRect.height;
+            const dropdownListEnd = formListInputContainerDOMRect.top
+                + formListInputContainerDOMRect.height
+                + fromListTreeDOMRect.height;
             if (containerEnd < dropdownListEnd) {
-                transformValue = dropdownInputContainerDOMRect.height + dropdownListDOMRect.height;
+                transformValue = formListInputContainerDOMRect.height + fromListTreeDOMRect.height;
             } else {
                 transformValue = 0;
             }
@@ -208,7 +209,7 @@ class Component {
         this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
 
-    private getAutocompleteNotFoundText(): string {
+    public getAutocompleteNotFoundText(): string {
         const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objekte';
         return `Keine ${objectName} gefunden (mind. ${this.state.autoCompleteConfiguration.charCount} ` +
             'Zeichen für die Suche eingeben).';

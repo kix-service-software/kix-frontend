@@ -1,5 +1,5 @@
 import { ContextService } from "@kix/core/dist/browser/context";
-import { FormDropdownItem, FormInputComponent } from "@kix/core/dist/model";
+import { FormInputComponent, TreeNode } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
 
 // TODO: als allgemeines input-valid implementieren
@@ -16,7 +16,9 @@ class Component extends FormInputComponent<number, CompontentState> {
     public onMount(): void {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.items = objectData.validObjects.map((vo) => new FormDropdownItem(vo.ID, '', vo.Name));
+        if (objectData) {
+            this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(vo.ID, vo.Name));
+        }
         this.setCurrentValue();
     }
 
@@ -24,9 +26,9 @@ class Component extends FormInputComponent<number, CompontentState> {
         return;
     }
 
-    public itemChanged(item: FormDropdownItem): void {
-        this.state.currentItem = item;
-        super.provideValue(item ? Number(item.id) : null);
+    public validChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 }
 
