@@ -1,10 +1,10 @@
 <for(searchValue in state.searchValues)>
     <div.form-search-value>
         <span>UND</span>
-        <form-dropdown-tree nodes=state.propertyNodes selectedNode=searchValue.currentPropertyNode
-            on-itemChanged('propertyChanged', searchValue)/>
-        <form-dropdown-tree nodes=searchValue.operationNodes selectedNode=searchValue.currentOperationNode
-            on-itemChanged('operationChanged', searchValue)/>
+        <form-list nodes=state.propertyNodes activeNodes=[searchValue.currentPropertyNode]
+            on-nodesChanged('propertyChanged', searchValue)/>
+        <form-list nodes=searchValue.operationNodes activeNodes=[searchValue.currentOperationNode]
+            on-nodesChanged('operationChanged', searchValue)/>
         <div.search-value>
             <if(searchValue.currentPropertyNode)>
                 <${component.getPropertyComponent(searchValue)} fieldId=searchValue.currentPropertyNode.id formId=state.formId

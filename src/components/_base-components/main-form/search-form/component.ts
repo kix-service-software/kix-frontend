@@ -1,4 +1,4 @@
-import { WidgetType, OverlayType, StringContent, KIXObject } from '@kix/core/dist/model';
+import { WidgetType, OverlayType, StringContent, KIXObject, SearchFormInstance } from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, KIXObjectServiceRegistry
@@ -22,6 +22,15 @@ class Component {
         WidgetService.getInstance().setWidgetType('result-list-preview', WidgetType.GROUP);
         const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
         this.state.table = objectService.getObjectTable();
+        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            this.state.fulltextSearch = formInstance.form.fulltextSearch;
+            this.state.defaultProperties = formInstance.form.defaultSearchProperties;
+        }
+    }
+
+    public fulltextValueChanged(event: any): void {
+        this.state.fulltextValue = event.target.value;
     }
 
     public reset(): void {
@@ -37,15 +46,26 @@ class Component {
 
     public async search(): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true, "Suche ...");
-        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.state.formId)
-            .then((objects) => {
-                this.state.table.contentLayer.setPreloadedObjects(objects);
-                this.state.resultCount = objects ? objects.length : 0;
-                this.state.table.loadRows(false);
-            })
-            .catch((error) => {
-                this.showError(error);
-            });
+        if (this.state.fulltextActive) {
+            if (this.state.fulltextValue && this.state.fulltextValue !== '') {
+                await KIXObjectSearchService.getInstance()
+                    .executeFullTextSearch<KIXObject>(this.state.objectType, this.state.fulltextValue)
+                    .then((objects) => {
+                        this.setSearchResult(objects);
+                    })
+                    .catch((error) => {
+                        this.showError(error);
+                    });
+            }
+        } else {
+            await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.state.formId)
+                .then((objects) => {
+                    this.setSearchResult(objects);
+                })
+                .catch((error) => {
+                    this.showError(error);
+                });
+        }
         DialogService.getInstance().setMainDialogLoading(false);
     }
 
@@ -57,12 +77,29 @@ class Component {
         return;
     }
 
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
-
     public getResultTitle(): string {
         return `Trefferliste (${this.state.resultCount})`;
+    }
+
+    public toggleFulltext(enable: boolean): void {
+        this.state.fulltextActive = enable;
+    }
+
+    private setSearchResult(objects: KIXObject[]): void {
+        this.state.table.contentLayer.setPreloadedObjects(objects);
+        this.state.resultCount = objects ? objects.length : 0;
+
+        const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
+        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        const objectProperties = searchCache.criterias.map((c) => c.property);
+        const columns = objectService.getTableColumnConfiguration(objectProperties);
+        this.state.table.setColumns(columns);
+
+        this.state.table.loadRows(false);
+    }
+
+    private showError(error: any): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

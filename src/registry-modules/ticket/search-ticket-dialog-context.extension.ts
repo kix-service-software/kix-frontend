@@ -2,7 +2,7 @@ import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import { TicketSearchContextConfiguration, TicketSearchContext } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, FormField, KIXObjectType,
-    TicketProperty, FormContext, Form
+    TicketProperty, FormContext, Form, SearchForm
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -25,17 +25,14 @@ export class ModuleExtension implements IModuleFactoryExtension {
         const formIdNewTicket = 'search-ticket-form';
         const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
         if (!existingFormNewTicket) {
-            const fulltextField = new FormField("Volltext", TicketProperty.FULLTEXT, false, "Volltext");
-
-            const form = new Form(
+            const form = new SearchForm(
                 formIdNewTicket,
                 'Ticketsuche',
-                [
-                    new FormGroup('Volltext', [fulltextField])
-                ],
                 KIXObjectType.TICKET,
-                false,
-                FormContext.SEARCH
+                FormContext.SEARCH,
+                null,
+                true,
+                [TicketProperty.TITLE, TicketProperty.QUEUE_ID]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
