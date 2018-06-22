@@ -78,11 +78,11 @@ class Component {
         }
     }
 
-    // TODO: kann ggf. entfallen
-    private focusLost(): void {
-        // this.nodeClicked(this.state.preSelectedNode);
-        // this.toggleList();
-        (this as any).emit('nodesChanged', this.state.selectedNodes);
+    public focusLost(): void {
+        // timeout necessary because focus-lost comes before node-clicked and blockes it on first click (rerender)
+        setTimeout(() => {
+            (this as any).emit('nodesChanged', this.state.selectedNodes);
+        }, 100);
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
