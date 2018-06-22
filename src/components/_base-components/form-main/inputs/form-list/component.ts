@@ -79,7 +79,7 @@ class Component {
     }
 
     public focusLost(): void {
-        // timeout necessary because focus-lost comes before node-clicked and blockes it on first click (rerender)
+        // timeout necessary because focus-lost comes before node-clicked and blocks it on first click (rerender)
         setTimeout(() => {
             (this as any).emit('nodesChanged', this.state.selectedNodes);
         }, 100);
