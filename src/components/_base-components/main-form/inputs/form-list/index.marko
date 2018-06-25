@@ -1,6 +1,6 @@
 <div.form-list on-click('setKeepExpanded') key=state.listId>
     <div.form-list-input-container.input-style class={"list-shown": state.expanded}
-        key=("form-list-input-container-" + state.listId)>
+        key=("form-list-input-container-" + state.listId) title=input.placeholder>
         <if(state.selectedNodes && state.selectedNodes.length)>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click('toggleList', false)>
                 <for(node in state.selectedNodes)>

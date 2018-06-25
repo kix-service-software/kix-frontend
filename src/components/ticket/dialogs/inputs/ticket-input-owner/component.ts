@@ -17,17 +17,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = objectData.agents.map((a) => new TreeNode(a.UserID, a.UserFullname, 'kix-icon-man'));
-        this.setCurrentValue();
-    }
-
-    public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
-            }
-        }
     }
 
     public ownerChanged(nodes: TreeNode[]): void {

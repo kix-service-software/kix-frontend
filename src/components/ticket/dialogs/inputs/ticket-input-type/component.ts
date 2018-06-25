@@ -19,13 +19,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state.nodes = objectData.ticketTypes.map((t) =>
             new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.TYPE_ID, t.ID))
         );
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.currentNode = this.state.nodes.find((i) => i.id === fieldValue.value);
     }
 
     public typeChanged(nodes: TreeNode[]): void {

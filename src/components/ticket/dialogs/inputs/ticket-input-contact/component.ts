@@ -18,11 +18,6 @@ class Component extends FormInputComponent<Contact, ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        return;
     }
 
     public contactChanged(nodes: TreeNode[]): void {

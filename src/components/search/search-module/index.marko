@@ -1,1 +1,19 @@
-<h1>Suche Dashboard</h1>
+<widget title="Suchkriterien für Ticketsuche">
+    <@content>
+        <div.search-criteria>
+            <div.search-criteria-list>
+                <for(criteria in state.criterias)>
+                    <div.search-criteria-list-item>
+                        <div.key>
+                            <span.property-name>${criteria.property} (${criteria.operator})</span>
+                        </div>
+                        <div.value>
+                            <span>${criteria.value}</span>
+                        </div>
+                    </div>
+                </for>
+            </div>
+            <div.search-criteria-buttons/>
+        </div>
+    </@content>
+</widget>

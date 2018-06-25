@@ -19,17 +19,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<number>(this.state.field.property);
-            if (value) {
-                this.state.currentNode = TreeUtil.findNode(this.state.nodes, value.value);
-            }
-        }
     }
 
     private prepareTree(services: Service[]): TreeNode[] {

@@ -33,13 +33,6 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
     }
 
     public onMount(): void {
-        ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>) => {
-                this.state.widgetConfiguration =
-                    context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-                this.setTableConfiguration();
-            }
-        });
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
