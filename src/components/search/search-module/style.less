@@ -5,7 +5,7 @@
     padding: 1em;
     .search-criteria-list {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: 1fr 1fr;
         grid-gap: 0 0.75rem;
         height: 8.75rem;
         overflow-y: scroll;
@@ -28,6 +28,15 @@
                 color: @secondary-7;
                 &.key:after {
                     content: ":";
+                }
+                &.key {
+                    .property-name {
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        max-width: 90%;
+                        float: left;
+                    }
                 }
             }
             &:nth-of-type(4n+1) {

@@ -3,7 +3,9 @@ import { SearchOperator } from '@kix/core/dist/browser';
 export class ComponentState {
     public constructor(
         public criterias: FilterCriteria[] = [
-            new FilterCriteria('Property 1', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
+            new FilterCriteria('Property mit ganz doll viel langem Namen und haufenweise Text',
+                SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                'Wert mit ganz viel Text und haufenweise Buchstaben und noch mehr Text und noch viel mehr Buchstaben.'),
             new FilterCriteria('Property 2', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
             new FilterCriteria('Property 3', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
             new FilterCriteria('Property 4', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
