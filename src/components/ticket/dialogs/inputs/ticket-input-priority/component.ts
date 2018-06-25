@@ -1,7 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { ObjectIcon, TicketProperty, FormInputComponent, TreeNode } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -19,15 +18,16 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state.nodes = objectData.ticketPriorities.map((p) =>
             new TreeNode(p.ID, p.Name, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID))
         );
-        this.setCurrentValue();
+        this.setCurrentNode();
     }
 
-    public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            if (Array.isArray(this.state.defaultValue.value)) {
+                this.state.currentNode = this.state.defaultValue.value.length ?
+                    this.state.nodes.find((n) => n.id === this.state.defaultValue.value[0]) : null;
+            } else {
+                this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
             }
         }
     }

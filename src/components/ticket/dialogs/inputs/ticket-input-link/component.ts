@@ -18,17 +18,6 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         super.onMount();
     }
 
-    public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
-            if (value) {
-                this.state.linkDescriptions = value.value ? value.value : [];
-            }
-        }
-        this.setCurrentValue();
-    }
-
     public openTicketLinkDialog(): void {
         DialogService.getInstance().openOverlayDialog(
             'link-ticket-dialog',

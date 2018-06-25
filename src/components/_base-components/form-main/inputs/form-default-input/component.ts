@@ -25,11 +25,6 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public onMount(): void {
         super.onMount();
-        this.setCurrentValue();
-    }
-
-    public setCurrentValue(): void {
-        return;
     }
 
     private valueChanged(event: any): void {

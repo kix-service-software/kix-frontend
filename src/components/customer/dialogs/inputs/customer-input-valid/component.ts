@@ -19,11 +19,6 @@ class Component extends FormInputComponent<number, CompontentState> {
         if (objectData) {
             this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(vo.ID, vo.Name));
         }
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        return;
     }
 
     public validChanged(nodes: TreeNode[]): void {
