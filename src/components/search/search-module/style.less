@@ -1,0 +1,41 @@
+.search-criteria {
+    display: grid;
+    grid-template-columns: auto 16rem;
+    align-content: center;
+    padding: 1em;
+    .search-criteria-list {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-gap: 0 0.75rem;
+        height: 8.75rem;
+        overflow-y: scroll;
+        .search-criteria-list-item {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            border-radius: 3px;
+            div {
+                min-width: 2.875em;
+                display: inline-block;
+                vertical-align: top;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                position: relative;
+                min-height: 1.75em;
+                line-height: 1.75em;
+                padding: 0 0.875em;
+                box-sizing: border-box;
+                color: @secondary-7;
+                &.key:after {
+                    content: ":";
+                }
+            }
+            &:nth-of-type(4n+1) {
+                background: @secondary-3;
+            }
+            &:nth-of-type(4n+2) {
+                background: @secondary-3;
+            }
+        }
+    }
+}
