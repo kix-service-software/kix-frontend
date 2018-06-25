@@ -38,6 +38,8 @@ class Component {
         if (formInstance) {
             formInstance.reset();
         }
+
+        KIXObjectSearchService.getInstance().clearSearchCache();
     }
 
     public cancel(): void {

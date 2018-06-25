@@ -1,13 +1,14 @@
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectSearchService, FormInputRegistry, FormService, LabelService,
-    SearchOperatorUtil
+    SearchOperatorUtil,
+    IKIXObjectSearchListener
 } from '@kix/core/dist/browser';
-import { TreeNode, SearchFormInstance } from '@kix/core/dist/model';
+import { TreeNode, SearchFormInstance, FilterCriteria, KIXObject } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { FormSearchValue } from './FormSearchValue';
 
-class Component {
+class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
 
@@ -22,6 +23,8 @@ class Component {
     }
 
     public onMount(): void {
+        KIXObjectSearchService.getInstance().registerListener(this);
+
         const properties = KIXObjectSearchService.getInstance().getSearchProperties(this.state.objectType);
         if (properties) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
@@ -99,10 +102,23 @@ class Component {
         }
     }
 
-    public checkSearchValueList(): void {
+    private checkSearchValueList(): void {
         if (!this.state.searchValues.some((sv) => sv.currentPropertyNode === null)) {
             this.state.searchValues = [...this.state.searchValues, new FormSearchValue()];
         }
+    }
+
+    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
+        return;
+    }
+
+    public searchCleared(): void {
+        this.state.searchValues = [];
+        this.checkSearchValueList();
+    }
+
+    public searchFinished<T extends KIXObject = KIXObject>(result: T[]): void {
+        return;
     }
 
 }
