@@ -16,6 +16,7 @@ class FormComponent {
         this.state.objectType = this.state.formInstance.getObjectType();
         this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
         WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
+        this.state.loading = false;
     }
 
 }

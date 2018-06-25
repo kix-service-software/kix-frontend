@@ -12,7 +12,7 @@ export class ComponentState {
         public fulltextSearch: boolean = false,
         public defaultProperties: string[] = [],
         public fullTextField: FormField[] = [],
-        public fulltextActive: boolean = false,
+        public fulltextActive: boolean = true,
         public fulltextValue: string = null,
         public loading: boolean = true
     ) { }

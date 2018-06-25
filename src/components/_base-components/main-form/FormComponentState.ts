@@ -6,7 +6,8 @@ export class FormComponentState {
         public formId: string = null,
         public objectType: KIXObjectType = null,
         public formInstance: IFormInstance = null,
-        public isSearchContext: boolean = false
+        public isSearchContext: boolean = false,
+        public loading: boolean = true
     ) { }
 
 }
