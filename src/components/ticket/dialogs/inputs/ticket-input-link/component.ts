@@ -1,6 +1,5 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
 import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
 

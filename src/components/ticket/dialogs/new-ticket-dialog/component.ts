@@ -1,14 +1,12 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    FormValidationService, OverlayService, FormService, ContextService
+    OverlayService, FormService, ContextService
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ContextType, FormFieldValue, FormField, TicketProperty, Customer, Contact, KIXObjectType, ContextMode
+    FormFieldValue, FormField, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
-import {
-    TicketService, NewTicketDialogContext, NewTicketDialogContextConfiguration
-} from "@kix/core/dist/browser/ticket";
+import { TicketService } from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
 
 class NewTicketDialogComponent {
@@ -20,7 +18,7 @@ class NewTicketDialogComponent {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
             formInstance.registerListener({
@@ -35,13 +33,13 @@ class NewTicketDialogComponent {
     }
 
     private cancel(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }
 
     private async  submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {

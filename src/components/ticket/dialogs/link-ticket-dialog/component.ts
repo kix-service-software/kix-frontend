@@ -33,7 +33,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                 this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
-            const formInstance = FormService.getInstance().getOrCreateFormInstance(
+            const formInstance = FormService.getInstance().getFormInstance(
                 this.state.currentLinkableObjectNode.id.toString()
             );
             formInstance.reset();
