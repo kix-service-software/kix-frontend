@@ -13,7 +13,8 @@ export class ComponentState {
         public defaultProperties: string[] = [],
         public fullTextField: FormField[] = [],
         public fulltextActive: boolean = false,
-        public fulltextValue: string = null
+        public fulltextValue: string = null,
+        public loading: boolean = true
     ) { }
 
 }

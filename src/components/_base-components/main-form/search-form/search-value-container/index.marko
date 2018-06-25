@@ -1,18 +1,23 @@
-<for(searchValue in state.searchValues)>
-    <div.form-search-value>
-        <span>UND</span>
-        <form-list nodes=state.propertyNodes activeNodes=[searchValue.currentPropertyNode]
-            on-nodesChanged('propertyChanged', searchValue)/>
-        <form-list nodes=searchValue.operationNodes activeNodes=[searchValue.currentOperationNode]
-            on-nodesChanged('operationChanged', searchValue)/>
-        <div.search-value>
-            <if(searchValue.currentPropertyNode)>
-                <${component.getPropertyComponent(searchValue)} fieldId=searchValue.currentPropertyNode.id formId=state.formId
-                    key=("search-value-" + searchValue.currentPropertyNode.id)/>
-            </if>
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
+    <for(searchValue in state.searchValues)>
+        <div.form-search-value>
+            <span>UND</span>
+            <form-list nodes=state.propertyNodes selectedNodes=[searchValue.currentPropertyNode]
+                on-nodesChanged('propertyChanged', searchValue)/>
+            <form-list nodes=searchValue.operationNodes selectedNodes=[searchValue.currentOperationNode]
+                on-nodesChanged('operationChanged', searchValue)/>
+            <div.search-value>
+                <if(searchValue.currentPropertyNode)>
+                    <${component.getPropertyComponent(searchValue)} fieldId=searchValue.currentPropertyNode.id formId=state.formId
+                        key=("search-value-" + searchValue.currentPropertyNode.id)/>
+                </if>
+            </div>
+            <div.remove-value on-click('removeValue', searchValue)>
+                <span.kix-icon-minus/>
+            </div>
         </div>
-        <div.remove-value on-click('removeValue', searchValue)>
-            <span.kix-icon-minus/>
-        </div>
-    </div>
-</for>
+    </for>
+</else>

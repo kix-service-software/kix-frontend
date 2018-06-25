@@ -1,19 +1,24 @@
 <div.search-form>
-    <if(state.fulltextSearch)>
-        <div.fulltext-search on-click('toggleFulltext', true) title="Volltextsuche aktivieren">
-            <span>Volltext:</span>
-            <input.input-style value=state.fulltextValue on-change('fulltextValueChanged')/>
-            <if(!state.fulltextActive)>
+    <if(state.loading)>
+        <loading-spinner/>
+    </if>
+    <else>
+        <if(state.fulltextSearch)>
+            <div.fulltext-search on-click('toggleFulltext', true) title="Volltextsuche aktivieren">
+                <span>Volltext:</span>
+                <input.input-style value=state.fulltextValue on-change('fulltextValueChanged')/>
+                <if(!state.fulltextActive)>
+                    <div.form-shield/>
+                </if>
+            </div>
+        </if>
+        <div.search-criterias on-click('toggleFulltext', false) title="Attributsuche aktivieren">
+            <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
+            <if(state.fulltextActive)>
                 <div.form-shield/>
             </if>
         </div>
-    </if>
-    <div.search-criterias on-click('toggleFulltext', false) title="Attributsuche aktivieren">
-        <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
-        <if(state.fulltextActive)>
-            <div.form-shield/>
-        </if>
-    </div>
+    </else>
 </div>
 <div.dialog-button-container>
     <button.cancel-button type="button" on-click("reset") title="Daten zurücksetzen">

@@ -4,7 +4,9 @@ import {
     SearchOperatorUtil,
     IKIXObjectSearchListener
 } from '@kix/core/dist/browser';
-import { TreeNode, SearchFormInstance, FilterCriteria, KIXObject } from '@kix/core/dist/model';
+import {
+    TreeNode, SearchFormInstance, FilterCriteria, KIXObject, FilterType, FilterDataType
+} from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { FormSearchValue } from './FormSearchValue';
 
@@ -31,19 +33,12 @@ class Component implements IKIXObjectSearchListener {
             this.state.propertyNodes = properties.map((p) => new TreeNode(p, labelProvider.getPropertyText(p)));
         }
 
-        if (this.state.defaultProperties && this.state.defaultProperties.length) {
-            this.state.defaultProperties.forEach((dp) => {
-                const property = this.state.propertyNodes.find((pn) => pn.id === dp);
-                const operations = KIXObjectSearchService.getInstance().getSearchOperations(
-                    this.state.objectType, dp
-                );
-                const value = new FormSearchValue(
-                    dp, true, operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o)), property)
-                );
-                this.state.searchValues.push(value);
-            });
+        if (this.state.defaultProperties) {
+            this.setDefaultFormProperties();
             this.checkSearchValueList();
         }
+
+        this.state.loading = false;
     }
 
     public propertyChanged(searchValue: FormSearchValue, nodes: TreeNode[]): void {
@@ -106,6 +101,33 @@ class Component implements IKIXObjectSearchListener {
         if (!this.state.searchValues.some((sv) => sv.currentPropertyNode === null)) {
             this.state.searchValues = [...this.state.searchValues, new FormSearchValue()];
         }
+    }
+
+    private setDefaultFormProperties(): void {
+        this.state.defaultProperties.forEach((dp) => {
+            const property = this.state.propertyNodes.find((pn) => pn.id === dp);
+            const operations = KIXObjectSearchService.getInstance().getSearchOperations(
+                this.state.objectType, dp
+            );
+
+            let currentOperation: TreeNode;
+            if ((operations && operations.length)) {
+                currentOperation = new TreeNode(operations[0], SearchOperatorUtil.getText(operations[0]));
+            }
+
+            const value = new FormSearchValue(
+                dp,
+                true,
+                operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o))),
+                property,
+                currentOperation
+            );
+            this.state.searchValues.push(value);
+
+            const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+            const criteria = new FilterCriteria(dp, currentOperation.id, FilterDataType.STRING, FilterType.AND, null);
+            formInstance.setFilterCriteria(criteria);
+        });
     }
 
     public searchCriteriasChanged(criterias: FilterCriteria[]): void {

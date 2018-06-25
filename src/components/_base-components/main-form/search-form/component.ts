@@ -1,11 +1,15 @@
-import { WidgetType, OverlayType, StringContent, KIXObject, SearchFormInstance } from '@kix/core/dist/model';
+import {
+    WidgetType, OverlayType, StringContent,
+    KIXObject, SearchFormInstance, FilterCriteria
+} from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
 import {
-    WidgetService, DialogService, KIXObjectSearchService, OverlayService, KIXObjectServiceRegistry
+    WidgetService, DialogService, KIXObjectSearchService,
+    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
 
@@ -27,6 +31,7 @@ class Component {
             this.state.fulltextSearch = formInstance.form.fulltextSearch;
             this.state.defaultProperties = formInstance.form.defaultSearchProperties;
         }
+        this.state.loading = false;
     }
 
     public fulltextValueChanged(event: any): void {
@@ -102,6 +107,18 @@ class Component {
 
     private showError(error: any): void {
         OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+    }
+
+    public searchCleared(): void {
+        this.state.canSearch = false;
+    }
+
+    public searchFinished<T extends KIXObject<any> = KIXObject<any>>(result: T[]): void {
+        return;
+    }
+
+    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
+        this.state.canSearch = !criterias.some((c) => c.value === null);
     }
 
 }
