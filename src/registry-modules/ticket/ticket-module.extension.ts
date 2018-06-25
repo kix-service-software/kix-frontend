@@ -1,15 +1,10 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    WidgetConfiguration, WidgetType, ConfiguredWidget, WidgetSize, Form,
-    FormField, TicketProperty, ArticleProperty, DataType, FormContext, KIXObjectType, FormFieldOption
+    Form, FormField, TicketProperty, ArticleProperty, FormContext, KIXObjectType, FormFieldOption, FormFieldValue
 } from '@kix/core/dist/model';
-import {
-    TicketContextConfiguration, ArticleLabelProvider,
-    TicketStateOptions
-} from '@kix/core/dist/browser/ticket';
+import { TicketContextConfiguration, TicketStateOptions } from '@kix/core/dist/browser/ticket';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
-import { TableColumnConfiguration } from '@kix/core/dist/browser';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
@@ -43,8 +38,12 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Ticket verknüpfen mit", TicketProperty.LINK, false, "Verknüpfungen"));
             fields.push(new FormField("Bearbeiter", TicketProperty.OWNER_ID, false, "Bearbeiter"));
             fields.push(new FormField("Verantwortlicher", TicketProperty.RESPONSIBLE_ID, false, "Verantwortlicher"));
-            fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
-            fields.push(new FormField("Status des Tickets", TicketProperty.STATE_ID, false, "Status"));
+            fields.push(new FormField<number>(
+                "Priorität", TicketProperty.PRIORITY_ID, false, "Priorität", null, new FormFieldValue(3)
+            ));
+            fields.push(new FormField<number>(
+                "Status des Tickets", TicketProperty.STATE_ID, false, "Status", null, new FormFieldValue(4)
+            ));
 
             const group = new FormGroup('Ticketdaten', fields);
 

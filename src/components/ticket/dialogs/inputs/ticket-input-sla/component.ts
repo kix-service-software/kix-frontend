@@ -23,17 +23,6 @@ class Component extends FormInputComponent<number, ComponentState>  {
                 new TreeNode(s.ID, s.Name, new ObjectIcon(TicketProperty.SLA_ID, s.ID))
             );
         }
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
-            }
-        }
     }
 
     public slaChanged(nodes: TreeNode[]): void {

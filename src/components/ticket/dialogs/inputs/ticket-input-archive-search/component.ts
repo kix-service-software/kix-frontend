@@ -19,11 +19,6 @@ class Component extends FormInputComponent<number, ComponentState> {
             new TreeNode(ArchiveFlag.ARCHIVED, 'Archivierte Tickets'),
             new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Nicht archivierte Tickets')
         ];
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        return;
     }
 
     public nodesChanged(nodes: TreeNode[]): void {

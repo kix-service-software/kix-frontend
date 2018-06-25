@@ -38,15 +38,6 @@ class Component extends FormInputComponent<Customer, ComponentState> {
             },
             updateForm: () => { return; }
         });
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
-        }
     }
 
     public getPlaceholder(): string {
