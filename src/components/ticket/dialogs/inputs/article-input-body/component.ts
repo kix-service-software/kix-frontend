@@ -1,6 +1,5 @@
 import { ArticleInputBodyComponentState } from "./ArticleInputBodyComponentState";
 import { FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser";
 
 class ArticleInputBodyComponent extends FormInputComponent<string, ArticleInputBodyComponentState> {
 

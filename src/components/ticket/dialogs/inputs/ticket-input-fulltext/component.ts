@@ -1,6 +1,5 @@
 import { TicketInputFulltextComponentState } from "./TicketInputFulltextComponentState";
 import { FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputFulltextComponent extends FormInputComponent<string, TicketInputFulltextComponentState> {
 
