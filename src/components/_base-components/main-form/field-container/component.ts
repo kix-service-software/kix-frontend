@@ -1,5 +1,5 @@
-import { FormField, KIXObjectType } from "@kix/core/dist/model";
-import { FormService, FormInputRegistry } from "@kix/core/dist/browser";
+import { FormField } from "@kix/core/dist/model";
+import { FormInputRegistry } from "@kix/core/dist/browser";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 import { FieldContainerComponentState } from "./FieldContainerComponentState";
 
@@ -16,7 +16,7 @@ class FieldContainerComponent {
         this.state.formId = input.formId;
     }
 
-    private getInputComponent(field: FormField): any {
+    public getInputComponent(field: FormField): any {
         const definition = FormInputRegistry.getInstance().getFormInputComponent(field.property, this.state.objectType);
         return ComponentsService.getInstance().getComponentTemplate(definition.componentId);
     }

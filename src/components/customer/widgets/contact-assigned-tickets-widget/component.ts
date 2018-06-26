@@ -1,14 +1,13 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, WidgetService,
+    ContextService, ActionFactory,
+    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer,
     TableColumnConfiguration, ITableClickListener
 } from '@kix/core/dist/browser';
-import { WidgetConfiguration, Contact, WidgetType, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
+import { WidgetConfiguration, Contact, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
 import {
     ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
 } from '@kix/core/dist/browser/contact';
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { TicketTableContentLayer, TicketTableLabelLayer, TicketService } from '@kix/core/dist/browser/ticket';
 
 class Component {
@@ -94,7 +93,7 @@ class Component {
             const tableId = 'contact-open-tickets-' + IdService.generateDateBasedId();
             this.state.openTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -112,7 +111,7 @@ class Component {
             const tableId = 'contact-escalated-tickets-' + IdService.generateDateBasedId();
             this.state.escalatedTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -130,7 +129,7 @@ class Component {
             const tableId = 'contact-reminder-tickets-' + IdService.generateDateBasedId();
             this.state.reminderTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -148,7 +147,7 @@ class Component {
             const tableId = 'contact-new-tickets-' + IdService.generateDateBasedId();
             this.state.newTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -166,7 +165,7 @@ class Component {
             const tableId = 'contact-pending-tickets-' + IdService.generateDateBasedId();
             this.state.pendingTicketsTable = new StandardTable(
                 tableId,
-                new TicketTableContentLayer(tableId, []),
+                new TicketTableContentLayer([]),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
@@ -197,7 +196,7 @@ class Component {
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
-        (this.state.escalatedTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.escalatedTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.escalatedTicketsTable.loadRows(true);
         this.state.loadEscalatedTickets = false;
     }
@@ -212,7 +211,7 @@ class Component {
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
-        (this.state.reminderTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.reminderTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.reminderTicketsTable.loadRows(true);
         this.state.loadReminderTickets = false;
     }
@@ -227,7 +226,7 @@ class Component {
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
-        (this.state.newTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.newTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.newTicketsTable.loadRows(true);
         this.state.loadNewTickets = false;
     }
@@ -242,7 +241,7 @@ class Component {
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
-        (this.state.openTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.openTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.openTicketsTable.loadRows(true);
         this.state.loadOpenTickets = false;
     }
@@ -257,7 +256,7 @@ class Component {
             this.state.contact.ContactID, KIXObjectType.CONTACT, properties
         );
 
-        (this.state.pendingTicketsTable.contentLayer as TicketTableContentLayer).setPreloadedTickets(tickets);
+        this.state.pendingTicketsTable.contentLayer.setPreloadedObjects(tickets);
         this.state.pendingTicketsTable.loadRows(true);
         this.state.loadPendingTickets = false;
     }

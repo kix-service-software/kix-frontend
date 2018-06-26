@@ -1,6 +1,5 @@
 import { LinkTicketComponentState } from "./LinkTicketComponentState";
 import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
 
@@ -16,17 +15,6 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
 
     public onMount(): void {
         super.onMount();
-    }
-
-    public setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<CreateLinkDescription[]>(this.state.field.property);
-            if (value) {
-                this.state.linkDescriptions = value.value ? value.value : [];
-            }
-        }
-        this.setCurrentValue();
     }
 
     public openTicketLinkDialog(): void {

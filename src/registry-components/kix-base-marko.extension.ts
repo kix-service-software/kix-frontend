@@ -13,8 +13,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getDialogFormDependencies(): string[] {
         return [
-            '_base-components/form-main/inputs/form-default-input',
-            '_base-components/form-main/inputs/form-list'
+            '_base-components/main-form/inputs/form-default-input',
+            '_base-components/main-form/inputs/form-list'
         ];
     }
 
@@ -35,8 +35,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getDialogFormTags(): Array<[string, string]> {
         return [
-            ['form-default-input', '_base-components/form-main/inputs/form-default-input'],
-            ['form-list', '_base-components/form-main/inputs/form-list']
+            ['form-default-input', '_base-components/main-form/inputs/form-default-input'],
+            ['form-list', '_base-components/main-form/inputs/form-list']
         ];
     }
 

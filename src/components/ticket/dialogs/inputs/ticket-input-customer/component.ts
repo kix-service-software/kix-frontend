@@ -19,7 +19,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public onMount(): void {
         super.onMount();
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.registerListener({
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
@@ -38,15 +38,6 @@ class Component extends FormInputComponent<Customer, ComponentState> {
             },
             updateForm: () => { return; }
         });
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
-        }
     }
 
     public getPlaceholder(): string {

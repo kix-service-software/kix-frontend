@@ -1,6 +1,5 @@
 import { TicketInputTicketNumberComponentState } from "./TicketInputTicketNumberComponentState";
 import { FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class TicketInputFulltextComponent extends FormInputComponent<string, TicketInputTicketNumberComponentState> {
 
@@ -14,13 +13,6 @@ class TicketInputFulltextComponent extends FormInputComponent<string, TicketInpu
 
     public onMount(): void {
         super.onMount();
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string>(this.state.field.property);
-        this.state.currentValue = value.value;
     }
 
 }

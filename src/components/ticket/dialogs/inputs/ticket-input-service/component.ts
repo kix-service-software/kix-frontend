@@ -3,7 +3,6 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent
 } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -19,17 +18,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue<number>(this.state.field.property);
-            if (value) {
-                this.state.currentNode = TreeUtil.findNode(this.state.nodes, value.value);
-            }
-        }
     }
 
     private prepareTree(services: Service[]): TreeNode[] {

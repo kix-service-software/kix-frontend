@@ -1,9 +1,8 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    FormDropdownItem, ObjectIcon, TicketProperty, FormInputComponent, TreeNode
+    ObjectIcon, TicketProperty, FormInputComponent, TreeNode
 } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<number, ComponentState>  {
 
@@ -22,17 +21,6 @@ class Component extends FormInputComponent<number, ComponentState>  {
             this.state.nodes = objectData.slas.map((s) =>
                 new TreeNode(s.ID, s.Name, new ObjectIcon(TicketProperty.SLA_ID, s.ID))
             );
-        }
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        if (formInstance) {
-            const value = formInstance.getFormFieldValue(this.state.field.property);
-            if (value) {
-                this.state.currentNode = this.state.nodes.find((i) => i.id === value.value);
-            }
         }
     }
 

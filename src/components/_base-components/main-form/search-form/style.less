@@ -1,0 +1,26 @@
+.search-form {
+    >.fulltext-search {
+        position: relative;
+        display: grid;
+        grid-template-columns: 4rem auto;
+        grid-gap: 0.5rem;
+        align-items: center;
+        padding: @margin-default 10rem;
+    }
+    >.search-criterias {
+        position: relative;
+        padding: @margin-default 10rem;
+    }
+    .form-shield {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: @secondary-7;
+        opacity: 0.25;
+        cursor: pointer;
+        border-radius: 3px;
+        border: 1px solid #5b5b5b;
+    }
+}

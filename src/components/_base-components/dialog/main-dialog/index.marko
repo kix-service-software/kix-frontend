@@ -2,7 +2,7 @@
     <div.main-dialog-container>
         <div.shield/>
         <div.main-dialog>
-            <widget isDialog=true title=state.dialogTitle minimizable=false>
+            <widget key="main-dialog" isDialog=true title=state.dialogTitle minimizable=false>
                 <@content>
                     <tab-container tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false contextType="DIALOG"
                         on-tabChanged('tabChanged') no-update-body/>

@@ -1,7 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { ObjectIcon, TicketProperty, FormInputComponent, TreeNode } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -19,13 +18,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state.nodes = objectData.ticketTypes.map((t) =>
             new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.TYPE_ID, t.ID))
         );
-        this.setCurrentValue();
-    }
-
-    protected setCurrentValue(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
-        const fieldValue = formInstance.getFormFieldValue(this.state.field.property);
-        this.state.currentNode = this.state.nodes.find((i) => i.id === fieldValue.value);
     }
 
     public typeChanged(nodes: TreeNode[]): void {

@@ -1,6 +1,6 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { Context, WidgetType, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
+import { WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
 import { TabContainerComponentState } from './TabContainerComponentState';
 import { WidgetService } from '@kix/core/dist/browser';
 
