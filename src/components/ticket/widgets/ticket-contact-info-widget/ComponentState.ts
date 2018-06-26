@@ -1,6 +1,6 @@
 import { Contact, WidgetConfiguration, ContextType } from '@kix/core/dist/model';
 
-export class ContactInfoWidgetComponentState {
+export class ComponentState {
 
     public constructor(
         public instanceId: string = null,

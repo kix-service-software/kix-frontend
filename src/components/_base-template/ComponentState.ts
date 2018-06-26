@@ -1,6 +1,6 @@
 import { ObjectData, AbstractAction } from "@kix/core/dist/model";
 
-export class BaseTemplateComponentState {
+export class ComponentState {
 
     public initialized: boolean = false;
 

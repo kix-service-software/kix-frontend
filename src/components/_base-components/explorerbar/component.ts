@@ -1,39 +1,63 @@
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ContextService } from '@kix/core/dist/browser/context/';
-import { ConfiguredWidget, WidgetType } from '@kix/core/dist/model/';
+import { ConfiguredWidget, Context, ContextType } from '@kix/core/dist/model/';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { ComponentState } from './ComponentState';
+import { IdService } from '@kix/core/dist/browser';
 
-class ExplorerbarComponent {
+class Component {
 
-    private state: any;
+    private state: ComponentState;
+    private contextListernerId: string;
 
-    public onCreate(input: any): void {
-        this.state = {
-            explorer: []
-        };
+    public onCreate(): void {
+        this.state = new ComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('explorer-');
     }
 
-    private getWidgetTemplate(widget: ConfiguredWidget): any {
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType || 'MAIN';
+    }
+
+    public onMount(): void {
+        ContextService.getInstance().registerListener({
+            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+                if (type === this.state.contextType) {
+                    this.setContext(context);
+                }
+            }
+        });
+        this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
+    }
+
+    private setContext(context: Context<any>): void {
+        if (context) {
+            this.state.isExplorerBarExpanded = context.explorerBarExpanded;
+            this.state.explorer = context.getExplorer() || [];
+            if (this.state.explorer.length) {
+                context.registerListener(this.contextListernerId, {
+                    sidebarToggled: () => { return; },
+                    explorerBarToggled: () => {
+                        this.state.isExplorerBarExpanded = context.explorerBarExpanded;
+                    },
+                    objectChanged: () => { return; },
+                });
+            }
+            (this as any).setStateDirty('explorer');
+        }
+    }
+
+    public getExplorerTemplate(widget: ConfiguredWidget): any {
         return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
     }
 
-    private isExplorerBarExpanded(instanceId: string): boolean {
+    public isExplorerBarExpanded(instanceId: string): boolean {
         const context = ContextService.getInstance().getActiveContext();
         return context.explorerBarExpanded;
     }
 
-    private isExplorerMinimized(instanceId: string): boolean {
-        const context = ContextService.getInstance().getActiveContext();
-        return context.isExplorerExpanded(instanceId);
-    }
-
-    private toggleExplorerBar(): void {
+    public toggleExplorerBar(): void {
         ContextService.getInstance().getActiveContext().toggleExplorerBar();
-    }
-
-    private explorerAvailable(instanceId: string): boolean {
-        return this.state.explorer.some((r) => r.instanceId === instanceId);
     }
 }
 
-module.exports = ExplorerbarComponent;
+module.exports = Component;

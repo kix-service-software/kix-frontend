@@ -1,13 +1,16 @@
 import { ContextService } from "@kix/core/dist/browser/context";
-import { ContactInfoWidgetComponentState } from './ContactInfoWidgetComponentState';
+import { ComponentState } from './ComponentState';
 import { KIXObjectType, Contact } from "@kix/core/dist/model";
+import { IdService } from "@kix/core/dist/browser";
 
-class ContactInfoWidgetComponent {
+class Component {
 
-    private state: ContactInfoWidgetComponentState;
+    private state: ComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new ContactInfoWidgetComponentState(input.instanceId);
+        this.state = new ComponentState(input.instanceId);
+        this.contextListernerId = IdService.generateDateBasedId('ticket-contact-info-');
     }
 
     public onInput(input: any): void {
@@ -19,7 +22,7 @@ class ContactInfoWidgetComponent {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.setContactId();
 
-        context.registerListener({
+        context.registerListener(this.contextListernerId, {
             objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT) {
                     this.state.contactId = contact ? contact.ContactID : null;
@@ -42,4 +45,4 @@ class ContactInfoWidgetComponent {
 
 }
 
-module.exports = ContactInfoWidgetComponent;
+module.exports = Component;

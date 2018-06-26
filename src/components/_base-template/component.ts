@@ -1,7 +1,6 @@
-import { SocketEvent, Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor } from '@kix/core/dist/model';
+import { Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
-import { BaseTemplateComponentState } from './BaseTemplateComponentState';
+import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { CustomerService } from '@kix/core/dist/browser/customer';
@@ -9,17 +8,20 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { HomeContext } from '@kix/core/dist/browser/home';
 import { SearchService } from '@kix/core/dist/browser/search';
+import { IdService } from '@kix/core/dist/browser';
 
 declare var io: any;
 
-class BaseTemplateComponent {
+class Component {
 
-    public state: BaseTemplateComponentState;
+    public state: ComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new BaseTemplateComponentState(
+        this.state = new ComponentState(
             input.contextId, input.objectData, input.objectId
         );
+        this.contextListernerId = IdService.generateDateBasedId('base-template-');
     }
 
     public async onMount(): Promise<void> {
@@ -73,7 +75,7 @@ class BaseTemplateComponent {
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
-            context.registerListener({
+            context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
                     this.setGridColumns();
                 },
@@ -111,4 +113,4 @@ class BaseTemplateComponent {
     }
 }
 
-module.exports = BaseTemplateComponent;
+module.exports = Component;

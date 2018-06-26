@@ -4,13 +4,16 @@ export class MarkoDependencyExtension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            'search/search-module'
+            'search/search-module',
+            'widgets/search-result-explorer'
+
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['search', 'search/search-module']
+            ['search', 'search/search-module'],
+            ['search-result-explorer', 'widgets/search-result-explorer']
         ];
     }
 

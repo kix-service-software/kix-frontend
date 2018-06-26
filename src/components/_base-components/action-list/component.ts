@@ -1,21 +1,20 @@
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { ActionListComponentState } from './ActionListComponentState';
+import { ComponentState } from './ComponentState';
 import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
 import { Context, KIXObject } from '@kix/core/dist/model';
 import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
+import { IdService } from '@kix/core/dist/browser';
 
-export class ActionListComponent {
+export class Component {
 
-    private state: ActionListComponentState;
+    private state: ComponentState;
     private resizeTimeout: any = null;
 
-    private context: Context<any> = null;
+    private contextListernerId: string;
     private contextListener: ComponentContextListener = null;
 
-    private static MODULE_ID: string = 'ticket-details';
-
     public onCreate(input: any): void {
-        this.state = new ActionListComponentState();
+        this.state = new ComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('action-list-');
     }
 
     public onInput(input: any): void {
@@ -38,8 +37,7 @@ export class ActionListComponent {
     }
 
     public setContext(context: Context<any>): void {
-        this.context = context;
-        context.registerListener(this.contextListener);
+        context.registerListener(this.contextListernerId, this.contextListener);
     }
 
     private windowResizeThrottler() {
@@ -70,7 +68,7 @@ export class ActionListComponent {
 // tslint:disable-next-line:max-classes-per-file
 class ComponentContextServiceListener extends AbstractContextServiceListener {
 
-    public constructor(private actionListComponent: ActionListComponent) {
+    public constructor(private actionListComponent: Component) {
         super();
     }
 
@@ -83,7 +81,7 @@ class ComponentContextServiceListener extends AbstractContextServiceListener {
 // tslint:disable-next-line:max-classes-per-file
 class ComponentContextListener implements IContextListener {
 
-    public constructor(private actionListComponent: ActionListComponent) { }
+    public constructor(private actionListComponent: Component) { }
 
     public sidebarToggled(): void {
         setTimeout(() => {
@@ -106,4 +104,4 @@ class ComponentContextListener implements IContextListener {
 }
 
 
-module.exports = ActionListComponent;
+module.exports = Component;

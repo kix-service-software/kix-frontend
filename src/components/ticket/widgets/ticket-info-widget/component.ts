@@ -1,15 +1,17 @@
-import { TicketInfoComponentState } from './TicketInfoComponentState';
-import { TicketService, TicketLabelProvider } from "@kix/core/dist/browser/ticket";
-import { ContextService, AbstractContextServiceListener } from '@kix/core/dist/browser/context';
-import { SysconfigUtil, ObjectIcon, Context, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
-import { ActionFactory } from '@kix/core/dist/browser';
+import { ComponentState } from './ComponentState';
+import { TicketLabelProvider } from "@kix/core/dist/browser/ticket";
+import { ContextService } from '@kix/core/dist/browser/context';
+import { SysconfigUtil, ObjectIcon, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
+import { ActionFactory, IdService } from '@kix/core/dist/browser';
 
-class TicketInfoWidgetComponent {
+class Component {
 
-    private state: TicketInfoComponentState;
+    private state: ComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new TicketInfoComponentState();
+        this.state = new ComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('ticket-info-');
     }
 
     public onInput(input: any): void {
@@ -19,7 +21,7 @@ class TicketInfoWidgetComponent {
     public onMount(): void {
         this.state.labelProvider = new TicketLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
+        context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
             objectChanged: () => { return; }
@@ -89,4 +91,4 @@ class TicketInfoWidgetComponent {
 
 }
 
-module.exports = TicketInfoWidgetComponent;
+module.exports = Component;
