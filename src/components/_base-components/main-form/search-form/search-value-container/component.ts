@@ -30,7 +30,9 @@ class Component implements IKIXObjectSearchListener {
         const properties = KIXObjectSearchService.getInstance().getSearchProperties(this.state.objectType);
         if (properties) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
-            this.state.propertyNodes = properties.map((p) => new TreeNode(p, labelProvider.getPropertyText(p)));
+            this.state.propertyNodes = properties.map(
+                (p) => new TreeNode(p, labelProvider ? labelProvider.getPropertyText(p) : p)
+            );
         }
 
         if (this.state.defaultProperties) {
@@ -60,6 +62,7 @@ class Component implements IKIXObjectSearchListener {
         if (nodes && nodes.length) {
             searchValue.filterCriteria.operator = nodes[0].id;
             searchValue.currentOperationNode = nodes[0];
+            this.provideFilterCriteria(searchValue);
         }
     }
 
@@ -106,27 +109,31 @@ class Component implements IKIXObjectSearchListener {
     private setDefaultFormProperties(): void {
         this.state.defaultProperties.forEach((dp) => {
             const property = this.state.propertyNodes.find((pn) => pn.id === dp);
-            const operations = KIXObjectSearchService.getInstance().getSearchOperations(
-                this.state.objectType, dp
-            );
+            if (property) {
+                const operations = KIXObjectSearchService.getInstance().getSearchOperations(
+                    this.state.objectType, dp
+                );
 
-            let currentOperation: TreeNode;
-            if ((operations && operations.length)) {
-                currentOperation = new TreeNode(operations[0], SearchOperatorUtil.getText(operations[0]));
+                let currentOperation: TreeNode;
+                if ((operations && operations.length)) {
+                    currentOperation = new TreeNode(operations[0], SearchOperatorUtil.getText(operations[0]));
+                }
+
+                const value = new FormSearchValue(
+                    dp,
+                    true,
+                    operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o))),
+                    property,
+                    currentOperation
+                );
+                this.state.searchValues.push(value);
+
+                const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+                const criteria = new FilterCriteria(
+                    dp, currentOperation.id, FilterDataType.STRING, FilterType.AND, null
+                );
+                formInstance.setFilterCriteria(criteria);
             }
-
-            const value = new FormSearchValue(
-                dp,
-                true,
-                operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o))),
-                property,
-                currentOperation
-            );
-            this.state.searchValues.push(value);
-
-            const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
-            const criteria = new FilterCriteria(dp, currentOperation.id, FilterDataType.STRING, FilterType.AND, null);
-            formInstance.setFilterCriteria(criteria);
         });
     }
 
