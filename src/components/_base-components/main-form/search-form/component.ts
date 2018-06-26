@@ -29,6 +29,7 @@ class Component implements IKIXObjectSearchListener {
         const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         if (formInstance) {
             this.state.fulltextSearch = formInstance.form.fulltextSearch;
+            this.state.fulltextActive = this.state.fulltextSearch;
             this.state.defaultProperties = formInstance.form.defaultSearchProperties;
         }
         this.state.loading = false;

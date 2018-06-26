@@ -4,7 +4,7 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption
+    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -72,15 +72,17 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, false, "Volltext"));
             fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, false, "Ticketnummer"));
             fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
-            fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
-            fields.push(new FormField("Status", TicketProperty.STATE_ID, false, "Status", [
-                new FormFieldOption(TicketStateOptions.SHOW_PENDING_TIME, false)
-            ]));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, false, "Typ"));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, false, "Queue"));
             fields.push(new FormField("Archiv", TicketProperty.ARCHIVE_FLAG, false, "Archiv"));
             fields.push(new FormField("Service", TicketProperty.SERVICE_ID, false, "Service"));
             fields.push(new FormField("SLA", TicketProperty.SLA_ID, false, "SLA"));
+            fields.push(new FormField<number>(
+                "Priorität", TicketProperty.PRIORITY_ID, false, "Priorität", null, new FormFieldValue(3)
+            ));
+            fields.push(new FormField<number>(
+                "Status des Tickets", TicketProperty.STATE_ID, false, "Status", null, new FormFieldValue(4)
+            ));
 
             const group = new FormGroup('Ticketattribute', fields);
 
