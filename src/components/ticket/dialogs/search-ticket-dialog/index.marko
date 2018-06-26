@@ -1,1 +1,13 @@
-<h1>Ticketsuche</h1>
+<if(!state.loading && state.formId)>
+    <widget instanceId="search-ticket-dialog">
+        <@icon>
+            <span.kix-icon-ticket/>
+        </@icon>
+        <@content>
+            <main-form formId=state.formId/>
+        </@content>
+    </widget>
+</if>
+<else>
+    <loading-spinner/>
+</else>

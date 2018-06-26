@@ -17,6 +17,8 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
             'customer/widgets/contact-assigned-tickets-widget',
             'customer/dialogs/new-customer-dialog',
             'customer/dialogs/new-contact-dialog',
+            'customer/dialogs/search-contact-dialog',
+            'customer/dialogs/search-customer-dialog',
             'customer/dialogs/inputs/customer-input-valid',
             'customer/dialogs/inputs/contact-input-customer'
         ];
@@ -41,6 +43,8 @@ export class CustomerMarkoDependencyExtension implements IMarkoDependencyExtensi
             ['contact-assigned-tickets-widget', 'customer/widgets/contact-assigned-tickets-widget'],
             ['new-customer-dialog', 'customer/dialogs/new-customer-dialog'],
             ['new-contact-dialog', 'customer/dialogs/new-contact-dialog'],
+            ['search-contact-dialog', 'customer/dialogs/search-contact-dialog'],
+            ['search-customer-dialog', 'customer/dialogs/search-customer-dialog'],
             ['customer-input-valid', 'customer/dialogs/inputs/customer-input-valid'],
             ['contact-input-customer', 'customer/dialogs/inputs/contact-input-customer']
         ];

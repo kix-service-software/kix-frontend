@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
 import {
-    ContextType, OverlayType, StringContent, ComponentContent,
+    OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
 } from "@kix/core/dist/model";
 import { NewContactDialogContext, ContactService } from "@kix/core/dist/browser/contact";
@@ -19,7 +19,7 @@ class Component {
     }
 
     private cancel(): void {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
@@ -27,7 +27,7 @@ class Component {
     }
 
     private async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getOrCreateFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {

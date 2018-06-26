@@ -1,0 +1,50 @@
+<div.search-form>
+    <if(state.loading)>
+        <loading-spinner/>
+    </if>
+    <else>
+        <if(state.fulltextSearch)>
+            <div.fulltext-search on-click('toggleFulltext', true) title="Volltextsuche aktivieren">
+                <span>Volltext:</span>
+                <input.input-style value=state.fulltextValue on-change('fulltextValueChanged')/>
+                <if(!state.fulltextActive)>
+                    <div.form-shield/>
+                </if>
+            </div>
+        </if>
+        <div.search-criterias on-click('toggleFulltext', false) title="Attributsuche aktivieren">
+            <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
+            <if(state.fulltextActive)>
+                <div.form-shield/>
+            </if>
+        </div>
+    </else>
+</div>
+<div.dialog-button-container>
+    <button.cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
+        <span.kix-icon-close/>
+        Daten zurücksetzen
+    </button>
+    <button.submit-button type="button" on-click("search") title="Suche starten" disabled=(!state.canSearch)>
+        <span.kix-icon-search/>
+        Suche starten
+    </button>
+</div>
+<widget instanceId="result-list-preview" title=component.getResultTitle()>
+    <@content>
+        <if(state.table)>
+            <standard-table standardTable=state.table/>
+        </if>
+    </@content>
+</widget>
+<div.dialog-button-container>
+    <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+        <span.kix-icon-close/>
+        Abbrechen
+    </button>
+    <button.submit-button type="button" on-click("submit") title="Detailierte Suchergebnisse"
+        disabled=(!state.resultCount)>
+        <span.kix-icon-check/>
+        Detailierte Suchergebnisse
+    </button>
+</div>

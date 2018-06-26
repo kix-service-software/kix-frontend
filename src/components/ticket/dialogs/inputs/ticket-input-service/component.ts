@@ -3,7 +3,6 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent
 } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<number, ComponentState> {
 

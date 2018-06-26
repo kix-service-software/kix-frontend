@@ -1,6 +1,5 @@
 import { ComponentState } from "./ComponentState";
 import { FormInputComponent } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<string, ComponentState> {
 

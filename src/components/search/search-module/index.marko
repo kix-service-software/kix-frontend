@@ -1,1 +1,28 @@
-<h1>Suche Dashboard</h1>
+<widget title="Suchkriterien für Ticketsuche">
+    <@content>
+        <div.search-criteria>
+            <div.search-criteria-list>
+                <for(criteria in state.criterias)>
+                    <div.search-criteria-list-item>
+                        <div.key title="${criteria.property}">
+                            <span.property-name>${criteria.property} (${criteria.operator})</span>
+                        </div>
+                        <div.value title="${criteria.value}">
+                            <span>${criteria.value}</span>
+                        </div>
+                    </div>
+                </for>
+            </div>
+            <div.search-criteria-buttons>
+                <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
+                    <span.kix-icon-search/>
+                    Neue Suche
+                </button>
+                <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten">
+                    <span.kix-icon-edit/>
+                    Suche bearbeiten
+                </button>
+            </div>
+        </div>
+    </@content>
+</widget>

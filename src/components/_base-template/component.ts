@@ -25,8 +25,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.bootstrapServices();
-        ContextService.getInstance().setObjectData(this.state.objectData);
 
         await ComponentsService.getInstance().init();
         this.state.initialized = true;
@@ -50,6 +48,8 @@ class Component {
             }
         });
 
+        ContextService.getInstance().setObjectData(this.state.objectData);
+        this.bootstrapServices();
         this.setContext();
     }
 

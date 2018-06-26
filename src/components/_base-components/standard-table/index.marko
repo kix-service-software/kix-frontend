@@ -52,8 +52,7 @@
                             <for(value in row.values)>
                                 $ let column = component.getColumn(value);
                                 <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                    data-id=(state.tableId + column.id) key=((state.tableId + column.id) + "[]")
-                                    title=value.displayValue>
+                                    data-id=(state.tableId + column.id) title=value.displayValue>
                                     <if(column.showIcon && value.objectValue)>
                                         <icon icon=component.getValueIcon(column, value) showUnknown=true/>
                                     </if>
