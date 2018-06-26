@@ -15,7 +15,8 @@ export class ComponentState extends FormInputComponentState<PendingTimeFormValue
             "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30", "23:59"
         ],
         public selectedDate: string = '',
-        public selectedTime: string = ''
+        public selectedTime: string = '',
+        public multiselect: boolean = false
     ) {
         super();
     }

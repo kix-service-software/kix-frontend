@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent
+    ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent, FormContext
 } from "@kix/core/dist/model";
 
 class Component extends FormInputComponent<number, ComponentState> {
@@ -12,6 +12,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.state.multiselect = this.state.formContext === FormContext.SEARCH;
     }
 
     public onMount(): void {

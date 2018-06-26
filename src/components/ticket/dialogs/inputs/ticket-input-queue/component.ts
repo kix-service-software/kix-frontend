@@ -1,8 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent } from "@kix/core/dist/model";
+import {
+    ObjectIcon, TicketProperty, TreeNode, Queue,
+    FormInputComponent, FormContext, SearchFormInstance
+} from "@kix/core/dist/model";
+import { FormService, SearchOperator } from "@kix/core/dist/browser";
 
-class Component extends FormInputComponent<number, ComponentState> {
+class Component extends FormInputComponent<number[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -10,6 +14,18 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        if (this.state.formContext === FormContext.SEARCH) {
+            const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+            formInstance.registerListener({
+                formValueChanged: () => {
+                    const criteria = formInstance.getCriterias().find((c) => c.property === this.state.fieldId);
+                    if (criteria) {
+                        this.state.multiselect = criteria.operator ? criteria.operator === SearchOperator.IN : false;
+                    }
+                },
+                updateForm: () => { return; }
+            });
+        }
     }
 
     public onMount(): void {
@@ -35,8 +51,12 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public queueChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+        this.state.currentNodes = nodes ? nodes : [];
+        super.provideValue(
+            this.state.currentNodes
+                ? this.state.currentNodes.map((cn) => cn.id)
+                : null
+        );
     }
 
 }
