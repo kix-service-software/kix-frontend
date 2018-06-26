@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
 import {
-    ContextType, OverlayType, StringContent, ComponentContent,
+    OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
 } from "@kix/core/dist/model";
 import { NewContactDialogContext, ContactService } from "@kix/core/dist/browser/contact";
