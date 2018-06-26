@@ -1,13 +1,16 @@
 import { SidebarMenuComponentState } from './SidebarMenuComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
-import { Context, WidgetType, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
+import { Context, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
+import { IdService } from '@kix/core/dist/browser';
 
 class SidebarMenuComponent {
 
     private state: SidebarMenuComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
         this.state = new SidebarMenuComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('sidebar-menu-');
     }
 
     public onInput(input: any): void {
@@ -28,7 +31,7 @@ class SidebarMenuComponent {
 
     private setContext(context: Context<any>): void {
         if (context) {
-            context.registerListener({
+            context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
                     this.setSidebarMenu(context);
                 },

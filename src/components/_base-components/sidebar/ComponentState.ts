@@ -1,6 +1,6 @@
 import { ConfiguredWidget, ContextType } from '@kix/core/dist/model';
 
-export class SidebarComponentState {
+export class ComponentState {
 
     public sidebars: ConfiguredWidget[] = [];
     public showIconBar: boolean = true;

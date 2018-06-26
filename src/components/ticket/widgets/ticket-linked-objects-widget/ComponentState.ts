@@ -3,7 +3,7 @@ import { AbstractAction, Ticket, WidgetComponentState } from '@kix/core/dist/mod
 
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 
-export class LinkedObjectsWidgetComponentState extends WidgetComponentState<LinkedObjectsSettings> {
+export class ComponentState extends WidgetComponentState<LinkedObjectsSettings> {
 
     public constructor(
         public ticketId: number = null,

@@ -1,7 +1,7 @@
 import { ILabelProvider } from '@kix/core/dist/browser';
 import { AbstractAction, Ticket, WidgetComponentState } from '@kix/core/dist/model';
 
-export class TicketInfoComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
         public ticket: Ticket = null,

@@ -6,7 +6,7 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
-import { LinkedObjectsWidgetComponentState } from './LinkedObjectsWidgetComponentState';
+import { ComponentState } from './ComponentState';
 import { Link, Ticket, WidgetType, KIXObjectType, ContextMode } from '@kix/core/dist/model';
 import {
     StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight,
@@ -14,12 +14,14 @@ import {
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
-class LinkedObjectsWidgetComponent {
+class Component {
 
-    private state: LinkedObjectsWidgetComponentState;
+    private state: ComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new LinkedObjectsWidgetComponentState();
+        this.state = new ComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('ticket-linked-objects-');
     }
 
     public onInput(input: any): void {
@@ -30,7 +32,7 @@ class LinkedObjectsWidgetComponent {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener({
+        context.registerListener(this.contextListernerId, {
             objectChanged: (id: string | number) => {
                 if (id === this.state.ticketId) {
                     this.setLinkedObjects();
@@ -162,4 +164,4 @@ class LinkedObjectsWidgetComponent {
     }
 }
 
-module.exports = LinkedObjectsWidgetComponent;
+module.exports = Component;

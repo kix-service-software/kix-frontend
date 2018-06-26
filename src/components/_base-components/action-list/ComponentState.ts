@@ -1,6 +1,6 @@
 import { ConfiguredWidget, Ticket, Article, AbstractAction } from '@kix/core/dist/model';
 
-export class ActionListComponentState {
+export class ComponentState {
 
     public constructor(
         public actionList: AbstractAction[] = [],

@@ -1,14 +1,17 @@
-import { SidebarComponentState } from './SidebarComponentState';
+import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { WidgetType, Context, ContextType } from '@kix/core/dist/model';
+import { Context, ContextType } from '@kix/core/dist/model';
+import { IdService } from '@kix/core/dist/browser';
 
-class SidebarComponent {
+class Component {
 
-    private state: SidebarComponentState;
+    private state: ComponentState;
+    private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new SidebarComponentState();
+        this.state = new ComponentState();
+        this.contextListernerId = IdService.generateDateBasedId('sidebar-');
     }
 
     public onInput(input: any): void {
@@ -28,7 +31,7 @@ class SidebarComponent {
 
     private setContext(context: Context<any>): void {
         if (context) {
-            context.registerListener({
+            context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
                     this.updateSidebars(context);
                 },
@@ -44,15 +47,11 @@ class SidebarComponent {
         this.state.showSidebar = context ? context.isSidebarShown() : false;
     }
 
-    private getSidebarTemplate(instanceId: string): any {
+    public getSidebarTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
-
-    private getWidgetType(): WidgetType {
-        return WidgetType.SIDEBAR;
-    }
 }
 
-module.exports = SidebarComponent;
+module.exports = Component;
