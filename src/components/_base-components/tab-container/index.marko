@@ -3,7 +3,7 @@
         <@headerContent>
             <ul.tab-list>
                 <for(tab in state.tabWidgets)>
-                    <li class={active: component.isActiveTab(tab.instanceId)} on-click('tabClicked', tab) key=tab.instanceId>
+                    <li class={active: component.isActiveTab(tab.instanceId)} on-click('tabClicked', tab)>
                         <if(tab.configuration.icon)>
                             <span class=tab.configuration.icon/>
                         </if>
@@ -15,7 +15,7 @@
         <@content>
             <div class={"tab-sidebar-grid": state.hasSidebars}>
                 <if(state.activeTab)>
-                    <div.tab-content key=(state.activeTab.instanceId + "-content")>
+                    <div.tab-content>
                         <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
                     </div>
                 </if>

@@ -17,6 +17,7 @@ export class ComponentState {
             new FilterCriteria('Property 10', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
             new FilterCriteria('Property 11', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test'),
             new FilterCriteria('Property 12', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'test')
-        ]
+        ],
+        public fromHistory: boolean = false
     ) { }
 }
