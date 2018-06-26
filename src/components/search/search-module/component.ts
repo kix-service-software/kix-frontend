@@ -20,10 +20,15 @@ class Component {
         }
     }
 
-    public openSearchDialog(): void {
+    public openNewSearchDialog(): void {
         KIXObjectSearchService.getInstance().clearSearchCache();
         ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
     }
+
+    public openEditSearchDialog(): void {
+        ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
+    }
+
 
 }
 
