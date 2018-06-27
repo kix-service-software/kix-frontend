@@ -101,20 +101,10 @@ class Component implements IKIXObjectSearchListener {
         this.state.defaultProperties.forEach((dp) => {
             const property = this.state.propertyNodes.find((pn) => pn.id === dp);
             if (property) {
-                const operations = KIXObjectSearchService.getInstance().getSearchOperations(
-                    this.state.objectType, dp
-                );
-
-                let currentOperation: TreeNode;
-                if ((operations && operations.length)) {
-                    currentOperation = new TreeNode(operations[0], SearchOperatorUtil.getText(operations[0]));
-                }
-
-                const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
-                const criteria = new FilterCriteria(
-                    dp, currentOperation.id, FilterDataType.STRING, FilterType.AND, null
-                );
-                formInstance.setFilterCriteria(criteria);
+                const searchValue = new FormSearchValue(this.state.objectType);
+                searchValue.setPropertyNode(property);
+                this.state.searchValues.push(searchValue);
+                this.provideFilterCriteria(searchValue);
             }
         });
     }
