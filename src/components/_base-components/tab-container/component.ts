@@ -14,7 +14,6 @@ class TabLaneComponent {
 
 
     public onInput(input: any): void {
-        this.state.loading = true;
         this.state.tabWidgets = input.tabWidgets;
         this.state.tabId = input.tabId;
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
@@ -34,7 +33,6 @@ class TabLaneComponent {
         this.state.contextType = input.contextType;
         this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
         this.setSidebars();
-        this.state.loading = false;
     }
 
     public onMount(): void {
@@ -50,8 +48,6 @@ class TabLaneComponent {
         if (this.state.contextType) {
             this.setSidebars();
         }
-
-        this.state.loading = false;
     }
 
     public tabClicked(tab: ConfiguredWidget): void {
