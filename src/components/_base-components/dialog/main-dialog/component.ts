@@ -20,10 +20,12 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public open(dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string): void {
-        this.state.dialogTitle = dialogTitle;
-        this.state.dialogWidgets = dialogs;
-        this.state.dialogId = dialogId;
-        this.state.show = true;
+        if (!this.state.show) {
+            this.state.dialogTitle = dialogTitle;
+            this.state.dialogWidgets = dialogs;
+            this.state.dialogId = dialogId;
+            this.state.show = true;
+        }
     }
 
     public close(): void {

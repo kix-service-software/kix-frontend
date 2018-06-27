@@ -37,12 +37,9 @@ class Component extends FormInputComponent<number[], ComponentState> {
     }
 
     public queueChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes ? nodes : [];
-        super.provideValue(
-            this.state.currentNodes
-                ? this.state.currentNodes.map((cn) => cn.id)
-                : null
-        );
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+
     }
 
 }
