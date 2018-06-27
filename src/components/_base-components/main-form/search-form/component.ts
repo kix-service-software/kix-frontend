@@ -5,16 +5,18 @@ import {
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService,
-    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener
+    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener, IdService
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
 class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
+    public listenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.listenerId = IdService.generateDateBasedId('search-form-');
     }
 
     public onInput(input: any) {

@@ -7,7 +7,8 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
         public contextId: string = null,
-        public nodes: TreeNode[] = []
+        public nodes: TreeNode[] = [],
+        public activeNode: TreeNode = null
     ) { }
 
 }

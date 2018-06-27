@@ -2,7 +2,8 @@ import { ComponentState } from './ComponentState';
 import {
     KIXObjectSearchService, FormInputRegistry, FormService, LabelService,
     SearchOperatorUtil,
-    IKIXObjectSearchListener
+    IKIXObjectSearchListener,
+    IdService
 } from '@kix/core/dist/browser';
 import {
     TreeNode, SearchFormInstance, FilterCriteria, KIXObject, FilterType, FilterDataType
@@ -13,9 +14,11 @@ import { FormSearchValue } from './FormSearchValue';
 class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
+    public listenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.listenerId = IdService.generateDateBasedId('search-value-container-');
     }
 
     public onInput(input: any): void {
