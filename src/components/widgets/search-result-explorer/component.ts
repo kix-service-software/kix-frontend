@@ -1,5 +1,12 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, IKIXObjectSearchListener, KIXObjectSearchService } from '@kix/core/dist/browser';
+import {
+    ContextService,
+    IdService,
+    IKIXObjectSearchListener,
+    KIXObjectSearchService,
+    SearchResultCategory
+} from '@kix/core/dist/browser';
+import { TreeNode, KIXObjectType } from '@kix/core/dist/model';
 
 export class Component implements IKIXObjectSearchListener {
 
@@ -36,7 +43,28 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     public searchFinished(): void {
-        const categories = KIXObjectSearchService.getInstance().getSearchResultCategories();
+        const rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
+        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        this.state.nodes = searchCache && rootCategory ?
+            this.prepareTreeNodes([rootCategory], searchCache.objectType, searchCache.result.length) : [];
+
+    }
+
+    private prepareTreeNodes(
+        categories: SearchResultCategory[], objectType?: KIXObjectType, rootLenght?: number
+    ): TreeNode[] {
+        let nodes: TreeNode[] = [];
+        if (categories) {
+            nodes = categories.map((category: SearchResultCategory) => {
+                return new TreeNode(
+                    category.objectType,
+                    category.label + (objectType && objectType === category.objectType ? ` (${rootLenght})` : ''),
+                    null, null,
+                    this.prepareTreeNodes(category.children)
+                );
+            });
+        }
+        return nodes;
     }
 }
 
