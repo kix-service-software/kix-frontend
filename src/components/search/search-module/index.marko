@@ -5,10 +5,10 @@
                 <for(criteria in state.criterias)>
                     <div.search-criteria-list-item>
                         <div.key title="${criteria.property}">
-                            <span.property-name>${criteria.property} (${criteria.operator})</span>
+                            <span.property-name>${criteria[0]} (${criteria[1]})</span>
                         </div>
                         <div.value title="${criteria.value}">
-                            <span>${criteria.value}</span>
+                            <span>${criteria[2]}</span>
                         </div>
                     </div>
                 </for>
