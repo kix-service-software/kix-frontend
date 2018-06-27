@@ -60,7 +60,8 @@
                 "anonymous": "always",
                 "asyncArrow": "always"
             }
-        ]
+        ],
+        "prefer-for-of": false
     },
     "jsRules": {
         "max-line-length": [

@@ -6,7 +6,7 @@
         </@icon>
         <@content>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode/>
+                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked('activeNodeChanged')/>
             </if>
         </@content>
     </widget>

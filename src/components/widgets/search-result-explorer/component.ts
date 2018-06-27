@@ -11,6 +11,8 @@ import { TreeNode, KIXObjectType } from '@kix/core/dist/model';
 export class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
+    private rootCategory: SearchResultCategory;
+
     public listenerId: string;
 
     public onCreate(input: any): void {
@@ -27,7 +29,11 @@ export class Component implements IKIXObjectSearchListener {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.descriptor.contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.searchFinished();
+        this.prepareTree();
+        const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+        if (activeCategory) {
+            this.state.activeNode = this.getActiveNode(activeCategory.objectType);
+        }
     }
 
     public searchCriteriasChanged(): void {
@@ -39,14 +45,15 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     public searchFinished(): void {
-        const rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
-        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        this.state.nodes = searchCache && rootCategory ?
-            this.prepareTreeNodes([rootCategory], true, searchCache.result.length) : [];
-        if (!this.state.activeNode) {
-            this.state.activeNode = this.state.nodes[0];
-        }
+        this.prepareTree();
+        this.activeNodeChanged(this.state.nodes[0]);
+    }
 
+    private prepareTree(): void {
+        this.rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
+        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        this.state.nodes = searchCache && this.rootCategory ?
+            this.prepareTreeNodes([this.rootCategory], true, searchCache.result.length) : [];
     }
 
     private prepareTreeNodes(
@@ -65,6 +72,46 @@ export class Component implements IKIXObjectSearchListener {
             });
         }
         return nodes;
+    }
+
+    public activeNodeChanged(node: TreeNode): void {
+        this.state.activeNode = node;
+        if (this.state.activeNode) {
+            const activeCategory = this.getActiveCategory(this.state.activeNode.id);
+            KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(activeCategory);
+        }
+    }
+
+    private getActiveCategory(
+        objectType: KIXObjectType,
+        categories: SearchResultCategory[] = [this.rootCategory]
+    ): SearchResultCategory {
+        let activeCategory = categories.find((c) => c.objectType === objectType);
+        if (!activeCategory) {
+            for (let index = 0; index < categories.length; index++) {
+                activeCategory = this.getActiveCategory(objectType, categories[index].children);
+                if (activeCategory) {
+                    break;
+                }
+            }
+        }
+        return activeCategory;
+    }
+
+    private getActiveNode(
+        objectType: KIXObjectType,
+        nodes: TreeNode[] = this.state.nodes
+    ): TreeNode {
+        let activeNode = nodes.find((n) => n.id === objectType);
+        if (!activeNode) {
+            for (let index = 0; index < nodes.length; index++) {
+                activeNode = this.getActiveNode(objectType, nodes[index].children);
+                if (activeNode) {
+                    break;
+                }
+            }
+        }
+        return activeNode;
     }
 }
 
