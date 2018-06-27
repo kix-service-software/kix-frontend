@@ -1,5 +1,6 @@
 <form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
-    on-nodesChanged('stateChanged') selectedNodes=[state.currentNode] invalid=state.invalid/>
+    on-nodesChanged('stateChanged') selectedNodes=[state.currentNode] invalid=state.invalid
+    multiselect=state.multiselect/>
 <if(state.pending)>
     <div.pending-state class={invalid: state.invalid}>
         <span>*Warten bis:</span>

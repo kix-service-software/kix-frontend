@@ -23,6 +23,7 @@ class Component {
         this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
+            (this as any).emit('nodesChanged', this.state.selectedNodes);
         }
         if (this.state.asAutocomplete) {
             this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
