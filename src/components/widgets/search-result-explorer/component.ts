@@ -27,11 +27,7 @@ export class Component implements IKIXObjectSearchListener {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.descriptor.contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-    }
-
-    public isExplorerMinimized(instanceId: string): boolean {
-        const context = ContextService.getInstance().getActiveContext();
-        return context.isExplorerExpanded(instanceId);
+        this.searchFinished();
     }
 
     public searchCriteriasChanged(): void {
@@ -46,21 +42,25 @@ export class Component implements IKIXObjectSearchListener {
         const rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         this.state.nodes = searchCache && rootCategory ?
-            this.prepareTreeNodes([rootCategory], searchCache.objectType, searchCache.result.length) : [];
+            this.prepareTreeNodes([rootCategory], true, searchCache.result.length) : [];
+        if (!this.state.activeNode) {
+            this.state.activeNode = this.state.nodes[0];
+        }
 
     }
 
     private prepareTreeNodes(
-        categories: SearchResultCategory[], objectType?: KIXObjectType, rootLenght?: number
+        categories: SearchResultCategory[], isRoot: boolean = false, rootLenght?: number
     ): TreeNode[] {
         let nodes: TreeNode[] = [];
         if (categories) {
             nodes = categories.map((category: SearchResultCategory) => {
                 return new TreeNode(
                     category.objectType,
-                    category.label + (objectType && objectType === category.objectType ? ` (${rootLenght})` : ''),
+                    category.label + (isRoot ? ` (${rootLenght})` : ''),
                     null, null,
-                    this.prepareTreeNodes(category.children)
+                    this.prepareTreeNodes(category.children),
+                    null, null, null, null, (isRoot ? true : false)
                 );
             });
         }

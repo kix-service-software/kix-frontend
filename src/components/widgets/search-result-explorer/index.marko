@@ -1,12 +1,12 @@
 <div.search-result-exporer>
-    <widget instanceId=state.instanceId minimizable=false minimized=component.isExplorerMinimized(state.instanceId)
-        explorer=true title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Suchergebnisse")>
+    <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Suchergebnisse")>
         <@icon>
             <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-search")/>
         </@icon>
         <@content>
             <if(state.nodes)>
-                <!-- TODO: tree componente einbinden -->
+                <tree tree=state.nodes activeNode=state.activeNode/>
             </if>
         </@content>
     </widget>
