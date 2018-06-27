@@ -1,8 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, KIXObjectSearchService } from "@kix/core/dist/browser";
-import { ContextMode } from "@kix/core/dist/model";
+import { ContextService, KIXObjectSearchService, IContextServiceListener } from "@kix/core/dist/browser";
+import { ContextMode, ContextType, ContextConfiguration, Context } from "@kix/core/dist/model";
+import { SearchContext } from '@kix/core/dist/browser/search';
 
-class Component {
+class Component implements IContextServiceListener {
 
     private state: ComponentState;
 
@@ -16,6 +17,15 @@ class Component {
 
     public onMount(): void {
         if (!this.state.fromHistory) {
+            ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
+        }
+        ContextService.getInstance().registerListener(this);
+    }
+
+    public contextChanged(
+        contextId: string, context: Context<ContextConfiguration>, type: ContextType, fromHistory: boolean
+    ): void {
+        if (contextId === SearchContext.CONTEXT_ID && !fromHistory) {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
     }

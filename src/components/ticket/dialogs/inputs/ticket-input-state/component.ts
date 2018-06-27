@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TicketProperty, TreeNode, } from "@kix/core/dist/model";
+import { ObjectIcon, TicketProperty, TreeNode, FormContext, } from "@kix/core/dist/model";
 import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
 import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
 

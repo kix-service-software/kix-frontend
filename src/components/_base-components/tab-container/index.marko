@@ -1,31 +1,36 @@
 <div.tab-container>
-    <widget instanceId="tab-widget" title=state.title minimizable=state.minimizable>
-        <@headerContent>
-            <ul.tab-list>
-                <for(tab in state.tabWidgets)>
-                    <li class={active: component.isActiveTab(tab.instanceId)} on-click('tabClicked', tab)>
-                        <if(tab.configuration.icon)>
-                            <span class=tab.configuration.icon/>
-                        </if>
-                        ${tab.configuration.title}
-                    </li>
-                </for>
-            </ul>
-        </@headerContent>
-        <@content>
-            <div class={"tab-sidebar-grid": state.hasSidebars}>
-                <if(state.activeTab)>
-                    <div.tab-content>
-                        <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
-                    </div>
-                </if>
-                <if(state.hasSidebars)>
-                    <sidebar contextType=state.contextType/>
-                    <div.site-menu-wrapper>
-                        <sidebar-menu contextType=state.contextType/>
-                    </div>
-                </if>
-            </div>
-        </@content>
-    </widget>
+    <if(state.loading)>
+        <loading-spinner/>
+    </if>
+    <else>
+        <widget instanceId="tab-widget" title=state.title minimizable=state.minimizable>
+            <@headerContent>
+                <ul.tab-list>
+                    <for(tab in state.tabWidgets)>
+                        <li class={active: component.isActiveTab(tab.instanceId)} on-click('tabClicked', tab)>
+                            <if(tab.configuration.icon)>
+                                <span class=tab.configuration.icon/>
+                            </if>
+                            ${tab.configuration.title}
+                        </li>
+                    </for>
+                </ul>
+            </@headerContent>
+            <@content>
+                <div class={"tab-sidebar-grid": state.hasSidebars}>
+                    <if(state.activeTab)>
+                        <div.tab-content>
+                            <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
+                        </div>
+                    </if>
+                    <if(state.hasSidebars)>
+                        <sidebar contextType=state.contextType/>
+                        <div.site-menu-wrapper>
+                            <sidebar-menu contextType=state.contextType/>
+                        </div>
+                    </if>
+                </div>
+            </@content>
+        </widget>
+    </else>
 </div>

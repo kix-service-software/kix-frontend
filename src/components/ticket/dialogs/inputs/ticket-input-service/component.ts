@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent
+    ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent, FormContext
 } from "@kix/core/dist/model";
 
 class Component extends FormInputComponent<number, ComponentState> {

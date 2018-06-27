@@ -1,8 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent } from "@kix/core/dist/model";
+import {
+    ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent
+} from "@kix/core/dist/model";
 
-class Component extends FormInputComponent<number, ComponentState> {
+class Component extends FormInputComponent<number[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -37,6 +39,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     public queueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+
     }
 
 }

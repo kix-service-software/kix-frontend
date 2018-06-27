@@ -54,8 +54,12 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Ticket verknüpfen mit", TicketProperty.LINK, false, "Verknüpfungen"));
             fields.push(new FormField("Bearbeiter", TicketProperty.OWNER_ID, false, "Bearbeiter"));
             fields.push(new FormField("Verantwortlicher", TicketProperty.RESPONSIBLE_ID, false, "Verantwortlicher"));
-            fields.push(new FormField("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
-            fields.push(new FormField("Status des Tickets", TicketProperty.STATE_ID, false, "Status"));
+            fields.push(new FormField<number>(
+                "Priorität", TicketProperty.PRIORITY_ID, false, "Priorität", null, new FormFieldValue(3)
+            ));
+            fields.push(new FormField<number>(
+                "Status des Tickets", TicketProperty.STATE_ID, false, "Status", null, new FormFieldValue(4)
+            ));
 
             const group = new FormGroup('Ticketdaten', fields);
 
@@ -74,15 +78,11 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, false, "Typ"));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, false, "Queue"));
+            fields.push(new FormField<number>("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
+            fields.push(new FormField<number>("Status des Tickets", TicketProperty.STATE_ID, false, "Status"));
             fields.push(new FormField("Archiv", TicketProperty.ARCHIVE_FLAG, false, "Archiv"));
             fields.push(new FormField("Service", TicketProperty.SERVICE_ID, false, "Service"));
             fields.push(new FormField("SLA", TicketProperty.SLA_ID, false, "SLA"));
-            fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, false, "Priorität", null, new FormFieldValue(3)
-            ));
-            fields.push(new FormField<number>(
-                "Status des Tickets", TicketProperty.STATE_ID, false, "Status", null, new FormFieldValue(4)
-            ));
 
             const group = new FormGroup('Ticketattribute', fields);
 

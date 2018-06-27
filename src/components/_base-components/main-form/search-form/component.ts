@@ -47,6 +47,7 @@ class Component implements IKIXObjectSearchListener {
             formInstance.reset();
         }
 
+        this.state.fulltextValue = null;
         KIXObjectSearchService.getInstance().clearSearchCache();
     }
 
