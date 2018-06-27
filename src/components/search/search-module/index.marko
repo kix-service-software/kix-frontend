@@ -1,28 +1,41 @@
-<widget title="Suchkriterien für Ticketsuche">
-    <@content>
-        <div.search-criteria>
-            <div.search-criteria-list>
-                <for(criteria in state.criterias)>
-                    <div.search-criteria-list-item>
-                        <div.key title="${criteria.property}">
-                            <span.property-name>${criteria[0]} (${criteria[1]})</span>
+<div.search-dashboard>
+    <widget title="Suchkriterien für Ticketsuche">
+        <@content>
+            <div.search-criteria>
+                <div.search-criteria-list>
+                    <for(criteria in state.criterias)>
+                        <div.search-criteria-list-item>
+                            <div.key title="${criteria.property}">
+                                <span.property-name>${criteria[0]} (${criteria[1]})</span>
+                            </div>
+                            <div.value title="${criteria.value}">
+                                <span>${criteria[2]}</span>
+                            </div>
                         </div>
-                        <div.value title="${criteria.value}">
-                            <span>${criteria[2]}</span>
-                        </div>
-                    </div>
-                </for>
+                    </for>
+                </div>
+                <div.search-criteria-buttons>
+                    <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
+                        <span.kix-icon-search/>
+                        Neue Suche
+                    </button>
+                    <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten">
+                        <span.kix-icon-edit/>
+                        Suche bearbeiten
+                    </button>
+                </div>
             </div>
-            <div.search-criteria-buttons>
-                <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
-                    <span.kix-icon-search/>
-                    Neue Suche
-                </button>
-                <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten">
-                    <span.kix-icon-edit/>
-                    Suche bearbeiten
-                </button>
-            </div>
-        </div>
-    </@content>
-</widget>
+        </@content>
+    </widget>
+    <widget title=state.resultTitle>
+        <@icon>
+            <icon icon=state.resultIcon/>
+        </@icon>
+        <@content>
+            <if(state.resultTable && !state.noSearch)>
+                <standard-table standardTable=state.resultTable/>
+            </if>
+            <else>Keine Suche verfügbar.</else>
+        </@content>
+    </widget>
+</div>
