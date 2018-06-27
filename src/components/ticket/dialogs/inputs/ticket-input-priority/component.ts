@@ -10,7 +10,6 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        this.state.multiselect = this.state.formContext === FormContext.SEARCH;
     }
 
     public onMount(): void {
