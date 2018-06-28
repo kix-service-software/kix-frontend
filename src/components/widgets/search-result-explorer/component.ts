@@ -13,11 +13,10 @@ export class Component implements IKIXObjectSearchListener {
     private state: ComponentState;
     private rootCategory: SearchResultCategory;
 
-    public listenerId: string;
+    public listenerId: string = IdService.generateDateBasedId('search-result-explorer-');
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.listenerId = IdService.generateDateBasedId('search-result-explorer-');
     }
 
     public onInput(input: any): void {
@@ -34,10 +33,6 @@ export class Component implements IKIXObjectSearchListener {
         if (activeCategory) {
             this.state.activeNode = this.getActiveNode(activeCategory.objectType);
         }
-    }
-
-    public searchCriteriasChanged(): void {
-        return;
     }
 
     public searchCleared(): void {

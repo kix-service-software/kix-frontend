@@ -1,11 +1,13 @@
-<li.tree-node class=(component.isActiveNode() ? "active" : "") id=state.nodeId key=state.nodeId>
+<li.tree-node class={active: component.isNodeActive() | component.hasActiveChild()} id=state.nodeId key=state.nodeId>
     <span.tree-icon on-click('toggleNode')>
         <if(component.hasChildren())>
             <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank")/>
         </if>
     </span>
     <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
-        <icon icon=state.node.icon showUnknown=true/>
+        <if(state.node.icon)>
+            <icon icon=state.node.icon showUnknown=true/>
+        </if>
         <span.node-title class=(state.node.expanded ? "expanded" : "") title=component.getLabel()>
             ${state.node.label}
             <if(state.node.properties)>

@@ -4,9 +4,10 @@
     .tree-node {
         display: grid;
         grid-template-columns: @tree-icon-size auto;
-        grid-gap: @tree-column-gap;
+        grid-column-gap: @tree-column-gap;
         align-items: center;
-        margin-bottom: .25rem;
+        margin: 0 @margin-small .25rem 0;
+        cursor: pointer;
         >.tree-icon {
             font-size: .625rem;
             color: @secondary-0;
@@ -22,26 +23,74 @@
         }
         >.node-value {
             display: grid;
-            grid-template-columns: @tree-icon-size max-content @tree-icon-size;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
             grid-gap: @tree-column-gap;
             align-items: center;
             height: 1.5rem;
-            &.active {
-                font-weight: bold;
-            }
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 font-size: @tree-icon-size;
             }
         }
-        >.tree-list {
-            margin-left: @tree-icon-size;
+        &:hover {
+            >.tree-icon {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    background-color: @primary-0;
+                }
+            }
+            >.node-value {
+                color: @primary-0;
+            }
         }
         &.active {
+            >.tree-icon {
+                color: @secondary-6;
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    background-color: @primary-0;
+                }
+            }
             >.node-value {
-                background: @secondary-1;
+                color: @primary-0;
                 font-weight: bold;
-                cursor: pointer;
+            }
+        }
+        /* sub tree */
+        >.tree-list {
+            grid-column: 2;
+            .tree-node {
+                >.tree-icon {
+                    color: @secondary-1;
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        background-color: @secondary-3;
+                    }
+                }
+                &:hover {
+                    >.tree-icon {
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            background-color: @primary-2;
+                        }
+                    }
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
+                &.active {
+                    >.tree-icon {
+                        color: @secondary-6;
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            background-color: @primary-2;
+                        }
+                    }
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
             }
         }
     }

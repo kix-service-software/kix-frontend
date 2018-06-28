@@ -17,44 +17,28 @@ class TreeComponent {
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
-        this.scrollToNode();
     }
 
     public onMount(): void {
-        this.state.treeParent = (this as any).getEl(this.state.treeId).parentElement;
+        this.state.treeParent = (this as any).getEl().parentElement;
     }
 
-    private nodeToggled(node: TreeNode): void {
+    public nodeToggled(node: TreeNode): void {
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
     }
 
-    private nodeClicked(node: TreeNode): void {
+    public nodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
 
-    private nodeHovered(node: TreeNode): void {
+    public nodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
     }
 
-    private scrollToNode(): void {
-        if (this.state.activeNode) {
-            const container = document.getElementById(this.state.treeId);
-            const element = document.getElementById(this.state.treeId + '-node-' + this.state.activeNode.id);
-            if (element && container) {
-                if (element.offsetTop < container.scrollTop) {
-                    container.scrollTop = element.offsetTop;
-                } else {
-                    const offsetBottom = element.offsetTop + element.offsetHeight;
-                    const scrollBottom = container.scrollTop + container.offsetHeight;
-                    if (offsetBottom > scrollBottom) {
-                        container.scrollTop = offsetBottom - container.offsetHeight;
-                    }
-                }
-            }
-        }
+    public getTreeDOMElement(): any {
+        return (this as any).getEl();
     }
-
 }
 
 module.exports = TreeComponent;
