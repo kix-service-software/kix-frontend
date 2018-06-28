@@ -14,7 +14,7 @@ import { FormSearchValue } from './FormSearchValue';
 class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
-    public listenerId: string = IdService.generateDateBasedId('search-value-container-');;
+    public listenerId: string = IdService.generateDateBasedId('search-value-container-');
 
     public onCreate(): void {
         this.state = new ComponentState();
