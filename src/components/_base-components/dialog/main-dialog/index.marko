@@ -3,6 +3,9 @@
         <div.shield/>
         <div.main-dialog>
             <widget key="main-dialog" isDialog=true title=state.dialogTitle minimizable=false>
+                <@icon>
+                    <icon icon=state.dialogIcon/>
+                </@icon>
                 <@content>
                     <tab-container tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false contextType="DIALOG"
                         on-tabChanged('tabChanged') no-update-body/>
