@@ -48,8 +48,8 @@ class TreeNodeComponent {
     }
 
     public hasActiveChild(): boolean {
-        return this.state.node.children &&
-            this.state.activeNode.id &&
+        return this.state.activeNode &&
+            this.state.node.children &&
             this.checkForActiveChild(this.state.node.children);
     }
 
