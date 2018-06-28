@@ -12,10 +12,10 @@
             grid-template-columns: 1fr 1fr;
             grid-gap: 0 0.75rem;
             height: 8.75rem;
-            overflow-y: scroll;
+            overflow-y: auto;
             .search-criteria-list-item {
                 display: grid;
-                grid-template-columns: 1fr 3fr;
+                grid-template-columns: 1fr 1fr 6fr;
                 border-radius: @border-radius;
                 height: 1.75rem;
                 padding: 0 0.875rem;
@@ -27,7 +27,7 @@
                     position: relative;
                     box-sizing: border-box;
                     color: @secondary-7;
-                    &.key:after {
+                    &.operator:after {
                         content: ":";
                     }
                     &.key {
@@ -40,6 +40,11 @@
                         }
                     }
                     &.value {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                    &.operator {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         overflow: hidden;

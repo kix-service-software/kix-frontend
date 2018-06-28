@@ -50,10 +50,9 @@ export class FormSearchValue {
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
 
             if (this.isDropdown) {
-                const values = KIXObjectSearchService.getInstance().getSearchValues(
+                this.nodes = KIXObjectSearchService.getInstance().getTreeNodes(
                     this.objectType, this.currentPropertyNode.id
                 );
-                values.forEach((name, id) => this.nodes.push(new TreeNode(id, name)));
             }
         }
     }

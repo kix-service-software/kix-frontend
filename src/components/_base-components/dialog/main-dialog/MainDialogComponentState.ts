@@ -1,4 +1,4 @@
-import { ConfiguredWidget, ConfiguredDialogWidget } from "@kix/core/dist/model";
+import { ConfiguredWidget, ConfiguredDialogWidget, ObjectIcon } from "@kix/core/dist/model";
 
 export class MainDialogComponentState {
 
@@ -10,7 +10,8 @@ export class MainDialogComponentState {
         public loadingHint: string = null,
         public contextId: string = null,
         public dialogId: string = null,
-        public dialogTitle: string = null
+        public dialogTitle: string = null,
+        public dialogIcon: string | ObjectIcon = null
     ) { }
 
 }
