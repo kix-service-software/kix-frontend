@@ -1,5 +1,5 @@
 import { TreeNodeComponentState } from './TreeNodeComponentState';
-import { TreeNode, ObjectIcon, TreeUtil } from '@kix/core/dist/model';
+import { TreeNode } from '@kix/core/dist/model';
 
 class TreeNodeComponent {
 
@@ -14,6 +14,7 @@ class TreeNodeComponent {
         this.state.node = input.node;
         this.state.filterValue = input.filterValue;
         this.state.activeNode = input.activeNode;
+        (this as any).setStateDirty('activeNode');
         this.state.treeId = input.treeId;
         this.state.nodeId = this.state.treeId + '-node-' + this.state.node.id;
         if (!this.hasListener && input.treeParent) {
@@ -27,7 +28,6 @@ class TreeNodeComponent {
         this.state.treeParent.removeEventListener('keydown', this.navigateTree);
         this.state.node = null;
         this.state.filterValue = null;
-        this.state.activeNode = null;
     }
 
     private hasChildren(): boolean {
@@ -43,8 +43,20 @@ class TreeNodeComponent {
         return title;
     }
 
-    private isActiveNode(): boolean {
+    private isNodeActive(): boolean {
         return this.state.activeNode && this.state.activeNode.id === this.state.node.id;
+    }
+
+    public hasActiveChild(): boolean {
+        return this.state.node.children &&
+            this.state.activeNode.id &&
+            this.checkForActiveChild(this.state.node.children);
+    }
+
+    private checkForActiveChild(children: TreeNode[]): boolean {
+        return children && children.length && children.some(
+            (c) => c.id === this.state.activeNode.id || this.checkForActiveChild(c.children)
+        );
     }
 
     private toggleNode(event: any): void {
@@ -60,7 +72,7 @@ class TreeNodeComponent {
     }
 
     private nodeHovered(): void {
-        if (!this.isActiveNode()) {
+        if (!this.isNodeActive()) {
             (this as any).emit('nodeHovered', this.state.node);
         }
     }
@@ -77,39 +89,40 @@ class TreeNodeComponent {
         (this as any).emit('nodeClicked', node);
     }
 
+    // TODO: Tastatur-Steuerung wieder aktivieren, falls nötig
     private navigateTree(event: any): void {
-        if (this.state.node && this.navigationKeyPressed(event) && this.isActiveNode()) {
-            if (event.preventDefault) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        // if (this.state.node && this.navigationKeyPressed(event) && this.isNodeActive()) {
+        //     if (event.preventDefault) {
+        //         event.preventDefault();
+        //         event.stopPropagation();
+        //     }
 
-            switch (event.key) {
-                case 'ArrowUp':
-                    if (this.state.node.previousNode) {
-                        this.childNodeHovered(this.state.node.previousNode);
-                    }
-                    break;
-                case 'ArrowDown':
-                    if (this.state.node.nextNode) {
-                        this.childNodeHovered(this.state.node.nextNode);
-                    }
-                    break;
-                case 'ArrowLeft':
-                    this.state.node.expanded = false;
-                    this.childNodeToggled(this.state.node);
-                    (this as any).setStateDirty();
-                    break;
-                case 'ArrowRight':
-                    if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
-                        this.state.node.expanded = true;
-                        this.childNodeToggled(this.state.node);
-                        (this as any).setStateDirty();
-                    }
-                    break;
-                default:
-            }
-        }
+        //     switch (event.key) {
+        //         case 'ArrowUp':
+        //             if (this.state.node.previousNode) {
+        //                 this.childNodeHovered(this.state.node.previousNode);
+        //             }
+        //             break;
+        //         case 'ArrowDown':
+        //             if (this.state.node.nextNode) {
+        //                 this.childNodeHovered(this.state.node.nextNode);
+        //             }
+        //             break;
+        //         case 'ArrowLeft':
+        //             this.state.node.expanded = false;
+        //             this.childNodeToggled(this.state.node);
+        //             (this as any).setStateDirty();
+        //             break;
+        //         case 'ArrowRight':
+        //             if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
+        //                 this.state.node.expanded = true;
+        //                 this.childNodeToggled(this.state.node);
+        //                 (this as any).setStateDirty();
+        //             }
+        //             break;
+        //         default:
+        //     }
+        // }
     }
 
     private navigationKeyPressed(event: any): boolean {

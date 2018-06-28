@@ -3,9 +3,8 @@
 .form-list-tree {
     .tree-node {
         display: grid;
-        grid-auto-columns: max-content;
-        grid-auto-flow: column;
-        grid-gap: @tree-column-gap;
+        grid-template-columns: @tree-icon-size auto;
+        grid-column-gap: @tree-column-gap;
         align-items: center;
         margin-bottom: .25rem;
         cursor: pointer;
@@ -24,7 +23,8 @@
         }
         >.node-value {
             display: grid;
-            grid-template-columns: @tree-icon-size max-content @tree-icon-size;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
             grid-gap: @tree-column-gap;
             align-items: center;
             height: 1.5rem;
@@ -33,12 +33,9 @@
                 font-size: @tree-icon-size;
             }
         }
-        >.form-list-tree {
-            margin-left: @tree-icon-size;
-        }
         &:hover {
             >.node-value {
-                background: @secondary-1;
+                background: @secondary-5;
                 font-weight: bold;
             }
         }
@@ -50,6 +47,18 @@
             &:hover {
                 >.node-value {
                     background: darken(@tertiary-4, 20%);
+                }
+            }
+        }
+        >.form-list-tree {
+            grid-column: 2;
+            .tree-node {
+                >.tree-icon {
+                    color: @secondary-1;
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        background-color: @secondary-3;
+                    }
                 }
             }
         }

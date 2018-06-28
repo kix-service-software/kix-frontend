@@ -14,11 +14,10 @@ import { FormSearchValue } from './FormSearchValue';
 class Component implements IKIXObjectSearchListener {
 
     private state: ComponentState;
-    public listenerId: string;
+    public listenerId: string = IdService.generateDateBasedId('search-value-container-');
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.listenerId = IdService.generateDateBasedId('search-value-container-');
     }
 
     public onInput(input: any): void {
@@ -107,10 +106,6 @@ class Component implements IKIXObjectSearchListener {
                 this.provideFilterCriteria(searchValue);
             }
         });
-    }
-
-    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
-        return;
     }
 
     public searchCleared(): void {
