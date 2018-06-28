@@ -33,6 +33,12 @@ class Component implements IKIXObjectSearchListener {
             this.state.fulltextSearch = formInstance.form.fulltextSearch;
             this.state.fulltextActive = this.state.fulltextSearch;
             this.state.defaultProperties = formInstance.form.defaultSearchProperties;
+
+            formInstance.registerSearchFormListener({
+                searchCriteriasChanged: (criterias: FilterCriteria[]) => {
+                    this.state.canSearch = !criterias.some((c) => c.value === null);
+                }
+            });
         }
         this.state.loading = false;
     }
@@ -119,10 +125,6 @@ class Component implements IKIXObjectSearchListener {
 
     public searchFinished<T extends KIXObject<any> = KIXObject<any>>(result: T[]): void {
         return;
-    }
-
-    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
-        this.state.canSearch = !criterias.some((c) => c.value === null);
     }
 
 }
