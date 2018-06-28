@@ -11,12 +11,13 @@ import { SearchContext } from '@kix/core/dist/browser/search';
 
 class Component implements IContextServiceListener, IKIXObjectSearchListener {
 
-    public listenerId: string = 'kix-search-module-listener';
+    public listenerId: string;
 
     private state: ComponentState;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.listenerId = 'kix-search-module-listener';
     }
 
     public onInput(input: any): void {
