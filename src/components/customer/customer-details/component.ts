@@ -23,7 +23,7 @@ class Component {
 
     private async loadCustomer(): Promise<void> {
         const contacts = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null);
+            KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS);
         if (contacts && contacts.length) {
             this.state.customer = contacts[0];
             this.state.loadingCustomer = false;

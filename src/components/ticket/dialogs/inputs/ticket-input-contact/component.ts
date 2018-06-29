@@ -1,6 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { Contact, FormInputComponent, KIXObjectType, ContextMode, TreeNode } from "@kix/core/dist/model";
+import {
+    Contact, FormInputComponent, KIXObjectType, ContextMode,
+    TreeNode, KIXObjectLoadingOptions
+} from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<Contact, ComponentState> {
@@ -29,8 +32,9 @@ class Component extends FormInputComponent<Contact, ComponentState> {
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
         this.state.contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, null, ContextMode.DETAILS, null, null, null, searchValue, limit
+            KIXObjectType.CONTACT, null, ContextMode.DETAILS, loadingOptions
         );
 
         let treeNodes = [];

@@ -20,7 +20,7 @@ export class TicketArticleDetailsComponent {
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
             const tickets = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [ticket.TicketID], ContextMode.DETAILS, null
+                KIXObjectType.TICKET, [ticket.TicketID], ContextMode.DETAILS
             );
 
             if (tickets && tickets.length && tickets[0].Articles && tickets[0].Articles.length) {

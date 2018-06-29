@@ -25,7 +25,7 @@ class CustomerInfoComponent {
 
         if (this.state.customerId) {
             const customers = await ContextService.getInstance().loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS, null
+                KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS
             ).catch((error) => {
                 this.state.error = error;
             });

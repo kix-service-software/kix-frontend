@@ -35,7 +35,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         ];
         const todoTicketList = new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
             "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], {
-                limit: 20,
+                limit: 500,
                 displayLimit: 10,
                 showTotalCount: true,
                 tableColumns: [
@@ -80,7 +80,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const newTicketsListWidget =
             new ConfiguredWidget("20180612-new-tickets-widget", new WidgetConfiguration(
                 "ticket-list-widget", "Neue Tickets", ['bulk-ticket-action'], {
-                    limit: 20,
+                    limit: 500,
                     displayLimit: 10,
                     showTotalCount: true,
                     tableColumns: [
