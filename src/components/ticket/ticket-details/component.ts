@@ -1,7 +1,7 @@
 import { TicketService, TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
 import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import {
-    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType, ContextMode
+    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType, ContextMode, KIXObjectLoadingOptions
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
@@ -34,8 +34,13 @@ export class TicketDetailsComponent {
     }
 
     private async loadTicket(): Promise<void> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            ['Ticket.*'], null, null, null, null,
+            ['TimeUnits', 'DynamicFields', 'Links', 'Articles', 'Attachments', 'Flags', 'History'],
+            ['Links', 'Articles', 'Attachments', 'Flags', 'History']
+        );
         const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-            KIXObjectType.TICKET, [this.state.ticketId], ContextMode.DETAILS, ['Ticket.*']
+            KIXObjectType.TICKET, [this.state.ticketId], ContextMode.DETAILS, loadingOptions
         );
         this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
         this.state.loadingTicket = false;
