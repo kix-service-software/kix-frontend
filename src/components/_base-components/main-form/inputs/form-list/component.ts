@@ -80,23 +80,21 @@ class Component {
     }
 
     public focusLost(): void {
-        // timeout necessary because focus-lost comes before node-clicked and blocks it on first click (rerender)
-        setTimeout(() => {
-            (this as any).emit('nodesChanged', this.state.selectedNodes);
-        }, 100);
+        // TODO: ggf. irrelevant
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
     private keyDown(event: any): void {
-        // if (this.state.expanded) {
-        //     if (event.key === 'Escape' || event.key === 'Tab') {
-        //         this.toggleList();
-        //     } else if (event.key === 'Enter' || event.key === 'Tab') {
-        //         event.stopPropagation();
-        //         event.preventDefault();
-        //         this.nodeClicked(this.state.preSelectedNodes);
-        //     }
-        // }
+        if (this.state.expanded) {
+            if (event.key === 'Escape' || event.key === 'Tab') {
+                this.toggleList();
+            }
+            //     else if (event.key === 'Enter' || event.key === 'Tab') {
+            //         event.stopPropagation();
+            //         event.preventDefault();
+            //         this.nodeClicked(this.state.preSelectedNodes);
+            //     }
+        }
     }
 
     public keyUp(event: any): void {
