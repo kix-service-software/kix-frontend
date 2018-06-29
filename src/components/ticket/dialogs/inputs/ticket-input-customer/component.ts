@@ -1,7 +1,8 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketProperty, FormFieldValue, FormInputComponent, FormField, KIXObjectType, Customer, ContextMode, TreeNode
+    TicketProperty, FormFieldValue, FormInputComponent, FormField,
+    KIXObjectType, Customer, ContextMode, TreeNode
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 
@@ -53,7 +54,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     private async loadCustomers(customerIds: string[]): Promise<void> {
         this.state.loading = true;
         this.customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, customerIds, ContextMode.DASHBOARD, null
+            KIXObjectType.CUSTOMER, customerIds, ContextMode.DASHBOARD
         );
         this.state.nodes = this.customers.map(
             (c) => new TreeNode(c.CustomerID, c.DisplayValue, 'kix-icon-man-house')

@@ -18,7 +18,7 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS, null
+            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS
         );
 
         if (contacts && contacts.length) {
