@@ -18,7 +18,7 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS, null
+            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS
         );
 
         if (customers && customers.length) {

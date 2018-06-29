@@ -57,7 +57,7 @@ class Component {
             : undefined;
 
         const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS, null
+            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS
         );
 
         if (contacts && contacts.length) {
