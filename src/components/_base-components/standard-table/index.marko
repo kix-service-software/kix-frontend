@@ -30,8 +30,8 @@
                 </for>
             </div>
             <if(state.standardTable.toggle)>
-                <div.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
-                    data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
+                <span.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
+                    data-id=(state.tableId + "toggle-row-column")>&nbsp;</span>
             </if>
             <if(state.standardTable.isLoading())>
                 <loading-spinner/>
