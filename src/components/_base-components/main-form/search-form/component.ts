@@ -5,7 +5,7 @@ import {
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService,
-    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener, IdService
+    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener, IdService, KIXObjectSearchCache
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
@@ -40,6 +40,19 @@ class Component implements IKIXObjectSearchListener {
                 }
             });
         }
+
+        if (KIXObjectSearchService.getInstance().getSearchCache()) {
+            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+            if (cache.objectType === this.state.objectType) {
+                this.state.fulltextActive = cache.isFulltext;
+                this.state.fulltextValue = cache.fulltextValue;
+                this.setSearchResult(cache.result);
+                this.state.canSearch = !cache.criterias.some((c) => c.value === null);
+            } else {
+                KIXObjectSearchService.getInstance().clearSearchCache();
+            }
+        }
+
         this.state.loading = false;
     }
 
@@ -123,7 +136,7 @@ class Component implements IKIXObjectSearchListener {
         this.state.canSearch = false;
     }
 
-    public searchFinished<T extends KIXObject<any> = KIXObject<any>>(result: T[]): void {
+    public searchFinished(): void {
         return;
     }
 

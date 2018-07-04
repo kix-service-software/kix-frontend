@@ -5,6 +5,7 @@ import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes
 } from "@kix/core/dist/model";
+import { isArray } from "util";
 
 export class FormSearchValue {
 
@@ -40,6 +41,9 @@ export class FormSearchValue {
                 this.objectType, propertyNode.id
             );
             this.operationNodes = operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o)));
+            if (this.operationNodes && this.operationNodes.length) {
+                this.setOperationNode(this.operationNodes[0]);
+            }
 
             const inputType = KIXObjectSearchService.getInstance().getSearchInputType(
                 this.objectType, this.currentPropertyNode.id
@@ -57,11 +61,28 @@ export class FormSearchValue {
         }
     }
 
-    public setOperationNode(operationNode: TreeNode): void {
-        this.currentOperationNode = operationNode;
+    public setOperationNode(operationNode?: TreeNode, operator?: SearchOperator): void {
+        if (operationNode) {
+            this.currentOperationNode = operationNode;
+        } else if (operator) {
+            this.currentOperationNode = this.operationNodes.find((on) => on.id === operator);
+        }
+
         this.isMultiselect = this.currentOperationNode
             ? this.currentOperationNode.id === SearchOperator.IN
             : false;
+    }
+
+    public setCurrentValue(value: any): void {
+        this.currentValue = value;
+        this.currentValueNodes = [];
+        if (this.isDropdown) {
+            if (isArray(value)) {
+                value.forEach((v) => this.currentValueNodes.push(this.nodes.find((n) => n.id === v)));
+            } else {
+                this.currentValueNodes = [this.nodes.find((n) => n.id === value)];
+            }
+        }
     }
 
     public setTreeValues(nodes: TreeNode[]): void {
