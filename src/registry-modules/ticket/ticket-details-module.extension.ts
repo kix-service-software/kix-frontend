@@ -167,27 +167,27 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // Overlays
         const customerInfoOverlay =
             new ConfiguredWidget("customer-info-overlay", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {},
+                "ticket-customer-info", "Kunde", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoOverlay =
             new ConfiguredWidget("contact-info-overlay", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Ansprechpartner1", [], {},
+                "ticket-contact-info", "Ansprechpartner", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const toReceiverOverlay =
             new ConfiguredWidget("to-receiver-overlay", new WidgetConfiguration(
-                "article-receiver-list-widget", "Empfänger: An", [], {},
+                "article-receiver-list", "Empfänger: An", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-To', false)
             );
         const ccReceiverOverlay =
             new ConfiguredWidget("cc-receiver-overlay", new WidgetConfiguration(
-                "article-receiver-list-widget", "Empfänger: Cc", [], {},
+                "article-receiver-list", "Empfänger: Cc", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Cc', false)
             );
         const bccReceiverOverlay =
             new ConfiguredWidget("bcc-receiver-overlay", new WidgetConfiguration(
-                "article-receiver-list-widget", "Empfänger: Bcc", [], {},
+                "article-receiver-list", "Empfänger: Bcc", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Bcc', false)
             );
         const articleAttachmentOverlay =
