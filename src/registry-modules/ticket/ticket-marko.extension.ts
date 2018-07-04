@@ -25,7 +25,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/inputs/ticket-input-ticketnumber'
         ];
         const widgets = [
-            'ticket/widgets/article-receiver-list-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-info-widget',
             'ticket/widgets/ticket-history-widget',
@@ -44,6 +43,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/ticket-article-attachment-list',
             'ticket/ticket-contact-info',
             'ticket/ticket-customer-info',
+            'ticket/article-receiver-list',
             ...dialog,
             ...widgets
         ];
@@ -51,7 +51,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
     public getComponentTags(): Array<[string, string]> {
         const widgets: Array<[string, string]> = [
-            ['article-receiver-list-widget', 'ticket/widgets/article-receiver-list-widget'],
             ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
             ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
             ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
@@ -94,6 +93,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
             ['ticket-contact-info', 'ticket/ticket-contact-info'],
             ['ticket-customer-info', 'ticket/ticket-customer-info'],
+            ['article-receiver-list', 'ticket/article-receiver-list'],
             ...inputs,
             ...widgets,
         ];
