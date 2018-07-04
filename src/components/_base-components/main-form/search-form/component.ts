@@ -5,7 +5,7 @@ import {
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService,
-    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener, IdService
+    OverlayService, KIXObjectServiceRegistry, IKIXObjectSearchListener, IdService, KIXObjectSearchCache
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
@@ -36,10 +36,23 @@ class Component implements IKIXObjectSearchListener {
 
             formInstance.registerSearchFormListener({
                 searchCriteriasChanged: (criterias: FilterCriteria[]) => {
-                    this.state.canSearch = !criterias.some((c) => c.value === null);
+                    this.setCanSearch();
                 }
             });
         }
+
+        if (KIXObjectSearchService.getInstance().getSearchCache()) {
+            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+            if (cache.objectType === this.state.objectType) {
+                this.state.fulltextActive = cache.isFulltext;
+                this.state.fulltextValue = cache.fulltextValue;
+                this.setSearchResult(cache.result);
+                this.setCanSearch();
+            } else {
+                KIXObjectSearchService.getInstance().clearSearchCache();
+            }
+        }
+
         this.state.loading = false;
     }
 
@@ -119,11 +132,20 @@ class Component implements IKIXObjectSearchListener {
         OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
+    private setCanSearch(): void {
+        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            this.state.canSearch = formInstance.getCriterias().some(
+                (c) => c.property !== null && c.operator !== null && c.value !== null
+            );
+        }
+    }
+
     public searchCleared(): void {
         this.state.canSearch = false;
     }
 
-    public searchFinished<T extends KIXObject<any> = KIXObject<any>>(result: T[]): void {
+    public searchFinished(): void {
         return;
     }
 

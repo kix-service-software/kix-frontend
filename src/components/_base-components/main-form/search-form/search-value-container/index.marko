@@ -4,7 +4,7 @@
 <else>
     <for(searchValue in state.searchValues)>
         <div.form-search-value>
-            <span>UND</span>
+            <span>und</span>
             <form-list nodes=state.propertyNodes selectedNodes=[searchValue.currentPropertyNode]
                 on-nodesChanged('propertyChanged', searchValue)/>
             <form-list nodes=searchValue.operationNodes selectedNodes=[searchValue.currentOperationNode]
@@ -27,9 +27,12 @@
                     </else>
                 </if>
             </div>
-            <div.remove-value on-click('removeValue', searchValue)>
-                <span.kix-icon-minus/>
-            </div>
+            <if(state.searchValues.length > 1)>
+                <button.form-button.button-without-text type="button" title="Verknüpfung zuordnen"
+                    on-click('removeValue', searchValue)>
+                    <span.kix-icon-minus/>
+                </button>
+            </if>
         </div>
     </for>
 </else>

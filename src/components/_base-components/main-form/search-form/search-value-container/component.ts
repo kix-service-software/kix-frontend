@@ -38,29 +38,37 @@ class Component implements IKIXObjectSearchListener {
             );
         }
 
-        if (this.state.defaultProperties) {
+        if (KIXObjectSearchService.getInstance().getSearchCache()) {
+            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+            cache.criterias.forEach((criteria) => {
+                const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);
+
+                const searchValue = new FormSearchValue(this.state.objectType);
+                searchValue.setPropertyNode(property);
+                searchValue.setOperationNode(null, criteria.operator);
+                searchValue.setCurrentValue(criteria.value);
+                this.state.searchValues.push(searchValue);
+                this.provideFilterCriteria(searchValue);
+            });
+        } else if (this.state.defaultProperties) {
             this.setDefaultFormProperties();
-            this.checkSearchValueList();
         }
 
+        this.checkSearchValueList();
         this.state.loading = false;
     }
 
     public propertyChanged(searchValue: FormSearchValue, nodes: TreeNode[]): void {
-        if (nodes && nodes.length && nodes[0].id) {
-            this.removeValue(searchValue, false);
-            searchValue.setPropertyNode(nodes[0]);
-            this.provideFilterCriteria(searchValue);
-            this.checkSearchValueList();
-            (this as any).setStateDirty('searchValues');
-        }
+        this.removeValue(searchValue, false);
+        searchValue.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
+        this.provideFilterCriteria(searchValue);
+        this.checkSearchValueList();
+        (this as any).setStateDirty('searchValues');
     }
 
     public operationChanged(searchValue: FormSearchValue, nodes: TreeNode[]): void {
-        if (nodes && nodes.length) {
-            searchValue.setOperationNode(nodes[0]);
-            this.provideFilterCriteria(searchValue);
-        }
+        searchValue.setOperationNode(nodes && nodes.length ? nodes[0] : null);
+        this.provideFilterCriteria(searchValue);
     }
 
     public treeValueChanged(searchValue: FormSearchValue, nodes: TreeNode[]): void {
@@ -114,7 +122,7 @@ class Component implements IKIXObjectSearchListener {
         this.checkSearchValueList();
     }
 
-    public searchFinished<T extends KIXObject = KIXObject>(result: T[]): void {
+    public searchFinished(): void {
         return;
     }
 

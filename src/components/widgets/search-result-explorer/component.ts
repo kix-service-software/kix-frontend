@@ -37,7 +37,8 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     public searchCleared(): void {
-        // TODO: Baum zurücksetzen?
+        KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(null);
+        this.state.nodes = null;
     }
 
     public searchFinished(): void {
