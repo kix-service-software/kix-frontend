@@ -36,7 +36,7 @@ class Component implements IKIXObjectSearchListener {
 
             formInstance.registerSearchFormListener({
                 searchCriteriasChanged: (criterias: FilterCriteria[]) => {
-                    this.state.canSearch = !criterias.some((c) => c.value === null);
+                    this.setCanSearch();
                 }
             });
         }
@@ -47,7 +47,7 @@ class Component implements IKIXObjectSearchListener {
                 this.state.fulltextActive = cache.isFulltext;
                 this.state.fulltextValue = cache.fulltextValue;
                 this.setSearchResult(cache.result);
-                this.state.canSearch = !cache.criterias.some((c) => c.value === null);
+                this.setCanSearch();
             } else {
                 KIXObjectSearchService.getInstance().clearSearchCache();
             }
@@ -130,6 +130,15 @@ class Component implements IKIXObjectSearchListener {
 
     private showError(error: any): void {
         OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+    }
+
+    private setCanSearch(): void {
+        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            this.state.canSearch = formInstance.getCriterias().some(
+                (c) => c.property !== null && c.operator !== null && c.value !== null
+            );
+        }
     }
 
     public searchCleared(): void {
