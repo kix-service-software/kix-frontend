@@ -30,6 +30,11 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
         }
         ContextService.getInstance().registerListener(this);
         KIXObjectSearchService.getInstance().registerListener(this);
+
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (cache) {
+            this.searchFinished();
+        }
     }
 
     public contextChanged(
@@ -51,9 +56,10 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
 
     public searchCleared(): void {
         this.state.criterias = [];
+        this.state.resultTable = null;
     }
 
-    public searchFinished<T extends KIXObject = KIXObject>(result: T[]): void {
+    public searchFinished<T extends KIXObject = KIXObject>(): void {
         this.state.resultTable = null;
         this.state.criterias = [];
 
