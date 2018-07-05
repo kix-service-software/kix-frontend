@@ -5,7 +5,7 @@ export class MarkoDependencyExtension implements IMarkoDependencyExtension {
     public getDependencies(): string[] {
         return [
             'search/search-module',
-            'widgets/search-result-explorer'
+            'search/widgets/search-result-explorer'
 
         ];
     }
@@ -13,7 +13,7 @@ export class MarkoDependencyExtension implements IMarkoDependencyExtension {
     public getComponentTags(): Array<[string, string]> {
         return [
             ['search', 'search/search-module'],
-            ['search-result-explorer', 'widgets/search-result-explorer']
+            ['search-result-explorer', 'search/widgets/search-result-explorer']
         ];
     }
 

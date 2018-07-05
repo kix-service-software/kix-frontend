@@ -1,40 +1,5 @@
 <div.search-dashboard>
-    <widget title="Suchkriterien für Ticketsuche">
-        <@content>
-            <div.search-criteria>
-                <div.search-criteria-list>
-                    <for(criteria in state.criterias)>
-                        <div.search-criteria-list-item>
-                            <div.key title=criteria[0]>
-                                <span.property-name>${criteria[0]}</span>
-                            </div>
-                            <div.operator title=((" (" + criteria[1]) + ")")>
-                                <span>(${criteria[1]})</span>
-                            </div>
-                            <div.value title=criteria[2]>
-                                <span>${criteria[2]}</span>
-                            </div>
-                        </div>
-                    </for>
-                    <if(state.criterias.length < 10)>
-                        <for(i from state.criterias.length to 9 step 1)>
-                            <div.search-criteria-list-item>&nbsp;</div>
-                        </for>
-                    </if>
-                </div>
-                <div.search-criteria-buttons>
-                    <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
-                        <span.kix-icon-search/>
-                        Neue Suche
-                    </button>
-                    <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten">
-                        <span.kix-icon-edit/>
-                        Suche bearbeiten
-                    </button>
-                </div>
-            </div>
-        </@content>
-    </widget>
+    <search-criteria-widget/>
     <widget title=state.resultTitle>
         <@icon>
             <icon icon=state.resultIcon/>
