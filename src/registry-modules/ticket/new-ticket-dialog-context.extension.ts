@@ -1,6 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    NewTicketDialogContext, NewTicketDialogContextConfiguration, TicketStateOptions
+    NewTicketDialogContext, NewTicketDialogContextConfiguration, TicketStateOptions, PendingTimeFormValue
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
@@ -55,10 +55,14 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Bearbeiter", TicketProperty.OWNER_ID, false, "Bearbeiter"));
             fields.push(new FormField("Verantwortlicher", TicketProperty.RESPONSIBLE_ID, false, "Verantwortlicher"));
             fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, false, "Priorität", null, new FormFieldValue(3)
+                "Priorität", TicketProperty.PRIORITY_ID, true, "Priorität", null, new FormFieldValue(3)
             ));
-            fields.push(new FormField<number>(
-                "Status des Tickets", TicketProperty.STATE_ID, false, "Status", null, new FormFieldValue(4)
+            fields.push(new FormField<PendingTimeFormValue>(
+                "Status des Tickets",
+                TicketProperty.STATE_ID,
+                true, "Status",
+                null,
+                new FormFieldValue(new PendingTimeFormValue(4))
             ));
 
             const group = new FormGroup('Ticketdaten', fields);

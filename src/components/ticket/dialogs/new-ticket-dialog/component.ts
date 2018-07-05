@@ -38,7 +38,7 @@ class NewTicketDialogComponent {
         DialogService.getInstance().closeMainDialog();
     }
 
-    private async  submit(): Promise<void> {
+    private async submit(): Promise<void> {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
