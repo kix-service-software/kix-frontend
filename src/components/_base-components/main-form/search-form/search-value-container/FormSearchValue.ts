@@ -123,11 +123,11 @@ export class FormSearchValue {
         if (this.isDate) {
             filterDataType = FilterDataType.DATE;
             const date = new Date(this.date);
-            value = isNaN(date.getTime()) ? null : DateTimeUtil.createKIXDateTimeString(date);
+            value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
         } else if (this.isDateTime) {
             filterDataType = FilterDataType.DATETIME;
             const date = new Date(`${this.date} ${this.time}`);
-            value = isNaN(date.getTime()) ? null : DateTimeUtil.createKIXDateTimeString(date);
+            value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
         }
 
         return new FilterCriteria(property, operator, filterDataType, FilterType.AND, value);
