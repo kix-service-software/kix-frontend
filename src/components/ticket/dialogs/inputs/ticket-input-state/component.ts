@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TicketProperty, TreeNode, FormContext, } from "@kix/core/dist/model";
+import { ObjectIcon, TicketProperty, TreeNode, DateTimeUtil } from "@kix/core/dist/model";
 import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
 import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
 
@@ -26,11 +26,21 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
 
     protected setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
+            let defaultStateValue: PendingTimeFormValue;
             if (Array.isArray(this.state.defaultValue.value)) {
-                this.state.currentNode = this.state.defaultValue.value.length ?
-                    this.state.nodes.find((n) => n.id === this.state.defaultValue.value[0]) : null;
+                defaultStateValue = this.state.defaultValue.value[0];
             } else {
-                this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+                defaultStateValue = this.state.defaultValue.value;
+            }
+            if (defaultStateValue) {
+                this.state.currentNode = this.state.nodes.find((n) => n.id === defaultStateValue.stateId);
+                this.showPendingTime();
+                if (this.state.pending && defaultStateValue.pendingDate) {
+                    const pendingDate = new Date(defaultStateValue.pendingDate);
+                    this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
+                    // TODO: "default" Zeit auf Auswahl mappen oder TimeInputComponente verwenden
+                    // this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
+                }
             }
         }
     }
@@ -79,7 +89,7 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
     private setValue(): void {
         if (this.state.currentNode) {
             const stateValue = new PendingTimeFormValue(
-                (this.state.currentNode ? Number(this.state.currentNode.id) : null),
+                Number(this.state.currentNode.id),
                 this.state.pending,
                 new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
             );
