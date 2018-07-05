@@ -15,11 +15,6 @@ export class MainDialogComponent implements IMainDialogListener {
         DialogService.getInstance().registerMainDialogListener(this);
     }
 
-    public tabChanged(tab: ConfiguredDialogWidget): void {
-        this.state.dialogId = tab.instanceId;
-        ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
-    }
-
     public open(
         dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string, dialogIcon?: string | ObjectIcon
     ): void {
@@ -27,8 +22,10 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.dialogTitle = dialogTitle;
             this.state.dialogIcon = dialogIcon;
             this.state.dialogWidgets = dialogs;
-            this.state.dialogId = dialogId;
             this.state.show = true;
+            setTimeout(() => {
+                this.tabChanged(dialogs.find((d) => d.instanceId === dialogId));
+            }, 100);
         }
     }
 
@@ -36,13 +33,18 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.show = false;
     }
 
+    public tabChanged(tab: ConfiguredDialogWidget): void {
+        this.state.dialogId = tab.instanceId;
+        ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
+    }
+
     public setHint(hint: string): void {
         this.state.dialogHint = hint;
     }
 
     public setLoading(isLoading: boolean, loadingHint: string): void {
-        this.state.isLoading = isLoading;
         this.state.loadingHint = loadingHint;
+        this.state.isLoading = isLoading;
     }
 
 }

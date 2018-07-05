@@ -6,7 +6,6 @@ import {
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 
 export class ModuleExtension implements IModuleFactoryExtension {
 
@@ -22,11 +21,11 @@ export class ModuleExtension implements IModuleFactoryExtension {
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
-        const formIdNewTicket = 'search-ticket-form';
-        const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
-        if (!existingFormNewTicket) {
+        const formId = 'search-ticket-form';
+        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        if (!existingForm) {
             const form = new SearchForm(
-                formIdNewTicket,
+                formId,
                 'Ticketsuche',
                 KIXObjectType.TICKET,
                 FormContext.SEARCH,
@@ -36,7 +35,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.TICKET, formIdNewTicket);
+        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.TICKET, formId);
     }
 
 }

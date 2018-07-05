@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    FormFieldValue, FormField, KIXObjectType, ContextMode
+    KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
 import { TicketService } from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
@@ -21,14 +21,7 @@ class NewTicketDialogComponent {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
-            formInstance.registerListener({
-                formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                    // FIXME: Notify valueChange for sidebars
-                },
-                updateForm: () => { return; }
-            });
         }
-
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 

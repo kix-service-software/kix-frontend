@@ -183,23 +183,20 @@ class Component {
         if (formListTree) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = formListInputContainer;
-            let relevantContainer;
             while (container
                 && container.parentNode
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
-                relevantContainer = container;
                 container = container.parentNode;
             }
-            const fromListTreeDOMRect = formListTree.getBoundingClientRect();
-            const containerElementDOMRect = relevantContainer.getBoundingClientRect();
-            const formListInputContainerDOMRect = formListInputContainer.getBoundingClientRect();
-            const containerEnd = containerElementDOMRect.top + containerElementDOMRect.height;
-            const dropdownListEnd = formListInputContainerDOMRect.top
-                + formListInputContainerDOMRect.height
-                + fromListTreeDOMRect.height;
+            const containerEnd = container.getBoundingClientRect().top + container.getBoundingClientRect().height;
+            const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
+                + formListInputContainer.getBoundingClientRect().height
+                + formListTree.getBoundingClientRect().height;
             if (containerEnd < dropdownListEnd) {
-                transformValue = formListInputContainerDOMRect.height + fromListTreeDOMRect.height;
+                transformValue
+                    = formListInputContainer.getBoundingClientRect().height
+                    + formListTree.getBoundingClientRect().height;
             } else {
                 transformValue = 0;
             }

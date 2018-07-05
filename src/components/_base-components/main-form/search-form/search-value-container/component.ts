@@ -82,6 +82,18 @@ class Component implements IKIXObjectSearchListener {
         this.provideFilterCriteria(searchValue);
     }
 
+    public dateValueChanged(searchValue: FormSearchValue, event: any): void {
+        const value = event.target.value;
+        searchValue.setDateValue(value);
+        this.provideFilterCriteria(searchValue);
+    }
+
+    public timeValueChanged(searchValue: FormSearchValue, event: any): void {
+        const value = event.target.value;
+        searchValue.setTimeValue(value);
+        this.provideFilterCriteria(searchValue);
+    }
+
     public provideFilterCriteria(searchValue: FormSearchValue): void {
         const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         formInstance.setFilterCriteria(searchValue.getFilterCriteria());

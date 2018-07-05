@@ -1,8 +1,10 @@
+import { KIXObjectType, FormContext } from "@kix/core/dist/model";
+import { FormService } from "@kix/core/dist/browser";
+
 export class ComponentState {
 
     public constructor(
-        public formId: string = null,
-        public loading: boolean = false
+        public formId: string = FormService.getInstance().getFormIdByContext(FormContext.SEARCH, KIXObjectType.CONTACT)
     ) { }
 
 }

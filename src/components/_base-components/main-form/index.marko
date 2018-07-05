@@ -1,10 +1,7 @@
 <div.form>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else-if(state.isSearchContext)>
+    <if(state.isSearchContext)>
         <search-form formId=state.formId objectType=state.objectType/>
-    </else-if>
+    </if>
     <else-if(state.formInstance && state.formInstance.form && state.formId)>
         <for(group in state.formInstance.form.groups)>
             <if(state.formInstance.form.groups.length > 1)>

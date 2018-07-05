@@ -1,6 +1,5 @@
 import { ComponentState } from "./ComponentState";
 import { FormService, DialogService } from "@kix/core/dist/browser";
-import { FormContext, KIXObjectType } from "@kix/core/dist/model";
 
 class Component {
 
@@ -8,10 +7,6 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
-    }
-
-    public onMount(): void {
-        this.state.formId = FormService.getInstance().getFormIdByContext(FormContext.SEARCH, KIXObjectType.TICKET);
     }
 
     public cancel(): void {
