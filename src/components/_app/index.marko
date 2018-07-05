@@ -15,15 +15,13 @@
         </for>
     </head>
     <body>
-        <main>
-            <if(input.login)>
-                <_login logout=input.data.logout/>
-            </if>
-            <else>
-                <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
-                    tagLib=input.data.tagLib actionLib=input.data.actionLib/>
-            </else>
-        </main>
+        <if(input.login)>
+            <_login logout=input.data.logout/>
+        </if>
+        <else>
+            <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
+                tagLib=input.data.tagLib actionLib=input.data.actionLib/>
+        </else>
         <script src="/static/thirdparty/polyfill-array.js"/>
         <script src="/static/thirdparty/bluebird.min.js"/>
         <script src="/static/thirdparty/socket.io.js"/>
