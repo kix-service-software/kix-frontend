@@ -32,24 +32,28 @@ class NewTicketDialogComponent {
     }
 
     private async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        const result = formInstance.validateForm();
-        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-        if (validationError) {
-            this.showValidationError(result);
-        } else {
-            DialogService.getInstance().setMainDialogLoading(true, "Ticket wird angelegt");
-            await TicketService.getInstance().createTicketByForm(this.state.formId)
-                .then((ticketId) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
-                    this.showSuccessHint();
-                    DialogService.getInstance().closeMainDialog();
-                    ContextService.getInstance().setContext(null, KIXObjectType.TICKET, ContextMode.DETAILS, ticketId);
-                }).catch((error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
-                    this.showError(error);
-                });
-        }
+        setTimeout(async () => {
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const result = formInstance.validateForm();
+            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+            if (validationError) {
+                this.showValidationError(result);
+            } else {
+                DialogService.getInstance().setMainDialogLoading(true, "Ticket wird angelegt");
+                await TicketService.getInstance().createTicketByForm(this.state.formId)
+                    .then((ticketId) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showSuccessHint();
+                        DialogService.getInstance().closeMainDialog();
+                        ContextService.getInstance().setContext(
+                            null, KIXObjectType.TICKET, ContextMode.DETAILS, ticketId
+                        );
+                    }).catch((error) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showError(error);
+                    });
+            }
+        }, 100);
     }
 
     private showSuccessHint(): void {
