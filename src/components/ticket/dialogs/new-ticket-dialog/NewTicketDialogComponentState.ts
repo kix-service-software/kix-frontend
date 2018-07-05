@@ -4,8 +4,7 @@ import { KIXObjectType } from "@kix/core/dist/model";
 export class NewTicketDialogComponentState {
 
     public constructor(
-        public formId: string = 'new-ticket-form',
-        public loading: boolean = false
+        public formId: string = 'new-ticket-form'
     ) { }
 
 }
