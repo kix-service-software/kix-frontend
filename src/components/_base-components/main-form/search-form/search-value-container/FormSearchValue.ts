@@ -3,7 +3,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     TreeNode, FilterCriteria, FilterDataType,
-    FilterType, KIXObjectType, InputFieldTypes
+    FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
 } from "@kix/core/dist/model";
 import { isArray } from "util";
 
@@ -17,7 +17,9 @@ export class FormSearchValue {
     public nodes: TreeNode[] = [];
     public currentValueNodes: TreeNode[] = [];
 
-    public currentValue: any;
+    private currentValue: any;
+    private date: string;
+    private time: string = '';
 
     public constructor(
         public objectType: KIXObjectType = null,
@@ -98,6 +100,14 @@ export class FormSearchValue {
         this.currentValue = value;
     }
 
+    public setDateValue(value: string): void {
+        this.date = value;
+    }
+
+    public setTimeValue(value: string): void {
+        this.time = value;
+    }
+
     public getFilterCriteria(): FilterCriteria {
         const property = this.currentPropertyNode
             ? this.currentPropertyNode.id
@@ -107,7 +117,20 @@ export class FormSearchValue {
             ? this.currentOperationNode.id
             : null;
 
-        return new FilterCriteria(property, operator, FilterDataType.STRING, FilterType.AND, this.currentValue);
+        let value = this.currentValue;
+
+        let filterDataType = FilterDataType.STRING;
+        if (this.isDate) {
+            filterDataType = FilterDataType.DATE;
+            const date = new Date(this.date);
+            value = isNaN(date.getTime()) ? null : DateTimeUtil.createKIXDateTimeString(date);
+        } else if (this.isDateTime) {
+            filterDataType = FilterDataType.DATETIME;
+            const date = new Date(`${this.date} ${this.time}`);
+            value = isNaN(date.getTime()) ? null : DateTimeUtil.createKIXDateTimeString(date);
+        }
+
+        return new FilterCriteria(property, operator, filterDataType, FilterType.AND, value);
     }
 
 }
