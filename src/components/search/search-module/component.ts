@@ -5,7 +5,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ContextMode, ContextType, ContextConfiguration,
-    Context, FilterCriteria, KIXObject
+    Context, KIXObject
 } from "@kix/core/dist/model";
 import { SearchContext } from '@kix/core/dist/browser/search';
 
@@ -43,15 +43,6 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
         if (contextId === SearchContext.CONTEXT_ID && !fromHistory) {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
-    }
-
-    public openNewSearchDialog(): void {
-        KIXObjectSearchService.getInstance().clearSearchCache();
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
-    }
-
-    public openEditSearchDialog(): void {
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
     }
 
     public searchCleared(): void {
