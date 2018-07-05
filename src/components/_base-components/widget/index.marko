@@ -4,9 +4,9 @@
             <if(input.explorer)>
                 <span.kix-icon-close-left on-click('minimizeExplorer')/>
             </if>
-            <else-if(component.isInputDefined(input.icon))>
+            <if(component.isInputDefined(input.icon))>
                 <include(input.icon)/>
-            </else-if>
+            </if>
             <if(input.title)>
                 <h3 title=input.title class={minimizable: state.minimizable} on-click('minimizeWidget')>${input.title}</h3>
             </if>
