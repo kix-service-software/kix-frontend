@@ -70,7 +70,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     )
                 ],
                 toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                sortOrder: "Ticket.Age",
+                sortOrder: "Ticket.Age:numeric",
                 headerHeight: TableHeaderHeight.LARGE,
                 rowHeight: TableRowHeight.SMALL
             },
@@ -101,7 +101,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         )
                     ],
                     toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                    sortOrder: "Ticket.-Age",
+                    sortOrder: "Ticket.-Age:numeric",
                     headerHeight: TableHeaderHeight.LARGE,
                     rowHeight: TableRowHeight.SMALL
                 },
