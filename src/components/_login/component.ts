@@ -19,6 +19,14 @@ class LoginFormComponent {
             ClientStorageService.destroyToken();
         }
         this.state.loading = false;
+        setTimeout(() => {
+            if (!this.state.userName) {
+                const userNameElement = (this as any).getEl('login-user-name');
+                if (userNameElement) {
+                    userNameElement.focus();
+                }
+            }
+        }, 200);
     }
 
     private userNameChanged(event: any): void {
