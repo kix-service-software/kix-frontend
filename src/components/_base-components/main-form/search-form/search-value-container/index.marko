@@ -19,8 +19,8 @@
                         <input type=date/>
                     </else-if>
                     <else-if(searchValue.isDateTime)>
-                        <input type=date/>
-                        <input type=time/>
+                        <input.input-style type="date" on-change('dateValueChanged', searchValue) value=searchValue.date/>
+                        <input.input-style type="time" on-change('timeValueChanged', searchValue) value=searchValue.time/>
                     </else-if>
                     <else>
                         <input.input-style value=searchValue.currentValue type="text" on-change('textValueChanged', searchValue)/>

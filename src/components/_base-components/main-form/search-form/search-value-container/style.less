@@ -4,6 +4,12 @@
     align-items: center;
     grid-column-gap: 0.5rem;
     margin-bottom: @margin-small;
+    .search-value {
+        >input[type="time"],
+        >input[type="date"] {
+            width: 50%;
+        }
+    }
     >.remove-value {
         cursor: pointer;
     }
