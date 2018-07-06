@@ -1,10 +1,10 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
-        <div.standard-table class={"has-checkbox-column": state.standardTable.selection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
+        <div.standard-table class={"has-checkbox-column": state.standardTable.tableConfiguration.enableSelection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
             key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <div.row.header-row key=(state.tableId + "header-row") class={"no-select": state.resizeActive}
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight(), width: state.rowWidth}>
-                <if(state.standardTable.selection)>
+                <if(state.standardTable.tableConfiguration.enableSelection)>
                     <div.table-cell.table-header-cell.checkbox-column title="Select all" data-id=(state.tableId + "checkbox-column")>
                         <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
                     </div>
@@ -29,7 +29,7 @@
                     </div>
                 </for>
             </div>
-            <if(state.standardTable.toggle)>
+            <if(state.standardTable.tableConfiguration.toggle)>
                 <span.toggle-header-column style={height: component.getRowHeight(), "line-height": component.getRowHeight()}
                     data-id=(state.tableId + "toggle-row-column")>&nbsp;</span>
             </if>
@@ -62,7 +62,7 @@
                                     </if>
                                 </div>
                             </for>
-                            <if(state.standardTable.toggle)>
+                            <if(state.standardTable.tableConfiguration.toggle)>
                                 <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>
                                     <if(row.isToggled)>
                                         <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>

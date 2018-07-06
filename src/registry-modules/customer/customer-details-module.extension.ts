@@ -4,7 +4,9 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize, ContactProperty, TicketProperty
 } from '@kix/core/dist/model';
-import { TableColumnConfiguration } from '@kix/core/dist/browser';
+import {
+    TableColumnConfiguration, TableConfiguration, TableHeaderHeight, TableRowHeight
+} from '@kix/core/dist/browser';
 
 export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -30,9 +32,9 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
         const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
             'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [
                 'contact-edit-action', 'contact-print-action'
-            ], {
-                displayLimit: 10,
-                tableColumns: [
+            ], new TableConfiguration(
+                null, 10,
+                [
                     new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 130),
                     new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 130),
                     new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 130),
@@ -41,8 +43,8 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                     new TableColumnConfiguration(ContactProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 130),
                     new TableColumnConfiguration(ContactProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 130),
                     new TableColumnConfiguration('contact-new-ticket', true, false, true, false, 130)
-                ]
-            },
+                ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+            ),
             false, true, WidgetSize.LARGE, null, false
         ));
 
@@ -55,24 +57,24 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
         const openTicketsGroup =
             new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
-                'customer-open-tickets-group', 'Offene Tickets', [], {
-                    displayLimit: 10,
-                    tableColumns: [
+                'customer-open-tickets-group', 'Offene Tickets', [], new TableConfiguration(
+                    null, 10,
+                    [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.STATE_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 130)
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                ),
                 true, true, WidgetSize.SMALL, null, false)
             );
 
         const escalatedTicketsGroup =
             new ConfiguredWidget('customer-escalated-tickets-group', new WidgetConfiguration(
-                'customer-escalated-tickets-group', 'Eskalierte Tickets', [], {
-                    displayLimit: 10,
-                    tableColumns: [
+                'customer-escalated-tickets-group', 'Eskalierte Tickets', [], new TableConfiguration(
+                    null, 10,
+                    [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
@@ -87,55 +89,55 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
                         new TableColumnConfiguration(
                             TicketProperty.ESCALATION_SOLUTIONS_TIME, true, false, true, true, 130
                         ),
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                ),
                 false, true, WidgetSize.SMALL, null, false)
             );
 
         const reminderTicketsGroup =
             new ConfiguredWidget('customer-reminder-tickets-group', new WidgetConfiguration(
-                'customer-reminder-tickets-group', 'Erinnerungstickets', [], {
-                    displayLimit: 10,
-                    tableColumns: [
+                'customer-reminder-tickets-group', 'Erinnerungstickets', [], new TableConfiguration(
+                    null, 10,
+                    [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.PENDING_TIME, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.STATE_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 130)
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                ),
                 true, true, WidgetSize.SMALL, null, false)
             );
 
         const newTicketsGroup =
             new ConfiguredWidget('customer-new-tickets-group', new WidgetConfiguration(
-                'customer-new-tickets-group', 'Neue Tickets', [], {
-                    displayLimit: 10,
-                    tableColumns: [
+                'customer-new-tickets-group', 'Neue Tickets', [], new TableConfiguration(
+                    null, 10,
+                    [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.STATE_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 130)
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                ),
                 true, true, WidgetSize.SMALL, null, false)
             );
 
         const pendingTicketsGroup =
             new ConfiguredWidget('customer-pending-tickets-group', new WidgetConfiguration(
-                'customer-pending-tickets-group', 'Tickets in Wartestatus', [], {
-                    displayLimit: 10,
-                    tableColumns: [
+                'customer-pending-tickets-group', 'Tickets in Wartestatus', [], new TableConfiguration(
+                    null, 10,
+                    [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.PENDING_TIME, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.STATE_ID, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 130)
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                ),
                 true, true, WidgetSize.SMALL, null, false)
             );
 

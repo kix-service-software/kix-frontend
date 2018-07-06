@@ -1,11 +1,8 @@
 declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import {
-    StandardTable, TableColumnConfiguration, TableRow, TableColumn, TableValue, ActionFactory
-} from '@kix/core/dist/browser';
+import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class StandardTableComponent<T extends KIXObject<T>> {
@@ -85,7 +82,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (headerRow) {
             let rowWidth = 0;
             this.state.standardTable.getColumns().forEach((c) => rowWidth += c.size);
-            if (this.state.standardTable.selection) {
+            if (this.state.standardTable.tableConfiguration.enableSelection) {
                 rowWidth += headerRow.firstChild.offsetWidth;
             }
             this.state.rowWidth = rowWidth;
@@ -138,8 +135,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
             const column = this.getColumns().find((col) => col.id === this.state.resizeSettings.columnId);
             if (column) {
                 column.size = this.state.resizeSettings.currentSize;
-                if (this.state.standardTable.configurationChangeListener) {
-                    this.state.standardTable.configurationChangeListener.columnConfigurationChanged(column);
+                if (this.state.standardTable.listenerConfiguration.configurationChangeListener) {
+                    this.state.standardTable.listenerConfiguration.configurationChangeListener
+                        .columnConfigurationChanged(column);
                 }
             }
         }
@@ -148,7 +146,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.setRowWidth();
     }
 
-    private sortUp(columnId: string): void {
+    public sortUp(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.UP) {
             this.state.standardTable.setSortSettings(columnId, SortOrder.UP);
             this.state.sortedColumnId = columnId;
@@ -157,7 +155,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    private sortDown(columnId: string): void {
+    public sortDown(columnId: string): void {
         if (this.state.sortedColumnId !== columnId || this.state.sortOrder !== SortOrder.DOWN) {
             this.state.standardTable.setSortSettings(columnId, SortOrder.DOWN);
             this.state.sortedColumnId = columnId;
@@ -171,21 +169,21 @@ class StandardTableComponent<T extends KIXObject<T>> {
         table.scrollTop = 0;
     }
 
-    private isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
+    public isActiveSort(columnId: string, sortOrder: SortOrder): boolean {
         return this.state.sortedColumnId === columnId && this.state.sortOrder === sortOrder;
     }
 
-    private isSelected(row: TableRow<T>): boolean {
-        return this.state.standardTable.selectionListener ?
-            this.state.standardTable.selectionListener.isRowSelected(row) : false;
+    public isSelected(row: TableRow<T>): boolean {
+        return this.state.standardTable.listenerConfiguration.selectionListener ?
+            this.state.standardTable.listenerConfiguration.selectionListener.isRowSelected(row) : false;
     }
 
-    private isAllSelected(): boolean {
-        return this.state.standardTable.selectionListener ?
-            this.state.standardTable.selectionListener.isAllSelected() : false;
+    public isAllSelected(): boolean {
+        return this.state.standardTable.listenerConfiguration.selectionListener ?
+            this.state.standardTable.listenerConfiguration.selectionListener.isAllSelected() : false;
     }
 
-    private selectAll(event): void {
+    public selectAll(event): void {
         const checked = event.target.checked;
 
         const elements: any = document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-input'");
@@ -193,35 +191,36 @@ class StandardTableComponent<T extends KIXObject<T>> {
             element.checked = checked;
         });
 
-        if (this.state.standardTable.selectionListener) {
+        if (this.state.standardTable.listenerConfiguration.selectionListener) {
             if (checked) {
-                this.state.standardTable.selectionListener.selectAll(
+                this.state.standardTable.listenerConfiguration.selectionListener.selectAll(
                     this.state.standardTable.getTableRows(true)
                 );
             } else {
-                this.state.standardTable.selectionListener.selectNone();
+                this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
             }
         }
     }
 
-    private selectRow(row: any, event: any): void {
-        if (this.state.standardTable.selectionListener) {
-            this.state.standardTable.selectionListener.selectionChanged(row, event.target.checked);
+    public selectRow(row: any, event: any): void {
+        if (this.state.standardTable.listenerConfiguration.selectionListener) {
+            this.state.standardTable.listenerConfiguration.selectionListener
+                .selectionChanged(row, event.target.checked);
         }
     }
 
-    private rowClicked(row: TableRow<T>, columnId: string, event: any): void {
-        if (this.state.standardTable.clickListener) {
-            this.state.standardTable.clickListener.rowClicked(row.object, columnId, event);
+    public rowClicked(row: TableRow<T>, columnId: string, event: any): void {
+        if (this.state.standardTable.listenerConfiguration.clickListener) {
+            this.state.standardTable.listenerConfiguration.clickListener.rowClicked(row.object, columnId, event);
         }
     }
 
-    private loadMore(): void {
+    public loadMore(): void {
         const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
         if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
             const checkHeight =
                 this.state.standardTable.getCurrentDisplayLimit()
-                * this.state.standardTable.rowHeight;
+                * this.state.standardTable.tableConfiguration.rowHeight;
             if (standardTable.scrollTop > checkHeight) {
                 this.state.standardTable.increaseCurrentDisplayLimit();
 
@@ -242,8 +241,8 @@ class StandardTableComponent<T extends KIXObject<T>> {
             table.style.height = 'unset';
             if (!this.state.standardTable.isLoading()) {
                 const rows = this.state.standardTable.getTableRows();
-                const minElements = rows.length > this.state.standardTable.displayLimit ?
-                    this.state.standardTable.displayLimit : rows.length;
+                const minElements = rows.length > this.state.standardTable.tableConfiguration.displayLimit ?
+                    this.state.standardTable.tableConfiguration.displayLimit : rows.length;
                 const rowCount = minElements === 0 ? 1 : minElements;
 
                 const browserFontSizeSetting = window
@@ -252,8 +251,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
                 const browserFontSize = Number(browserFontSizeSetting.replace('px', ''));
 
-                const headerRowHeight = browserFontSize * Number(this.state.standardTable.headerHeight);
-                const rowHeight = browserFontSize * Number(this.state.standardTable.rowHeight);
+                const headerRowHeight =
+                    browserFontSize * Number(this.state.standardTable.tableConfiguration.headerHeight);
+                const rowHeight = browserFontSize * Number(this.state.standardTable.tableConfiguration.rowHeight);
 
                 let height = (rowCount * rowHeight) + headerRowHeight;
                 const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
@@ -266,11 +266,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public getRowHeight(): string {
-        return this.state.standardTable.rowHeight + 'em';
+        return this.state.standardTable.tableConfiguration.rowHeight + 'em';
     }
 
     public getHeaderHeight(): string {
-        return this.state.standardTable.headerHeight + 'em';
+        return this.state.standardTable.tableConfiguration.headerHeight + 'em';
     }
 
     public getSpacerHeight(): string {
@@ -278,19 +278,19 @@ class StandardTableComponent<T extends KIXObject<T>> {
         const remainder =
             this.state.standardTable.getLimit()
             - this.state.standardTable.getCurrentDisplayLimit()
-            - Math.ceil(this.state.standardTable.displayLimit * 1.5);
+            - Math.ceil(this.state.standardTable.tableConfiguration.displayLimit * 1.5);
         if (remainder > 0) {
-            spacerHeight = remainder * this.state.standardTable.rowHeight;
+            spacerHeight = remainder * this.state.standardTable.tableConfiguration.rowHeight;
         }
         return spacerHeight + 'em';
     }
 
-    private getColumnSize(columnId: string): string {
+    public getColumnSize(columnId: string): string {
         const column = this.getColumns().find((col) => col.id === columnId);
         return column.size + 'px';
     }
 
-    private async toggleRow(row: TableRow<T>): Promise<void> {
+    public async toggleRow(row: TableRow<T>): Promise<void> {
         this.state.standardTable.toggleRow(row);
 
         (this as any).forceUpdate();
@@ -304,40 +304,40 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }, 50);
     }
 
-    private getToggleTemplate(): any {
-        return this.state.standardTable.toggleOptions.componentId ?
+    public getToggleTemplate(): any {
+        return this.state.standardTable.tableConfiguration.toggleOptions.componentId ?
             ComponentsService.getInstance().getComponentTemplate(
-                this.state.standardTable.toggleOptions.componentId
+                this.state.standardTable.tableConfiguration.toggleOptions.componentId
             ) : undefined;
     }
 
-    private getToggleInput(row: TableRow<T>): any {
+    public getToggleInput(row: TableRow<T>): any {
         const toggleInput = {};
-        if (this.state.standardTable.toggleOptions.inputPropertyName) {
-            toggleInput[this.state.standardTable.toggleOptions.inputPropertyName] = row.object;
+        if (this.state.standardTable.tableConfiguration.toggleOptions.inputPropertyName) {
+            toggleInput[this.state.standardTable.tableConfiguration.toggleOptions.inputPropertyName] = row.object;
         }
         return toggleInput;
     }
 
-    private getToggleActions(article: Article): IAction[] {
+    public getToggleActions(article: Article): IAction[] {
         let actions = [];
         if (this.state.standardTable.isToggleEnabled()) {
             actions = ActionFactory.getInstance().generateActions(
-                this.state.standardTable.toggleOptions.actions, false, article
+                this.state.standardTable.tableConfiguration.toggleOptions.actions, false, article
             );
         }
         return actions;
     }
 
-    private getColumn(value: TableValue): TableColumn {
+    public getColumn(value: TableValue): TableColumn {
         const column = this.state.standardTable.getColumns().find((c) => c.id === value.columnId);
         return column;
     }
 
-    private calculateToggleContentMinHeight(index: number): string {
+    public calculateToggleContentMinHeight(index: number): string {
         const minHeight = "10em";
         setTimeout(() => {
-            if (this.state.standardTable.toggleOptions.actions.length > 5) {
+            if (this.state.standardTable.tableConfiguration.toggleOptions.actions.length > 5) {
                 const actionList = document.querySelector('ul.toggle-actions');
                 const computedHeight = getComputedStyle(actionList).height;
                 const rowContent = (this as any).getEl(this.state.tableId + "row-toggle-content-" + index);
@@ -351,15 +351,15 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return minHeight;
     }
 
-    private getColumnIcon(column: TableColumn): ObjectIcon {
+    public getColumnIcon(column: TableColumn): ObjectIcon {
         return new ObjectIcon(column.icon[0], column.icon[1]);
     }
 
-    private getValueIcon(column: TableColumn, value: TableValue): ObjectIcon {
+    public getValueIcon(column: TableColumn, value: TableValue): ObjectIcon {
         return new ObjectIcon(column.id, value.objectValue);
     }
 
-    private getRowClasses(row: TableRow<T>): string[] {
+    public getRowClasses(row: TableRow<T>): string[] {
         const classes = [...row.classes];
         if (!row.selectable) {
             classes.push('row-not-selectable');

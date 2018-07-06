@@ -1,7 +1,6 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     WidgetConfiguration,
-    WidgetType,
     ContextConfiguration,
     ConfiguredWidget,
     WidgetSize,
@@ -9,7 +8,10 @@ import {
     TicketProperty,
     ArticleProperty
 } from '@kix/core/dist/model/';
-import { TableColumnConfiguration } from '@kix/core/dist/browser';
+import {
+    TableColumnConfiguration, TableConfiguration,
+    ToggleOptions, TableHeaderHeight, TableRowHeight
+} from '@kix/core/dist/browser';
 import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
 
 export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtension {
@@ -28,15 +30,15 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
                 "ticket-history-widget", "Historie", ['print-ticket-action'],
-                {
-                    tableColumns: [
+                new TableConfiguration(
+                    null, 7, [
                         new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
                         new TableColumnConfiguration('Name', true, false, true, true, 200),
                         new TableColumnConfiguration(ArticleProperty.ARTICLE_ID, true, false, true, true, 100),
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
                         new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
-                    ]
-                },
+                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ),
                 true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =
@@ -66,7 +68,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                 {
                     groups: [
                         [
-                            "Ticket", [
+                            "Ticket", new TableConfiguration(null, 7, [
                                 new TableColumnConfiguration(
                                     TicketProperty.TICKET_NUMBER, true, false, true, true, 100, DataType.STRING),
                                 new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 100),
@@ -77,7 +79,8 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                                     TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
                                 ),
                                 new TableColumnConfiguration(TicketProperty.LINKED_AS, true, false, true, true, 100)
-                            ]
+                            ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                            )
                         ]
                     ]
                 },
@@ -131,35 +134,39 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
 
         const articleWidget =
             new ConfiguredWidget("article-list", new WidgetConfiguration(
-                "article-list-widget", "Artikelübersicht", [
-                    'article-print-action',
-                    'article-edit-action',
-                    'article-communication-action',
-                    'article-tag-action',
-                    'article-maximize-action'
-                ],
+                "article-list-widget", "Artikelübersicht", [],
                 {
                     generalActions: [
                         'article-bulk-action', 'article-new-email-action', 'article-new-note-action',
                         'article-call-outgoing-action', 'article-call-incoming-action'
                     ],
-                    tableColumns: [
-                        new TableColumnConfiguration(
-                            'Number', true, false, false, true, 50, DataType.NUMBER
-                        ),
-                        new TableColumnConfiguration(
-                            ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
-                        ),
-                        new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
-                        new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
-                        new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
-                        new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
-                        new TableColumnConfiguration(
-                            ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
-                        ),
-                        new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
-                    ]
+                    tableConfiguration: new TableConfiguration(
+                        null, null, [
+                            new TableColumnConfiguration(
+                                'Number', true, false, false, true, 50, DataType.NUMBER
+                            ),
+                            new TableColumnConfiguration(
+                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
+                            ),
+                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
+                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
+                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
+                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
+                            new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
+                            new TableColumnConfiguration(
+                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
+                            ),
+                            new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
+                        ], null, true,
+                        true, new ToggleOptions('ticket-article-details', 'article', [
+                            'article-print-action',
+                            'article-edit-action',
+                            'article-communication-action',
+                            'article-tag-action',
+                            'article-maximize-action'
+                        ], true),
+                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
                 },
                 false, true, WidgetSize.LARGE, null, false)
             );

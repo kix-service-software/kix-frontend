@@ -1,10 +1,8 @@
-import { StandardTable } from '@kix/core/dist/browser';
+import { StandardTable, TableConfiguration } from '@kix/core/dist/browser';
 import { Ticket, WidgetComponentState, IAction, KIXObjectPropertyFilter } from '@kix/core/dist/model';
 
-import { TicketListSettings } from './TicketListSettings';
-
-export class TicketListComponentState extends WidgetComponentState<TicketListSettings> {
-    public standardTable: StandardTable<Ticket> = null;
+export class TicketListComponentState extends WidgetComponentState<TableConfiguration> {
+    public standardTable: StandardTable = null;
     public predefinedTableFilter: KIXObjectPropertyFilter[] = [];
     public generalTicketActions: IAction[] = [];
     public title: string = '';

@@ -1,7 +1,8 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, KIXObjectSearchService,
-    IContextServiceListener, IKIXObjectSearchListener, LabelService, SearchOperatorUtil, KIXObjectServiceRegistry
+    IContextServiceListener, IKIXObjectSearchListener, LabelService, SearchOperatorUtil,
+    KIXObjectServiceRegistry, StandardTableFactoryService
 } from "@kix/core/dist/browser";
 import {
     ContextMode, ContextType, ContextConfiguration,
@@ -74,11 +75,11 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
             this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName()} (${cache.result.length})`;
 
             const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(cache.objectType);
-            this.state.resultTable = objectService.getObjectTable();
+            this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(cache.objectType);
             const objectProperties = cache.criterias.map((c) => c.property);
             const columns = objectService.getTableColumnConfiguration(objectProperties);
             this.state.resultTable.setColumns(columns);
-            this.state.resultTable.contentLayer.setPreloadedObjects(cache.result);
+            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(cache.result);
             this.state.resultTable.loadRows(false);
         } else {
             this.state.noSearch = true;

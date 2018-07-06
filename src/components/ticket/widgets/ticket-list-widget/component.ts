@@ -1,30 +1,21 @@
 import { TicketListComponentState } from './TicketListComponentState';
-import {
-    Context,
-    Ticket,
-    KIXObjectPropertyFilter,
-} from '@kix/core/dist/model/';
+import { Ticket, KIXObjectPropertyFilter, KIXObjectType } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketTableContentLayer,
-    TicketTableLabelLayer,
-    TicketTableSelectionListener,
-    TicketTableClickListener
+    TicketTableContentLayer, TicketTableLabelLayer, TicketTableSelectionListener, TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
-    StandardTable, TableRowHeight, ITableConfigurationListener,
-    TableSortLayer, TableColumn, TableFilterLayer, ToggleOptions,
-    TableHeaderHeight, ActionFactory, TableToggleLayer, ITableToggleLayer, TableRow, ITableToggleListener
+    ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
+    ActionFactory, TableToggleLayer, TableRow, ITableToggleListener, TableConfiguration,
+    StandardTableFactoryService, TableLayerConfiguration, TableListenerConfiguration
 } from '@kix/core/dist/browser';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { TicketListSettings } from './TicketListSettings';
 
-class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
+class TicketListWidgetComponent implements ITableToggleListener {
 
 
     public state: TicketListComponentState;
 
-    public onCreate(input: any): void {
+    public onCreate(): void {
         this.state = new TicketListComponentState();
     }
 
@@ -56,33 +47,27 @@ class TicketListWidgetComponent implements ITableToggleListener<Ticket> {
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
 
-            const configurationListener: ITableConfigurationListener<Ticket> = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
+            const tableConfiguration = this.state.widgetConfiguration.settings;
 
-            const tableSettings = (this.state.widgetConfiguration.settings as TicketListSettings);
-
-            const filter = tableSettings.filter && tableSettings.filter.length ? tableSettings.filter : null;
-
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                new TicketTableContentLayer(null, filter, tableSettings.sortOrder, tableSettings.limit),
+            const layerConfiguration = new TableLayerConfiguration(
+                new TicketTableContentLayer(
+                    null, tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
+                ),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
-                new TableToggleLayer(this, false),
-                null,
-                null,
-                this.state.widgetConfiguration.settings.tableColumns || [],
-                new TicketTableSelectionListener(),
-                new TicketTableClickListener(),
-                configurationListener,
-                this.state.widgetConfiguration.settings.displayLimit,
-                true,
-                tableSettings.rowHeight ? tableSettings.rowHeight : TableRowHeight.LARGE,
-                tableSettings.headerHeight ? tableSettings.headerHeight : TableHeaderHeight.LARGE,
-                tableSettings.toggleOptions ? true : false,
-                tableSettings.toggleOptions
+                new TableToggleLayer(this, false)
+            );
+
+            const configurationListener: ITableConfigurationListener = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
+            const listenerConfiguration = new TableListenerConfiguration(
+                new TicketTableClickListener(), new TicketTableSelectionListener(), configurationListener
+            );
+
+            this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
+                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration
             );
 
             this.state.standardTable.setTableListener(() => {

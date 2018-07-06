@@ -9,8 +9,8 @@ import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { ComponentState } from './ComponentState';
 import { Link, Ticket, WidgetType, KIXObjectType, ContextMode } from '@kix/core/dist/model';
 import {
-    StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn, TableRowHeight,
-    ActionFactory, WidgetService, TableHeaderHeight
+    StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn,
+    ActionFactory, WidgetService, TableListenerConfiguration, TableLayerConfiguration
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -96,39 +96,27 @@ class Component {
 
     private getTicketTableConfiguration(linkedTickets: Link[]): StandardTable<Ticket> {
         if (this.state.widgetConfiguration) {
-            const labelProvider = new TicketTableLabelLayer();
-
             const groupEntry = this.state.widgetConfiguration.settings.groups.find(
                 (g) => g[0] === KIXObjectType.TICKET
             );
-            const columnConfig = groupEntry ? groupEntry[1] : [];
+            const tableConfiguration = groupEntry[1];
 
-            const contentProvider = new LinkedTicketTableContentLayer(
+            const contentLayer = new LinkedTicketTableContentLayer(
                 this.state.instanceId, this.state.ticketId, linkedTickets
+            );
+            const labelLayer = new TicketTableLabelLayer();
+            const layerConfiguration = new TableLayerConfiguration(
+                contentLayer, labelLayer, [], [new TableSortLayer()]
             );
 
             const clickListener = new TicketTableClickListener();
-            const configurationListener: ITableConfigurationListener<Ticket> = {
+            const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
 
             return new StandardTable(
-                IdService.generateDateBasedId(),
-                contentProvider,
-                labelProvider,
-                [],
-                [new TableSortLayer()],
-                null,
-                null,
-                null,
-                columnConfig,
-                null,
-                clickListener,
-                configurationListener,
-                7,
-                null,
-                TableRowHeight.SMALL,
-                TableHeaderHeight.SMALL
+                IdService.generateDateBasedId(), tableConfiguration, layerConfiguration, listenerConfiguration
             );
         }
     }
@@ -136,7 +124,7 @@ class Component {
     private columnConfigurationChanged(column: TableColumn): void {
         const groupEntry = this.state.widgetConfiguration.settings.groups.find((g) => g[0] === KIXObjectType.TICKET);
         if (groupEntry) {
-            const index = groupEntry[1].findIndex((tc) => tc.columnId === column.id);
+            const index = groupEntry[1].tableColumns.findIndex((tc) => tc.columnId === column.id);
 
             if (index >= 0) {
                 groupEntry[1][index].size = column.size;

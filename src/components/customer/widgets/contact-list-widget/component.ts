@@ -1,10 +1,11 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    TableRowHeight, StandardTable, IdService, TableSortLayer, TableFilterLayer, TableHeaderHeight
+    StandardTable, IdService, TableSortLayer, TableFilterLayer,
+    TableLayerConfiguration, TableListenerConfiguration
 } from "@kix/core/dist/browser";
 import { Contact, KIXObjectType, ContextMode } from "@kix/core/dist/model";
-import { ContactTableContentLayer, ContactTableLabelLayer, ContactService } from "@kix/core/dist/browser/contact";
+import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -33,33 +34,26 @@ class Component {
 
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-
-            const configurationListener: ITableConfigurationListener<Contact> = {
+            const clickListener = {
+                rowClicked: (contact: Contact, columnId: string): void => {
+                    ContextService.getInstance().setContext(
+                        null, KIXObjectType.CONTACT, ContextMode.DETAILS, contact.ContactID
+                    );
+                }
+            };
+            const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+
+            const layerConfiguration = new TableLayerConfiguration(
+                new ContactTableContentLayer(), new ContactTableLabelLayer(),
+                [new TableFilterLayer()], [new TableSortLayer()]
+            );
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                new ContactTableContentLayer(),
-                new ContactTableLabelLayer(),
-                [new TableFilterLayer()],
-                [new TableSortLayer()],
-                null, null, null,
-                this.state.widgetConfiguration.settings.tableColumns || [],
-                null,
-                {
-                    rowClicked: (contact: Contact, columnId: string): void => {
-                        ContextService.getInstance().setContext(
-                            null, KIXObjectType.CONTACT, ContextMode.DETAILS, contact.ContactID
-                        );
-                    }
-                },
-                configurationListener,
-                this.state.widgetConfiguration.settings.displayLimit,
-                false,
-                TableRowHeight.SMALL,
-                TableHeaderHeight.LARGE,
-                false
+                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
             );
         }
     }
