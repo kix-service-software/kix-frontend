@@ -52,7 +52,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
         this.setLinkTypes();
         // TODO: nur temporär, später ggf. über eine TableFactory neue Tabellen-Instanz erstellen
         if (this.state.standardTable) {
-            this.state.standardTable.highlightLayer.setHighlightedObjects([]);
+            this.state.standardTable.layerConfiguration.highlightLayer.setHighlightedObjects([]);
         }
 
         document.addEventListener('keydown', (event: any) => {
@@ -101,7 +101,7 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     private async executeSearch(): Promise<void> {
         this.state.resultCount = null;
         if (this.state.standardTable && this.state.currentLinkableObjectNode) {
-            (this.state.standardTable.contentLayer as IFormTableLayer)
+            (this.state.standardTable.layerConfiguration.contentLayer as IFormTableLayer)
                 .setFormId(this.state.currentLinkableObjectNode.id.toString());
 
             this.state.canSearch = false;
@@ -119,15 +119,17 @@ class LinkTicketDialogComponent<T extends KIXObject> {
                     (this.state.currentLinkableObjectNode.label as KIXObjectType)
                 );
         }
-        (this.state.standardTable.contentLayer as IFormTableLayer).setFormId(null);
+        (this.state.standardTable.layerConfiguration.contentLayer as IFormTableLayer).setFormId(null);
         this.state.standardTable.loadRows();
-        this.state.standardTable.selectionListener.addListener(this.objectSelectionChanged.bind(this));
+        this.state.standardTable.listenerConfiguration.selectionListener.addListener(
+            this.objectSelectionChanged.bind(this)
+        );
     }
 
     private setPreventSelectionFilterOfStandardTable(): void {
         if (this.state.standardTable && this.state.linkDescriptions) {
             const objects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
-            this.state.standardTable.preventSelectionLayer.setPreventSelectionFilter(objects);
+            this.state.standardTable.layerConfiguration.preventSelectionLayer.setPreventSelectionFilter(objects);
         }
     }
 
@@ -147,10 +149,12 @@ class LinkTicketDialogComponent<T extends KIXObject> {
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
             DialogService.getInstance().publishDialogResult('link-ticket-dialog', this.state.linkDescriptions);
             this.showSuccessHint(newLinks.length);
-            this.state.standardTable.highlightLayer.setHighlightedObjects(this.state.selectedObjects);
+            this.state.standardTable.layerConfiguration.highlightLayer.setHighlightedObjects(
+                this.state.selectedObjects
+            );
             this.setPreventSelectionFilterOfStandardTable();
-            this.state.standardTable.selectionListener.selectNone();
-            const labelLayer = (this.state.standardTable.labelLayer as ILinkDescriptionLabelLayer);
+            this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
+            const labelLayer = (this.state.standardTable.layerConfiguration.labelLayer as ILinkDescriptionLabelLayer);
             labelLayer.setLinkDescriptions(this.state.linkDescriptions);
             this.state.standardTable.loadRows(true);
         }

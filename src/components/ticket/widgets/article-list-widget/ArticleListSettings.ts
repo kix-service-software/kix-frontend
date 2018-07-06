@@ -1,8 +1,8 @@
-import { TableColumnConfiguration } from "@kix/core/dist/browser";
+import { TableConfiguration } from "@kix/core/dist/browser";
 
 export class ArticleListSettings {
 
-    public tableColumns: TableColumnConfiguration[];
+    public tableConfiguration: TableConfiguration;
 
     public generalActions: string[];
 

@@ -1,8 +1,8 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, StandardTable, TableFilterLayer,
-    TableSortLayer, TableRowHeight, IdService, TableColumn,
-    ITableConfigurationListener, ITableClickListener, ActionFactory
+    ContextService, StandardTable, TableFilterLayer, TableSortLayer, IdService,
+    TableColumn, ITableConfigurationListener, ITableClickListener, ActionFactory,
+    TableLayerConfiguration, TableListenerConfiguration
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
 import {
@@ -50,28 +50,24 @@ class Component {
 
     private setTable(): void {
         if (this.state.contact && this.state.widgetConfiguration) {
-            const configurationListener: ITableConfigurationListener<Customer> = {
+            const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
             const clickListener: ITableClickListener<Customer> = {
                 rowClicked: this.tableRowClicked.bind(this)
             };
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+
+            const layerCOnfiguration = new TableLayerConfiguration(
+                new CustomerTableContentLayer(this.state.contact.UserCustomerIDs), new CustomerTableLabelLayer(),
+                [new TableFilterLayer()], [new TableSortLayer()]
+            );
 
             this.state.customerTable = new StandardTable(
                 'assigned-customers-' + IdService.generateDateBasedId(),
-                new CustomerTableContentLayer(this.state.contact.UserCustomerIDs),
-                new CustomerTableLabelLayer(),
-                [new TableFilterLayer()],
-                [new TableSortLayer()],
-                null, null, null,
-                this.state.widgetConfiguration.settings.tableColumns || [],
-                null,
-                clickListener,
-                configurationListener,
-                this.state.widgetConfiguration.settings.displayLimit,
-                false,
-                TableRowHeight.SMALL);
+                this.state.widgetConfiguration.settings, layerCOnfiguration, listenerConfiguration
+            );
         }
     }
 
