@@ -1,4 +1,4 @@
-import { ArticleInputAttachmentComponentState } from "./ArticleInputAttachmentComponentState";
+import { ComponentState } from "./ComponentState";
 import {
     ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent
 } from "@kix/core/dist/model";
@@ -6,10 +6,12 @@ import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
 import { Label } from "@kix/core/dist/browser/components";
 
-class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInputAttachmentComponentState> {
+class Component extends FormInputComponent<any, ComponentState> {
+
+    private dragCounter: number;
 
     public onCreate(): void {
-        this.state = new ArticleInputAttachmentComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -18,17 +20,42 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
 
     public onMount(): void {
         super.onMount();
-        document.addEventListener("dragover", this.dragOver.bind(this), false);
+        this.dragCounter = 0;
+        const uploadElement = (this as any).getEl();
+        if (uploadElement) {
+            uploadElement.addEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
+        } else {
+            document.addEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
+        }
+        document.addEventListener('dragenter', this.dragEnter.bind(this), false);
+        document.addEventListener('dragleave', this.dragLeave.bind(this), false);
     }
 
-    private triggerFileUpload(): void {
+    public onDestroy(): void {
+        const uploadElement = (this as any).getEl();
+        if (uploadElement) {
+            uploadElement.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
+        } else {
+            document.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
+        }
+        document.removeEventListener('dragenter', this.dragEnter.bind(this), false);
+        document.removeEventListener('dragleave', this.dragLeave.bind(this), false);
+    }
+
+    private preventDefaultDragBehavior(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    }
+
+    public triggerFileUpload(): void {
         const uploadInput = (this as any).getEl('fileUploadInput');
         if (uploadInput) {
             uploadInput.click();
         }
     }
 
-    private setAttachments(): void {
+    public setAttachments(): void {
         const uploadInput = (this as any).getEl('fileUploadInput');
         if (uploadInput && uploadInput.files) {
             this.appendFiles(Array.from(uploadInput.files));
@@ -73,15 +100,24 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
         (this as any).setStateDirty('files');
     }
 
-    private dragOver(event: any): void {
+    private dragEnter(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
+        this.dragCounter++;
         this.state.dragging = true;
         this.state.minimized = false;
     }
 
-    private drop(event: any): void {
+    private dragLeave(): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.dragCounter--;
+        if (this.dragCounter === 0) {
+            this.state.dragging = false;
+        }
+    }
+
+    public drop(event: any): void {
         event.stopPropagation();
         event.preventDefault();
 
@@ -90,9 +126,10 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
             this.appendFiles(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
         }
         this.state.dragging = false;
+        this.dragCounter = 0;
     }
 
-    private minimize(): void {
+    public minimize(): void {
         this.state.minimized = !this.state.minimized;
     }
 
@@ -125,4 +162,4 @@ class ArticleInputAttachmentComponent extends FormInputComponent<any, ArticleInp
     }
 }
 
-module.exports = ArticleInputAttachmentComponent;
+module.exports = Component;
