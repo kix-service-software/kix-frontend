@@ -1,7 +1,7 @@
 import { WidgetComponentState, Contact, Customer, AbstractAction } from "@kix/core/dist/model";
-import { StandardTable } from "@kix/core/dist/browser";
+import { StandardTable, TableConfiguration } from "@kix/core/dist/browser";
 
-export class ComponentState extends WidgetComponentState {
+export class ComponentState extends WidgetComponentState<TableConfiguration> {
 
     public constructor(
         public contact: Contact = null,

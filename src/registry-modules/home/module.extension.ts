@@ -13,7 +13,8 @@ import {
 } from '@kix/core/dist/model';
 import {
     TableColumnConfiguration, SearchOperator, ToggleOptions, TableHeaderHeight,
-    TableRowHeight
+    TableRowHeight,
+    TableConfiguration
 } from '@kix/core/dist/browser';
 import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
 import { TicketProperty } from '@kix/core/dist/model/';
@@ -34,11 +35,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             ]),
         ];
         const todoTicketList = new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
-            "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], {
-                limit: 500,
-                displayLimit: 10,
-                showTotalCount: true,
-                tableColumns: [
+            "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], new TableConfiguration(
+                500, 10, [
                     new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
                     new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
                     new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
@@ -55,7 +53,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
                     ),
                 ],
-                filter: [
+                [
                     new FilterCriteria(
                         TicketProperty.OWNER_ID, SearchOperator.EQUALS,
                         FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
@@ -69,21 +67,19 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         FilterDataType.NUMERIC, FilterType.OR, 2
                     )
                 ],
-                toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                sortOrder: "Ticket.Age:numeric",
-                headerHeight: TableHeaderHeight.LARGE,
-                rowHeight: TableRowHeight.SMALL
-            },
+                true,
+                true, new ToggleOptions('ticket-article-details', 'article', [], true),
+                "Ticket.Age:numeric",
+                TableHeaderHeight.LARGE,
+                TableRowHeight.SMALL
+            ),
             false, true, WidgetSize.LARGE, null, true, predefinedToDoTableFilter)
         );
 
         const newTicketsListWidget =
             new ConfiguredWidget("20180612-new-tickets-widget", new WidgetConfiguration(
-                "ticket-list-widget", "Neue Tickets", ['bulk-ticket-action'], {
-                    limit: 500,
-                    displayLimit: 10,
-                    showTotalCount: true,
-                    tableColumns: [
+                "ticket-list-widget", "Neue Tickets", ['bulk-ticket-action'], new TableConfiguration(
+                    500, 10, [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 250),
@@ -94,17 +90,17 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                             TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
                         ),
                     ],
-                    filter: [
+                    [
                         new FilterCriteria(
                             TicketProperty.STATE_ID, SearchOperator.EQUALS,
                             FilterDataType.NUMERIC, FilterType.OR, 1
                         )
                     ],
-                    toggleOptions: new ToggleOptions('ticket-article-details', 'article', [], true),
-                    sortOrder: "Ticket.-Age:numeric",
-                    headerHeight: TableHeaderHeight.LARGE,
-                    rowHeight: TableRowHeight.SMALL
-                },
+                    true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
+                    "Ticket.-Age:numeric",
+                    TableHeaderHeight.LARGE,
+                    TableRowHeight.SMALL
+                ),
                 false, true, WidgetSize.LARGE, null, true)
             );
 

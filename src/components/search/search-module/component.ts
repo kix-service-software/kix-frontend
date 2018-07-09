@@ -1,12 +1,6 @@
 import { ComponentState } from './ComponentState';
-import {
-    ContextService, KIXObjectSearchService,
-    IContextServiceListener, IKIXObjectSearchListener, LabelService, SearchOperatorUtil, KIXObjectServiceRegistry
-} from "@kix/core/dist/browser";
-import {
-    ContextMode, ContextType, ContextConfiguration,
-    Context, KIXObject
-} from "@kix/core/dist/model";
+import { ContextService, IContextServiceListener } from "@kix/core/dist/browser";
+import { ContextMode, ContextType, ContextConfiguration, Context } from "@kix/core/dist/model";
 import { SearchContext } from '@kix/core/dist/browser/search';
 
 class Component implements IContextServiceListener {
@@ -38,7 +32,6 @@ class Component implements IContextServiceListener {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
     }
-
 }
 
 module.exports = Component;

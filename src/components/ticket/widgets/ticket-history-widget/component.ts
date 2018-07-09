@@ -1,17 +1,11 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import {
-    HistoryTableLabelLayer, HistoryTableContentLayer, TicketDetailsContext, TicketService
+    HistoryTableLabelLayer, HistoryTableContentLayer
 } from '@kix/core/dist/browser/ticket';
 import { TicketHistoryComponentState } from './TicketHistoryComponentState';
 import {
-    TableColumnConfiguration, StandardTable, ITableClickListener,
-    ITableConfigurationListener,
-    TableSortLayer,
-    TableColumn,
-    TableFilterLayer,
-    ActionFactory,
-    TableRowHeight,
-    TableHeaderHeight
+    StandardTable, ITableClickListener, ITableConfigurationListener, TableColumn,
+    ActionFactory, TableLayerConfiguration, TableListenerConfiguration,
 } from '@kix/core/dist/browser';
 import { TicketHistory, ArticleProperty, KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
@@ -60,37 +54,21 @@ class TicketHistoryWidgetComponent {
 
     private setHistoryTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const labelProvider = new HistoryTableLabelLayer();
-
-            const columnConfig: TableColumnConfiguration[] = this.state.widgetConfiguration.settings.tableColumns || [];
-
-            const contentProvider = new HistoryTableContentLayer(this.state.instanceId, this.state.ticket);
+            const contentLayer = new HistoryTableContentLayer(this.state.ticket);
+            const labelLayer = new HistoryTableLabelLayer();
+            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
 
             const clickListener: ITableClickListener<TicketHistory> = {
                 rowClicked: this.navigateToArticle.bind(this)
             };
-
-            const configurationListener: ITableConfigurationListener<TicketHistory> = {
+            const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
-                contentProvider,
-                labelProvider,
-                [new TableFilterLayer()],
-                [new TableSortLayer()],
-                null,
-                null,
-                null,
-                columnConfig,
-                null,
-                clickListener,
-                configurationListener,
-                7,
-                null,
-                TableRowHeight.SMALL,
-                TableHeaderHeight.SMALL
+                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
             );
         }
     }

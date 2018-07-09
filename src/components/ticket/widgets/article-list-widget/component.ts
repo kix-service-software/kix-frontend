@@ -12,7 +12,7 @@ import {
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ToggleOptions, ActionFactory, TableHeaderHeight
+    TableSortLayer, ToggleOptions, ActionFactory, TableHeaderHeight, TableListenerConfiguration, TableLayerConfiguration
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
 import { IEventListener, EventService } from "@kix/core/dist/browser/event";
@@ -63,46 +63,39 @@ export class Component implements IEventListener {
 
     private setArticleTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const columns: TableColumnConfiguration[] = this.state.widgetConfiguration.settings.tableColumns || [];
 
-            const configurationListener: ITableConfigurationListener<Article> = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
+            const tableConfiguration = this.state.widgetConfiguration.settings.tableConfiguration;
+            tableConfiguration.displayLimit = this.state.articles.length;
 
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
+            const layerConfiguration = new TableLayerConfiguration(
                 new ArticleTableContentLayer(this.state.ticket),
                 new ArticleTableLabelLayer(),
                 [new ArticleTableFilterLayer()],
                 [new TableSortLayer()],
-                new ArticleTableToggleLayer(new ArticleTableToggleListener(), true),
-                null,
-                null,
-                columns,
-                new ArticleTableSelectionListener(),
-                new ArticleTableClickListener(),
-                configurationListener,
-                this.state.articles.length,
-                true,
-                TableRowHeight.LARGE,
-                TableHeaderHeight.LARGE,
-                true,
-                new ToggleOptions(
-                    'ticket-article-details',
-                    'article',
-                    this.state.widgetConfiguration.actions,
-                    true
-                )
+                new ArticleTableToggleLayer(new ArticleTableToggleListener(), true)
+            );
+
+            const configurationListener: ITableConfigurationListener = {
+                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
+            };
+            const listenerConfiguration = new TableListenerConfiguration(
+                new ArticleTableClickListener(), new ArticleTableSelectionListener(), configurationListener
+            );
+
+            this.state.standardTable = new StandardTable(
+                IdService.generateDateBasedId(),
+                tableConfiguration, layerConfiguration, listenerConfiguration
             );
         }
     }
 
     private columnConfigurationChanged(column: TableColumn): void {
         const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
+            this.state.widgetConfiguration.settings.tableConfiguration.tableColumns
+                .findIndex((tc) => tc.columnId === column.id);
 
         if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
+            this.state.widgetConfiguration.settings.tableConfiguration.tableColumns[index].size = column.size;
             ContextService.getInstance().saveWidgetConfiguration(
                 this.state.instanceId, this.state.widgetConfiguration
             );

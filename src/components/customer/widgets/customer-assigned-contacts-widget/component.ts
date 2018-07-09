@@ -1,14 +1,13 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer,
-    TableSortLayer, TableRowHeight, IdService, TableColumn,
-    ITableConfigurationListener, ITableClickListener, DialogService, ActionFactory
+    TableSortLayer, IdService, TableColumn, ITableConfigurationListener, ITableClickListener,
+    ActionFactory, TableLayerConfiguration, TableListenerConfiguration
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
 import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext, ContactService
+    ContactTableContentLayer, ContactTableLabelLayer, ContactService
 } from "@kix/core/dist/browser/contact";
-import { ComponentRouterService } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -51,28 +50,25 @@ class Component {
 
     private setTable(): void {
         if (this.state.customer && this.state.widgetConfiguration) {
-            const configurationListener: ITableConfigurationListener<Contact> = {
+            const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-
             const clickListener: ITableClickListener<Contact> = {
                 rowClicked: this.tableRowClicked.bind(this)
             };
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
 
-            this.state.contactTable = new StandardTable(
-                'assigned-contacts-' + IdService.generateDateBasedId(),
+            const layerConfiguration = new TableLayerConfiguration(
                 new ContactTableContentLayer(this.state.customer.CustomerID),
                 new ContactTableLabelLayer(),
                 [new TableFilterLayer()],
-                [new TableSortLayer()],
-                null, null, null,
-                this.state.widgetConfiguration.settings.tableColumns || [],
-                null,
-                clickListener,
-                configurationListener,
-                this.state.widgetConfiguration.settings.displayLimit,
-                false,
-                TableRowHeight.SMALL);
+                [new TableSortLayer()]
+            );
+
+            this.state.contactTable = new StandardTable(
+                'assigned-contacts-' + IdService.generateDateBasedId(),
+                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
+            );
 
             this.state.contactTable.setTableListener(() => {
                 const count = this.state.contactTable.getTableRows(true).length;

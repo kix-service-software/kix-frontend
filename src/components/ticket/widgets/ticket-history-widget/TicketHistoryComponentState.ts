@@ -1,10 +1,8 @@
-import { StandardTable } from '@kix/core/dist/browser';
+import { StandardTable, TableConfiguration } from '@kix/core/dist/browser';
 import { AbstractAction, TicketHistory, Ticket } from '@kix/core/dist/model';
 import { WidgetComponentState } from '@kix/core/dist/model/';
 
-import { TicketHistorySettings } from './TicketHistorySettings';
-
-export class TicketHistoryComponentState extends WidgetComponentState<TicketHistorySettings> {
+export class TicketHistoryComponentState extends WidgetComponentState<TableConfiguration> {
 
     public constructor(
         public ticketId: number = null,

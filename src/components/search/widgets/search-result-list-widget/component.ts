@@ -3,7 +3,7 @@ import { KIXObjectPropertyFilter, KIXObject, } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
-    LabelService, SearchOperatorUtil
+    LabelService, SearchOperatorUtil, StandardTableFactoryService
 } from '@kix/core/dist/browser';
 import { KIXObjectServiceRegistry } from '@kix/core/dist/services';
 
@@ -63,11 +63,16 @@ class Component implements IKIXObjectSearchListener {
             this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName()} (${cache.result.length})`;
 
             const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(cache.objectType);
-            this.state.resultTable = objectService.getObjectTable();
+
+            this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
+                cache.objectType, null, null, null, true
+            );
+
             const objectProperties = cache.criterias.map((c) => c.property);
             const columns = objectService.getTableColumnConfiguration(objectProperties);
+
             this.state.resultTable.setColumns(columns);
-            this.state.resultTable.contentLayer.setPreloadedObjects(cache.result);
+            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(cache.result);
             this.state.resultTable.loadRows(false);
 
             this.state.actions.forEach((a) => a.setData(this.state.resultTable));

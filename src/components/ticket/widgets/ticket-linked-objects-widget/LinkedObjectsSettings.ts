@@ -1,7 +1,7 @@
-import { TableColumnConfiguration } from "@kix/core/dist/browser";
+import { TableConfiguration } from "@kix/core/dist/browser";
 
 export class LinkedObjectsSettings {
 
-    public groups: Array<[string, TableColumnConfiguration[]]> = [];
+    public groups: Array<[string, TableConfiguration]> = [];
 
 }
