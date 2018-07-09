@@ -10,7 +10,7 @@ import { ComponentState } from './ComponentState';
 import { Link, Ticket, WidgetType, KIXObjectType, ContextMode } from '@kix/core/dist/model';
 import {
     StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn,
-    ActionFactory, WidgetService, TableListenerConfiguration, TableLayerConfiguration
+    ActionFactory, WidgetService, TableListenerConfiguration, TableLayerConfiguration, StandardTableFactoryService
 } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
@@ -99,7 +99,7 @@ class Component {
             const groupEntry = this.state.widgetConfiguration.settings.groups.find(
                 (g) => g[0] === KIXObjectType.TICKET
             );
-            const tableConfiguration = groupEntry[1];
+            const tableConfiguration = groupEntry ? groupEntry[1] : null;
 
             const contentLayer = new LinkedTicketTableContentLayer(
                 this.state.instanceId, this.state.ticketId, linkedTickets
@@ -115,8 +115,8 @@ class Component {
             };
             const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
 
-            return new StandardTable(
-                IdService.generateDateBasedId(), tableConfiguration, layerConfiguration, listenerConfiguration
+            return StandardTableFactoryService.getInstance().createStandardTable(
+                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration
             );
         }
     }
