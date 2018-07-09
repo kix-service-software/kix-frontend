@@ -1,7 +1,7 @@
 <div.action-list-wrapper>
     <ul.action-list key="action-list">
         <for(element in state.listDefault)>
-            <li class={"can-not-run": !element.canRun()}>
+            <li class={inactive: !element.canRun()}>
                 <action action=element/>
             </li>
         </for>
@@ -15,7 +15,7 @@
         <div.action-list-expansion-container>
             <ul.action-list-expansion>
                 <for(element in state.listExpansion)>
-                    <li class={"can-not-run": !element.canRun()}>
+                    <li class={inactive: !element.canRun()}>
                         <action action=element displayText=true/>
                     </li>
                 </for>

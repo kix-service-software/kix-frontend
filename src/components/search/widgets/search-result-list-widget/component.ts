@@ -75,11 +75,16 @@ class Component implements IKIXObjectSearchListener {
             this.state.resultTable.setColumns(columns);
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(cache.result);
             this.state.resultTable.loadRows(false);
+            this.state.resultTable.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
             WidgetService.getInstance().setActionData(this.state.instanceId, this.state.resultTable);
         } else {
             this.state.noSearch = true;
         }
+    }
+
+    private setActionsDirty(): void {
+        WidgetService.getInstance().rerenderActions(this.state.instanceId);
     }
 
     private setActions(): void {
