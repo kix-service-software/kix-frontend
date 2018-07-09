@@ -33,6 +33,9 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             new KIXObjectPropertyFilter('Bearbeiter', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
             ]),
+            new KIXObjectPropertyFilter('Beobachtete Tickets', [
+                new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
+            ]),
         ];
         const todoTicketList = new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
             "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], new TableConfiguration(
