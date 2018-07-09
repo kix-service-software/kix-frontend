@@ -3,9 +3,9 @@ import { KIXObjectPropertyFilter, KIXObject, } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
-    LabelService, SearchOperatorUtil, StandardTableFactoryService
+    LabelService, SearchOperatorUtil, StandardTableFactoryService, WidgetService
 } from '@kix/core/dist/browser';
-import { KIXObjectServiceRegistry } from '@kix/core/dist/services';
+import { KIXObjectServiceRegistry } from '@kix/core/dist/browser';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -15,7 +15,7 @@ class Component implements IKIXObjectSearchListener {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.listenerId = 'search-result-list-listener';
+        this.listenerId = this.state.instanceId;
     }
 
     public onMount(): void {
@@ -25,13 +25,13 @@ class Component implements IKIXObjectSearchListener {
             : undefined;
 
 
+        this.setActions();
+
         KIXObjectSearchService.getInstance().registerListener(this);
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             this.searchFinished();
         }
-
-        this.setActions();
     }
 
     public searchCleared(): void {
@@ -75,7 +75,7 @@ class Component implements IKIXObjectSearchListener {
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(cache.result);
             this.state.resultTable.loadRows(false);
 
-            this.state.actions.forEach((a) => a.setData(this.state.resultTable));
+            WidgetService.getInstance().setActionData(this.state.instanceId, this.state.resultTable);
         } else {
             this.state.noSearch = true;
         }
@@ -86,6 +86,7 @@ class Component implements IKIXObjectSearchListener {
             this.state.actions = ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions, true);
         }
+        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {

@@ -323,7 +323,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         let actions = [];
         if (this.state.standardTable.isToggleEnabled()) {
             actions = ActionFactory.getInstance().generateActions(
-                this.state.standardTable.tableConfiguration.toggleOptions.actions, false, article
+                this.state.standardTable.tableConfiguration.toggleOptions.actions, false, [article]
             );
         }
         return actions;

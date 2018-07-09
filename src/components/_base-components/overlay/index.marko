@@ -5,7 +5,7 @@
         </if>
         <div.overlay-content class=state.overlayClass key="overlay" on-click("overlayClicked")>
             <widget instanceId=state.instanceId title=state.title minimizable=false closable=(!component.isToast())
-                actions=state.actions on-closeWidget('closeOverlay')>
+                on-closeWidget('closeOverlay')>
                 <@icon>
                     <icon icon=state.icon/>
                 </@icon>

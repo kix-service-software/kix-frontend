@@ -2,12 +2,12 @@ import { TicketListComponentState } from './TicketListComponentState';
 import { Ticket, KIXObjectPropertyFilter, KIXObjectType } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketTableContentLayer, TicketTableLabelLayer, TicketTableSelectionListener, TicketTableClickListener
+    TicketTableContentLayer, TicketTableLabelLayer, TicketTableClickListener
 } from '@kix/core/dist/browser/ticket/';
 import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
-    ActionFactory, TableToggleLayer, TableRow, ITableToggleListener, TableConfiguration,
-    StandardTableFactoryService, TableLayerConfiguration, TableListenerConfiguration
+    ActionFactory, TableToggleLayer, TableRow, ITableToggleListener,
+    StandardTableFactoryService, TableLayerConfiguration, TableListenerConfiguration, WidgetService
 } from '@kix/core/dist/browser';
 
 class TicketListWidgetComponent implements ITableToggleListener {
@@ -41,6 +41,8 @@ class TicketListWidgetComponent implements ITableToggleListener {
         if (this.state.widgetConfiguration) {
             this.state.generalTicketActions = ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions, true);
+
+            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalTicketActions);
         }
     }
 
@@ -63,7 +65,7 @@ class TicketListWidgetComponent implements ITableToggleListener {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
             const listenerConfiguration = new TableListenerConfiguration(
-                new TicketTableClickListener(), new TicketTableSelectionListener(), configurationListener
+                new TicketTableClickListener(), null, configurationListener
             );
 
             this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(

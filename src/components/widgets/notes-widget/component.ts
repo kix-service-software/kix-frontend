@@ -2,6 +2,7 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import { NotesService } from "@kix/core/dist/browser/notes";
 import { NotesEditAction } from "./NotesEditAction";
 import { ComponentState } from './ComponentState';
+import { WidgetService } from "@kix/core/dist/browser";
 
 export class Component {
 
@@ -21,24 +22,24 @@ export class Component {
         this.state.contextId = context.descriptor.contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.state.actions = [new NotesEditAction(this)];
+        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
         this.editorValue = this.state.value;
     }
 
-    private valueChanged(value): void {
+    public valueChanged(value): void {
         this.editorValue = value;
     }
 
-    // public for use in action
     public setEditorActive() {
         this.state.editorActive = true;
     }
 
-    private cancelEditor() {
+    public cancelEditor() {
         this.state.editorActive = false;
     }
 
-    private submitEditor() {
+    public submitEditor() {
         setTimeout(() => {
             this.state.value = this.editorValue;
             this.state.editorActive = false;

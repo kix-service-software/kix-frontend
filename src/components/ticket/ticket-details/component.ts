@@ -51,16 +51,18 @@ export class TicketDetailsComponent {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.ticket);
+            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, [this.state.ticket]);
         }
         return actions;
+        // TODO: wie folgt Action übergeben
+        // WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
     private getTicketActions(): string[] {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, this.state.ticket);
+            actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, [this.state.ticket]);
         }
         return actions;
     }

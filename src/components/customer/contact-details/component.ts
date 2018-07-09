@@ -34,16 +34,18 @@ class Component {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.contactId) {
-            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.contact);
+            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, [this.state.contact]);
         }
         return actions;
+        // TODO: wie folgt Action übergeben
+        // WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
     private getContactActions(): string[] {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.contactId) {
-            actions = ActionFactory.getInstance().generateActions(config.contactActions, true, this.state.contact);
+            actions = ActionFactory.getInstance().generateActions(config.contactActions, true, [this.state.contact]);
         }
         return actions;
     }

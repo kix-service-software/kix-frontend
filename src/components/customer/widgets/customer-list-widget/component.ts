@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
-    TableLayerConfiguration, TableListenerConfiguration
+    TableLayerConfiguration, TableListenerConfiguration, WidgetService
 } from "@kix/core/dist/browser";
 import { Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
@@ -28,6 +28,7 @@ class Component {
         this.state.actions = ActionFactory.getInstance().generateActions(
             this.state.widgetConfiguration.actions, true, null
         );
+        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
 
         this.setTableConfiguration();
     }
