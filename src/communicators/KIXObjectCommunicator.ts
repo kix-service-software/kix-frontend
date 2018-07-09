@@ -18,7 +18,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.kixObjectType);
         if (service) {
-            await service.loadObjects(data.token, data.objectIds, data.loadingOptions)
+            await service.loadObjects(data.token, data.objectIds, data.loadingOptions, data.objectLoadingOptions)
                 .then((objects: any[]) => {
                     response = new CommunicatorResponse(
                         KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
