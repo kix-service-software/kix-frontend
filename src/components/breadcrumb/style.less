@@ -1,25 +1,31 @@
 .breadcrumb {
     background: @secondary-6;
-    color: @default-dark-font-color;
+    color: @secondary-1;
     margin-bottom: @margin-small;
     padding: 2px .5em 0;
-    border-radius: 3px;
+    border-radius: @border-radius;
+    box-shadow: @shadow-1;
     height: @breadcrumb-height;
     box-sizing: border-box;
     overflow: hidden;
     line-height: @breadcrumb-height;
-    vertical-align: text-bottom;
-    span,
-    a {
+    span.context {
         margin-right: @margin-small;
-    }
-    a:not(:first-of-type)::before {
-        content: "|";
-        display: inline-block;
-        margin: 0 @margin-small 0 @margin-small;
+        cursor: pointer;
+        &::after {
+            content: '|';
+            margin-left: @margin-small;
+        }
+        &:last-of-type {
+            cursor: unset;
+            &::after {
+                content: '';
+            }
+        }
     }
     [class^="kix-icon-"],
     [class*=" kix-icon-"] {
-        color: @primary-2;
+        color: @primary-6;
+        margin-right: @margin-small;
     }
 }
