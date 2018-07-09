@@ -60,7 +60,7 @@ class Component {
         SearchService.getInstance();
 
         const homeContext = new ContextDescriptor(
-            HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextType.MAIN, ContextMode.DASHBOARD,
+            HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
