@@ -1,5 +1,5 @@
-<widget instanceId=state.instanceId configurationTagId="customer-info-configuration"
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") contentActions=state.actions>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
     <@icon>
         <if(state.widgetConfiguration)>
             <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>

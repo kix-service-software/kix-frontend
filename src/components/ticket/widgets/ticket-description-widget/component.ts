@@ -50,7 +50,7 @@ class TicketDescriptionWidgetComponent {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.firstArticle) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, this.state.firstArticle
+                this.state.widgetConfiguration.actions, false, [this.state.firstArticle]
             );
         }
     }

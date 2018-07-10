@@ -1,0 +1,14 @@
+<widget instanceId=state.instanceId title=state.resultTitle>
+    <@icon>
+        <icon icon=state.resultIcon/>
+    </@icon>
+    <@headerContent>
+        <filter on-filter('filter')/>
+    </@headerContent>
+    <@content>
+        <if(state.resultTable && !state.noSearch)>
+            <standard-table standardTable=state.resultTable/>
+        </if>
+        <else>Keine Suche verfügbar.</else>
+    </@content>
+</widget>

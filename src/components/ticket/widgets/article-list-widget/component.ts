@@ -1,18 +1,17 @@
-import { Article, Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
     ArticleTableFilterLayer,
     ArticleTableLabelLayer,
     ArticleTableClickListener,
-    ArticleTableSelectionListener,
     ArticleTableToggleListener,
     ArticleTableToggleLayer
 } from "@kix/core/dist/browser/ticket";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TableColumnConfiguration, StandardTable, TableRowHeight, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ToggleOptions, ActionFactory, TableHeaderHeight, TableListenerConfiguration, TableLayerConfiguration
+    StandardTable, ITableConfigurationListener, TableColumn,
+    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration, WidgetService
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
 import { IEventListener, EventService } from "@kix/core/dist/browser/event";
@@ -57,7 +56,9 @@ export class Component implements IEventListener {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.ticket) {
             this.state.generalArticleActions = ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.settings.generalActions, true, this.state.ticket);
+                .generateActions(this.state.widgetConfiguration.settings.generalActions, true, [this.state.ticket]);
+
+            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalArticleActions);
         }
     }
 
@@ -79,7 +80,7 @@ export class Component implements IEventListener {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
             const listenerConfiguration = new TableListenerConfiguration(
-                new ArticleTableClickListener(), new ArticleTableSelectionListener(), configurationListener
+                new ArticleTableClickListener(), null, configurationListener
             );
 
             this.state.standardTable = new StandardTable(

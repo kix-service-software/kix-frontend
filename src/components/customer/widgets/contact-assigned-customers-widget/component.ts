@@ -43,7 +43,7 @@ class Component {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.contact) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, this.state.contact
+                this.state.widgetConfiguration.actions, false, [this.state.contact]
             );
         }
     }

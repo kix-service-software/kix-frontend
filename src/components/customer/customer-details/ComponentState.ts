@@ -4,6 +4,7 @@ import { CustomerDetailsContextConfiguration } from "@kix/core/dist/browser/cust
 export class ComponentState {
 
     public constructor(
+        public instanceId: string = '20180710-customer-details',
         public customerId: string = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],

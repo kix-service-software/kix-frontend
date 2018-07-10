@@ -4,7 +4,7 @@ import {
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
-import { ActionFactory } from '@kix/core/dist/browser';
+import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
@@ -13,10 +13,13 @@ export class TicketDetailsComponent {
     private state: TicketDetailsComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketDetailsComponentState(Number(input.objectId));
+        this.state = new TicketDetailsComponentState();
     }
 
     public async onMount(): Promise<void> {
+        const context = (ContextService.getInstance().getActiveContext() as TicketDetailsContext);
+        this.state.ticketId = Number(context.objectId);
+        // TODO: mit den anderen Detail-Komponent (customer, contact) abgleichen
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext, type: ContextType) => {
                 if (type === ContextType.MAIN && contextId === TicketDetailsContext.CONTEXT_ID) {
@@ -25,11 +28,13 @@ export class TicketDetailsComponent {
                     this.state.lanes = ticketDeatilsContext.getLanes();
                     this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
                     (this as any).update();
+                    this.setActions();
                 }
             }
         });
-
         this.loadTicket();
+        // FIXME: ticket erst beim 2. öffnen da --> erstes laden = keine actions
+        this.setActions();
     }
 
     private async loadTicket(): Promise<void> {
@@ -46,20 +51,21 @@ export class TicketDetailsComponent {
         this.setTicketHookInfo();
     }
 
-    private getActions(): string[] {
-        let actions = [];
+    private setActions(): void {
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, this.state.ticket);
+            const actions = ActionFactory.getInstance().generateActions(
+                config.generalActions, true, [this.state.ticket]
+            );
+            WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
-        return actions;
     }
 
-    private getTicketActions(): string[] {
+    public getTicketActions(): string[] {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, this.state.ticket);
+            actions = ActionFactory.getInstance().generateActions(config.ticketActions, true, [this.state.ticket]);
         }
         return actions;
     }
@@ -72,13 +78,13 @@ export class TicketDetailsComponent {
         }
     }
 
-    private getWidgetTemplate(instanceId: string): any {
+    public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
-    private getTitle(): string {
+    public getTitle(): string {
         if (this.state.ticket) {
             const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + this.state.ticket.TicketNumber;
             return titlePrefix + " - " + this.state.ticket.Title;
@@ -86,11 +92,11 @@ export class TicketDetailsComponent {
         return '';
     }
 
-    private getLaneKey(): string {
+    public getLaneKey(): string {
         return IdService.generateDateBasedId('lane-');
     }
 
-    private getLaneWidgetType(): number {
+    public getLaneWidgetType(): number {
         return WidgetType.LANE;
     }
 }

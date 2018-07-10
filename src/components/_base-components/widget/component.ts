@@ -16,7 +16,6 @@ class WidgetComponent implements IEventListener {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
-        this.state.configurationTagId = input.configurationTagId;
         this.state.explorer = input.explorer;
         this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;

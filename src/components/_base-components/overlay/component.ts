@@ -93,6 +93,7 @@ class OverlayComponent {
                 this.state.actions = ActionFactory.getInstance().generateActions(
                     widgetConfiguration.actions, false, this.state.content.getActionObject()
                 );
+                WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
                 this.state.title = widgetConfiguration.title;
                 this.state.icon = widgetConfiguration.icon;
             }

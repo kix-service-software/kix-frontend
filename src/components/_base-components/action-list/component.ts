@@ -1,25 +1,29 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
-import { Context, KIXObject } from '@kix/core/dist/model';
+import { Context, KIXObject, IActionListener } from '@kix/core/dist/model';
 import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
-import { IdService } from '@kix/core/dist/browser';
+import { IdService, WidgetService } from '@kix/core/dist/browser';
 
-export class Component {
+export class Component implements IActionListener {
 
     private state: ComponentState;
     private resizeTimeout: any = null;
+
+    public listenerInstanceId: string;
 
     private contextListernerId: string;
     private contextListener: ComponentContextListener = null;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.listenerInstanceId = input.instanceId;
         this.contextListernerId = IdService.generateDateBasedId('action-list-');
     }
 
     public onInput(input: any): void {
+        // TODO: noch notwendig für Content-Actions (siehe "base"-widget)
         this.state.actionList = input.list;
-        this.prepareLists();
+        this.prepareActionLists();
     }
 
     public onMount(): void {
@@ -30,9 +34,18 @@ export class Component {
                 this.state.showListExpansion = false;
             }
         }, false);
-        this.prepareLists();
+
+        if (this.listenerInstanceId) {
+            WidgetService.getInstance().registerActionListener(this);
+            this.actionsChanged();
+        } else {
+            // TODO: noch notwendig für Content-Actions (siehe "base"-widget)
+            this.prepareActionLists();
+        }
+
         ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
         this.contextListener = new ComponentContextListener(this);
+
         window.addEventListener("resize", this.windowResizeThrottler.bind(this), false);
     }
 
@@ -44,12 +57,12 @@ export class Component {
         if (!this.resizeTimeout) {
             this.resizeTimeout = setTimeout(() => {
                 this.resizeTimeout = null;
-                this.prepareLists();
+                this.prepareActionLists();
             }, 66);
         }
     }
 
-    public prepareLists() {
+    public prepareActionLists() {
         const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
         if (listWidth > 0 && this.state.actionList) {
             // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 50px Puffer (... + margin/padding)
@@ -59,9 +72,19 @@ export class Component {
         }
     }
 
-    private toggleListExpansion(): any {
+    public toggleListExpansion(): any {
         this.state.showListExpansion = !this.state.showListExpansion;
         this.state.keepShow = !this.state.keepShow;
+    }
+
+    public actionsChanged(): void {
+        this.state.actionList = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
+        this.prepareActionLists();
+    }
+
+    public actionDataChanged(): void {
+        (this as any).setStateDirty('listDefault');
+        (this as any).setStateDirty('listExpansion');
     }
 }
 
@@ -85,13 +108,13 @@ class ComponentContextListener implements IContextListener {
 
     public sidebarToggled(): void {
         setTimeout(() => {
-            this.actionListComponent.prepareLists();
+            this.actionListComponent.prepareActionLists();
         }, 50);
     }
 
     public explorerBarToggled(): void {
         setTimeout(() => {
-            this.actionListComponent.prepareLists();
+            this.actionListComponent.prepareActionLists();
         }, 50);
     }
 

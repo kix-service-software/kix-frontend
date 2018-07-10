@@ -1,16 +1,9 @@
 import { ComponentState } from './ComponentState';
-import {
-    ContextService, KIXObjectSearchService,
-    IContextServiceListener, IKIXObjectSearchListener, LabelService, SearchOperatorUtil,
-    KIXObjectServiceRegistry, StandardTableFactoryService, TableConfiguration
-} from "@kix/core/dist/browser";
-import {
-    ContextMode, ContextType, ContextConfiguration,
-    Context, KIXObject
-} from "@kix/core/dist/model";
+import { ContextService, IContextServiceListener } from "@kix/core/dist/browser";
+import { ContextMode, ContextType, ContextConfiguration, Context } from "@kix/core/dist/model";
 import { SearchContext } from '@kix/core/dist/browser/search';
 
-class Component implements IContextServiceListener, IKIXObjectSearchListener {
+class Component implements IContextServiceListener {
 
     public listenerId: string;
 
@@ -30,12 +23,6 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
         ContextService.getInstance().registerListener(this);
-        KIXObjectSearchService.getInstance().registerListener(this);
-
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        if (cache) {
-            this.searchFinished();
-        }
     }
 
     public contextChanged(
@@ -43,52 +30,6 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
     ): void {
         if (contextId === SearchContext.CONTEXT_ID && !fromHistory) {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
-        }
-    }
-
-    public searchCleared(): void {
-        this.state.criterias = [];
-        this.state.resultTable = null;
-    }
-
-    public searchFinished<T extends KIXObject = KIXObject>(): void {
-        this.state.resultTable = null;
-        this.state.criterias = [];
-
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        if (cache) {
-            this.state.noSearch = false;
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
-            const cachedCriterias = (cache ? cache.criterias : []);
-            const newCriterias: Array<[string, string, string]> = [];
-            cachedCriterias.forEach(
-                (cc) => {
-                    const property = labelProvider.getPropertyText(cc.property);
-                    const operator = SearchOperatorUtil.getText(cc.operator);
-                    const value = cc.value.toString();
-                    newCriterias.push([property, operator, value]);
-                }
-            );
-            this.state.criterias = newCriterias;
-
-            this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName(true)} (${cache.result.length})`;
-
-            const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(cache.objectType);
-
-            const tableConfiguration = new TableConfiguration(null, 10);
-            this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
-                cache.objectType, tableConfiguration, null, null, true
-            );
-
-            const objectProperties = cache.criterias.map((c) => c.property);
-            const columns = objectService.getTableColumnConfiguration(objectProperties);
-
-            this.state.resultTable.setColumns(columns);
-            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(cache.result);
-            this.state.resultTable.loadRows(false);
-        } else {
-            this.state.noSearch = true;
         }
     }
 }

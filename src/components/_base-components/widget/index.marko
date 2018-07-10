@@ -15,9 +15,7 @@
             </if>
         </span>
         <span.header-right>
-            <if(component.isInputDefined(input.actions))>
-                <action-list list=input.actions/>
-            </if>
+            <action-list list=input.actions instanceId=state.instanceId/>
             <if(state.minimizable)>
                 <span.minimize-icon-wrapper>
                     <if(state.minimized)>
@@ -40,6 +38,7 @@
     </div>
     <div.widget-content>
         <if(component.isInputDefined(input.contentActions))>
+            <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
             <if(component.isContentWidget())>
                 <div.content-actions key=("content-actions" + Math.random())>
                     <action-list list=input.contentActions/>
