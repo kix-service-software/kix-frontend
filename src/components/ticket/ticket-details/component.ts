@@ -35,7 +35,7 @@ export class TicketDetailsComponent {
     private async loadTicket(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(
             ['Ticket.*'], null, null, null, null,
-            ['TimeUnits', 'DynamicFields', 'Links', 'Articles', 'Attachments', 'Flags', 'History'],
+            ['TimeUnits', 'DynamicFields', 'Links', 'Articles', 'Attachments', 'Flags', 'History', 'Watchers'],
             ['Links', 'Articles', 'Attachments', 'Flags', 'History']
         );
         const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(

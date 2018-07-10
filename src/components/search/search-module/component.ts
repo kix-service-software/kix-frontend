@@ -72,12 +72,13 @@ class Component implements IContextServiceListener, IKIXObjectSearchListener {
             this.state.criterias = newCriterias;
 
             this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName()} (${cache.result.length})`;
+            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName(true)} (${cache.result.length})`;
 
             const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(cache.objectType);
 
+            const tableConfiguration = new TableConfiguration(null, 10);
             this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
-                cache.objectType, null, null, null, true
+                cache.objectType, tableConfiguration, null, null, true
             );
 
             const objectProperties = cache.criterias.map((c) => c.property);
