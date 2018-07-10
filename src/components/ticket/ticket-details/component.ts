@@ -32,8 +32,7 @@ export class TicketDetailsComponent {
                 }
             }
         });
-        this.loadTicket();
-        // FIXME: ticket erst beim 2. öffnen da --> erstes laden = keine actions
+        await this.loadTicket();
         this.setActions();
     }
 
