@@ -1,7 +1,6 @@
-import { TicketService, TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
+import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
 import {
-    BreadcrumbDetails, Ticket, Context, WidgetType, ContextType, KIXObjectType, ContextMode, KIXObjectLoadingOptions
+    Ticket, WidgetType, ContextType, KIXObjectType, ContextMode, KIXObjectLoadingOptions
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';

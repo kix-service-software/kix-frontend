@@ -1,8 +1,7 @@
 import { HomeComponentState } from './HomeComponentState';
-import { BreadcrumbDetails, Context, ConfiguredWidget, ObjectIcon, ContextType } from '@kix/core/dist/model/';
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
+import { ConfiguredWidget } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/';
-import { HomeContext, HomeContextConfiguration } from '@kix/core/dist/browser/home';
+import { HomeContext } from '@kix/core/dist/browser/home';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class HomeComponent {
