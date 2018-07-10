@@ -1,7 +1,4 @@
 import { TicketsComponentState } from './TicketsComponentState';
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
-import { BreadcrumbDetails, Context } from '@kix/core/dist/model/';
-import { ContextService } from '@kix/core/dist/browser/context';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 
 class TicketsComponent {

@@ -1,14 +1,8 @@
 <div.breadcrumb>
-    <if(state.breadcrumbDetails)>
-        <if(state.breadcrumbDetails.icon)>
-            <span class=state.breadcrumbDetails.icon/>
+    <icon icon=state.icon/>
+    <for(context in state.contexts | status-var=loop)>
+        <if((loop.getIndex()-1) !== state.contexts.length)>
+            <span.context on-click('changeContext', context[0])>${context[1]}</span>
         </if>
-        <else>
-            <span.kix-icon-home/>
-        </else>
-        <span>
-            ${state.breadcrumbDetails.componentDisplayText}
-            <if(state.breadcrumbDetails.parameterDisplayText)>${' '}| ${state.breadcrumbDetails.parameterDisplayText}</if>
-        </span>
-    </if>
+    </for>
 </div>
