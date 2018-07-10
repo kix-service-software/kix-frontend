@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextType, KIXObjectType, WidgetType, Contact, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Contact, ContextMode } from "@kix/core/dist/model";
 import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
-import { ContactDetailsContext, ContactService } from "@kix/core/dist/browser/contact";
+import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
 class Component {
@@ -18,8 +18,8 @@ class Component {
         this.state.configuration = context.configuration;
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
-        this.setActions();
         await this.loadContact();
+        this.setActions();
     }
 
     private async loadContact(): Promise<void> {
@@ -41,7 +41,7 @@ class Component {
         }
     }
 
-    private getContactActions(): string[] {
+    public getContactActions(): string[] {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.contactId) {
@@ -50,24 +50,24 @@ class Component {
         return actions;
     }
 
-    private getTitle(): string {
+    public getTitle(): string {
         return this.state.contact
             ? this.state.contact.DisplayValue
             : 'Ansprechpartner: ' + this.state.contactId;
 
     }
 
-    private getLaneKey(): string {
+    public getLaneKey(): string {
         return IdService.generateDateBasedId('lane-');
     }
 
-    private getWidgetTemplate(instanceId: string): any {
+    public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
-    private getLaneWidgetType(): number {
+    public getLaneWidgetType(): number {
         return WidgetType.LANE;
     }
 

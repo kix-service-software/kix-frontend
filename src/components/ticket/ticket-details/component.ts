@@ -29,11 +29,13 @@ export class TicketDetailsComponent {
                     this.state.lanes = ticketDeatilsContext.getLanes();
                     this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
                     (this as any).update();
+                    this.setActions();
                 }
             }
         });
-        this.setActions();
         this.loadTicket();
+        // FIXME: ticket erst beim 2. öffnen da --> erstes laden = keine actions
+        this.setActions();
     }
 
     private async loadTicket(): Promise<void> {

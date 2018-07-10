@@ -37,6 +37,10 @@ export class Component implements IActionListener {
 
         if (this.listenerInstanceId) {
             WidgetService.getInstance().registerActionListener(this);
+            this.actionsChanged();
+        } else {
+            // TODO: noch notwendig für Content-Actions (siehe "base"-widget)
+            this.prepareActionLists();
         }
 
         ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));

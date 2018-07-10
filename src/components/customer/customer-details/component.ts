@@ -20,15 +20,15 @@ class Component {
         this.state.loadingConfig = false;
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
-        this.setActions();
         await this.loadCustomer();
+        this.setActions();
     }
 
     private async loadCustomer(): Promise<void> {
-        const contacts = await ContextService.getInstance().loadObjects<Customer>(
+        const customer = await ContextService.getInstance().loadObjects<Customer>(
             KIXObjectType.CUSTOMER, [this.state.customerId], ContextMode.DETAILS);
-        if (contacts && contacts.length) {
-            this.state.customer = contacts[0];
+        if (customer && customer.length) {
+            this.state.customer = customer[0];
             this.state.loadingCustomer = false;
         }
     }
