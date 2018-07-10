@@ -30,6 +30,10 @@ class BreadcrumbComponent implements IContextServiceListener {
                 const displayText = await context.getDisplayText();
                 this.state.contexts.push([contextId, displayText]);
             }
+
+            const currentContextDisplayText = await newContext.getDisplayText();
+            this.state.contexts.push([newContextId, currentContextDisplayText]);
+
             this.state.loading = false;
         }
     }
