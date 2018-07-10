@@ -108,7 +108,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.minimized = false;
     }
 
-    private dragLeave(): void {
+    private dragLeave(event: any): void {
         event.stopPropagation();
         event.preventDefault();
         this.dragCounter--;
@@ -147,7 +147,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         return AttachmentUtil.getFileSize(file.size);
     }
 
-    private removeFile(label: Label): void {
+    public removeFile(label: Label): void {
         const fileIndex = this.state.files.findIndex((sf) => sf.name === label.id);
         if (fileIndex > -1) {
             this.state.files.splice(fileIndex, 1);
