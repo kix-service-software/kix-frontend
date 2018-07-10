@@ -38,6 +38,7 @@
     </div>
     <div.widget-content>
         <if(component.isInputDefined(input.contentActions))>
+            <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
             <if(component.isContentWidget())>
                 <div.content-actions key=("content-actions" + Math.random())>
                     <action-list list=input.contentActions/>

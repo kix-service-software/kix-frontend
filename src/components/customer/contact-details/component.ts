@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextType, KIXObjectType, WidgetType, Contact, ContextMode } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
 import { ContactDetailsContext, ContactService } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -18,6 +18,7 @@ class Component {
         this.state.configuration = context.configuration;
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
+        this.setActions();
         await this.loadContact();
     }
 
@@ -30,15 +31,14 @@ class Component {
         }
     }
 
-    private getActions(): string[] {
-        let actions = [];
+    private setActions(): void {
         const config = this.state.configuration;
-        if (config && this.state.contactId) {
-            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, [this.state.contact]);
+        if (config && this.state.contact) {
+            const actions = ActionFactory.getInstance().generateActions(
+                config.generalActions, true, [this.state.contact]
+            );
+            WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
-        return actions;
-        // TODO: wie folgt Action übergeben
-        // WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
     private getContactActions(): string[] {

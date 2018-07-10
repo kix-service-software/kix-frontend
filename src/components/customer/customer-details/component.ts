@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextType, KIXObjectType, WidgetType, ContextMode, Customer } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
-import { CustomerDetailsContext, CustomerService } from "@kix/core/dist/browser/customer";
+import { KIXObjectType, WidgetType, ContextMode, Customer } from "@kix/core/dist/model";
+import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
+import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
 class Component {
@@ -9,15 +9,18 @@ class Component {
     private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(input.objectId);
+        this.state = new ComponentState();
     }
 
-    public async  onMount(): Promise<void> {
+    public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
+        this.state.customerId = context.objectId.toString();
+        // TODO: mit den anderen Detail-Komponent (ticket) abgleichen
         this.state.configuration = context.configuration;
         this.state.loadingConfig = false;
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
+        this.setActions();
         await this.loadCustomer();
     }
 
@@ -30,18 +33,17 @@ class Component {
         }
     }
 
-    private getActions(): string[] {
-        let actions = [];
+    private setActions(): void {
         const config = this.state.configuration;
-        if (config && this.state.customerId) {
-            actions = ActionFactory.getInstance().generateActions(config.generalActions, true, [this.state.customer]);
+        if (config && this.state.customer) {
+            const actions = ActionFactory.getInstance().generateActions(
+                config.generalActions, true, [this.state.customer]
+            );
+            WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
-        return actions;
-        // TODO: wie folgt Action übergeben
-        // WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
-    private getCustomerActions(): string[] {
+    public getCustomerActions(): string[] {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.customerId) {
@@ -50,24 +52,24 @@ class Component {
         return actions;
     }
 
-    private getTitle(): string {
+    public getTitle(): string {
         return this.state.customer
             ? this.state.customer.DisplayValue
             : 'Kunde: ' + this.state.customerId;
 
     }
 
-    private getLaneKey(): string {
+    public getLaneKey(): string {
         return IdService.generateDateBasedId('lane-');
     }
 
-    private getWidgetTemplate(instanceId: string): any {
+    public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
-    private getLaneWidgetType(): number {
+    public getLaneWidgetType(): number {
         return WidgetType.LANE;
     }
 
