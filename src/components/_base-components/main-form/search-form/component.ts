@@ -5,7 +5,8 @@ import {
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, KIXObjectServiceRegistry,
-    IKIXObjectSearchListener, IdService, StandardTableFactoryService
+    IKIXObjectSearchListener, IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
+    TableRowHeight
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
@@ -26,7 +27,13 @@ class Component implements IKIXObjectSearchListener {
 
     public onMount(): void {
         WidgetService.getInstance().setWidgetType('result-list-preview', WidgetType.GROUP);
-        this.state.table = StandardTableFactoryService.getInstance().createStandardTable(this.state.objectType);
+        const tableConfiguration = new TableConfiguration(
+            null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+        this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
+            this.state.objectType, tableConfiguration
+        );
+
         const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         if (formInstance) {
             this.state.fulltextSearch = formInstance.form.fulltextSearch;
