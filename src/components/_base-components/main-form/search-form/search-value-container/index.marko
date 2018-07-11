@@ -2,9 +2,11 @@
     <loading-spinner/>
 </if>
 <else>
-    <for(searchValue in state.searchValues)>
+    <for(searchValue in state.searchValues | status-var=loop)>
         <div.form-search-value>
-            <span>und</span>
+            <span>
+                <if(loop.getIndex() > 0)>und</if>
+            </span>
             <form-list nodes=state.propertyNodes selectedNodes=[searchValue.currentPropertyNode]
                 on-nodesChanged('propertyChanged', searchValue)/>
             <form-list nodes=searchValue.operationNodes selectedNodes=[searchValue.currentOperationNode]

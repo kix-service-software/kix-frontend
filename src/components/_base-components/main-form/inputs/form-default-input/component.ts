@@ -36,14 +36,11 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public keyDown(event: any): void {
-        if (event.key === 'Enter') {
+        setTimeout(() => {
             this.valueChanged(event);
-        }
+        }, 100);
     }
 
-    public focusLost(event: any): void {
-        this.valueChanged(event);
-    }
 }
 
 module.exports = Component;

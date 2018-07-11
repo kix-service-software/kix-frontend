@@ -99,17 +99,19 @@ class LinkTicketDialogComponent<T extends KIXObject> {
     }
 
     private async executeSearch(): Promise<void> {
-        this.state.resultCount = null;
-        if (this.state.standardTable && this.state.currentLinkableObjectNode) {
-            (this.state.standardTable.layerConfiguration.contentLayer as IFormTableLayer)
-                .setFormId(this.state.currentLinkableObjectNode.id.toString());
+        setTimeout(async () => {
+            this.state.resultCount = null;
+            if (this.state.standardTable && this.state.currentLinkableObjectNode) {
+                (this.state.standardTable.layerConfiguration.contentLayer as IFormTableLayer)
+                    .setFormId(this.state.currentLinkableObjectNode.id.toString());
 
-            this.state.canSearch = false;
-            await this.state.standardTable.loadRows();
-            const count = this.state.standardTable.getTableRows().length;
-            this.state.resultCount = count > 0 ? count : null;
-            this.state.canSearch = true;
-        }
+                this.state.canSearch = false;
+                await this.state.standardTable.loadRows();
+                const count = this.state.standardTable.getTableRows().length;
+                this.state.resultCount = count > 0 ? count : null;
+                this.state.canSearch = true;
+            }
+        }, 100);
     }
 
     private getStandardTable(): void {
