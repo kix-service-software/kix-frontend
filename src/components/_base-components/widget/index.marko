@@ -2,7 +2,7 @@
     <div.widget-header>
         <span.header-left>
             <if(input.explorer)>
-                <span.kix-icon-close-left on-click('minimizeExplorer')/>
+                <span.kix-icon-close-left.as-button on-click('minimizeExplorer')/>
             </if>
             <if(component.isInputDefined(input.icon))>
                 <include(input.icon)/>
@@ -19,10 +19,10 @@
             <if(state.minimizable)>
                 <span.minimize-icon-wrapper>
                     <if(state.minimized)>
-                        <span.kix-icon-sort-down on-click('minimizeWidget')/>
+                        <span.kix-icon-sort-down.as-button on-click('minimizeWidget')/>
                     </if>
                     <else>
-                        <span.kix-icon-triangle-up on-click('minimizeWidget')>
+                        <span.kix-icon-triangle-up.as-button on-click('minimizeWidget')>
                             <span.path1/>
                             <span.path2/>
                         </span>
@@ -31,7 +31,7 @@
             </if>
             <if(state.closable)>
                 <span.close-icon-wrapper>
-                    <span.kix-icon-close on-click('closeClicked')/>
+                    <span.kix-icon-close.as-button on-click('closeClicked')/>
                 </span>
             </if>
         </span>
