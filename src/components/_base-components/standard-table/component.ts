@@ -48,6 +48,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }, 500);
     }
 
+    public onDestroy(): void {
+        document.removeEventListener('mousemove', this.mousemove.bind(this));
+        document.removeEventListener('mouseup', this.mouseup.bind(this));
+    }
+
     private initTableScrollRange(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
 
@@ -107,7 +112,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return this.state.standardTable ? this.state.standardTable.getColumns() : [];
     }
 
-    private mousedown(col: string, event: any): void {
+    public mousedown(col: string, event: any): void {
         this.state.resizeSettings.columnId = col;
         this.state.resizeSettings.startOffset = event.pageX;
         this.state.resizeActive = true;
@@ -131,7 +136,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     private mouseup(): void {
-        if (this.state.standardTable && this.state.resizeSettings) {
+        if (this.state.standardTable && this.state.resizeSettings.columnId) {
             const column = this.getColumns().find((col) => col.id === this.state.resizeSettings.columnId);
             if (column) {
                 column.size = this.state.resizeSettings.currentSize;
