@@ -67,6 +67,7 @@ class Component implements IKIXObjectSearchListener {
 
         this.state.fulltextValue = null;
         KIXObjectSearchService.getInstance().clearSearchCache();
+        this.setSearchResult([]);
     }
 
     public cancel(): void {
@@ -120,11 +121,11 @@ class Component implements IKIXObjectSearchListener {
 
         const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        const objectProperties = searchCache.criterias.map((c) => c.property);
+        const objectProperties = searchCache ? searchCache.criterias.map((c) => c.property) : [];
         const columns = objectService.getTableColumnConfiguration(objectProperties);
         this.state.table.setColumns(columns);
 
-        this.state.table.loadRows(false);
+        this.state.table.loadRows();
     }
 
     private showError(error: any): void {
