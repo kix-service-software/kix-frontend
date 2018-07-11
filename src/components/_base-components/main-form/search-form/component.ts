@@ -60,7 +60,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public reset(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }

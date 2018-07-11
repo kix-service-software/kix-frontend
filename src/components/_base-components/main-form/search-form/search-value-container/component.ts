@@ -131,6 +131,7 @@ class Component implements IKIXObjectSearchListener {
 
     public searchCleared(): void {
         this.state.searchValues = [];
+        this.setDefaultFormProperties();
         this.checkSearchValueList();
     }
 
