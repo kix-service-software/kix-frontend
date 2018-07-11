@@ -51,8 +51,9 @@ class Component implements IKIXObjectSearchListener {
                     displayValue = labelProvider.getPropertyValueDisplayText(criteria.property, criteria.value);
                 }
 
+                const displayProperty = labelProvider.getPropertyText(criteria.property);
                 this.state.criterias.push([
-                    criteria.property, SearchOperatorUtil.getText(criteria.operator), displayValue
+                    displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
                 ]);
             }
         }
