@@ -7,7 +7,7 @@ export class ComponentState {
         public formId: string = null,
         public objectType: KIXObjectType = null,
         public resultCount: number = 0,
-        public canSearch: boolean = true,
+        public canSearch: boolean = false,
         public table: StandardTable<KIXObject> = null,
         public fulltextSearch: boolean = false,
         public defaultProperties: string[] = [],
