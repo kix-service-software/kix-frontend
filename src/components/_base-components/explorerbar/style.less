@@ -26,30 +26,24 @@
             transform: rotate(270deg);
             transform-origin: @explorer-width/2 @explorer-width/2;
             overflow: hidden;
+            display: grid;
+            grid-template-columns: (@explorer-width - 2rem) 2rem;
             .header-left {
-                display: inline-block;
-                float: left;
-                margin-right: 5px;
                 padding: 2px 1em 2px;
                 h3 {
-                    margin-bottom: 0;
-                    font-weight: 400;
-                    [class^="kix-icon-"],
-                    [class*=" kix-icon-"] {
-                        margin-right: .5em;
-                    }
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
             }
             .header-right {
-                display: inline-block;
-                float: right;
-                width: 2em;
                 text-align: center;
                 background-color: @secondary-2;
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
                     line-height: 2em;
                 }
+                cursor: pointer;
             }
         }
     }
