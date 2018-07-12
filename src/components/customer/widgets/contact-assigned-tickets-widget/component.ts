@@ -300,7 +300,7 @@ class Component {
 
     }
 
-    private getTicketTableTitle(
+    public getTicketTableTitle(
         config: WidgetConfiguration,
         table: StandardTable<Ticket>,
         defaultTitle: string
@@ -310,27 +310,27 @@ class Component {
         return `${title} (${count})`;
     }
 
-    private filterEscalated(filterValue: string): void {
+    public filterEscalated(filterValue: string): void {
         this.state.escalatedFilterValue = filterValue;
         this.filter(this.state.escalatedTicketsTable, filterValue);
     }
 
-    private filterReminder(filterValue: string): void {
+    public filterReminder(filterValue: string): void {
         this.state.reminderFilterValue = filterValue;
         this.filter(this.state.reminderTicketsTable, filterValue);
     }
 
-    private filterNew(filterValue: string): void {
+    public filterNew(filterValue: string): void {
         this.state.newFilterValue = filterValue;
         this.filter(this.state.newTicketsTable, filterValue);
     }
 
-    private filterOpen(filterValue: string): void {
+    public filterOpen(filterValue: string): void {
         this.state.openFilterValue = filterValue;
         this.filter(this.state.openTicketsTable, filterValue);
     }
 
-    private filterPending(filterValue: string): void {
+    public filterPending(filterValue: string): void {
         this.state.pendingFilterValue = filterValue;
         this.filter(this.state.pendingTicketsTable, filterValue);
     }
