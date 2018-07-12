@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     IKIXObjectSearchListener, KIXObjectSearchService,
-    LabelService, ContextService, SearchOperatorUtil
+    LabelService, ContextService, SearchOperatorUtil, DialogService
 } from '@kix/core/dist/browser';
 import { KIXObject, ContextMode } from '@kix/core/dist/model';
 class Component implements IKIXObjectSearchListener {
@@ -24,7 +24,10 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public openEditSearchDialog(): void {
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (cache) {
+            ContextService.getInstance().setDialogContext(null, cache.objectType, ContextMode.SEARCH);
+        }
     }
 
     public searchCleared(): void {
