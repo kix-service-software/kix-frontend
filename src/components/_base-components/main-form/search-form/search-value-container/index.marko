@@ -25,7 +25,7 @@
                         <input.input-style type="time" on-change('timeValueChanged', searchValue) value=searchValue.time/>
                     </else-if>
                     <else>
-                        <input.input-style value=searchValue.currentValue type="text" on-change('textValueChanged', searchValue)/>
+                        <input.input-style value=searchValue.currentValue type="text" on-keydown('textValueChanged', searchValue)/>
                     </else>
                 </if>
             </div>

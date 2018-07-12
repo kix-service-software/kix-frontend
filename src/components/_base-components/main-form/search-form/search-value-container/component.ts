@@ -77,9 +77,11 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public textValueChanged(searchValue: FormSearchValue, event: any): void {
-        const value = event.target.value;
-        searchValue.setTextValue(value);
-        this.provideFilterCriteria(searchValue);
+        setTimeout(() => {
+            const value = event.target.value;
+            searchValue.setTextValue(value);
+            this.provideFilterCriteria(searchValue);
+        }, 100);
     }
 
     public dateValueChanged(searchValue: FormSearchValue, event: any): void {
