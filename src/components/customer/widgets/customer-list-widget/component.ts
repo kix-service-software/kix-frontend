@@ -4,7 +4,7 @@ import {
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
     TableLayerConfiguration, TableListenerConfiguration, WidgetService
 } from "@kix/core/dist/browser";
-import { Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
+import { Customer, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
 
 class Component {
@@ -72,8 +72,8 @@ class Component {
         }
     }
 
-    private filter(filterValue?: string): void {
-        this.state.standardTable.resetFilter();
+    public filter(filterValue: string, filter: KIXObjectPropertyFilter): void {
+        this.state.standardTable.setFilterSettings(filterValue, filter);
     }
 
 }
