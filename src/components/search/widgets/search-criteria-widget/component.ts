@@ -38,6 +38,7 @@ class Component implements IKIXObjectSearchListener {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
+            this.state.title = labelProvider.getObjectName(true);
             this.state.criterias = [];
             for (const criteria of cache.criterias) {
                 let displayValue;
