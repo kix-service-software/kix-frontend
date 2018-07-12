@@ -4,15 +4,9 @@
             <div.search-criteria-list>
                 <for(criteria in state.criterias)>
                     <div.search-criteria-list-item>
-                        <div.key title=criteria[0]>
-                            <span.property-name>${criteria[0]}</span>
-                        </div>
-                        <div.operator title=((" (" + criteria[1]) + ")")>
-                            <span>(${criteria[1]})</span>
-                        </div>
-                        <div.value title=criteria[2]>
-                            <span>${criteria[2]}</span>
-                        </div>
+                        <div.key title=criteria[0]>${criteria[0]}</div>
+                        <div.operator title=criteria[1]>(${criteria[1]})</div>
+                        <div.value title=criteria[2]>${criteria[2]}</div>
                     </div>
                 </for>
                 <if(state.criterias.length < 10)>
