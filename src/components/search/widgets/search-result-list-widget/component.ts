@@ -3,7 +3,8 @@ import { KIXObjectPropertyFilter, KIXObject, } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
-    LabelService, SearchOperatorUtil, StandardTableFactoryService, WidgetService, TableConfiguration
+    LabelService, SearchOperatorUtil, StandardTableFactoryService, WidgetService,
+    TableConfiguration, TableHeaderHeight, TableRowHeight
 } from '@kix/core/dist/browser';
 import { KIXObjectServiceRegistry } from '@kix/core/dist/browser';
 
@@ -64,7 +65,9 @@ class Component implements IKIXObjectSearchListener {
 
             const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(cache.objectType);
 
-            const tableConfiguration = new TableConfiguration(null, 10, null, null, true);
+            const tableConfiguration = new TableConfiguration(
+                null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+            );
             this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
                 cache.objectType, tableConfiguration, null, null, true
             );
