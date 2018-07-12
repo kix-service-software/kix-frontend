@@ -2,7 +2,11 @@
     <icon icon=state.icon/>
     <for(context in state.contexts | status-var=loop)>
         <if((loop.getIndex()-1) !== state.contexts.length)>
-            <span.context on-click('changeContext', context[0])>${context[1]}</span>
+            <link-target contextId=context[0]>
+                <@content>
+                    <span.context>${context[1]}</span>
+                </@content>
+            </link-target>
         </if>
     </for>
 </div>
