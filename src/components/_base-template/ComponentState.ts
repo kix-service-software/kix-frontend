@@ -8,7 +8,6 @@ export class ComponentState {
         public contextId: string,
         public objectData: ObjectData,
         public objectId: string,
-        public configurationMode: boolean = false,
         public gridColumns: string = null,
         public hasExplorer: boolean = false
     ) { }

@@ -1,4 +1,4 @@
-import { Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor } from '@kix/core/dist/model';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '@kix/core/dist/model';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
@@ -6,9 +6,10 @@ import { ComponentsService } from '@kix/core/dist/browser/components';
 import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
-import { HomeContext } from '@kix/core/dist/browser/home';
 import { SearchService } from '@kix/core/dist/browser/search';
 import { IdService } from '@kix/core/dist/browser';
+import { RoutingService } from '@kix/core/dist/browser/router';
+import { HomeContext } from '@kix/core/dist/browser/home';
 
 declare var io: any;
 
@@ -64,12 +65,7 @@ class Component {
             false, 'home', 'home', HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
-
-        if (this.state.contextId) {
-            ContextService.getInstance().setContext(this.state.contextId, null, null, this.state.objectId);
-        } else {
-            ContextService.getInstance().setContext(HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD);
-        }
+        RoutingService.getInstance().routeToInitialContext();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
@@ -87,10 +83,6 @@ class Component {
             });
         }
         this.setGridColumns();
-    }
-
-    public toggleConfigurationMode(): void {
-        this.state.configurationMode = !this.state.configurationMode;
     }
 
     private setGridColumns(): void {

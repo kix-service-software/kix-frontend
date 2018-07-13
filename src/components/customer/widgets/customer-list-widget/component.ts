@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
-    TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService
+    TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService, AbstractTableLayer
 } from "@kix/core/dist/browser";
 import { Customer, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
@@ -40,8 +40,15 @@ class Component {
             };
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
+            const contentLayer: AbstractTableLayer = new CustomerTableContentLayer(null, null);
+            const labelLayer = new CustomerTableLabelLayer();
+
+            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
+                [new TableFilterLayer()], [new TableSortLayer()]
+            );
             this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings, null, listenerConfiguration, true
+                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
+                layerConfiguration, listenerConfiguration, true
             );
         }
     }
