@@ -1,5 +1,12 @@
-<a href=state.url on-click('linkClicked')>
-    <if(input.content)>
-        <${input.content}/>
+<if(!state.loading)>
+    <if(state.routingConfiguration)>
+        <a href=state.url on-click('linkClicked')>
+            <if(input.content)>
+                <${input.content}/>
+            </if>
+        </a>
     </if>
-</a>
+    <else-if(input.content)>
+        <${input.content}/>
+    </else-if>
+</if>

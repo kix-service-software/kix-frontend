@@ -64,12 +64,10 @@ class TicketListWidgetComponent implements ITableToggleListener {
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-            const listenerConfiguration = new TableListenerConfiguration(
-                new TicketTableClickListener(), null, configurationListener
-            );
+            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
             this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration
+                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration, true
             );
 
             this.state.standardTable.setTableListener(() => {

@@ -10,21 +10,19 @@ class Component {
     }
 
     public onInput(input: ComponentState): void {
-        this.state.contextId = input.contextId;
-        this.state.objectType = input.objectType;
+        this.state.routingConfiguration = input.routingConfiguration;
         this.state.objectId = input.objectId;
-        this.state.contextMode = input.contextMode;
-
         this.setURL();
     }
 
     private async setURL(): Promise<void> {
         this.state.loading = true;
-
-        this.state.url = await RoutingService.getInstance().buildUrl(
-            this.state.contextId, this.state.objectType, this.state.contextMode, this.state.objectId
-        );
-
+        if (this.state.routingConfiguration) {
+            const contextUrl = await RoutingService.getInstance().buildUrl(
+                this.state.routingConfiguration, this.state.objectId
+            );
+            this.state.url = '/' + contextUrl;
+        }
         this.state.loading = false;
     }
 
@@ -32,9 +30,7 @@ class Component {
         if (event.preventDefault) {
             event.preventDefault();
         }
-        RoutingService.getInstance().routeToContext(
-            this.state.contextId, this.state.objectType, this.state.contextMode, this.state.objectId
-        );
+        RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
     }
 
 }

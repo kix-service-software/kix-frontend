@@ -2,7 +2,7 @@
     <ul.main-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
-                <link-target contextId=menuEntry.contextId objectType=menuEntry.kixObjectType contextMode=menuEntry.contextMode>
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
                     <@content>
                         <span class="hover-label">${menuEntry.text}</span>
                         <span class="label-wrapper">
@@ -19,7 +19,7 @@
     <ul.user-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.secondaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
-                <link-target contextId=menuEntry.contextId objectType=menuEntry.kixObjectType contextMode=menuEntry.contextMode>
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
                     <@content>
                         <span class="menu-item-wrapper cf">
                             <span class="hover-label">${menuEntry.text}</span>

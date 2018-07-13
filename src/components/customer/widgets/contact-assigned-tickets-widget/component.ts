@@ -1,7 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, StandardTable, TableColumnConfiguration, ITableClickListener,
-    StandardTableFactoryService, TableListenerConfiguration
+    ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
 } from '@kix/core/dist/browser';
 import { WidgetConfiguration, Contact, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
 import {
@@ -13,8 +12,6 @@ class Component {
 
     private state: ComponentState;
 
-    private clickListener: ITableClickListener<Ticket>;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -24,12 +21,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.clickListener = {
-            rowClicked: (object: Ticket, columnId: string) => {
-                TicketService.getInstance().openTicket(object.TicketID, true);
-            }
-        };
-
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration(this.state.instanceId)
@@ -89,45 +80,40 @@ class Component {
 
     private configureOpenTicketsTable(): void {
         if (this.state.openTicketsConfig) {
-            const listenerConfiguration = new TableListenerConfiguration(this.clickListener);
             this.state.openTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.openTicketsConfig.settings, null, listenerConfiguration
+                KIXObjectType.TICKET, this.state.openTicketsConfig.settings, null, null, true
             );
         }
     }
 
     private configureEscalatedTicketsTable(): void {
         if (this.state.escalatedTicketsConfig) {
-            const listenerConfiguration = new TableListenerConfiguration(this.clickListener);
             this.state.escalatedTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.escalatedTicketsConfig.settings, null, listenerConfiguration
+                KIXObjectType.TICKET, this.state.escalatedTicketsConfig.settings, null, null, true
             );
         }
     }
 
     private configureReminderTicketsTable(): void {
         if (this.state.reminderTicketsConfig) {
-            const listenerConfiguration = new TableListenerConfiguration(this.clickListener);
             this.state.reminderTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.reminderTicketsConfig.settings, null, listenerConfiguration
+                KIXObjectType.TICKET, this.state.reminderTicketsConfig.settings, null, null, true
             );
         }
     }
 
     private configureNewTicketsTable(): void {
         if (this.state.newTicketsConfig) {
-            const listenerConfiguration = new TableListenerConfiguration(this.clickListener);
             this.state.newTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.newTicketsConfig.settings, null, listenerConfiguration
+                KIXObjectType.TICKET, this.state.newTicketsConfig.settings, null, null, true
             );
         }
     }
 
     private configurePendingTicketsTable(): void {
         if (this.state.pendingTicketsConfig) {
-            const listenerConfiguration = new TableListenerConfiguration(this.clickListener);
             this.state.pendingTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.pendingTicketsConfig.settings, null, listenerConfiguration
+                KIXObjectType.TICKET, this.state.pendingTicketsConfig.settings, null, null, true
             );
         }
     }

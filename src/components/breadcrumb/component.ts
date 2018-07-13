@@ -1,6 +1,7 @@
 import { ContextType, Context } from "@kix/core/dist/model";
 import { IContextServiceListener, ContextService } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
+import { RoutingConfiguration } from "@kix/core/dist/browser/router";
 
 class BreadcrumbComponent implements IContextServiceListener {
 
@@ -38,8 +39,11 @@ class BreadcrumbComponent implements IContextServiceListener {
         }
     }
 
-    public changeContext(contextId: string): void {
-        ContextService.getInstance().setContext(contextId, null, null);
+    public getRoutingConfiguration(contextId: string, index: number): RoutingConfiguration {
+        if (index < this.state.contexts.length - 1) {
+            return new RoutingConfiguration(null, contextId, null, null, null);
+        }
+        return null;
     }
 
 }
