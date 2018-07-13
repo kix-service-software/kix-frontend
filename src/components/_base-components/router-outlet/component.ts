@@ -1,8 +1,9 @@
-import { ComponentRouterService } from '@kix/core/dist/browser/router';
 import { RouterComponentState } from './RouterComponentState';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { RoutingService, IRoutingServiceListener } from '@kix/core/dist/browser/router';
+import { ComponentRouter } from '@kix/core/dist/model';
 
-export class RouterOutletComponent {
+export class RouterOutletComponent implements IRoutingServiceListener {
 
     private state: RouterComponentState;
 
@@ -15,20 +16,15 @@ export class RouterOutletComponent {
     }
 
     public onMount(): void {
-        ComponentRouterService.getInstance().addServiceListener(this.routerStateChanged.bind(this));
-        this.routerStateChanged();
+        RoutingService.getInstance().registerServiceListener(this);
     }
 
-    private routerStateChanged(): void {
-        const router = ComponentRouterService.getInstance().getCurrentRouter(this.state.routerId);
+    public routedTo(router: ComponentRouter): void {
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
             this.state.template = ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
             (this as any).update();
-            // setTimeout(() => {
-            //     (this as any).setStateDirty('template');
-            // }, 50);
         }
     }
 

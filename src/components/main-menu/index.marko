@@ -2,23 +2,8 @@
     <ul.main-menu class=(state.showText ? "" : "image-only")>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class=(menuEntry.active ? "active" : "")>
-                <a href="/${menuEntry.contextId}" on-click('menuClicked', menuEntry)>
-                    <span class="hover-label">${menuEntry.text}</span>
-                    <span class="label-wrapper">
-                        <span class="kix-icon-${menuEntry.icon}"/>
-                        <span class="inline-label">
-                            <br/>${menuEntry.text}
-                        </span>
-                    </span>
-                </a>
-            </li>
-        </for>
-    </ul>
-    <ul.user-menu class=(state.showText ? "" : "image-only")>
-        <for(menuEntry in state.secondaryMenuEntries)>
-            <li class=(menuEntry.active ? "active" : "")>
-                <a href="/${menuEntry.contextId}" on-click('menuClicked', menuEntry)>
-                    <span class="menu-item-wrapper cf">
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
+                    <@content>
                         <span class="hover-label">${menuEntry.text}</span>
                         <span class="label-wrapper">
                             <span class="kix-icon-${menuEntry.icon}"/>
@@ -26,8 +11,27 @@
                                 <br/>${menuEntry.text}
                             </span>
                         </span>
-                    </span>
-                </a>
+                    </@content>
+                </link-target>
+            </li>
+        </for>
+    </ul>
+    <ul.user-menu class=(state.showText ? "" : "image-only")>
+        <for(menuEntry in state.secondaryMenuEntries)>
+            <li class=(menuEntry.active ? "active" : "")>
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
+                    <@content>
+                        <span class="menu-item-wrapper cf">
+                            <span class="hover-label">${menuEntry.text}</span>
+                            <span class="label-wrapper">
+                                <span class="kix-icon-${menuEntry.icon}"/>
+                                <span class="inline-label">
+                                    <br/>${menuEntry.text}
+                                </span>
+                            </span>
+                        </span>
+                    </@content>
+                </link-target>
             </li>
         </for>
     </ul>

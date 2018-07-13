@@ -1,9 +1,5 @@
 import { ContextService } from '@kix/core/dist/browser/context';
-import {
-    LinkedTicketTableContentLayer,
-    TicketTableLabelLayer,
-    TicketTableClickListener
-} from '@kix/core/dist/browser/ticket';
+import { LinkedTicketTableContentLayer, TicketTableLabelLayer } from '@kix/core/dist/browser/ticket';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { ComponentState } from './ComponentState';
@@ -109,14 +105,13 @@ class Component {
                 contentLayer, labelLayer, [], [new TableSortLayer()]
             );
 
-            const clickListener = new TicketTableClickListener();
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
             return StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration
+                KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration, true
             );
         }
     }

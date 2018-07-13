@@ -84,7 +84,7 @@ class Component implements IKIXObjectSearchListener {
                 null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
-                objectType, tableConfiguration, null, null, true
+                objectType, tableConfiguration, null, null, true, true
             );
 
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);

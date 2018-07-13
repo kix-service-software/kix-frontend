@@ -4,6 +4,7 @@ import { StandardTableInput } from './StandardTableInput';
 import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class StandardTableComponent<T extends KIXObject<T>> {
 
@@ -370,6 +371,26 @@ class StandardTableComponent<T extends KIXObject<T>> {
             classes.push('row-not-selectable');
         }
         return classes;
+    }
+
+    public getRoutingConfiguration(column: TableColumn, value: TableValue): RoutingConfiguration {
+        let config;
+        if (column.routingConfiguration) {
+            config = column.routingConfiguration;
+        } else {
+            config = this.state.standardTable.tableConfiguration.routingConfiguration;
+        }
+        return config;
+    }
+
+    public getRoutingObjectId(column: TableColumn, row: TableRow): string | number {
+        let id;
+        if (column.routingConfiguration) {
+            id = row.object[column.routingConfiguration.objectIdProperty];
+        } else if (this.state.standardTable.tableConfiguration.routingConfiguration) {
+            id = row.object[this.state.standardTable.tableConfiguration.routingConfiguration.objectIdProperty];
+        }
+        return id;
     }
 }
 

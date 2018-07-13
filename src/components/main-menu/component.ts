@@ -3,6 +3,7 @@ import { MenuComponentState } from './MenuComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
 import { IContextServiceListener } from '@kix/core/dist/browser';
+import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class KIXMenuComponent implements IContextServiceListener {
 
@@ -33,12 +34,9 @@ class KIXMenuComponent implements IContextServiceListener {
         }
     }
 
-    public menuClicked(menuEntry: MenuEntry, event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-        ContextService.getInstance().setContext(
-            menuEntry.contextId, menuEntry.kixObjectType, menuEntry.contextMode, null, true
+    public getRoutingConfiguration(menuEntry: MenuEntry): RoutingConfiguration {
+        return new RoutingConfiguration(
+            null, menuEntry.contextId, menuEntry.kixObjectType, menuEntry.contextMode, null
         );
     }
 

@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
-    TableLayerConfiguration, TableListenerConfiguration, WidgetService
+    TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService, AbstractTableLayer
 } from "@kix/core/dist/browser";
 import { Contact, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
 import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
@@ -35,26 +35,21 @@ class Component {
 
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-            const clickListener = {
-                rowClicked: (contact: Contact, columnId: string): void => {
-                    ContextService.getInstance().setContext(
-                        null, KIXObjectType.CONTACT, ContextMode.DETAILS, contact.ContactID
-                    );
-                }
-            };
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            const layerConfiguration = new TableLayerConfiguration(
-                new ContactTableContentLayer(), new ContactTableLabelLayer(),
+            const contentLayer: AbstractTableLayer = new ContactTableContentLayer(null, null);
+            const labelLayer = new ContactTableLabelLayer();
+
+            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
                 [new TableFilterLayer()], [new TableSortLayer()]
             );
 
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
+            this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
+                KIXObjectType.CONTACT, this.state.widgetConfiguration.settings,
+                layerConfiguration, listenerConfiguration, true
             );
         }
     }
