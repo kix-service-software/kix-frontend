@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, StandardTable, TableFilterLayer, TableSortLayer, IdService,
     TableColumn, ITableConfigurationListener, ITableClickListener, ActionFactory,
-    TableLayerConfiguration, TableListenerConfiguration
+    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
 import {
@@ -54,19 +54,16 @@ class Component {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
 
-            const clickListener: ITableClickListener<Customer> = {
-                rowClicked: this.tableRowClicked.bind(this)
-            };
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
             const layerCOnfiguration = new TableLayerConfiguration(
                 new CustomerTableContentLayer(this.state.contact.UserCustomerIDs), new CustomerTableLabelLayer(),
                 [new TableFilterLayer()], [new TableSortLayer()]
             );
 
-            this.state.customerTable = new StandardTable(
-                'assigned-customers-' + IdService.generateDateBasedId(),
-                this.state.widgetConfiguration.settings, layerCOnfiguration, listenerConfiguration
+            this.state.customerTable = StandardTableFactoryService.getInstance().createStandardTable(
+                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
+                layerCOnfiguration, listenerConfiguration, true
             );
         }
     }

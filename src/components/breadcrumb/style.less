@@ -1,6 +1,6 @@
 .breadcrumb {
     background: @secondary-6;
-    color: @secondary-1;
+    color: @secondary-0;
     margin-bottom: @margin-small;
     padding: 2px .5em 0;
     border-radius: @border-radius;
@@ -9,6 +9,15 @@
     box-sizing: border-box;
     overflow: hidden;
     line-height: @breadcrumb-height;
+    >a,
+    >a:active,
+    >a:visited {
+        color: @secondary-0;
+        text-decoration: none;
+        &:hover {
+            color: @secondary-1;
+        }
+    }
     span.context {
         margin-right: @margin-small;
         cursor: pointer;

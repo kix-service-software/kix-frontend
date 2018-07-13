@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
-    TableLayerConfiguration, TableListenerConfiguration, WidgetService
+    TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService, AbstractTableLayer
 } from "@kix/core/dist/browser";
 import { Customer, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
 import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
@@ -35,27 +35,20 @@ class Component {
 
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
-
-            const layerConfiguration = new TableLayerConfiguration(
-                new CustomerTableContentLayer(), new CustomerTableLabelLayer(),
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
-
-            const clickListener = {
-                rowClicked: (customer: Customer, columnId: string): void => {
-                    ContextService.getInstance().setContext(
-                        null, KIXObjectType.CUSTOMER, ContextMode.DETAILS, customer.CustomerID
-                    );
-                }
-            };
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
+            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
+            const contentLayer: AbstractTableLayer = new CustomerTableContentLayer(null, null);
+            const labelLayer = new CustomerTableLabelLayer();
+
+            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
+                [new TableFilterLayer()], [new TableSortLayer()]
+            );
+            this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
+                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
+                layerConfiguration, listenerConfiguration, true
             );
         }
     }

@@ -31,7 +31,7 @@ class Component implements IKIXObjectSearchListener {
             null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
-            this.state.objectType, tableConfiguration
+            this.state.objectType, tableConfiguration, null, null, true
         );
 
         const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);

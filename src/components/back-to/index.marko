@@ -16,8 +16,12 @@
         <ul.back-to-list>
             <for(entry in state.history)>
                 <li.history-entry onClick('navigate', entry)>
-                    <icon icon=entry.icon/>
-                    <span.history-text>${entry.displayText}</span>
+                    <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectIds>
+                        <@content>
+                            <icon icon=entry.icon/>
+                            <span.history-text>${entry.displayText}</span>
+                        </@content>
+                    </link-target>
                 </li>
             </for>
         </ul>

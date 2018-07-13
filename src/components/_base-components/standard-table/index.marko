@@ -52,16 +52,21 @@
                             <for(value in row.values)>
                                 $ var column = component.getColumn(value);
                                 $ var key = state.tableId.toString() + column.id + '[]';
-                                <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
-                                    data-id=(state.tableId + column.id) title=value.displayValue key=key>
-                                    <if(column.showIcon && value.objectValue)>
-                                        <icon icon=component.getValueIcon(column, value) showUnknown=true/>
-                                    </if>
-                                    <if(column.showIcon && column.showText)>&nbsp;</if>
-                                    <if(column.showText)>
-                                        <span>${value.displayValue}</span>
-                                    </if>
-                                </div>
+                                <link-target routingConfiguration=component.getRoutingConfiguration(column, value)
+                                    objectId=component.getRoutingObjectId(column, row)>
+                                    <@content>
+                                        <div.table-cell.row-column.row-link style={width: column.size} on-click('rowClicked', row, column.id)
+                                            data-id=(state.tableId + column.id) title=value.displayValue key=key>
+                                            <if(column.showIcon && value.objectValue)>
+                                                <icon icon=component.getValueIcon(column, value) showUnknown=true/>
+                                            </if>
+                                            <if(column.showIcon && column.showText)>&nbsp;</if>
+                                            <if(column.showText)>
+                                                <span>${value.displayValue}</span>
+                                            </if>
+                                        </div>
+                                    </@content>
+                                </link-target>
                             </for>
                             <if(state.standardTable.tableConfiguration.toggle)>
                                 <div.table-cell.fixed.toggle-row-column data-id=(state.tableId + "toggle-row-column") on-click('toggleRow', row)>

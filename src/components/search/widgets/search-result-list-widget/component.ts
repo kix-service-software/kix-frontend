@@ -69,7 +69,7 @@ class Component implements IKIXObjectSearchListener {
                 null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
-                cache.objectType, tableConfiguration, null, null, true
+                cache.objectType, tableConfiguration, null, null, true, true
             );
 
             const objectProperties = cache.criterias.map((c) => c.property);
