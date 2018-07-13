@@ -21,6 +21,7 @@ class Component {
             const contextUrl = await RoutingService.getInstance().buildUrl(
                 this.state.routingConfiguration, this.state.objectId
             );
+            this.state.routingConfiguration.path = contextUrl;
             this.state.url = '/' + contextUrl;
         }
         this.state.loading = false;
