@@ -6,9 +6,12 @@
         <filter on-filter('filter')/>
     </@headerContent>
     <@content>
-        <if(state.resultTable && !state.noSearch)>
-            <standard-table standardTable=state.resultTable/>
+        <if(state.loading)>
+            <loading-spinner/>
         </if>
+        <else-if(state.resultTable && !state.noSearch)>
+            <standard-table standardTable=state.resultTable/>
+        </else-if>
         <else>Keine Suche verfügbar.</else>
     </@content>
 </widget>

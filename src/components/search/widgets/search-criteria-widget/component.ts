@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     IKIXObjectSearchListener, KIXObjectSearchService,
-    LabelService, ContextService, SearchOperatorUtil, DialogService
+    LabelService, ContextService, SearchOperatorUtil
 } from '@kix/core/dist/browser';
 import { KIXObject, ContextMode } from '@kix/core/dist/model';
 class Component implements IKIXObjectSearchListener {
@@ -61,7 +61,10 @@ class Component implements IKIXObjectSearchListener {
                 ]);
             }
         }
+    }
 
+    public searchResultCategoryChanged(): void {
+        return;
     }
 }
 

@@ -1,14 +1,10 @@
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectSearchService, FormInputRegistry, FormService, LabelService,
-    SearchOperatorUtil,
-    IKIXObjectSearchListener,
-    IdService
+    KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService
 } from '@kix/core/dist/browser';
 import {
-    TreeNode, SearchFormInstance, FilterCriteria, KIXObject, FilterType, FilterDataType
+    TreeNode, SearchFormInstance
 } from '@kix/core/dist/model';
-import { ComponentsService } from '@kix/core/dist/browser/components';
 import { FormSearchValue } from './FormSearchValue';
 
 class Component implements IKIXObjectSearchListener {
@@ -138,6 +134,10 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchFinished(): void {
+        return;
+    }
+
+    public searchResultCategoryChanged(): void {
         return;
     }
 

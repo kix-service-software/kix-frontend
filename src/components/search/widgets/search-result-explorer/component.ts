@@ -47,6 +47,10 @@ export class Component implements IKIXObjectSearchListener {
         this.activeNodeChanged(this.state.nodes[0]);
     }
 
+    public searchResultCategoryChanged(): void {
+        return;
+    }
+
     private prepareTree(): void {
         this.rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
         this.state.nodes = this.rootCategory ?
