@@ -17,7 +17,7 @@ class BreadcrumbComponent implements IContextServiceListener {
     }
 
     public async contextChanged(
-        newContextId: string, newContext: Context, type: ContextType, fromHistory: boolean
+        newContextId: string, newContext: Context, type: ContextType, history: boolean
     ): Promise<void> {
         if (type === ContextType.MAIN) {
             this.state.loading = true;

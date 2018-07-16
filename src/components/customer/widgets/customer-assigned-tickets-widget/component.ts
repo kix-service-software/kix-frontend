@@ -58,7 +58,7 @@ class Component {
             : undefined;
 
         const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId], ContextMode.DETAILS
+            KIXObjectType.CUSTOMER, [context.objectId]
         );
 
         if (customers && customers.length) {

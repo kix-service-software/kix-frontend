@@ -43,7 +43,7 @@ export class TicketDetailsComponent {
             ['Links', 'Articles', 'Attachments', 'Flags', 'History']
         );
         const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-            KIXObjectType.TICKET, [this.state.ticketId], ContextMode.DETAILS, loadingOptions
+            KIXObjectType.TICKET, [this.state.ticketId], loadingOptions
         );
         this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
         this.state.loadingTicket = false;

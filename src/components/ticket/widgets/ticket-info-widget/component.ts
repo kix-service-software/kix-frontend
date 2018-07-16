@@ -43,7 +43,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         if (context.objectId) {
             const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.objectId], ContextMode.DETAILS
+                KIXObjectType.TICKET, [context.objectId]
             );
 
             this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
