@@ -20,7 +20,8 @@
                     <span.kix-icon-search/>
                     Neue Suche
                 </button>
-                <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten">
+                <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten"
+                    disabled=(state.criterias.length === 0)>
                     <span.kix-icon-edit/>
                     Suche bearbeiten
                 </button>
