@@ -61,7 +61,7 @@ class TreeNodeComponent {
 
     private toggleNode(event: any): void {
         event.stopPropagation();
-        event.preventDefault();
+        event.preventDefault(event);
         this.state.node.expanded = !this.state.node.expanded;
         (this as any).emit('nodeToggled', this.state.node);
         (this as any).setStateDirty();

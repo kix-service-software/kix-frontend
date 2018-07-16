@@ -27,9 +27,9 @@ class Component {
         this.state.loading = false;
     }
 
-    public linkClicked(): void {
+    public linkClicked(event: any): void {
         if (event.preventDefault) {
-            event.preventDefault();
+            event.preventDefault(event);
         }
         RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
     }

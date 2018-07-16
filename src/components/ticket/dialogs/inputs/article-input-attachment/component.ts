@@ -44,7 +44,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private preventDefaultDragBehavior(event: any): void {
         event.stopPropagation();
-        event.preventDefault();
+        event.preventDefault(event);
         event.dataTransfer.dropEffect = 'copy';
     }
 
@@ -102,7 +102,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private dragEnter(event: any): void {
         event.stopPropagation();
-        event.preventDefault();
+        event.preventDefault(event);
         this.dragCounter++;
         this.state.dragging = true;
         this.state.minimized = false;
@@ -110,7 +110,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private dragLeave(event: any): void {
         event.stopPropagation();
-        event.preventDefault();
+        event.preventDefault(event);
         this.dragCounter--;
         if (this.dragCounter === 0) {
             this.state.dragging = false;
@@ -119,7 +119,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public drop(event: any): void {
         event.stopPropagation();
-        event.preventDefault();
+        event.preventDefault(event);
 
         if (event.dataTransfer.files) {
             const files: File[] = Array.from(event.dataTransfer.files);
