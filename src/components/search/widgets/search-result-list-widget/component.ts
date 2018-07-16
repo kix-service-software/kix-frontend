@@ -57,28 +57,27 @@ class Component implements IKIXObjectSearchListener {
     ): Promise<void> {
         if (objectType) {
             this.state.loading = true;
-            // TODO: Kind-Kategorie vom selben Objekt-Typ wie Suchergebnis
-            // (z.B. verlinkte Tickets von gesuchten Tickets) sind so nicht möglich
-            const isSearchMainObject: boolean = cache.objectType === objectType;
-            let objectNumber: number = 0;
-            let objects: KIXObject[] = [];
+            const isSearchMainObject = cache.objectType === objectType;
+
+            let resultCount: number = 0;
+            let resultObjects: KIXObject[] = [];
+
             if (isSearchMainObject) {
-                objectNumber = cache.result.length;
-                objects = cache.result;
+                resultCount = cache.result.length;
+                resultObjects = cache.result;
             } else {
-                const activeCategory: SearchResultCategory
-                    = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+                const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
                 if (activeCategory) {
-                    objectNumber = activeCategory ? activeCategory.objectIds.length : 0;
-                    objects = await ContextService.getInstance().loadObjects(
-                        objectType, activeCategory.objectIds, ContextMode.SEARCH
+                    resultCount = activeCategory ? activeCategory.objectIds.length : 0;
+                    resultObjects = await ContextService.getInstance().loadObjects(
+                        objectType, activeCategory.objectIds, ContextMode.DASHBOARD
                     );
                 }
             }
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName(true)} (${objectNumber})`;
+            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName(true)} (${resultCount})`;
 
             const tableConfiguration = new TableConfiguration(
                 null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
@@ -87,25 +86,26 @@ class Component implements IKIXObjectSearchListener {
                 objectType, tableConfiguration, null, null, true, true
             );
 
-            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
             this.state.resultTable.loadRows();
             if (isSearchMainObject) {
                 const objectProperties = cache.criterias.map((c) => c.property);
                 const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
-                // FIXME: setColumns scheint irgendwie die Rows leer zu setzen
-                // this.state.resultTable.setColumns(columns);
+                this.state.resultTable.setColumns(columns);
             }
 
             this.state.resultTable.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
             WidgetService.getInstance().setActionData(this.state.instanceId, this.state.resultTable);
+
             this.state.loading = false;
+            (this as any).setStateDirty('loading');
         }
     }
 
     private setActionsDirty(): void {
-        WidgetService.getInstance().rerenderActions(this.state.instanceId);
+        WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
     private setActions(): void {
