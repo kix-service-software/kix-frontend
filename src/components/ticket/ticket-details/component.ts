@@ -1,6 +1,6 @@
 import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
 import {
-    Ticket, WidgetType, ContextType, KIXObjectType, ContextMode, KIXObjectLoadingOptions
+    Ticket, WidgetType, ContextType, KIXObjectType, KIXObjectLoadingOptions
 } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
@@ -19,21 +19,25 @@ export class TicketDetailsComponent {
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as TicketDetailsContext);
         this.state.ticketId = Number(context.objectId);
-        // TODO: mit den anderen Detail-Komponent (customer, contact) abgleichen
-        ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext, type: ContextType) => {
-                if (type === ContextType.MAIN && contextId === TicketDetailsContext.CONTEXT_ID) {
-                    this.state.ticketDetailsConfiguration = ticketDeatilsContext.configuration;
-                    this.state.loadingConfig = false;
-                    this.state.lanes = ticketDeatilsContext.getLanes();
-                    this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
-                    (this as any).update();
-                    this.setActions();
+        if (!this.state.ticketId) {
+            this.state.error = 'No ticket id given.';
+        } else {
+            // TODO: mit den anderen Detail-Komponent (customer, contact) abgleichen
+            ContextService.getInstance().registerListener({
+                contextChanged: (contextId: string, ticketDeatilsContext: TicketDetailsContext, type: ContextType) => {
+                    if (type === ContextType.MAIN && contextId === TicketDetailsContext.CONTEXT_ID) {
+                        this.state.ticketDetailsConfiguration = ticketDeatilsContext.configuration;
+                        this.state.loadingConfig = false;
+                        this.state.lanes = ticketDeatilsContext.getLanes();
+                        this.state.tabWidgets = ticketDeatilsContext.getLaneTabs();
+                        (this as any).update();
+                        this.setActions();
+                    }
                 }
-            }
-        });
-        await this.loadTicket();
-        this.setActions();
+            });
+            await this.loadTicket();
+            this.setActions();
+        }
     }
 
     private async loadTicket(): Promise<void> {
@@ -44,8 +48,16 @@ export class TicketDetailsComponent {
         );
         const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
             KIXObjectType.TICKET, [this.state.ticketId], loadingOptions
-        );
+        ).catch((error) => {
+            this.state.error = error;
+        });
+
         this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
+
+        if (!this.state.ticket) {
+            this.state.error = `No found ticket for ID: ${this.state.ticketId}`;
+        }
+
         this.state.loadingTicket = false;
         this.setTicketHookInfo();
     }

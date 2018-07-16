@@ -12,7 +12,8 @@ export class ComponentState {
         public generalActions: AbstractAction[] = [],
         public contactActions: AbstractAction[] = [],
         public loadingContact: boolean = true,
-        public configuration: ContactDetailsContextConfiguration = null
+        public configuration: ContactDetailsContextConfiguration = null,
+        public error: any = null
     ) { }
 
 }

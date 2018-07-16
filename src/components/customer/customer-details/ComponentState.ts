@@ -13,7 +13,8 @@ export class ComponentState {
         public loadingCustomer: boolean = true,
         public loadingConfig: boolean = true,
         public configuration: CustomerDetailsContextConfiguration = null,
-        public customer: Customer = null
+        public customer: Customer = null,
+        public error: any = null
     ) { }
 
 }

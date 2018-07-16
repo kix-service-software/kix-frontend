@@ -15,23 +15,31 @@ class Component {
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
         this.state.customerId = context.objectId.toString();
-        // TODO: mit den anderen Detail-Komponent (ticket) abgleichen
-        this.state.configuration = context.configuration;
-        this.state.loadingConfig = false;
-        this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
-        await this.loadCustomer();
-        this.setActions();
+
+        if (!this.state.customerId) {
+            this.state.error = 'No customer id given.';
+        } else {
+            this.state.configuration = context.configuration;
+            this.state.loadingConfig = false;
+            this.state.lanes = context.getLanes();
+            this.state.tabWidgets = context.getLaneTabs();
+            await this.loadCustomer();
+            this.setActions();
+        }
     }
 
     private async loadCustomer(): Promise<void> {
         const customer = await ContextService.getInstance().loadObjects<Customer>(
             KIXObjectType.CUSTOMER, [this.state.customerId]
-        );
+        ).catch((error) => {
+            this.state.error = error;
+        });
 
         if (customer && customer.length) {
             this.state.customer = customer[0];
             this.state.loadingCustomer = false;
+        } else {
+            this.state.error = `No customer found for id ${this.state.customerId}`;
         }
     }
 

@@ -15,7 +15,9 @@ export class TicketDetailsComponentState {
         public loadingTicket: boolean = true,
         public loadingConfig: boolean = true,
         public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null,
-        public ticket: Ticket = null
+        public ticket: Ticket = null,
+        public hasError: boolean = false,
+        public error: any = null
     ) { }
 
 }
