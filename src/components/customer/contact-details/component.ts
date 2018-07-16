@@ -15,21 +15,29 @@ class Component {
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as ContactDetailsContext);
         this.state.contactId = context.objectId.toString();
-        this.state.configuration = context.configuration;
-        this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
-        await this.loadContact();
-        this.setActions();
+        if (!this.state.contactId) {
+            this.state.error = 'No contact id given.';
+        } else {
+            this.state.configuration = context.configuration;
+            this.state.lanes = context.getLanes();
+            this.state.tabWidgets = context.getLaneTabs();
+            await this.loadContact();
+            this.setActions();
+        }
     }
 
     private async loadContact(): Promise<void> {
         const contacts = await ContextService.getInstance().loadObjects<Contact>(
             KIXObjectType.CONTACT, [this.state.contactId]
-        );
+        ).catch((error) => {
+            this.state.error = error;
+        });
 
         if (contacts && contacts.length) {
             this.state.contact = contacts[0];
             this.state.loadingContact = false;
+        } else {
+            this.state.error = `No contact found for id ${this.state.contactId}`;
         }
     }
 

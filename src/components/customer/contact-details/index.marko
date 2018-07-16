@@ -1,6 +1,9 @@
-<if(!state.contact)>
-    <loading-spinner/>
+<if(state.error)>
+    <span.error>${state.error}</span>
 </if>
+<else-if(!state.contact)>
+    <loading-spinner/>
+</else-if>
 <else>
     <div.contact-details>
         <widget instanceId=state.instanceId minimizable=true title=component.getTitle()

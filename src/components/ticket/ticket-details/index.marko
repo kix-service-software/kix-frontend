@@ -1,6 +1,9 @@
-<if(state.loadingTicket || state.loadingConfig)>
-    <loading-spinner/>
+<if(state.error)>
+    <span.error>${state.error}</span>
 </if>
+<else-if(state.loadingTicket || state.loadingConfig)>
+    <loading-spinner/>
+</else-if>
 <else>
     <div.ticket-details>
         <widget instanceId=state.instanceId minimizable=true title=component.getTitle()
