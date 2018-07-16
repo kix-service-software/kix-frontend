@@ -25,7 +25,7 @@ class ContactInfoComponent {
 
         if (this.state.contactId) {
             const contacts = await ContextService.getInstance().loadObjects<Contact>(
-                KIXObjectType.CONTACT, [this.state.contactId], ContextMode.DETAILS
+                KIXObjectType.CONTACT, [this.state.contactId]
             ).catch((error) => {
                 this.state.error = error;
             });

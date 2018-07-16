@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { ContextService, IContextServiceListener } from "@kix/core/dist/browser";
 import { ContextType, Context, ContextConfiguration } from "@kix/core/dist/model";
 import { ContextHistoryEntry } from "@kix/core/dist/browser/context/ContextHistoryEntry";
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
+import { RoutingConfiguration, RoutingService } from "@kix/core/dist/browser/router";
 
 class Component implements IContextServiceListener {
 
@@ -37,7 +37,6 @@ class Component implements IContextServiceListener {
 
     public navigate(entry: ContextHistoryEntry): void {
         this.toggleList();
-        ContextService.getInstance().setContext(null, null, null, null, null, entry);
     }
 
     public contextChanged(contextId: string, context: Context<ContextConfiguration>, type: ContextType): void {
@@ -45,7 +44,7 @@ class Component implements IContextServiceListener {
     }
 
     public getRoutingConfiguration(entry: ContextHistoryEntry): RoutingConfiguration {
-        return new RoutingConfiguration(null, entry.contextId, null, entry.descriptor.contextMode, null);
+        return new RoutingConfiguration(null, entry.contextId, null, entry.descriptor.contextMode, null, true);
     }
 
 }

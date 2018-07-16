@@ -54,7 +54,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     private async loadCustomers(customerIds: string[]): Promise<void> {
         this.state.loading = true;
         this.customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, customerIds, ContextMode.DASHBOARD
+            KIXObjectType.CUSTOMER, customerIds
         );
         this.state.nodes = this.customers.map(
             (c) => new TreeNode(c.CustomerID, c.DisplayValue, 'kix-icon-man-house')

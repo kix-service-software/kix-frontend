@@ -29,7 +29,7 @@ class Component {
         }
 
         const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId], ContextMode.DETAILS
+            KIXObjectType.CONTACT, [context.objectId]
         );
 
         if (contacts && contacts.length) {

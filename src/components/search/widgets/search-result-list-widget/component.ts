@@ -70,7 +70,7 @@ class Component implements IKIXObjectSearchListener {
                 if (activeCategory) {
                     resultCount = activeCategory ? activeCategory.objectIds.length : 0;
                     resultObjects = await ContextService.getInstance().loadObjects(
-                        objectType, activeCategory.objectIds, ContextMode.DASHBOARD
+                        objectType, activeCategory.objectIds
                     );
                 }
             }

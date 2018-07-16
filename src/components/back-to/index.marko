@@ -15,11 +15,13 @@
     <if(!state.minimized)>
         <ul.back-to-list>
             <for(entry in state.history)>
-                <li.history-entry onClick('navigate', entry)>
-                    <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectIds>
+                <li onClick('navigate', entry)>
+                    <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectId>
                         <@content>
-                            <icon icon=entry.icon/>
-                            <span.history-text>${entry.displayText}</span>
+                            <span.history-entry>
+                                <icon icon=entry.icon/>
+                                <span.history-text>${entry.displayText}</span>
+                            </span>
                         </@content>
                     </link-target>
                 </li>
