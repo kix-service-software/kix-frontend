@@ -156,6 +156,10 @@ class Component implements IKIXObjectSearchListener {
         return;
     }
 
+    public searchResultCategoryChanged(): void {
+        return;
+    }
+
 }
 
 module.exports = Component;
