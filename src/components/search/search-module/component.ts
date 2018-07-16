@@ -15,20 +15,20 @@ class Component implements IContextServiceListener {
     }
 
     public onInput(input: any): void {
-        this.state.fromHistory = input.fromHistory;
+        this.state.history = input.history;
     }
 
     public onMount(): void {
-        if (!this.state.fromHistory) {
+        if (!this.state.history) {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
         ContextService.getInstance().registerListener(this);
     }
 
     public contextChanged(
-        contextId: string, context: Context<ContextConfiguration>, type: ContextType, fromHistory: boolean
+        contextId: string, context: Context<ContextConfiguration>, type: ContextType, history: boolean
     ): void {
-        if (contextId === SearchContext.CONTEXT_ID && !fromHistory) {
+        if (contextId === SearchContext.CONTEXT_ID && !history) {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
     }
