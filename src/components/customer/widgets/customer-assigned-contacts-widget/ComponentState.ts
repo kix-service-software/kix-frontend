@@ -8,7 +8,8 @@ export class ComponentState extends WidgetComponentState<TableConfiguration> {
         public contactTable: StandardTable<Contact> = null,
         public filterValue: string = '',
         public title: string = '',
-        public actions: AbstractAction[] = []
+        public actions: AbstractAction[] = [],
+        public loading: boolean = false
     ) {
         super();
     }

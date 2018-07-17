@@ -40,16 +40,12 @@ class Component {
             };
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            const contentLayer: AbstractTableLayer = new CustomerTableContentLayer(null, null);
-            const labelLayer = new CustomerTableLabelLayer();
-
-            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
             this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
-                layerConfiguration, listenerConfiguration, true
+                null, listenerConfiguration, true
             );
+            this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
+            this.state.standardTable.loadRows();
         }
     }
 

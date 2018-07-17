@@ -1,10 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, StandardTable, TableFilterLayer, TableSortLayer, IdService,
-    TableColumn, ITableConfigurationListener, ITableClickListener, ActionFactory,
-    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService
+    ContextService, TableFilterLayer, TableSortLayer,
+    TableColumn, ITableConfigurationListener, ActionFactory,
+    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService
 } from "@kix/core/dist/browser/customer";
@@ -48,23 +48,26 @@ class Component {
         }
     }
 
-    private setTable(): void {
+    private async setTable(): Promise<void> {
         if (this.state.contact && this.state.widgetConfiguration) {
+            this.state.loading = true;
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
-
-            const layerCOnfiguration = new TableLayerConfiguration(
-                new CustomerTableContentLayer(this.state.contact.UserCustomerIDs), new CustomerTableLabelLayer(),
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
 
             this.state.customerTable = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
-                layerCOnfiguration, listenerConfiguration, true
+                null, listenerConfiguration, true
             );
+
+            const customer = await ContextService.getInstance().loadObjects(
+                KIXObjectType.CUSTOMER, this.state.contact.UserCustomerIDs
+            );
+
+            this.state.customerTable.layerConfiguration.contentLayer.setPreloadedObjects(customer);
+            this.state.customerTable.loadRows();
+            this.state.loading = false;
         }
     }
 
