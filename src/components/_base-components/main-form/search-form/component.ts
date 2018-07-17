@@ -62,6 +62,15 @@ class Component implements IKIXObjectSearchListener {
         this.state.loading = false;
     }
 
+    public keyDown(event: any): void {
+        if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
+            if (event.preventDefault) {
+                event.preventDefault(event);
+            }
+            this.search();
+        }
+    }
+
     public fulltextValueChanged(event: any): void {
         this.state.fulltextValue = event.target.value;
     }
