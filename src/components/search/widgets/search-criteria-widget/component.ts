@@ -16,6 +16,7 @@ class Component implements IKIXObjectSearchListener {
 
     public onMount(): void {
         KIXObjectSearchService.getInstance().registerListener(this);
+        this.searchFinished();
     }
 
     public openNewSearchDialog(): void {
@@ -60,6 +61,8 @@ class Component implements IKIXObjectSearchListener {
                     displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
                 ]);
             }
+        } else {
+            this.state.title = "";
         }
     }
 
