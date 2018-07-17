@@ -41,6 +41,14 @@ class Component extends FormInputComponent<string, ComponentState> {
         }, 100);
     }
 
+    public getAutoCompleteOption(): string {
+        if (this.state.inputType === InputFieldTypes.PASSWORD) {
+            return "new-password";
+        }
+
+        return "nope";
+    }
+
 }
 
 module.exports = Component;
