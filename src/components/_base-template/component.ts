@@ -7,7 +7,7 @@ import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { SearchService } from '@kix/core/dist/browser/search';
-import { IdService } from '@kix/core/dist/browser';
+import { IdService, FAQService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
 
@@ -58,6 +58,7 @@ class Component {
         TicketService.getInstance();
         CustomerService.getInstance();
         ContactService.getInstance();
+        FAQService.getInstance();
         SearchService.getInstance();
 
         const homeContext = new ContextDescriptor(
