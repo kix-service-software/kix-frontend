@@ -40,17 +40,12 @@ class Component {
             };
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            const contentLayer: AbstractTableLayer = new ContactTableContentLayer(null, null);
-            const labelLayer = new ContactTableLabelLayer();
-
-            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
-
             this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.CONTACT, this.state.widgetConfiguration.settings,
-                layerConfiguration, listenerConfiguration, true
+                null, listenerConfiguration, true
             );
+            this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
+            this.state.standardTable.loadRows();
         }
     }
 

@@ -1,13 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, StandardTable, TableFilterLayer,
-    TableSortLayer, IdService, TableColumn, ITableConfigurationListener, ITableClickListener,
-    ActionFactory, TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService
+    ContextService, TableColumn, ITableConfigurationListener,
+    ActionFactory, TableListenerConfiguration, StandardTableFactoryService
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
-import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactService
-} from "@kix/core/dist/browser/contact";
+import { ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -48,30 +45,30 @@ class Component {
         }
     }
 
-    private setTable(): void {
+    private async setTable(): Promise<void> {
         if (this.state.customer && this.state.widgetConfiguration) {
+            this.state.loading = true;
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
-
-            const layerConfiguration = new TableLayerConfiguration(
-                new ContactTableContentLayer(this.state.customer.CustomerID),
-                new ContactTableLabelLayer(),
-                [new TableFilterLayer()],
-                [new TableSortLayer()]
-            );
 
             this.state.contactTable = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.CONTACT, this.state.widgetConfiguration.settings,
-                layerConfiguration, listenerConfiguration, true
+                null, listenerConfiguration, true
             );
 
             this.state.contactTable.setTableListener(() => {
                 const count = this.state.contactTable.getTableRows(true).length;
                 this.state.title = "Zugeordnete Ansprechpartner " + (count > 0 ? ' (' + count + ')' : '');
             });
+
+            const contactIds = this.state.customer.Contacts.map((c) => typeof c === 'string' ? c : c.ContactID);
+            const contacts = await ContextService.getInstance().loadObjects(KIXObjectType.CONTACT, contactIds);
+            this.state.contactTable.layerConfiguration.contentLayer.setPreloadedObjects(contacts);
+            this.state.contactTable.loadRows();
+
+            this.state.loading = false;
         }
     }
 
