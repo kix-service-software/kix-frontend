@@ -1,4 +1,6 @@
-<div.form>
+<form.form autocomplete="off">
+    <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
+    <input id="password" style="display:none" type="password" name="fakepasswordremembered"/>
     <if(state.isSearchContext)>
         <search-form formId=state.formId objectType=state.objectType/>
     </if>
@@ -16,4 +18,4 @@
             </else>
         </for>
     </else-if>
-</div>
+</form>
