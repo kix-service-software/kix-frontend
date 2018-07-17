@@ -29,10 +29,7 @@ class Component implements IKIXObjectSearchListener {
         this.setActions();
 
         KIXObjectSearchService.getInstance().registerListener(this);
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        if (cache) {
-            this.searchFinished();
-        }
+        this.searchFinished();
     }
 
     public searchCleared(): void {
@@ -45,7 +42,8 @@ class Component implements IKIXObjectSearchListener {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             this.state.noSearch = false;
-            this.initWidget(cache.objectType, cache);
+            const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+            this.initWidget(category ? category.objectType : cache.objectType, cache);
         } else {
             this.state.noSearch = true;
         }
