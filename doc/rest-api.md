@@ -67,14 +67,6 @@ In `@kix/core/services/api` das Interface für den Service anlegen. Es wird nur 
 ```javascript
 export interface IFAQService extends IService {
 
-    getCategory(token: string, categoryId: string): Promise<FAQCategory>;
-
-    getCategories(token: string, categoryIds: string[]): Promise<FAQCategory[]>;
-
-    getArticle(token: string, articleId: number): Promise<FAQArticle>;
-
-    getArticles(token: string, articleId: number): Promise<FAQArticle[]>;
-
     createArticle(token: string, parameter: Array<[string, any]>): Promise<number>;
 
 }
@@ -86,11 +78,17 @@ In `@kix/core/services/impl/api` den Service anlegen.
 
 * Der Service muss von `KIXObjectService` ableiten
 * Der Service muss das entsprechende Interface implementieren
+* der Service muss an der Registry registriert werden
 * die `isServiceFor()` Methode muss ermitteln ob der Service mit dem gegebenen Typ umgehen kann
 * die `RESOURCE_URI` gibt den Hauptpfad der Rest-Resource an 
 
 ```javascript
 export class FAQService extends KIXObjectService<FAQArticle> implements IFAQService {
+
+    public constructor(@inject("IHttpService") httpService: IHttpService) {
+        super(httpService);
+        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+    }
 
     public isServiceFor(type: KIXObjectType): boolean {
         return type === KIXObjectType.FAQ_ARTICLE
@@ -102,16 +100,51 @@ export class FAQService extends KIXObjectService<FAQArticle> implements IFAQServ
 
     protected RESOURCE_URI: string = 'faq';
 
-    public async getCategory(token: string, categoryId: string): Promise<FAQCategory> { }
+    public async loadObjects(
+        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+    ): Promise<KIXObject[]> {
+        let objects = [];
 
-    public async getCategories(token: string, categoryIds: string[]): Promise<FAQCategory[]> { }
+        switch (objectType) {
+            case KIXObjectType.FAQ_ARTICLE:
+                objects = await this.getArticles(token, objectIds);
+                break;
+            case KIXObjectType.FAQ_CATEGORY:
+                objects = await this.getCategories(token, objectIds);
+                break;
+            default:
+        }
 
-    public async getArticle(token: string, articleId: number): Promise<FAQArticle> { }
+        return objects;
+    }
+    
+    public async getArticles(token: string, categoryIds: Array<number | string>): Promise<FAQCategory[]> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'articles', categoryIds.join(','));
+        const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri);
+        let result = [];
+        if (categoryIds.length === 1) {
+            result = [(response as FAQArticleResponse).FAQArticle];
+        } else {
+            result = (response as FAQArticlesResponse).FAQArticle;
+        }
+        return result;
+    }
 
-    public async getArticles(token: string, articleId: number): Promise<FAQArticle[]> { }
-
-    public async createArticle(token: string, parameter: Array<[string, any]>): Promise<number> { }
-
-
+    public async getCategories(token: string, categoryIds: Array<number | string>): Promise<FAQCategory[]> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'categories', categoryIds.join(','));
+        const response = await this.getObjectByUri<FAQCategoriesResponse | FAQCategoryResponse>(token, uri);
+        let result = [];
+        if (categoryIds.length === 1) {
+            result = [(response as FAQCategoryResponse).FAQCategory];
+        } else {
+            result = (response as FAQCategoriesResponse).FAQCategory;
+        }
+        return result;
+    }
 }
 ```
+### Service registrieren
+
+Der Service muss mit seinem Interface als Identifier registriert in `CoreServiceRegistry` werden.
+
