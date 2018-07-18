@@ -83,7 +83,7 @@ In `@kix/core/services/impl/api` den Service anlegen.
 * die `RESOURCE_URI` gibt den Hauptpfad der Rest-Resource an 
 
 ```javascript
-export class FAQService extends KIXObjectService<FAQArticle> implements IFAQService {
+export class FAQService extends KIXObjectService implements IFAQService {
 
     public constructor(@inject("IHttpService") httpService: IHttpService) {
         super(httpService);

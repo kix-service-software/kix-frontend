@@ -2,6 +2,7 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import { FormInputComponent, TreeNode } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
 
+// TODO: als allgemeines input-valid implementieren
 class Component extends FormInputComponent<number, CompontentState> {
 
     public onCreate(): void {
@@ -16,7 +17,7 @@ class Component extends FormInputComponent<number, CompontentState> {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData) {
-            this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+            this.state.nodes = objectData.languages.map((l) => new TreeNode(l[0], l[1]));
         }
         this.setCurrentNode();
     }
@@ -29,7 +30,7 @@ class Component extends FormInputComponent<number, CompontentState> {
 
     public valueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 }
 

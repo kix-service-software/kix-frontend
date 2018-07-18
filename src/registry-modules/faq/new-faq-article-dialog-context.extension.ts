@@ -33,13 +33,18 @@ export class Extension implements IModuleFactoryExtension {
                 "Sprache", FAQArticleProperty.LANGUAGE, true, "Sprache", null, new FormFieldValue('de')
             ));
             fields.push(new FormField("Keywords", FAQArticleProperty.KEYWORDS, false, "Keywords"));
-            fields.push(new FormField("Sichtbarkeit", FAQArticleProperty.VISIBILITY, true, "Sichtbarkeit"));
+            fields.push(new FormField(
+                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, true, "Sichtbarkeit",
+                null, new FormFieldValue("internal")
+            ));
             fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, false, "Anlagen"));
             fields.push(new FormField("FAQ verknüpfen", FAQArticleProperty.LINK, false, "FAQ verknüpfen"));
             fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, false, "Symptom"));
             fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, false, "Ursache"));
             fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, false, "Lösung"));
-            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, true, "Gültigkeit"));
+            fields.push(new FormField(
+                "Gültigkeit", FAQArticleProperty.VALID_ID, true, "Gültigkeit", null, new FormFieldValue(1)
+            ));
 
             const group = new FormGroup('FAQ Daten', fields);
 
