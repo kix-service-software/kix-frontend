@@ -7,7 +7,8 @@ import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { SearchService } from '@kix/core/dist/browser/search';
-import { IdService, FAQService } from '@kix/core/dist/browser';
+import { FAQService } from '@kix/core/dist/browser/faq';
+import { IdService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
 
