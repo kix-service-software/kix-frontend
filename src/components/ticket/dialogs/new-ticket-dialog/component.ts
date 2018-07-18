@@ -1,6 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService
+    OverlayService, FormService, ContextService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -40,7 +40,8 @@ class NewTicketDialogComponent {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird angelegt");
-                await TicketService.getInstance().createTicketByForm(this.state.formId)
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.TICKET);
+                await service.createObjectByForm(KIXObjectType.TICKET, this.state.formId)
                     .then((ticketId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();

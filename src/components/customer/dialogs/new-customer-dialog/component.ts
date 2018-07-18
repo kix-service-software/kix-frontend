@@ -1,10 +1,11 @@
 import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentState";
-import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
 import {
-    ContextType, OverlayType, StringContent, ComponentContent,
+    DialogService, ContextService, FormService, OverlayService, KIXObjectServiceRegistry
+} from "@kix/core/dist/browser";
+import {
+    OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
-import { NewCustomerDialogContext, CustomerService } from "@kix/core/dist/browser/customer";
 
 class NewCustomerDialogComponent {
 
@@ -34,7 +35,8 @@ class NewCustomerDialogComponent {
             this.showValidationError(result);
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
-            await CustomerService.getInstance().createCustomerByForm(this.state.formId)
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CUSTOMER);
+            await service.createObjectByForm(KIXObjectType.CUSTOMER, this.state.formId)
                 .then((customerId) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();

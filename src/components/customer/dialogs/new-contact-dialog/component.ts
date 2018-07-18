@@ -1,10 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { DialogService, ContextService, FormService, OverlayService } from "@kix/core/dist/browser";
+import {
+    DialogService, ContextService, FormService, OverlayService, KIXObjectServiceRegistry
+} from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
 } from "@kix/core/dist/model";
-import { NewContactDialogContext, ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -34,7 +35,8 @@ class Component {
             this.showValidationError(result);
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Ansprechpartner wird angelegt");
-            await ContactService.getInstance().createContactByForm(this.state.formId)
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CONTACT);
+            await service.createObjectByForm(KIXObjectType.CONTACT, this.state.formId)
                 .then((contactId) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();

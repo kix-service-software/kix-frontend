@@ -6,8 +6,6 @@ import { ContextCommunicator } from './ContextCommunicator';
 import { IconCommunicator } from './IconCommunicator';
 import { MainMenuCommunicator } from './MainMenuCommunicator';
 import { TicketCommunicator } from './TicketCommunicator';
-import { ContactCommunicator } from './ContactCommunicator';
-import { CustomerCommunicator } from './CustomerCommunicator';
 import { KIXObjectCommunicator } from './KIXObjectCommunicator';
 import { NotesCommunicatior } from './NotesCommunicator';
 
@@ -18,9 +16,7 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
             ApplicationCommunicator,
             AuthenticationCommunicator,
             ConfigurationCommunicatior,
-            ContactCommunicator,
             ContextCommunicator,
-            CustomerCommunicator,
             IconCommunicator,
             KIXObjectCommunicator,
             MainMenuCommunicator,
