@@ -6,7 +6,8 @@
             "ticket-marko": "../../dist/registry-modules/ticket/ticket-marko.extension",
             "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension",
             "home-marko": "../../dist/registry-modules/home/home-marko.extension",
-            "search-marko": "../../dist/registry-modules/search/search-marko.extension"
+            "search-marko": "../../dist/registry-modules/search/search-marko.extension",
+            "faq-marko": "../../dist/registry-modules/faq/faq-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -32,6 +33,7 @@
             "search-ticket-dialog-context": "../../dist/registry-modules/ticket/search-ticket-dialog-context.extension",
             "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
             "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension",
+            "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
             "search-contact-dialog-context": "../../dist/registry-modules/customer/search-contact-dialog-context.extension",
             "search-customer-dialog-context": "../../dist/registry-modules/customer/search-customer-dialog-context.extension"
         }
