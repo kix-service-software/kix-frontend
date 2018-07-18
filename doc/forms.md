@@ -31,3 +31,16 @@ public async createFormDefinitions(): Promise<void> {
 ```html
 <main-form formId='new-faq-article-form'/>
 ```
+
+## Eingabefelder registrieren/zuweisen
+Im `FAQService`:
+
+```javascript
+FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponentDefinition(
+    FAQArticleProperty.FIELD_1, KIXObjectType.FAQ_ARTICLE, 'rich-text-input', 'Symptom'
+));
+
+FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponentDefinition(
+    FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'Gültigkeit'
+));
+```
