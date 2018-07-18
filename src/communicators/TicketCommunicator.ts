@@ -11,9 +11,7 @@ import {
     Ticket, TicketEvent,
     TicketProperty,
     LoadArticleZipAttachmentRequest,
-    TicketFactory,
-    CreateTicketRequest,
-    CreateTicketResponse
+    TicketFactory
 } from '@kix/core/dist/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -26,26 +24,11 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     protected registerEvents(): void {
-        this.registerEventHandler(TicketEvent.CREATE_TICKET, this.createTicket.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_TICKETS, this.loadTickets.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
         this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this));
         this.registerEventHandler(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
-    }
-
-    private async createTicket(data: CreateTicketRequest): Promise<CommunicatorResponse<CreateTicketResponse>> {
-        let response;
-        await this.ticketService.createTicket(data.token, data.parameter)
-            .then((ticketId) => {
-                const createTicketResponse = new CreateTicketResponse(ticketId);
-                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_FINISHED, createTicketResponse);
-            })
-            .catch((error) => {
-                response = new CommunicatorResponse(TicketEvent.CREATE_TICKET_ERROR, error.message);
-            });
-
-        return response;
     }
 
     private async loadTickets(data: SearchTicketsRequest): Promise<CommunicatorResponse<SearchTicketsResponse>> {

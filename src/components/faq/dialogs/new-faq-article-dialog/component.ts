@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
-import { FormService, DialogService, OverlayService } from '@kix/core/dist/browser';
+import { FormService, DialogService, OverlayService, KIXObjectServiceRegistry } from '@kix/core/dist/browser';
 import {
-    ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent
+    ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType
 } from '@kix/core/dist/model';
 
 class Component {
@@ -20,7 +20,7 @@ class Component {
         DialogService.getInstance().closeMainDialog();
     }
 
-    public submit(): void {
+    public async submit(): Promise<void> {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
@@ -28,6 +28,16 @@ class Component {
             this.showValidationError(result);
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "FAQ Artikel wird angelegt");
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.FAQ_ARTICLE);
+            await service.createObjectByForm(KIXObjectType.FAQ_ARTICLE, this.state.formId)
+                .then((contactId) => {
+                    DialogService.getInstance().setMainDialogLoading();
+                    this.showSuccessHint();
+                    DialogService.getInstance().closeMainDialog();
+                }).catch((error) => {
+                    DialogService.getInstance().setMainDialogLoading();
+                    this.showError(error);
+                });
         }
     }
 

@@ -1,4 +1,6 @@
-import { KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse } from "@kix/core/dist/model";
+import {
+    KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest, CreateObjectResponse
+} from "@kix/core/dist/model";
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
 import { KIXObjectServiceRegistry } from "@kix/core/dist/services";
@@ -11,6 +13,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
     protected registerEvents(): void {
         this.registerEventHandler(KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
+        this.registerEventHandler(KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
     }
 
     private async loadObjects(data: LoadObjectsRequest): Promise<CommunicatorResponse<LoadObjectsResponse<any>>> {
@@ -37,4 +40,21 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         return response;
     }
 
+    private async createObject(data: CreateObjectRequest): Promise<CommunicatorResponse<CreateObjectResponse>> {
+        let response;
+
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        if (service) {
+            const id = await service.createObject(data.token, data.objectType, data.parameter);
+            response = new CommunicatorResponse(
+                KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)
+            );
+        } else {
+            const errorMessage = 'No API service registered for object type ' + data.objectType;
+            this.loggingService.error(errorMessage);
+            response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, errorMessage);
+        }
+
+        return response;
+    }
 }
