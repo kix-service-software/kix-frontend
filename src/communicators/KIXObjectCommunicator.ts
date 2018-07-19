@@ -45,10 +45,16 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            const id = await service.createObject(data.token, data.objectType, data.parameter);
-            response = new CommunicatorResponse(
-                KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)
-            );
+            await service.createObject(data.token, data.objectType, data.parameter)
+                .then((id) => {
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)
+                    );
+                }).catch((error) => {
+                    const message = error.errorMessage ? error.errorMessage.body : error;
+                    response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, message);
+                });
+
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             this.loggingService.error(errorMessage);

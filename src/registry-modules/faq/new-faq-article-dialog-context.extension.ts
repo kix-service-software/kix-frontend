@@ -28,7 +28,7 @@ export class Extension implements IModuleFactoryExtension {
         if (!existingForm) {
             const fields: FormField[] = [];
             fields.push(new FormField("Titel", FAQArticleProperty.TITLE, true, "Titel"));
-            fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, false, "Kategorie"));
+            fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, true, "Kategorie"));
             fields.push(new FormField(
                 "Sprache", FAQArticleProperty.LANGUAGE, true, "Sprache", null, new FormFieldValue('de')
             ));
