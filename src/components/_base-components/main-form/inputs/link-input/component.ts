@@ -2,6 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
+import { FormService, LabelService } from "@kix/core/dist/browser";
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -17,23 +18,34 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         super.onMount();
     }
 
-    public openTicketLinkDialog(): void {
+    public openDialog(): void {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const objectType = formInstance.getObjectType();
+
+        let dialogTitle = 'Objekt verknüpfen';
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
+        if (labelProvider) {
+            dialogTitle = `${labelProvider.getObjectName(false)} verknüpfen`;
+        }
+
+        const resultListenerId = 'result-listener-link-' + objectType;
         DialogService.getInstance().openOverlayDialog(
-            'link-ticket-dialog',
+            'link-object-dialog',
             {
                 linkDescriptions: this.state.linkDescriptions,
-                resultListenerId: 'ticket-input-link'
+                objectType,
+                resultListenerId
             },
-            'Ticket verknüpfen',
+            dialogTitle,
             'kix-icon-link'
         );
         DialogService.getInstance()
             .registerDialogResultListener<CreateLinkDescription[]>(
-                'link-ticket-dialog', 'ticket-input-link', this.ticketLinksChanged.bind(this)
+                resultListenerId, 'object-link', this.linksChanged.bind(this)
             );
     }
 
-    private ticketLinksChanged(linkDescriptions: CreateLinkDescription[]): void {
+    private linksChanged(linkDescriptions: CreateLinkDescription[]): void {
         this.state.linkDescriptions = linkDescriptions;
         this.updateField();
     }
@@ -63,6 +75,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
                 : ld.linkTypeDescription.linkType.TargetName;
             return new Label(ld.linkableObject, null, null, null, `(${linkLabel})`);
         });
+        (this as any).setStateDirty('labels');
     }
 
 }

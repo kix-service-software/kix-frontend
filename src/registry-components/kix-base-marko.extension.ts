@@ -7,7 +7,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ...this.getDialogFormDependencies(),
             ...this.getGeneralWidgetDependencies(),
             'quick-search',
-            '_base-components/base-html-components/list-with-title'
+            '_base-components/base-html-components/list-with-title',
+            '_base-components/dialog/link-object-dialog'
         ];
     }
 
@@ -34,7 +35,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ...this.getDialogFormTags(),
             ...this.getGeneralWidgetTags(),
             ['icon', '_base-components/icon'],
-            ['list-with-title', '_base-components/base-html-components/list-with-title']
+            ['list-with-title', '_base-components/base-html-components/list-with-title'],
+            ['link-object-dialog', '_base-components/dialog/link-object-dialog']
         ];
     }
 

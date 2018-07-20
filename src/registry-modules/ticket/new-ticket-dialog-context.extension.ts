@@ -72,8 +72,7 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
 
-        // TODO: Sollte entfernt werden, da es für Ticketsuche eigenständiges Formular gibt
-        const formIdLinkWithTicket = 'link-with-ticket-form';
+        const formIdLinkWithTicket = 'link-ticket-search-form';
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
             const fields: FormField[] = [];
