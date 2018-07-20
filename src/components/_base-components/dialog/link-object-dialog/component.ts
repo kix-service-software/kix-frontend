@@ -115,8 +115,8 @@ class LinkTicketDialogComponent {
         if (this.state.currentLinkableObjectNode) {
             this.state.canSearch = false;
             this.state.standardTable = null;
-            const objects = await KIXObjectSearchService.getInstance().executeFormSearch(
-                KIXObjectType.TICKET, this.state.currentLinkableObjectNode.id
+            const objects = await KIXObjectSearchService.getInstance().executeSearch(
+                this.state.currentLinkableObjectNode.id
             );
 
             this.prepareResultTable(objects);
