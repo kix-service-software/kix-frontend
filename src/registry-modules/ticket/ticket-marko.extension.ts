@@ -5,7 +5,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
     public getDependencies(): string[] {
         const dialog = [
             'ticket/dialogs/new-ticket-dialog',
-            'ticket/dialogs/link-ticket-dialog',
             'ticket/dialogs/search-ticket-dialog',
             'ticket/dialogs/inputs/article-input-body',
             'ticket/dialogs/inputs/article-input-attachment',
@@ -19,7 +18,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/inputs/ticket-input-queue',
             'ticket/dialogs/inputs/ticket-input-contact',
             'ticket/dialogs/inputs/ticket-input-customer',
-            'ticket/dialogs/inputs/ticket-input-link',
             'ticket/dialogs/inputs/ticket-input-archive-search',
             'ticket/dialogs/inputs/ticket-input-fulltext',
             'ticket/dialogs/inputs/ticket-input-ticketnumber'
@@ -77,7 +75,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue'],
             ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
             ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
-            ['ticket-input-link', 'ticket/dialogs/inputs/ticket-input-link'],
             ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
             ['ticket-input-fulltext', 'ticket/dialogs/inputs/ticket-input-fulltext'],
             ['ticket-input-ticketnumber', 'ticket/dialogs/inputs/ticket-input-ticketnumber']
@@ -89,7 +86,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
-            ['link-ticket-dialog', 'ticket/dialogs/link-ticket-dialog'],
             ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
             ['ticket-contact-info', 'ticket/ticket-contact-info'],
             ['ticket-customer-info', 'ticket/ticket-customer-info'],

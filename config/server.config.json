@@ -5,8 +5,8 @@
         "node_modules/@kix",
         "extensions"
     ],
-    "FRONTEND_URL": "https://localhost",
-    "BACKEND_API_URL": "http://docker.vm.devel.cape-it.de:54918/api.pl/webservice/core:v1",
+    "FRONTEND_URL": "https://localhost:3001",
+    "BACKEND_API_URL": "http://dev-backend.kix18.docker.vm.devel.cape-it.de/api.pl/webservice/core:v1",
     "LOG_LEVEL": 3,
     "LOG_FILEDIR": "logs",
     "LOG_TRACE": true,

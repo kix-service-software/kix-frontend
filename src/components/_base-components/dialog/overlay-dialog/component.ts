@@ -18,7 +18,7 @@ export class OverlayDialogComponent {
         WidgetService.getInstance().setWidgetType('overlay-dialog', WidgetType.OVERLAY_DIALOG);
     }
 
-    private openOverlayDialog(dialogTagId?: string, input?: any, title?: string, icon?: string | ObjectIcon): void {
+    public openOverlayDialog(dialogTagId?: string, input?: any, title?: string, icon?: string | ObjectIcon): void {
         this.state.dialogTemplate = ComponentsService.getInstance().getComponentTemplate(dialogTagId);
         this.state.dialogInput = input;
         this.state.title = title;
@@ -26,7 +26,7 @@ export class OverlayDialogComponent {
         this.state.show = true;
     }
 
-    private closeDialog(): void {
+    public closeDialog(): void {
         this.state.show = false;
     }
 
