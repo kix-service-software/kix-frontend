@@ -204,14 +204,16 @@ class LinkTicketDialogComponent {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
             if (this.state.currentLinkableObjectNode) {
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
+                const linkObjectType = service.getLinkObjectName();
                 objectData.linkTypes.forEach((lt) => {
                     if (
                         (
-                            lt.Source === KIXObjectType.TICKET &&
+                            lt.Source === linkObjectType &&
                             lt.Target === this.state.currentLinkableObjectNode.label
                         ) ||
                         (
-                            lt.Target === KIXObjectType.TICKET &&
+                            lt.Target === linkObjectType &&
                             lt.Source === this.state.currentLinkableObjectNode.label
                         )
                     ) {
