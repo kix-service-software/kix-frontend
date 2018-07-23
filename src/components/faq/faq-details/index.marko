@@ -1,4 +1,30 @@
-<h1>FAQ Article Details</h1>
-<if(state.faqArticle)>
-    <span>${state.faqArticle.Title}</span>
+<if(state.error)>
+    <span.error>${state.error}</span>
 </if>
+<else-if(state.loadingTicket || state.loadingConfig)>
+    <loading-spinner/>
+</else-if>
+<else>
+    <div.faq-details>
+        <widget instanceId=state.instanceId minimizable=true title=component.getTitle() actions=component.getActions()
+            contentActions=component.getFAQActions()>
+            <@content>
+                <ul.lane-list no-update>
+                    <li>
+                        <tab-container tabWidgets=state.tabWidgets title="FAQ-Informationen" showSidebar=false/>
+                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN",
+                                instanceId: lane.instanceId, 
+                                faqArticleId: state.faqArticleId, 
+                                type: component.LANE_WIDGET_TYPE
+                                })/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+    </div>
+</else>
