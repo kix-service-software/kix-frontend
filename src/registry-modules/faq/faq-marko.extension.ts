@@ -4,6 +4,7 @@ export class Extension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
+            'faq/faq-details',
             'faq/dialogs/new-faq-article-dialog',
             'faq/dialogs/inputs/faq-category-input',
             'faq/dialogs/inputs/faq-visibility-input'
@@ -12,6 +13,7 @@ export class Extension implements IMarkoDependencyExtension {
 
     public getComponentTags(): Array<[string, string]> {
         return [
+            ['faq-details', 'faq/faq-details'],
             ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
             ['faq-category-input', 'faq/dialogs/inputs/faq-category-input'],
             ['faq-visibility-input', 'faq/dialogs/inputs/faq-visibility-input']
