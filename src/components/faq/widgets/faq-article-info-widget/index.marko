@@ -2,20 +2,10 @@
     contentActions=state.actions>
     <@icon>
         <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
+            <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
         </if>
     </@icon>
     <@content>
-        <if(state.customer)>
-            <div.customer-info-container>
-                <for(groupTuple in state.customer.getCustomerInfoData())>
-                    <div.customer-group>
-                        <for(attributeTuple in groupTuple[1])>
-                            <object-property-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
-                        </for>
-                    </div>
-                </for>
-            </div>
-        </if>
+        <h1>FAQ Article Information</h1>
     </@content>
 </widget>

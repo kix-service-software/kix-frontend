@@ -1,9 +1,14 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
+import { FAQArticle } from "@kix/core/dist/model/kix/faq";
+import { FAQLabelProvider } from "@kix/core/dist/browser/faq";
 
 class Component {
+
     private state: ComponentState;
+
+    public labelProvider: FAQLabelProvider = new FAQLabelProvider();
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -17,20 +22,20 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId]
+        const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
+            KIXObjectType.FAQ_ARTICLE, [context.objectId]
         );
 
-        if (customers && customers.length) {
-            this.state.customer = customers[0];
+        if (faqs && faqs.length) {
+            this.state.faqArticle = faqs[0];
             this.setActions();
         }
     }
 
     private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.customer) {
+        if (this.state.widgetConfiguration && this.state.faqArticle) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.state.customer]
+                this.state.widgetConfiguration.actions, false, [this.state.faqArticle]
             );
         }
     }
