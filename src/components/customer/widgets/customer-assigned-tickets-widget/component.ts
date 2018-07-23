@@ -26,12 +26,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.clickListener = {
-            rowClicked: (object: Ticket, columnId: string) => {
-                TicketService.getInstance().openTicket(object.TicketID, true);
-            }
-        };
-
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration(this.state.instanceId)

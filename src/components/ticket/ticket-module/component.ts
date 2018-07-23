@@ -13,11 +13,6 @@ class TicketsComponent {
         this.state.ticketId = Number(input.objectId);
     }
 
-    public onMount(): void {
-        if (this.state.ticketId) {
-            TicketService.getInstance().openTicket(this.state.ticketId);
-        }
-    }
 }
 
 module.exports = TicketsComponent;

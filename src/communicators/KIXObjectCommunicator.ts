@@ -51,6 +51,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                         KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)
                     );
                 }).catch((error) => {
+                    this.loggingService.error(error);
                     response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, error);
                 });
 
