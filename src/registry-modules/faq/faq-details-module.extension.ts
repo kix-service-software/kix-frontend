@@ -10,22 +10,30 @@ export class Extension implements IModuleFactoryExtension {
 
     public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
-        const ticketDetailsWidget = new ConfiguredWidget("20180710-faq-details", new WidgetConfiguration(
+        const faqDetailsWidget = new ConfiguredWidget("faq-details", new WidgetConfiguration(
             "faq-details-widget", "FAQ Details", [], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        const customerInfoLane =
-            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
-                'customer-info-widget', 'Kundeninformationen', [
-                    'contact-edit-action', 'contact-print-action'
-                ], {},
+        const faqInfoLane =
+            new ConfiguredWidget('faq-article-info-lane', new WidgetConfiguration(
+                'faq-article-info-widget', 'FAQ-Informationen', [], {},
                 false, true, WidgetSize.LARGE, null, false)
             );
 
+        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget];
+
+        const laneTabs = ['faq-article-info-lane'];
+        const laneTabWidgets = [faqInfoLane];
+
+        const actions = ['faq-article-create-action'];
+        const faqActions = [
+            'faq-article-link-action', 'faq-article-delete-action',
+            'faq-article-print-action', 'faq-article-edit-action'
+        ];
 
         return new FAQDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], [], [], []
+            this.getModuleId(), [], [], [], [], [], laneTabs, laneWidgets, laneTabWidgets, actions, faqActions
         );
     }
 

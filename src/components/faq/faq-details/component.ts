@@ -1,12 +1,15 @@
-import { ContextService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType } from "@kix/core/dist/model";
+import { KIXObjectType, AbstractAction, WidgetType } from "@kix/core/dist/model";
 import { FAQArticle } from "@kix/core/dist/model/kix/faq";
+import { ComponentsService } from "@kix/core/dist/browser/components";
 
 class Component {
 
     private state: ComponentState;
+
+    public LANE_WIDGET_TYPE = WidgetType.LANE;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -35,8 +38,40 @@ class Component {
         if (faqArticles && faqArticles.length) {
             this.state.faqArticle = faqArticles[0];
         } else {
-            this.state.error = `No contact found for id ${this.state.faqArticleId}`;
+            this.state.error = `No faq article found for id ${this.state.faqArticleId}`;
         }
+    }
+
+    public getTitle(): string {
+        if (this.state.faqArticle) {
+            return `${this.state.faqArticle.Number} - ${this.state.faqArticle.Title}`;
+        } else {
+            return "FAQ Article";
+        }
+    }
+
+    public getFAQActions(): AbstractAction[] {
+        let actions = [];
+        const config = this.state.configuration;
+        if (config && this.state.faqArticle) {
+            actions = ActionFactory.getInstance().generateActions(config.faqActions, true, [this.state.faqArticle]);
+        }
+        return actions;
+    }
+
+    public getActions(): AbstractAction[] {
+        let actions = [];
+        const config = this.state.configuration;
+        if (config && this.state.faqArticle) {
+            actions = ActionFactory.getInstance().generateActions(config.actions, true, [this.state.faqArticle]);
+        }
+        return actions;
+    }
+
+    public getWidgetTemplate(instanceId: string): any {
+        const context = ContextService.getInstance().getActiveContext();
+        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
 }
