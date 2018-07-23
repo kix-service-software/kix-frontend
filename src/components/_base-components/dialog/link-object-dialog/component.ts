@@ -46,6 +46,8 @@ class LinkTicketDialogComponent {
                 this.executeSearch();
             }
         });
+
+        this.state.loading = false;
     }
 
     private setLinkableObjects(): void {
@@ -84,9 +86,8 @@ class LinkTicketDialogComponent {
                 this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
-            const formInstance = FormService.getInstance().getFormInstance(
-                this.state.currentLinkableObjectNode.id.toString()
-            );
+            this.state.formId = this.state.currentLinkableObjectNode.id.toString();
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
 
             formInstance.registerListener({
@@ -99,16 +100,36 @@ class LinkTicketDialogComponent {
     }
 
     public linkableObjectChanged(nodes: TreeNode[]): void {
+        this.state.loading = true;
+
+        this.state.successHint = null;
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.state.selectedObjects = [];
 
-        if (!this.state.currentLinkableObjectNode) {
-            this.state.standardTable = null;
-            this.state.resultCount = null;
-        } else {
+        if (this.state.currentLinkableObjectNode) {
+            this.state.formId = this.state.currentLinkableObjectNode.id.toString();
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            formInstance.reset();
+
+            formInstance.registerListener({
+                formValueChanged: () => {
+                    this.state.canSearch = formInstance.hasValues();
+                },
+                updateForm: () => { return; }
+            });
             this.prepareResultTable([]);
+        } else {
+            this.state.standardTable = null;
+            this.state.formId = null;
+            this.state.resultCount = null;
         }
         this.setLinkTypes();
+
+        (this as any).setStateDirty('currentLinkableObjectNode');
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private async executeSearch(): Promise<void> {
@@ -136,27 +157,29 @@ class LinkTicketDialogComponent {
             objectType, tableConfiguration, null, null, true
         );
 
-        table.listenerConfiguration.selectionListener.addListener(
-            this.objectSelectionChanged.bind(this)
-        );
+        if (table) {
+            table.listenerConfiguration.selectionListener.addListener(
+                this.objectSelectionChanged.bind(this)
+            );
 
-        this.highlightLayer = new TableHighlightLayer();
-        table.addAdditionalLayerOnTop(this.highlightLayer);
-        this.preventSelectionLayer = new TablePreventSelectionLayer();
-        table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-        this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
-        table.addAdditionalLayerOnTop(this.objectLinkLayer);
+            this.highlightLayer = new TableHighlightLayer();
+            table.addAdditionalLayerOnTop(this.highlightLayer);
+            this.preventSelectionLayer = new TablePreventSelectionLayer();
+            table.addAdditionalLayerOnTop(this.preventSelectionLayer);
+            this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
+            table.addAdditionalLayerOnTop(this.objectLinkLayer);
 
-        table.setColumns([
-            new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
-        ]);
+            table.setColumns([
+                new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+            ]);
 
-        this.setLinkedObjectsToTableLayer(table);
+            this.setLinkedObjectsToTableLayer(table);
 
-        table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-        table.loadRows();
+            table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            table.loadRows();
 
-        this.state.standardTable = table;
+            this.state.standardTable = table;
+        }
     }
 
     private setLinkedObjectsToTableLayer(table: StandardTable = this.state.standardTable): void {
@@ -200,6 +223,8 @@ class LinkTicketDialogComponent {
     }
 
     private setLinkTypes(): void {
+        this.state.currentLinkTypeNode = null;
+
         this.linkTypeDescriptions = [];
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {

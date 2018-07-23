@@ -28,8 +28,8 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                     KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
                 );
             }).catch((error) => {
-                const message = error.errorMessage ? error.errorMessage.body : error;
-                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, message);
+                this.loggingService.error(error);
+                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error);
             });
         } else {
             const errorMessage = 'No API service registered for object type ' + data.kixObjectType;
