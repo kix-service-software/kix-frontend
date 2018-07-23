@@ -52,6 +52,26 @@ export class Extension implements IModuleFactoryExtension {
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
+
+        const linkFormId = 'link-faq-search-form';
+        const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
+        if (!existingLinkForm) {
+            const fields: FormField[] = [];
+            fields.push(new FormField("Volltext", FAQArticleProperty.FULLTEXT, false, "Volltext"));
+            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, false, "FAQ#"));
+            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, false, "Titel"));
+            fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, false, "Kategorie"));
+            fields.push(new FormField("Gültig", FAQArticleProperty.VALID_ID, false, "Gültig"));
+
+            const group = new FormGroup('FAQ-Attribute', fields);
+
+            const form = new Form(linkFormId, 'Verknüpfen mit FAQ', [group], KIXObjectType.FAQ_ARTICLE, false);
+            await configurationService.saveModuleConfiguration(form.id, null, form);
+        }
+
+        configurationService.registerForm(
+            [FormContext.LINK], KIXObjectType.FAQ_ARTICLE, linkFormId
+        );
     }
 
 }

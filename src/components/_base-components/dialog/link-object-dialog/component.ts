@@ -109,6 +109,8 @@ class LinkTicketDialogComponent {
             this.prepareResultTable([]);
         }
         this.setLinkTypes();
+
+        (this as any).setStateDirty('currentLinkableObjectNode');
     }
 
     private async executeSearch(): Promise<void> {
@@ -136,27 +138,29 @@ class LinkTicketDialogComponent {
             objectType, tableConfiguration, null, null, true
         );
 
-        table.listenerConfiguration.selectionListener.addListener(
-            this.objectSelectionChanged.bind(this)
-        );
+        if (table) {
+            table.listenerConfiguration.selectionListener.addListener(
+                this.objectSelectionChanged.bind(this)
+            );
 
-        this.highlightLayer = new TableHighlightLayer();
-        table.addAdditionalLayerOnTop(this.highlightLayer);
-        this.preventSelectionLayer = new TablePreventSelectionLayer();
-        table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-        this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
-        table.addAdditionalLayerOnTop(this.objectLinkLayer);
+            this.highlightLayer = new TableHighlightLayer();
+            table.addAdditionalLayerOnTop(this.highlightLayer);
+            this.preventSelectionLayer = new TablePreventSelectionLayer();
+            table.addAdditionalLayerOnTop(this.preventSelectionLayer);
+            this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
+            table.addAdditionalLayerOnTop(this.objectLinkLayer);
 
-        table.setColumns([
-            new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
-        ]);
+            table.setColumns([
+                new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+            ]);
 
-        this.setLinkedObjectsToTableLayer(table);
+            this.setLinkedObjectsToTableLayer(table);
 
-        table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-        table.loadRows();
+            table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            table.loadRows();
 
-        this.state.standardTable = table;
+            this.state.standardTable = table;
+        }
     }
 
     private setLinkedObjectsToTableLayer(table: StandardTable = this.state.standardTable): void {
