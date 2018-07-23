@@ -32,13 +32,13 @@ export class Extension implements IModuleFactoryExtension {
             fields.push(new FormField(
                 "Sprache", FAQArticleProperty.LANGUAGE, true, "Sprache", null, new FormFieldValue('de')
             ));
-            fields.push(new FormField("Keywords", FAQArticleProperty.KEYWORDS, false, "Keywords"));
+            fields.push(new FormField("Schlagworte", FAQArticleProperty.KEYWORDS, false, "Schlagworte"));
             fields.push(new FormField(
                 "Sichtbarkeit", FAQArticleProperty.VISIBILITY, true, "Sichtbarkeit",
                 null, new FormFieldValue("internal")
             ));
             fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, false, "Anlagen"));
-            fields.push(new FormField("FAQ verknüpfen", FAQArticleProperty.LINK, false, "FAQ verknüpfen"));
+            fields.push(new FormField("FAQ verknüpfen mit", FAQArticleProperty.LINK, false, "FAQ verknüpfen mit"));
             fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, false, "Symptom"));
             fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, false, "Ursache"));
             fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, false, "Lösung"));
