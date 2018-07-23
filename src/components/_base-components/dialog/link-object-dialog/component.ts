@@ -199,7 +199,7 @@ class LinkTicketDialogComponent {
     public submitClicked(): void {
         if (this.canSubmit()) {
             const newLinks = this.state.selectedObjects.map(
-                (so) => new CreateLinkDescription(so, this.state.currentLinkTypeDescription)
+                (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
             DialogService.getInstance().publishDialogResult(this.resultListenerId, this.state.linkDescriptions);
@@ -224,6 +224,7 @@ class LinkTicketDialogComponent {
 
     private setLinkTypes(): void {
         this.state.currentLinkTypeNode = null;
+        this.state.linkTypeNodes = [];
 
         this.linkTypeDescriptions = [];
         const objectData = ContextService.getInstance().getObjectData();

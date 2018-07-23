@@ -42,6 +42,7 @@ export class Extension implements IModuleFactoryExtension {
             fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, false, "Symptom"));
             fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, false, "Ursache"));
             fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, false, "Lösung"));
+            fields.push(new FormField("Kommentar", FAQArticleProperty.FIELD_6, false, "Kommentar"));
             fields.push(new FormField(
                 "Gültigkeit", FAQArticleProperty.VALID_ID, true, "Gültigkeit", null, new FormFieldValue(1)
             ));
