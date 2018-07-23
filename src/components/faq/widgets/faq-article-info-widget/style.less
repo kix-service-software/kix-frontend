@@ -1,0 +1,16 @@
+.customer-info-container {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(25%, 1fr));
+    grid-gap: @margin-middle;
+    >.customer-group {
+        >.key-value-pair {
+            grid-template-columns: 30% 1em minmax(3em, auto);
+            >.key {
+                font-weight: bold;
+            }
+            >.value {
+                white-space: nowrap;
+            }
+        }
+    }
+}

@@ -15,6 +15,14 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
+        const customerInfoLane =
+            new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
+                'customer-info-widget', 'Kundeninformationen', [
+                    'contact-edit-action', 'contact-print-action'
+                ], {},
+                false, true, WidgetSize.LARGE, null, false)
+            );
+
 
         return new FAQDetailsContextConfiguration(
             this.getModuleId(), [], [], [], [], [], [], [], []
