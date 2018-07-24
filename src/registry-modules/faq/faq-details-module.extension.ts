@@ -37,6 +37,16 @@ export class Extension implements IModuleFactoryExtension {
                             ["FAQs", KIXObjectType.FAQ_ARTICLE]
                         ]
                     },
+                    true, true, WidgetSize.LARGE, null, false
+                )
+            );
+
+        const faqArticleLane =
+            new ConfiguredWidget('faq-article-content-widget',
+                new WidgetConfiguration(
+                    'faq-article-content-widget', 'FAQ-Artikel',
+                    ['faq-article-edit-action', 'faq-article-print-action', 'faq-article-vote-action'],
+                    {},
                     false, true, WidgetSize.LARGE, null, false
                 )
             );
@@ -45,7 +55,7 @@ export class Extension implements IModuleFactoryExtension {
         const laneTabWidgets = [faqInfoLaneTab];
 
         const lanes = ['faq-article-linked-objects-widget'];
-        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget, faqLinkedObjectsLane];
+        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget, faqArticleLane, faqLinkedObjectsLane];
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
