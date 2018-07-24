@@ -15,7 +15,7 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        const faqInfoLane =
+        const faqInfoLaneTab =
             new ConfiguredWidget('faq-article-info-lane',
                 new WidgetConfiguration(
                     'faq-article-info-widget', 'FAQ-Informationen',
@@ -23,11 +23,20 @@ export class Extension implements IModuleFactoryExtension {
                     {}, false, true, WidgetSize.LARGE, null, false
                 )
             );
-
-        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget];
+        const faqLinkedObjectsLane =
+            new ConfiguredWidget('faq-article-linked-objects-widget',
+                new WidgetConfiguration(
+                    'faq-article-linked-objects-widget', 'Verknüpfte Objekte',
+                    ['faq-article-edit-action', 'faq-article-print-action'],
+                    {}, false, true, WidgetSize.LARGE, null, false
+                )
+            );
 
         const laneTabs = ['faq-article-info-lane'];
-        const laneTabWidgets = [faqInfoLane];
+        const laneTabWidgets = [faqInfoLaneTab];
+
+        const lanes = ['faq-article-linked-objects-widget'];
+        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget, faqLinkedObjectsLane];
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
@@ -36,7 +45,7 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         return new FAQDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], laneTabs, laneWidgets, laneTabWidgets, actions, faqActions
+            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, actions, faqActions
         );
     }
 

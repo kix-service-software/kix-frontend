@@ -16,6 +16,8 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.LANE_WIDGET_TYPE = WidgetType.LANE;
+
         const context = (ContextService.getInstance().getActiveContext() as FAQDetailsContext);
         this.state.faqArticleId = context.objectId.toString();
         if (!this.state.faqArticleId) {
