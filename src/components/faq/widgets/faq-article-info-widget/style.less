@@ -1,0 +1,21 @@
+.faq-article-information-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    div {
+        .key-value-pair {
+            grid-template-columns: 35% 0em minmax(3em, auto);
+            >.key {
+                font-weight: bold;
+            }
+            >.value {
+                white-space: nowrap;
+            }
+        }
+        @media only screen and (max-width: 1440px) {
+            .key-value-pair {
+                grid-template-columns: 40% 0em minmax(3em, auto);
+            }
+        }
+    }
+}

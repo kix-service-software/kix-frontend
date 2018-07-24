@@ -5,7 +5,9 @@
                 <icon icon=label.icon showUnknown=true/>
                 <span.label-text>${label.text}</span>
                 <span>${label.additionalText}</span>
-                <span.kix-icon-close on-click('removeLabel', label)/>
+                <if(state.removeLabels)>
+                    <span.kix-icon-close on-click('removeLabel', label)/>
+                </if>
             </div>
         </span>
     </for>

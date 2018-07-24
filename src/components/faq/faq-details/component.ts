@@ -26,6 +26,7 @@ class Component {
             this.state.tabWidgets = context.getLaneTabs();
             await this.loadFAQArticle();
         }
+        this.state.loading = false;
     }
 
     private async loadFAQArticle(): Promise<void> {

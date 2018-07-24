@@ -15,7 +15,19 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
+        const faqInfoLane =
+            new ConfiguredWidget('faq-article-info-lane',
+                new WidgetConfiguration(
+                    'faq-article-info-widget', 'FAQ-Informationen',
+                    ['faq-article-edit-action', 'faq-article-print-action'],
+                    {}, false, true, WidgetSize.LARGE, null, false
+                )
+            );
+
         const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget];
+
+        const laneTabs = ['faq-article-info-lane'];
+        const laneTabWidgets = [faqInfoLane];
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
@@ -24,7 +36,7 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         return new FAQDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], [], laneWidgets, [], actions, faqActions
+            this.getModuleId(), [], [], [], [], [], laneTabs, laneWidgets, laneTabWidgets, actions, faqActions
         );
     }
 
