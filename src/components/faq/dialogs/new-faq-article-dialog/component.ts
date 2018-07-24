@@ -5,6 +5,9 @@ import {
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
 } from '@kix/core/dist/model';
+import { RoutingConfiguration, RoutingService } from '@kix/core/dist/browser/router';
+import { FAQDetailsContext } from '@kix/core/dist/browser/faq';
+import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
 
 class Component {
 
@@ -36,9 +39,11 @@ class Component {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    ContextService.getInstance().setContext(
-                        null, KIXObjectType.FAQ_ARTICLE, ContextMode.DETAILS, faqArticleId
+                    const routingConfiguration = new RoutingConfiguration(
+                        null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+                        ContextMode.DETAILS, FAQArticleProperty.ID
                     );
+                    RoutingService.getInstance().routeToContext(routingConfiguration, faqArticleId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
