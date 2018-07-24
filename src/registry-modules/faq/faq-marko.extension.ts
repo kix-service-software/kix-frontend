@@ -8,7 +8,8 @@ export class Extension implements IMarkoDependencyExtension {
             'faq/dialogs/new-faq-article-dialog',
             'faq/dialogs/inputs/faq-category-input',
             'faq/dialogs/inputs/faq-visibility-input',
-            'faq/widgets/faq-article-info-widget'
+            'faq/widgets/faq-article-info-widget',
+            'faq/widgets/faq-article-linked-objects-widget'
         ];
     }
 
@@ -18,7 +19,8 @@ export class Extension implements IMarkoDependencyExtension {
             ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
             ['faq-category-input', 'faq/dialogs/inputs/faq-category-input'],
             ['faq-visibility-input', 'faq/dialogs/inputs/faq-visibility-input'],
-            ['faq-article-info-widget', 'faq/widgets/faq-article-info-widget']
+            ['faq-article-info-widget', 'faq/widgets/faq-article-info-widget'],
+            ['faq-article-linked-objects-widget', 'faq/widgets/faq-article-linked-objects-widget']
         ];
     }
 
