@@ -6,6 +6,38 @@
         </if>
     </@icon>
     <@content>
-        <h1>FAQ Article Information</h1>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else-if(!state.faqArticle)>
+            <span.error>No FAQ Article found available.</span>
+        </else-if>
+        <else>
+            <div.faq-article-information-container>
+                <div>
+                    <object-property-label object=state.faqArticle property=component.properties.CATEGORY_ID
+                        labelProvider=component.labelProvider/>
+                    <object-property-label object=state.faqArticle property=component.properties.VISIBILITY
+                        labelProvider=component.labelProvider/>
+                    <object-property-label object=state.faqArticle property=component.properties.VALID_ID
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.faqArticle property=component.properties.CREATE_TIME
+                        labelProvider=component.labelProvider/>
+                    <object-property-label object=state.faqArticle property=component.properties.CREATED_BY
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.faqArticle property=component.properties.CHANGE_TIME
+                        labelProvider=component.labelProvider/>
+                    <object-property-label object=state.faqArticle property=component.properties.CHANGED_BY
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <label-list labels=state.labels removeLabels=false/>
+                </div>
+            </div>
+        </else>
     </@content>
 </widget>

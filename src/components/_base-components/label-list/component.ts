@@ -11,9 +11,15 @@ class LabelListComponent {
     }
 
     public onInput(input: LabelComponentState): void {
+        this.state.removeLabels = typeof input.removeLabels !== 'undefined' ? input.removeLabels : true;
         if (input.labels) {
             this.state.labels = input.labels.sort(
-                (a, b) => SortUtil.compareString(a.object.KIXObjectType, b.object.KIXObjectType)
+                (a, b) => {
+                    if (a.object && b.object) {
+                        return SortUtil.compareString(a.object.KIXObjectType, b.object.KIXObjectType);
+                    }
+                    return 0;
+                }
             );
         }
     }

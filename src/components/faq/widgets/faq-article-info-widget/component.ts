@@ -1,14 +1,16 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
+import { FAQArticle, FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
 import { FAQLabelProvider } from "@kix/core/dist/browser/faq";
+import { Label } from "@kix/core/dist/browser/components";
 
 class Component {
 
     private state: ComponentState;
 
     public labelProvider: FAQLabelProvider = new FAQLabelProvider();
+    public properties;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -19,6 +21,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.labelProvider = new FAQLabelProvider();
+        this.properties = FAQArticleProperty;
+
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -29,7 +34,10 @@ class Component {
         if (faqs && faqs.length) {
             this.state.faqArticle = faqs[0];
             this.setActions();
+            this.createLabels();
         }
+
+        this.state.loading = false;
     }
 
     private setActions(): void {
@@ -38,6 +46,11 @@ class Component {
                 this.state.widgetConfiguration.actions, false, [this.state.faqArticle]
             );
         }
+    }
+
+    private createLabels(): void {
+        const keywords = ['FAQ', 'ARTICLE', 'KEYWORD', 'HACK', 'WORKAROUND', 'Sonstiges'];
+        this.state.labels = keywords.map((k) => new Label(null, k, 'kix-icon-unknown', k, null, k));
     }
 
 }

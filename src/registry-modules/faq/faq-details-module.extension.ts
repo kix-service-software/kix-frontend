@@ -16,9 +16,12 @@ export class Extension implements IModuleFactoryExtension {
         ));
 
         const faqInfoLane =
-            new ConfiguredWidget('faq-article-info-lane', new WidgetConfiguration(
-                'faq-article-info-widget', 'FAQ-Informationen', [], {},
-                false, true, WidgetSize.LARGE, null, false)
+            new ConfiguredWidget('faq-article-info-lane',
+                new WidgetConfiguration(
+                    'faq-article-info-widget', 'FAQ-Informationen',
+                    ['faq-article-edit-action', 'faq-article-print-action'],
+                    {}, false, true, WidgetSize.LARGE, null, false
+                )
             );
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget];
