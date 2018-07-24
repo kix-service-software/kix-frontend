@@ -1,5 +1,8 @@
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize } from "@kix/core/dist/model";
+import {
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
+    WidgetSize, KIXObjectType
+} from "@kix/core/dist/model";
 import { FAQDetailsContextConfiguration, FAQDetailsContext } from "@kix/core/dist/browser/faq";
 
 export class Extension implements IModuleFactoryExtension {
@@ -28,7 +31,13 @@ export class Extension implements IModuleFactoryExtension {
                 new WidgetConfiguration(
                     'faq-article-linked-objects-widget', 'Verknüpfte Objekte',
                     ['faq-article-edit-action', 'faq-article-print-action'],
-                    {}, false, true, WidgetSize.LARGE, null, false
+                    {
+                        linkedObjectTypes: [
+                            ["Tickets", KIXObjectType.TICKET],
+                            ["FAQs", KIXObjectType.FAQ_ARTICLE]
+                        ]
+                    },
+                    false, true, WidgetSize.LARGE, null, false
                 )
             );
 
