@@ -23,11 +23,25 @@
                     </widget>
                 </div>
                 <div>
-                    <div>
-                        <span>Bewertung: * * * *</span>
+                    <div.faq-rating>
+                        <span tooltip=component.getRatingTooltip()>Bewertung:</span>
+                        <span>
+                            <if(state.faqArticle.Votes.length)>
+                                <for(i from 1 to 10)>
+                                    <if(component.fillStar(i))>+</if>
+                                    <else>-</else>
+                                </for>
+                                (${component.getRating()})
+                            </if>
+                            <else>Keine Bewertung abgegeben</else>
+                        </span>
                     </div>
-                    <div>
+                    <div.faq-attachments>
                         <span>Anlagen</span>
+                        <for(attachment in state.faqArticle.Attachments)>
+                            <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
+                                on-fileClicked('download', attachment)/>
+                        </for>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, WidgetType } from "@kix/core/dist/model";
+import { KIXObjectType, AbstractAction, WidgetType, KIXObjectLoadingOptions } from "@kix/core/dist/model";
 import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -34,8 +34,11 @@ class Component {
     }
 
     private async loadFAQArticle(): Promise<void> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, ['Attachments', 'Votes'], ['Attachments', 'Votes']
+        );
         const faqArticles = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [this.state.faqArticleId]
+            KIXObjectType.FAQ_ARTICLE, [this.state.faqArticleId], loadingOptions
         ).catch((error) => {
             this.state.error = error;
         });
