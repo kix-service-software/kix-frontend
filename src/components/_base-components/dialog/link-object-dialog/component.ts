@@ -37,9 +37,10 @@ class LinkTicketDialogComponent {
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
         this.setLinkTypes();
-        this.prepareResultTable([]);
-
-        this.highlightLayer.setHighlightedObjects([]);
+        if (this.state.currentLinkableObjectNode) {
+            this.prepareResultTable([]);
+            this.highlightLayer.setHighlightedObjects([]);
+        }
 
         document.addEventListener('keydown', (event: any) => {
             if (event.key === 'Enter' && this.state.canSearch) {
@@ -147,38 +148,40 @@ class LinkTicketDialogComponent {
     }
 
     private prepareResultTable(objects: KIXObject[]): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.currentLinkableObjectNode.id);
-        const objectType = formInstance.getObjectType();
+        if (this.state.currentLinkableObjectNode) {
+            const formInstance = FormService.getInstance().getFormInstance(this.state.currentLinkableObjectNode.id);
+            const objectType = formInstance.getObjectType();
 
-        const tableConfiguration = new TableConfiguration(
-            null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-        );
-        const table = StandardTableFactoryService.getInstance().createStandardTable(
-            objectType, tableConfiguration, null, null, true
-        );
-
-        if (table) {
-            table.listenerConfiguration.selectionListener.addListener(
-                this.objectSelectionChanged.bind(this)
+            const tableConfiguration = new TableConfiguration(
+                null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
+            const table = StandardTableFactoryService.getInstance().createStandardTable(
+                objectType, tableConfiguration, null, null, true
             );
 
-            this.highlightLayer = new TableHighlightLayer();
-            table.addAdditionalLayerOnTop(this.highlightLayer);
-            this.preventSelectionLayer = new TablePreventSelectionLayer();
-            table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-            this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
-            table.addAdditionalLayerOnTop(this.objectLinkLayer);
+            if (table) {
+                table.listenerConfiguration.selectionListener.addListener(
+                    this.objectSelectionChanged.bind(this)
+                );
 
-            table.setColumns([
-                new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
-            ]);
+                this.highlightLayer = new TableHighlightLayer();
+                table.addAdditionalLayerOnTop(this.highlightLayer);
+                this.preventSelectionLayer = new TablePreventSelectionLayer();
+                table.addAdditionalLayerOnTop(this.preventSelectionLayer);
+                this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
+                table.addAdditionalLayerOnTop(this.objectLinkLayer);
 
-            this.setLinkedObjectsToTableLayer(table);
+                table.setColumns([
+                    new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                ]);
 
-            table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-            table.loadRows();
+                this.setLinkedObjectsToTableLayer(table);
 
-            this.state.standardTable = table;
+                table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+                table.loadRows();
+
+                this.state.standardTable = table;
+            }
         }
     }
 
