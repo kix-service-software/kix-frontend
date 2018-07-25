@@ -49,8 +49,9 @@ class Component {
     }
 
     private createLabels(): void {
-        const keywords = ['FAQ', 'ARTICLE', 'KEYWORD', 'HACK', 'WORKAROUND', 'Sonstiges'];
-        this.state.labels = keywords.map((k) => new Label(null, k, 'kix-icon-unknown', k, null, k));
+        this.state.labels = this.state.faqArticle.Keywords.map(
+            (k) => new Label(null, k, 'kix-icon-unknown', k, null, k)
+        );
     }
 
 }
