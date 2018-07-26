@@ -1,5 +1,5 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration } from '@kix/core/dist/model';
+import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
 import { FAQContext, FAQContextConfiguration } from '@kix/core/dist/browser/faq';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
@@ -9,7 +9,16 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        return new FAQContextConfiguration(this.getModuleId(), [], [], [], [], [], []);
+        const notesSidebar =
+            new ConfiguredWidget("20180726-faq-notes", new WidgetConfiguration(
+                "notes-widget", "Notizen", [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+            );
+
+        const sidebars = ['20180726-faq-notes'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+
+        return new FAQContextConfiguration(this.getModuleId(), [], sidebars, sidebarWidgets, [], [], []);
     }
 
     public createFormDefinitions(): void {
