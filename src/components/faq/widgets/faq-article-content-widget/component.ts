@@ -2,8 +2,12 @@ import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon } from "
 import { ContextService, ActionFactory, WidgetService, BrowserUtil } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
 import { FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions } from "@kix/core/dist/model/kix/faq";
+import { EventService, IEventListener } from "@kix/core/dist/browser/event";
+import { FAQEvent } from "@kix/core/dist/browser/faq";
 
-class Component {
+class Component implements IEventListener {
+
+    public eventSubscriberId: string = 'FAQContentComponent';
 
     private state: ComponentState;
 
@@ -21,11 +25,23 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        EventService.getInstance().subscribe(FAQEvent.VOTE_UPDATED, this);
+
+        await this.loadFAQArticle();
+    }
+
+    public eventPublished(faqArticle: FAQArticle): void {
+        this.loadFAQArticle(false);
+    }
+
+    private async loadFAQArticle(cache: boolean = true): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, ['Attachments', 'Votes'], ['Attachments', 'Votes']
         );
         const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [context.objectId], loadingOptions
+            KIXObjectType.FAQ_ARTICLE, [context.objectId], loadingOptions, null, cache
         );
 
         if (faqs && faqs.length) {
