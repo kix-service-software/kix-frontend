@@ -1,6 +1,7 @@
 import { Attachment, ObjectIcon } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
+import { BrowserUtil } from '@kix/core/dist/browser';
 
 declare var window: any;
 
@@ -32,7 +33,7 @@ class ArticleAttachmentComponent {
             const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
             this.state.progress = false;
 
-            TicketService.getInstance().startBrowserDownload(attachment);
+            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
         }
     }
 
