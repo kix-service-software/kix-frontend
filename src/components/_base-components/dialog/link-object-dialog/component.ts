@@ -20,6 +20,7 @@ class LinkTicketDialogComponent {
     private highlightLayer: ITableHighlightLayer;
     private preventSelectionLayer: ITablePreventSelectionLayer;
     private resultListenerId: string;
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -49,6 +50,7 @@ class LinkTicketDialogComponent {
         });
 
         this.state.loading = false;
+        this.formListenerId = 'LinkObjectDialog';
     }
 
     private setLinkableObjects(): void {
@@ -92,8 +94,10 @@ class LinkTicketDialogComponent {
             formInstance.reset();
 
             formInstance.registerListener({
+                formListenerId: this.formListenerId,
                 formValueChanged: () => {
-                    this.state.canSearch = formInstance.hasValues();
+                    // FIXME: auskommentiert, weil es die Auswahl des ersten Wertes einer Form zurücksetzt (rerendert)
+                    // this.state.canSearch = formInstance.hasValues();
                 },
                 updateForm: () => { return; }
             });
@@ -113,8 +117,10 @@ class LinkTicketDialogComponent {
             formInstance.reset();
 
             formInstance.registerListener({
+                formListenerId: this.formListenerId,
                 formValueChanged: () => {
-                    this.state.canSearch = formInstance.hasValues();
+                    // FIXME: auskommentiert, weil es die Auswahl des ersten Wertes einer Form zurücksetzt (rerendert)
+                    // this.state.canSearch = formInstance.hasValues();
                 },
                 updateForm: () => { return; }
             });
@@ -134,7 +140,8 @@ class LinkTicketDialogComponent {
     }
 
     private async executeSearch(): Promise<void> {
-        if (this.state.currentLinkableObjectNode) {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
             this.state.canSearch = false;
             this.state.standardTable = null;
             const objects = await KIXObjectSearchService.getInstance().executeSearch(

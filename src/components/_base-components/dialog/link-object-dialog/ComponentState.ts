@@ -14,7 +14,9 @@ export class ComponentState {
         public currentLinkTypeDescription: LinkTypeDescription = null,
         public linkDescriptions: CreateLinkDescription[] = [],
         public successHint: string = null,
-        public canSearch: boolean = false,
+        // FIXME: auf true geändert, weil es die Auswahl des ersten Wertes einer Form zurücksetzt (rerendert)
+        // public canSearch: boolean = false,
+        public canSearch: boolean = true,
         public objectType: KIXObjectType = null,
         public formId: string = null,
         public loading: boolean = true

@@ -28,15 +28,19 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private valueChanged(event: any): void {
+        console.log('valueChanged');
         if (event) {
             this.state.currentValue = event.target ? event.target.value : '';
-            super.provideValue(this.state.currentValue);
+            console.log('valueChanged: ' + this.state.currentValue);
             (this as any).emit('valueChanged', this.state.currentValue);
+            super.provideValue(this.state.currentValue);
         }
     }
 
     public keyDown(event: any): void {
+        console.log('keyDown');
         setTimeout(() => {
+            console.log('keyDown-timeout');
             this.valueChanged(event);
         }, 100);
     }
