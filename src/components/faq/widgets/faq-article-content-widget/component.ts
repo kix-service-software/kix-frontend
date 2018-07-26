@@ -87,7 +87,9 @@ class Component {
         );
 
         if (attachments && attachments.length) {
-            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
+            BrowserUtil.startBrowserDownload(
+                attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
+            );
         }
     }
 }
