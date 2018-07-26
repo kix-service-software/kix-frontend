@@ -1,11 +1,10 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { OverlayDialogComponentState } from './OverlayDialogComponentState';
-import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { ObjectIcon, Context, WidgetType } from '@kix/core/dist/model';
-import { WidgetService } from '@kix/core/dist/browser';
+import { ObjectIcon, WidgetType } from '@kix/core/dist/model';
+import { WidgetService, IOverlayDialogListener } from '@kix/core/dist/browser';
 
-export class OverlayDialogComponent {
+export class OverlayDialogComponent implements IOverlayDialogListener {
 
     private state: OverlayDialogComponentState;
 
@@ -14,11 +13,11 @@ export class OverlayDialogComponent {
     }
 
     public onMount(): void {
-        DialogService.getInstance().registerOverlayDialogListener(this.openOverlayDialog.bind(this));
+        DialogService.getInstance().registerOverlayDialogListener(this);
         WidgetService.getInstance().setWidgetType('overlay-dialog', WidgetType.OVERLAY_DIALOG);
     }
 
-    public openOverlayDialog(dialogTagId?: string, input?: any, title?: string, icon?: string | ObjectIcon): void {
+    public open(dialogTagId?: string, input?: any, title?: string, icon?: string | ObjectIcon): void {
         this.state.dialogTemplate = ComponentsService.getInstance().getComponentTemplate(dialogTagId);
         this.state.dialogInput = input;
         this.state.title = title;
@@ -26,10 +25,9 @@ export class OverlayDialogComponent {
         this.state.show = true;
     }
 
-    public closeDialog(): void {
+    public close(): void {
         this.state.show = false;
     }
-
 }
 
 module.exports = OverlayDialogComponent;
