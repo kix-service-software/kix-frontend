@@ -5,7 +5,10 @@
         </if>
     </@icon>
     <@content>
-        <if(state.linkedObjectGroups.length)>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else-if(state.linkedObjectGroups.length)>
             <for(group in state.linkedObjectGroups)>
                 <widget instanceId="linked-object-group" title=group[0]>
                     <@content>
@@ -13,7 +16,7 @@
                     </@content>
                 </widget>
             </for>
-        </if>
+        </else-if>
         <else>
             <span>Es sind keine verknüpften Objekte vorhanden.</span>
         </else>

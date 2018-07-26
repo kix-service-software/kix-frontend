@@ -1,5 +1,6 @@
 import {
-    KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest, CreateObjectResponse
+    KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
+    CreateObjectResponse, KIXObjectLoadingOptions
 } from "@kix/core/dist/model";
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
@@ -21,8 +22,9 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.kixObjectType);
         if (service) {
+            const loadingOptions = data.loadingOptions ? data.loadingOptions : new KIXObjectLoadingOptions();
             await service.loadObjects(
-                data.token, data.kixObjectType, data.objectIds, data.loadingOptions, data.objectLoadingOptions
+                data.token, data.kixObjectType, data.objectIds, loadingOptions, data.objectLoadingOptions
             ).then((objects: any[]) => {
                 response = new CommunicatorResponse(
                     KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
