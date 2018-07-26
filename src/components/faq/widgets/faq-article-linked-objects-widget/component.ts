@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, KIXObjectServiceRegistry, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, ObjectLinkDescriptionLabelLayer, TableColumn
+    TableConfiguration, TableHeaderHeight, TableRowHeight, ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService
 } from '@kix/core/dist/browser';
-import { KIXObjectType, Link, KIXObject, DataType, KIXObjectLoadingOptions } from '@kix/core/dist/model';
+import { KIXObjectType, Link, KIXObject, DataType, KIXObjectLoadingOptions, WidgetType } from '@kix/core/dist/model';
 import { FAQArticle } from '@kix/core/dist/model/kix/faq';
 
 class Component {
@@ -19,6 +19,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        WidgetService.getInstance().setWidgetType('linked-object-group', WidgetType.GROUP);
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -31,14 +32,11 @@ class Component {
             this.state.faqArticle = faqs[0];
 
             this.setActions();
-            this.setLinkedObjectsGroups();
-
-            let totalCount = 0;
-            this.state.linkedObjectGroups.forEach((log) => totalCount += log[1].getTableRows(true).length);
-            this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${totalCount})`;
+            await this.setLinkedObjectsGroups();
         }
 
         this.state.loading = false;
+
     }
 
     private setActions(): void {
@@ -50,33 +48,43 @@ class Component {
     }
 
     private async setLinkedObjectsGroups(): Promise<void> {
-        const linkedObjectTypes: Array<[string, KIXObjectType]> = this.state.widgetConfiguration.settings;
-        const faqArticleId = this.state.faqArticle.ID.toString();
+        if (this.state.widgetConfiguration.settings) {
+            const linkedObjectTypes: Array<[string, KIXObjectType]> =
+                this.state.widgetConfiguration.settings.linkedObjectTypes;
 
-        for (const lot of linkedObjectTypes) {
-            const objectLinks = this.state.faqArticle.Links.filter((link) => this.checkLink(link, lot[1]));
-            const objectIds = objectLinks.map((ol) => ol.SourceKey === faqArticleId ? ol.TargetKey : ol.SourceKey);
+            const faqArticleId = this.state.faqArticle.ID.toString();
 
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(lot[1]);
-            const objects = await service.loadObjects(lot[1], objectIds, null);
+            let objectsCount = 0;
+            for (const lot of linkedObjectTypes) {
+                const objectLinks = this.state.faqArticle.Links.filter((link) => this.checkLink(link, lot[1]));
+                const objectIds = objectLinks.map((ol) => ol.SourceKey === faqArticleId ? ol.TargetKey : ol.SourceKey);
 
-            const tableConfiguration = new TableConfiguration(
-                null, null, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            );
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(lot[1]);
+                const objects = objectIds.length ? await service.loadObjects(lot[1], objectIds, null) : [];
 
-            const table = StandardTableFactoryService.getInstance().createStandardTable<KIXObject>(
-                lot[1], tableConfiguration, null, null, true
-            );
+                const tableConfiguration = new TableConfiguration(
+                    null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                );
 
-            table.setColumns([
-                new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
-            ]);
-            table.addAdditionalLayerOnTop(new ObjectLinkDescriptionLabelLayer());
-            table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-            table.loadRows();
+                const table = StandardTableFactoryService.getInstance().createStandardTable<KIXObject>(
+                    lot[1], tableConfiguration, null, null, true
+                );
 
-            const title = `${lot[0]} (${objects.length})`;
-            this.state.linkedObjectGroups.push([title, table]);
+                table.addAdditionalLayerOnTop(new ObjectLinkDescriptionLabelLayer());
+
+                table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+                table.loadRows();
+
+                table.setColumns([
+                    new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                ]);
+
+                objectsCount += objects.length;
+                const title = `${lot[0]} (${objects.length})`;
+                this.state.linkedObjectGroups.push([title, table]);
+            }
+
+            this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${objectsCount})`;
         }
 
     }

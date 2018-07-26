@@ -35,7 +35,7 @@ class Component {
 
     private async loadFAQArticle(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, ['Attachments', 'Votes'], ['Attachments', 'Votes']
+            null, null, null, null, null, ['Attachments', 'Votes', 'Links'], ['Attachments', 'Votes', 'Links']
         );
         const faqArticles = await ContextService.getInstance().loadObjects<FAQArticle>(
             KIXObjectType.FAQ_ARTICLE, [this.state.faqArticleId], loadingOptions
