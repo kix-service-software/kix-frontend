@@ -14,7 +14,9 @@
         </else-if>
         <else>
             <div.faq-article-history-container>
-                <h1>History</h1>
+                <if(state.table)>
+                    <standard-table standardTable=state.table/>
+                </if>
             </div>
         </else>
     </@content>

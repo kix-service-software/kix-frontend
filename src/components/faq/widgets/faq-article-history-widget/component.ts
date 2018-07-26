@@ -1,9 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
-import { FAQArticle, FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
-import { FAQLabelProvider } from "@kix/core/dist/browser/faq";
-import { Label } from "@kix/core/dist/browser/components";
+import { ContextService, ActionFactory, StandardTableFactoryService } from "@kix/core/dist/browser";
+import { KIXObjectType } from "@kix/core/dist/model";
+import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 
 class Component {
 
@@ -28,6 +26,7 @@ class Component {
         if (faqs && faqs.length) {
             this.state.faqArticle = faqs[0];
             this.setActions();
+            this.prepareTable();
         }
 
         this.state.loading = false;
@@ -39,6 +38,16 @@ class Component {
                 this.state.widgetConfiguration.actions, false, [this.state.faqArticle]
             );
         }
+    }
+
+    private prepareTable(): void {
+        const table =
+            StandardTableFactoryService.getInstance().createStandardTable(KIXObjectType.FAQ_ARTICLE_HISTORY);
+
+        table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.faqArticle.History);
+        table.loadRows();
+
+        this.state.table = table;
     }
 
 }
