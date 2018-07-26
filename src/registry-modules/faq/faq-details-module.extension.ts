@@ -41,6 +41,14 @@ export class Extension implements IModuleFactoryExtension {
                 )
             );
 
+        const faqHistoryLane =
+            new ConfiguredWidget('faq-article-history-widget',
+                new WidgetConfiguration(
+                    'faq-article-history-widget', 'Historie', [], {},
+                    true, true, WidgetSize.LARGE, null, false
+                )
+            );
+
         const faqArticleLane =
             new ConfiguredWidget('faq-article-content-widget',
                 new WidgetConfiguration(
@@ -54,8 +62,10 @@ export class Extension implements IModuleFactoryExtension {
         const laneTabs = ['faq-article-info-lane'];
         const laneTabWidgets = [faqInfoLaneTab];
 
-        const lanes = ['faq-article-linked-objects-widget'];
-        const laneWidgets: Array<ConfiguredWidget<any>> = [faqDetailsWidget, faqArticleLane, faqLinkedObjectsLane];
+        const lanes = ['faq-article-linked-objects-widget', 'faq-article-history-widget'];
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            faqDetailsWidget, faqArticleLane, faqLinkedObjectsLane, faqHistoryLane
+        ];
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
