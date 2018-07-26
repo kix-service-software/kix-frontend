@@ -60,6 +60,7 @@ export class Component implements IEventListener {
                     });
 
                     OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+                    EventService.getInstance().publish(FAQEvent.VOTE_UPDATED, this.faqArticle);
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
                         OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
