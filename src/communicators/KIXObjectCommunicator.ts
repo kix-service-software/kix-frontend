@@ -47,7 +47,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            await service.createObject(data.token, data.objectType, data.parameter)
+            await service.createObject(data.token, data.objectType, data.parameter, data.createOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(
                         KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)

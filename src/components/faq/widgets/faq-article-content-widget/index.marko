@@ -1,53 +1,56 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    contentActions=state.actions>
-    <@icon>
-        <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
-        </if>
-    </@icon>
-    <@content>
-        <if(state.faqArticle)>
-            <div.faq-article-content-container>
-                <div>
-                    <widget instanceId="faq-article-group" title="Symptom">
-                        <@content>$!{state.faqArticle.Field1}</@content>
-                    </widget>
-                    <widget instanceId="faq-article-group" title="Ursache">
-                        <@content>$!{state.faqArticle.Field2}</@content>
-                    </widget>
-                    <widget instanceId="faq-article-group" title="Lösung">
-                        <@content>$!{state.faqArticle.Field3}</@content>
-                    </widget>
-                    <widget instanceId="faq-article-group" title="Kommentar">
-                        <@content>$!{state.faqArticle.Field6}</@content>
-                    </widget>
-                </div>
-                <div>
-                    <div.faq-rating>
-                        <span tooltip=component.getRatingTooltip()>Bewertung:</span>
-                        <span>
-                            <if(state.faqArticle.Votes.length)>
-                                <for(i from 1 to 10)>
-                                    <if(component.fillStar(i))>+</if>
-                                    <else>-</else>
-                                </for>
-                                (${component.getRating()})
-                            </if>
-                            <else>Keine Bewertung abgegeben</else>
-                        </span>
+<div.faq-content>
+    <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+        contentActions=state.actions>
+        <@icon>
+            <if(state.widgetConfiguration)>
+                <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
+            </if>
+        </@icon>
+        <@content>
+            <if(state.faqArticle)>
+                <div.faq-article-content-container>
+                    <div>
+                        <widget instanceId="faq-article-group" title="Symptom">
+                            <@content>$!{state.faqArticle.Field1}</@content>
+                        </widget>
+                        <widget instanceId="faq-article-group" title="Ursache">
+                            <@content>$!{state.faqArticle.Field2}</@content>
+                        </widget>
+                        <widget instanceId="faq-article-group" title="Lösung">
+                            <@content>$!{state.faqArticle.Field3}</@content>
+                        </widget>
+                        <widget instanceId="faq-article-group" title="Kommentar">
+                            <@content>$!{state.faqArticle.Field6}</@content>
+                        </widget>
                     </div>
-                    <div.faq-attachments>
-                        <span>Anlagen</span>
-                        <for(attachment in state.faqArticle.Attachments)>
-                            <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
-                                on-fileClicked('download', attachment)/>
-                        </for>
+                    <div>
+                        <div.faq-rating>
+                            <span tooltip=component.getRatingTooltip()>Bewertung:</span>
+                            <span>
+                                <if(state.faqArticle.Votes.length)>
+                                    <for(i from 1 to 10)>
+                                        <if(component.fillStar(i))>+</if>
+                                        <else>-</else>
+                                    </for>
+                                    (${component.getRating()})
+                                </if>
+                                <else>Keine Bewertung abgegeben</else>
+                            </span>
+                        </div>
+                        <div.faq-attachments>
+                            <span>Anlagen</span>
+                            <for(attachment in state.faqArticle.Attachments)>
+                                <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
+                                    on-fileClicked('download', attachment)/>
+                            </for>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </if>
-        <else>
-            <span.error>No FAQ Article available</span>
-        </else>
-    </@content>
-</widget>
+            </if>
+            <else>
+                <span.error>No FAQ Article available</span>
+            </else>
+            <faq-vote-selector/>
+        </@content>
+    </widget>
+</div>
