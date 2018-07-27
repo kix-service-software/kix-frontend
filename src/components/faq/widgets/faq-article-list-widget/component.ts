@@ -3,12 +3,17 @@ import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService
 } from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria } from "@kix/core/dist/model";
-import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "@kix/core/dist/model";
+import { FAQArticleProperty, FAQCategory } from "@kix/core/dist/model/kix/faq";
+import { FAQContext } from "@kix/core/dist/browser/faq";
 
 class Component {
 
     private state: ComponentState;
+
+    private predefinedFilter: KIXObjectPropertyFilter;
+    private textFilterValue: string;
+    private additionalFilterCriteria: TableFilterCriteria[] = [];
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -21,6 +26,12 @@ class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        context.registerListener('faq-article-list-context-listener', {
+            explorerBarToggled: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: this.contextObjectChanged.bind(this)
+        });
 
         this.prepareFilter();
         this.prepareActions();
@@ -64,8 +75,13 @@ class Component {
         });
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
-
+        table.layerConfiguration.contentLayer.setPreloadedObjects(null);
         this.state.table = table;
+
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.descriptor.contextId === FAQContext.CONTEXT_ID) {
+            this.setCategoryFilter((context as FAQContext).currentFAQCategory);
+        }
     }
 
     private setActionsDirty(): void {
@@ -81,7 +97,38 @@ class Component {
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
-        this.state.table.setFilterSettings(textFilterValue, filter);
+        if (this.state.table) {
+            this.predefinedFilter = filter;
+            this.textFilterValue = textFilterValue;
+
+            const newFilter = new KIXObjectPropertyFilter(
+                filter.name, [...filter.criterias, ...this.additionalFilterCriteria]
+            );
+
+            this.state.table.setFilterSettings(textFilterValue, newFilter);
+        }
+    }
+
+    private contextObjectChanged(objectId: string | number, object: KIXObject, type: KIXObjectType): void {
+        if (type === KIXObjectType.FAQ_CATEGORY) {
+            this.setCategoryFilter((object as FAQCategory));
+        }
+    }
+
+    private setCategoryFilter(category: FAQCategory): void {
+        this.additionalFilterCriteria = [];
+
+        if (category) {
+            this.additionalFilterCriteria = [
+                new TableFilterCriteria(FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, category.ID)
+            ];
+        }
+
+        if (!this.predefinedFilter) {
+            this.predefinedFilter = new KIXObjectPropertyFilter('FAQ Kategorie', []);
+        }
+
+        this.filter(this.textFilterValue, this.predefinedFilter);
     }
 
 }
