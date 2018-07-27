@@ -4,7 +4,7 @@ import {
     TableColumn, ITableConfigurationListener, ActionFactory,
     TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService
 } from "@kix/core/dist/browser/customer";
@@ -61,8 +61,11 @@ class Component {
                 null, listenerConfiguration, true
             );
 
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, null, ['TicketStats']
+            );
             const customer = await ContextService.getInstance().loadObjects(
-                KIXObjectType.CUSTOMER, this.state.contact.UserCustomerIDs
+                KIXObjectType.CUSTOMER, this.state.contact.UserCustomerIDs, loadingOptions, null, false
             );
 
             this.state.customerTable.layerConfiguration.contentLayer.setPreloadedObjects(customer);
