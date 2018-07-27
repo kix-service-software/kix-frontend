@@ -8,6 +8,8 @@ import { FormService } from "@kix/core/dist/browser/form";
 
 class Component extends FormInputComponent<Contact, ComponentState> {
 
+    private contacts: Contact[];
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -21,11 +23,22 @@ class Component extends FormInputComponent<Contact, ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
+        this.setCurrentNode();
+    }
+
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            const contact = this.state.currentNode ? this.contacts.find(
+                (cu) => cu.ContactID === this.state.currentNode.id
+            ) : null;
+            super.provideValue(contact);
+        }
     }
 
     public contactChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const contact = this.state.currentNode ? this.state.contacts.find(
+        const contact = this.state.currentNode ? this.contacts.find(
             (cu) => cu.ContactID === this.state.currentNode.id
         ) : null;
         super.provideValue(contact);
@@ -33,18 +46,19 @@ class Component extends FormInputComponent<Contact, ComponentState> {
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
-        this.state.contacts = await ContextService.getInstance().loadObjects<Contact>(
+        this.contacts = await ContextService.getInstance().loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions
         );
 
         let treeNodes = [];
         if (searchValue && searchValue !== '') {
-            treeNodes = this.state.contacts.map(
+            treeNodes = this.contacts.map(
                 (c) => new TreeNode(c.ContactID, c.DisplayValue, 'kix-icon-man-bubble')
             );
         }
+        this.state.nodes = treeNodes;
 
-        return treeNodes;
+        return this.state.nodes;
     }
 
 }

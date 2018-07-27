@@ -43,6 +43,17 @@ class Component extends FormInputComponent<Customer, ComponentState> {
             },
             updateForm: () => { return; }
         });
+        this.setCurrentNode();
+    }
+
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            const customer = this.state.currentNode ? this.customers.find(
+                (cu) => cu.CustomerID === this.state.currentNode.id
+            ) : null;
+            super.provideValue(customer);
+        }
     }
 
     public onDestroy(): void {

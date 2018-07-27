@@ -20,7 +20,6 @@ class LinkTicketDialogComponent {
     private highlightLayer: ITableHighlightLayer;
     private preventSelectionLayer: ITablePreventSelectionLayer;
     private resultListenerId: string;
-    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -43,14 +42,7 @@ class LinkTicketDialogComponent {
             this.highlightLayer.setHighlightedObjects([]);
         }
 
-        document.addEventListener('keydown', (event: any) => {
-            if (event.key === 'Enter' && this.state.canSearch) {
-                this.executeSearch();
-            }
-        });
-
         this.state.loading = false;
-        this.formListenerId = 'LinkObjectDialog';
     }
 
     private setLinkableObjects(): void {
@@ -93,15 +85,21 @@ class LinkTicketDialogComponent {
             const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
 
-            formInstance.registerListener({
-                formListenerId: this.formListenerId,
-                formValueChanged: () => {
-                    // FIXME: auskommentiert, weil es die Auswahl des ersten Wertes einer Form zurücksetzt (rerendert)
-                    // this.state.canSearch = formInstance.hasValues();
-                },
-                updateForm: () => { return; }
+            document.addEventListener('keydown', (event: any) => {
+                if (event.key === 'Enter' && formInstance.hasValues()) {
+                    this.executeSearch();
+                }
             });
         }
+    }
+
+    public onDestroy(): void {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        document.removeEventListener('keydown', (event: any) => {
+            if (event.key === 'Enter' && formInstance.hasValues()) {
+                this.executeSearch();
+            }
+        });
     }
 
     public linkableObjectChanged(nodes: TreeNode[]): void {
@@ -115,15 +113,6 @@ class LinkTicketDialogComponent {
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
             const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
-
-            formInstance.registerListener({
-                formListenerId: this.formListenerId,
-                formValueChanged: () => {
-                    // FIXME: auskommentiert, weil es die Auswahl des ersten Wertes einer Form zurücksetzt (rerendert)
-                    // this.state.canSearch = formInstance.hasValues();
-                },
-                updateForm: () => { return; }
-            });
             this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
@@ -142,7 +131,6 @@ class LinkTicketDialogComponent {
     private async executeSearch(): Promise<void> {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
-            this.state.canSearch = false;
             this.state.standardTable = null;
             const objects = await KIXObjectSearchService.getInstance().executeSearch(
                 this.state.currentLinkableObjectNode.id
@@ -150,7 +138,6 @@ class LinkTicketDialogComponent {
 
             this.prepareResultTable(objects);
             this.state.resultCount = objects.length > 0 ? objects.length : null;
-            this.state.canSearch = true;
         }
     }
 

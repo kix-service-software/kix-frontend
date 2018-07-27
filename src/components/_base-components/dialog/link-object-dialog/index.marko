@@ -19,12 +19,7 @@
                     <@content>
                         <if(state.formId)>
                             <main-form formId=state.formId key="link-object-form-widget-form"/>
-                            <div.linkable-objects-form-button-container key="link-object-form-widget-search-button">
-                                <button.submit-button type="button" on-click("executeSearch") title="Suche starten" disabled=(!state.canSearch)>
-                                    <span.kix-icon-search/>
-                                    Suche starten
-                                </button>
-                            </div>
+                            <linkable-objects-search-button formId=state.formId on-executeSearch("executeSearch")/>
                         </if>
                     </@content>
                 </widget>

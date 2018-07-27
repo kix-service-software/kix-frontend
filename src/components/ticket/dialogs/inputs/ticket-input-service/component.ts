@@ -18,6 +18,14 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
+        this.setCurrentNode();
+    }
+
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+        }
     }
 
     private prepareTree(services: Service[]): TreeNode[] {
