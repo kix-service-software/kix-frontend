@@ -75,7 +75,8 @@ class Component implements IEventListener {
     }
 
     public getRatingTooltip(): string {
-        return `Anzahl Bewertungen: ${this.state.faqArticle.Votes.length}`;
+        const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
+        return `Anzahl Bewertungen: ${count}`;
     }
 
     public fillStar(index: number): boolean {

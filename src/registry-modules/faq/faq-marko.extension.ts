@@ -12,7 +12,8 @@ export class Extension implements IMarkoDependencyExtension {
             'faq/widgets/faq-article-info-widget',
             'faq/widgets/faq-article-linked-objects-widget',
             'faq/widgets/faq-article-content-widget',
-            'faq/widgets/faq-article-history-widget'
+            'faq/widgets/faq-article-history-widget',
+            'faq/widgets/faq-article-list-widget'
         ];
     }
 
@@ -26,7 +27,8 @@ export class Extension implements IMarkoDependencyExtension {
             ['faq-article-info-widget', 'faq/widgets/faq-article-info-widget'],
             ['faq-article-linked-objects-widget', 'faq/widgets/faq-article-linked-objects-widget'],
             ['faq-article-content-widget', 'faq/widgets/faq-article-content-widget'],
-            ['faq-article-history-widget', 'faq/widgets/faq-article-history-widget']
+            ['faq-article-history-widget', 'faq/widgets/faq-article-history-widget'],
+            ['faq-article-list-widget', 'faq/widgets/faq-article-list-widget']
         ];
     }
 
