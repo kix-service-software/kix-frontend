@@ -50,13 +50,12 @@ class Component extends FormInputComponent<Contact, ComponentState> {
             KIXObjectType.CONTACT, null, loadingOptions
         );
 
-        let treeNodes = [];
+        this.state.nodes = [];
         if (searchValue && searchValue !== '') {
-            treeNodes = this.contacts.map(
+            this.state.nodes = this.contacts.map(
                 (c) => new TreeNode(c.ContactID, c.DisplayValue, 'kix-icon-man-bubble')
             );
         }
-        this.state.nodes = treeNodes;
 
         return this.state.nodes;
     }
