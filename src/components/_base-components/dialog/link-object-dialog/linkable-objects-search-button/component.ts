@@ -28,6 +28,13 @@ class Component {
         }
     }
 
+    public onDestroy(): void {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.removeListener('LinkableObjectsSearchButton');
+        }
+    }
+
     public executeSearch(): void {
         (this as any).emit('executeSearch');
     }
