@@ -13,10 +13,22 @@ class ArticleInputBodyComponent extends FormInputComponent<string, ComponentStat
 
     public onMount(): void {
         super.onMount();
+        this.setCurrentValue();
+    }
+
+    public setCurrentValue(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentValue = this.state.defaultValue.value;
+            super.provideValue(this.state.currentValue);
+        }
     }
 
     public valueChanged(value: string): void {
-        super.provideValue(value);
+        this.state.currentValue = value;
+        if (this.state.currentValue === '') {
+            this.state.currentValue = null;
+        }
+        super.provideValue(this.state.currentValue);
     }
 
 }

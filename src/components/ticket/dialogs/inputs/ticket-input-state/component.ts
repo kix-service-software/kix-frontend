@@ -41,6 +41,7 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
                     // TODO: "default" Zeit auf Auswahl mappen oder TimeInputComponente verwenden
                     // this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
                 }
+                this.setValue();
             }
         }
     }

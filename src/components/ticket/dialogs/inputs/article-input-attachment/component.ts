@@ -32,6 +32,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
             uploadElement.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);

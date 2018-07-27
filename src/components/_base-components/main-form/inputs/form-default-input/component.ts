@@ -25,13 +25,22 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public onMount(): void {
         super.onMount();
+        this.setCurrentValue();
+    }
+
+    public setCurrentValue(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentValue = this.state.defaultValue.value;
+            (this as any).emit('valueChanged', this.state.currentValue);
+            super.provideValue(this.state.currentValue);
+        }
     }
 
     private valueChanged(event: any): void {
         if (event) {
-            this.state.currentValue = event.target ? event.target.value : '';
-            super.provideValue(this.state.currentValue);
+            this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
             (this as any).emit('valueChanged', this.state.currentValue);
+            super.provideValue(this.state.currentValue);
         }
     }
 

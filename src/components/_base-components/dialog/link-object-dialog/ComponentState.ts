@@ -14,7 +14,6 @@ export class ComponentState {
         public currentLinkTypeDescription: LinkTypeDescription = null,
         public linkDescriptions: CreateLinkDescription[] = [],
         public successHint: string = null,
-        public canSearch: boolean = false,
         public objectType: KIXObjectType = null,
         public formId: string = null,
         public loading: boolean = true

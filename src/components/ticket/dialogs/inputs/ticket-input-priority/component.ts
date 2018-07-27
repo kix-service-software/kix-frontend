@@ -29,6 +29,7 @@ class Component extends FormInputComponent<number, ComponentState> {
             } else {
                 this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
             }
+            super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
         }
     }
 
