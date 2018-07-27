@@ -5,6 +5,7 @@
     "tags-dir": [
         "base-html-components",
         "dialog",
+        "dialog/link-object-dialog",
         "tree",
         "main-form",
         "main-form/inputs",

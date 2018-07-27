@@ -5,10 +5,12 @@ import {
     KIXObjectType, Customer, ContextMode, TreeNode
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
+import { IdService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 
     private customers: Customer[] = [];
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -21,7 +23,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     public onMount(): void {
         super.onMount();
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        this.formListenerId = IdService.generateDateBasedId('TicketCustomerInput');
         formInstance.registerListener({
+            formListenerId: this.formListenerId,
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
                     if (value.value) {
@@ -39,6 +43,23 @@ class Component extends FormInputComponent<Customer, ComponentState> {
             },
             updateForm: () => { return; }
         });
+        this.setCurrentNode();
+    }
+
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            const customer = this.state.currentNode ? this.customers.find(
+                (cu) => cu.CustomerID === this.state.currentNode.id
+            ) : null;
+            super.provideValue(customer);
+        }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        formInstance.removeListener(this.formListenerId);
     }
 
     public getPlaceholder(): string {

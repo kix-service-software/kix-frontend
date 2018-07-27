@@ -42,12 +42,6 @@ class LinkTicketDialogComponent {
             this.highlightLayer.setHighlightedObjects([]);
         }
 
-        document.addEventListener('keydown', (event: any) => {
-            if (event.key === 'Enter' && this.state.canSearch) {
-                this.executeSearch();
-            }
-        });
-
         this.state.loading = false;
     }
 
@@ -91,13 +85,21 @@ class LinkTicketDialogComponent {
             const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
 
-            formInstance.registerListener({
-                formValueChanged: () => {
-                    this.state.canSearch = formInstance.hasValues();
-                },
-                updateForm: () => { return; }
+            document.addEventListener('keydown', (event: any) => {
+                if (event.key === 'Enter' && formInstance.hasValues()) {
+                    this.executeSearch();
+                }
             });
         }
+    }
+
+    public onDestroy(): void {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        document.removeEventListener('keydown', (event: any) => {
+            if (event.key === 'Enter' && formInstance.hasValues()) {
+                this.executeSearch();
+            }
+        });
     }
 
     public linkableObjectChanged(nodes: TreeNode[]): void {
@@ -111,13 +113,6 @@ class LinkTicketDialogComponent {
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
             const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
-
-            formInstance.registerListener({
-                formValueChanged: () => {
-                    this.state.canSearch = formInstance.hasValues();
-                },
-                updateForm: () => { return; }
-            });
             this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
@@ -134,8 +129,8 @@ class LinkTicketDialogComponent {
     }
 
     private async executeSearch(): Promise<void> {
-        if (this.state.currentLinkableObjectNode) {
-            this.state.canSearch = false;
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
             this.state.standardTable = null;
             const objects = await KIXObjectSearchService.getInstance().executeSearch(
                 this.state.currentLinkableObjectNode.id
@@ -143,7 +138,6 @@ class LinkTicketDialogComponent {
 
             this.prepareResultTable(objects);
             this.state.resultCount = objects.length > 0 ? objects.length : null;
-            this.state.canSearch = true;
         }
     }
 

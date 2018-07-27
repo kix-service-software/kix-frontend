@@ -5,7 +5,7 @@ export class ComponentState extends FormInputComponentState<Customer> {
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public isLoading: boolean = false,
-        public customers: Customer[] = [],
+        public nodes: TreeNode[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public currentNode: TreeNode = null
     ) {
