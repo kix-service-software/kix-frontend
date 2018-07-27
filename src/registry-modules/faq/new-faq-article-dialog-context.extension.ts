@@ -2,7 +2,7 @@ import {
     ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { NewContactDialogContextConfiguration, NewContactDialogContext } from "@kix/core/dist/browser/contact";
+import { NewContactDialogContextConfiguration } from "@kix/core/dist/browser/contact";
 import { ServiceContainer } from "@kix/core/dist/common";
 import { IConfigurationService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
