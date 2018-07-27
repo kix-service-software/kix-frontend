@@ -11,8 +11,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     public getDefaultConfiguration(): ContextConfiguration {
 
         const articleListWidget =
-            new ConfiguredWidget("20180727-faq-article-list-widget", new WidgetConfiguration(
-                "faq-article-list-widget", "Übersicht FAQ", [
+            new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
+                'faq-article-list-widget', 'Übersicht FAQ', [
                     'faq-article-create-action', 'csv-export-action'
                 ], {},
                 false, false, WidgetSize.BOTH, null, false)
@@ -21,9 +21,18 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const content = ['20180727-faq-article-list-widget'];
         const contentWidgets = [articleListWidget];
 
+        const faqCategoryExplorer =
+            new ConfiguredWidget('20180625-faq-category-explorer', new WidgetConfiguration(
+                'faq-category-explorer', 'FAQ Kategorien', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-faq', false)
+            );
+
+        const explorer = ['20180625-faq-category-explorer'];
+        const explorerWidgets: Array<ConfiguredWidget<any>> = [faqCategoryExplorer];
+
         const notesSidebar =
-            new ConfiguredWidget("20180726-faq-notes", new WidgetConfiguration(
-                "notes-widget", "Notizen", [], {},
+            new ConfiguredWidget('20180726-faq-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
@@ -31,7 +40,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
         return new FAQContextConfiguration(
-            this.getModuleId(), [], sidebars, sidebarWidgets, [], content, contentWidgets
+            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
         );
     }
 
