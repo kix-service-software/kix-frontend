@@ -9,32 +9,16 @@
     box-sizing: border-box;
     overflow: hidden;
     line-height: @breadcrumb-height;
-    >a,
-    >a:active,
-    >a:visited {
-        color: @secondary-0;
-        text-decoration: none;
-        &:hover {
-            color: @secondary-1;
-        }
-    }
-    span.context {
-        margin-right: @margin-small;
-        cursor: pointer;
-        &::after {
-            content: '|';
-            margin-left: @margin-small;
-        }
-        &:last-of-type {
-            cursor: unset;
-            &::after {
-                content: '';
-            }
-        }
-    }
     [class^="kix-icon-"],
     [class*=" kix-icon-"] {
         color: @primary-6;
         margin-right: @margin-small;
+    }
+    >span.context {
+        margin-right: @margin-small;
+        &:not(:last-of-type)::after {
+            content: '|';
+            margin-left: @margin-small;
+        }
     }
 }
