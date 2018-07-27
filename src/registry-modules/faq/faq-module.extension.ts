@@ -9,6 +9,18 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
+
+        const articleListWidget =
+            new ConfiguredWidget("20180727-faq-article-list-widget", new WidgetConfiguration(
+                "faq-article-list-widget", "Übersicht FAQ", [
+                    'faq-article-create-action', 'csv-export-action'
+                ], {},
+                false, false, WidgetSize.BOTH, null, false)
+            );
+
+        const content = ['20180727-faq-article-list-widget'];
+        const contentWidgets = [articleListWidget];
+
         const notesSidebar =
             new ConfiguredWidget("20180726-faq-notes", new WidgetConfiguration(
                 "notes-widget", "Notizen", [], {},
@@ -18,7 +30,9 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const sidebars = ['20180726-faq-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new FAQContextConfiguration(this.getModuleId(), [], sidebars, sidebarWidgets, [], [], []);
+        return new FAQContextConfiguration(
+            this.getModuleId(), [], sidebars, sidebarWidgets, [], content, contentWidgets
+        );
     }
 
     public createFormDefinitions(): void {

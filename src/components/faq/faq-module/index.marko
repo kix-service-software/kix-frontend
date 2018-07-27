@@ -1,1 +1,5 @@
-<h1>FAQ Dashboard</h1>
+<div.faq-dashboard>
+    <for(widget in state.contentWidgets)>
+        <include(component.getTemplate(widget), { instanceId: widget.instanceId, contextType: "MAIN" })/>
+    </for>
+</div>
