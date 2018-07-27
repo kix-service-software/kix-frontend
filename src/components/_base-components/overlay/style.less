@@ -1,13 +1,9 @@
 .overlay {
     .full-size();
-    .shield+.overlay-content {
-        position: fixed;
-    }
     >.overlay-content {
         position: absolute;
         left: 50%;
         &.info-overlay {
-            transform: unset;
             >.overlay-widget {
                 .widget(@tertiary-1, @secondary-6, @overlay-widget-header-height);
                 width: @default-widget-width;
@@ -34,7 +30,6 @@
             }
         }
         &.hint-overlay {
-            transform: unset;
             >.overlay-widget {
                 .widget(@secondary-2, @secondary-0, @overlay-widget-header-height);
                 width: 22rem;
@@ -51,6 +46,7 @@
             }
         }
         &.warning-overlay {
+            position: fixed;
             top: 12rem;
             >.overlay-widget {
                 .widget(@tertiary-0, @secondary-6, @overlay-widget-header-height);
@@ -74,6 +70,7 @@
             }
         }
         &.toast-overlay {
+            position: fixed;
             top: 10rem;
             opacity: 0;
             transition: opacity .20s ease-in, top .20s ease-in;
