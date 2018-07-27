@@ -101,12 +101,6 @@ class TicketListWidgetComponent implements ITableToggleListener {
         }
         return title;
     }
-
-    // Toggle Listener
-    public rowToggled(row: TableRow<Ticket>, rowIndex: number, tableId: string): void {
-        console.log('row toggled');
-    }
-
 }
 
 module.exports = TicketListWidgetComponent;
