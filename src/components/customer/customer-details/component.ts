@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, ContextMode, Customer } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, ContextMode, Customer, KIXObjectLoadingOptions } from "@kix/core/dist/model";
 import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
 import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -29,8 +29,11 @@ class Component {
     }
 
     private async loadCustomer(): Promise<void> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, ['Contacts', 'Tickets', 'TicketStats']
+        );
         const customer = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [this.state.customerId]
+            KIXObjectType.CUSTOMER, [this.state.customerId], loadingOptions, null, false
         ).catch((error) => {
             this.state.error = error;
         });

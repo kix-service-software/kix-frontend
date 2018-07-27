@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Contact, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Contact, ContextMode, KIXObjectLoadingOptions } from "@kix/core/dist/model";
 import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
 import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
