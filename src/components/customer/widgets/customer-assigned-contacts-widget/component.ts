@@ -3,7 +3,7 @@ import {
     ContextService, TableColumn, ITableConfigurationListener,
     ActionFactory, TableListenerConfiguration, StandardTableFactoryService
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
@@ -26,8 +26,11 @@ class Component {
             this.state.title = this.state.widgetConfiguration.title;
         }
 
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, ['Contacts']
+        );
         const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId]
+            KIXObjectType.CUSTOMER, [context.objectId], loadingOptions, null, false
         );
 
         if (customers && customers.length) {
@@ -63,8 +66,14 @@ class Component {
                 this.state.title = "Zugeordnete Ansprechpartner " + (count > 0 ? ' (' + count + ')' : '');
             });
 
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, null, ['TicketStats']
+            );
             const contactIds = this.state.customer.Contacts.map((c) => typeof c === 'string' ? c : c.ContactID);
-            const contacts = await ContextService.getInstance().loadObjects(KIXObjectType.CONTACT, contactIds);
+            const contacts = await ContextService.getInstance().loadObjects(
+                KIXObjectType.CONTACT, contactIds, loadingOptions, null, false
+            );
+
             this.state.contactTable.layerConfiguration.contentLayer.setPreloadedObjects(contacts);
             this.state.contactTable.loadRows();
 

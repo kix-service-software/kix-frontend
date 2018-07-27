@@ -1,0 +1,91 @@
+import { ComponentState } from './ComponentState';
+import { ContextService, IdService } from '@kix/core/dist/browser';
+import { TreeNode } from '@kix/core/dist/model';
+import { FAQCategory } from '@kix/core/dist/model/kix/faq';
+import { FAQContext } from '@kix/core/dist/browser/faq';
+
+export class Component {
+
+    private state: ComponentState;
+
+    public listenerId: string;
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState(input.instanceId);
+        this.listenerId = IdService.generateDateBasedId('search-result-explorer-');
+    }
+
+    public onInput(input: any): void {
+        this.state.contextType = input.contextType;
+    }
+
+    public async onMount(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        const objectData = ContextService.getInstance().getObjectData();
+        this.state.nodes = this.prepareTreeNodes(objectData.faqCategories);
+
+        this.setActiveNode(context.currentFAQCategory);
+    }
+
+    private setActiveNode(category: FAQCategory): void {
+        if (category) {
+            this.state.activeNode = this.getActiveNode(category);
+        }
+    }
+
+    private getActiveNode(category: FAQCategory, nodes: TreeNode[] = this.state.nodes
+    ): TreeNode {
+        let activeNode = nodes.find((n) => n.id.ID === category.ID);
+        if (!activeNode) {
+            for (let index = 0; index < nodes.length; index++) {
+                activeNode = this.getActiveNode(category, nodes[index].children);
+                if (activeNode) {
+                    nodes[index].expanded = true;
+                    break;
+                }
+            }
+        }
+        return activeNode;
+    }
+
+    private prepareTreeNodes(categories: FAQCategory[]): TreeNode[] {
+        return categories
+            ? categories.map((c) => new TreeNode(
+                c, this.getCategoryLabel(c), null, null, this.prepareTreeNodes(c.SubCategories))
+            )
+            : [];
+    }
+
+    private getCategoryLabel(category: FAQCategory): string {
+        const count = this.countArticles(category);
+        return `${category.Name} (${count})`;
+    }
+
+    private countArticles(category: FAQCategory): number {
+        let count = category.Articles ? category.Articles.length : 0;
+
+        if (category.SubCategories) {
+            category.SubCategories.forEach((c) => count += this.countArticles(c));
+        }
+
+        return count;
+    }
+
+    public async activeNodeChanged(node: TreeNode): Promise<void> {
+        this.state.activeNode = node;
+
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        context.setFAQCategory(node.id);
+    }
+
+    public async showAll(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        this.state.activeNode = null;
+        context.setFAQCategory(null);
+    }
+
+}
+
+module.exports = Component;

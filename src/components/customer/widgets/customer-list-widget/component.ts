@@ -45,7 +45,9 @@ class Component {
                 null, listenerConfiguration, true
             );
             this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
-            this.state.standardTable.loadRows();
+            setTimeout(() => {
+                this.state.standardTable.loadRows();
+            }, 200);
         }
     }
 
