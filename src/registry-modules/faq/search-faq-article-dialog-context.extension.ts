@@ -6,6 +6,7 @@ import {
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { FAQArticleSearchContext, FAQArticleSearchContextConfiguration } from '@kix/core/dist/browser/faq';
+import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
 
 export class ModuleExtension implements IModuleFactoryExtension {
 
@@ -18,7 +19,26 @@ export class ModuleExtension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        // nothing
+        const configurationService =
+            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+
+        const formId = 'search-faq-article-form';
+        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        if (!existingForm) {
+            const form = new SearchForm(
+                formId,
+                'FAQ-Artikel',
+                KIXObjectType.FAQ_ARTICLE,
+                FormContext.SEARCH,
+                null,
+                true,
+                [
+                    FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID
+                ]
+            );
+            await configurationService.saveModuleConfiguration(form.id, null, form);
+        }
+        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.FAQ_ARTICLE, formId);
     }
 
 }
