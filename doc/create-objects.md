@@ -7,7 +7,7 @@ Am Beispiel FAQ Artikel
 ### Kontext implementieren und Formularkonfiguration zur Verfügung stellen
 - "kix-module"-Extension registrieren
 
-```
+```javascript
 "kix:module": {
     ...,
     "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
@@ -19,10 +19,10 @@ Am Beispiel FAQ Artikel
 
 - Context registrieren (`ContextService`)
 
-```
+```javascript
 const newFAQArticleContext = new ContextDescriptor(
     NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
-    false, 'new-faq-article-dialog', 'faqarticle', NewFAQArticleDialogContext
+    false, 'new-faq-article-dialog', 'faqarticle/new', NewFAQArticleDialogContext
 );
 ContextService.getInstance().registerContext(newFAQArticleContext);
 ```
@@ -30,7 +30,7 @@ ContextService.getInstance().registerContext(newFAQArticleContext);
 ### Erstelldialog implementieren & registrieren
 - Komponente implementieren `src/components/faq/dialogs/new-faq-article-dialog`
 - im Service (`FAQService`) registrieren
-```
+```javascript
 DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
     'new-faq-article-dialog',
     new WidgetConfiguration(

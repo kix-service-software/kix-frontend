@@ -41,7 +41,7 @@ DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             new WidgetConfiguration(
                 'search-contact-dialog', 'Ansprechpartner', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man-bubble'
             ),
-            KIXObjectType.TICKET,
+            KIXObjectType.CONTACT,
             ContextMode.SEARCH
         ));
 ```

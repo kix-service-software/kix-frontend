@@ -46,10 +46,10 @@ Der COntext muss im entsprechenden Service registriert werden (`FAQService`).
 const ticketDetailsContextDescriptor = new ContextDescriptor(
             FAQDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'faq-details', 'faq', FAQDetailsContext
+            true, 'faq-details', 'faqarticle', FAQDetailsContext
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
-```        
+```
 
 # Detail Modul implementieren & registrieren
 
