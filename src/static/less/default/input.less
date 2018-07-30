@@ -28,7 +28,6 @@
         &::placeholder {
             color: @tertiary-0;
         }
-        &~.dropdown-button,
         &~.form-list-button {
             color: @tertiary-0;
         }
@@ -40,46 +39,83 @@
     }
 }
 
-.dropdown,
-.dropdown-tree,
-.dropdown-auto-complete,
+// TODO: mit style der form-list zusammenfassen
 .form-list {
     position: relative;
-    >div.dropdown-input-container,
-    >.form-list-input-container {
+    >.form-list-loading,
+    >.form-list-autocomplete-no-results,
+    >.form-list-tree {
+        z-index: 1;
+        position: absolute;
+        top: @default-input-height;
+        left: 0;
+        right: 0;
+        border: 1px solid @secondary-4;
+        background-color: @secondary-6;
+        min-height: @default-input-height;
+        padding: .25rem;
+        box-sizing: border-box;
+    }
+    >.form-list-loading {
+        >.loading-spinner {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+    }
+    >.form-list-tree {
+        max-height: 15rem;
+        overflow: auto;
+        border-radius: @border-radius;
+    }
+    >div.form-list-input-container {
+        height: unset;
+        min-height: 2rem;
         position: relative;
         padding: 0;
+        &:not(.autocomplete) {
+            padding-right: 1.75rem;
+            >input {
+                border-right: none;
+                margin: -1px;
+            }
+            >.form-list-button {
+                top: -1px;
+                right: -1px;
+            }
+        }
+        &.autocomplete {
+            >input {
+                border: none;
+            }
+        }
         &:hover,
         &.list-shown {
             >input.input-style:not(:disabled),
-            >input.input-style:not(:disabled)~.dropdown-button,
             >input.input-style:not(:disabled)~.form-list-button,
             >.selected-nodes~.form-list-button {
                 border-color: darken(@secondary-3, 20%);
             }
         }
-        >input.input-style:focus:not(:disabled)~.dropdown-button,
         >input.input-style:focus:not(:disabled)~.form-list-button {
             border-color: darken(@secondary-3, 20%);
         }
-        >input.input-style:not(:disabled)~.dropdown-button:hover,
-        >input.input-style:not(:disabled)~.form-list-button:hover {
+        >input.input-style:not(:disabled)~.form-list-button:hover,
+        >.selected-nodes~.form-list-button:hover {
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
-        >input.invalid~.dropdown-button,
         >input.invalid~.form-list-button {
             color: @tertiary-0;
             border-color: @tertiary-0;
-        } // TODO: später mit dem aus form-list ersetzen
-        >.selected-item-container {
-            display: inline-block;
-            position: absolute;
-            top: .25rem;
-            left: .25rem;
-            max-width: 96%;
-            >.selected-item {
+        }
+        >.selected-nodes {
+            padding: .25rem .25rem 0 .25rem;
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            >.selected-node {
                 display: grid;
                 grid-auto-flow: column;
                 align-items: center;
@@ -88,6 +124,9 @@
                 background-color: @secondary-5;
                 border-radius: @border-radius;
                 padding: 0 @margin-small;
+                height: 1.5rem;
+                box-sizing: border-box;
+                margin: 0 .25rem .25rem 0;
                 span:first-child[class^="kix-icon-"],
                 span:first-child[class*=" kix-icon-"] {
                     font-size: .875rem;
@@ -108,7 +147,6 @@
                 }
             }
         }
-        >.dropdown-button,
         >.form-list-button {
             background-color: @secondary-4;
             color: @secondary-2;
@@ -122,31 +160,6 @@
             position: absolute;
             right: 0;
             top: 0;
-        }
-    }
-    >.dropdown-list {
-        z-index: 1;
-        position: absolute;
-        top: @default-input-height;
-        left: 0;
-        right: 0;
-        max-height: 10em;
-        overflow: auto;
-        list-style: none;
-        border: 1px solid @secondary-4;
-        background-color: @secondary-6;
-        .dropdown-item {
-            display: grid;
-            grid-template-columns: max-content max-content max-content;
-            grid-column-gap: 0.5em;
-            align-items: center;
-            height: 1.5rem;
-            padding-left: 0.5rem;
-            &.active {
-                background-color: @secondary-4;
-                font-weight: bold;
-                cursor: pointer;
-            }
         }
     }
 }

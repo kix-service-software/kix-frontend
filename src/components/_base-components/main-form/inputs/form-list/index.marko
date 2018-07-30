@@ -1,5 +1,5 @@
 <div.form-list on-click('setKeepExpanded') key=state.listId>
-    <div.form-list-input-container.input-style class={"list-shown": state.expanded}
+    <div.form-list-input-container.input-style class={"list-shown": state.expanded, autocomplete: state.asAutocomplete}
         key=("form-list-input-container-" + state.listId) title=input.placeholder>
         <if(state.selectedNodes && state.selectedNodes.length)>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click('toggleList', false)>
