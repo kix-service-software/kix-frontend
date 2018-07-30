@@ -104,9 +104,11 @@ class Component {
         // }
 
         if (!this.state.selectedNodes.length && !this.navigationKeyPressed(event)) {
-            this.state.filterValue = event.target.value;
-            if (this.state.asAutocomplete && this.state.filterValue && this.state.searchCallback) {
+            if (this.state.asAutocomplete && typeof event.target.value !== 'undefined' && this.state.searchCallback) {
+                this.state.autocompleteSearchValue = event.target.value;
                 this.startSearch();
+            } else {
+                this.state.filterValue = event.target.value;
             }
         }
     }
@@ -158,8 +160,9 @@ class Component {
             window.clearTimeout(this.timeout);
             this.timeout = null;
         }
-        const hasMinLength = this.state.filterValue.length >= this.state.autoCompleteConfiguration.charCount;
-        if (this.state.filterValue && hasMinLength && !this.state.isLoading) {
+        const hasMinLength =
+            this.state.autocompleteSearchValue.length >= this.state.autoCompleteConfiguration.charCount;
+        if (hasMinLength && !this.state.isLoading) {
             this.timeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
         } else {
             this.state.nodes = [];
@@ -170,7 +173,7 @@ class Component {
         this.state.isLoading = true;
         this.state.expanded = true;
         this.state.nodes = await this.state.searchCallback(
-            this.state.autoCompleteConfiguration.limit, this.state.filterValue
+            this.state.autoCompleteConfiguration.limit, this.state.autocompleteSearchValue
         );
         this.state.isLoading = false;
         this.timeout = null;

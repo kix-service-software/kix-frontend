@@ -14,6 +14,7 @@ export class ComponentState {
         public invalid: boolean = false,
         public treeStyle: string = null,
         public asAutocomplete: boolean = false,
+        public autocompleteSearchValue: string = null,
         public isLoading: boolean = false,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,

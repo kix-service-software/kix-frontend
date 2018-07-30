@@ -1,5 +1,5 @@
 <div.form-list on-click('setKeepExpanded') key=state.listId>
-    <div.form-list-input-container.input-style class={"list-shown": state.expanded}
+    <div.form-list-input-container.input-style class={"list-shown": state.expanded, autocomplete: state.asAutocomplete}
         key=("form-list-input-container-" + state.listId) title=input.placeholder>
         <if(state.selectedNodes && state.selectedNodes.length)>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click('toggleList', false)>
@@ -18,9 +18,9 @@
         <else>
             <input.input-style type="text" class={invalid: state.invalid} readonly=(!state.enabled) disabled=(!state.enabled)
                 placeholder=(state.selectedNodes && state.selectedNodes.length ? "" : input.placeholder)
-                value=state.filterValue on-keydown('keyDown') on-keyup('keyUp') on-click('toggleList', false)
-                on-focus('toggleList', false) on-blur('focusLost') key=("form-list-input-" + state.listId)
-                id=state.treeId/>
+                value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue) on-keydown('keyDown')
+                on-keyup('keyUp') on-click('toggleList', false) on-focus('toggleList', false) on-blur('focusLost')
+                key=("form-list-input-" + state.listId) id=state.treeId/>
         </else>
         <if(!state.asAutocomplete)>
             <span.form-list-button.kix-icon-sort-down on-click('listToggleButtonClicked')/>
