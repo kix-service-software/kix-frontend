@@ -44,7 +44,7 @@ export class Extension implements IModuleFactoryExtension {
         const faqHistoryLane =
             new ConfiguredWidget('faq-article-history-widget',
                 new WidgetConfiguration(
-                    'faq-article-history-widget', 'Historie', [], {},
+                    'faq-article-history-widget', 'Historie', ['faq-article-print-action'], {},
                     true, true, WidgetSize.LARGE, null, false
                 )
             );
