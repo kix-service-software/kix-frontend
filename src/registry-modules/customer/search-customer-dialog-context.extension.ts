@@ -1,7 +1,7 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, ContactProperty, CustomerProperty
+    FormContext, SearchForm, CustomerProperty
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';

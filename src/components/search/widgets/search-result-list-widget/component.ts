@@ -121,7 +121,9 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public async searchResultCategoryChanged(category: SearchResultCategory): Promise<void> {
-        await this.initWidget(category.objectType);
+        if (category) {
+            await this.initWidget(category.objectType);
+        }
     }
 }
 

@@ -27,10 +27,11 @@ ContextService.getInstance().registerContext(searchContactContext);
 ### Suchdefinition und Ergebnistabelle registrieren
 
 - `SearchDefinition` implementieren (`ContactSearchDefinition`)
-- `SearchDefinition` registrieren 
+- `SearchDefinition` registrieren
 ```
 KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 ```
+- Funktion `getTreeNodes` implementieren (`ContactService` - für Werte der Dropdown-Felder)
 
 ### Suchdialog implementieren & registrieren
 - Komponente implementieren `src/components/customer/dialogs/search-contact-dialog`

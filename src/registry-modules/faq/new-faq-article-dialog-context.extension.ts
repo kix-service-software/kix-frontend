@@ -62,7 +62,7 @@ export class Extension implements IModuleFactoryExtension {
             fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, false, "FAQ#"));
             fields.push(new FormField("Titel", FAQArticleProperty.TITLE, false, "Titel"));
             fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, false, "Kategorie"));
-            fields.push(new FormField("Gültig", FAQArticleProperty.VALID_ID, false, "Gültig"));
+            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, false, "Gültigkeit"));
 
             const group = new FormGroup('FAQ-Attribute', fields);
 
