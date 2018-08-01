@@ -38,10 +38,15 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
         if (!configuration) {
             const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
-            this.configurationService.saveModuleConfiguration(
-                data.contextId, userId, moduleDefaultConfiguration);
+            if (moduleDefaultConfiguration) {
+                this.configurationService.saveModuleConfiguration(
+                    data.contextId, userId, moduleDefaultConfiguration);
 
-            configuration = moduleDefaultConfiguration;
+                configuration = moduleDefaultConfiguration;
+            } else {
+                throw new Error("No default configuration for context '" + data.contextId + "' given!");
+
+            }
         }
 
         configuration.contextId = data.contextId;

@@ -1,7 +1,7 @@
 import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, WidgetType, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import { KIXObjectType, AbstractAction, WidgetType, KIXObjectLoadingOptions, ContextType } from "@kix/core/dist/model";
 import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -34,19 +34,13 @@ class Component {
     }
 
     private async loadFAQArticle(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null,
-            ['Attachments', 'Votes', 'Links', 'History'], ['Attachments', 'Votes', 'Links', 'History']
-        );
-        const faqArticles = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [this.state.faqArticleId], loadingOptions
+        this.state.faqArticle = await ContextService.getInstance().getObject<FAQArticle>(
+            KIXObjectType.FAQ_ARTICLE, ContextType.MAIN
         ).catch((error) => {
             this.state.error = error;
-        });
+        }) as FAQArticle;
 
-        if (faqArticles && faqArticles.length) {
-            this.state.faqArticle = faqArticles[0];
-        } else {
+        if (!this.state.faqArticle) {
             this.state.error = `No faq article found for id ${this.state.faqArticleId}`;
         }
     }

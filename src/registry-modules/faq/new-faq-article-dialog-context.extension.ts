@@ -2,12 +2,11 @@ import {
     ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { NewContactDialogContextConfiguration } from "@kix/core/dist/browser/contact";
 import { ServiceContainer } from "@kix/core/dist/common";
 import { IConfigurationService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
-import { NewFAQArticleDialogContext } from "@kix/core/dist/browser/faq";
+import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -16,7 +15,7 @@ export class Extension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        return new NewContactDialogContextConfiguration();
+        return new NewFAQArticleDialogContextConfiguration();
     }
 
     public async createFormDefinitions(): Promise<void> {
