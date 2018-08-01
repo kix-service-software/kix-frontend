@@ -9,7 +9,7 @@ Am Beispiel von FAQ.
 * Service muss von `KIXObjectService` ableiten
 
 ```javascript
-export class FAQService extends KIXObjectService {
+export class FAQService extends KIXObjectService<FAQArticle> {
 
     private static INSTANCE: FAQService;
 
@@ -24,8 +24,6 @@ export class FAQService extends KIXObjectService {
         super();
     }
 
-    public mainKIXObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
-
     public isServiceFor(type: KIXObjectType) {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
@@ -34,5 +32,15 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_VOTE;
     }
 
+    public getLinkObjectName(): string {
+        return "FAQArticle";
+    }
+
+    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        // some code
+    }
+
 }
 ```
+
+Service initial in `_base-template/component.ts` aufrufen lassen (`bootstrapServices`)

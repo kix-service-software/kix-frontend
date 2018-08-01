@@ -8,6 +8,7 @@ import { TicketService } from '@kix/core/dist/browser/ticket';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { SearchService } from '@kix/core/dist/browser/search';
 import { FAQService } from '@kix/core/dist/browser/faq';
+import { LinkService } from '@kix/core/dist/browser/link';
 import { IdService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
@@ -61,6 +62,7 @@ class Component {
         ContactService.getInstance();
         FAQService.getInstance();
         SearchService.getInstance();
+        LinkService.getInstance();
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,

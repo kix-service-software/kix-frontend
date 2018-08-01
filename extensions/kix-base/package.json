@@ -39,7 +39,8 @@
             "faq-module": "../../dist/registry-modules/faq/faq-module.extension",
             "faq-details-module": "../../dist/registry-modules/faq/faq-details-module.extension",
             "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
-            "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension"
+            "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension",
+            "edit-link-dialog-context": "../../dist/registry-modules/link/edit-link-dialog-context.extension"
         }
     }
 }

@@ -41,18 +41,12 @@ export class TicketDetailsComponent {
     }
 
     private async loadTicket(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            ['Ticket.*'], null, null, null, null,
-            ['TimeUnits', 'DynamicFields', 'Links', 'Articles', 'Attachments', 'Flags', 'History', 'Watchers'],
-            ['Links', 'Articles', 'Attachments', 'Flags', 'History']
-        );
-        const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-            KIXObjectType.TICKET, [this.state.ticketId], loadingOptions
+        this.state.ticket = await ContextService.getInstance().getObject<Ticket>(
+            KIXObjectType.TICKET, ContextType.MAIN
         ).catch((error) => {
             this.state.error = error;
-        });
+        }) as Ticket;
 
-        this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
 
         if (!this.state.ticket) {
             this.state.error = `No found ticket for ID: ${this.state.ticketId}`;
