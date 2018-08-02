@@ -24,7 +24,9 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
         const searchResultListWidget =
             new ConfiguredWidget("201800709-search-result-list-widget", new WidgetConfiguration(
-                "search-result-list-widget", "Trefferliste", ['csv-export-action', 'bulk-action'], {},
+                "search-result-list-widget", "Trefferliste", [
+                    'csv-export-action', 'bulk-action', 'search-result-print-action'
+                ], {},
                 false, true, WidgetSize.LARGE, null, true)
             );
 
