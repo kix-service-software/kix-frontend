@@ -2,15 +2,15 @@
     <@content>
         <div.search-criteria>
             <div.search-criteria-list>
-                <for(criteria in state.criterias)>
+                <for(criteria in state.displayCriterias)>
                     <div.search-criteria-list-item>
                         <div.key title=criteria[0]>${criteria[0]}</div>
                         <div.operator title=criteria[1]>(${criteria[1]})</div>
                         <div.value title=criteria[2]>${criteria[2]}</div>
                     </div>
                 </for>
-                <if(state.criterias.length < 10)>
-                    <for(i from state.criterias.length to 9 step 1)>
+                <if(state.displayCriterias.length < 10)>
+                    <for(i from state.displayCriterias.length to 9 step 1)>
                         <div.search-criteria-list-item>&nbsp;</div>
                     </for>
                 </if>
@@ -21,7 +21,7 @@
                     Neue Suche
                 </button>
                 <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten"
-                    disabled=(state.criterias.length === 0)>
+                    disabled=(state.displayCriterias.length === 0)>
                     <span.kix-icon-edit/>
                     Suche bearbeiten
                 </button>

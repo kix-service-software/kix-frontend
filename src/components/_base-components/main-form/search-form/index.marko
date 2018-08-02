@@ -6,8 +6,9 @@
         <if(state.fulltextSearch)>
             <div.fulltext-search on-click('toggleFulltext', true)>
                 <span>Volltext:</span>
-                <input.input-style value=state.fulltextValue on-change('fulltextValueChanged')/>
-                <if( !state.fulltextActive)>
+                <input.input-style key="fulltext-input" value=state.fulltextValue on-keyup('fulltextValueChanged')
+                    on-change('fulltextValueChanged')/>
+                <if(!state.fulltextActive)>
                     <div.form-shield title="Volltextsuche aktivieren"/>
                 </if>
             </div>

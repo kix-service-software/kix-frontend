@@ -18,7 +18,7 @@
                             on-nodesChanged('treeValueChanged', searchValue) multiselect=searchValue.isMultiselect/>
                     </if>
                     <else-if(searchValue.isDate)>
-                        <input type=date/>
+                        <input.input-style type="date" on-change('dateValueChanged', searchValue) value=searchValue.date/>
                     </else-if>
                     <else-if(searchValue.isDateTime)>
                         <input.input-style type="date" on-change('dateValueChanged', searchValue) value=searchValue.date/>

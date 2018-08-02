@@ -1,16 +1,16 @@
 import {
     WidgetType, OverlayType, StringContent,
-    KIXObject, SearchFormInstance, FilterCriteria
+    KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener
 } from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, KIXObjectServiceRegistry,
-    IKIXObjectSearchListener, IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
+    IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
     TableRowHeight
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
-class Component implements IKIXObjectSearchListener {
+class Component implements ISearchFormListener {
 
     private state: ComponentState;
     public listenerId: string;
@@ -40,11 +40,7 @@ class Component implements IKIXObjectSearchListener {
             this.state.fulltextActive = this.state.fulltextSearch;
             this.state.defaultProperties = formInstance.form.defaultSearchProperties;
 
-            formInstance.registerSearchFormListener({
-                searchCriteriasChanged: (criterias: FilterCriteria[]) => {
-                    this.setCanSearch();
-                }
-            });
+            formInstance.registerSearchFormListener(this);
         }
 
         if (KIXObjectSearchService.getInstance().getSearchCache()) {
@@ -62,6 +58,13 @@ class Component implements IKIXObjectSearchListener {
         this.state.loading = false;
     }
 
+    public onDestroy(): void {
+        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            formInstance.removeSearchFormListener(this.listenerId);
+        }
+    }
+
     public keyDown(event: any): void {
         if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
@@ -73,6 +76,7 @@ class Component implements IKIXObjectSearchListener {
 
     public fulltextValueChanged(event: any): void {
         this.state.fulltextValue = event.target.value;
+        this.setCanSearch();
     }
 
     public reset(): void {
@@ -129,6 +133,13 @@ class Component implements IKIXObjectSearchListener {
 
     public toggleFulltext(enable: boolean): void {
         this.state.fulltextActive = enable;
+        if (this.state.fulltextActive) {
+            const fulltextInput = (this as any).getEl('fulltext-input');
+            if (fulltextInput) {
+                fulltextInput.focus();
+            }
+        }
+        this.setCanSearch();
     }
 
     private setSearchResult(objects: KIXObject[]): void {
@@ -149,26 +160,21 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private setCanSearch(): void {
-        const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
-        if (formInstance) {
-            this.state.canSearch = formInstance.getCriterias().some(
-                (c) => c.property !== null && c.operator !== null && c.value !== null
-            );
+        if (this.state.fulltextActive) {
+            this.state.canSearch = !!this.state.fulltextValue;
+        } else {
+            const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+            if (formInstance) {
+                this.state.canSearch = formInstance.getCriterias().some(
+                    (c) => c.property !== null && c.operator !== null && c.value !== null
+                );
+            }
         }
     }
 
-    public searchCleared(): void {
-        this.state.canSearch = false;
+    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
+        this.setCanSearch();
     }
-
-    public searchFinished(): void {
-        return;
-    }
-
-    public searchResultCategoryChanged(): void {
-        return;
-    }
-
 }
 
 module.exports = Component;
