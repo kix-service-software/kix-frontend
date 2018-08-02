@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     IKIXObjectSearchListener, KIXObjectSearchService,
-    LabelService, ContextService, SearchOperatorUtil
+    LabelService, ContextService, SearchOperatorUtil, SearchOperator
 } from '@kix/core/dist/browser';
 import { KIXObject, ContextMode } from '@kix/core/dist/model';
 class Component implements IKIXObjectSearchListener {
@@ -32,7 +32,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchCleared(): void {
-        this.state.criterias = [];
+        this.state.displayCriterias = [];
     }
 
     public searchFinished(): void {
@@ -40,26 +40,32 @@ class Component implements IKIXObjectSearchListener {
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = labelProvider.getObjectName(true);
-            this.state.criterias = [];
-            for (const criteria of cache.criterias) {
-                let displayValue;
-                if (Array.isArray(criteria.value)) {
-                    const valueStrings = [];
-                    for (const v of criteria.value) {
-                        const value = labelProvider.getPropertyValueDisplayText(criteria.property, v);
-                        valueStrings.push(value);
-                    }
-                    displayValue = valueStrings.join(', ');
-                } else if (criteria.value instanceof KIXObject) {
-                    displayValue = criteria.value.toString();
-                } else {
-                    displayValue = labelProvider.getPropertyValueDisplayText(criteria.property, criteria.value);
-                }
-
-                const displayProperty = labelProvider.getPropertyText(criteria.property);
-                this.state.criterias.push([
-                    displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
+            this.state.displayCriterias = [];
+            if (cache.isFulltext && cache.fulltextValue) {
+                this.state.displayCriterias.push([
+                    "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), cache.fulltextValue
                 ]);
+            } else {
+                for (const criteria of cache.criterias) {
+                    let displayValue;
+                    if (Array.isArray(criteria.value)) {
+                        const valueStrings = [];
+                        for (const v of criteria.value) {
+                            const value = labelProvider.getPropertyValueDisplayText(criteria.property, v);
+                            valueStrings.push(value);
+                        }
+                        displayValue = valueStrings.join(', ');
+                    } else if (criteria.value instanceof KIXObject) {
+                        displayValue = criteria.value.toString();
+                    } else {
+                        displayValue = labelProvider.getPropertyValueDisplayText(criteria.property, criteria.value);
+                    }
+
+                    const displayProperty = labelProvider.getPropertyText(criteria.property);
+                    this.state.displayCriterias.push([
+                        displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
+                    ]);
+                }
             }
         } else {
             this.state.title = "";

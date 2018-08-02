@@ -34,8 +34,8 @@ class Component implements IKIXObjectSearchListener {
             );
         }
 
-        if (KIXObjectSearchService.getInstance().getSearchCache()) {
-            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (cache && (!cache.isFulltext || !cache.fulltextValue)) {
             cache.criterias.forEach((criteria) => {
                 const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);
 
