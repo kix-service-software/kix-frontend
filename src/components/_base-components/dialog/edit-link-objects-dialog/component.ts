@@ -1,17 +1,18 @@
 import { ComponentState } from './ComponentState';
-import { DialogService, OverlayService, WidgetService } from '@kix/core/dist/browser';
+import { DialogService, OverlayService, WidgetService, ContextService } from '@kix/core/dist/browser';
 import { ComponentContent, OverlayType, StringContent, WidgetType } from '@kix/core/dist/model';
 
 class Component {
 
     private state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onMount(): void {
         WidgetService.getInstance().setWidgetType('link-objects-preview-table', WidgetType.GROUP);
+        // ContextService.getInstance().getContext();
     }
 
     public getResultTitle(): string {

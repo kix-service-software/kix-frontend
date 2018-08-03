@@ -1,16 +1,16 @@
 # Actions
 
-Am Beispiel von LinkEditAction.
+Am Beispiel von LinkedObjectsEditAction.
 
 ## Action implementieren
 
 * Action muss von `AbstractAction` ableiten
 
 ```javascript
-export class LinkEditAction extends AbstractAction {
+export class LinkedObjectsEditAction extends AbstractAction {
 
     public initAction(displayText: boolean): void {
-        this.text = "Verknüpfungen bearbeiten";
+        this.text = "Bearbeiten";
         this.icon = "kix-icon-edit";
         this.displayText = displayText;
     }
@@ -27,5 +27,5 @@ export class LinkEditAction extends AbstractAction {
 
 ```javascript
 ActionFactory.getInstance()
-    .registerAction('link-edit-action', LinkEditAction);
+    .registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 ```
