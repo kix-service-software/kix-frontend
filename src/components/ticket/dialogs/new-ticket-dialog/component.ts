@@ -6,7 +6,6 @@ import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
-import { TicketService } from "@kix/core/dist/browser/ticket";
 import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
 
 class NewTicketDialogComponent {

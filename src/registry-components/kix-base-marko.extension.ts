@@ -9,7 +9,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'quick-search',
             '_base-components/base-html-components/list-with-title',
             '_base-components/dialog/link-object-dialog',
-            '_base-components/dialog/edit-link-objects-dialog'
+            '_base-components/dialog/edit-linked-objects-dialog'
         ];
     }
 
@@ -38,7 +38,7 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['icon', '_base-components/icon'],
             ['list-with-title', '_base-components/base-html-components/list-with-title'],
             ['link-object-dialog', '_base-components/dialog/link-object-dialog'],
-            ['edit-link-objects-dialog', '_base-components/dialog/edit-link-objects-dialog']
+            ['edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog']
         ];
     }
 
