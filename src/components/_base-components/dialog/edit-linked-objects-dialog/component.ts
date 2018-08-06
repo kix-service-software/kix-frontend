@@ -31,6 +31,7 @@ class Component {
             this.links = this.linkRootObject ? this.linkRootObject.Links : [];
             this.state.linkObjectCount = this.links ? this.links.length : 0;
             await this.prepareLinkObjects();
+            await this.reviseLinkObjects();
             this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.LINK_OBJECT
             );
@@ -68,11 +69,10 @@ class Component {
                 }
                 return linkObject;
             });
-            await this.prepareLinkObjectsTitles();
         }
     }
 
-    private async prepareLinkObjectsTitles(): Promise<void> {
+    private async reviseLinkObjects(): Promise<void> {
         const linkedObjectIds: Map<KIXObjectType, string[]> = new Map();
         this.linkObjects.forEach((lo) => {
             if (linkedObjectIds.has(lo.linkedObjectType)) {
@@ -81,6 +81,11 @@ class Component {
                 linkedObjectIds.set(lo.linkedObjectType, [lo.linkedObjectKey]);
             }
         });
+        await this.setLinkObjectsTitles(linkedObjectIds);
+        this.setFilter(linkedObjectIds);
+    }
+
+    private async setLinkObjectsTitles(linkedObjectIds): Promise<void> {
         const linkedObjectIdsIterator = linkedObjectIds.entries();
         let linkedObjectIdsByType = linkedObjectIdsIterator.next();
         while (linkedObjectIdsByType && linkedObjectIdsByType.value) {
@@ -99,7 +104,9 @@ class Component {
             });
             linkedObjectIdsByType = linkedObjectIdsIterator.next();
         }
+    }
 
+    private setFilter(linkedObjectIds): void {
         linkedObjectIds.forEach((ids, type) => {
             this.state.predefinedTableFilter.push(
                 new KIXObjectPropertyFilter(type.toString(), [
