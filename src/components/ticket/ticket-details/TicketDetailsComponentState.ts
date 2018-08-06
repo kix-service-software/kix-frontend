@@ -10,8 +10,6 @@ export class TicketDetailsComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public generalActions: AbstractAction[] = [],
         public ticketActions: AbstractAction[] = [],
-        public ticketHook: string = '',
-        public ticketHookDivider: string = '',
         public loadingTicket: boolean = true,
         public loadingConfig: boolean = true,
         public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null,

@@ -1,6 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, ContextMode, Customer, KIXObjectLoadingOptions } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
+import { KIXObjectType, WidgetType, Customer, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import {
+    ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
+} from "@kix/core/dist/browser";
 import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -66,9 +68,9 @@ class Component {
     }
 
     public getTitle(): string {
-        return this.state.customer
-            ? this.state.customer.DisplayValue
-            : 'Kunde: ' + this.state.customerId;
+        // TODO: ggf. über Context?
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.customer.KIXObjectType);
+        return service.getDetailsTitle(this.state.customer);
 
     }
 

@@ -1,7 +1,7 @@
 <if(!state.loading)>
-    <widget instanceId="edit-link-object-dialog">
+    <widget instanceId="edit-linked-objects-dialog">
         <@content>
-            <div.edit-link-dialog-container>
+            <div.edit-linked-objects-dialog-container>
                 <widget instanceId="link-objects-preview-table" title=component.getResultTitle()>
                     <@content>
                         <if(state.table)>
@@ -9,6 +9,9 @@
                         </if>
                     </@content>
                 </widget>
+                <div.dialog-button-container>
+                    <!-- Löschen- und Verknüpfen-Anlegen-Button -->
+                </div>
             </div>
             <div.dialog-button-container>
                 <button.cancel-button type="button" on-click("cancel") title="Abbrechen">

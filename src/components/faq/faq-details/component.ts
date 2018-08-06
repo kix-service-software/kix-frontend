@@ -1,4 +1,4 @@
-import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory, WidgetService, KIXObjectServiceRegistry } from "@kix/core/dist/browser";
 import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, AbstractAction, WidgetType, KIXObjectLoadingOptions, ContextType } from "@kix/core/dist/model";
@@ -46,11 +46,9 @@ class Component {
     }
 
     public getTitle(): string {
-        if (this.state.faqArticle) {
-            return `${this.state.faqArticle.Number} - ${this.state.faqArticle.Title}`;
-        } else {
-            return "FAQ Article";
-        }
+        // TODO: ggf. über Context?
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.faqArticle.KIXObjectType);
+        return service.getDetailsTitle(this.state.faqArticle);
     }
 
     public getFAQActions(): AbstractAction[] {

@@ -30,7 +30,7 @@ export class Extension implements IModuleFactoryExtension {
             new ConfiguredWidget('faq-article-linked-objects-widget',
                 new WidgetConfiguration(
                     'faq-article-linked-objects-widget', 'Verknüpfte Objekte',
-                    ['link-edit-action', 'faq-article-print-action'],
+                    ['linked-objects-edit-action', 'faq-article-print-action'],
                     {
                         linkedObjectTypes: [
                             ["Tickets", KIXObjectType.TICKET],
