@@ -2,11 +2,12 @@ import { ComponentState } from './ComponentState';
 import {
     DialogService, OverlayService, WidgetService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
-    TableHighlightLayer, LabelService, KIXObjectServiceRegistry
+    TableHighlightLayer, LabelService, KIXObjectServiceRegistry, SearchOperator
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
-    WidgetType, Link, KIXObject, LinkObject, KIXObjectType, CreateLinkDescription
+    WidgetType, Link, KIXObject, LinkObject, KIXObjectType,
+    CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria, LinkObjectProperty
 } from '@kix/core/dist/model';
 
 class Component {
@@ -30,6 +31,7 @@ class Component {
             this.links = this.linkRootObject ? this.linkRootObject.Links : [];
             this.state.linkObjectCount = this.links ? this.links.length : 0;
             await this.prepareLinkObjects();
+            await this.reviseLinkObjects();
             this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.LINK_OBJECT
             );
@@ -67,11 +69,10 @@ class Component {
                 }
                 return linkObject;
             });
-            await this.prepareLinkObjectsTitles();
         }
     }
 
-    private async prepareLinkObjectsTitles(): Promise<void> {
+    private async reviseLinkObjects(): Promise<void> {
         const linkedObjectIds: Map<KIXObjectType, string[]> = new Map();
         this.linkObjects.forEach((lo) => {
             if (linkedObjectIds.has(lo.linkedObjectType)) {
@@ -80,6 +81,11 @@ class Component {
                 linkedObjectIds.set(lo.linkedObjectType, [lo.linkedObjectKey]);
             }
         });
+        await this.setLinkObjectsTitles(linkedObjectIds);
+        this.setFilter(linkedObjectIds);
+    }
+
+    private async setLinkObjectsTitles(linkedObjectIds): Promise<void> {
         const linkedObjectIdsIterator = linkedObjectIds.entries();
         let linkedObjectIdsByType = linkedObjectIdsIterator.next();
         while (linkedObjectIdsByType && linkedObjectIdsByType.value) {
@@ -100,8 +106,24 @@ class Component {
         }
     }
 
+    private setFilter(linkedObjectIds): void {
+        linkedObjectIds.forEach((ids, type) => {
+            this.state.predefinedTableFilter.push(
+                new KIXObjectPropertyFilter(type.toString(), [
+                    new TableFilterCriteria(
+                        LinkObjectProperty.LINKED_OBJECT_TYPE, SearchOperator.EQUALS, type.toString()
+                    )
+                ]),
+            );
+        });
+    }
+
     public getResultTitle(): string {
         return `Vorhandene Verknüpfungen (${this.state.linkObjectCount})`;
+    }
+
+    public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
+        this.state.table.setFilterSettings(textFilterValue, filter);
     }
 
     public openAddLinkDialog(): void {

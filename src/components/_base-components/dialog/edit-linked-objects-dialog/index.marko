@@ -5,6 +5,9 @@
                 <widget instanceId="link-objects-preview-table" title=component.getResultTitle()>
                     <@content>
                         <if(state.table)>
+                            <div.linkObjectsFilter>
+                                <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte" on-filter('filter')/>
+                            </div>
                             <standard-table standardTable=state.table/>
                         </if>
                     </@content>
