@@ -1,6 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Contact, ContextMode, KIXObjectLoadingOptions } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, IdService, WidgetService } from "@kix/core/dist/browser";
+import { KIXObjectType, WidgetType, Contact } from "@kix/core/dist/model";
+import {
+    ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
+} from "@kix/core/dist/browser";
 import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 
@@ -61,9 +63,9 @@ class Component {
     }
 
     public getTitle(): string {
-        return this.state.contact
-            ? this.state.contact.DisplayValue
-            : 'Ansprechpartner: ' + this.state.contactId;
+        // TODO: ggf. über Context?
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.contact.KIXObjectType);
+        return service.getDetailsTitle(this.state.contact);
 
     }
 

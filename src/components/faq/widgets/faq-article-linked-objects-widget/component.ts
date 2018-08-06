@@ -3,7 +3,7 @@ import {
     ContextService, ActionFactory, KIXObjectServiceRegistry, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService
 } from '@kix/core/dist/browser';
-import { KIXObjectType, Link, KIXObject, DataType, KIXObjectLoadingOptions, WidgetType } from '@kix/core/dist/model';
+import { KIXObjectType, Link, KIXObject, DataType, WidgetType } from '@kix/core/dist/model';
 import { FAQArticle } from '@kix/core/dist/model/kix/faq';
 
 class Component {
@@ -23,14 +23,9 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Links'], ['Links']);
-        const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [context.objectId], loadingOptions
-        );
+        this.state.faqArticle = await context.getObject<FAQArticle>();
 
-        if (faqs && faqs.length) {
-            this.state.faqArticle = faqs[0];
-
+        if (this.state.faqArticle) {
             this.setActions();
             await this.setLinkedObjectsGroups();
         }

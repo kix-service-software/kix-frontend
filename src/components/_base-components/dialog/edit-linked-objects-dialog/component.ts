@@ -1,7 +1,8 @@
 import { ComponentState } from './ComponentState';
 import {
     DialogService, OverlayService, WidgetService,
-    ContextService, StandardTableFactoryService, ITableHighlightLayer, TableHighlightLayer, LabelService
+    ContextService, StandardTableFactoryService, ITableHighlightLayer,
+    TableHighlightLayer, LabelService, KIXObjectServiceRegistry
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
@@ -28,7 +29,7 @@ class Component {
             this.linkRootObject = await activeContext.getObject();
             this.links = this.linkRootObject ? this.linkRootObject.Links : [];
             this.state.linkObjectCount = this.links ? this.links.length : 0;
-            this.prepareLinkObjects();
+            await this.prepareLinkObjects();
             this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.LINK_OBJECT
             );
@@ -42,9 +43,10 @@ class Component {
         }
     }
 
-    private prepareLinkObjects() {
+    private async prepareLinkObjects(): Promise<void> {
         const objectData = ContextService.getInstance().getObjectData();
         if (this.links && this.links.length && objectData) {
+
             this.linkObjects = this.links.map((l) => {
                 const linkObject: LinkObject = new LinkObject();
                 const linkedAs = objectData.linkTypes.find((lt) => lt.Name === l.Type);
@@ -52,21 +54,49 @@ class Component {
                     l.SourceObject === this.linkRootObject.KIXObjectType &&
                     l.SourceKey.toString() === this.linkRootObject.ObjectId.toString()
                 ) {
-                    linkObject.ObjectId = l.TargetKey;
-                    linkObject.linkedObjectKey = l.TargetKey;
+                    linkObject.ObjectId = l.ObjectId;
+                    linkObject.linkedObjectKey = l.TargetKey.toString();
                     linkObject.linkedObjectType = l.TargetObject as KIXObjectType;
-                    linkObject.title = l.TargetKey + ':::' + l.TargetObject;
                     linkObject.linkedAs = linkedAs.TargetName;
                 } else {
-                    linkObject.ObjectId = l.SourceKey;
-                    linkObject.linkedObjectKey = l.SourceKey;
+                    linkObject.ObjectId = l.ObjectId;
+                    linkObject.linkedObjectKey = l.SourceKey.toString();
                     linkObject.linkedObjectType = l.SourceObject as KIXObjectType;
-                    linkObject.title = l.SourceKey + ':::' + l.SourceObject;
                     linkObject.linkedAs = linkedAs.SourceName;
                     linkObject.isSource = true;
                 }
                 return linkObject;
             });
+            await this.prepareLinkObjectsTitles();
+        }
+    }
+
+    private async prepareLinkObjectsTitles(): Promise<void> {
+        const linkedObjectIds: Map<KIXObjectType, string[]> = new Map();
+        this.linkObjects.forEach((lo) => {
+            if (linkedObjectIds.has(lo.linkedObjectType)) {
+                linkedObjectIds.get(lo.linkedObjectType).push(lo.linkedObjectKey);
+            } else {
+                linkedObjectIds.set(lo.linkedObjectType, [lo.linkedObjectKey]);
+            }
+        });
+        const linkedObjectIdsIterator = linkedObjectIds.entries();
+        let linkedObjectIdsByType = linkedObjectIdsIterator.next();
+        while (linkedObjectIdsByType && linkedObjectIdsByType.value) {
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(linkedObjectIdsByType.value[0]);
+            const objects =
+                linkedObjectIdsByType.value[1].length ?
+                    await service.loadObjects(linkedObjectIdsByType.value[0], linkedObjectIdsByType.value[1], null)
+                    : [];
+            objects.forEach((o) => {
+                const linkObject =
+                    this.linkObjects.find((lo) => lo.linkedObjectType === o.KIXObjectType &&
+                        lo.linkedObjectKey === o.ObjectId.toString());
+                if (linkObject) {
+                    linkObject.title = service.getDetailsTitle(o);
+                }
+            });
+            linkedObjectIdsByType = linkedObjectIdsIterator.next();
         }
     }
 

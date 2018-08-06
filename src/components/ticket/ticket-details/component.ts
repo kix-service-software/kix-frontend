@@ -1,10 +1,8 @@
 import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
-import {
-    Ticket, WidgetType, ContextType, KIXObjectType, KIXObjectLoadingOptions
-} from '@kix/core/dist/model';
+import { Ticket, WidgetType, ContextType, KIXObjectType } from '@kix/core/dist/model';
 import { TicketDetailsComponentState } from './TicketDetailsComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
-import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
+import { ActionFactory, WidgetService, KIXObjectServiceRegistry } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 
@@ -53,7 +51,6 @@ export class TicketDetailsComponent {
         }
 
         this.state.loadingTicket = false;
-        this.setTicketHookInfo();
     }
 
     private setActions(): void {
@@ -75,14 +72,6 @@ export class TicketDetailsComponent {
         return actions;
     }
 
-    private setTicketHookInfo(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            this.state.ticketHook = objectData.ticketHook;
-            this.state.ticketHookDivider = objectData.ticketHookDivider;
-        }
-    }
-
     public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
@@ -90,11 +79,9 @@ export class TicketDetailsComponent {
     }
 
     public getTitle(): string {
-        if (this.state.ticket) {
-            const titlePrefix = this.state.ticketHook + this.state.ticketHookDivider + this.state.ticket.TicketNumber;
-            return titlePrefix + " - " + this.state.ticket.Title;
-        }
-        return '';
+        // TODO: ggf. über Context?
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.ticket.KIXObjectType);
+        return service.getDetailsTitle(this.state.ticket);
     }
 
     public getLaneKey(): string {

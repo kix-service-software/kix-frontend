@@ -17,7 +17,7 @@ export class LinkedObjectsEditAction extends AbstractAction {
 
     public run(): void {
         const context = ContextService.getInstance().getActiveContext();
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.LINK, ContextMode.EDIT_LINKS, context.objectId);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.LINK, ContextMode.EDIT_LINKS);
     }
 
 }
