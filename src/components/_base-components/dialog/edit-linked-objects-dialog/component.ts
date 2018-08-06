@@ -2,11 +2,12 @@ import { ComponentState } from './ComponentState';
 import {
     DialogService, OverlayService, WidgetService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
-    TableHighlightLayer, LabelService, KIXObjectServiceRegistry
+    TableHighlightLayer, LabelService, KIXObjectServiceRegistry, SearchOperator
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
-    WidgetType, Link, KIXObject, LinkObject, KIXObjectType, CreateLinkDescription
+    WidgetType, Link, KIXObject, LinkObject, KIXObjectType,
+    CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria, LinkObjectProperty
 } from '@kix/core/dist/model';
 
 class Component {
@@ -98,10 +99,24 @@ class Component {
             });
             linkedObjectIdsByType = linkedObjectIdsIterator.next();
         }
+
+        linkedObjectIds.forEach((ids, type) => {
+            this.state.predefinedTableFilter.push(
+                new KIXObjectPropertyFilter(type.toString(), [
+                    new TableFilterCriteria(
+                        LinkObjectProperty.LINKED_OBJECT_TYPE, SearchOperator.EQUALS, type.toString()
+                    )
+                ]),
+            );
+        });
     }
 
     public getResultTitle(): string {
         return `Vorhandene Verknüpfungen (${this.state.linkObjectCount})`;
+    }
+
+    public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
+        this.state.table.setFilterSettings(textFilterValue, filter);
     }
 
     public openAddLinkDialog(): void {
