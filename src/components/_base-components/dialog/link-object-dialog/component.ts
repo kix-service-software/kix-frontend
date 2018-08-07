@@ -199,7 +199,10 @@ class LinkTicketDialogComponent {
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
-            DialogService.getInstance().publishDialogResult(this.resultListenerId, this.state.linkDescriptions);
+            DialogService.getInstance().publishDialogResult(
+                this.resultListenerId,
+                [this.state.linkDescriptions, newLinks]
+            );
             this.showSuccessHint(newLinks.length);
             this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
             this.highlightLayer.setHighlightedObjects(newLinks.map((ld) => ld.linkableObject));

@@ -40,13 +40,13 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
             'kix-icon-link'
         );
         DialogService.getInstance()
-            .registerDialogResultListener<CreateLinkDescription[]>(
+            .registerDialogResultListener<CreateLinkDescription[][]>(
                 resultListenerId, 'object-link', this.linksChanged.bind(this)
             );
     }
 
-    private linksChanged(linkDescriptions: CreateLinkDescription[]): void {
-        this.state.linkDescriptions = linkDescriptions;
+    private linksChanged(result: CreateLinkDescription[][]): void {
+        this.state.linkDescriptions = result[0];
         this.updateField();
     }
 
