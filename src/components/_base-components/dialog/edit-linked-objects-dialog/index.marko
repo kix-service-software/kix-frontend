@@ -2,7 +2,7 @@
     <widget instanceId="edit-linked-objects-dialog">
         <@content>
             <div.edit-linked-objects-dialog-container>
-                <widget instanceId="link-objects-preview-table" title=component.getResultTitle()>
+                <widget instanceId="link-objects-preview-table" title=(("Vorhandene Verknüpfungen (" + state.linkObjectCount) + ")")>
                     <@content>
                         <if(state.table)>
                             <div.linkObjectsFilter>

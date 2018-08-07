@@ -40,7 +40,6 @@ class Component {
         if (activeContext) {
             this.linkRootObject = await activeContext.getObject();
             this.links = this.linkRootObject ? this.linkRootObject.Links : [];
-            this.state.linkObjectCount = this.links ? this.links.length : 0;
 
             await this.prepareLinkObjects();
             await this.reviseLinkObjects();
@@ -56,6 +55,7 @@ class Component {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
             this.state.table.loadRows(true);
             this.highlightNewLinkObjects();
+            this.state.linkObjectCount = this.allLinkObjects.length;
         }
     }
 
@@ -166,10 +166,6 @@ class Component {
         });
     }
 
-    public getResultTitle(): string {
-        return `Vorhandene Verknüpfungen (${this.state.linkObjectCount})`;
-    }
-
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
         this.state.table.setFilterSettings(textFilterValue, filter);
     }
@@ -223,6 +219,7 @@ class Component {
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
             this.state.table.loadRows(true);
+            this.state.linkObjectCount = this.allLinkObjects.length;
         }
     }
 
