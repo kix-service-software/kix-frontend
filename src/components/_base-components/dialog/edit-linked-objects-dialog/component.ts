@@ -198,7 +198,6 @@ class Component {
     }
 
     private linksChanged(result: CreateLinkDescription[][]): void {
-        // TODO: anfügen, nicht ersetzen
         this.linkDescriptionsForCreate = [...this.linkDescriptionsForCreate, ...result[1]];
         this.linkDescriptions = result[0];
         this.updateTable(result[1]);
