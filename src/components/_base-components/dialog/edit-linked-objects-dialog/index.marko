@@ -2,18 +2,16 @@
     <widget instanceId="edit-linked-objects-dialog">
         <@content>
             <div.edit-linked-objects-dialog-container>
-                <widget instanceId="link-objects-preview-table" title=(("Vorhandene Verknüpfungen (" + state.linkObjectCount) + ")")>
-                    <@content>
-                        <if(state.table)>
-                            <div.linkObjectsFilter>
-                                <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte" on-filter('filter')/>
-                            </div>
-                            <standard-table standardTable=state.table/>
-                        </if>
-                    </@content>
-                </widget>
+                <div.table-head>
+                    <span>${"Vorhandene Verknüpfungen (" + state.linkObjectCount + ")"}</span>
+                    <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte" on-filter('filter')/>
+                </div>
+                <standard-table standardTable=state.table/>
                 <div.dialog-button-container>
-                    <!-- Löschen- und Verknüpfen-Anlegen-Button -->
+                    <button.cancel-button type="button" on-click("markToDelete") title="Verknüpfung löschen">
+                        <span.kix-icon-trash/>
+                        Verknüpfung löschen
+                    </button>
                     <button.form-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
                         <span.kix-icon-link/>
                         Verknüpfung zuordnen
