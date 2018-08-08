@@ -202,11 +202,12 @@ class Component {
 
     private updateTable(newLinkDescriptions): void {
         if (newLinkDescriptions.length) {
-            const newLinkObjects: LinkObject[] = newLinkDescriptions.map((ld) => {
+            const newLinkObjects: LinkObject[] = newLinkDescriptions.map((ld: CreateLinkDescription) => {
                 const service =
                     KIXObjectServiceRegistry.getInstance().getServiceInstance(ld.linkableObject.KIXObjectType);
                 return new LinkObject({
-                    ObjectId: ld.linkTypeDescription.linkType.TypeID,
+                    ObjectId: 'NEW-' + ld.linkableObject.KIXObjectType + '-' +
+                        ld.linkableObject.ObjectId + '-' + ld.linkTypeDescription.linkType.TypeID,
                     linkedObjectKey: ld.linkableObject.ObjectId,
                     linkedObjectType: ld.linkableObject.KIXObjectType,
                     title: service.getDetailsTitle(ld.linkableObject),
@@ -228,12 +229,29 @@ class Component {
     }
 
     public async submit(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
-        setTimeout(() => {
-            this.showSuccessHint();
-            DialogService.getInstance().closeMainDialog();
-            DialogService.getInstance().setMainDialogLoading(false);
-        }, 1500);
+        // DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
+        // const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
+
+        // let everythingOK: boolean = true;
+        // const errors: Error[] = [];
+        // for (const linkDesc of this.linkDescriptionsForCreate) {
+        //     await service.createObject(KIXObjectType.LINK, faqVote, new CreateFAQVoteOptions(this.faqArticle.ID))
+        //         .catch((error) => {
+        //             everythingOK = false;
+        //             errors.push(error);
+        //         });
+
+        // }
+        // if (everythingOK) {
+        //     this.showSuccessHint();
+        //     DialogService.getInstance().closeMainDialog();
+        //     DialogService.getInstance().setMainDialogLoading(false);
+        // } else {
+        //     DialogService.getInstance().setMainDialogLoading(false);
+        //     OverlayService.getInstance().openOverlay(
+        //         OverlayType.WARNING, null, new StringContent(errors.join(',')), 'Fehler!', true
+        //     );
+        // }
     }
 
     private showSuccessHint(): void {
