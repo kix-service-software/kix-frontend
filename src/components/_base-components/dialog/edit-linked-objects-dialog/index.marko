@@ -8,7 +8,7 @@
                 </div>
                 <standard-table standardTable=state.table/>
                 <div.dialog-button-container>
-                    <button.cancel-button type="button" on-click("markToDelete") title="Verknüpfung löschen">
+                    <button.cancel-button type="button" on-click("markToDelete") title="Verknüpfung löschen" disabled=(!state.canDelete)>
                         <span.kix-icon-trash/>
                         Verknüpfung löschen
                     </button>
@@ -23,7 +23,7 @@
                     <span.kix-icon-close/>
                     Abbrechen
                 </button>
-                <button.submit-button type="button" on-click("submit") title="Übernehmen">
+                <button.submit-button type="button" on-click("submit") title="Übernehmen" disabled=(!component.canSubmit())>
                     <span.kix-icon-check/>
                     Übernehmen
                 </button>
