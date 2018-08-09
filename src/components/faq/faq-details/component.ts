@@ -36,9 +36,7 @@ class Component {
     private async loadFAQArticle(): Promise<void> {
         this.state.faqArticle = await ContextService.getInstance().getObject<FAQArticle>(
             KIXObjectType.FAQ_ARTICLE, ContextType.MAIN
-        ).catch((error) => {
-            this.state.error = error;
-        }) as FAQArticle;
+        );
 
         if (!this.state.faqArticle) {
             this.state.error = `No faq article found for id ${this.state.faqArticleId}`;
@@ -46,9 +44,8 @@ class Component {
     }
 
     public getTitle(): string {
-        // TODO: ggf. über Context?
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.faqArticle.KIXObjectType);
-        return service.getDetailsTitle(this.state.faqArticle);
+        const context = ContextService.getInstance().getActiveContext();
+        return context.getDisplayText();
     }
 
     public getFAQActions(): AbstractAction[] {

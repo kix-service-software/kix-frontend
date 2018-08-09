@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Customer, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Customer, KIXObjectLoadingOptions, ContextType } from "@kix/core/dist/model";
 import {
     ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
@@ -31,19 +31,11 @@ class Component {
     }
 
     private async loadCustomer(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, ['Contacts', 'Tickets', 'TicketStats']
+        this.state.customer = await ContextService.getInstance().getObject<Customer>(
+            KIXObjectType.CUSTOMER, ContextType.MAIN
         );
-        const customer = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [this.state.customerId], loadingOptions, null, false
-        ).catch((error) => {
-            this.state.error = error;
-        });
 
-        if (customer && customer.length) {
-            this.state.customer = customer[0];
-            this.state.loadingCustomer = false;
-        } else {
+        if (!this.state.customer) {
             this.state.error = `No customer found for id ${this.state.customerId}`;
         }
     }
@@ -68,9 +60,8 @@ class Component {
     }
 
     public getTitle(): string {
-        // TODO: ggf. über Context?
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.customer.KIXObjectType);
-        return service.getDetailsTitle(this.state.customer);
+        const context = ContextService.getInstance().getActiveContext();
+        return context.getDisplayText();
 
     }
 

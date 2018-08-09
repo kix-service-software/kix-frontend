@@ -41,10 +41,7 @@ export class TicketDetailsComponent {
     private async loadTicket(): Promise<void> {
         this.state.ticket = await ContextService.getInstance().getObject<Ticket>(
             KIXObjectType.TICKET, ContextType.MAIN
-        ).catch((error) => {
-            this.state.error = error;
-        }) as Ticket;
-
+        );
 
         if (!this.state.ticket) {
             this.state.error = `No found ticket for ID: ${this.state.ticketId}`;
@@ -79,9 +76,8 @@ export class TicketDetailsComponent {
     }
 
     public getTitle(): string {
-        // TODO: ggf. über Context?
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.ticket.KIXObjectType);
-        return service.getDetailsTitle(this.state.ticket);
+        const context = ContextService.getInstance().getActiveContext();
+        return context.getDisplayText();
     }
 
     public getLaneKey(): string {

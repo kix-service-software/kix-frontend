@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Contact } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Contact, ContextType } from "@kix/core/dist/model";
 import {
     ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
@@ -29,16 +29,11 @@ class Component {
     }
 
     private async loadContact(): Promise<void> {
-        const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [this.state.contactId]
-        ).catch((error) => {
-            this.state.error = error;
-        });
+        this.state.contact = await ContextService.getInstance().getObject<Contact>(
+            KIXObjectType.CONTACT, ContextType.MAIN
+        );
 
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
-            this.state.loadingContact = false;
-        } else {
+        if (!this.state.contact) {
             this.state.error = `No contact found for id ${this.state.contactId}`;
         }
     }
@@ -63,9 +58,8 @@ class Component {
     }
 
     public getTitle(): string {
-        // TODO: ggf. über Context?
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.contact.KIXObjectType);
-        return service.getDetailsTitle(this.state.contact);
+        const context = ContextService.getInstance().getActiveContext();
+        return context.getDisplayText();
 
     }
 
