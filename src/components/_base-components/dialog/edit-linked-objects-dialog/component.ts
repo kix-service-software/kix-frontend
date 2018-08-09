@@ -1,14 +1,15 @@
 import { ComponentState } from './ComponentState';
 import {
-    DialogService, OverlayService, WidgetService,
+    DialogService, OverlayService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
-    TableHighlightLayer, LabelService, KIXObjectServiceRegistry, SearchOperator
+    TableHighlightLayer, LabelService, KIXObjectServiceRegistry, SearchOperator,
+    ITablePreventSelectionLayer, TablePreventSelectionLayer
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
-    WidgetType, Link, KIXObject, LinkObject, KIXObjectType,
+    Link, KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, ObjectData, LinkType
+    LinkObjectProperty, LinkTypeDescription, LinkType
 } from '@kix/core/dist/model';
 
 class Component {
@@ -19,11 +20,13 @@ class Component {
     private allLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
     private deleteLinkObjects: LinkObject[] = [];
+    private selectedLinkObjects: LinkObject[] = [];
     private linkedObjects: KIXObject[] = [];
     private linkDescriptions: CreateLinkDescription[] = [];
     private linkDescriptionsForCreate: CreateLinkDescription[] = [];
     private highlightLayerForNew: ITableHighlightLayer;
     private highlightLayerForDelete: ITableHighlightLayer;
+    private preventSelectionLayer: ITablePreventSelectionLayer;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -32,6 +35,7 @@ class Component {
         this.allLinkObjects = [];
         this.newLinkObjects = [];
         this.deleteLinkObjects = [];
+        this.selectedLinkObjects = [];
         this.linkedObjects = [];
         this.linkDescriptions = [];
         this.linkDescriptionsForCreate = [];
@@ -56,6 +60,8 @@ class Component {
                 this.state.table.addAdditionalLayerOnTop(this.highlightLayerForNew);
                 this.highlightLayerForDelete = new TableHighlightLayer('link-object-to-delete');
                 this.state.table.addAdditionalLayerOnTop(this.highlightLayerForDelete);
+                this.preventSelectionLayer = new TablePreventSelectionLayer();
+                this.state.table.addAdditionalLayerOnTop(this.preventSelectionLayer);
 
                 this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
                 this.state.table.loadRows(true);
@@ -179,8 +185,11 @@ class Component {
         });
     }
 
-    public objectSelectionChanged(selectedLinkObjects: LinkObject[]): void {
-        this.deleteLinkObjects = selectedLinkObjects;
+    public objectSelectionChanged(newSelectedLinkObjects: LinkObject[]): void {
+        this.state.canDelete = newSelectedLinkObjects.some(
+            (nslo) => !this.selectedLinkObjects.some((slo) => slo.equals(nslo))
+        );
+        this.selectedLinkObjects = newSelectedLinkObjects;
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
@@ -188,45 +197,14 @@ class Component {
     }
 
     public markToDelete(): void {
-        const deleteNewLinkObject: LinkObject[] = [];
-        this.deleteLinkObjects.forEach((dlo) => {
-            const index = this.newLinkObjects.findIndex((nlo) => nlo.equals(dlo));
-            if (index !== -1) {
-                deleteNewLinkObject.push(dlo);
-                this.newLinkObjects.splice(index, 1);
+        this.selectedLinkObjects.forEach((slo) => {
+            if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
+                this.deleteLinkObjects.push(slo);
             }
         });
-
-        this.updateDescriptions(deleteNewLinkObject);
-        this.updateTableForDelete(deleteNewLinkObject);
-    }
-
-    private updateDescriptions(deleteNewLinkObject: LinkObject[]): void {
-        this.linkDescriptionsForCreate = this.linkDescriptionsForCreate.filter(
-            (ldfc) => !deleteNewLinkObject.some(
-                (dlo) => dlo.linkedObjectKey === ldfc.linkableObject.ObjectId &&
-                    dlo.linkedObjectType === ldfc.linkableObject.KIXObjectType &&
-                    dlo.linkType.TypeID === ldfc.linkTypeDescription.linkType.TypeID
-            )
-        );
-        this.linkDescriptions = this.linkDescriptions.filter(
-            (ldfc) => !deleteNewLinkObject.some(
-                (dlo) => dlo.linkedObjectKey === ldfc.linkableObject.ObjectId &&
-                    dlo.linkedObjectType === ldfc.linkableObject.KIXObjectType &&
-                    dlo.linkType.TypeID === ldfc.linkTypeDescription.linkType.TypeID
-            )
-        );
-    }
-
-    private updateTableForDelete(deleteNewLinkObject: LinkObject[]): void {
-        this.deleteLinkObjects = this.deleteLinkObjects.filter(
-            (dlo) => !deleteNewLinkObject.some((dnlo) => dnlo.equals(dlo))
-        );
-        this.allLinkObjects = this.allLinkObjects.filter(
-            (alo) => !deleteNewLinkObject.some((dnlo) => dnlo.equals(alo))
-        );
-        this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
+        this.preventSelectionLayer.setPreventSelectionFilter(this.deleteLinkObjects);
         this.state.table.loadRows(true);
+        this.state.canDelete = false;
         this.highlightDeleteLinkObjects();
     }
 
@@ -297,7 +275,32 @@ class Component {
         DialogService.getInstance().closeMainDialog();
     }
 
+    public canSubmit(): boolean {
+        // TODO: richtig implementieren
+        return false;
+    }
+
     public async submit(): Promise<void> {
+        // const deleteNewLinkObject: LinkObject[] = [];
+        // this.deleteLinkObjects.forEach((dlo) => {
+        //     if (this.newLinkObjects.some((nlo) => nlo.equals(dlo))) {
+        //         deleteNewLinkObject.push(dlo);
+        //     }
+        // });
+        // this.deleteLinkObjects = this.deleteLinkObjects.filter(
+        //     (dlo) => !deleteNewLinkObject.some((dnlo) => dnlo.equals(dlo))
+        // );
+        // this.linkDescriptionsForCreate = this.linkDescriptionsForCreate.filter(
+        //     (ldfc) => !deleteNewLinkObject.some(
+        //         (dlo) => dlo.linkedObjectKey === ldfc.linkableObject.ObjectId &&
+        //             dlo.linkedObjectType === ldfc.linkableObject.KIXObjectType &&
+        //             dlo.linkType.TypeID === ldfc.linkTypeDescription.linkType.TypeID
+        //     )
+        // );
+
+
+
+
         // DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
         // const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
 

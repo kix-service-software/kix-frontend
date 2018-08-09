@@ -8,7 +8,8 @@ export class ComponentState {
         public loading: boolean = false,
         public linkObjectCount: number = 0,
         public table: StandardTable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = []
+        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
+        public canDelete: boolean = false
     ) { }
 
 }
