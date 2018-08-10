@@ -9,7 +9,8 @@ export class ComponentState {
         public linkObjectCount: number = 0,
         public table: StandardTable = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public canDelete: boolean = false
+        public canDelete: boolean = false,
+        public canSubmit: boolean = false
     ) { }
 
 }
