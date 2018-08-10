@@ -184,10 +184,8 @@ class Component {
     }
 
     public objectSelectionChanged(newSelectedLinkObjects: LinkObject[]): void {
-        this.state.canDelete = newSelectedLinkObjects.some(
-            (nslo) => !this.selectedLinkObjects.some((slo) => slo.equals(nslo))
-        );
         this.selectedLinkObjects = newSelectedLinkObjects;
+        this.state.canDelete = !!this.selectedLinkObjects.length;
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
@@ -279,22 +277,6 @@ class Component {
     }
 
     public async submit(): Promise<void> {
-        // const deleteNewLinkObject: LinkObject[] = [];
-        // this.deleteLinkObjects.forEach((dlo) => {
-        //     if (this.newLinkObjects.some((nlo) => nlo.equals(dlo))) {
-        //         deleteNewLinkObject.push(dlo);
-        //     }
-        // });
-        // this.deleteLinkObjects = this.deleteLinkObjects.filter(
-        //     (dlo) => !deleteNewLinkObject.some((dnlo) => dnlo.equals(dlo))
-        // );
-        // this.linkDescriptionsForCreate = this.linkDescriptionsForCreate.filter(
-        //     (ldfc) => !deleteNewLinkObject.some(
-        //         (dlo) => dlo.linkedObjectKey === ldfc.linkableObject.ObjectId &&
-        //             dlo.linkedObjectType === ldfc.linkableObject.KIXObjectType &&
-        //             dlo.linkType.TypeID === ldfc.linkTypeDescription.linkType.TypeID
-        //     )
-        // );
         const linkIdsToDelete: number[] = [];
         this.deleteLinkObjects.forEach((dlo) => {
             const newLinkObjectIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(dlo));
@@ -305,36 +287,62 @@ class Component {
             }
         });
 
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
+        let createLinksOK: boolean = true;
+        if (!!this.newLinkObjects.length) {
+            createLinksOK = await this.addLinks();
+        }
+        let deleteLinksOK: boolean = true;
+        if (createLinksOK && !!linkIdsToDelete.length) {
+            deleteLinksOK = await this.deleteLinks(linkIdsToDelete);
+        }
 
-        const errorMessages: string[] = [];
+        DialogService.getInstance().setMainDialogLoading(false);
+        if (createLinksOK && deleteLinksOK) {
+            this.showSuccessHint();
+            DialogService.getInstance().closeMainDialog();
+        }
+    }
+
+    private async addLinks(): Promise<boolean> {
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK_OBJECT);
+        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
+        let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
                 KIXObjectType.LINK_OBJECT,
                 newLinkObject,
                 new CreateLinkObjectOptions(this.linkRootObject)
             ).catch((error) => {
-                errorMessages.push(error.message);
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null,
+                    // TODO: Error richtig auswerten
+                    new StringContent('Verknüpfung nicht anlegbar (' + error + ')'),
+                    'Fehler!', true
+                );
+                ok = false;
+                return;
             });
+        }
+        return ok;
+    }
 
+    private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
+        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
+        let ok = true;
+        for (const linkId of linkIdsToDelete) {
+            await service.deleteObject(KIXObjectType.LINK_OBJECT, linkId).catch((error) => {
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null,
+                    // TODO: Error richtig auswerten
+                    new StringContent('Verknüpfung nicht entfernbar (' + error + ')'),
+                    'Fehler!', true
+                );
+                ok = false;
+                return;
+            });
         }
-        if (!!errorMessages.length) {
-            DialogService.getInstance().setMainDialogLoading(false);
-            const content = new ComponentContent('list-with-title',
-                {
-                    title: 'Fehler beim Anlegen der neuen Verknüpfungen:',
-                    list: errorMessages
-                }
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Fehler!', true
-            );
-        } else {
-            this.showSuccessHint();
-            DialogService.getInstance().closeMainDialog();
-            DialogService.getInstance().setMainDialogLoading(false);
-        }
+        return ok;
     }
 
     private showSuccessHint(): void {
