@@ -33,6 +33,7 @@ class Component {
             KIXObjectType.CONTACT, ContextType.MAIN
         );
 
+        this.state.loadingContact = false;
         if (!this.state.contact) {
             this.state.error = `No contact found for id ${this.state.contactId}`;
         }

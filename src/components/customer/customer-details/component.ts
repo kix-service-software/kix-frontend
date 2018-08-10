@@ -35,6 +35,7 @@ class Component {
             KIXObjectType.CUSTOMER, ContextType.MAIN
         );
 
+        this.state.loadingCustomer = false;
         if (!this.state.customer) {
             this.state.error = `No customer found for id ${this.state.customerId}`;
         }
