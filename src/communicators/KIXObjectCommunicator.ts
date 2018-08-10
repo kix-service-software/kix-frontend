@@ -1,6 +1,6 @@
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
-    CreateObjectResponse, KIXObjectLoadingOptions
+    CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse
 } from "@kix/core/dist/model";
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
@@ -15,6 +15,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     protected registerEvents(): void {
         this.registerEventHandler(KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
         this.registerEventHandler(KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
+        this.registerEventHandler(KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
     private async loadObjects(data: LoadObjectsRequest): Promise<CommunicatorResponse<LoadObjectsResponse<any>>> {
@@ -61,6 +62,29 @@ export class KIXObjectCommunicator extends KIXCommunicator {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             this.loggingService.error(errorMessage);
             response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, errorMessage);
+        }
+
+        return response;
+    }
+
+    private async deleteObject(data: DeleteObjectRequest): Promise<CommunicatorResponse<DeleteObjectResponse>> {
+        let response;
+
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        if (service) {
+            await service.deleteObject(data.token, data.objectType, data.objectId)
+                .then(() => {
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.DELETE_OBJECT_FINISHED, new DeleteObjectResponse(data.requestId)
+                    );
+                }).catch((error) => {
+                    this.loggingService.error(error);
+                    response = new CommunicatorResponse(KIXObjectEvent.DELETE_OBJECT_ERROR, error);
+                });
+        } else {
+            const errorMessage = 'No API service registered for object type ' + data.objectType;
+            this.loggingService.error(errorMessage);
+            response = new CommunicatorResponse(KIXObjectEvent.DELETE_OBJECT_ERROR, errorMessage);
         }
 
         return response;
