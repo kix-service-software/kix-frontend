@@ -9,7 +9,7 @@ import {
     ComponentContent, OverlayType, StringContent,
     Link, KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, LinkType
+    LinkObjectProperty, LinkTypeDescription, LinkType, CreateLinkObjectOptions
 } from '@kix/core/dist/model';
 
 class Component {
@@ -23,7 +23,6 @@ class Component {
     private selectedLinkObjects: LinkObject[] = [];
     private linkedObjects: KIXObject[] = [];
     private linkDescriptions: CreateLinkDescription[] = [];
-    private linkDescriptionsForCreate: CreateLinkDescription[] = [];
     private highlightLayerForNew: ITableHighlightLayer;
     private highlightLayerForDelete: ITableHighlightLayer;
     private preventSelectionLayer: ITablePreventSelectionLayer;
@@ -38,7 +37,6 @@ class Component {
         this.selectedLinkObjects = [];
         this.linkedObjects = [];
         this.linkDescriptions = [];
-        this.linkDescriptionsForCreate = [];
     }
 
     public async onMount(): Promise<void> {
@@ -206,6 +204,7 @@ class Component {
         this.state.table.loadRows(true);
         this.state.canDelete = false;
         this.highlightDeleteLinkObjects();
+        this.setCanSubmit();
     }
 
     private highlightDeleteLinkObjects(): void {
@@ -236,9 +235,9 @@ class Component {
     }
 
     private linksChanged(result: CreateLinkDescription[][]): void {
-        this.linkDescriptionsForCreate = [...this.linkDescriptionsForCreate, ...result[1]];
         this.linkDescriptions = result[0];
         this.updateTableForNew(result[1]);
+        this.setCanSubmit();
     }
 
     private updateTableForNew(newLinkDescriptions): void {
@@ -275,9 +274,8 @@ class Component {
         DialogService.getInstance().closeMainDialog();
     }
 
-    public canSubmit(): boolean {
-        // TODO: richtig implementieren
-        return false;
+    private setCanSubmit(): void {
+        this.state.canSubmit = !!this.deleteLinkObjects.length || !!this.newLinkObjects.length;
     }
 
     public async submit(): Promise<void> {
@@ -297,33 +295,46 @@ class Component {
         //             dlo.linkType.TypeID === ldfc.linkTypeDescription.linkType.TypeID
         //     )
         // );
+        const linkIdsToDelete: number[] = [];
+        this.deleteLinkObjects.forEach((dlo) => {
+            const newLinkObjectIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(dlo));
+            if (newLinkObjectIndex !== -1) {
+                this.newLinkObjects.splice(newLinkObjectIndex, 1);
+            } else {
+                linkIdsToDelete.push(Number(dlo.ObjectId));
+            }
+        });
 
+        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
 
+        const errorMessages: string[] = [];
+        for (const newLinkObject of this.newLinkObjects) {
+            await service.createObject(
+                KIXObjectType.LINK_OBJECT,
+                newLinkObject,
+                new CreateLinkObjectOptions(this.linkRootObject)
+            ).catch((error) => {
+                errorMessages.push(error.message);
+            });
 
-
-        // DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden aktualisiert.");
-        // const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.LINK);
-
-        // let everythingOK: boolean = true;
-        // const errors: Error[] = [];
-        // for (const linkDesc of this.linkDescriptionsForCreate) {
-        //     await service.createObject(KIXObjectType.LINK, faqVote, new CreateFAQVoteOptions(this.faqArticle.ID))
-        //         .catch((error) => {
-        //             everythingOK = false;
-        //             errors.push(error);
-        //         });
-
-        // }
-        // if (everythingOK) {
-        //     this.showSuccessHint();
-        //     DialogService.getInstance().closeMainDialog();
-        //     DialogService.getInstance().setMainDialogLoading(false);
-        // } else {
-        //     DialogService.getInstance().setMainDialogLoading(false);
-        //     OverlayService.getInstance().openOverlay(
-        //         OverlayType.WARNING, null, new StringContent(errors.join(',')), 'Fehler!', true
-        //     );
-        // }
+        }
+        if (!!errorMessages.length) {
+            DialogService.getInstance().setMainDialogLoading(false);
+            const content = new ComponentContent('list-with-title',
+                {
+                    title: 'Fehler beim Anlegen der neuen Verknüpfungen:',
+                    list: errorMessages
+                }
+            );
+            OverlayService.getInstance().openOverlay(
+                OverlayType.WARNING, null, content, 'Fehler!', true
+            );
+        } else {
+            this.showSuccessHint();
+            DialogService.getInstance().closeMainDialog();
+            DialogService.getInstance().setMainDialogLoading(false);
+        }
     }
 
     private showSuccessHint(): void {
