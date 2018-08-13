@@ -122,18 +122,21 @@ class Component {
         while (linkedObjectIdsByType && linkedObjectIdsByType.value) {
             const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(linkedObjectIdsByType.value[0]);
 
-            const objects = linkedObjectIdsByType.value[1].length ?
-                await service.loadObjects(linkedObjectIdsByType.value[0], linkedObjectIdsByType.value[1], null)
-                : [];
-            this.linkedObjects = [...this.linkedObjects, ...objects];
-            this.linkedObjects.forEach((o) => {
-                const linkObject = this.allLinkObjects.find(
-                    (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
+            if (service && linkedObjectIdsByType.value[1].length) {
+                const objects = await service.loadObjects(
+                    linkedObjectIdsByType.value[0], linkedObjectIdsByType.value[1], null
                 );
-                if (linkObject) {
-                    linkObject.title = service.getDetailsTitle(o);
-                }
-            });
+                this.linkedObjects = [...this.linkedObjects, ...objects];
+                this.linkedObjects.forEach((o) => {
+                    const linkObject = this.allLinkObjects.find(
+                        (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
+                    );
+                    if (linkObject) {
+                        linkObject.title = service.getDetailsTitle(o);
+                    }
+                });
+            }
+
             linkedObjectIdsByType = linkedObjectIdsIterator.next();
         }
     }

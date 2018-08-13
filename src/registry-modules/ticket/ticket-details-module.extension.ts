@@ -64,7 +64,8 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             );
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
-                "ticket-linked-objects-widget", "Verknüpfte Objekte", ['print-ticket-action', 'edit-ticket-action'],
+                "ticket-linked-objects-widget", "Verknüpfte Objekte",
+                ['print-ticket-action', 'linked-objects-edit-action'],
                 {
                     groups: [
                         [
