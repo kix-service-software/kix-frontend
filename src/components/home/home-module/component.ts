@@ -1,8 +1,6 @@
 import { HomeComponentState } from './HomeComponentState';
-import { ConfiguredWidget } from '@kix/core/dist/model/';
 import { ContextService } from '@kix/core/dist/browser/context/';
 import { HomeContext } from '@kix/core/dist/browser/home';
-import { ComponentsService } from '@kix/core/dist/browser/components';
 
 class HomeComponent {
 
@@ -17,9 +15,6 @@ class HomeComponent {
         this.state.contentWidgets = context.getContent();
     }
 
-    public getTemplate(widget: ConfiguredWidget): any {
-        return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
-    }
 }
 
 module.exports = HomeComponent;

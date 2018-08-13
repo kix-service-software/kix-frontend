@@ -1,5 +1,3 @@
 <div.dashboard.home>
-    <for(widget in state.contentWidgets)>
-        <include(component.getTemplate(widget), { instanceId: widget.instanceId, contextType: "MAIN" })/>
-    </for>
+    <widget-container widgets=state.contentWidgets/>
 </div>

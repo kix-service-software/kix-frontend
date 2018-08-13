@@ -26,7 +26,8 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/widgets/ticket-customer-info-widget',
             'ticket/widgets/ticket-contact-info-widget',
             'ticket/widgets/ticket-dynamic-fields-widget',
-            'ticket/widgets/ticket-linked-objects-widget'
+            'ticket/widgets/ticket-linked-objects-widget',
+            'ticket/widgets/ticket-chart-widget'
         ];
 
         return [
@@ -55,7 +56,8 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['ticket-contact-info-widget', 'ticket/widgets/ticket-contact-info-widget'],
             ['ticket-dynamic-fields-widget', 'ticket/widgets/ticket-dynamic-fields-widget'],
             ['ticket-linked-objects-widget', 'ticket/widgets/ticket-linked-objects-widget'],
-            ['ticket-dynamic-fields-container', 'ticket/ticket-dynamic-fields-container']
+            ['ticket-dynamic-fields-container', 'ticket/ticket-dynamic-fields-container'],
+            ['ticket-chart-widget', 'ticket/widgets/ticket-chart-widget']
         ];
 
         const inputs: Array<[string, string]> = [
