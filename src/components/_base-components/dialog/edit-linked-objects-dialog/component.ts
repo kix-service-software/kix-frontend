@@ -303,6 +303,10 @@ class Component {
         if (createLinksOK && deleteLinksOK) {
             this.showSuccessHint();
             DialogService.getInstance().closeMainDialog();
+            const activeContext = ContextService.getInstance().getActiveContext();
+            if (activeContext) {
+                activeContext.reloadObject();
+            }
         }
     }
 

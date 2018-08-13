@@ -29,8 +29,9 @@ class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener(this.contextListernerId, {
-            objectChanged: (id: string | number) => {
+            objectChanged: (id: string | number, object: Ticket) => {
                 if (id === this.state.ticketId) {
+                    this.state.ticket = object;
                     this.setLinkedObjects();
                 }
             },
