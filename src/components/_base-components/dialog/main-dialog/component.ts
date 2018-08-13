@@ -38,6 +38,10 @@ export class MainDialogComponent implements IMainDialogListener {
         ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
     }
 
+    public setTitle(title: string): void {
+        this.state.dialogTitle = title;
+    }
+
     public setHint(hint: string): void {
         this.state.dialogHint = hint;
     }
