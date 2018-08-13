@@ -170,12 +170,12 @@
 .explorer-widget {
     .widget();
     width: @explorer-width;
-    &.widget-content {
-        height: unset;
-        min-height: @explorer-width;
-        max-height: 400px;
+    min-height: @default-widget-height;
+    background-color: @secondary-6;
+    >.widget-content {
         overflow: auto;
         padding: 1.25em .75em 1.25em .5em;
+        max-height: 43rem - @default-widget-header-height;
     }
 }
 

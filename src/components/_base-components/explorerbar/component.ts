@@ -37,6 +37,8 @@ class Component {
                 context.registerListener(this.contextListernerId, {
                     sidebarToggled: () => { return; },
                     explorerBarToggled: () => {
+                        const activeContext = ContextService.getInstance().getActiveContext();
+                        this.state.additionalTitle = activeContext.getAdditionalInformation();
                         this.state.isExplorerBarExpanded = context.explorerBarExpanded;
                     },
                     objectChanged: () => { return; },
