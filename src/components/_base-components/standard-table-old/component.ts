@@ -1,4 +1,4 @@
-
+declare var PerfectScrollbar: any;
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
@@ -10,6 +10,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     private state: StandardTableComponentState<T>;
     private loadMoreTimeout: any = null;
+    private ps: any;
 
     public onCreate(input: StandardTableInput<T>): void {
         this.state = new StandardTableComponentState<T>();
@@ -28,6 +29,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (this.state.standardTable) {
             const table = (this as any).getEl(this.state.tableId + 'standard-table');
             const wrapperElement = (this as any).getEl(this.state.tableId + 'standard-table-wrapper');
+            this.ps = new PerfectScrollbar(table, {
+                minScrollbarLength: 50,
+                wrapperElement
+            });
 
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
                 (this as any).setStateDirty();
@@ -40,12 +45,42 @@ class StandardTableComponent<T extends KIXObject<T>> {
         setTimeout(() => {
             this.setRowWidth();
             this.setTableHeight();
+            this.initTableScrollRange();
         }, 500);
     }
 
     public onDestroy(): void {
         document.removeEventListener('mousemove', this.mousemove.bind(this));
         document.removeEventListener('mouseup', this.mouseup.bind(this));
+    }
+
+    private initTableScrollRange(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+
+        if (table) {
+
+            table.addEventListener('ps-scroll-y', () => {
+                const header = (this as any).getEl(this.state.tableId + 'header-row');
+                header.style.top = table.scrollTop + 'px';
+            });
+
+            table.addEventListener('ps-scroll-x', () => {
+                const scrollbarColumnPos = (table.scrollLeft * -1);
+
+                const toggleRowColumns: any =
+                    document.querySelectorAll("[data-id='" + this.state.tableId + "toggle-row-column']");
+                toggleRowColumns.forEach((cell: any) => {
+                    cell.style.right = scrollbarColumnPos + 'px';
+                });
+
+                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
+                openedRows.forEach((cell: any) => {
+                    cell.style.left = table.scrollLeft + 'px';
+                });
+            });
+
+            this.ps.update();
+        }
     }
 
     private setRowWidth(): void {
@@ -61,7 +96,17 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public onUpdate(): void {
+        const table = (this as any).getEl(this.state.tableId + 'standard-table');
+        const header = (this as any).getEl(this.state.tableId + 'header-row');
+        if (table && header) {
+            header.style.top = table.scrollTop + 'px';
+            // FIXME: hat hier nix zu suchen, aber ohne geht "loadMore" nicht mehr, warum auch immer...
+            table.addEventListener('ps-scroll-y', () => {
+                header.style.top = table.scrollTop + 'px';
+            });
+        }
         this.setTableHeight();
+        this.ps.update();
     }
 
     private getColumns(): TableColumn[] {
@@ -177,23 +222,23 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public loadMore(): void {
-        // const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
-        // if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
-        //     const checkHeight =
-        //         this.state.standardTable.getCurrentDisplayLimit()
-        //         * this.state.standardTable.tableConfiguration.rowHeight;
-        //     if (standardTable.scrollTop > checkHeight) {
-        //         this.state.standardTable.increaseCurrentDisplayLimit();
+        const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
+        if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
+            const checkHeight =
+                this.state.standardTable.getCurrentDisplayLimit()
+                * this.state.standardTable.tableConfiguration.rowHeight;
+            if (standardTable.scrollTop > checkHeight) {
+                this.state.standardTable.increaseCurrentDisplayLimit();
 
-        //         // check after increase if still more have to be loaded
-        //         this.loadMoreTimeout = setTimeout(() => {
-        //             this.loadMoreTimeout = null;
-        //             this.loadMore();
-        //         }, 66);
+                // check after increase if still more have to be loaded
+                this.loadMoreTimeout = setTimeout(() => {
+                    this.loadMoreTimeout = null;
+                    this.loadMore();
+                }, 66);
 
-        //         (this as any).setStateDirty();
-        //     }
-        // }
+                (this as any).setStateDirty();
+            }
+        }
     }
 
     public setTableHeight(): void {
@@ -306,6 +351,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 rowContent.style.minHeight = computedHeight;
             }
             this.setTableHeight();
+            this.ps.update();
         }, 10);
 
         return minHeight;
