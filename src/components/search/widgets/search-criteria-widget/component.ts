@@ -20,8 +20,11 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public openNewSearchDialog(): void {
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const objectType = cache ? cache.objectType : null;
+
         KIXObjectSearchService.getInstance().clearSearchCache();
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
+        ContextService.getInstance().setDialogContext(null, objectType, ContextMode.SEARCH);
     }
 
     public openEditSearchDialog(): void {
