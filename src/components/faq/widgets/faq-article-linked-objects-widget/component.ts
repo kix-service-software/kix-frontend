@@ -1,17 +1,21 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, KIXObjectServiceRegistry, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService
+    TableConfiguration, TableHeaderHeight, TableRowHeight,
+    ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
 } from '@kix/core/dist/browser';
 import { KIXObjectType, Link, KIXObject, DataType, WidgetType } from '@kix/core/dist/model';
 import { FAQArticle } from '@kix/core/dist/model/kix/faq';
+import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
 
 class Component {
 
     private state: ComponentState;
+    private contextListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.contextListenerId = IdService.generateDateBasedId('faq-linked-objects-widget');
     }
 
     public onInput(input: any): void {
@@ -24,6 +28,16 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.state.faqArticle = await context.getObject<FAQArticle>();
+        context.registerListener(this.contextListenerId, {
+            objectChanged: (id: string | number, object: FAQArticle) => {
+                if (id.toString() === this.state.faqArticle.ObjectId.toString()) {
+                    this.state.faqArticle = object;
+                    this.setLinkedObjects();
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; }
+        });
 
         if (this.state.faqArticle) {
             this.setActions();
@@ -88,6 +102,14 @@ class Component {
         const faqArticleId = this.state.faqArticle.ID.toString();
         return (link.SourceObject === objectType && link.SourceKey !== faqArticleId) ||
             (link.TargetObject === objectType && link.TargetKey !== faqArticleId);
+    }
+
+    public async setLinkedObjects(): Promise<void> {
+        this.state.loading = true;
+        this.state.linkedObjectGroups = [];
+        await this.setLinkedObjectsGroups();
+        (this as any).setStateDirty('linkedObjectGroups');
+        this.state.loading = false;
     }
 
 }
