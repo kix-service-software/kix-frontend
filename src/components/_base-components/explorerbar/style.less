@@ -30,7 +30,9 @@
             grid-template-columns: (@explorer-width - 2rem) 2rem;
             .header-left {
                 padding: 2px 1em 2px;
-                h3 {
+                display: grid;
+                grid-template-columns: max-content auto;
+                >span.rtl {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;

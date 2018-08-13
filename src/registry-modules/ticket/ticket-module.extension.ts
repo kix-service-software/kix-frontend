@@ -1,18 +1,24 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import {
-    Form, FormField, TicketProperty, ArticleProperty, FormContext,
-    KIXObjectType, FormFieldOption, FormFieldValue
-} from '@kix/core/dist/model';
-import { TicketContextConfiguration } from '@kix/core/dist/browser/ticket';
+import { ConfiguredWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
+import { TicketContextConfiguration, TicketContext } from '@kix/core/dist/browser/ticket';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
     public getModuleId(): string {
-        return "tickets";
+        return TicketContext.CONTEXT_ID;
     }
 
     public getDefaultConfiguration(): any {
-        return new TicketContextConfiguration(this.getModuleId(), [], [], [], [], []);
+        const queueExplorer =
+            new ConfiguredWidget('20180813-ticket-queue-explorer', new WidgetConfiguration(
+                'ticket-queue-explorer', 'Queues', [], {},
+                false, false, WidgetSize.SMALL, null
+            ));
+
+        const explorer = ['20180813-ticket-queue-explorer'];
+        const explorerWidgets: Array<ConfiguredWidget<any>> = [queueExplorer];
+
+        return new TicketContextConfiguration(this.getModuleId(), explorer, [], [], explorerWidgets, []);
     }
 
     public async createFormDefinitions(): Promise<void> {

@@ -12,7 +12,8 @@
             <else>
                 <div.explorer>
                     <span.header-left>
-                        <h3>${explorer.configuration.title}</h3>
+                        <span>${explorer.configuration.title + ': '}</span>
+                        <span.rtl>${state.additionalTitle}</span>
                     </span>
                     <span.header-right>
                         <span.kix-icon-sort-down on-click('toggleExplorerBar')/>
