@@ -9,7 +9,9 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             'quick-search',
             '_base-components/base-html-components/list-with-title',
             '_base-components/dialog/link-object-dialog',
-            '_base-components/dialog/edit-linked-objects-dialog'
+            '_base-components/dialog/edit-linked-objects-dialog',
+            '_base-components/widget-container',
+            '_base-components/chart'
         ];
     }
 

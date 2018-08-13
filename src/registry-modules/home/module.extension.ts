@@ -26,6 +26,79 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
+
+        const chart1 = new ConfiguredWidget('20180813-1-ticket-chart-widget', new WidgetConfiguration(
+            'ticket-chart-widget', 'Übersicht Ticketprioritäten', [], {
+                type: 'bar',
+                data: {
+                    labels: ["1 very low", "2 low", "3 normal", "4 high", "5 very high"],
+                    datasets: [{
+                        data: [0, 3, 15, 25, 4],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    }
+                }
+            },
+            false, true, WidgetSize.SMALL, null, true)
+        );
+
+        const chart2 = new ConfiguredWidget('20180813-2-ticket-chart-widget', new WidgetConfiguration(
+            'ticket-chart-widget', 'Übersicht Ticketstatus', [], {
+                type: 'pie',
+                data: {
+                    labels: ["new", "open", "pending", "escalated"],
+                    datasets: [{
+                        label: "Ticketstatus",
+                        data: [20, 50, 32, 8],
+                        backgroundColor: [
+                            'rgba(0, 255, 0, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(255, 0, 0, 0.8)'
+                        ],
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    }
+                }
+            },
+            false, true, WidgetSize.SMALL, null, true)
+        );
+
+        const chart3 = new ConfiguredWidget('20180813-3-ticket-chart-widget', new WidgetConfiguration(
+            'ticket-chart-widget', 'Übersicht letzte 7 Tage', [], {
+                type: 'line',
+                data: {
+                    labels: ["1", "2", "3", "4", "5", "6", "7"],
+                    datasets: [{
+                        data: [5, 25, 12, 3, 30, 16, 24],
+                        backgroundColor: [
+                            'rgba(255, 0, 0, 0.5)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    }
+                }
+            },
+            false, true, WidgetSize.SMALL, null, true)
+        );
+
         const predefinedToDoTableFilter = [
             new KIXObjectPropertyFilter('Verantwortliche Tickets', [
                 new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
@@ -37,8 +110,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
             ]),
         ];
-        const todoTicketList = new ConfiguredWidget("20180612-to-do-widget", new WidgetConfiguration(
-            "ticket-list-widget", "ToDo / Bearbeitung erforderlich", ['bulk-ticket-action'], new TableConfiguration(
+        const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
+            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-ticket-action'], new TableConfiguration(
                 500, 10, [
                     new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
                     new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
@@ -72,7 +145,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 ],
                 true,
                 true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                "Ticket.Age:numeric",
+                'Ticket.Age:numeric',
                 TableHeaderHeight.LARGE,
                 TableRowHeight.SMALL
             ),
@@ -80,8 +153,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         );
 
         const newTicketsListWidget =
-            new ConfiguredWidget("20180612-new-tickets-widget", new WidgetConfiguration(
-                "ticket-list-widget", "Neue Tickets", ['bulk-ticket-action'], new TableConfiguration(
+            new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
+                'ticket-list-widget', 'Neue Tickets', ['bulk-ticket-action'], new TableConfiguration(
                     500, 10, [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
@@ -100,20 +173,23 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         )
                     ],
                     true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                    "Ticket.-Age:numeric",
+                    'Ticket.-Age:numeric',
                     TableHeaderHeight.LARGE,
                     TableRowHeight.SMALL
                 ),
                 false, true, WidgetSize.LARGE, null, true)
             );
 
-        const content: string[] = ['20180612-to-do-widget', '20180612-new-tickets-widget'];
-        const contentWidgets = [todoTicketList, newTicketsListWidget];
+        const content: string[] = [
+            '20180813-1-ticket-chart-widget', '20180813-2-ticket-chart-widget', '20180813-3-ticket-chart-widget',
+            '20180612-to-do-widget',
+            '20180612-new-tickets-widget'];
+        const contentWidgets = [chart1, chart2, chart3, todoTicketList, newTicketsListWidget];
 
         // sidebars
         const notesSidebar =
-            new ConfiguredWidget("20180607-home-notes", new WidgetConfiguration(
-                "notes-widget", "Notizen", [], {},
+            new ConfiguredWidget('20180607-home-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
