@@ -38,7 +38,12 @@ class Component {
                     sidebarToggled: () => { return; },
                     explorerBarToggled: () => {
                         const activeContext = ContextService.getInstance().getActiveContext();
-                        this.state.additionalTitle = activeContext.getAdditionalInformation();
+                        const explorerStructur = [...activeContext.getAdditionalInformation()];
+                        if (explorerStructur && !!explorerStructur.length) {
+                            this.state.explorerStructurStringLastElement = explorerStructur.pop();
+                            this.state.explorerStructurString = !!explorerStructur.length ?
+                                explorerStructur.join(' | ') + ' | ' : '';
+                        }
                         this.state.isExplorerBarExpanded = context.explorerBarExpanded;
                     },
                     objectChanged: () => { return; },

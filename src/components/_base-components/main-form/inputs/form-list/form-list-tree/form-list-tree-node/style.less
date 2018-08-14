@@ -1,18 +1,19 @@
-@form-list-tree-icon-size: .875rem;
+@form-list-tree-icon-size: .625rem;
 @form-list-tree-node-size: .25rem+@form-list-tree-icon-size;
-@form-list-tree-column-gap: @margin-small;
+@form-list-tree-column-gap: .375rem;
 .form-list-tree {
     .tree-node {
         display: grid;
         grid-template-columns: @form-list-tree-node-size auto;
-        grid-gap: .25rem @form-list-tree-column-gap;
-        margin-bottom: .25rem;
+        grid-column-gap: @form-list-tree-column-gap;
         cursor: pointer;
+        line-height: @form-list-tree-node-size;
         >.tree-icon {
+            padding-top: .25rem;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
-                color: @secondary-0;
                 background-color: @secondary-2;
+                color: @secondary-0;
                 font-size: @form-list-tree-icon-size;
                 width: @form-list-tree-node-size;
                 height: @form-list-tree-node-size;
@@ -23,6 +24,8 @@
             }
         }
         >.node-value {
+            .font-size-small();
+            color: @secondary-7;
             display: grid;
             grid-auto-columns: max-content;
             grid-auto-flow: column;
@@ -31,8 +34,9 @@
             height: 1.5rem;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
-                font-size: @form-list-tree-icon-size;
+                font-size: @form-list-tree-node-size;
             }
+            margin-bottom: .5rem;
         }
         &:hover {
             >.node-value {
@@ -53,8 +57,8 @@
         }
         /* sub tree */
         >.form-list-tree {
+            margin-left: -@form-list-tree-node-size;
             grid-column: 2;
-            margin-bottom: -.25rem;
         }
     }
 }

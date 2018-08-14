@@ -81,16 +81,15 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         context.setQueue(node.id);
 
-        const additionalInformation = this.getStructureInformation();
-        context.setAdditionalInformation(additionalInformation);
+        context.setAdditionalInformation(this.getStructureInformation());
     }
 
-    private getStructureInformation(node: TreeNode = this.state.activeNode): string {
+    private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
         const queue = (node.id as Queue);
-        let info = queue.Name;
+        let info = [queue.Name];
 
         if (node.parent) {
-            info = this.getStructureInformation(node.parent) + ' | ' + info;
+            info = [...this.getStructureInformation(node.parent), ...info];
         }
 
         return info;

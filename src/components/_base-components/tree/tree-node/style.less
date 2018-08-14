@@ -1,13 +1,15 @@
-@tree-icon-size: .875rem;
+@tree-icon-size: .625rem;
 @tree-node-size: .25rem+@tree-icon-size;
-@tree-column-gap: @margin-small;
+@tree-column-gap: .375rem;
 .tree-list {
     .tree-node {
         display: grid;
         grid-template-columns: @tree-node-size auto;
-        grid-column-gap: 0.5rem;
+        grid-column-gap: @tree-column-gap;
         cursor: pointer;
+        line-height: @form-list-tree-node-size;
         >.tree-icon {
+            padding-top: .25rem;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 background-color: @secondary-2;
@@ -22,6 +24,7 @@
             }
         }
         >.node-value {
+            .font-size-small();
             color: @secondary-7;
             display: grid;
             grid-auto-columns: max-content;
@@ -31,20 +34,11 @@
             height: 1.5rem;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
-                font-size: @tree-icon-size;
+                font-size: @tree-node-size;
             }
+            margin-bottom: .5rem;
         }
-        &:hover {
-            >.tree-icon {
-                [class^="kix-icon-"],
-                [class*=" kix-icon-"] {
-                    background-color: @primary-0;
-                }
-            }
-            >.node-value {
-                color: @primary-0;
-            }
-        }
+        &:hover,
         &.active {
             >.tree-icon {
                 [class^="kix-icon-"],
@@ -55,13 +49,17 @@
             }
             >.node-value {
                 color: @primary-0;
+            }
+        }
+        &.active {
+            >.node-value {
                 font-weight: bold;
             }
         }
         /* sub tree */
         >.tree-list {
+            margin-left: -@tree-node-size;
             grid-column: 2;
-            margin-bottom: -.25rem;
             .tree-node {
                 >.tree-icon {
                     [class^="kix-icon-"],
@@ -75,6 +73,7 @@
                         [class^="kix-icon-"],
                         [class*=" kix-icon-"] {
                             background-color: @primary-2;
+                            color: @secondary-6;
                         }
                     }
                     >.node-value {
@@ -85,8 +84,8 @@
                     >.tree-icon {
                         [class^="kix-icon-"],
                         [class*=" kix-icon-"] {
-                            color: @secondary-6;
                             background-color: @primary-2;
+                            color: @secondary-6;
                         }
                     }
                     >.node-value {

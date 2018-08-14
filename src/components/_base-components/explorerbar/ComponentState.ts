@@ -6,6 +6,7 @@ export class ComponentState {
         public explorer: ConfiguredWidget[] = [],
         public contextType: ContextType = null,
         public isExplorerBarExpanded: boolean = true,
-        public additionalTitle: string = null
+        public explorerStructurString: string = null,
+        public explorerStructurStringLastElement: string = null
     ) { }
 }
