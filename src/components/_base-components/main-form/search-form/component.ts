@@ -148,7 +148,7 @@ class Component implements ISearchFormListener {
 
         const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        const objectProperties = searchCache ? searchCache.criterias.map((c) => c.property) : [];
+        const objectProperties = searchCache ? searchCache.criteria.map((c) => c.property) : [];
         const columns = objectService.getTableColumnConfiguration(objectProperties);
         this.state.table.setColumns(columns);
 
@@ -165,14 +165,14 @@ class Component implements ISearchFormListener {
         } else {
             const formInstance = FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
             if (formInstance) {
-                this.state.canSearch = formInstance.getCriterias().some(
+                this.state.canSearch = formInstance.getCriteria().some(
                     (c) => c.property !== null && c.operator !== null && c.value !== null
                 );
             }
         }
     }
 
-    public searchCriteriasChanged(criterias: FilterCriteria[]): void {
+    public searchCriteriaChanged(criteria: FilterCriteria[]): void {
         this.setCanSearch();
     }
 }

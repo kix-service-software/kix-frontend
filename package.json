@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/chai": "4.1.4",
     "@types/chai-as-promised": "7.1.0",
-    "@types/chart.js": "^2.7.30",
+    "@types/chart.js": "2.7.30",
     "@types/mocha": "5.2.3",
     "@types/node": "10.5.1",
     "@types/socket.io": "1.4.36",

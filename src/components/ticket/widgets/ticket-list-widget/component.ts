@@ -1,22 +1,27 @@
-import { TicketListComponentState } from './TicketListComponentState';
-import { Ticket, KIXObjectPropertyFilter, KIXObjectType } from '@kix/core/dist/model/';
+import { ComponentState } from './ComponentState';
+import {
+    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, TicketProperty
+} from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    TicketTableContentLayer, TicketTableLabelLayer, TicketTableClickListener
+    TicketTableContentLayer, TicketTableLabelLayer
 } from '@kix/core/dist/browser/ticket/';
 import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
-    ActionFactory, TableToggleLayer, TableRow, ITableToggleListener,
-    StandardTableFactoryService, TableLayerConfiguration, TableListenerConfiguration, WidgetService
+    ActionFactory, TableToggleLayer, StandardTableFactoryService, TableLayerConfiguration,
+    TableListenerConfiguration, WidgetService, SearchOperator
 } from '@kix/core/dist/browser';
 
-class TicketListWidgetComponent implements ITableToggleListener {
+class Component {
 
+    public state: ComponentState;
 
-    public state: TicketListComponentState;
+    private predefinedFilter: KIXObjectPropertyFilter;
+    private textFilterValue: string;
+    private additionalFilterCriteria: TableFilterCriteria[] = [];
 
     public onCreate(): void {
-        this.state = new TicketListComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -24,25 +29,35 @@ class TicketListWidgetComponent implements ITableToggleListener {
     }
 
     public onMount(): void {
-        const currentContext = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = currentContext
-            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+        this.additionalFilterCriteria = [];
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context
+            ? context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
+        this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Übersicht Tickets';
         this.state.predefinedTableFilter = this.state.widgetConfiguration ?
             this.state.widgetConfiguration.predefinedTableFilters : [];
 
+        if (this.state.widgetConfiguration.contextDependent) {
+            context.registerListener('faq-article-list-context-listener', {
+                explorerBarToggled: () => { return; },
+                sidebarToggled: () => { return; },
+                objectChanged: this.contextObjectChanged.bind(this)
+            });
+        }
+
+        this.prepareActions();
         this.setTableConfiguration();
-        this.setActions();
     }
 
-    private setActions(): void {
+    private prepareActions(): void {
         if (this.state.widgetConfiguration) {
-            this.state.generalTicketActions = ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.actions, true);
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, true, null
+            );
 
-            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalTicketActions);
+            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
         }
     }
 
@@ -58,7 +73,7 @@ class TicketListWidgetComponent implements ITableToggleListener {
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
                 [new TableSortLayer()],
-                new TableToggleLayer(this, false)
+                new TableToggleLayer(null, false)
             );
 
             const configurationListener: ITableConfigurationListener = {
@@ -66,15 +81,19 @@ class TicketListWidgetComponent implements ITableToggleListener {
             };
             const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            this.state.standardTable = StandardTableFactoryService.getInstance().createStandardTable(
+            const table = StandardTableFactoryService.getInstance().createStandardTable(
                 KIXObjectType.TICKET, tableConfiguration, layerConfiguration, listenerConfiguration, true
             );
 
-            this.state.standardTable.setTableListener(() => {
+            table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
+
+            table.setTableListener(() => {
                 this.state.title = this.getTitle();
             });
 
-            this.filter();
+            WidgetService.getInstance().setActionData(this.state.instanceId, table);
+
+            this.state.table = table;
         }
     }
 
@@ -90,21 +109,53 @@ class TicketListWidgetComponent implements ITableToggleListener {
         }
     }
 
+    private setActionsDirty(): void {
+        WidgetService.getInstance().updateActions(this.state.instanceId);
+    }
+
     private filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
-        this.state.standardTable.setFilterSettings(textFilterValue, filter);
+        if (this.state.table) {
+            this.predefinedFilter = filter;
+            this.textFilterValue = textFilterValue;
+
+            const name = filter ? filter.name : null;
+            const predefinedCriteria = filter ? filter.criteria : [];
+            const newFilter = new KIXObjectPropertyFilter(
+                name, [...predefinedCriteria, ...this.additionalFilterCriteria]
+            );
+
+            this.state.table.setFilterSettings(textFilterValue, newFilter);
+        }
     }
 
     private getTitle(): string {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
-        if (this.state.standardTable) {
-            title = `${title} (${this.state.standardTable.getTableRows(true).length})`;
+        if (this.state.table) {
+            title = `${title} (${this.state.table.getTableRows(true).length})`;
         }
         return title;
     }
 
-    public rowToggled(): void {
-        return;
+    private contextObjectChanged(objectId: string | number, object: KIXObject, type: KIXObjectType): void {
+        if (type === KIXObjectType.QUEUE) {
+            const criteria = new TableFilterCriteria(TicketProperty.QUEUE_ID, SearchOperator.EQUALS, objectId);
+            this.setTicketFilter(object ? criteria : null);
+        }
+    }
+
+    private setTicketFilter(criteria: TableFilterCriteria): void {
+        this.additionalFilterCriteria = [];
+
+        if (criteria) {
+            this.additionalFilterCriteria = [criteria];
+        }
+
+        if (!this.predefinedFilter) {
+            this.predefinedFilter = new KIXObjectPropertyFilter('Ticketfilter', []);
+        }
+
+        this.filter(this.textFilterValue, this.predefinedFilter);
     }
 }
 
-module.exports = TicketListWidgetComponent;
+module.exports = Component;

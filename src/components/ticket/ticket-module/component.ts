@@ -1,18 +1,20 @@
-import { TicketsComponentState } from './TicketsComponentState';
-import { TicketService } from '@kix/core/dist/browser/ticket';
+import { ComponentState } from './ComponentState';
+import { TicketContext } from '@kix/core/dist/browser/ticket';
+import { ContextService } from '@kix/core/dist/browser';
 
-class TicketsComponent {
+class Component {
 
-    public state: TicketsComponentState;
+    public state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketsComponentState();
+        this.state = new ComponentState();
     }
 
-    public onInput(input: any) {
-        this.state.ticketId = Number(input.objectId);
+    public async onMount(): Promise<void> {
+        const context = (await ContextService.getInstance().getContext(TicketContext.CONTEXT_ID) as TicketContext);
+        this.state.contentWidgets = context.getContent();
     }
 
 }
 
-module.exports = TicketsComponent;
+module.exports = Component;

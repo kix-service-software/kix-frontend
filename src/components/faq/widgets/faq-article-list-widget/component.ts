@@ -24,6 +24,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -101,8 +102,10 @@ class Component {
             this.predefinedFilter = filter;
             this.textFilterValue = textFilterValue;
 
+            const name = this.predefinedFilter ? this.predefinedFilter.name : null;
+            const predefinedCriteria = this.predefinedFilter ? this.predefinedFilter.criteria : [];
             const newFilter = new KIXObjectPropertyFilter(
-                filter.name, [...filter.criterias, ...this.additionalFilterCriteria]
+                name, [...predefinedCriteria, ...this.additionalFilterCriteria]
             );
 
             this.state.table.setFilterSettings(textFilterValue, newFilter);
