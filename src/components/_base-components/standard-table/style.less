@@ -9,7 +9,16 @@
         overflow: auto;
         z-index: 0;
         display: grid;
-        grid-template-columns: @cell-min-width auto @cell-min-width;
+        grid-template-columns: auto;
+        &.has-checkbox-column {
+            grid-template-columns: @cell-min-width auto;
+        }
+        &.has-toggle-row-column {
+            grid-template-columns: auto @cell-min-width;
+        }
+        &.has-checkbox-column.has-toggle-row-column {
+            grid-template-columns: @cell-min-width auto @cell-min-width;
+        }
         >.toggle-header-column {
             background-color: @secondary-3;
             width: @cell-min-width;
