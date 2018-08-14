@@ -1,4 +1,4 @@
-<widget instanceId=state.instanceId title=state.title>
+<widget instanceId=state.instanceId title=state.title actions=state.actions>
     <@icon>
         <span.kix-icon-minus/>
     </@icon>
@@ -6,8 +6,8 @@
         <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Tickets" on-filter('filter')/>
     </@headerContent>
     <@content>
-        <if(state.standardTable)>
-            <standard-table standardTable=state.standardTable/>
+        <if(state.table)>
+            <standard-table standardTable=state.table/>
         </if>
     </@content>
 </widget>

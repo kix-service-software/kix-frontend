@@ -87,7 +87,7 @@ class Component implements IKIXObjectSearchListener {
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
             this.state.resultTable.loadRows();
             if (isSearchMainObject) {
-                const objectProperties = cache.criterias.map((c) => c.property);
+                const objectProperties = cache.criteria.map((c) => c.property);
                 const objectService = KIXObjectServiceRegistry.getInstance().getServiceInstance(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
                 this.state.resultTable.setColumns(columns);

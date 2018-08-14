@@ -35,7 +35,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchCleared(): void {
-        this.state.displayCriterias = [];
+        this.state.displayCriteria = [];
     }
 
     public searchFinished(): void {
@@ -43,13 +43,13 @@ class Component implements IKIXObjectSearchListener {
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = labelProvider.getObjectName(true);
-            this.state.displayCriterias = [];
+            this.state.displayCriteria = [];
             if (cache.isFulltext && cache.fulltextValue) {
-                this.state.displayCriterias.push([
+                this.state.displayCriteria.push([
                     "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), cache.fulltextValue
                 ]);
             } else {
-                for (const criteria of cache.criterias) {
+                for (const criteria of cache.criteria) {
                     let displayValue;
                     if (Array.isArray(criteria.value)) {
                         const valueStrings = [];
@@ -65,7 +65,7 @@ class Component implements IKIXObjectSearchListener {
                     }
 
                     const displayProperty = labelProvider.getPropertyText(criteria.property);
-                    this.state.displayCriterias.push([
+                    this.state.displayCriteria.push([
                         displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
                     ]);
                 }
