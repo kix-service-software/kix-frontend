@@ -2,21 +2,22 @@
     <div.explorerbar class=(state.isExplorerBarExpanded ? "expanded" : "collapsed")>
         <for(explorer in state.explorer)>
             <if(state.isExplorerBarExpanded)>
-                <div>
-                    <include(component.getExplorerTemplate(explorer), {
+                <include(component.getExplorerTemplate(explorer), {
                         instanceId: explorer.instanceId,
                         contextType: state.contextType
                     })/>
-                </div>
             </if>
             <else>
                 <div.explorer>
-                    <span.header-left>
+                    <span.explorer-title>
                         <span>${explorer.configuration.title + ': '}</span>
-                        <span.rtl>${state.additionalTitle}</span>
+                        <span.rtl title=(state.explorerStructurString + state.explorerStructurStringLastElement)>
+                            ${state.explorerStructurString}
+                            <span.last-element>${state.explorerStructurStringLastElement}</span>
+                        </span>
                     </span>
-                    <span.header-right>
-                        <span.kix-icon-sort-down on-click('toggleExplorerBar')/>
+                    <span.explorer-toggle-button on-click('toggleExplorerBar')>
+                        <span.kix-icon-sort-down/>
                     </span>
                 </div>
             </else>

@@ -2,10 +2,13 @@
     .widget-content {
         >span.show-all {
             display: inline-block;
-            margin: 0 0 0 2rem;
+            margin-bottom: 2rem;
             cursor: pointer;
+            &:hover {
+                color: @primary-0;
+            }
             &.active {
-                color: #04537d;
+                color: @primary-0;
                 font-weight: bold;
             }
         }

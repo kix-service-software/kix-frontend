@@ -24,13 +24,13 @@
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 line-height: @widget-header-height;
-                font-size: @h3-font-size;
+                font-size: @h2-font-size;
             }
             display: grid;
             grid-auto-columns: max-content;
             grid-auto-flow: column;
             grid-gap: @widget-header-grid-gap;
-            >h3 {
+            >h2 {
                 display: inline;
                 &.minimizable {
                     cursor: pointer;
@@ -141,7 +141,7 @@
     }
 }
 
-.container-draggable .widget .widget-header .header-left h3 {
+.container-draggable .widget .widget-header .header-left h2 {
     & [class^="kix-icon-"],
     & [class*=" kix-icon-"] {
         display: none;
@@ -170,11 +170,11 @@
 .explorer-widget {
     .widget();
     width: @explorer-width;
-    min-height: @default-widget-height;
+    height: 100%;
     background-color: @secondary-6;
     >.widget-content {
         overflow: auto;
-        padding: 1.25em .75em 1.25em .5em;
+        padding: 1rem .875rem;
         max-height: 43rem - @default-widget-header-height;
     }
 }
@@ -190,7 +190,7 @@
             >[class*=" kix-icon-"] {
                 .font-size-normal();
             }
-            >h3 {
+            >h2 {
                 .font-size-normal();
                 margin-bottom: 0;
                 font-weight: bold;
@@ -239,7 +239,7 @@
             >[class*=" kix-icon-"] {
                 .font-size-normal();
             }
-            >h3 {
+            >h2 {
                 .font-size-normal();
                 color: @secondary-7;
                 font-weight: bold;
@@ -260,7 +260,7 @@
                 >[class*=" kix-icon-"] {
                     .font-size-normal();
                 }
-                >h3 {
+                >h2 {
                     .font-size-normal();
                     color: @secondary-7;
                     font-weight: bold;
