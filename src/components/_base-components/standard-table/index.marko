@@ -1,6 +1,6 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
-        <div.standard-table class={"has-checkbox-column": state.standardTable.tableConfiguration.enableSelection ? true : false, "has-toggle-row-column": state.standardTable.toggle ? true : false}
+        <div.standard-table class={"has-checkbox-column": state.standardTable.tableConfiguration.enableSelection, "has-toggle-row-column": state.standardTable.tableConfiguration.toggle}
             key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <if(state.standardTable.tableConfiguration.enableSelection)>
                 <div.table-cell.checkbox-column.check-all title="Select all" data-id=(state.tableId + "checkbox-column")>
