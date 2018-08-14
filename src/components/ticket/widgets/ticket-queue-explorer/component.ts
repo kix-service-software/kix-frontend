@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode, Queue } from '@kix/core/dist/model';
+import { TreeNode, Queue, TreeNodeProperty } from '@kix/core/dist/model';
 import { TicketContext } from '@kix/core/dist/browser/ticket';
 
 export class Component {
@@ -52,13 +52,27 @@ export class Component {
     private prepareTreeNodes(categories: Queue[]): TreeNode[] {
         return categories
             ? categories.map((q) => new TreeNode(
-                q, this.getCategoryLabel(q), null, null, this.prepareTreeNodes(q.SubQueues))
+                q, q.Name, null, null, this.prepareTreeNodes(q.SubQueues), null, null, null, this.getTicketStats(q))
             )
             : [];
     }
 
-    private getCategoryLabel(queue: Queue): string {
-        return `${queue.Name} (...)`;
+    private getTicketStats(queue: Queue): TreeNodeProperty[] {
+        const properties: TreeNodeProperty[] = [];
+        if (queue.TicketStats) {
+            const openCount = queue.TicketStats.OpenCount;
+            properties.push(new TreeNodeProperty(openCount, `offene Tickets: ${openCount}`));
+
+            const lockCount = openCount - queue.TicketStats.LockCount;
+            properties.push(new TreeNodeProperty(lockCount, `nicht gesperrte Tickets: ${lockCount}`));
+
+            const escalatedCount = queue.TicketStats.EscalatedCount;
+            if (escalatedCount > 0) {
+                properties.push(new TreeNodeProperty(lockCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated'));
+            }
+        }
+
+        return properties;
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
