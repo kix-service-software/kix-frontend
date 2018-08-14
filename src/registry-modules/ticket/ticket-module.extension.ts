@@ -18,7 +18,24 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const explorer = ['20180813-ticket-queue-explorer'];
         const explorerWidgets: Array<ConfiguredWidget<any>> = [queueExplorer];
 
-        return new TicketContextConfiguration(this.getModuleId(), explorer, [], [], explorerWidgets, []);
+        // sidebars
+        const notesSidebar =
+            new ConfiguredWidget('20180814-ticket-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+            );
+
+        const sidebars = ['20180814-ticket-notes'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+
+        return new TicketContextConfiguration(
+            this.getModuleId(),
+            explorer,
+            sidebars,
+            sidebarWidgets,
+            explorerWidgets,
+            []
+        );
     }
 
     public async createFormDefinitions(): Promise<void> {
