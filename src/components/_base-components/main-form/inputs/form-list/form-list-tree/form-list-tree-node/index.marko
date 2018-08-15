@@ -4,9 +4,9 @@
             <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleNode')/>
         </if>
     </span>
-    <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
+    <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked') title=component.getLabel()>
         <icon icon=state.node.icon showUnknown=true/>
-        <span.node-title class=(state.node.expanded ? "expanded" : "") title=component.getLabel()>
+        <span.node-title class=(state.node.expanded ? "expanded" : "")>
             ${state.node.label}
             <if(state.node.properties)>
                 (<for(prop in state.node.properties | status-var=loop)>

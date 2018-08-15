@@ -2,6 +2,7 @@
 @tree-node-size: .25rem+@tree-icon-size;
 @tree-column-gap: .375rem;
 .tree-list {
+    overflow: hidden;
     .tree-node {
         display: grid;
         grid-template-columns: @tree-node-size auto;
@@ -27,7 +28,7 @@
             .font-size-small();
             color: @secondary-7;
             display: grid;
-            grid-auto-columns: max-content;
+            grid-auto-columns: auto;
             grid-auto-flow: column;
             grid-gap: @tree-column-gap;
             align-items: center;
@@ -37,6 +38,9 @@
                 font-size: @tree-node-size;
             }
             margin-bottom: .5rem;
+            .node-title {
+                .shorten-text;
+            }
         }
         &:hover,
         &.active {
