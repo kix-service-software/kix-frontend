@@ -119,10 +119,19 @@ class ComponentContextListener implements IContextListener {
     }
 
     public objectChanged(objectId: string | number, object: KIXObject<any>): void {
-        //
+        return;
     }
+
     public objectProvided(objectId: string | number, object: KIXObject<any>): void {
-        //
+        return;
+    }
+
+    public objectListChanged(objectList: KIXObject[]): void {
+        return;
+    }
+
+    public filteredObjectListChanged(objectList: KIXObject[]): void {
+        return;
     }
 }
 

@@ -47,6 +47,8 @@ class Component {
                         this.state.isExplorerBarExpanded = context.explorerBarExpanded;
                     },
                     objectChanged: () => { return; },
+                    objectListChanged: () => { return; },
+                    filteredObjectListChanged: () => { return; }
                 });
             }
             (this as any).setStateDirty('explorer');

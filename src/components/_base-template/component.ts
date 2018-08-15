@@ -85,7 +85,9 @@ class Component {
                     this.state.hasExplorer = context.isExplorerBarShown();
                     this.setGridColumns();
                 },
-                objectChanged: () => { return; }
+                objectChanged: () => { return; },
+                objectListChanged: () => { return; },
+                filteredObjectListChanged: () => { return; }
             });
         }
         this.setGridColumns();

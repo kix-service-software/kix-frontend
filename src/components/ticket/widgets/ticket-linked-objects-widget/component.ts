@@ -36,7 +36,9 @@ class Component {
                 }
             },
             sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; }
+            explorerBarToggled: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
         });
 
         this.state.widgetConfiguration = context

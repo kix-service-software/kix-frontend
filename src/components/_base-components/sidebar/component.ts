@@ -37,6 +37,8 @@ class Component {
                 },
                 explorerBarToggled: () => { return; },
                 objectChanged: () => { return; },
+                objectListChanged: () => { return; },
+                filteredObjectListChanged: () => { return; }
             });
         }
         this.updateSidebars(context);

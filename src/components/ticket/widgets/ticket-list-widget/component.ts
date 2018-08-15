@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, TicketProperty
+    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria
 } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
@@ -9,7 +9,7 @@ import {
 import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
     ActionFactory, TableToggleLayer, StandardTableFactoryService, TableLayerConfiguration,
-    TableListenerConfiguration, WidgetService, SearchOperator
+    TableListenerConfiguration, WidgetService
 } from '@kix/core/dist/browser';
 
 class Component {
@@ -43,7 +43,9 @@ class Component {
             context.registerListener('faq-article-list-context-listener', {
                 explorerBarToggled: () => { return; },
                 sidebarToggled: () => { return; },
-                objectChanged: this.contextObjectChanged.bind(this)
+                objectChanged: () => { return; },
+                objectListChanged: this.contextObjectListChanged.bind(this),
+                filteredObjectListChanged: () => { return; }
             });
         }
 
@@ -66,9 +68,11 @@ class Component {
 
             const tableConfiguration = this.state.widgetConfiguration.settings;
 
+            const preloadedTickets = this.state.widgetConfiguration.contextDependent ? [] : null;
+
             const layerConfiguration = new TableLayerConfiguration(
                 new TicketTableContentLayer(
-                    null, tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
+                    preloadedTickets, tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
                 ),
                 new TicketTableLabelLayer(),
                 [new TableFilterLayer()],
@@ -113,7 +117,7 @@ class Component {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
+    public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
         if (this.state.table) {
             this.predefinedFilter = filter;
             this.textFilterValue = textFilterValue;
@@ -124,7 +128,11 @@ class Component {
                 name, [...predefinedCriteria, ...this.additionalFilterCriteria]
             );
 
-            this.state.table.setFilterSettings(textFilterValue, newFilter);
+            await this.state.table.setFilterSettings(textFilterValue, newFilter);
+
+            const context = ContextService.getInstance().getActiveContext();
+            const rows = this.state.table.getTableRows();
+            context.setFilteredObjectList(rows.map((r) => r.object));
         }
     }
 
@@ -136,25 +144,22 @@ class Component {
         return title;
     }
 
-    private contextObjectChanged(objectId: string | number, object: KIXObject, type: KIXObjectType): void {
-        if (type === KIXObjectType.QUEUE) {
-            const criteria = new TableFilterCriteria(TicketProperty.QUEUE_ID, SearchOperator.EQUALS, objectId);
-            this.setTicketFilter(object ? criteria : null);
+    private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
+        if (this.state.table) {
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
+            this.resetFilter();
+            await this.state.table.loadRows();
+
+            const context = ContextService.getInstance().getActiveContext();
+            const rows = this.state.table.getTableRows();
+            context.setFilteredObjectList(rows.map((r) => r.object));
         }
     }
 
-    private setTicketFilter(criteria: TableFilterCriteria): void {
-        this.additionalFilterCriteria = [];
-
-        if (criteria) {
-            this.additionalFilterCriteria = [criteria];
-        }
-
-        if (!this.predefinedFilter) {
-            this.predefinedFilter = new KIXObjectPropertyFilter('Ticketfilter', []);
-        }
-
-        this.filter(this.textFilterValue, this.predefinedFilter);
+    private resetFilter(): void {
+        this.textFilterValue = '';
+        this.predefinedFilter = null;
+        this.state.table.resetFilter();
     }
 }
 

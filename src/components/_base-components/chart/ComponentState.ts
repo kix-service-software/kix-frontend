@@ -4,8 +4,7 @@ import { ChartConfiguration } from "chart.js";
 export class ComponentState {
 
     public constructor(
-        public chartId: string = IdService.generateDateBasedId(),
-        public config: ChartConfiguration = null
+        public chartId: string = IdService.generateDateBasedId()
     ) { }
 
 }
