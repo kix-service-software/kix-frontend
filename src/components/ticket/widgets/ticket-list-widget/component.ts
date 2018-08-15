@@ -147,20 +147,13 @@ class Component {
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
-            this.resetFilter();
             await this.state.table.loadRows();
 
             const context = ContextService.getInstance().getActiveContext();
-            const rows = this.state.table.getTableRows();
-            context.setFilteredObjectList(rows.map((r) => r.object));
+            context.setFilteredObjectList(context.getObjectList());
         }
     }
 
-    private resetFilter(): void {
-        this.textFilterValue = '';
-        this.predefinedFilter = null;
-        this.state.table.resetFilter();
-    }
 }
 
 module.exports = Component;
