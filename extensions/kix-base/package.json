@@ -7,7 +7,8 @@
             "customer-marko": "../../dist/registry-modules/customer/customer-marko.extension",
             "home-marko": "../../dist/registry-modules/home/home-marko.extension",
             "search-marko": "../../dist/registry-modules/search/search-marko.extension",
-            "faq-marko": "../../dist/registry-modules/faq/faq-marko.extension"
+            "faq-marko": "../../dist/registry-modules/faq/faq-marko.extension",
+            "cmdb-marko": "../../dist/registry-modules/cmdb/cmdb-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -40,7 +41,8 @@
             "faq-details-module": "../../dist/registry-modules/faq/faq-details-module.extension",
             "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
             "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension",
-            "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension"
+            "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension",
+            "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension"
         }
     }
 }

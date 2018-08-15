@@ -5,6 +5,7 @@ import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { CustomerService } from '@kix/core/dist/browser/customer';
 import { TicketService } from '@kix/core/dist/browser/ticket';
+import { CMDBService } from '@kix/core/dist/browser/cmdb';
 import { ContactService } from '@kix/core/dist/browser/contact';
 import { SearchService } from '@kix/core/dist/browser/search';
 import { FAQService } from '@kix/core/dist/browser/faq';
@@ -58,6 +59,7 @@ class Component {
 
     private bootstrapServices(): void {
         TicketService.getInstance();
+        CMDBService.getInstance();
         CustomerService.getInstance();
         ContactService.getInstance();
         FAQService.getInstance();

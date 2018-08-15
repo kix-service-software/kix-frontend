@@ -52,10 +52,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
         if (headerRow) {
             let rowWidth = 0;
-            this.state.standardTable.getColumns().forEach((c) => rowWidth += c.size);
-            if (this.state.standardTable.tableConfiguration.enableSelection) {
-                rowWidth += headerRow.firstChild.offsetWidth;
-            }
+            this.getColumns().forEach((c) => rowWidth += c.size);
             this.state.rowWidth = rowWidth;
         }
     }
@@ -221,7 +218,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 openedRowsContent.forEach((rC) => {
                     height += rC.offsetHeight;
                 });
-                table.style.height = height + 'px';
+                table.style.height = height + 10 + 'px';
             }
         }
     }
