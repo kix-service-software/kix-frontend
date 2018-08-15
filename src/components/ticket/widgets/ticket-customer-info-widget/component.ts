@@ -29,7 +29,9 @@ class Component {
                 }
             },
             explorerBarToggled: () => { return; },
-            sidebarToggled: () => { return; }
+            sidebarToggled: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
         });
     }
 

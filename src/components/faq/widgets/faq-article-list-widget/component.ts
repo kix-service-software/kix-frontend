@@ -31,7 +31,9 @@ class Component {
         context.registerListener('faq-article-list-context-listener', {
             explorerBarToggled: () => { return; },
             sidebarToggled: () => { return; },
-            objectChanged: this.contextObjectChanged.bind(this)
+            objectChanged: this.contextObjectChanged.bind(this),
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
         });
 
         this.prepareFilter();

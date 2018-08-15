@@ -18,6 +18,7 @@ import {
 } from '@kix/core/dist/browser';
 import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
 import { TicketProperty } from '@kix/core/dist/model/';
+import { TicketChartConfiguration } from '@kix/core/dist/browser/ticket';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -27,76 +28,79 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
     public getDefaultConfiguration(): ContextConfiguration {
 
+        const chartConfig1 = new TicketChartConfiguration(TicketProperty.PRIORITY_ID, {
+            type: 'bar',
+            data: {
+                labels: ["1 very low", "2 low", "3 normal", "4 high", "5 very high"],
+                datasets: [{
+                    data: [0, 3, 15, 25, 4],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
         const chart1 = new ConfiguredWidget('20180813-1-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketprioritäten', [], {
-                type: 'bar',
-                data: {
-                    labels: ["1 very low", "2 low", "3 normal", "4 high", "5 very high"],
-                    datasets: [{
-                        data: [0, 3, 15, 25, 4],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    }
-                }
-            },
-            false, true, WidgetSize.SMALL, null, true)
+            'ticket-chart-widget', 'Übersicht Ticketprioritäten', [], chartConfig1,
+            false, true, WidgetSize.SMALL, null, false)
         );
 
+        const chartConfig2 = new TicketChartConfiguration(TicketProperty.STATE_ID, {
+            type: 'pie',
+            data: {
+                labels: ["new", "open", "pending", "escalated"],
+                datasets: [{
+                    label: "Ticketstatus",
+                    data: [20, 50, 32, 8],
+                    backgroundColor: [
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(255, 0, 0, 0.8)'
+                    ],
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: true,
+                    position: 'right'
+                }
+            }
+        });
         const chart2 = new ConfiguredWidget('20180813-2-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketstatus', [], {
-                type: 'pie',
-                data: {
-                    labels: ["new", "open", "pending", "escalated"],
-                    datasets: [{
-                        label: "Ticketstatus",
-                        data: [20, 50, 32, 8],
-                        backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(255, 0, 0, 0.8)'
-                        ],
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: true,
-                        position: 'right'
-                    }
-                }
-            },
-            false, true, WidgetSize.SMALL, null, true)
+            'ticket-chart-widget', 'Übersicht Ticketstatus', [], chartConfig2,
+            false, true, WidgetSize.SMALL, null, false)
         );
 
-        const chart3 = new ConfiguredWidget('20180813-3-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht letzte 7 Tage', [], {
-                type: 'line',
-                data: {
-                    labels: ["1", "2", "3", "4", "5", "6", "7"],
-                    datasets: [{
-                        data: [5, 25, 12, 3, 30, 16, 24],
-                        backgroundColor: [
-                            'rgba(255, 0, 0, 0.5)'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    }
-                }
+        const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATE_TIME, {
+            type: 'line',
+            data: {
+                labels: ["1", "2", "3", "4", "5", "6", "7"],
+                datasets: [{
+                    data: [5, 25, 12, 3, 30, 16, 24],
+                    backgroundColor: [
+                        'rgba(255, 0, 0, 0.5)'
+                    ]
+                }]
             },
-            false, true, WidgetSize.SMALL, null, true)
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
+        const chart3 = new ConfiguredWidget('20180813-3-ticket-chart-widget', new WidgetConfiguration(
+            'ticket-chart-widget', 'Übersicht letzte 7 Tage', [], chartConfig3,
+            false, true, WidgetSize.SMALL, null, false)
         );
 
         const predefinedToDoTableFilter = [
@@ -149,7 +153,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 TableHeaderHeight.LARGE,
                 TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.LARGE, null, true, predefinedToDoTableFilter)
+            false, true, WidgetSize.LARGE, null, false, predefinedToDoTableFilter)
         );
 
         const newTicketsListWidget =
@@ -177,7 +181,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     TableHeaderHeight.LARGE,
                     TableRowHeight.SMALL
                 ),
-                false, true, WidgetSize.LARGE, null, true)
+                false, true, WidgetSize.LARGE, null, false)
             );
 
         const content: string[] = [

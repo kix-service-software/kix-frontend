@@ -24,7 +24,9 @@ class Component {
         context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
-            objectChanged: () => { return; }
+            objectChanged: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.getTicket();

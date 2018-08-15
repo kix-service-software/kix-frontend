@@ -36,7 +36,9 @@ class SidebarMenuComponent {
                     this.setSidebarMenu(context);
                 },
                 explorerBarToggled: () => { return; },
-                objectChanged: () => { return; }
+                objectChanged: () => { return; },
+                objectListChanged: () => { return; },
+                filteredObjectListChanged: () => { return; }
             });
         }
         this.setSidebarMenu(context);

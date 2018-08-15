@@ -1,6 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode, Queue, TreeNodeProperty } from '@kix/core/dist/model';
+import { ContextService, IdService, SearchOperator } from '@kix/core/dist/browser';
+import {
+    TreeNode, Queue, TreeNodeProperty, FilterCriteria,
+    TicketProperty, FilterDataType, FilterType
+} from '@kix/core/dist/model';
 import { TicketContext } from '@kix/core/dist/browser/ticket';
 
 export class Component {
@@ -25,7 +28,7 @@ export class Component {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTreeNodes(objectData.queuesHierarchy);
 
-        this.setActiveNode(context.queue);
+        this.showAll();
     }
 
     private setActiveNode(queue: Queue): void {
@@ -78,9 +81,13 @@ export class Component {
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
+        const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        context.setQueue(node.id);
-
+        context.loadTickets(null, [
+            new FilterCriteria(
+                TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, queue.QueueID
+            )
+        ]);
         context.setAdditionalInformation(this.getStructureInformation());
     }
 
@@ -98,7 +105,7 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
-        context.setQueue(null);
+        context.loadTickets(null);
     }
 
 }
