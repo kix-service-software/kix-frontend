@@ -18,9 +18,8 @@
         grid-template-columns: 6fr 4fr;
         grid-gap: @widget-header-grid-gap;
         >.header-left {
+            .shorten-text;
             line-height: @widget-header-height;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 line-height: @widget-header-height;
@@ -60,8 +59,7 @@
                 >.action-list {
                     >li {
                         >div {
-                            overflow: hidden;
-                            text-overflow: ellipsis;
+                            .shorten-text;
                         }
                     }
                 }

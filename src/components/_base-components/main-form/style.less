@@ -14,8 +14,7 @@
             display: grid;
             grid-template-columns: auto max-content;
             >span.label-text {
-                overflow: hidden;
-                text-overflow: ellipsis;
+                .shorten-text;
                 text-align: right;
                 >.required-field {
                     &:after {

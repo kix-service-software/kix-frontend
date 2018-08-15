@@ -3,15 +3,12 @@
     grid-template-columns: 5em 2em 5em;
     .key,
     .value {
-        text-overflow: ellipsis;
-        overflow: hidden;
+        .shorten-text;
         vertical-align: middle;
     }
     .key {
         .property-name {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
+            .shorten-text;
             max-width: 90%;
             float: left;
         }

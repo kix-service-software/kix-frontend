@@ -8,15 +8,13 @@
             padding: 0 .5em 0;
             margin: 0 .5em;
             box-sizing: border-box;
-            text-overflow: ellipsis;
             line-height: 32px;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
                 margin-right: .25em;
             }
             div {
-                text-overflow: ellipsis;
-                overflow: hidden;
+                .shorten-text;
             }
             /* TODO: nur vorübergehend */
             &.inactive {
