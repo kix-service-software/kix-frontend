@@ -5,7 +5,7 @@ Am Beispiel FAQ Artikel
 ## Erstellkontext einbinden
 
 ### Kontext implementieren und Formularkonfiguration zur Verfügung stellen
-- "kix-module"-Extension registrieren
+- "kix-module"-Extension in der package.json registrieren
 
 ```javascript
 "kix:module": {
@@ -29,7 +29,7 @@ ContextService.getInstance().registerContext(newFAQArticleContext);
 
 ### Erstelldialog implementieren & registrieren
 - Komponente implementieren `src/components/faq/dialogs/new-faq-article-dialog`
-- im Service (`FAQService`) registrieren
+- im Service (`FAQService`, ggf. Service anlegen) registrieren
 ```javascript
 DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
     'new-faq-article-dialog',
@@ -40,4 +40,4 @@ DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
     ContextMode.CREATE
 ));
 ```
-- Marko.js-Komponenten registrieren (`src/registry-modules/faq/faq-marko.extension`)
+- Marko.js-Komponenten in der package.json registrieren (`src/registry-modules/faq/faq-marko.extension`) und Datei anlegen
