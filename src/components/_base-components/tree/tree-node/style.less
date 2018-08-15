@@ -42,7 +42,17 @@
                 .shorten-text;
             }
         }
-        &:hover,
+        &:hover {
+            >.tree-icon {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    color: @primary-0;
+                }
+            }
+            >.node-value {
+                color: @primary-0;
+            }
+        }
         &.active {
             >.tree-icon {
                 [class^="kix-icon-"],
@@ -53,10 +63,6 @@
             }
             >.node-value {
                 color: @primary-0;
-            }
-        }
-        &.active {
-            >.node-value {
                 font-weight: bold;
             }
         }
@@ -76,8 +82,7 @@
                     >.tree-icon {
                         [class^="kix-icon-"],
                         [class*=" kix-icon-"] {
-                            background-color: @primary-2;
-                            color: @secondary-6;
+                            color: @primary-2;
                         }
                     }
                     >.node-value {
