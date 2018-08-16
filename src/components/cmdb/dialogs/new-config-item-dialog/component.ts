@@ -1,8 +1,12 @@
-import { ContextService, DialogService, OverlayService } from '@kix/core/dist/browser';
 import {
-    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult, ValidationSeverity, ConfigItemClass
+    ContextService, DialogService, OverlayService, FormService, KIXObjectServiceRegistry
+} from '@kix/core/dist/browser';
+import {
+    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
+    ValidationSeverity, ConfigItemClass, KIXObjectType
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
+import { CMDBService } from '@kix/core/dist/browser/cmdb';
 
 class Component {
 
@@ -32,13 +36,39 @@ class Component {
     }
 
     public cancel(): void {
+        if (this.state.formId) {
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            formInstance.reset();
+        }
         DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading();
-        this.showSuccessHint();
-        DialogService.getInstance().closeMainDialog();
+        if (this.state.formId) {
+
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const result = formInstance.validateForm();
+            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+
+            if (validationError) {
+                this.showValidationError(result);
+            } else {
+                DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CONFIG_ITEM);
+                const cmdbService = (service as CMDBService);
+
+                const ciClass = this.state.currentClassNode.id as ConfigItemClass;
+                await cmdbService.createConfigItem(KIXObjectType.CONFIG_ITEM, this.state.formId, ciClass.ID)
+                    .then((configItemId) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showSuccessHint();
+                        DialogService.getInstance().closeMainDialog();
+                    }).catch((error) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showError(error);
+                    });
+            }
+        }
     }
 
     private showSuccessHint(): void {
