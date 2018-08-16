@@ -15,12 +15,17 @@
                     </div>
                 </div>
             </div>
+            <div.ci-create-form-container>
+                <if(state.formId)>
+                    <main-form formId=state.formId/>
+                </if>
+            </div>
             <div.dialog-button-container>
                 <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
                     <span.kix-icon-close/>
                     Abbrechen
                 </button>
-                <button.submit-button type="button" on-click("submit") title="Speichern">
+                <button.submit-button disabled=(!state.formId) type="button" on-click("submit") title="Speichern">
                     <span.kix-icon-check/>
                     Speichern
                 </button>

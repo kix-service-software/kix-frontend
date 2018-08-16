@@ -1,9 +1,9 @@
 import {
-    ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
+    ContextConfiguration, FormField, KIXObjectType, Form, ConfigItemProperty, VersionProperty, FormFieldOption
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService } from "@kix/core/dist/services";
+import { IConfigurationService, ICmdbService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
 
@@ -20,35 +20,40 @@ export class Extension implements IModuleFactoryExtension {
     public async createFormDefinitions(): Promise<void> {
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
-        // const formId = 'new-config-item-form';
-        // const existingForm = configurationService.getModuleConfiguration(formId, null);
-        // if (!existingForm) {
-        //     const fields: FormField[] = [];
+        const cmdbService =
+            ServiceContainer.getInstance().getClass<ICmdbService>("ICmdbService");
 
-        //     const group = new FormGroup('Config Item Daten', fields);
+        const ciClasses = await cmdbService.loadConfigItemClassWithDefinitions(token);
 
-        //     const form = new Form(formId, 'Neues Config Item', [group], KIXObjectType.CONFIG_ITEM);
-        //     await configurationService.saveModuleConfiguration(form.id, null, form);
-        // }
-        // configurationService.registerForm([FormContext.NEW], KIXObjectType.CONFIG_ITEM, formId);
+        for (const ciClass of ciClasses) {
+            const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+            const existingForm = configurationService.getModuleConfiguration(formId, null);
+            if (!existingForm) {
+                const fields: FormField[] = [];
 
-        // const linkFormId = 'link-config-item-search-form';
-        // const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
-        // if (!existingLinkForm) {
-        //     const fields: FormField[] = [];
+                fields.push(new FormField('Name', VersionProperty.NAME, true, 'CI Name'));
+                fields.push(new FormField(
+                    'Verwendungsstatus', ConfigItemProperty.CUR_DEPL_STATE_ID, true, 'Verwendungsstatus')
+                );
+                fields.push(new FormField(
+                    'Vorfallstatus', ConfigItemProperty.CUR_INCI_STATE_ID, true, 'Vorfallstatus')
+                );
+                fields.push(new FormField(
+                    'Bilder', ConfigItemProperty.IMAGES, false, 'Bilder',
+                    [new FormFieldOption('MimeTypes', ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'])]
+                ));
+                fields.push(new FormField(
+                    'CI Verknüpfen mit', ConfigItemProperty.LINKS, false, 'CI Verknüpfen mit')
+                );
 
-        //     const group = new FormGroup('Config Item Attribute', fields);
-
-        //     const form = new Form(
-        //         linkFormId, 'Verknüpfen mit Config Item', [group], KIXObjectType.CONFIG_ITEM, false
-        //     );
-        //     await configurationService.saveModuleConfiguration(form.id, null, form);
-        // }
-
-        // configurationService.registerForm(
-        //     [FormContext.LINK], KIXObjectType.CONFIG_ITEM, linkFormId
-        // );
+                const group = new FormGroup('Config Item Daten', fields);
+                const form = new Form(formId, 'Neues Config Item', [group], KIXObjectType.CONFIG_ITEM);
+                await configurationService.saveModuleConfiguration(form.id, null, form);
+            }
+            configurationService.registerFormId(formId);
+        }
     }
 
 }

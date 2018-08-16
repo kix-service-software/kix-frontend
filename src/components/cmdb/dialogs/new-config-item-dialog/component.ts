@@ -1,6 +1,6 @@
 import { ContextService, DialogService, OverlayService } from '@kix/core/dist/browser';
 import {
-    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult, ValidationSeverity
+    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult, ValidationSeverity, ConfigItemClass
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
 
@@ -23,6 +23,12 @@ class Component {
 
     public classChanged(nodes: TreeNode[]): void {
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        if (this.state.currentClassNode) {
+            const ciClass = this.state.currentClassNode.id as ConfigItemClass;
+            this.state.formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+        } else {
+            this.state.formId = null;
+        }
     }
 
     public cancel(): void {
