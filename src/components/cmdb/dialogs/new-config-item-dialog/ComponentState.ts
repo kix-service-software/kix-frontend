@@ -1,8 +1,11 @@
+import { TreeNode } from "@kix/core/dist/model";
+
 export class ComponentState {
 
     public constructor(
         public loading: boolean = false,
-        public formId: string = 'new-config-item-form'
+        public classNodes: TreeNode[] = [],
+        public currentClassNode: TreeNode = null
     ) { }
 
 }

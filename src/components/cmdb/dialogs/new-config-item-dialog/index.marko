@@ -1,7 +1,20 @@
 <if(!state.loading)>
     <widget instanceId="new-config-item-dialog">
         <@content>
-            <!-- <main-form formId=state.formId/> -->
+            <div.form>
+                <div.form-field title="Config item Klasse">
+                    <div.field-label>
+                        <span.label-text>Config Item Klasse</span>
+                    </div>
+                    <div.field-icon>
+                        <overlay-icon isHint=true content="Config Item Klasse auswählen" title="Config Item Klasse"/>
+                    </div>
+                    <div.field-input>
+                        <form-list nodes=state.classNodes placeholder="CI Klasse auswählen" selectedNodes=[state.currentClassNode]
+                            on-nodesChanged('classChanged') multiselect=false/>
+                    </div>
+                </div>
+            </div>
             <div.dialog-button-container>
                 <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
                     <span.kix-icon-close/>

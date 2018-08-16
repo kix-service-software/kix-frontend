@@ -1,11 +1,8 @@
-import { ComponentState } from './ComponentState';
+import { ContextService, DialogService, OverlayService } from '@kix/core/dist/browser';
 import {
-    FormService, DialogService, OverlayService
-} from '@kix/core/dist/browser';
-import {
-    ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
+    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult, ValidationSeverity
 } from '@kix/core/dist/model';
-import { RoutingConfiguration, RoutingService } from '@kix/core/dist/browser/router';
+import { ComponentState } from './ComponentState';
 
 class Component {
 
@@ -15,38 +12,27 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
+    public onMount(): void {
+        const objectData = ContextService.getInstance().getObjectData();
+        if (objectData.configItemClasses) {
+            this.state.classNodes = objectData.configItemClasses.map(
+                (ci) => new TreeNode(ci, ci.Name)
+            );
         }
+    }
+
+    public classChanged(nodes: TreeNode[]): void {
+        this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+    }
+
+    public cancel(): void {
         DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {
-        // const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        // const result = formInstance.validateForm();
-        // const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-        // if (validationError) {
-        //     this.showValidationError(result);
-        // } else {
-        //     DialogService.getInstance().setMainDialogLoading(true, "Config Item wird angelegt");
-        //     const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CONFIG_ITEM);
-        //     await service.createObjectByForm(KIXObjectType.CONFIG_ITEM, this.state.formId)
-        //         .then((configItemId) => {
         DialogService.getInstance().setMainDialogLoading();
         this.showSuccessHint();
         DialogService.getInstance().closeMainDialog();
-        //             // const routingConfiguration = new RoutingConfiguration(
-        //             //     null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
-        //             //     ContextMode.DETAILS, ConfigItemProperty.ID
-        //             // );
-        //             // RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
-        //         }).catch((error) => {
-        //             DialogService.getInstance().setMainDialogLoading();
-        //             this.showError(error);
-        //         });
-        // }
     }
 
     private showSuccessHint(): void {
