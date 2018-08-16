@@ -24,13 +24,13 @@ class NewTicketDialogComponent {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    private cancel(): void {
+    public cancel(): void {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }
 
-    private async submit(): Promise<void> {
+    public async submit(): Promise<void> {
         setTimeout(async () => {
             const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
             const result = formInstance.validateForm();

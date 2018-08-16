@@ -26,10 +26,10 @@ class Component extends FormInputComponent<number[], ComponentState> {
         }
     }
 
-    private prepareTree(faqCategories: GeneralCatalogItem[]): TreeNode[] {
+    private prepareTree(items: GeneralCatalogItem[]): TreeNode[] {
         let nodes = [];
-        if (faqCategories) {
-            nodes = faqCategories.map((gcItem: GeneralCatalogItem) => {
+        if (items) {
+            nodes = items.map((gcItem: GeneralCatalogItem) => {
                 const treeNode = new TreeNode(
                     gcItem.ItemID, gcItem.Name,
                     new ObjectIcon('ItemID', gcItem.ItemID),
