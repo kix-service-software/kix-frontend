@@ -66,9 +66,12 @@ class Component extends FormInputComponent<any, ComponentState> {
     private appendFiles(files: File[]): void {
         const fileErrors: Array<[File, AttachmentError]> = [];
 
+        const option = this.state.field.options.find((o) => o.option === 'MimeTypes');
+        const mimeTypes = option ? option.value as string[] : null;
+
         files.forEach((f: File) => {
             if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
-                const fileError = AttachmentUtil.checkFile(f);
+                const fileError = AttachmentUtil.checkFile(f, mimeTypes);
                 if (fileError) {
                     fileErrors.push([f, fileError]);
                 } else {

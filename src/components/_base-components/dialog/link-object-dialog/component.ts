@@ -12,7 +12,7 @@ import {
 } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 
-class LinkTicketDialogComponent {
+class LinkDialogComponent {
 
     private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
@@ -94,12 +94,14 @@ class LinkTicketDialogComponent {
     }
 
     public onDestroy(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        document.removeEventListener('keydown', (event: any) => {
-            if (event.key === 'Enter' && formInstance.hasValues()) {
-                this.executeSearch();
-            }
-        });
+        if (this.state.formId) {
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            document.removeEventListener('keydown', (event: any) => {
+                if (event.key === 'Enter' && formInstance.hasValues()) {
+                    this.executeSearch();
+                }
+            });
+        }
     }
 
     public linkableObjectChanged(nodes: TreeNode[]): void {
@@ -272,4 +274,4 @@ class LinkTicketDialogComponent {
     }
 }
 
-module.exports = LinkTicketDialogComponent;
+module.exports = LinkDialogComponent;
