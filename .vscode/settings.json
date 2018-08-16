@@ -13,10 +13,5 @@
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
   "less.lint.important": "warning",
-  "less.lint.float": "warning",
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
-  }
+  "less.lint.float": "warning"
 }
