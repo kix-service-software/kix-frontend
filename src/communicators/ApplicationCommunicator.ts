@@ -8,9 +8,9 @@ export class ApplicationCommunicator extends KIXCommunicator {
         return 'application';
     }
 
-    protected registerEvents(): void {
+    protected registerEvents(client: SocketIO.Socket): void {
         this.registerEventHandler<LoadComponentsRequest, LoadComponentsResponse>(
-            ApplicationEvent.LOAD_COMPONENTS, this.loadComponents.bind(this)
+            client, ApplicationEvent.LOAD_COMPONENTS, this.loadComponents.bind(this)
         );
     }
 

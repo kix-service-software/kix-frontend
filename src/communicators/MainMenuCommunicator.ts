@@ -20,8 +20,8 @@ export class MainMenuCommunicator extends KIXCommunicator {
         return 'main-menu';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
     private async loadMenuEntries(

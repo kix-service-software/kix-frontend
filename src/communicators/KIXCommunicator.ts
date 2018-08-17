@@ -19,8 +19,6 @@ import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/
 @injectable()
 export abstract class KIXCommunicator implements ICommunicator {
 
-    private client: SocketIO.Socket;
-
     public constructor(
         @inject('IConfigurationService') protected configurationService: IConfigurationService,
         @inject('IAuthenticationService') protected authenticationService: IAuthenticationService,
@@ -41,32 +39,27 @@ export abstract class KIXCommunicator implements ICommunicator {
 
     protected abstract getNamespace(): string;
 
-    protected abstract registerEvents(): void;
+    protected abstract registerEvents(client: SocketIO.Socket): void;
 
     public registerNamespace(server: SocketIO.Server): void {
         const nsp = server.of('/' + this.getNamespace());
         nsp
             .use(this.authenticationService.isSocketAuthenticated.bind(this.authenticationService))
             .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-                this.setClient(client);
-                this.registerEvents();
+                this.registerEvents(client);
             });
     }
 
-    protected setClient(client: SocketIO.Socket): void {
-        this.client = client;
-    }
-
     protected registerEventHandler<RQ, RS>(
-        event: string, handler: (data: RQ) => Promise<CommunicatorResponse<RS>>
+        client: SocketIO.Socket, event: string, handler: (data: RQ) => Promise<CommunicatorResponse<RS>>
     ): void {
-        this.client.on(event, async (data: RQ) => {
+        client.on(event, async (data: RQ) => {
 
             // start profiling
             const profileTaskId = this.profilingService.start('SocketIO', this.getNamespace() + '/' + event, data);
 
             const response: CommunicatorResponse<RS> = await handler(data);
-            this.client.emit(response.event, response.data);
+            client.emit(response.event, response.data);
 
             // stop profiling
             this.profilingService.stop(profileTaskId, response.data);

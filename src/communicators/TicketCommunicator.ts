@@ -23,12 +23,14 @@ export class TicketCommunicator extends KIXCommunicator {
         return 'tickets';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(TicketEvent.LOAD_TICKETS, this.loadTickets.bind(this));
-        this.registerEventHandler(TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
-        this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
-        this.registerEventHandler(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this));
-        this.registerEventHandler(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, TicketEvent.LOAD_TICKETS, this.loadTickets.bind(this));
+        this.registerEventHandler(client, TicketEvent.LOAD_TICKET, this.loadTicket.bind(this));
+        this.registerEventHandler(client, TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
+        this.registerEventHandler(
+            client, TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this)
+        );
+        this.registerEventHandler(client, TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
     }
 
     private async loadTickets(data: SearchTicketsRequest): Promise<CommunicatorResponse<SearchTicketsResponse>> {

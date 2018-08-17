@@ -16,9 +16,9 @@ export class IconCommunicator extends KIXCommunicator {
         return 'icons';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(IconEvent.LOAD_ICON, this.loadIcon.bind(this));
-        this.registerEventHandler(IconEvent.LOAD_ICONS, this.loadIcons.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, IconEvent.LOAD_ICON, this.loadIcon.bind(this));
+        this.registerEventHandler(client, IconEvent.LOAD_ICONS, this.loadIcons.bind(this));
     }
 
     private async loadIcon(data: ObjectIconLoadRequest): Promise<CommunicatorResponse<ObjectIconLoadResponse>> {

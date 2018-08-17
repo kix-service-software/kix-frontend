@@ -15,12 +15,12 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
         return 'configuration';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(ConfigurationEvent.LOAD_MODULE_CONFIGURATION,
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, ConfigurationEvent.LOAD_MODULE_CONFIGURATION,
             this.loadModuleConfiguration.bind(this));
-        this.registerEventHandler(ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION,
+        this.registerEventHandler(client, ConfigurationEvent.LOAD_SIDEBAR_CONFIGURATION,
             this.loadSidebarConfiguration.bind(this));
-        this.registerEventHandler(ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
+        this.registerEventHandler(client, ConfigurationEvent.SAVE_COMPONENT_CONFIGURATION,
             this.saveComponentConfiguration.bind(this));
     }
 
