@@ -34,6 +34,7 @@ class Component implements IKIXObjectSearchListener {
 
     public searchCleared(): void {
         this.state.resultTable = null;
+        this.searchResultCategoryChanged(null);
     }
 
     public searchFinished<T extends KIXObject = KIXObject>(): void {
@@ -99,6 +100,9 @@ class Component implements IKIXObjectSearchListener {
 
             this.state.loading = false;
             (this as any).setStateDirty('loading');
+        } else {
+            this.state.resultIcon = null;
+            this.state.resultTitle = 'Trefferliste';
         }
     }
 
@@ -121,9 +125,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public async searchResultCategoryChanged(category: SearchResultCategory): Promise<void> {
-        if (category) {
-            await this.initWidget(category.objectType);
-        }
+        await this.initWidget(category ? category.objectType : null);
     }
 }
 
