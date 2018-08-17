@@ -1,9 +1,6 @@
 <div.search-result-explorer>
     <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Suchergebnisse")>
-        <@icon>
-            <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-search")/>
-        </@icon>
         <@content>
             <if(state.nodes)>
                 <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked('activeNodeChanged')/>
