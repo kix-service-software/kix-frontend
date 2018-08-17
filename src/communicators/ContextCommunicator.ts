@@ -21,10 +21,16 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
         return 'context';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this));
-        this.registerEventHandler(ContextEvent.SAVE_CONTEXT_CONFIGURATION, this.saveContextConfiguration.bind(this));
-        this.registerEventHandler(ContextEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(
+            client, ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.SAVE_CONTEXT_CONFIGURATION, this.saveContextConfiguration.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this)
+        );
     }
 
     protected async loadContextConfiguration(

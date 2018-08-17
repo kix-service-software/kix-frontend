@@ -27,13 +27,12 @@ export class AuthenticationCommunicator extends KIXCommunicator {
     public registerNamespace(socketIO: SocketIO.Server): void {
         const nsp = socketIO.of('/' + this.getNamespace());
         nsp.on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
-            this.setClient(client);
-            this.registerEvents();
+            this.registerEvents(client);
         });
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(AuthenticationEvent.LOGIN, this.login.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, AuthenticationEvent.LOGIN, this.login.bind(this));
     }
 
     private async login(data: LoginRequest): Promise<CommunicatorResponse<AuthenticationResult>> {

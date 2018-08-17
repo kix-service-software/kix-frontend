@@ -12,10 +12,10 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         return 'kixobjects';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
-        this.registerEventHandler(KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
-        this.registerEventHandler(KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
+        this.registerEventHandler(client, KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
+        this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
     private async loadObjects(data: LoadObjectsRequest): Promise<CommunicatorResponse<LoadObjectsResponse<any>>> {

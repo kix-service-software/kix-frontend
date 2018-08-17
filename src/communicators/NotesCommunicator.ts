@@ -13,9 +13,9 @@ export class NotesCommunicatior extends KIXCommunicator {
         return 'notes';
     }
 
-    protected registerEvents(): void {
-        this.registerEventHandler(NotesEvent.LOAD_NOTES, this.loadNotes.bind(this));
-        this.registerEventHandler(NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
+    protected registerEvents(client: SocketIO.Socket): void {
+        this.registerEventHandler(client, NotesEvent.LOAD_NOTES, this.loadNotes.bind(this));
+        this.registerEventHandler(client, NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
     }
 
     private async loadNotes(data: LoadNotesRequest): Promise<CommunicatorResponse<LoadNotesResponse>> {
