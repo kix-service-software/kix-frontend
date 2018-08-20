@@ -181,6 +181,18 @@
         overflow: auto;
         padding: 1rem .875rem;
         max-height: 43rem - @default-widget-header-height;
+        >span.show-all {
+            display: inline-block;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            &:hover {
+                color: @primary-0;
+            }
+            &.active {
+                color: @primary-0;
+                font-weight: bold;
+            }
+        }
     }
 }
 
