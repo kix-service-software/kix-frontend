@@ -11,13 +11,13 @@ import {
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, LinkType, CreateLinkObjectOptions
 } from '@kix/core/dist/model';
+import { LinkService } from '@kix/core/dist/browser/link';
 
 class Component {
 
     private state: ComponentState;
     private mainObject: KIXObject = null;
-    private links: Link[] = [];
-    private allLinkObjects: LinkObject[] = [];
+    private availableLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
     private deleteLinkObjects: LinkObject[] = [];
     private selectedLinkObjects: LinkObject[] = [];
@@ -30,8 +30,7 @@ class Component {
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
         this.mainObject = null;
-        this.links = [];
-        this.allLinkObjects = [];
+        this.availableLinkObjects = [];
         this.newLinkObjects = [];
         this.deleteLinkObjects = [];
         this.selectedLinkObjects = [];
@@ -43,9 +42,10 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             this.mainObject = await context.getObject();
-            this.links = this.mainObject ? this.mainObject.Links : [];
 
-            await this.prepareLinkObjects();
+            this.availableLinkObjects = LinkService.getInstance().getLinkObjects(this.mainObject);
+            this.state.linkObjectCount = this.availableLinkObjects.length;
+
             await this.reviseLinkObjects();
             this.setInitialLinkDescriptions();
             this.prepareTable();
@@ -53,40 +53,9 @@ class Component {
         this.state.loading = false;
     }
 
-    private async prepareLinkObjects(): Promise<void> {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (this.links && this.links.length && objectData) {
-
-            this.allLinkObjects = this.links.map((l: Link) => {
-                const linkObject: LinkObject = new LinkObject();
-                const linkType = objectData.linkTypes.find((lt) => lt.Name === l.Type);
-                if (
-                    l.SourceObject === this.mainObject.KIXObjectType &&
-                    l.SourceKey.toString() === this.mainObject.ObjectId.toString()
-                ) {
-                    linkObject.ObjectId = l.ObjectId || l.ID;
-                    linkObject.linkedObjectKey = l.TargetKey.toString();
-                    linkObject.linkedObjectType = l.TargetObject as KIXObjectType;
-                    linkObject.linkedAs = linkType.TargetName;
-                    linkObject.linkType = linkType;
-                } else {
-                    linkObject.ObjectId = l.ObjectId || l.ID;
-                    linkObject.linkedObjectKey = l.SourceKey.toString();
-                    linkObject.linkedObjectType = l.SourceObject as KIXObjectType;
-                    linkObject.linkedAs = linkType.SourceName;
-                    linkObject.linkType = linkType;
-                    linkObject.isSource = true;
-                }
-                return linkObject;
-            });
-
-            this.state.linkObjectCount = this.allLinkObjects.length;
-        }
-    }
-
     private async reviseLinkObjects(): Promise<void> {
         const linkedObjectIds: Map<KIXObjectType, string[]> = new Map();
-        this.allLinkObjects.forEach((lo) => {
+        this.availableLinkObjects.forEach((lo) => {
             if (linkedObjectIds.has(lo.linkedObjectType)) {
                 if (linkedObjectIds.get(lo.linkedObjectType).findIndex((id) => id === lo.linkedObjectKey) === -1) {
                     linkedObjectIds.get(lo.linkedObjectType).push(lo.linkedObjectKey);
@@ -95,23 +64,23 @@ class Component {
                 linkedObjectIds.set(lo.linkedObjectType, [lo.linkedObjectKey]);
             }
         });
-        await this.getLinkedObjectsAndSetLinkObjectsTitles(linkedObjectIds);
-        this.setFilter(linkedObjectIds);
+        await this.prepareLinkedObjects(linkedObjectIds);
+        this.initPredefinedFilter(linkedObjectIds);
     }
 
-    private async getLinkedObjectsAndSetLinkObjectsTitles(linkedObjectIds): Promise<void> {
-        const linkedObjectIdsIterator = linkedObjectIds.entries();
-        let linkedObjectIdsByType = linkedObjectIdsIterator.next();
-        while (linkedObjectIdsByType && linkedObjectIdsByType.value) {
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(linkedObjectIdsByType.value[0]);
+    private async prepareLinkedObjects(linkedObjectIds: Map<KIXObjectType, string[]>): Promise<void> {
+        const iterator = linkedObjectIds.entries();
+        let objectIds = iterator.next();
+        while (objectIds && objectIds.value) {
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(objectIds.value[0]);
 
-            if (service && linkedObjectIdsByType.value[1].length) {
+            if (service && objectIds.value[1].length) {
                 const objects = await service.loadObjects(
-                    linkedObjectIdsByType.value[0], linkedObjectIdsByType.value[1], null
+                    objectIds.value[0], objectIds.value[1], null
                 );
                 this.linkedObjects = [...this.linkedObjects, ...objects];
                 this.linkedObjects.forEach((o) => {
-                    const linkObject = this.allLinkObjects.find(
+                    const linkObject = this.availableLinkObjects.find(
                         (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
                     );
                     if (linkObject) {
@@ -120,11 +89,11 @@ class Component {
                 });
             }
 
-            linkedObjectIdsByType = linkedObjectIdsIterator.next();
+            objectIds = iterator.next();
         }
     }
 
-    private setFilter(linkedObjectIds): void {
+    private initPredefinedFilter(linkedObjectIds: Map<KIXObjectType, string[]>): void {
         linkedObjectIds.forEach((ids, type) => {
             this.state.predefinedTableFilter.push(
                 new KIXObjectPropertyFilter(type.toString(), [
@@ -137,7 +106,7 @@ class Component {
     }
 
     private setInitialLinkDescriptions(): void {
-        this.allLinkObjects.forEach((lo) => {
+        this.availableLinkObjects.forEach((lo) => {
             const linkedObject = this.linkedObjects.find(
                 (ldo) => ldo.ObjectId.toString() === lo.linkedObjectKey && ldo.KIXObjectType === lo.linkedObjectType
             );
@@ -176,14 +145,18 @@ class Component {
 
         this.newObjectsHighlightLayer = new TableHighlightLayer();
         table.addAdditionalLayerOnTop(this.newObjectsHighlightLayer);
+        this.newObjectsHighlightLayer.setHighlightedObjects(this.newLinkObjects);
+
         this.removeObjectsHighlightLayer = new TableHighlightLayer('link-object-to-delete');
         table.addAdditionalLayerOnTop(this.removeObjectsHighlightLayer);
+        this.removeObjectsHighlightLayer.setHighlightedObjects(this.deleteLinkObjects);
+
         this.preventSelectionLayer = new TablePreventSelectionLayer();
         table.addAdditionalLayerOnTop(this.preventSelectionLayer);
+        this.preventSelectionLayer.setPreventSelectionFilter([...this.deleteLinkObjects, ...this.newLinkObjects]);
 
-        table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
+        table.layerConfiguration.contentLayer.setPreloadedObjects(this.availableLinkObjects);
         table.loadRows(true);
-        this.setHighlightedObjects();
         table.listenerConfiguration.selectionListener.addListener(
             this.objectSelectionChanged.bind(this)
         );
@@ -206,15 +179,11 @@ class Component {
                 this.deleteLinkObjects.push(slo);
             }
         });
-        this.preventSelectionLayer.setPreventSelectionFilter(this.deleteLinkObjects);
-        this.state.table.loadRows(true);
-        this.state.canDelete = false;
-        this.highlightDeleteLinkObjects();
-        this.setCanSubmit();
-    }
 
-    private highlightDeleteLinkObjects(): void {
-        this.removeObjectsHighlightLayer.setHighlightedObjects(this.deleteLinkObjects);
+        this.prepareTable();
+
+        this.state.canDelete = false;
+        this.setCanSubmit();
     }
 
     public openAddLinkDialog(): void {
@@ -263,17 +232,13 @@ class Component {
                     isSource: ld.linkTypeDescription.asSource
                 } as LinkObject);
             });
-            this.allLinkObjects = [...this.allLinkObjects, ...newLinkObjects];
+            this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
-            this.state.table.loadRows();
-            this.state.linkObjectCount = this.allLinkObjects.length;
-        }
-        this.setHighlightedObjects();
-    }
 
-    private setHighlightedObjects(): void {
-        this.newObjectsHighlightLayer.setHighlightedObjects(this.newLinkObjects);
+            this.prepareTable();
+
+            this.state.linkObjectCount = this.availableLinkObjects.length;
+        }
     }
 
     public cancel(): void {
