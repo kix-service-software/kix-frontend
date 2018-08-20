@@ -1,10 +1,6 @@
 <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
-    <@icon>
-        <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? "kix-icon-" + state.widgetConfiguration.icon : "")/>
-        </if>
-    </@icon>
+    <@icon/>
     <@content>
         <div.history-content>
             <if(state.ticket)>

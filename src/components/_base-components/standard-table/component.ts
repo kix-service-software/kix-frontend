@@ -1,7 +1,7 @@
 
 import { StandardTableComponentState } from './StandardTableComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
+import { TableRow, TableColumn, TableValue, ActionFactory, TableRowHeight } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { RoutingConfiguration } from '@kix/core/dist/browser/router';
@@ -26,9 +26,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
         if (this.state.standardTable) {
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            const wrapperElement = (this as any).getEl(this.state.tableId + 'standard-table-wrapper');
-
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
                 (this as any).setStateDirty();
                 if (scrollToTop) {
@@ -173,26 +170,39 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
+    private loadMoreFinished: boolean = false;
     public loadMore(): void {
-        // const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
-        // if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
-        //     const checkHeight =
-        //         this.state.standardTable.getCurrentDisplayLimit()
-        //         * this.state.standardTable.tableConfiguration.rowHeight;
-        //     if (standardTable.scrollTop > checkHeight) {
-        //         this.state.standardTable.increaseCurrentDisplayLimit();
+        const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
+        if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
+            const checkHeight =
+                this.state.standardTable.getCurrentDisplayLimit()
+                * this.state.standardTable.tableConfiguration.rowHeight
+                * this.getBrowserFontsize();
 
-        //         // check after increase if still more have to be loaded
-        //         this.loadMoreTimeout = setTimeout(() => {
-        //             this.loadMoreTimeout = null;
-        //             this.loadMore();
-        //         }, 66);
+            if (standardTable.scrollTop > checkHeight) {
+                // TODO: ggf. um fehlende Differenz erhöhen, als immer nur um ein bisschen und dann nochmal zu prüfen...
+                this.state.standardTable.increaseCurrentDisplayLimit();
 
-        //         (this as any).setStateDirty();
-        //     }
-        // }
+                // check after increase if still more have to be loaded
+                this.loadMoreTimeout = setTimeout(() => {
+                    this.loadMoreTimeout = null;
+                    this.loadMore();
+                }, 66);
+                this.loadMoreFinished = true;
+
+            } else if (this.loadMoreFinished) {
+                (this as any).setStateDirty();
+                this.loadMoreFinished = false;
+            }
+        }
     }
 
+    private getBrowserFontsize(): number {
+        const browserFontSizeSetting = window
+            .getComputedStyle(document.getElementsByTagName("body")[0], null)
+            .getPropertyValue("font-size");
+        return Number(browserFontSizeSetting.replace('px', ''));
+    }
     public setTableHeight(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
         if (table) {
@@ -203,22 +213,17 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     this.state.standardTable.tableConfiguration.displayLimit : rows.length;
                 const rowCount = minElements === 0 ? 1 : minElements;
 
-                const browserFontSizeSetting = window
-                    .getComputedStyle(document.getElementsByTagName("body")[0], null)
-                    .getPropertyValue("font-size");
-
-                const browserFontSize = Number(browserFontSizeSetting.replace('px', ''));
-
                 const headerRowHeight =
-                    browserFontSize * Number(this.state.standardTable.tableConfiguration.headerHeight);
-                const rowHeight = browserFontSize * Number(this.state.standardTable.tableConfiguration.rowHeight);
+                    this.getBrowserFontsize() * Number(this.state.standardTable.tableConfiguration.headerHeight);
+                const rowHeight =
+                    this.getBrowserFontsize() * Number(this.state.standardTable.tableConfiguration.rowHeight);
 
                 let height = (rowCount * rowHeight) + headerRowHeight;
                 const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRowsContent.forEach((rC) => {
                     height += rC.offsetHeight;
                 });
-                table.style.height = height + 10 + 'px';
+                table.style.height = height + 15 + 'px';
             }
         }
     }
