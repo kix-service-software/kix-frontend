@@ -16,13 +16,12 @@
         align-content: start;
         .scrollbar-column {
             grid-column: 2;
-            z-index: 3; // TODO: hack, ggf. wieder entfernen beim Tabellenumbau
+            z-index: 3;
             background-color: @secondary-6; // TODO: hack, ggf. wieder entfernen beim Tabellenumbau
             position: sticky; // TODO: hack, ggf. wieder entfernen beim Tabellenumbau
             right: -.5rem; // TODO: hack, ggf. wieder entfernen beim Tabellenumbau
         }
         &.has-checkbox-column {
-            grid-template-columns: @cell-min-width auto @margin-small;
             >.row {
                 padding: 0;
                 .row-columns {
@@ -33,12 +32,8 @@
                     margin-left: -@cell-min-width+@margin-small;
                 }
             }
-            .scrollbar-column {
-                grid-column: 3;
-            }
         }
         &.has-toggle-row-column {
-            grid-template-columns: auto @cell-min-width @margin-small;
             >.row {
                 .row-columns {
                     border-top-right-radius: 0;
@@ -48,14 +43,82 @@
                     margin-right: -@cell-min-width;
                 }
             }
+        }
+        &.has-checkbox-column:not(.has-toggle-row-column) {
+            grid-template-columns: @cell-min-width auto @margin-small;
+            >.checkbox-column {
+                &:nth-of-type(4n+5):not(.opened) {
+                    >div:not(.margin-placeholder) {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
+            >.row {
+                &:nth-of-type(4n+6):not(.opened) {
+                    .row-columns {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
+            .scrollbar-column {
+                grid-column: 3;
+            }
+        }
+        &.has-toggle-row-column:not(.has-checkbox-column) {
+            grid-template-columns: auto @cell-min-width @margin-small;
+            >.row {
+                &:nth-of-type(4n+5):not(.opened) {
+                    .row-columns {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
+            >.toggle-row-column {
+                &:nth-of-type(4n+6):not(.opened) {
+                    >div:not(.margin-placeholder) {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
             .scrollbar-column {
                 grid-column: 3;
             }
         }
         &.has-checkbox-column.has-toggle-row-column {
             grid-template-columns: @cell-min-width auto @cell-min-width @margin-small;
+            >.checkbox-column {
+                &:nth-of-type(6n+7):not(.opened) {
+                    >div:not(.margin-placeholder) {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
+            >.row {
+                &:nth-of-type(6n+8):not(.opened) {
+                    .row-columns {
+                        background-color: @secondary-5;
+                    }
+                }
+                padding: 0;
+            }
+            >.toggle-row-column {
+                &:nth-of-type(6n+9):not(.opened) {
+                    >div:not(.margin-placeholder) {
+                        background-color: @secondary-5;
+                    }
+                }
+            }
             .scrollbar-column {
                 grid-column: 4;
+            }
+        }
+        &:not(.has-checkbox-column, .has-toggle-row-column) {
+            >.row {
+                &:nth-of-type(odd):not(.opened) {
+                    .row-columns {
+                        background-color: @secondary-5;
+                    }
+                }
             }
         }
         .row-link {
@@ -121,11 +184,6 @@
                 }
                 &.table-header-cell {
                     padding: 0 @margin-small;
-                }
-            }
-            &:nth-of-type(odd) {
-                .row-columns {
-                    background-color: @secondary-5;
                 }
             }
             &.opened {
@@ -206,7 +264,9 @@
                 z-index: 4;
                 margin: 0;
                 background-color: @secondary-3;
+                overflow: hidden;
                 .table-header-cell {
+                    background-color: @secondary-3; // TODO: wieder entfenren, wenn Resize in Componente korrekte Standard-Table-Config aussließt und richtige Header-Row-Breite berechnet
                     .sortable {
                         color: @secondary-1;
                         .sort-active {
@@ -244,14 +304,10 @@
             cursor: pointer;
             box-sizing: border-box;
             background-color: @secondary-6;
-            &:nth-of-type(even) {
-                >div:not(.margin-placeholder) {
-                    background-color: @secondary-5;
-                }
-            }
             &.opened {
                 >div:not(.margin-placeholder) {
                     background-color: @primary-5;
+                    border-radius: 0;
                 }
             }
             &.check-all,
@@ -263,30 +319,32 @@
         }
         >.checkbox-column {
             left: 0;
-            border-bottom-left-radius: @border-radius;
-            border-top-left-radius: @border-radius;
             &.check-all {
-                padding-left: @margin-small; // TODO: entspricht nicht ganz dem SG, Checkboxen haben aber eigenen brwoserbedingten Abstand
+                padding-left: @margin-small; // TODO: entspricht nicht ganz dem SG, Checkboxen haben aber eigenen browserbedingten Abstand
             }
             &:not(.check-all) {
                 display: grid;
                 grid-template-columns: @margin-small auto;
             }
+            >div:not(.margin-placeholder) {
+                border-bottom-left-radius: @border-radius;
+                border-top-left-radius: @border-radius;
+            }
         }
         >.toggle-row-column {
             right: 0;
-            border-bottom-right-radius: @border-radius;
-            border-top-right-radius: @border-radius;
             width: @cell-min-width + @margin-small; // TODO: entfernen, wenn vertikale Scrollbar unterhalb Header beginnt
             &.toggle-header-column {
                 padding-right: 1rem;
             }
-            >:not(.margin-placeholder) {
-                padding: 0 @margin-small;
-            }
             &:not(.toggle-header-column) {
                 display: grid;
                 grid-template-columns: auto @margin-small;
+            }
+            >:not(.margin-placeholder) {
+                padding: 0 @margin-small;
+                border-bottom-right-radius: @border-radius;
+                border-top-right-radius: @border-radius;
             }
         }
     }

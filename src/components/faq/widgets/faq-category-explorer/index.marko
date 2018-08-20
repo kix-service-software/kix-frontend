@@ -1,9 +1,6 @@
 <div.faq-category-explorer>
     <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "FAQ Kategorien")>
-        <@icon>
-            <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-faq")/>
-        </@icon>
         <@content>
             <span.show-all class={active: !state.activeNode} on-click('showAll')>alle anzeigen</span>
             <if(state.nodes)>

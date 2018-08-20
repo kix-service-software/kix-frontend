@@ -31,8 +31,8 @@
                 </for>
             </div>
             <if(state.standardTable.tableConfiguration.toggle && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
-                <span.toggle-row-column.toggle-header-column style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}
-                    data-id=(state.tableId + "toggle-row-column")>&nbsp;</span>
+                <div.toggle-row-column.toggle-header-column style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}
+                    data-id=(state.tableId + "toggle-row-column")>&nbsp;</div>
             </if>
             <if(state.standardTable.isLoading())>
                 <div.loading-spinner-container>
