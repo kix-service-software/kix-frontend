@@ -1,4 +1,7 @@
-<if(!state.loading)>
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
     <widget instanceId="edit-linked-objects-dialog">
         <@content>
             <div.edit-linked-objects-dialog-container>
@@ -30,7 +33,4 @@
             </div>
         </@content>
     </widget>
-</if>
-<else>
-    <loading-spinner/>
 </else>

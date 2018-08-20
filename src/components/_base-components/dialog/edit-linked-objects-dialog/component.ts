@@ -15,7 +15,7 @@ import {
 class Component {
 
     private state: ComponentState;
-    private linkRootObject: KIXObject = null;
+    private mainObject: KIXObject = null;
     private links: Link[] = [];
     private allLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
@@ -23,13 +23,13 @@ class Component {
     private selectedLinkObjects: LinkObject[] = [];
     private linkedObjects: KIXObject[] = [];
     private linkDescriptions: CreateLinkDescription[] = [];
-    private highlightLayerForNew: ITableHighlightLayer;
-    private highlightLayerForDelete: ITableHighlightLayer;
+    private newObjectsHighlightLayer: ITableHighlightLayer;
+    private removeObjectsHighlightLayer: ITableHighlightLayer;
     private preventSelectionLayer: ITablePreventSelectionLayer;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.linkRootObject = null;
+        this.mainObject = null;
         this.links = [];
         this.allLinkObjects = [];
         this.newLinkObjects = [];
@@ -40,36 +40,17 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const activeContext = ContextService.getInstance().getActiveContext();
-        if (activeContext) {
-            this.linkRootObject = await activeContext.getObject();
-            this.links = this.linkRootObject ? this.linkRootObject.Links : [];
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            this.mainObject = await context.getObject();
+            this.links = this.mainObject ? this.mainObject.Links : [];
 
             await this.prepareLinkObjects();
             await this.reviseLinkObjects();
             this.setInitialLinkDescriptions();
-
-            this.state.table = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.LINK_OBJECT
-            );
-
-            if (this.state.table) {
-                this.highlightLayerForNew = new TableHighlightLayer();
-                this.state.table.addAdditionalLayerOnTop(this.highlightLayerForNew);
-                this.highlightLayerForDelete = new TableHighlightLayer('link-object-to-delete');
-                this.state.table.addAdditionalLayerOnTop(this.highlightLayerForDelete);
-                this.preventSelectionLayer = new TablePreventSelectionLayer();
-                this.state.table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-
-                this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
-                this.state.table.loadRows(true);
-                this.highlightNewLinkObjects();
-                this.state.table.listenerConfiguration.selectionListener.addListener(
-                    this.objectSelectionChanged.bind(this)
-                );
-            }
-            this.state.linkObjectCount = this.allLinkObjects.length;
+            this.prepareTable();
         }
+        this.state.loading = false;
     }
 
     private async prepareLinkObjects(): Promise<void> {
@@ -80,8 +61,8 @@ class Component {
                 const linkObject: LinkObject = new LinkObject();
                 const linkType = objectData.linkTypes.find((lt) => lt.Name === l.Type);
                 if (
-                    l.SourceObject === this.linkRootObject.KIXObjectType &&
-                    l.SourceKey.toString() === this.linkRootObject.ObjectId.toString()
+                    l.SourceObject === this.mainObject.KIXObjectType &&
+                    l.SourceKey.toString() === this.mainObject.ObjectId.toString()
                 ) {
                     linkObject.ObjectId = l.ObjectId || l.ID;
                     linkObject.linkedObjectKey = l.TargetKey.toString();
@@ -98,6 +79,8 @@ class Component {
                 }
                 return linkObject;
             });
+
+            this.state.linkObjectCount = this.allLinkObjects.length;
         }
     }
 
@@ -162,16 +145,16 @@ class Component {
                 const objectData = ContextService.getInstance().getObjectData();
                 let linkType: LinkType;
                 if (objectData) {
-                    const link = this.linkRootObject.Links.find((l) => l.ID === lo.ObjectId);
+                    const link = this.mainObject.Links.find((l) => l.ID === lo.ObjectId);
                     if (link) {
                         linkType = objectData.linkTypes.find((lt) => {
                             if (lo.isSource) {
                                 return lt.Name === link.Type &&
                                     lt.Source === lo.linkedObjectType &&
-                                    lt.Target === this.linkRootObject.KIXObjectType;
+                                    lt.Target === this.mainObject.KIXObjectType;
                             } else {
                                 return lt.Name === link.Type &&
-                                    lt.Source === this.linkRootObject.KIXObjectType &&
+                                    lt.Source === this.mainObject.KIXObjectType &&
                                     lt.Target === lo.linkedObjectType;
                             }
                         });
@@ -184,6 +167,28 @@ class Component {
                 }
             }
         });
+    }
+
+    private prepareTable(): void {
+        const table = StandardTableFactoryService.getInstance().createStandardTable(
+            KIXObjectType.LINK_OBJECT
+        );
+
+        this.newObjectsHighlightLayer = new TableHighlightLayer();
+        table.addAdditionalLayerOnTop(this.newObjectsHighlightLayer);
+        this.removeObjectsHighlightLayer = new TableHighlightLayer('link-object-to-delete');
+        table.addAdditionalLayerOnTop(this.removeObjectsHighlightLayer);
+        this.preventSelectionLayer = new TablePreventSelectionLayer();
+        table.addAdditionalLayerOnTop(this.preventSelectionLayer);
+
+        table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
+        table.loadRows(true);
+        this.setHighlightedObjects();
+        table.listenerConfiguration.selectionListener.addListener(
+            this.objectSelectionChanged.bind(this)
+        );
+
+        this.state.table = table;
     }
 
     public objectSelectionChanged(newSelectedLinkObjects: LinkObject[]): void {
@@ -209,21 +214,21 @@ class Component {
     }
 
     private highlightDeleteLinkObjects(): void {
-        this.highlightLayerForDelete.setHighlightedObjects(this.deleteLinkObjects);
+        this.removeObjectsHighlightLayer.setHighlightedObjects(this.deleteLinkObjects);
     }
 
     public openAddLinkDialog(): void {
         let dialogTitle = 'Objekt verknüpfen';
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.linkRootObject.KIXObjectType);
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
         if (labelProvider) {
             dialogTitle = `${labelProvider.getObjectName(false)} verknüpfen`;
         }
-        const resultListenerId = 'result-listener-link-' + this.linkRootObject.KIXObjectType + '-edit-links';
+        const resultListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
         DialogService.getInstance().openOverlayDialog(
             'link-object-dialog',
             {
                 linkDescriptions: this.linkDescriptions,
-                objectType: this.linkRootObject.KIXObjectType,
+                objectType: this.mainObject.KIXObjectType,
                 resultListenerId
             },
             dialogTitle,
@@ -237,11 +242,11 @@ class Component {
 
     private linksChanged(result: CreateLinkDescription[][]): void {
         this.linkDescriptions = result[0];
-        this.updateTableForNew(result[1]);
+        this.addNewLinks(result[1]);
         this.setCanSubmit();
     }
 
-    private updateTableForNew(newLinkDescriptions): void {
+    private addNewLinks(newLinkDescriptions): void {
         if (newLinkDescriptions.length) {
             const newLinkObjects: LinkObject[] = newLinkDescriptions.map((ld: CreateLinkDescription) => {
                 const service =
@@ -261,14 +266,14 @@ class Component {
             this.allLinkObjects = [...this.allLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(this.allLinkObjects);
-            this.state.table.loadRows(true);
+            this.state.table.loadRows();
             this.state.linkObjectCount = this.allLinkObjects.length;
         }
-        this.highlightNewLinkObjects();
+        this.setHighlightedObjects();
     }
 
-    private highlightNewLinkObjects(): void {
-        this.highlightLayerForNew.setHighlightedObjects(this.newLinkObjects);
+    private setHighlightedObjects(): void {
+        this.newObjectsHighlightLayer.setHighlightedObjects(this.newLinkObjects);
     }
 
     public cancel(): void {
@@ -318,14 +323,9 @@ class Component {
             await service.createObject(
                 KIXObjectType.LINK_OBJECT,
                 newLinkObject,
-                new CreateLinkObjectOptions(this.linkRootObject)
+                new CreateLinkObjectOptions(this.mainObject)
             ).catch((error) => {
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null,
-                    // TODO: Error richtig auswerten
-                    new StringContent('Verknüpfung nicht anlegbar (' + error + ')'),
-                    'Fehler!', true
-                );
+                this.showError('Verknüpfung nicht anlegbar (' + error + ')');
                 ok = false;
                 return;
             });
@@ -339,12 +339,7 @@ class Component {
         let ok = true;
         for (const linkId of linkIdsToDelete) {
             await service.deleteObject(KIXObjectType.LINK_OBJECT, linkId).catch((error) => {
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null,
-                    // TODO: Error richtig auswerten
-                    new StringContent('Verknüpfung nicht entfernbar (' + error + ')'),
-                    'Fehler!', true
-                );
+                this.showError('Verknüpfung nicht entfernbar (' + error + ')');
                 ok = false;
                 return;
             });
