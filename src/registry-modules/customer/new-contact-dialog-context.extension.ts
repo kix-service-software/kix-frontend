@@ -57,14 +57,21 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                         label = attribute.Label;
                     }
 
+                    let componentId = null;
+                    if (attribute.Attribute === ContactProperty.USER_CUSTOMER_ID) {
+                        componentId = 'contact-input-customer';
+                    } else if (attribute.Attribute === ContactProperty.VALID_ID) {
+                        componentId = 'valid-input';
+                    }
+
                     group.formFields.push(
-                        new FormField(label, attribute.Attribute, attribute.Required, label)
+                        new FormField(label, attribute.Attribute, componentId, attribute.Required, label)
                     );
 
                     // TODO: eventuell wieder entfernen?
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {
                         group.formFields.push(
-                            new FormField('Password', ContactProperty.USER_PASSWORD, true, 'Password', [
+                            new FormField('Password', ContactProperty.USER_PASSWORD, null, true, 'Password', [
                                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                             ])
                         );

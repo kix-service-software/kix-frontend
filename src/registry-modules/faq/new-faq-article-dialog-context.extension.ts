@@ -26,24 +26,30 @@ export class Extension implements IModuleFactoryExtension {
         const existingForm = configurationService.getModuleConfiguration(formId, null);
         if (!existingForm) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, true, "Titel"));
-            fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, true, "Kategorie"));
+            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, true, "Titel"));
             fields.push(new FormField(
-                "Sprache", FAQArticleProperty.LANGUAGE, true, "Sprache", null, new FormFieldValue('de')
+                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', true, "Kategorie")
+            );
+            fields.push(new FormField(
+                "Sprache", FAQArticleProperty.LANGUAGE, 'language-input', true, "Sprache",
+                null, new FormFieldValue('de')
             ));
-            fields.push(new FormField("Schlagworte", FAQArticleProperty.KEYWORDS, false, "Schlagworte"));
+            fields.push(new FormField("Schlagworte", FAQArticleProperty.KEYWORDS, null, false, "Schlagworte"));
             fields.push(new FormField(
-                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, true, "Sichtbarkeit",
+                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, "Sichtbarkeit",
                 null, new FormFieldValue("internal")
             ));
-            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, false, "Anlagen"));
-            fields.push(new FormField("FAQ verknüpfen mit", FAQArticleProperty.LINK, false, "FAQ verknüpfen mit"));
-            fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, false, "Symptom"));
-            fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, false, "Ursache"));
-            fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, false, "Lösung"));
-            fields.push(new FormField("Kommentar", FAQArticleProperty.FIELD_6, false, "Kommentar"));
+            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
             fields.push(new FormField(
-                "Gültigkeit", FAQArticleProperty.VALID_ID, true, "Gültigkeit", null, new FormFieldValue(1)
+                "FAQ verknüpfen mit", FAQArticleProperty.LINK, 'link-input', false, "FAQ verknüpfen mit")
+            );
+            fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, 'rich-text-input', false, "Symptom"));
+            fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, 'rich-text-input', false, "Ursache"));
+            fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, 'rich-text-input', false, "Lösung"));
+            fields.push(new FormField("Kommentar", FAQArticleProperty.FIELD_6, 'rich-text-input', false, "Kommentar"));
+            fields.push(new FormField(
+                "Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', true, "Gültigkeit",
+                null, new FormFieldValue(1)
             ));
 
             const group = new FormGroup('FAQ Daten', fields);
@@ -57,11 +63,13 @@ export class Extension implements IModuleFactoryExtension {
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", FAQArticleProperty.FULLTEXT, false, "Volltext"));
-            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, false, "FAQ#"));
-            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, false, "Titel"));
-            fields.push(new FormField("Kategorie", FAQArticleProperty.CATEGORY_ID, false, "Kategorie"));
-            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, false, "Gültigkeit"));
+            fields.push(new FormField("Volltext", FAQArticleProperty.FULLTEXT, null, false, "Volltext"));
+            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "FAQ#"));
+            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Titel"));
+            fields.push(new FormField(
+                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Kategorie")
+            );
+            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Gültigkeit"));
 
             const group = new FormGroup('FAQ-Attribute', fields);
 

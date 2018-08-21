@@ -42,26 +42,38 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, true, "Ansprechpartner"));
-            fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, true, "Kunde"));
-            fields.push(new FormField("Tickettyp", TicketProperty.TYPE_ID, true, "TicketTyp"));
-            fields.push(new FormField("Zuordnung zu Bereich / Queue", TicketProperty.QUEUE_ID, true, "Queue"));
-            fields.push(new FormField("Betroffener Service", TicketProperty.SERVICE_ID, false, "Service"));
-            fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, false, "SLA"));
-            fields.push(new FormField("Betreff", TicketProperty.TITLE, true, "Betreff"));
-            fields.push(new FormField("Ticketbeschreibung", ArticleProperty.BODY, true, "Beschreibung"));
-            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, false, "Anlagen"));
-            fields.push(new FormField("Ticket verknüpfen mit", TicketProperty.LINK, false, "Verknüpfungen"));
-            fields.push(new FormField("Bearbeiter", TicketProperty.OWNER_ID, false, "Bearbeiter"));
-            fields.push(new FormField("Verantwortlicher", TicketProperty.RESPONSIBLE_ID, false, "Verantwortlicher"));
+            fields.push(new FormField(
+                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ansprechpartner")
+            );
+            fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, "Kunde"));
+            fields.push(new FormField("Tickettyp", TicketProperty.TYPE_ID, 'ticket-input-type', true, "TicketTyp"));
+            fields.push(new FormField(
+                "Zuordnung zu Bereich / Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', true, "Queue")
+            );
+            fields.push(new FormField(
+                "Betroffener Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Service")
+            );
+            fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
+            fields.push(new FormField("Betreff", TicketProperty.TITLE, null, true, "Betreff"));
+            fields.push(new FormField(
+                "Ticketbeschreibung", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung")
+            );
+            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));
+            fields.push(new FormField(
+                "Ticket verknüpfen mit", TicketProperty.LINK, 'link-input', false, "Verknüpfungen")
+            );
+            fields.push(new FormField(
+                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Bearbeiter")
+            );
+            fields.push(new FormField(
+                "Verantwortlicher", TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, "Verantwortlicher")
+            );
             fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, true, "Priorität", null, new FormFieldValue(3)
+                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority',
+                true, "Priorität", null, new FormFieldValue(3)
             ));
             fields.push(new FormField<PendingTimeFormValue>(
-                "Status des Tickets",
-                TicketProperty.STATE_ID,
-                true, "Status",
-                null,
+                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-state', true, "Status", null,
                 new FormFieldValue(new PendingTimeFormValue(4))
             ));
 
@@ -76,20 +88,26 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, false, "Volltext"));
-            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, false, "Ticketnummer"));
-            fields.push(new FormField("Titel", TicketProperty.TITLE, false, "Title"));
-            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, false, "Typ"));
-            fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, false, "Queue"));
-            fields.push(new FormField<number>("Priorität", TicketProperty.PRIORITY_ID, false, "Priorität"));
-            fields.push(new FormField<number>("Status des Tickets", TicketProperty.STATE_ID, false, "Status"));
-            fields.push(new FormField("Archiv", TicketProperty.ARCHIVE_FLAG, false, "Archiv"));
-            fields.push(new FormField("Service", TicketProperty.SERVICE_ID, false, "Service"));
-            fields.push(new FormField("SLA", TicketProperty.SLA_ID, false, "SLA"));
+            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Volltext"));
+            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Ticketnummer"));
+            fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Title"));
+            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-title', false, "Typ"));
+            fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Queue"));
+            fields.push(new FormField<number>(
+                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Priorität")
+            );
+            fields.push(new FormField<number>(
+                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-priority', false, "Status")
+            );
+            fields.push(new FormField(
+                "Archiv", TicketProperty.ARCHIVE_FLAG, 'ticket-input-archive-search', false, "Archiv")
+            );
+            fields.push(new FormField("Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Service"));
+            fields.push(new FormField("SLA", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
 
             const group = new FormGroup('Ticketattribute', fields);
 
-            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit ticket', [group], KIXObjectType.TICKET, false);
+            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit Ticket', [group], KIXObjectType.TICKET, false);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 

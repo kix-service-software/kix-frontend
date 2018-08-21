@@ -1,0 +1,4 @@
+<if(state.field)>
+    <textarea.input-style rows=5 cols=50 class={invalid: state.invalid}
+        placeholder=(state.field.required ? state.placeholder : "") on-keydown('keyDown') on-change('valueChanged')>${state.currentValue}</textarea>
+</if>

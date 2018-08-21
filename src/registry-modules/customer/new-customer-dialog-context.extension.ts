@@ -53,7 +53,7 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                 }
 
                 group.formFields.push(
-                    new FormField(label, attribute.Attribute, attribute.Required, label)
+                    new FormField(label, attribute.Attribute, null, attribute.Required, label)
                 );
             });
 

@@ -23,7 +23,10 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             '_base-components/main-form/inputs/valid-input',
             '_base-components/main-form/inputs/attachment-input',
             '_base-components/main-form/inputs/link-input',
-            '_base-components/main-form/inputs/language-input'
+            '_base-components/main-form/inputs/language-input',
+            '_base-components/main-form/inputs/general-catalog-input',
+            '_base-components/main-form/inputs/text-area-input',
+            '_base-components/main-form/inputs/object-reference-input'
         ];
     }
 
@@ -52,7 +55,10 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['valid-input', '_base-components/main-form/inputs/valid-input'],
             ['attachment-input', '_base-components/main-form/inputs/attachment-input'],
             ['link-input', '_base-components/main-form/inputs/link-input'],
-            ['language-input', '_base-components/main-form/inputs/language-input']
+            ['language-input', '_base-components/main-form/inputs/language-input'],
+            ['general-catalog-input', '_base-components/main-form/inputs/general-catalog-input'],
+            ['text-area-input', '_base-components/main-form/inputs/text-area-input'],
+            ['object-reference-input', '_base-components/main-form/inputs/object-reference-input']
         ];
     }
 

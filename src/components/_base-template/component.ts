@@ -13,6 +13,7 @@ import { LinkService } from '@kix/core/dist/browser/link';
 import { IdService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
+import { GeneralCatalogService } from '@kix/core/dist/browser/general-catalog';
 
 declare var io: any;
 
@@ -65,6 +66,7 @@ class Component {
         FAQService.getInstance();
         SearchService.getInstance();
         LinkService.getInstance();
+        GeneralCatalogService.getInstance();
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
