@@ -1,0 +1,47 @@
+import { ComponentState } from './ComponentState';
+import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '@kix/core/dist/model';
+
+class Component extends FormInputComponent<string, ComponentState> {
+
+    public onCreate(): void {
+        this.state = new ComponentState();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
+        this.state.currentValue = typeof input.currentValue !== 'undefined' ?
+            input.currentValue : this.state.currentValue;
+        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
+    }
+
+    public onMount(): void {
+        super.onMount();
+        this.setCurrentValue();
+    }
+
+    public setCurrentValue(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentValue = this.state.defaultValue.value;
+            (this as any).emit('valueChanged', this.state.currentValue);
+            super.provideValue(this.state.currentValue);
+        }
+    }
+
+    private valueChanged(event: any): void {
+        if (event) {
+            this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
+            (this as any).emit('valueChanged', this.state.currentValue);
+            super.provideValue(this.state.currentValue);
+        }
+    }
+
+    public keyDown(event: any): void {
+        setTimeout(() => {
+            this.valueChanged(event);
+        }, 100);
+    }
+
+}
+
+module.exports = Component;
