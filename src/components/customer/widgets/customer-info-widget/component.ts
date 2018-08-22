@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Context } from "@kix/core/dist/model";
 
 class Component {
     private state: ComponentState;
@@ -17,14 +17,26 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId]
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
+                if (type === KIXObjectType.CUSTOMER) {
+                    this.initWidget(context, customer);
+                }
+            }
+        });
 
-        if (customers && customers.length) {
-            this.state.customer = customers[0];
-            this.setActions();
-        }
+        await this.initWidget(context);
+
+
+    }
+
+    private async initWidget(context: Context, customer?: Customer): Promise<void> {
+        this.state.customer = customer ? customer : await context.getObject<Customer>();
+        this.setActions();
     }
 
     private setActions(): void {

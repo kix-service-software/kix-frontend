@@ -5,7 +5,6 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = '20180710-contact-details',
-        public contactId: string = null,
         public contact: Contact = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],

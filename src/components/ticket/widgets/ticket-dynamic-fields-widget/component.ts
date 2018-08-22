@@ -36,9 +36,9 @@ class DynamicFieldWidgetComponent {
 
     private async setTicket(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        if (context.objectId) {
+        if (context.getObjectId()) {
             const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.objectId]
+                KIXObjectType.TICKET, [context.getObjectId()]
             );
             this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
         }

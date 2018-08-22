@@ -82,7 +82,7 @@ class Component {
         this.state.table = table;
 
         const context = ContextService.getInstance().getActiveContext();
-        if (context.descriptor.contextId === FAQContext.CONTEXT_ID) {
+        if (context.getDescriptor().contextId === FAQContext.CONTEXT_ID) {
             this.setCategoryFilter((context as FAQContext).currentFAQCategory);
         }
     }

@@ -41,9 +41,15 @@ class KIXMenuComponent implements IContextServiceListener {
     }
 
     private setActiveMenuEntry(context: Context): void {
-        if (context && context.descriptor) {
-            this.state.primaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
-            this.state.secondaryMenuEntries.forEach((me) => me.active = me.contextId === context.descriptor.contextId);
+        if (context && context.getDescriptor()) {
+            this.state.primaryMenuEntries.forEach(
+                (me) => me.active = me.contextId === context.getDescriptor().contextId
+            );
+
+            this.state.secondaryMenuEntries.forEach(
+                (me) => me.active = me.contextId === context.getDescriptor().contextId
+            );
+
             (this as any).setStateDirty('primaryMenuEntries');
         }
     }

@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Customer, KIXObjectLoadingOptions, ContextType } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Customer } from "@kix/core/dist/model";
 import {
-    ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
+    ContextService, ActionFactory, IdService, WidgetService
 } from "@kix/core/dist/browser";
 import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -16,29 +16,31 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
-        this.state.customerId = context.objectId.toString();
-
-        if (!this.state.customerId) {
-            this.state.error = 'No customer id given.';
-        } else {
-            this.state.configuration = context.configuration;
-            this.state.loadingConfig = false;
-            this.state.lanes = context.getLanes();
-            this.state.tabWidgets = context.getLaneTabs();
-            await this.loadCustomer();
-            this.setActions();
-        }
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (customerId: string, customer: Customer, type: KIXObjectType) => {
+                if (type === KIXObjectType.CUSTOMER) {
+                    this.initWidget(context, customer);
+                }
+            }
+        });
+        await this.initWidget(context);
     }
 
-    private async loadCustomer(): Promise<void> {
-        this.state.customer = await ContextService.getInstance().getObject<Customer>(
-            KIXObjectType.CUSTOMER, ContextType.MAIN
-        );
+    private async initWidget(context: CustomerDetailsContext, customer?: Customer): Promise<void> {
+        this.state.loading = true;
+        this.state.customer = customer ? customer : await context.getObject<Customer>();
+        this.state.configuration = context.getConfiguration();
+        this.state.lanes = context.getLanes();
+        this.state.tabWidgets = context.getLaneTabs();
+        this.setActions();
 
-        this.state.loadingCustomer = false;
-        if (!this.state.customer) {
-            this.state.error = `No customer found for id ${this.state.customerId}`;
-        }
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private setActions(): void {

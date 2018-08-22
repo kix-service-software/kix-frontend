@@ -1,6 +1,6 @@
 <widget instanceId=state.instanceId title=state.title contentActions=state.actions>
     <@content>
-        <if(state.contact && state.customerTable && !state.loading)>
+        <if(state.contact && state.customerTable)>
             <div.customer-filter>
                 <filter on-filter('filter')/>
             </div>

@@ -1,7 +1,7 @@
 import { ConfiguredWidget, Ticket, AbstractAction } from '@kix/core/dist/model';
 import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
 
-export class TicketDetailsComponentState {
+export class ComponentState {
 
     public constructor(
         public instanceId: string = '20180710-ticket-details',
@@ -10,8 +10,7 @@ export class TicketDetailsComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public generalActions: AbstractAction[] = [],
         public ticketActions: AbstractAction[] = [],
-        public loadingTicket: boolean = true,
-        public loadingConfig: boolean = true,
+        public loading: boolean = true,
         public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null,
         public ticket: Ticket = null,
         public hasError: boolean = false,
