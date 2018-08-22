@@ -17,17 +17,17 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getDialogFormDependencies(): string[] {
         return [
-            '_base-components/main-form/inputs/form-default-input',
-            '_base-components/main-form/inputs/form-list',
-            '_base-components/main-form/inputs/rich-text-input',
-            '_base-components/main-form/inputs/valid-input',
-            '_base-components/main-form/inputs/attachment-input',
-            '_base-components/main-form/inputs/link-input',
-            '_base-components/main-form/inputs/language-input',
-            '_base-components/main-form/inputs/general-catalog-input',
-            '_base-components/main-form/inputs/text-area-input',
-            '_base-components/main-form/inputs/object-reference-input',
-            '_base-components/main-form/inputs/date-time-input'
+            '_base-components/form/inputs/form-default-input',
+            '_base-components/form/inputs/form-list',
+            '_base-components/form/inputs/rich-text-input',
+            '_base-components/form/inputs/valid-input',
+            '_base-components/form/inputs/attachment-input',
+            '_base-components/form/inputs/link-input',
+            '_base-components/form/inputs/language-input',
+            '_base-components/form/inputs/general-catalog-input',
+            '_base-components/form/inputs/text-area-input',
+            '_base-components/form/inputs/object-reference-input',
+            '_base-components/form/inputs/date-time-input'
         ];
     }
 
@@ -50,17 +50,17 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
 
     private getDialogFormTags(): Array<[string, string]> {
         return [
-            ['form-default-input', '_base-components/main-form/inputs/form-default-input'],
-            ['form-list', '_base-components/main-form/inputs/form-list'],
-            ['rich-text-input', '_base-components/main-form/inputs/rich-text-input'],
-            ['valid-input', '_base-components/main-form/inputs/valid-input'],
-            ['attachment-input', '_base-components/main-form/inputs/attachment-input'],
-            ['link-input', '_base-components/main-form/inputs/link-input'],
-            ['language-input', '_base-components/main-form/inputs/language-input'],
-            ['general-catalog-input', '_base-components/main-form/inputs/general-catalog-input'],
-            ['text-area-input', '_base-components/main-form/inputs/text-area-input'],
-            ['object-reference-input', '_base-components/main-form/inputs/object-reference-input'],
-            ['date-time-input', '_base-components/main-form/inputs/date-time-input']
+            ['form-default-input', '_base-components/form/inputs/form-default-input'],
+            ['form-list', '_base-components/form/inputs/form-list'],
+            ['rich-text-input', '_base-components/form/inputs/rich-text-input'],
+            ['valid-input', '_base-components/form/inputs/valid-input'],
+            ['attachment-input', '_base-components/form/inputs/attachment-input'],
+            ['link-input', '_base-components/form/inputs/link-input'],
+            ['language-input', '_base-components/form/inputs/language-input'],
+            ['general-catalog-input', '_base-components/form/inputs/general-catalog-input'],
+            ['text-area-input', '_base-components/form/inputs/text-area-input'],
+            ['object-reference-input', '_base-components/form/inputs/object-reference-input'],
+            ['date-time-input', '_base-components/form/inputs/date-time-input']
         ];
     }
 

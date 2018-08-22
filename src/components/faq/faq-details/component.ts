@@ -35,7 +35,7 @@ class Component {
     }
 
     private async initWidget(context: FAQDetailsContext, faqArticle?: FAQArticle): Promise<void> {
-        this.state.loading = false;
+        this.state.loading = true;
         this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes(true);
