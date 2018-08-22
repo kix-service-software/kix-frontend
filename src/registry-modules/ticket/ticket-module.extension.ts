@@ -151,7 +151,7 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
             }
         } as any);
         const chart3 = new ConfiguredWidget('20180814-3-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht letzte 7 Tage', [], chartConfig3,
+            'ticket-chart-widget', 'Neue Tickets der letzten 7 Tage', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, true)
         );
 
