@@ -17,6 +17,14 @@ class Component {
         this.state = new ComponentState();
     }
 
+    public async onMount(): Promise<void> {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.reset();
+        }
+        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+    }
+
     public cancel(): void {
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
