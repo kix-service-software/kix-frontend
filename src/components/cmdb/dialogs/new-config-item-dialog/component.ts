@@ -58,7 +58,7 @@ class Component {
                 const cmdbService = (service as CMDBService);
 
                 const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-                await cmdbService.createConfigItem(KIXObjectType.CONFIG_ITEM, this.state.formId, ciClass.ID)
+                await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();
