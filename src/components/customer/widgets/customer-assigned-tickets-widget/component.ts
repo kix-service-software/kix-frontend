@@ -4,12 +4,12 @@ import {
     ITableClickListener, StandardTableFactoryService
 } from "@kix/core/dist/browser";
 import {
-    WidgetConfiguration, Customer, KIXObjectType, Ticket, ContextMode, TicketProperty
+    WidgetConfiguration, Customer, KIXObjectType, Ticket, TicketProperty, Context
 } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerDetailsContext
 } from "@kix/core/dist/browser/customer";
-import { TicketTableContentLayer, TicketTableLabelLayer, TicketService } from "@kix/core/dist/browser/ticket";
+import { TicketService } from "@kix/core/dist/browser/ticket";
 
 class Component {
 
@@ -51,14 +51,25 @@ class Component {
             ? context.getWidgetConfiguration('customer-pending-tickets-group')
             : undefined;
 
-        const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId]
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
+                if (type === KIXObjectType.CUSTOMER) {
+                    this.initWidget(context, customer);
+                }
+            }
+        });
 
-        if (customers && customers.length) {
-            this.state.customer = customers[0];
-        }
+        await this.initWidget(context);
 
+
+    }
+
+    private async initWidget(context: Context, customer?: Customer): Promise<void> {
+        this.state.customer = customer ? customer : await context.getObject<Customer>();
         this.createTables();
         this.loadTickets();
         this.setActions();

@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObject, Contact, ContextMode } from "@kix/core/dist/model";
+import { KIXObjectType, Contact, Context } from "@kix/core/dist/model";
 
 class Component {
     private state: ComponentState;
@@ -17,16 +17,25 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId]
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.initWidget(context, contact);
+                }
+            }
+        });
 
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
-            this.setActions();
-        }
+        await this.initWidget(context);
     }
 
+    private async initWidget(context: Context, contact?: Contact): Promise<void> {
+        this.state.contact = contact ? contact : await context.getObject<Contact>();
+        this.setActions();
+    }
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.contact) {
             this.state.actions = ActionFactory.getInstance().generateActions(

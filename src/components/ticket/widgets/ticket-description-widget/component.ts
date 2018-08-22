@@ -1,6 +1,6 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
-import { WidgetType, Ticket, KIXObjectType, ContextMode } from '@kix/core/dist/model/';
+import { WidgetType, Ticket, KIXObjectType, Context } from '@kix/core/dist/model/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 
 class TicketDescriptionWidgetComponent {
@@ -23,20 +23,26 @@ class TicketDescriptionWidgetComponent {
         WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
-        await this.setTicket();
+        context.registerListener('ticket-description-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+                if (type === KIXObjectType.TICKET) {
+                    this.initWidget(context, ticket);
+                }
+            }
+        });
+
+        await this.initWidget(context);
+    }
+
+    private async initWidget(context: Context, ticket?: Ticket): Promise<void> {
+        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>();
         this.getFirstArticle();
         this.setActions();
         this.getTicketNotes();
-    }
-
-    public async setTicket(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.objectId) {
-            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.objectId]
-            );
-            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
-        }
     }
 
     private async getFirstArticle(): Promise<void> {

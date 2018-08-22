@@ -6,7 +6,6 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = '20180710-faq-details',
-        public faqArticleId: string = null,
         public faqArticle: FAQArticle = null,
         public configuration: FAQDetailsContextConfiguration = null,
         public error: any = null,

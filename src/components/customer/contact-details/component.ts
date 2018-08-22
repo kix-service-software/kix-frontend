@@ -13,30 +13,28 @@ class Component {
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
-
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as ContactDetailsContext);
-        this.state.contactId = context.objectId.toString();
-        if (!this.state.contactId) {
-            this.state.error = 'No contact id given.';
-        } else {
-            this.state.configuration = context.configuration;
-            this.state.lanes = context.getLanes();
-            this.state.tabWidgets = context.getLaneTabs();
-            await this.loadContact();
-            this.setActions();
-        }
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.initWidget(context, contact);
+                }
+            }
+        });
+        await this.initWidget(context);
     }
 
-    private async loadContact(): Promise<void> {
-        this.state.contact = await ContextService.getInstance().getObject<Contact>(
-            KIXObjectType.CONTACT, ContextType.MAIN
-        );
-
-        this.state.loadingContact = false;
-        if (!this.state.contact) {
-            this.state.error = `No contact found for id ${this.state.contactId}`;
-        }
+    private async initWidget(context: ContactDetailsContext, contact?: Contact): Promise<void> {
+        this.state.contact = contact ? contact : await context.getObject<Contact>();
+        this.state.configuration = context.getConfiguration();
+        this.state.lanes = context.getLanes();
+        this.state.tabWidgets = context.getLaneTabs();
+        this.setActions();
     }
 
     private setActions(): void {
@@ -46,16 +44,11 @@ class Component {
                 config.generalActions, true, [this.state.contact]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
-        }
-    }
 
-    public getContactActions(): string[] {
-        let actions = [];
-        const config = this.state.configuration;
-        if (config && this.state.contactId) {
-            actions = ActionFactory.getInstance().generateActions(config.contactActions, true, [this.state.contact]);
+            this.state.contactActions = ActionFactory.getInstance().generateActions(
+                config.contactActions, true, [this.state.contact]
+            );
         }
-        return actions;
     }
 
     public getTitle(): string {

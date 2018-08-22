@@ -19,7 +19,7 @@ export class Component {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        this.state.contextId = context.descriptor.contextId;
+        this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.state.actions = [new NotesEditAction(this)];
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);

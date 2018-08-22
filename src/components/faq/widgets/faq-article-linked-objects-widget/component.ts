@@ -4,7 +4,7 @@ import {
     TableConfiguration, TableHeaderHeight, TableRowHeight,
     ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
 } from '@kix/core/dist/browser';
-import { KIXObjectType, Link, KIXObject, DataType, WidgetType } from '@kix/core/dist/model';
+import { KIXObjectType, Link, KIXObject, DataType, WidgetType, Context } from '@kix/core/dist/model';
 import { FAQArticle } from '@kix/core/dist/model/kix/faq';
 import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
 
@@ -27,12 +27,10 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        this.state.faqArticle = await context.getObject<FAQArticle>();
         context.registerListener(this.contextListenerId, {
-            objectChanged: (id: string | number, object: FAQArticle) => {
-                if (id.toString() === this.state.faqArticle.ObjectId.toString()) {
-                    this.state.faqArticle = object;
-                    this.setLinkedObjects();
+            objectChanged: (id: string | number, object: FAQArticle, type: KIXObjectType) => {
+                if (type === KIXObjectType.FAQ_ARTICLE) {
+                    this.initWidget(context, object);
                 }
             },
             sidebarToggled: () => { return; },
@@ -41,13 +39,19 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        if (this.state.faqArticle) {
-            this.setActions();
-            await this.setLinkedObjectsGroups();
-        }
+        await this.initWidget(context);
+    }
 
-        this.state.loading = false;
+    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+        this.state.loading = true;
+        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
+        this.setLinkedObjects();
+        this.setActions();
+        await this.setLinkedObjectsGroups();
 
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 100);
     }
 
     private setActions(): void {
@@ -59,6 +63,7 @@ class Component {
     }
 
     private async setLinkedObjectsGroups(): Promise<void> {
+        this.state.linkedObjectGroups = [];
         if (this.state.widgetConfiguration.settings) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;

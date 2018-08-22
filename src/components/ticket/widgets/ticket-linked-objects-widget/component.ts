@@ -3,7 +3,7 @@ import { LinkedTicketTableContentLayer, TicketTableLabelLayer } from '@kix/core/
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { LinkedObjectsSettings } from './LinkedObjectsSettings';
 import { ComponentState } from './ComponentState';
-import { Link, Ticket, WidgetType, KIXObjectType, ContextMode } from '@kix/core/dist/model';
+import { Link, Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
 import {
     StandardTable, ITableConfigurationListener, TableSortLayer, TableColumn,
     ActionFactory, WidgetService, TableListenerConfiguration, TableLayerConfiguration, StandardTableFactoryService
@@ -54,9 +54,9 @@ class Component {
 
     private async setTicket(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        if (context.objectId) {
+        if (context.getObjectId()) {
             const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.objectId]
+                KIXObjectType.TICKET, [context.getObjectId()]
             );
 
             this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;

@@ -4,7 +4,7 @@ import {
     TableColumn, ITableConfigurationListener, ActionFactory,
     TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, KIXObjectServiceRegistry
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
 import {
     CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService
 } from "@kix/core/dist/browser/customer";
@@ -28,16 +28,26 @@ class Component {
             this.state.title = this.state.widgetConfiguration.title;
         }
 
-        const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId]
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.initWidget(context, contact);
+                }
+            }
+        });
 
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
-            this.state.title += ' (' + this.state.contact.UserCustomerIDs.length + ')';
-            this.setTable();
-            this.setActions();
-        }
+        this.initWidget(context);
+    }
+
+    private async initWidget(context: Context, contact?: Contact): Promise<void> {
+        this.state.contact = contact ? contact : await context.getObject<Contact>();
+        this.state.title = `${this.state.widgetConfiguration.title} (${this.state.contact.UserCustomerIDs.length})`;
+        this.setTable();
+        this.setActions();
     }
 
     private setActions(): void {
@@ -50,7 +60,6 @@ class Component {
 
     private async setTable(): Promise<void> {
         if (this.state.contact && this.state.widgetConfiguration) {
-            this.state.loading = true;
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
@@ -70,7 +79,6 @@ class Component {
 
             this.state.customerTable.layerConfiguration.contentLayer.setPreloadedObjects(customer);
             this.state.customerTable.loadRows();
-            this.state.loading = false;
         }
     }
 

@@ -10,8 +10,7 @@ export class ComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public generalActions: AbstractAction[] = [],
         public customerActions: AbstractAction[] = [],
-        public loadingCustomer: boolean = true,
-        public loadingConfig: boolean = true,
+        public loading: boolean = false,
         public configuration: CustomerDetailsContextConfiguration = null,
         public customer: Customer = null,
         public error: any = null
