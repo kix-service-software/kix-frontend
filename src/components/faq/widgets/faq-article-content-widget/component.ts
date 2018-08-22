@@ -1,5 +1,5 @@
-import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, WidgetService, BrowserUtil } from "@kix/core/dist/browser";
+import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "@kix/core/dist/model";
+import { ContextService, ActionFactory, WidgetService, BrowserUtil, IdService } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
 import { FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions } from "@kix/core/dist/model/kix/faq";
 import { EventService, IEventListener } from "@kix/core/dist/browser/event";
@@ -10,9 +10,11 @@ class Component implements IEventListener {
     public eventSubscriberId: string = 'FAQContentComponent';
 
     private state: ComponentState;
+    private contextListenerId: string = null;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.contextListenerId = IdService.generateDateBasedId('faq-content-widget');
     }
 
     public onInput(input: any): void {
@@ -27,28 +29,31 @@ class Component implements IEventListener {
 
         EventService.getInstance().subscribe(FAQEvent.VOTE_UPDATED, this);
 
-        await this.loadFAQArticle();
+        context.registerListener(this.contextListenerId, {
+            objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
+                if (type === KIXObjectType.FAQ_ARTICLE) {
+                    this.initWidget(context, faqArticle);
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
+        });
+
+        this.initWidget(context);
     }
 
-    public eventPublished(faqArticle: FAQArticle): void {
-        this.loadFAQArticle(false);
+    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+        this.state.faqArticle = faqArticle
+            ? faqArticle
+            : await context.getObject<FAQArticle>(KIXObjectType.FAQ_ARTICLE, true);
+        this.setActions();
     }
 
-    private async loadFAQArticle(cache: boolean = true): Promise<void> {
+    public async eventPublished(faqArticle: FAQArticle): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, ['Attachments', 'Votes'], ['Attachments', 'Votes']
-        );
-        const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [context.objectId], loadingOptions, null, cache
-        );
-
-        if (faqs && faqs.length) {
-            this.state.faqArticle = faqs[0];
-
-            this.setActions();
-        }
+        await this.initWidget(context);
     }
 
     private setActions(): void {

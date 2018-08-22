@@ -3,7 +3,7 @@ import {
     ContextService, TableColumn, ITableConfigurationListener,
     ActionFactory, TableListenerConfiguration, StandardTableFactoryService
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
@@ -26,18 +26,25 @@ class Component {
             this.state.title = this.state.widgetConfiguration.title;
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, ['Contacts']
-        );
-        const customers = await ContextService.getInstance().loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, [context.objectId], loadingOptions, null, false
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
+                if (type === KIXObjectType.CUSTOMER) {
+                    this.initWidget(context, customer);
+                }
+            }
+        });
 
-        if (customers && customers.length) {
-            this.state.customer = customers[0];
-            this.setTable();
-            this.setActions();
-        }
+        await this.initWidget(context);
+    }
+
+    private async initWidget(context: Context, customer?: Customer): Promise<void> {
+        this.state.customer = customer ? customer : await context.getObject<Customer>();
+        this.setTable();
+        this.setActions();
     }
 
     private setActions(): void {

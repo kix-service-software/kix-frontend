@@ -1,14 +1,16 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, StandardTableFactoryService } from "@kix/core/dist/browser";
-import { KIXObjectType } from "@kix/core/dist/model";
+import { ContextService, ActionFactory, StandardTableFactoryService, IdService } from "@kix/core/dist/browser";
+import { KIXObjectType, Context } from "@kix/core/dist/model";
 import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 
 class Component {
 
     private state: ComponentState;
+    private contextListenerId: string = null;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.contextListenerId = IdService.generateDateBasedId('faq-history-widget');
     }
 
     public onInput(input: any): void {
@@ -19,17 +21,32 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [context.objectId]
-        );
+        context.registerListener(this.contextListenerId, {
+            objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
+                if (type === KIXObjectType.FAQ_ARTICLE) {
+                    this.initWidget(context, faqArticle);
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
+        });
 
-        if (faqs && faqs.length) {
-            this.state.faqArticle = faqs[0];
-            this.setActions();
-            this.prepareTable();
-        }
+        await this.initWidget(context);
 
-        this.state.loading = false;
+    }
+
+    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+        this.state.loading = true;
+
+        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
+        this.setActions();
+        this.prepareTable();
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private setActions(): void {

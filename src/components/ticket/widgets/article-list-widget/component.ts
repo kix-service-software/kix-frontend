@@ -1,4 +1,4 @@
-import { Ticket, KIXObjectType, ContextMode } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, Context } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
@@ -29,28 +29,38 @@ export class Component implements IEventListener {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        await this.setTicket();
-        this.getArticles();
-        this.setActions();
-        this.setArticleTableConfiguration();
+        context.registerListener('article-list-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+                if (type === KIXObjectType.TICKET) {
+                    this.initWidget(context, ticket);
+                }
+            }
+        });
 
         EventService.getInstance().subscribe('ShowArticleInTicketDetails', this);
         EventService.getInstance().subscribe('ArticleTableRowToggled', this);
+
+        await this.initWidget(context);
+    }
+
+    private async initWidget(context: Context, ticket?: Ticket): Promise<void> {
+        this.state.loading = true;
+        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>();
+        this.setArticles();
+        this.setActions();
+        this.setArticleTableConfiguration();
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 100);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
         EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
-    }
-
-    public async setTicket(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.objectId) {
-            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.objectId]
-            );
-            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
-        }
     }
 
     private setActions(): void {
@@ -103,37 +113,29 @@ export class Component implements IEventListener {
         }
     }
 
-    private getArticles(): void {
+    private setArticles(): void {
         if (this.state.ticket) {
-            this.state.articles = this.state.ticket.Articles;
-        }
-    }
+            this.state.articles = [...this.state.ticket.Articles];
+            this.state.title = 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
 
-    private getAttachmentsCount(): number {
-        let count = 0;
-
-        if (this.state.articles) {
+            let count = 0;
             this.state.articles.forEach((article) => {
                 if (article.Attachments) {
                     count += article.Attachments.length;
                 }
             });
-        }
 
-        return count;
+            this.state.attachmentCount = count;
+        }
     }
 
-    private attachmentsClicked(): void {
+    public attachmentsClicked(): void {
         alert('Alle Anlagen ...');
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
-    }
-
-    private getTitle(): string {
-        return 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
     }
 
     public eventPublished(data: any, eventId: string): void {

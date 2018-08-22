@@ -14,6 +14,9 @@ export class ComponentState extends WidgetComponentState<ArticleListSettings> {
         public generalArticleActions: IAction[] = [],
         public filterValue: string = '',
         public ticket: Ticket = null,
+        public title: string = null,
+        public attachmentCount: number = 0,
+        public loading: boolean = false,
         public eventSubscriberWidgetPrefix: string = 'ArticleListWidget'
     ) {
         super();

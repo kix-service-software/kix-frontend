@@ -28,7 +28,7 @@ export class Component implements IKIXObjectSearchListener {
     public async onMount(): Promise<void> {
         KIXObjectSearchService.getInstance().registerListener(this);
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        this.state.contextId = context.descriptor.contextId;
+        this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.prepareTree();
         const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();

@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
 } from '@kix/core/dist/browser';
-import { WidgetConfiguration, Contact, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
+import { WidgetConfiguration, Contact, KIXObjectType, Ticket, ContextMode, Context } from '@kix/core/dist/model';
 import {
     ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
 } from '@kix/core/dist/browser/contact';
@@ -46,18 +46,29 @@ class Component {
             ? context.getWidgetConfiguration('contact-pending-tickets-group')
             : undefined;
 
-        const contacts = await ContextService.getInstance().loadObjects<Contact>(
-            KIXObjectType.CONTACT, [context.objectId]
-        );
+        context.registerListener('contact-details-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.initWidget(context, contact);
+                }
+            }
+        });
 
-        if (contacts && contacts.length) {
-            this.state.contact = contacts[0];
-            this.setActions();
-            this.createTables();
-            this.loadTickets();
-        }
+
+        this.initWidget(context);
 
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+    }
+
+    private async initWidget(context: Context, contact?: Contact): Promise<void> {
+        this.state.contact = contact ? contact : await context.getObject<Contact>();
+        this.setActions();
+        this.createTables();
+        this.loadTickets();
     }
 
     private setActions(): void {
@@ -201,7 +212,7 @@ class Component {
         this.state.loadPendingTickets = false;
     }
 
-    private getTitle(): string {
+    public getTitle(): string {
         const title = this.state.widgetConfiguration
             ? this.state.widgetConfiguration.title
             : '';

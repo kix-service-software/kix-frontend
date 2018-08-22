@@ -18,7 +18,6 @@
                             <include(component.getWidgetTemplate(lane.instanceId), { 
                                 contextType: "MAIN",
                                 instanceId: lane.instanceId, 
-                                faqArticleId: state.faqArticleId, 
                                 type: component.LANE_WIDGET_TYPE
                                 })/>
                         </li>
@@ -29,7 +28,6 @@
         <include(component.getWidgetTemplate('faq-article-content-widget'), { 
             contextType: "MAIN",
             instanceId: 'faq-article-content-widget', 
-            faqArticleId: state.faqArticleId, 
             type: component.LANE_WIDGET_TYPE
         })/>
     </div>

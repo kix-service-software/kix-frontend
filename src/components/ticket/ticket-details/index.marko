@@ -1,7 +1,7 @@
 <if(state.error)>
     <span.error>${state.error}</span>
 </if>
-<else-if(state.loadingTicket || state.loadingConfig)>
+<else-if(state.loading)>
     <loading-spinner/>
 </else-if>
 <else>
@@ -18,7 +18,6 @@
                             <include(component.getWidgetTemplate(lane.instanceId), { 
                                 contextType: "MAIN", 
                                 instanceId: lane.instanceId, 
-                                ticketId: state.ticketId, 
                                 type: component.getLaneWidgetType()
                                 })/>
                         </li>

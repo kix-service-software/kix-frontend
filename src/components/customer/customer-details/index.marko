@@ -1,7 +1,7 @@
 <if(state.error)>
     <span.error>${state.error}</span>
 </if>
-<else-if(state.loadingCustomer || state.loadingConfig)>
+<else-if(state.loading)>
     <loading-spinner/>
 </else-if>
 <else>

@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, ContextMode } from "@kix/core/dist/model";
+import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
+import { KIXObjectType, Customer, ContextMode, Context } from "@kix/core/dist/model";
 import { FAQArticle, FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
 import { FAQLabelProvider } from "@kix/core/dist/browser/faq";
 import { Label } from "@kix/core/dist/browser/components";
@@ -8,12 +8,14 @@ import { Label } from "@kix/core/dist/browser/components";
 class Component {
 
     private state: ComponentState;
+    private contextListenerId: string = null;
 
     public labelProvider: FAQLabelProvider = new FAQLabelProvider();
     public properties;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.contextListenerId = IdService.generateDateBasedId('faq-info-widget');
     }
 
     public onInput(input: any): void {
@@ -27,17 +29,31 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const faqs = await ContextService.getInstance().loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [context.objectId]
-        );
+        context.registerListener(this.contextListenerId, {
+            objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
+                if (type === KIXObjectType.FAQ_ARTICLE) {
+                    this.initWidget(context, faqArticle);
+                }
+            },
+            sidebarToggled: () => { return; },
+            explorerBarToggled: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; }
+        });
 
-        if (faqs && faqs.length) {
-            this.state.faqArticle = faqs[0];
-            this.setActions();
-            this.createLabels();
-        }
+        await this.initWidget(context);
+    }
 
-        this.state.loading = false;
+    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+        this.state.loading = true;
+
+        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
+        this.setActions();
+        this.createLabels();
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private setActions(): void {
