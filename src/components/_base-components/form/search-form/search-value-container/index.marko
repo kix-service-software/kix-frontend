@@ -29,7 +29,7 @@
                     </else>
                 </if>
             </div>
-            <if(state.searchValues.length > 1)>
+            <if(state.searchValues.length > 1 && loop.getIndex() !== state.searchValues.length-1)>
                 <button.form-button.button-without-text type="button" title="Suchparameter entfernen"
                     on-click('removeValue', searchValue)>
                     <span.kix-icon-minus/>

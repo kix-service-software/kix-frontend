@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { FormInputComponent } from "@kix/core/dist/model";
 
-class ArticleInputBodyComponent extends FormInputComponent<string, ComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -33,4 +33,4 @@ class ArticleInputBodyComponent extends FormInputComponent<string, ComponentStat
 
 }
 
-module.exports = ArticleInputBodyComponent;
+module.exports = Component;
