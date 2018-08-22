@@ -53,7 +53,7 @@ class NewTicketDialogComponent {
                         this.showError(error);
                     });
             }
-        }, 100);
+        }, 300);
     }
 
     private showSuccessHint(): void {
