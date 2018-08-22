@@ -26,29 +26,29 @@ class Component {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        const result = formInstance.validateForm();
-        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-        if (validationError) {
-            this.showValidationError(result);
-        } else {
-            DialogService.getInstance().setMainDialogLoading(true, "FAQ Artikel wird angelegt");
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.FAQ_ARTICLE);
-            await service.createObjectByForm(KIXObjectType.FAQ_ARTICLE, this.state.formId)
-                .then((faqArticleId) => {
-                    DialogService.getInstance().setMainDialogLoading();
-                    this.showSuccessHint();
-                    DialogService.getInstance().closeMainDialog();
-                    const routingConfiguration = new RoutingConfiguration(
-                        null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
-                        ContextMode.DETAILS, FAQArticleProperty.ID
-                    );
-                    RoutingService.getInstance().routeToContext(routingConfiguration, faqArticleId);
-                }).catch((error) => {
-                    DialogService.getInstance().setMainDialogLoading();
-                    this.showError(error);
-                });
-        }
+        setTimeout(async () => {
+            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const result = formInstance.validateForm();
+            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+            if (validationError) {
+                this.showValidationError(result);
+            } else {
+                DialogService.getInstance().setMainDialogLoading(true, "FAQ Artikel wird angelegt");
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.FAQ_ARTICLE);
+                await service.createObjectByForm(KIXObjectType.FAQ_ARTICLE, this.state.formId)
+                    .then((faqArticleId) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showSuccessHint();
+                        DialogService.getInstance().closeMainDialog();
+                        ContextService.getInstance().setContext(
+                            null, KIXObjectType.FAQ_ARTICLE, ContextMode.DETAILS, FAQArticleProperty.ID
+                        );
+                    }).catch((error) => {
+                        DialogService.getInstance().setMainDialogLoading();
+                        this.showError(error);
+                    });
+            }
+        }, 300);
     }
 
     private showSuccessHint(): void {
