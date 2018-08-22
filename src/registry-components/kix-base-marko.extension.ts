@@ -26,7 +26,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             '_base-components/main-form/inputs/language-input',
             '_base-components/main-form/inputs/general-catalog-input',
             '_base-components/main-form/inputs/text-area-input',
-            '_base-components/main-form/inputs/object-reference-input'
+            '_base-components/main-form/inputs/object-reference-input',
+            '_base-components/main-form/inputs/date-time-input'
         ];
     }
 
@@ -58,7 +59,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
             ['language-input', '_base-components/main-form/inputs/language-input'],
             ['general-catalog-input', '_base-components/main-form/inputs/general-catalog-input'],
             ['text-area-input', '_base-components/main-form/inputs/text-area-input'],
-            ['object-reference-input', '_base-components/main-form/inputs/object-reference-input']
+            ['object-reference-input', '_base-components/main-form/inputs/object-reference-input'],
+            ['date-time-input', '_base-components/main-form/inputs/date-time-input']
         ];
     }
 

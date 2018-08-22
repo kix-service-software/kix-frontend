@@ -1,6 +1,6 @@
 import {
     ContextConfiguration, FormField, KIXObjectType, Form, ConfigItemProperty,
-    VersionProperty, FormFieldOption, AttributeDefinition
+    VersionProperty, FormFieldOption, AttributeDefinition, FormFieldOptions, InputFieldTypes
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import { ServiceContainer } from "@kix/core/dist/common";
@@ -96,9 +96,13 @@ export class Extension implements IModuleFactoryExtension {
         } else if (ad.Input.Type === 'CIClassReference') {
             // TODO: CI field
         } else if (ad.Input.Type === 'Date') {
-            // TODO: Date field
+            return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+            ]);
         } else if (ad.Input.Type === 'DateTime') {
-            // TODO: Datetime field
+            return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
+            ]);
         }
 
         return new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
