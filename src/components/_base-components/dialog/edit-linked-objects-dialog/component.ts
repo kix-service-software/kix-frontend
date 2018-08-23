@@ -73,24 +73,25 @@ class Component {
         let objectIds = iterator.next();
         while (objectIds && objectIds.value) {
             const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(objectIds.value[0]);
-
             if (service && objectIds.value[1].length) {
                 const objects = await service.loadObjects(
                     objectIds.value[0], objectIds.value[1], null
                 );
                 this.linkedObjects = [...this.linkedObjects, ...objects];
-                this.linkedObjects.forEach((o) => {
-                    const linkObject = this.availableLinkObjects.find(
-                        (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
-                    );
-                    if (linkObject) {
-                        linkObject.title = service.getDetailsTitle(o);
-                    }
-                });
             }
 
             objectIds = iterator.next();
         }
+
+        this.linkedObjects.forEach((o) => {
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(o.KIXObjectType);
+            const linkObject = this.availableLinkObjects.find(
+                (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
+            );
+            if (linkObject) {
+                linkObject.title = service.getDetailsTitle(o);
+            }
+        });
     }
 
     private initPredefinedFilter(linkedObjectIds: Map<KIXObjectType, string[]>): void {
