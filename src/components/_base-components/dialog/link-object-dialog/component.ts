@@ -42,7 +42,7 @@ class LinkDialogComponent {
             this.highlightLayer.setHighlightedObjects([]);
         }
 
-        this.state.loading = false;
+        this.setCanSubmit();
     }
 
     private setLinkableObjects(): void {
@@ -105,7 +105,7 @@ class LinkDialogComponent {
     }
 
     public linkableObjectChanged(nodes: TreeNode[]): void {
-        this.state.loading = true;
+        DialogService.getInstance().setOverlayDialogLoading(true);
 
         this.state.successHint = null;
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
@@ -126,21 +126,25 @@ class LinkDialogComponent {
         (this as any).setStateDirty('currentLinkableObjectNode');
 
         setTimeout(() => {
-            this.state.loading = false;
+            this.setCanSubmit();
+            DialogService.getInstance().setOverlayDialogLoading(false);
         }, 50);
     }
 
     private async executeSearch(): Promise<void> {
+        DialogService.getInstance().setOverlayDialogLoading(true);
         const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
-            this.state.standardTable = null;
             const objects = await KIXObjectSearchService.getInstance().executeSearch(
                 this.state.currentLinkableObjectNode.id
             );
 
             this.prepareResultTable(objects);
             this.state.resultCount = objects.length > 0 ? objects.length : null;
+            this.setCanSubmit();
         }
+
+        DialogService.getInstance().setOverlayDialogLoading(false);
     }
 
     private prepareResultTable(objects: KIXObject[]): void {
@@ -189,14 +193,15 @@ class LinkDialogComponent {
 
     private objectSelectionChanged(objects: KIXObject[]): void {
         this.state.selectedObjects = objects;
+        this.setCanSubmit();
     }
 
-    private canSubmit(): boolean {
-        return this.state.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
+    private setCanSubmit(): void {
+        this.state.canSubmit = this.state.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
     }
 
     public submitClicked(): void {
-        if (this.canSubmit()) {
+        if (this.state.canSubmit) {
             const newLinks = this.state.selectedObjects.map(
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
@@ -272,6 +277,7 @@ class LinkDialogComponent {
         this.state.currentLinkTypeNode = nodes && nodes.length ? nodes[0] : null;
         this.state.currentLinkTypeDescription = this.state.currentLinkTypeNode ?
             this.linkTypeDescriptions[this.state.currentLinkTypeNode.id] : null;
+        this.setCanSubmit();
     }
 }
 

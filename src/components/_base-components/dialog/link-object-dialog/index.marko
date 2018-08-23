@@ -10,46 +10,41 @@
             <form-list nodes=state.linkableObjectNodes on-nodesChanged('linkableObjectChanged')
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
-        <if(state.loading)>
-            <loading-spinner/>
-        </if>
-        <else>
-            <div.linkable-objects-form>
-                <widget instanceId="link-object-dialog-form-widget" title="Suche" key="link-object-form-widget">
-                    <@content>
-                        <if(state.formId)>
-                            <main-form formId=state.formId key="link-object-form-widget-form"/>
-                            <linkable-objects-search-button formId=state.formId on-executeSearch("executeSearch")/>
-                        </if>
-                    </@content>
-                </widget>
-            </div>
-            <div.linkable-objects-result>
-                <if(state.currentLinkableObjectNode)>
-                    <div.result-title>Trefferliste (${state.resultCount})</div>
-                    <if(state.standardTable)>
-                        <standard-table standardTable=state.standardTable/>
+        <div.linkable-objects-form>
+            <widget instanceId="link-object-dialog-form-widget" title="Suche" key="link-object-form-widget">
+                <@content>
+                    <if(state.formId)>
+                        <main-form formId=state.formId key="link-object-form-widget-form"/>
+                        <linkable-objects-search-button formId=state.formId on-executeSearch("executeSearch")/>
                     </if>
+                </@content>
+            </widget>
+        </div>
+        <div.linkable-objects-result>
+            <if(state.currentLinkableObjectNode)>
+                <div.result-title>Trefferliste (${state.resultCount})</div>
+                <if(state.standardTable)>
+                    <standard-table standardTable=state.standardTable/>
                 </if>
-            </div>
-            <div.linkable-objects-submit>
-                <div.linkable-objects-link-type-selection>
-                    <div.linkable-objects-selection-label>
-                        <span>Art der Verknüpfung</span>
-                    </div>
-                    <form-list nodes=state.linkTypeNodes on-nodesChanged('linkTypeChanged') selectedNodes=[state.currentLinkTypeNode]
-                        placeholder="Art der Verknüpfung"/>
-                </div>
-                <button.submit-button disabled=(!component.canSubmit()) on-click('submitClicked')>
-                    <span.kix-icon-check/>
-                    Übernehmen
-                </button>
-            </div>
-            <if(state.successHint)>
-                <span.sucess-hint>
-                    ${state.successHint}<span.kix-icon-check/>
-                </span>
             </if>
-        </else>
+        </div>
+        <div.linkable-objects-submit>
+            <div.linkable-objects-link-type-selection>
+                <div.linkable-objects-selection-label>
+                    <span>Art der Verknüpfung</span>
+                </div>
+                <form-list nodes=state.linkTypeNodes on-nodesChanged('linkTypeChanged') selectedNodes=[state.currentLinkTypeNode]
+                    placeholder="Art der Verknüpfung"/>
+            </div>
+            <button.submit-button disabled=(!state.canSubmit) on-click('submitClicked')>
+                <span.kix-icon-check/>
+                Übernehmen
+            </button>
+        </div>
+        <if(state.successHint)>
+            <span.sucess-hint>
+                ${state.successHint}<span.kix-icon-check/>
+            </span>
+        </if>
     </else>
 </div>

@@ -12,6 +12,13 @@
                     </if>
                 </@content>
             </widget>
+            <if(state.loading)>
+                <div.loading-shield>
+                    <div.loading-info>
+                        <loading-spinner/>
+                    </div>
+                </div>
+            </if>
         </div>
     </div>
 </if>
