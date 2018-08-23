@@ -24,18 +24,18 @@ class Component {
             sidebarToggled: () => { return; },
             objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
                 if (type === KIXObjectType.CUSTOMER) {
-                    this.initWidget(context, customer);
+                    this.initWidget(customer);
                 }
             }
         });
 
-        await this.initWidget(context);
+        await this.initWidget(await context.getObject<Customer>());
 
 
     }
 
-    private async initWidget(context: Context, customer?: Customer): Promise<void> {
-        this.state.customer = customer ? customer : await context.getObject<Customer>();
+    private async initWidget(customer?: Customer): Promise<void> {
+        this.state.customer = customer;
         this.setActions();
     }
 

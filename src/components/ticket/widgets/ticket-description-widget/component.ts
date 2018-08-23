@@ -30,16 +30,16 @@ class TicketDescriptionWidgetComponent {
             sidebarToggled: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
-                    this.initWidget(context, ticket);
+                    this.initWidget(ticket);
                 }
             }
         });
 
-        await this.initWidget(context);
+        await this.initWidget(await context.getObject<Ticket>());
     }
 
-    private async initWidget(context: Context, ticket?: Ticket): Promise<void> {
-        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>();
+    private async initWidget(ticket: Ticket): Promise<void> {
+        this.state.ticket = ticket;
         this.getFirstArticle();
         this.setActions();
         this.getTicketNotes();

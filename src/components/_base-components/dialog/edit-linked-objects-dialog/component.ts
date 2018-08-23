@@ -11,7 +11,7 @@ import {
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, LinkType, CreateLinkObjectOptions
 } from '@kix/core/dist/model';
-import { LinkService } from '@kix/core/dist/browser/link';
+import { LinkService, LinkUtil } from '@kix/core/dist/browser/link';
 
 class Component {
 
@@ -43,7 +43,7 @@ class Component {
         if (context) {
             this.mainObject = await context.getObject();
 
-            this.availableLinkObjects = LinkService.getInstance().getLinkObjects(this.mainObject);
+            this.availableLinkObjects = LinkUtil.getLinkObjects(this.mainObject);
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
             await this.reviseLinkObjects();
@@ -110,29 +110,18 @@ class Component {
             const linkedObject = this.linkedObjects.find(
                 (ldo) => ldo.ObjectId.toString() === lo.linkedObjectKey && ldo.KIXObjectType === lo.linkedObjectType
             );
-            if (linkedObject) {
-                const objectData = ContextService.getInstance().getObjectData();
-                let linkType: LinkType;
-                if (objectData) {
-                    const link = this.mainObject.Links.find((l) => l.ID === lo.ObjectId);
-                    if (link) {
-                        linkType = objectData.linkTypes.find((lt) => {
-                            if (lo.isSource) {
-                                return lt.Name === link.Type &&
-                                    lt.Source === lo.linkedObjectType &&
-                                    lt.Target === this.mainObject.KIXObjectType;
-                            } else {
-                                return lt.Name === link.Type &&
-                                    lt.Source === this.mainObject.KIXObjectType &&
-                                    lt.Target === lo.linkedObjectType;
-                            }
-                        });
-                    }
-                }
-                if (linkType) {
-                    this.linkDescriptions.push(
-                        new CreateLinkDescription(linkedObject, new LinkTypeDescription(linkType, lo.isSource))
+            const objectData = ContextService.getInstance().getObjectData();
+            if (linkedObject && objectData) {
+                const link = this.mainObject.Links.find((l) => l.ID === lo.ObjectId);
+                if (link) {
+                    const linkType = objectData.linkTypes.find(
+                        (lt) => LinkUtil.isLinkType(lt, link, lo, this.mainObject)
                     );
+                    if (linkType) {
+                        this.linkDescriptions.push(
+                            new CreateLinkDescription(linkedObject, new LinkTypeDescription(linkType, lo.isSource))
+                        );
+                    }
                 }
             }
         });

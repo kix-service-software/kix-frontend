@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService } from '@kix/core/dist/browser/context';
-import { SysconfigUtil, ObjectIcon, KIXObjectType, Ticket, ContextMode } from '@kix/core/dist/model';
+import { ObjectIcon, KIXObjectType, Ticket } from '@kix/core/dist/model';
 import { ActionFactory, IdService } from '@kix/core/dist/browser';
 
 class Component {
@@ -18,7 +18,7 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.state.labelProvider = new TicketLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener(this.contextListernerId, {
@@ -29,7 +29,24 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.getTicket();
+
+        context.registerListener('ticket-dynamic-fields-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+                if (type === KIXObjectType.TICKET) {
+                    this.initWidget(ticket);
+                }
+            }
+        });
+
+        await this.initWidget(await context.getObject<Ticket>());
+    }
+
+    private async initWidget(ticket: Ticket): Promise<void> {
+        this.state.ticket = ticket;
         this.setActions();
     }
 
@@ -38,21 +55,6 @@ class Component {
             this.state.actions = ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, false, [this.state.ticket]
             );
-        }
-    }
-
-    public async getTicket(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.getObjectId()) {
-            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.getObjectId()]
-            );
-
-            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
-            if (this.state.ticket) {
-                this.state.isPending = this.state.ticket.hasPendingState();
-                this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
-            }
         }
     }
 

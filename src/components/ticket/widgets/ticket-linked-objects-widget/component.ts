@@ -47,20 +47,25 @@ class Component {
 
         WidgetService.getInstance().setWidgetType('ticket-linked-objects', WidgetType.GROUP);
 
-        await this.setTicket();
-        this.setLinkedObjects();
-        this.setActions();
+        context.registerListener('ticket-dynamic-fields-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+                if (type === KIXObjectType.TICKET) {
+                    this.initWidget(ticket);
+                }
+            }
+        });
+
+        await this.initWidget(await context.getObject<Ticket>());
     }
 
-    private async setTicket(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.getObjectId()) {
-            const ticketsResponse = await ContextService.getInstance().loadObjects<Ticket>(
-                KIXObjectType.TICKET, [context.getObjectId()]
-            );
-
-            this.state.ticket = ticketsResponse && ticketsResponse.length ? ticketsResponse[0] : null;
-        }
+    private async initWidget(ticket: Ticket): Promise<void> {
+        this.state.ticket = ticket;
+        this.setLinkedObjects();
+        this.setActions();
     }
 
     private setActions(): void {
