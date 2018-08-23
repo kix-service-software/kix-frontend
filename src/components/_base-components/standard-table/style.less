@@ -14,6 +14,10 @@
         display: grid;
         grid-template-columns: auto @margin-small;
         align-content: start;
+        >.loading-spinner-container {
+            justify-self: center;
+            grid-row: 2;
+        }
         .scrollbar-column {
             grid-column: 2;
             z-index: 3;
@@ -29,7 +33,7 @@
                     border-bottom-left-radius: 0;
                 }
                 .row-toggle-content-wrapper {
-                    margin-left: -@cell-min-width+@margin-small;
+                    margin-left: -2rem;
                 }
             }
         }
@@ -54,11 +58,14 @@
                 }
             }
             >.row {
-                &:nth-of-type(4n+6):not(.opened) {
+                &:nth-of-type(4n+6):not(.opened):not(:hover) {
                     .row-columns {
                         background-color: @secondary-5;
                     }
                 }
+            }
+            >.loading-spinner-container {
+                grid-column: 1 / span 2
             }
             .scrollbar-column {
                 grid-column: 3;
@@ -67,11 +74,14 @@
         &.has-toggle-row-column:not(.has-checkbox-column) {
             grid-template-columns: auto @cell-min-width @margin-small;
             >.row {
-                &:nth-of-type(4n+5):not(.opened) {
+                &:nth-of-type(4n+5):not(.opened):not(:hover) {
                     .row-columns {
                         background-color: @secondary-5;
                     }
                 }
+            }
+            >.loading-spinner-container {
+                grid-column: 1 / span 2
             }
             >.toggle-row-column {
                 &:nth-of-type(4n+6):not(.opened) {
@@ -94,12 +104,15 @@
                 }
             }
             >.row {
-                &:nth-of-type(6n+8):not(.opened) {
+                &:nth-of-type(6n+8):not(.opened):not(:hover) {
                     .row-columns {
                         background-color: @secondary-5;
                     }
                 }
                 padding: 0;
+            }
+            >.loading-spinner-container {
+                grid-column: 1 / span 3
             }
             >.toggle-row-column {
                 &:nth-of-type(6n+9):not(.opened) {
@@ -126,9 +139,6 @@
         }
         &.single-grid {
             grid-template-columns: auto;
-            >.loading-spinner-container {
-                justify-self: center;
-            }
             >.row {
                 margin: 0;
                 .row-columns {
@@ -232,20 +242,18 @@
                             }
                         }
                     }
-                    .row-toggle-content {
-                        margin: 0 2.25em 0em 2em;
+                    .row-toggle-content-container {
+                        margin: 0 @margin-default 0em 2em;
                         border: 1px solid @primary-4;
                         border-top: 0;
-                        border-bottom-left-radius: 3px;
-                        border-bottom-right-radius: 3px;
-                        padding: 1em 1em 1em 2em;
+                        border-bottom-left-radius: @border-radius;
+                        border-bottom-right-radius: @border-radius;
                         position: relative;
                         box-sizing: border-box;
-                        display: grid;
                         max-height: 31.5rem;
-                        overflow: hidden;
-                        >div {
-                            max-height: 31.5rem -1rem -2rem;
+                        overflow: auto;
+                        .row-toggle-content {
+                            margin: 1em 1em 1em 2em;
                         }
                     }
                 }
@@ -253,9 +261,6 @@
             &:hover:not(.opened):not(.header-row) {
                 .row-columns {
                     background-color: @secondary-3;
-                    .table-cell.toggle-row-column {
-                        background-color: @secondary-3;
-                    }
                 }
             }
             &.header-row {
@@ -303,11 +308,9 @@
             z-index: 4;
             cursor: pointer;
             box-sizing: border-box;
-            background-color: @secondary-6;
             &.opened {
                 >div:not(.margin-placeholder) {
                     background-color: @primary-5;
-                    border-radius: 0;
                 }
             }
             &.check-all,
@@ -319,6 +322,7 @@
         }
         >.checkbox-column {
             left: 0;
+            background-color: @secondary-6;
             &.check-all {
                 padding-left: @margin-small; // TODO: entspricht nicht ganz dem SG, Checkboxen haben aber eigenen browserbedingten Abstand
             }
@@ -340,6 +344,9 @@
             &:not(.toggle-header-column) {
                 display: grid;
                 grid-template-columns: auto @margin-small;
+            }
+            >div {
+                background-color: @secondary-6;
             }
             >:not(.margin-placeholder) {
                 padding: 0 @margin-small;

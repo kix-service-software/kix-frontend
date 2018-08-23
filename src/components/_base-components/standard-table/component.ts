@@ -257,14 +257,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.state.standardTable.toggleRow(row);
 
         (this as any).forceUpdate();
-
-        setTimeout(() => {
-            const table = (this as any).getEl(this.state.tableId + 'standard-table');
-            if (table) {
-                const openedRows = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
-                openedRows.forEach((cell: any) => cell.style.left = table.scrollLeft + 'px');
-            }
-        }, 50);
     }
 
     public getToggleTemplate(): any {
@@ -347,6 +339,21 @@ class StandardTableComponent<T extends KIXObject<T>> {
             id = row.object[this.state.standardTable.tableConfiguration.routingConfiguration.objectIdProperty];
         }
         return id;
+    }
+
+    public getGridClasses(): string {
+        let classesString: string = '';
+        if (!!!this.state.standardTable.getTableRows().length || this.state.standardTable.isLoading()) {
+            classesString = "single-grid";
+        } else {
+            if (this.state.standardTable.tableConfiguration.enableSelection) {
+                classesString = "has-checkbox-column";
+            }
+            if (this.state.standardTable.tableConfiguration.toggle) {
+                classesString += " has-toggle-row-column";
+            }
+        }
+        return classesString;
     }
 }
 
