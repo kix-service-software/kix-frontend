@@ -1,8 +1,7 @@
 <if(state.standardTable)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper") class={"no-select": state.resizeActive}>
-        <div.standard-table class={"single-grid": (state.standardTable.getTableRows().length === 0) || state.standardTable.isLoading(), "has-checkbox-column": state.standardTable.tableConfiguration.enableSelection && (!(!state.standardTable.getTableRows().length)), "has-toggle-row-column": state.standardTable.tableConfiguration.toggle}
-            key=(state.tableId + "standard-table") on-scroll('loadMore')>
-            <if(state.standardTable.tableConfiguration.enableSelection && ! !state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
+        <div.standard-table class=component.getGridClasses() key=(state.tableId + "standard-table") on-scroll('loadMore')>
+            <if(state.standardTable.tableConfiguration.enableSelection && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
                 <div.checkbox-column.check-all title="Select all" data-id=(state.tableId + "checkbox-column")
                     style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                     <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
@@ -42,8 +41,7 @@
             <else-if(!!state.standardTable.getTableRows().length)>
                 <for(row in state.standardTable.getTableRows() | status-var=loop)>
                     <if(state.standardTable.tableConfiguration.enableSelection)>
-                        <div.table-cell.checkbox-column.row-column class={opened: row.isToggled} data-id=(state.tableId + "checkbox-column")
-                            style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                        <div.table-cell.checkbox-column.row-column class={opened: row.isToggled} data-id=(state.tableId + "checkbox-column")>
                             <if(row.selectable)>
                                 <div.margin-placeholder/>
                                 <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
@@ -87,18 +85,19 @@
                                         </li>
                                     </for>
                                 </ul>
-                                <div.row-toggle-content style={"min-height": component.calculateToggleContentMinHeight(loop.getIndex())}
+                                <div.row-toggle-content-container style={"min-height": component.calculateToggleContentMinHeight(loop.getIndex())}
                                     key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
-                                    <include(component.getToggleTemplate(), component.getToggleInput(row))/>
+                                    <div.row-toggle-content>
+                                        <include(component.getToggleTemplate(), component.getToggleInput(row))/>
+                                    </div>
                                 </div>
                             </div>
                         </if>
                     </div>
                     <if(state.standardTable.tableConfiguration.toggle)>
                         <div.toggle-row-column class={opened: row.isToggled} data-id=(state.tableId + "toggle-row-column")
-                            on-click('toggleRow', row)
-                            style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
-                            <div>
+                            on-click('toggleRow', row)>
+                            <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
                                 <if(row.isToggled)>
                                     <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
                                         <span.path1/>
