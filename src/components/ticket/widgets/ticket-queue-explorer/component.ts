@@ -105,6 +105,7 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
+        context.setAdditionalInformation(['Alle']);
         context.loadTickets(null);
     }
 
