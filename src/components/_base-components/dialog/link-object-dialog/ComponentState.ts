@@ -16,6 +16,6 @@ export class ComponentState {
         public successHint: string = null,
         public objectType: KIXObjectType = null,
         public formId: string = null,
-        public loading: boolean = true
+        public canSubmit: boolean = false
     ) { }
 }

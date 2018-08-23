@@ -1,15 +1,15 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
-import { OverlayDialogComponentState } from './OverlayDialogComponentState';
+import { ComponentState } from './ComponentState';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { ObjectIcon, WidgetType } from '@kix/core/dist/model';
 import { WidgetService, IOverlayDialogListener } from '@kix/core/dist/browser';
 
 export class OverlayDialogComponent implements IOverlayDialogListener {
 
-    private state: OverlayDialogComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new OverlayDialogComponentState();
+        this.state = new ComponentState();
     }
 
     public onMount(): void {
@@ -23,11 +23,21 @@ export class OverlayDialogComponent implements IOverlayDialogListener {
         this.state.title = title;
         this.state.icon = icon;
         this.state.show = true;
+        this.state.loading = true;
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 200);
     }
 
     public close(): void {
         this.state.show = false;
     }
+
+    public setLoading(loading: boolean): void {
+        this.state.loading = loading;
+    }
+
 }
 
 module.exports = OverlayDialogComponent;
