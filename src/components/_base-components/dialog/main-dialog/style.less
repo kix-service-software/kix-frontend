@@ -37,17 +37,19 @@
                         background-color: @secondary-5;
                         border-width: 2px;
                         margin: 0;
-                        padding: @margin-default 0;
+                        padding: 0;
                         overflow: auto;
-                        >.tab-content {
-                            margin: 0;
-                            height: 100%;
-                            >.lane-tab-widget {
+                        >div {
+                            padding: @margin-default 0;
+                            >.tab-content {
+                                margin: 0;
                                 height: 100%;
-                                >.widget-content {
-                                    background-color: @secondary-5;
-                                    overflow-x: hidden;
-                                    overflow-y: auto;
+                                >.lane-tab-widget {
+                                    height: 100%;
+                                    >.widget-content {
+                                        background-color: @secondary-5;
+                                        overflow: hidden;
+                                    }
                                 }
                             }
                         }
