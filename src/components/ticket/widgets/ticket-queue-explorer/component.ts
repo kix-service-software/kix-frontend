@@ -71,7 +71,9 @@ export class Component {
 
             const escalatedCount = queue.TicketStats.EscalatedCount;
             if (escalatedCount > 0) {
-                properties.push(new TreeNodeProperty(lockCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated'));
+                properties.push(
+                    new TreeNodeProperty(escalatedCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated')
+                );
             }
         }
 
