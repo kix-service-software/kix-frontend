@@ -77,12 +77,15 @@ export class Component {
         this.state.activeNode = node;
 
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const category = node.id as FAQCategory;
+        context.setAdditionalInformation([category.Name]);
         context.setFAQCategory(node.id);
     }
 
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.activeNode = null;
+        context.setAdditionalInformation(['Alle']);
         context.setFAQCategory(null);
     }
 
