@@ -91,7 +91,7 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Volltext"));
             fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Ticketnummer"));
             fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Title"));
-            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-title', false, "Typ"));
+            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', false, "Typ"));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Queue"));
             fields.push(new FormField<number>(
                 "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Priorität")
