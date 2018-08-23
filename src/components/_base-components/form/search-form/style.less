@@ -4,8 +4,10 @@
     margin-left: 4rem;
     padding-right: @search-dialog-padding-right;
     >div {
-        margin-bottom: @margin-default;
         position: relative;
+        &:not(:last-of-type) {
+            margin-bottom: @margin-default;
+        }
         .form-shield {
             position: absolute;
             top: -2rem;
