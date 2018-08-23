@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import { Label } from "@kix/core/dist/browser/components";
-import { FormService, LabelService } from "@kix/core/dist/browser";
+import { FormService, LabelService, IdService } from "@kix/core/dist/browser";
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -28,7 +28,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
             dialogTitle = `${labelProvider.getObjectName(false)} verknüpfen`;
         }
 
-        const resultListenerId = 'result-listener-link-' + objectType;
+        const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
         DialogService.getInstance().openOverlayDialog(
             'link-object-dialog',
             {
@@ -59,13 +59,17 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         if (index !== -1) {
             this.state.linkDescriptions.splice(index, 1);
             this.updateField();
-            this.createLabels();
         }
     }
 
     private updateField(): void {
+        this.state.loading = true;
         this.createLabels();
         super.provideValue(this.state.linkDescriptions);
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private createLabels(): void {
@@ -75,7 +79,6 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
                 : ld.linkTypeDescription.linkType.TargetName;
             return new Label(ld.linkableObject, null, null, null, `(${linkLabel})`);
         });
-        (this as any).setStateDirty('labels');
     }
 
 }
