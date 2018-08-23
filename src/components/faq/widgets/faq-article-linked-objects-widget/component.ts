@@ -39,13 +39,12 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context);
+        await this.initWidget(context, await context.getObject<FAQArticle>());
     }
 
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.loading = true;
-        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
-        this.setLinkedObjects();
+        this.state.faqArticle = faqArticle;
         this.setActions();
         await this.setLinkedObjectsGroups();
 
@@ -109,14 +108,6 @@ class Component {
         const faqArticleId = this.state.faqArticle.ID.toString();
         return (link.SourceObject === objectType && link.SourceKey !== faqArticleId) ||
             (link.TargetObject === objectType && link.TargetKey !== faqArticleId);
-    }
-
-    public async setLinkedObjects(): Promise<void> {
-        this.state.loading = true;
-        this.state.linkedObjectGroups = [];
-        await this.setLinkedObjectsGroups();
-        (this as any).setStateDirty('linkedObjectGroups');
-        this.state.loading = false;
     }
 
 }

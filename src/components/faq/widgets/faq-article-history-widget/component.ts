@@ -33,16 +33,19 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context);
+        await this.initWidget(context, await context.getObject<FAQArticle>());
 
     }
 
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.loading = true;
 
-        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
-        this.setActions();
-        this.prepareTable();
+        this.state.faqArticle = faqArticle;
+
+        if (this.state.faqArticle) {
+            this.setActions();
+            this.prepareTable();
+        }
 
         setTimeout(() => {
             this.state.loading = false;

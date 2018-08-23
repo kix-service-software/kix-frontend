@@ -36,7 +36,7 @@ export class Component implements IEventListener {
             sidebarToggled: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
-                    this.initWidget(context, ticket);
+                    this.initWidget(ticket);
                 }
             }
         });
@@ -44,12 +44,12 @@ export class Component implements IEventListener {
         EventService.getInstance().subscribe('ShowArticleInTicketDetails', this);
         EventService.getInstance().subscribe('ArticleTableRowToggled', this);
 
-        await this.initWidget(context);
+        await this.initWidget(await context.getObject<Ticket>());
     }
 
-    private async initWidget(context: Context, ticket?: Ticket): Promise<void> {
+    private async initWidget(ticket: Ticket): Promise<void> {
         this.state.loading = true;
-        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>();
+        this.state.ticket = ticket;
         this.setArticles();
         this.setActions();
         this.setArticleTableConfiguration();

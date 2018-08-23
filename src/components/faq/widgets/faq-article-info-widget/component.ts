@@ -41,7 +41,7 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context);
+        await this.initWidget(context, await context.getObject<FAQArticle>());
     }
 
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {

@@ -35,16 +35,16 @@ class Component {
             sidebarToggled: () => { return; },
             objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT) {
-                    this.initWidget(context, contact);
+                    this.initWidget(contact);
                 }
             }
         });
 
-        this.initWidget(context);
+        this.initWidget(await context.getObject<Contact>());
     }
 
-    private async initWidget(context: Context, contact?: Contact): Promise<void> {
-        this.state.contact = contact ? contact : await context.getObject<Contact>();
+    private async initWidget(contact?: Contact): Promise<void> {
+        this.state.contact = contact;
         this.state.title = `${this.state.widgetConfiguration.title} (${this.state.contact.UserCustomerIDs.length})`;
         this.setTable();
         this.setActions();

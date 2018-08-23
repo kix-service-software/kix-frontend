@@ -41,13 +41,11 @@ class Component implements IEventListener {
             filteredObjectListChanged: () => { return; }
         });
 
-        this.initWidget(context);
+        this.initWidget(context, await context.getObject<FAQArticle>());
     }
 
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
-        this.state.faqArticle = faqArticle
-            ? faqArticle
-            : await context.getObject<FAQArticle>(KIXObjectType.FAQ_ARTICLE, true);
+        this.state.faqArticle = faqArticle;
         this.setActions();
     }
 

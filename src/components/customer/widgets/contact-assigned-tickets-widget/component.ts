@@ -53,19 +53,19 @@ class Component {
             sidebarToggled: () => { return; },
             objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT) {
-                    this.initWidget(context, contact);
+                    this.initWidget(contact);
                 }
             }
         });
 
 
-        this.initWidget(context);
+        this.initWidget(await context.getObject<Contact>());
 
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
-    private async initWidget(context: Context, contact?: Contact): Promise<void> {
-        this.state.contact = contact ? contact : await context.getObject<Contact>();
+    private async initWidget(contact?: Contact): Promise<void> {
+        this.state.contact = contact;
         this.setActions();
         this.createTables();
         this.loadTickets();
