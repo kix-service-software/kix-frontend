@@ -7,6 +7,7 @@ import { ServiceContainer } from "@kix/core/dist/common";
 import { IConfigurationService, ICmdbService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 import { NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration } from "@kix/core/dist/browser/cmdb";
+import { isArray } from "util";
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -55,13 +56,7 @@ export class Extension implements IModuleFactoryExtension {
                 const subGroups: FormGroup[] = [];
                 if (ciClass.CurrentDefinition && ciClass.CurrentDefinition.Definition) {
                     ciClass.CurrentDefinition.Definition.forEach((ad) => {
-                        if (ad.Input.Type === 'Dummy') {
-                            const subFields: FormField[] = [];
-                            ad.Sub.forEach((subAd) => subFields.push(this.getFormField(subAd)));
-                            subGroups.push(new FormGroup(ad.Name, subFields));
-                        } else {
-                            fields.push(this.getFormField(ad));
-                        }
+                        fields.push(this.getFormField(ad));
                     });
                 }
 
@@ -77,35 +72,51 @@ export class Extension implements IModuleFactoryExtension {
     }
 
     private getFormField(ad: AttributeDefinition): FormField {
+        let formField: FormField;
         if (ad.Input.Type === 'GeneralCatalog') {
-            return new FormField(ad.Name, ad.Key, 'general-catalog-input', ad.Input.Required, ad.Name,
+            formField = new FormField(ad.Name, ad.Key, 'general-catalog-input', ad.Input.Required, ad.Name,
                 [new FormFieldOption('GC_CLASS', ad.Input['Class'])]
             );
         } else if (ad.Input.Type === 'Text') {
-            return new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
+            formField = new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
         } else if (ad.Input.Type === 'TextArea') {
-            return new FormField(ad.Name, ad.Key, 'text-area-input', ad.Input.Required, ad.Name);
+            formField = new FormField(ad.Name, ad.Key, 'text-area-input', ad.Input.Required, ad.Name);
         } else if (ad.Input.Type === 'Contact') {
-            return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, ad.Name, [
+            formField = new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, ad.Name, [
                 new FormFieldOption('OBJECT', KIXObjectType.CONTACT)
             ]);
         } else if (ad.Input.Type === 'Customer') {
-            return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, ad.Name, [
+            formField = new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, ad.Name, [
                 new FormFieldOption('OBJECT', KIXObjectType.CUSTOMER)
             ]);
         } else if (ad.Input.Type === 'CIClassReference') {
-            // TODO: CI field
+            let classes = [];
+            if (isArray(ad.Input['ReferencedCIClassName'])) {
+                classes = ad.Input['ReferencedCIClassName'];
+            } else {
+                classes = [ad.Input['ReferencedCIClassName']];
+            }
+
+            formField = new FormField(ad.Name, ad.Key, 'ci-class-reference-input', ad.Input.Required, ad.Name, [
+                new FormFieldOption('CI_CLASS', classes)
+            ]);
         } else if (ad.Input.Type === 'Date') {
-            return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
+            formField = new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
             ]);
         } else if (ad.Input.Type === 'DateTime') {
-            return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
+            formField = new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
             ]);
         }
 
-        return new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
+        formField = new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
+
+        if (ad.Sub) {
+            formField.children = ad.Sub.map((subField) => this.getFormField(subField));
+        }
+
+        return formField;
     }
 
 }

@@ -6,7 +6,7 @@
         }
         min-height: 2em;
         display: grid;
-        grid-template-columns: 14.5rem 2rem auto;
+        grid-template-columns: 14.5rem 2rem auto max-content;
         >.field-label {
             white-space: nowrap;
             font-weight: bold;
@@ -29,6 +29,13 @@
         >.field-icon {
             margin-top: .25rem;
             margin-left: .25rem;
+        }
+        >.form-separator {
+            grid-column: 3;
+            width: 100%;
+            background-color: @secondary-3;
+            align-self: center;
+            height: 1px;
         }
     }
     >.group-widget,

@@ -1,11 +1,12 @@
 import {
-    FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
+    FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem
 } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
 import { KIXObjectServiceRegistry, SearchOperator } from "@kix/core/dist/browser";
 import { GeneralCatalogService } from "@kix/core/dist/browser/general-catalog";
 
-class Component extends FormInputComponent<number, CompontentState> {
+class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
@@ -32,7 +33,7 @@ class Component extends FormInputComponent<number, CompontentState> {
                 KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
             );
 
-            this.state.nodes = items.map((item) => new TreeNode(item.ItemID, item.Name));
+            this.state.nodes = items.map((item) => new TreeNode(item, item.Name));
             this.state.loading = false;
         } else {
             this.state.error = 'No gc class configured!';
@@ -42,14 +43,14 @@ class Component extends FormInputComponent<number, CompontentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
+            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
         }
     }
 
     public valueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 }
 
