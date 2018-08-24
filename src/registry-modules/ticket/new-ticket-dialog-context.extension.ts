@@ -97,7 +97,7 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
                 "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Priorität")
             );
             fields.push(new FormField<number>(
-                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-priority', false, "Status")
+                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-state', false, "Status")
             );
             fields.push(new FormField(
                 "Archiv", TicketProperty.ARCHIVE_FLAG, 'ticket-input-archive-search', false, "Archiv")
