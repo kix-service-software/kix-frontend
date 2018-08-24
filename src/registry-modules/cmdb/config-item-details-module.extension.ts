@@ -20,8 +20,8 @@ export class Extension implements IModuleFactoryExtension {
 
         const actions = ['config-item-create-action'];
         const configItemActions = [
-            'linked-objects-edit-action', 'ticket-create-action',
-            'config-item-version-compare-action', 'config-item-version-create-action'
+            'ticket-create-action', 'config-item-version-compare-action',
+            'config-item-version-create-action', 'linked-objects-edit-action'
         ];
 
         return new ConfigItemDetailsContextConfiguration(
