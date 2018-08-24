@@ -18,14 +18,14 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        // const actions = ['new-config-item-action'];
-        // const configItemActions = [
-        //     'config-item-link-action', 'new-ticket-action',
-        //     'version-compare-action', 'new-version-action'
-        // ];
+        const actions = ['config-item-create-action'];
+        const configItemActions = [
+            'linked-objects-edit-action', 'ticket-create-action',
+            'config-item-version-compare-action', 'config-item-version-create-action'
+        ];
 
         return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], [], [], [], [], []
+            this.getModuleId(), [], [], [], [], [], [], [], [], actions, configItemActions
         );
     }
 
