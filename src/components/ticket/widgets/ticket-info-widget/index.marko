@@ -8,7 +8,7 @@
     <@content>
         <if(state.ticket)>
             <div.ticket-information>
-                <div.information-list class={"explorer-and-sidebar-open": component.isExplorerAndSidebarShown()}>
+                <div.information-list>
                     <div>
                         <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
                             <@info>
