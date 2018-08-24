@@ -108,9 +108,9 @@ export class Extension implements IModuleFactoryExtension {
             formField = new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, ad.Name, [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
             ]);
+        } else {
+            formField = new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
         }
-
-        formField = new FormField(ad.Name, ad.Key, null, ad.Input.Required, ad.Name);
 
         if (ad.Sub) {
             formField.children = ad.Sub.map((subField) => this.getFormField(subField));
