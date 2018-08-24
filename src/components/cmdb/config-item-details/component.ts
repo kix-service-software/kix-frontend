@@ -48,21 +48,21 @@ class Component {
     }
 
     public getConfigItemActions(): AbstractAction[] {
-        const actions = [];
-        // const config = this.state.configuration;
-        // if (config && this.state.configItem) {
-        //     actions =
-        //         ActionFactory.getInstance().generateActions(config.configItemActions, true, [this.state.configItem]);
-        // }
+        let actions = [];
+        const config = this.state.configuration;
+        if (config && this.state.configItem) {
+            actions =
+                ActionFactory.getInstance().generateActions(config.configItemActions, true, [this.state.configItem]);
+        }
         return actions;
     }
 
     public getActions(): AbstractAction[] {
-        const actions = [];
-        // const config = this.state.configuration;
-        // if (config && this.state.configItem) {
-        //     actions = ActionFactory.getInstance().generateActions(config.actions, true, [this.state.configItem]);
-        // }
+        let actions = [];
+        const config = this.state.configuration;
+        if (config && this.state.configItem) {
+            actions = ActionFactory.getInstance().generateActions(config.actions, true, [this.state.configItem]);
+        }
         return actions;
     }
 

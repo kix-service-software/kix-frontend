@@ -23,13 +23,13 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
     public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
         const ticketDetailsWidget = new ConfiguredWidget("ticket-details-widget", new WidgetConfiguration(
-            "ticket-details-widget", "Ticket Details", ['new-ticket-action'], null,
+            "ticket-details-widget", "Ticket Details", ['ticket-create-action'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
-                "ticket-history-widget", "Historie", ['print-ticket-action'],
+                "ticket-history-widget", "Historie", ['ticket-print-action'],
                 new TableConfiguration(
                     null, 7, [
                         new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
@@ -44,12 +44,12 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
                 "ticket-description-widget", "Beschreibung & Anmerkungen",
-                ['print-ticket-action', 'edit-ticket-action', 'article-maximize-action'], {},
+                ['ticket-print-action', 'ticket-edit-action', 'article-maximize-action'], {},
                 false, true, WidgetSize.BOTH, null, false)
             );
         const processLane =
             new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Prozessinformationen", ['print-ticket-action'], {
+                "ticket-dynamic-fields-widget", "Prozessinformationen", ['ticket-print-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 true, true, WidgetSize.BOTH, null, false)
@@ -57,7 +57,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const dynamicFieldsLane =
             new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
                 "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder",
-                ['print-ticket-action', 'edit-ticket-action', 'article-maximize-action'], {
+                ['ticket-print-action', 'ticket-edit-action', 'article-maximize-action'], {
                     dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
                 },
                 true, true, WidgetSize.BOTH, null, false)
@@ -65,7 +65,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
                 "ticket-linked-objects-widget", "Verknüpfte Objekte",
-                ['print-ticket-action', 'linked-objects-edit-action'],
+                ['ticket-print-action', 'linked-objects-edit-action'],
                 {
                     groups: [
                         [
@@ -104,7 +104,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
 
         const ticketInfoLane =
             new ConfiguredWidget("ticket-information-lane", new WidgetConfiguration(
-                "ticket-info-widget", "Ticketinformationen", ['print-ticket-action', 'edit-ticket-action'], {},
+                "ticket-info-widget", "Ticketinformationen", ['ticket-print-action', 'ticket-edit-action'], {},
                 false, true, WidgetSize.SMALL, null, false)
             );
 
@@ -126,11 +126,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
 
         // actions
-        const generalActions = ['new-ticket-action'];
+        const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'edit-ticket-action', 'merge-ticket-action', 'link-ticket-action',
-            'lock-ticket-action', 'watch-ticket-action', 'spam-ticket-action',
-            'print-ticket-action',
+            'ticket-edit-action', 'ticket-merge-action', 'link-ticket-action',
+            'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
+            'ticket-print-action',
         ];
 
         const articleWidget =

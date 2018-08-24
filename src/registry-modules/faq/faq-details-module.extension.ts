@@ -69,7 +69,7 @@ export class Extension implements IModuleFactoryExtension {
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
-            'faq-article-link-action', 'faq-article-delete-action',
+            'linked-objects-edit-action', 'faq-article-delete-action',
             'faq-article-print-action', 'faq-article-edit-action'
         ];
 
