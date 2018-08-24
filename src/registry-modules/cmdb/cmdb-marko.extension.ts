@@ -6,7 +6,8 @@ export class Extension implements IMarkoDependencyExtension {
         return [
             'cmdb/dialogs/new-config-item-dialog',
             'cmdb/config-item-details',
-            'cmdb/inputs/ci-class-reference-input'
+            'cmdb/inputs/ci-class-reference-input',
+            'cmdb/widgets/config-item-info-widget'
         ];
     }
 
@@ -14,7 +15,8 @@ export class Extension implements IMarkoDependencyExtension {
         return [
             ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog'],
             ['config-item-details', 'cmdb/config-item-details'],
-            ['ci-class-reference-input', 'cmdb/inputs/ci-class-reference-input']
+            ['ci-class-reference-input', 'cmdb/inputs/ci-class-reference-input'],
+            ['config-item-info-widget', 'cmdb/widgets/config-item-info-widget']
         ];
     }
 

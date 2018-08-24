@@ -1,7 +1,6 @@
 import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, AbstractAction, WidgetType, ConfigItem } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 import { ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
 
@@ -35,7 +34,7 @@ class Component {
         this.state.configItem = configItem ? configItem : await context.getObject<ConfigItem>();
         this.state.configuration = context.getConfiguration();
         // this.state.lanes = context.getLanes(true);
-        // this.state.tabWidgets = context.getLaneTabs(true);
+        this.state.tabWidgets = context.getLaneTabs(true);
 
         setTimeout(() => {
             this.state.loading = false;

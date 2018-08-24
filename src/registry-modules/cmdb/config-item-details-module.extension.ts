@@ -18,6 +18,22 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
+        const configItemInfoLaneTab =
+            new ConfiguredWidget('config-item-info-lane',
+                new WidgetConfiguration(
+                    'config-item-info-widget', 'Config Item Informationen',
+                    [],
+                    {}, false, true, WidgetSize.LARGE, null, false
+                )
+            );
+
+        const laneTabs = ['config-item-info-lane'];
+        const laneTabWidgets = [configItemInfoLaneTab];
+
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            configItemDetailsWidget
+        ];
+
         const actions = ['config-item-create-action'];
         const configItemActions = [
             'ticket-create-action', 'config-item-version-compare-action',
@@ -25,7 +41,7 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], [], [], [], actions, configItemActions
+            this.getModuleId(), [], [], [], [], [], laneTabs, laneWidgets, laneTabWidgets, actions, configItemActions
         );
     }
 

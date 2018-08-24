@@ -80,15 +80,6 @@ class Component {
         return incidentStateId;
     }
 
-    // FIXME: Das Widget sollte eigentlich nichts von Sidebar und Explorer Wissen müssen.
-    // Das Styling sollte sich an Hand des verfügbaren Platzes anpassen
-    private isExplorerAndSidebarShown(): boolean {
-        return ContextService.getInstance().getActiveContext()
-            && ContextService.getInstance().getActiveContext().isExplorerBarShown()
-            && ContextService.getInstance().getActiveContext().explorerBarExpanded
-            && ContextService.getInstance().getActiveContext().isSidebarShown();
-    }
-
     private getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
     }
