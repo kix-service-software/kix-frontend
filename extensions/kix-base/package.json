@@ -42,7 +42,8 @@
             "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
             "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension",
             "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension",
-            "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension"
+            "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension",
+            "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension"
         }
     }
 }
