@@ -1,6 +1,6 @@
-import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "@kix/core/dist/model";
+import { AutoCompleteConfiguration, FormInputComponentState, TreeNode, ConfigItem } from "@kix/core/dist/model";
 
-export class ComponentState extends FormInputComponentState<number> {
+export class ComponentState extends FormInputComponentState<ConfigItem> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
