@@ -4,13 +4,15 @@ export class Extension implements IMarkoDependencyExtension {
 
     public getDependencies(): string[] {
         return [
-            'cmdb/dialogs/new-config-item-dialog'
+            'cmdb/dialogs/new-config-item-dialog',
+            'cmdb/inputs/ci-class-reference-input'
         ];
     }
 
     public getComponentTags(): Array<[string, string]> {
         return [
-            ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog']
+            ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog'],
+            ['ci-class-reference-input', 'cmdb/inputs/ci-class-reference-input']
         ];
     }
 
