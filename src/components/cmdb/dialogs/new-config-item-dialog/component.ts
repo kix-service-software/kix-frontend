@@ -3,7 +3,7 @@ import {
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService } from '@kix/core/dist/browser/cmdb';
@@ -63,6 +63,9 @@ class Component {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();
                         DialogService.getInstance().closeMainDialog();
+                        ContextService.getInstance().setContext(
+                            null, KIXObjectType.CONFIG_ITEM, ContextMode.DETAILS, configItemId
+                        );
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showError(error);

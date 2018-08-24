@@ -128,7 +128,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // actions
         const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'ticket-edit-action', 'ticket-merge-action', 'link-ticket-action',
+            'ticket-edit-action', 'ticket-merge-action', 'linked-objects-edit-action',
             'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
             'ticket-print-action',
         ];
