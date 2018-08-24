@@ -6,23 +6,22 @@
 </else-if>
 <else>
     <div.details-container>
-        <widget instanceId=state.instanceId minimizable=true title=component.getTitle()
-            contentActions=component.getCustomerActions()>
+        <widget instanceId=state.instanceId minimizable=true title=component.getTitle() actions=component.getActions()
+            contentActions=component.getConfigItemActions()>
             <@content>
                 <ul.lane-list no-update>
-                    <li key=component.getLaneKey()>
-                        <tab-container tabWidgets=state.tabWidgets title="Kundeninformationen"/>
+                    <!-- <li>
+                        <tab-container tabWidgets=state.tabWidgets title="Config Item Informationen" showSidebar=false/>
                     </li>
                     <for(lane in state.lanes)>
-                        <li.lane key=component.getLaneKey()>
+                        <li.lane>
                             <include(component.getWidgetTemplate(lane.instanceId), { 
-                                contextType: "MAIN", 
+                                contextType: "MAIN",
                                 instanceId: lane.instanceId, 
-                                customerId: state.customerId, 
-                                type: component.getLaneWidgetType()
+                                type: component.LANE_WIDGET_TYPE
                                 })/>
                         </li>
-                    </for>
+                    </for> -->
                 </ul>
             </@content>
         </widget>

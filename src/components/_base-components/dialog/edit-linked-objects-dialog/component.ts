@@ -265,7 +265,7 @@ class Component {
             DialogService.getInstance().closeMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
-                activeContext.reloadObject();
+                activeContext.getObject(null, true);
             }
         }
     }

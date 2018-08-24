@@ -14,10 +14,11 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
     // ...
 }
 ```
+Ggf. "getDisplayText"-Methode von abstrakter Klasse "Context" überschreiben
 
 ## DetailsContextConfiguration implementieren
 
-Die Konfiguration bietet den Inhalt des Kontextes an. Die Konfiguration wird al sJSON gespeichert und der Kontext muss Informationen aus der Konfiguration lesen/interpretieren.
+Die Konfiguration bietet den Inhalt des Kontextes an. Die Konfiguration wird als JSON gespeichert und der Kontext muss Informationen aus der Konfiguration lesen/interpretieren.
 
 ```javascript
 export class FAQDetailsContextConfiguration extends ContextConfiguration {
@@ -39,25 +40,44 @@ export class FAQDetailsContextConfiguration extends ContextConfiguration {
 }
 ```
 
-## DetailCOntext registrieren
+## DetailContext registrieren
 
-Der COntext muss im entsprechenden Service registriert werden (`FAQService`).
+Der Context muss im entsprechenden Service registriert werden (`FAQService`).
 ```javascript
-const ticketDetailsContextDescriptor = new ContextDescriptor(
+const faqDetailsContextDescriptor = new ContextDescriptor(
             FAQDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'faq-details', 'faqarticle', FAQDetailsContext
         );
-        ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 ```
 
-# Detail Modul implementieren & registrieren
+## getDetailsTitle im service implementieren
+
+```javascript
+public getDetailsTitle(faqArticle: FAQArticle): string {
+    if (faqArticle) {
+        const objectData = ContextService.getInstance().getObjectData();
+        let faqHook: string = '';
+        if (objectData) {
+            faqHook = objectData.faqHook;
+        }
+        return `${faqHook}${faqArticle.Number} - ${faqArticle.Title}`;
+    } else {
+        return "FAQ Article";
+    }
+}
+```
+
+# Detail Modul registrieren & implementieren
 
 ## Extension registrieren
 
 Extension für `kix:module` registrieren:
 
 `"faq-details-module": "../../dist/registry-modules/faq/faq-details-module.extension"`
+
+## Extension implementieren
 
 ```javascript
 export class Extension implements IModuleFactoryExtension {
