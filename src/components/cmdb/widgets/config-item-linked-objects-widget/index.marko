@@ -1,0 +1,24 @@
+<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+    <@icon>
+        <if(state.widgetConfiguration)>
+            <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
+        </if>
+    </@icon>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else-if(state.linkedObjectGroups.length)>
+            <for(group in state.linkedObjectGroups)>
+                <widget instanceId="linked-object-group" title=group[0]>
+                    <@content>
+                        <standard-table standardTable=group[1]/>
+                    </@content>
+                </widget>
+            </for>
+        </else-if>
+        <else>
+            <span>Es sind keine verknüpften Objekte vorhanden.</span>
+        </else>
+    </@content>
+</widget>

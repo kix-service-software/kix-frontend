@@ -33,7 +33,7 @@ class Component {
         this.state.loading = true;
         this.state.configItem = configItem ? configItem : await context.getObject<ConfigItem>();
         this.state.configuration = context.getConfiguration();
-        // this.state.lanes = context.getLanes(true);
+        this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);
 
         setTimeout(() => {
