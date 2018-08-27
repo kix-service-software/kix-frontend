@@ -1,7 +1,8 @@
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize
+    WidgetSize,
+    KIXObjectType
 } from "@kix/core/dist/model";
 import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
 
@@ -22,16 +23,33 @@ export class Extension implements IModuleFactoryExtension {
             new ConfiguredWidget('config-item-info-lane',
                 new WidgetConfiguration(
                     'config-item-info-widget', 'Config Item Informationen',
-                    [],
+                    ['config-item-edit-action', 'config-item-print-action'],
                     {}, false, true, WidgetSize.LARGE, null, false
+                )
+            );
+
+        const configItemLinkedObjectsLane =
+            new ConfiguredWidget('config-item-linked-objects-widget',
+                new WidgetConfiguration(
+                    'config-item-linked-objects-widget', 'Verknüpfte Objekte',
+                    ['linked-objects-edit-action', 'config-item-print-action'],
+                    {
+                        linkedObjectTypes: [
+                            ["Config Items", KIXObjectType.CONFIG_ITEM],
+                            ["Tickets", KIXObjectType.TICKET],
+                            ["FAQs", KIXObjectType.FAQ_ARTICLE]
+                        ]
+                    },
+                    true, true, WidgetSize.LARGE, null, false
                 )
             );
 
         const laneTabs = ['config-item-info-lane'];
         const laneTabWidgets = [configItemInfoLaneTab];
 
+        const lanes = ['config-item-linked-objects-widget'];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget
+            configItemDetailsWidget, configItemLinkedObjectsLane
         ];
 
         const actions = ['config-item-create-action'];
@@ -41,7 +59,7 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], [], laneTabs, laneWidgets, laneTabWidgets, actions, configItemActions
+            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, actions, configItemActions
         );
     }
 
