@@ -5,6 +5,7 @@
     "tags-dir": [
         "main-form",
         "inputs",
-        "search-form"
+        "search-form",
+        "field-container"
     ]
 }

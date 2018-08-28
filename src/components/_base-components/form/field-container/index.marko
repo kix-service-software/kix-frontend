@@ -1,47 +1,36 @@
-<for(field in input.fields)>
-    <if(component.hasChildren(field) && state.level === 0)>
+<for(field in state.fields)>
+    <if(component.showSeparator(field) && state.level === 0)>
         <div.form-field>
             <div.form-separator/>
         </div>
     </if>
-    <div.form-field title=field.label>
-        <div.field-label>
-            <span.label-text>
-                <if(field.required)>
-                    <span.required-field>*</span>
-                </if>${field.label}
-            </span>
-        </div>
-        <div.field-icon>
-            <overlay-icon isHint=true content=field.hint title=field.label/>
-        </div>
-        <div.field-input style={"padding-left": component.getPaddingLeft(), "padding-right": component.getPaddingRight(field)}>
-            <include(component.getInputComponent(field), { field, fieldId: field.property, formId: state.formId })/>
-        </div>
-        <if(component.hasChildren(field))>
-            <span.minimize-icon-container>
-                <if(state.minimized)>
-                    <span.kix-icon-sort-down on-click('minimize')/>
+    <form-field field=field level=state.level formId=input.formId objectType=input.objectType>
+        <@additionalFieldControls>
+            <div.additionalFieldControls>
+                <if(!field.asStructure)>
+                    <if(component.canAdd(field))>
+                        <button.button-without-text type="button" title="Hinzufügen" on-click('addField', field)>
+                            <span.kix-icon-plus/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
+                    <if(component.canRemove(field))>
+                        <button.button-without-text type="button" title="Entfernen" on-click('removeField', field)>
+                            <span.kix-icon-minus/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
                 </if>
-                <else>
-                    <span.kix-icon-triangle-up on-click('minimize')>
-                        <span.path1/>
-                        <span.path2/>
-                    </span>
-                </else>
-            </span>
-        </if>
-    </div>
-    <if(component.hasChildren(field))>
-        <if(!state.minimized)>
-            <div.sub-field-container>
-                <field-container level=(state.level + 1) fields=field.children formId=state.formId objectType=state.objectType/>
             </div>
-        </if>
-        <if(state.level === 0)>
-            <div.form-field>
-                <div.form-separator/>
-            </div>
-        </if>
+        </@additionalFieldControls>
+    </form-field>
+    <if(component.showSeparator(field) && state.level === 0)>
+        <div.form-field>
+            <div.form-separator/>
+        </div>
     </if>
 </for>
