@@ -1,7 +1,7 @@
 <div.file-upload class={dragging: state.dragging} on-drop("drop")>
     <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Datei wählen">
         <span.kix-icon-attachement/>Datei wählen
-        <input.file-upload-input type="file" multiple key="fileUploadInput" on-change("setAttachments")/>
+        <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>
     </button>
     <span.file-upload-notice>
         <span>
