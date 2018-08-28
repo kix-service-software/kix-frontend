@@ -7,11 +7,11 @@ import {
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
-    Link, KIXObject, LinkObject, KIXObjectType,
+    KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, LinkType, CreateLinkObjectOptions
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions
 } from '@kix/core/dist/model';
-import { LinkService, LinkUtil } from '@kix/core/dist/browser/link';
+import { LinkUtil } from '@kix/core/dist/browser/link';
 
 class Component {
 
