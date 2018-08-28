@@ -53,7 +53,7 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
             if (searchValue && searchValue !== '') {
                 this.state.nodes = this.configItems.map(
-                    (c) => new TreeNode(c, c.CurrentVersion.Name, 'kix-icon-ci')
+                    (c) => new TreeNode(c, c.Name, 'kix-icon-ci')
                 );
             }
         }

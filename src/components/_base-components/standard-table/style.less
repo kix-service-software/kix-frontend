@@ -125,9 +125,9 @@
                 grid-column: 4;
             }
         }
-        &:not(.has-checkbox-column, .has-toggle-row-column) {
+        &:not(.has-checkbox-column):not(.has-toggle-row-column) {
             >.row {
-                &:nth-of-type(odd):not(.opened) {
+                &:nth-of-type(odd):not(.opened):not(:hover) {
                     .row-columns {
                         background-color: @secondary-5;
                     }

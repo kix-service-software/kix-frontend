@@ -1,10 +1,14 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, KIXObjectServiceRegistry, StandardTableFactoryService,
+    ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight,
     ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
 } from '@kix/core/dist/browser';
-import { KIXObjectType, Link, KIXObject, DataType, WidgetType, Context, ConfigItem } from '@kix/core/dist/model';
+import {
+    KIXObjectType, Link, KIXObject, DataType, WidgetType,
+    Context, ConfigItem
+} from '@kix/core/dist/model';
+import { LinkUtil } from '@kix/core/dist/browser/link';
 
 class Component {
 
@@ -65,15 +69,12 @@ class Component {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
 
-            const configItemId = this.state.configItem.ObjectId.toString();
-
+            this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
                 const objectLinks = this.state.configItem.Links.filter((link) => this.checkLink(link, lot[1]));
-                const objectIds = objectLinks.map((ol) => ol.SourceKey === configItemId ? ol.TargetKey : ol.SourceKey);
 
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(lot[1]);
-                const objects = objectIds.length ? await service.loadObjects(lot[1], objectIds, null) : [];
+                const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.configItem, objectLinks);
 
                 const tableConfiguration = new TableConfiguration(
                     null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
@@ -84,14 +85,17 @@ class Component {
                 );
 
                 if (table) {
-                    table.addAdditionalLayerOnTop(new ObjectLinkDescriptionLabelLayer());
+                    const objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
+                    objectLinkLayer.setLinkDescriptions(linkDescriptions);
+                    table.addAdditionalLayerOnTop(objectLinkLayer);
 
+                    const objects = linkDescriptions.map((ld) => ld.linkableObject);
                     table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-                    table.loadRows();
 
                     table.setColumns([
                         new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
                     ]);
+                    table.loadRows();
 
                     objectsCount += objects.length;
                     const title = `${lot[0]} (${objects.length})`;

@@ -1,9 +1,4 @@
 <widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
-    <@icon>
-        <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
-        </if>
-    </@icon>
     <@content>
         <if(state.loading)>
             <loading-spinner/>

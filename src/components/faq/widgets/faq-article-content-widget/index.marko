@@ -1,11 +1,6 @@
 <div.faq-content>
     <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
         contentActions=state.actions>
-        <@icon>
-            <if(state.widgetConfiguration)>
-                <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
-            </if>
-        </@icon>
         <@content>
             <if(state.faqArticle)>
                 <div.faq-article-content-container>
