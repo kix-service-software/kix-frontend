@@ -29,6 +29,11 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
         document.addEventListener('dragenter', this.dragEnter.bind(this), false);
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
+
+        const option = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
+        if (option) {
+            this.state.multiple = Boolean(option.value);
+        }
     }
 
     public onDestroy(): void {

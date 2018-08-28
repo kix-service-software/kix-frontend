@@ -7,7 +7,8 @@ export class ComponentState extends FormInputComponentState<any> {
         public files: File[] = [],
         public dragging: boolean = false,
         public minimized: boolean = false,
-        public labels: Label[] = []
+        public labels: Label[] = [],
+        public multiple: boolean = true
     ) {
         super();
     }
