@@ -1,5 +1,5 @@
 import {
-    ContextConfiguration, FormField, CustomerSourceAttributeMapping, Form, FormContext, KIXObjectType
+    ContextConfiguration, FormField, CustomerSourceAttributeMapping, Form, FormContext, KIXObjectType, CustomerProperty
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
@@ -52,9 +52,13 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                     label = attribute.Label;
                 }
 
-                group.formFields.push(
-                    new FormField(label, attribute.Attribute, null, attribute.Required, label)
-                );
+                let componentId = null;
+                if (attribute.Attribute === CustomerProperty.VALID_ID) {
+                    componentId = 'valid-input';
+                }
+
+                const formField = new FormField(label, attribute.Attribute, componentId, attribute.Required, label);
+                group.formFields.push(formField);
             });
 
             const form = new Form(formId, 'Neuer Kunde', [...groups, lastGroup], KIXObjectType.CUSTOMER);
