@@ -191,7 +191,7 @@ class Component {
                 resultListenerId
             },
             dialogTitle,
-            'kix-icon-link'
+            'kix-icon-new-link'
         );
         DialogService.getInstance()
             .registerDialogResultListener<CreateLinkDescription[][]>(
