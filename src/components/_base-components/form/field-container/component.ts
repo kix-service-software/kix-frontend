@@ -1,9 +1,11 @@
 import { FormField } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
+import { FormService } from "@kix/core/dist/browser";
 
 class FieldContainerComponent {
 
     private state: ComponentState;
+    private formId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -12,6 +14,7 @@ class FieldContainerComponent {
     public onInput(input: any): void {
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         this.state.fields = input.fields;
+        this.formId = input.formId;
     }
 
     public showSeparator(field: FormField): boolean {
@@ -33,6 +36,9 @@ class FieldContainerComponent {
         } else {
             const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
             this.state.fields.splice(index, 1);
+
+            const formInstance = FormService.getInstance().getFormInstance(this.formId);
+            formInstance.provideFormFieldValue(field.instanceId, null);
         }
         this.state.fields = [...this.state.fields];
     }
@@ -52,6 +58,9 @@ class FieldContainerComponent {
             const newField = field.clone();
             const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
             this.state.fields.splice(index + 1, 0, newField);
+
+            const formInstance = FormService.getInstance().getFormInstance(this.formId);
+            formInstance.provideFormField(newField);
         }
 
         this.state.fields = [...this.state.fields];

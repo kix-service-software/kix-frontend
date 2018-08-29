@@ -32,7 +32,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 );
             }).catch((error) => {
                 this.loggingService.error(error);
-                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error);
+                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, this.getErrorMessage(error));
             });
         } else {
             const errorMessage = 'No API service registered for object type ' + data.kixObjectType;
@@ -55,7 +55,9 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                     );
                 }).catch((error) => {
                     this.loggingService.error(error);
-                    response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, error);
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.CREATE_OBJECT_ERROR, this.getErrorMessage(error)
+                    );
                 });
 
         } else {
@@ -79,7 +81,9 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                     );
                 }).catch((error) => {
                     this.loggingService.error(error);
-                    response = new CommunicatorResponse(KIXObjectEvent.DELETE_OBJECT_ERROR, error);
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.DELETE_OBJECT_ERROR, this.getErrorMessage(error)
+                    );
                 });
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
@@ -88,5 +92,14 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         }
 
         return response;
+    }
+
+    private getErrorMessage(error: any): string {
+        let errorMessage = error;
+        if (error.message) {
+            errorMessage = error.message;
+        }
+
+        return errorMessage;
     }
 }
