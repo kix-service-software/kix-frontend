@@ -26,13 +26,21 @@ class Component {
     }
 
     public classChanged(nodes: TreeNode[]): void {
+        DialogService.getInstance().setMainDialogLoading(true);
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        this.state.formId = null;
+        let formId;
         if (this.state.currentClassNode) {
             const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-            this.state.formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+            formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
         } else {
-            this.state.formId = null;
+            formId = null;
         }
+
+        setTimeout(() => {
+            this.state.formId = formId;
+            DialogService.getInstance().setMainDialogLoading(false);
+        }, 100);
     }
 
     public cancel(): void {
