@@ -111,14 +111,17 @@ class LinkDialogComponent {
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.state.selectedObjects = [];
 
+        this.state.formId = null;
+
+        let formId;
         if (this.state.currentLinkableObjectNode) {
-            this.state.formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            formId = this.state.currentLinkableObjectNode.id.toString();
+            const formInstance = FormService.getInstance().getFormInstance(formId);
             formInstance.reset();
             this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
-            this.state.formId = null;
+            formId = null;
             this.state.resultCount = null;
         }
         this.setLinkTypes();
@@ -126,6 +129,7 @@ class LinkDialogComponent {
         (this as any).setStateDirty('currentLinkableObjectNode');
 
         setTimeout(() => {
+            this.state.formId = formId;
             this.setCanSubmit();
             DialogService.getInstance().setOverlayDialogLoading(false);
         }, 50);
