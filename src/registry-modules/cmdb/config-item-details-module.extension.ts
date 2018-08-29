@@ -44,12 +44,22 @@ export class Extension implements IModuleFactoryExtension {
                 )
             );
 
+        const configItemGraphLane =
+            new ConfiguredWidget('config-item-graph-widget',
+                new WidgetConfiguration(
+                    'config-item-graph-widget', 'Verknüpfungsgraph',
+                    ['config-item-print-action'],
+                    null,
+                    true, true, WidgetSize.LARGE, null, false
+                )
+            );
+
         const laneTabs = ['config-item-info-lane'];
         const laneTabWidgets = [configItemInfoLaneTab];
 
-        const lanes = ['config-item-linked-objects-widget'];
+        const lanes = ['config-item-linked-objects-widget', 'config-item-graph-widget'];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget, configItemLinkedObjectsLane
+            configItemDetailsWidget, configItemLinkedObjectsLane, configItemGraphLane
         ];
 
         const actions = ['config-item-create-action'];

@@ -32,19 +32,24 @@
             grid-row: 2;
         }
     }
-    .main-dialog-container {
+    .image-dialog-container {
         position: relative;
         z-index: 300;
     }
-    .overlay-dialog-container {
+    .main-dialog-container {
         position: relative;
         z-index: 400;
+    }
+    .overlay-dialog-container {
+        position: relative;
+        z-index: 500;
     }
     .overlay {
         z-index: 100;
     }
+    .image-dialog-container~.overlay,
     .main-dialog-container~.overlay,
     .overlay-dialog-container~.overlay {
-        z-index: 450;
+        z-index: 550;
     }
 }
