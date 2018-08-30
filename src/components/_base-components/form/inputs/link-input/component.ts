@@ -46,7 +46,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
     }
 
     private linksChanged(result: CreateLinkDescription[][]): void {
-        this.state.linkDescriptions = result[0];
+        this.state.linkDescriptions = [...this.state.linkDescriptions, ...result[0]];
         this.updateField();
     }
 
