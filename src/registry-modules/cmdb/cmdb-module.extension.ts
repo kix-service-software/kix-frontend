@@ -19,8 +19,16 @@ export class Extension implements IModuleFactoryExtension {
 
         const sidebarWidgets = [notesSidebar];
 
+        const explorer = ['20180830-ci-class-explorer'];
+
+        const ciClassExplorer = new ConfiguredWidget('20180830-ci-class-explorer',
+            new WidgetConfiguration(
+                'config-item-class-explorer', 'CMDB Klassen', [], {}, false, false
+            ));
+        const explorerWidgets = [ciClassExplorer];
+
         return new CMDBContextConfiguration(
-            this.getModuleId(), [], sidebars, sidebarWidgets, [], [], []
+            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, [], []
         );
     }
 
