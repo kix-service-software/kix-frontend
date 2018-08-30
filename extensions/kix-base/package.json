@@ -21,7 +21,8 @@
             "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension",
             "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
             "search-menu-main": "../../dist/registry-modules/search/search-menu.extension",
-            "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension"
+            "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension",
+            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension"
         },
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
@@ -43,7 +44,8 @@
             "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension",
             "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension",
             "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension",
-            "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension"
+            "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension",
+            "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension"
         }
     }
 }
