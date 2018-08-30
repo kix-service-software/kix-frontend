@@ -74,6 +74,11 @@ class Component extends FormInputComponent<any, ComponentState> {
         const option = this.state.field.options.find((o) => o.option === 'MimeTypes');
         const mimeTypes = option ? option.value as string[] : null;
 
+        if (!this.state.multiple) {
+            this.state.files = [];
+            files = files.length > 0 ? [files[0]] : [];
+        }
+
         files.forEach((f: File) => {
             if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
                 const fileError = AttachmentUtil.checkFile(f, mimeTypes);
@@ -134,6 +139,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             const files: File[] = Array.from(event.dataTransfer.files);
             this.appendFiles(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
         }
+
         this.state.dragging = false;
         this.dragCounter = 0;
     }
