@@ -10,7 +10,8 @@ export class Extension implements IMarkoDependencyExtension {
             'cmdb/inputs/ci-class-reference-input',
             'cmdb/widgets/config-item-info-widget',
             'cmdb/widgets/config-item-linked-objects-widget',
-            'cmdb/widgets/config-item-graph-widget'
+            'cmdb/widgets/config-item-graph-widget',
+            'cmdb/widgets/config-item-class-explorer'
         ];
     }
 
@@ -23,6 +24,7 @@ export class Extension implements IMarkoDependencyExtension {
             ['config-item-info-widget', 'cmdb/widgets/config-item-info-widget'],
             ['config-item-linked-objects-widget', 'cmdb/widgets/config-item-linked-objects-widget'],
             ['config-item-graph-widget', 'cmdb/widgets/config-item-graph-widget'],
+            ['config-item-class-explorer', 'cmdb/widgets/config-item-class-explorer']
         ];
     }
 
