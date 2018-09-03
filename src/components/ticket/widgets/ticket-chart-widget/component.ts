@@ -43,9 +43,9 @@ class Component {
         this.state.chartConfig = this.ticketChartConfiguration.chartConfiguration;
     }
 
-    private contextFilteredObjectListChanged(objectList: KIXObject[]): void {
+    private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
-        const data = TicketChartFactory.getInstance().prepareData(
+        const data = await TicketChartFactory.getInstance().prepareData(
             this.ticketChartConfiguration.property, (objectList as Ticket[])
         );
 

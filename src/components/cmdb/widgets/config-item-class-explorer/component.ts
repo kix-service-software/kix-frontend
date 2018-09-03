@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode, ConfigItemClass, KIXObjectType, KIXObjectPropertyFilter } from '@kix/core/dist/model';
+import { TreeNode, ConfigItemClass, KIXObjectType } from '@kix/core/dist/model';
 import { CMDBContext } from '@kix/core/dist/browser/cmdb';
 
 export class Component {
@@ -25,7 +25,11 @@ export class Component {
         );
         this.state.nodes = this.prepareTreeNodes(ciClasses);
 
-        this.setActiveNode(context.currentCIClass);
+        if (context.currentCIClass) {
+            this.setActiveNode(context.currentCIClass);
+        } else {
+            this.showAll();
+        }
     }
 
     private setActiveNode(category: ConfigItemClass): void {

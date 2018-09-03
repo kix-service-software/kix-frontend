@@ -11,7 +11,8 @@ export class Extension implements IMarkoDependencyExtension {
             'cmdb/widgets/config-item-info-widget',
             'cmdb/widgets/config-item-linked-objects-widget',
             'cmdb/widgets/config-item-graph-widget',
-            'cmdb/widgets/config-item-class-explorer'
+            'cmdb/widgets/config-item-class-explorer',
+            'cmdb/widgets/config-item-chart-widget'
         ];
     }
 
@@ -24,7 +25,8 @@ export class Extension implements IMarkoDependencyExtension {
             ['config-item-info-widget', 'cmdb/widgets/config-item-info-widget'],
             ['config-item-linked-objects-widget', 'cmdb/widgets/config-item-linked-objects-widget'],
             ['config-item-graph-widget', 'cmdb/widgets/config-item-graph-widget'],
-            ['config-item-class-explorer', 'cmdb/widgets/config-item-class-explorer']
+            ['config-item-class-explorer', 'cmdb/widgets/config-item-class-explorer'],
+            ['config-item-chart-widget', 'cmdb/widgets/config-item-chart-widget']
         ];
     }
 
