@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode, ConfigItemClass, KIXObjectType } from '@kix/core/dist/model';
+import { TreeNode, ConfigItemClass, KIXObjectType, KIXObjectPropertyFilter } from '@kix/core/dist/model';
 import { CMDBContext } from '@kix/core/dist/browser/cmdb';
 
 export class Component {
@@ -8,6 +8,8 @@ export class Component {
     private state: ComponentState;
 
     public listenerId: string;
+
+    public textFilterValue: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -64,8 +66,13 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.activeNode = null;
+        this.state.filterValue = null;
         context.setAdditionalInformation(['Alle']);
         context.setCIClass(null);
+    }
+
+    public async filter(textFilterValue?: string): Promise<void> {
+        this.state.filterValue = textFilterValue;
     }
 
 }

@@ -6,7 +6,8 @@ export class ComponentState {
         public instanceId: string = null,
         public widgetConfiguration: WidgetConfiguration = null,
         public nodes: TreeNode[] = [],
-        public activeNode: TreeNode = null
+        public activeNode: TreeNode = null,
+        public filterValue: string = null
     ) { }
 
 }
