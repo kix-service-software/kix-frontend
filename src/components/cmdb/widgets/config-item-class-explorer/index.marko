@@ -2,9 +2,10 @@
     <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "CMDB Klassen")>
         <@content>
+            <filter on-filter('filter')/>
             <span.show-all class={active: !state.activeNode} on-click('showAll')>alle anzeigen</span>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked('activeNodeChanged')/>
+                <tree tree=state.nodes activeNode=state.activeNode filterValue=state.filterValue on-nodeClicked('activeNodeChanged')/>
             </if>
         </@content>
     </widget>
