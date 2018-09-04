@@ -1,6 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode, ConfigItemClass, KIXObjectType } from '@kix/core/dist/model';
+import {
+    TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
+} from '@kix/core/dist/model';
 import { CMDBContext } from '@kix/core/dist/browser/cmdb';
 
 export class Component {
@@ -20,8 +22,9 @@ export class Component {
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['ConfigItemStats']);
         const ciClasses = await ContextService.getInstance().loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null, null
+            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions
         );
         this.state.nodes = this.prepareTreeNodes(ciClasses);
 
@@ -53,9 +56,19 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(categories: ConfigItemClass[]): TreeNode[] {
-        return categories
-            ? categories.map((c) => new TreeNode(c, c.Name, null, null, null))
+    private prepareTreeNodes(configItemClasses: ConfigItemClass[]): TreeNode[] {
+        return configItemClasses
+            ? configItemClasses.map((c) => {
+                let count = '0';
+                if (c.ConfigItemStats) {
+                    count = (c.ConfigItemStats.PreProductiveCount + c.ConfigItemStats.ProductiveCount).toString();
+                }
+                const properties = [new TreeNodeProperty(count, `Anzahl Config Items: ${count}`)];
+                return new TreeNode(
+                    c, c.Name, new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, c.ID),
+                    null, null, null, null, null, properties
+                );
+            })
             : [];
     }
 
