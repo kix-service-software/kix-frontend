@@ -37,6 +37,11 @@ class Component {
             formId = null;
         }
 
+        if (formId) {
+            const formInstance = FormService.getInstance().getFormInstance(formId);
+            formInstance.reset();
+        }
+
         setTimeout(() => {
             this.state.formId = formId;
             DialogService.getInstance().setMainDialogLoading(false);
