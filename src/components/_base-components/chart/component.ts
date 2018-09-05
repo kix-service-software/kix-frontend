@@ -19,6 +19,14 @@ class Component {
     public onInput(input: any): void {
         this.config = input.config;
         if (this.config) {
+            if (!this.config.options) {
+                this.config.options = { animation: { duration: 300 } };
+            } else if (!this.config.options.animation) {
+                this.config.options.animation = { duration: 300 };
+            }
+
+            this.config.options.animation.duration = 300;
+
             if (this.timeout) {
                 clearTimeout(this.timeout);
             }
@@ -28,10 +36,12 @@ class Component {
                     const ctx = canvasElement.getContext('2d');
                     if (ctx) {
                         if (this.chart) {
-                            this.chart.data.labels = this.config.data.labels;
-                            this.chart.data.datasets = this.config.data.datasets;
+                            setTimeout(() => {
+                                this.chart.data.labels = this.config.data.labels;
+                                this.chart.data.datasets = this.config.data.datasets;
 
-                            this.chart.update();
+                                this.chart.update();
+                            }, 1000);
                         } else {
                             this.chart = new Chart(ctx, this.config);
                         }

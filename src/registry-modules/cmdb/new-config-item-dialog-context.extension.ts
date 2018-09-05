@@ -1,7 +1,7 @@
 import { ContextConfiguration } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService, ICmdbService } from "@kix/core/dist/services";
+import { IConfigurationService, ICMDBService } from "@kix/core/dist/services";
 import {
     NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from "@kix/core/dist/browser/cmdb";
@@ -22,7 +22,7 @@ export class Extension implements IModuleFactoryExtension {
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
         const cmdbService =
-            ServiceContainer.getInstance().getClass<ICmdbService>("ICmdbService");
+            ServiceContainer.getInstance().getClass<ICMDBService>("ICmdbService");
 
         const ciClasses = await cmdbService.loadConfigItemClassWithDefinitions(token);
 

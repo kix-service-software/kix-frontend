@@ -30,7 +30,7 @@ export class Extension implements IModuleFactoryExtension {
         const explorerWidgets = [ciClassExplorer];
 
 
-        const content = ['20180903-cmdb-chart-1', '20180903-cmdb-chart-2', '20180903-cmdb-chart-3'];
+        // CONTENT WIDGETS
 
         const chartConfig1 = new ConfigItemChartConfiguration(ConfigItemProperty.CLASS_ID, {
             type: 'bar',
@@ -120,7 +120,16 @@ export class Extension implements IModuleFactoryExtension {
             false, true, WidgetSize.SMALL, null, true)
         );
 
-        const contentWidgets = [chart1, chart2, chart3];
+        const content = [
+            '20180903-cmdb-chart-1', '20180903-cmdb-chart-2', '20180903-cmdb-chart-3', '20180905-ci-list-widget'
+        ];
+
+        const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget', new WidgetConfiguration(
+            'config-item-list-widget', 'Übersicht Config Items', [], {}, false, true,
+            WidgetSize.LARGE, 'kix-icon-ci', true
+        ));
+
+        const contentWidgets = [chart1, chart2, chart3, ciListWidget];
 
         return new CMDBContextConfiguration(
             this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
