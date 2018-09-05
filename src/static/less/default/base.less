@@ -159,13 +159,16 @@ button {
     user-select: none;
 }
 
+textarea::placeholder,
 input::placeholder {
     color: @secondary-2;
     font-style: italic;
     font-family: Carlito, Arial, Helvetica, sans-serif; // TODO: für Firefox scheinbar nötig
     opacity: 1; // TODO: für Firefox scheinbar nötig
 } // TODO: extra (noch testen in IE / Edge), weil sonst Regel für Chrome/Firefox nicht greift 
+textarea:-ms-input-placeholder,
 input:-ms-input-placeholder,
+textarea::-ms-input-placeholder,
 input::-ms-input-placeholder {
     color: @secondary-2;
     font-style: italic;
