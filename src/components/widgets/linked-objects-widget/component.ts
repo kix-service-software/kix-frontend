@@ -1,12 +1,13 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, KIXObjectServiceRegistry, StandardTableFactoryService,
+    ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight,
     ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
 } from '@kix/core/dist/browser';
-import { KIXObjectType, Link, KIXObject, DataType, WidgetType, Context } from '@kix/core/dist/model';
-import { FAQArticle } from '@kix/core/dist/model/kix/faq';
-import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
+import {
+    KIXObjectType, Link, KIXObject, DataType, WidgetType, Context
+} from '@kix/core/dist/model';
+import { LinkUtil } from '@kix/core/dist/browser/link';
 
 class Component {
 
@@ -15,7 +16,7 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.contextListenerId = IdService.generateDateBasedId('faq-linked-objects-widget');
+        this.contextListenerId = IdService.generateDateBasedId('kix-object-linked-objects-widget');
     }
 
     public onInput(input: any): void {
@@ -28,10 +29,8 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener(this.contextListenerId, {
-            objectChanged: (id: string | number, object: FAQArticle, type: KIXObjectType) => {
-                if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, object);
-                }
+            objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
+                this.initWidget(context, object);
             },
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
@@ -39,12 +38,12 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<FAQArticle>());
+        await this.initWidget(context, await context.getObject<KIXObject>());
     }
 
-    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+    private async initWidget(context: Context, kixObject?: KIXObject): Promise<void> {
         this.state.loading = true;
-        this.state.faqArticle = faqArticle;
+        this.state.kixObject = kixObject;
         this.setActions();
         await this.setLinkedObjectsGroups();
 
@@ -54,9 +53,9 @@ class Component {
     }
 
     private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.faqArticle) {
+        if (this.state.widgetConfiguration && this.state.kixObject) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, false, [this.state.kixObject]
             );
         }
     }
@@ -67,15 +66,12 @@ class Component {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
 
-            const faqArticleId = this.state.faqArticle.ID.toString();
-
+            this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
-                const objectLinks = this.state.faqArticle.Links.filter((link) => this.checkLink(link, lot[1]));
-                const objectIds = objectLinks.map((ol) => ol.SourceKey === faqArticleId ? ol.TargetKey : ol.SourceKey);
+                const objectLinks = this.state.kixObject.Links.filter((link) => this.checkLink(link, lot[1]));
 
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(lot[1]);
-                const objects = objectIds.length ? await service.loadObjects(lot[1], objectIds, null) : [];
+                const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
                 const tableConfiguration = new TableConfiguration(
                     null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
@@ -85,18 +81,24 @@ class Component {
                     lot[1], tableConfiguration, null, null, true
                 );
 
-                table.addAdditionalLayerOnTop(new ObjectLinkDescriptionLabelLayer());
+                if (table) {
+                    const objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
+                    objectLinkLayer.setLinkDescriptions(linkDescriptions);
+                    table.addAdditionalLayerOnTop(objectLinkLayer);
 
-                table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-                table.loadRows();
+                    const objects = linkDescriptions.map((ld) => ld.linkableObject);
+                    table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
 
-                table.setColumns([
-                    new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
-                ]);
+                    table.setColumns([
+                        new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                    ]);
+                    table.loadRows();
 
-                objectsCount += objects.length;
-                const title = `${lot[0]} (${objects.length})`;
-                this.state.linkedObjectGroups.push([title, table]);
+                    objectsCount += objects.length;
+                    const title = `${lot[0]} (${objects.length})`;
+                    this.state.linkedObjectGroups.push([title, table]);
+                }
+
             }
 
             this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${objectsCount})`;
@@ -105,9 +107,9 @@ class Component {
     }
 
     private checkLink(link: Link, objectType: KIXObjectType): boolean {
-        const faqArticleId = this.state.faqArticle.ID.toString();
-        return (link.SourceObject === objectType && link.SourceKey !== faqArticleId) ||
-            (link.TargetObject === objectType && link.TargetKey !== faqArticleId);
+        const ticketId = this.state.kixObject.ObjectId.toString();
+        return (link.SourceObject === objectType && link.SourceKey !== ticketId) ||
+            (link.TargetObject === objectType && link.TargetKey !== ticketId);
     }
 
 }

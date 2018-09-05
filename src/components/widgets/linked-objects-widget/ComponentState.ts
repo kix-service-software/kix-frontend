@@ -1,10 +1,10 @@
-import { WidgetComponentState, AbstractAction, ConfigItem } from "@kix/core/dist/model";
+import { WidgetComponentState, AbstractAction, Ticket, KIXObject } from "@kix/core/dist/model";
 import { StandardTable } from "@kix/core/dist/browser";
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public configItem: ConfigItem = null,
+        public kixObject: KIXObject = null,
         public actions: AbstractAction[] = [],
         public loading: boolean = true,
         public linkedObjectGroups: Array<[string, StandardTable]> = [],

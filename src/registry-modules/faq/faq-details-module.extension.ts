@@ -29,12 +29,13 @@ export class Extension implements IModuleFactoryExtension {
         const faqLinkedObjectsLane =
             new ConfiguredWidget('faq-article-linked-objects-widget',
                 new WidgetConfiguration(
-                    'faq-article-linked-objects-widget', 'Verknüpfte Objekte',
+                    'linked-objects-widget', 'Verknüpfte Objekte',
                     ['linked-objects-edit-action', 'faq-article-print-action'],
                     {
                         linkedObjectTypes: [
                             ["Tickets", KIXObjectType.TICKET],
-                            ["FAQs", KIXObjectType.FAQ_ARTICLE]
+                            ["FAQs", KIXObjectType.FAQ_ARTICLE],
+                            ["Config Items", KIXObjectType.CONFIG_ITEM]
                         ]
                     },
                     true, true, WidgetSize.LARGE, null, false

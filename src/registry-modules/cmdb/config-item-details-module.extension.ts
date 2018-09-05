@@ -31,7 +31,7 @@ export class Extension implements IModuleFactoryExtension {
         const configItemLinkedObjectsLane =
             new ConfiguredWidget('config-item-linked-objects-widget',
                 new WidgetConfiguration(
-                    'config-item-linked-objects-widget', 'Verknüpfte Objekte',
+                    'linked-objects-widget', 'Verknüpfte Objekte',
                     ['linked-objects-edit-action', 'config-item-print-action'],
                     {
                         linkedObjectTypes: [

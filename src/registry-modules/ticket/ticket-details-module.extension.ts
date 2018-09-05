@@ -6,7 +6,8 @@ import {
     WidgetSize,
     DataType,
     TicketProperty,
-    ArticleProperty
+    ArticleProperty,
+    KIXObjectType
 } from '@kix/core/dist/model/';
 import {
     TableColumnConfiguration, TableConfiguration,
@@ -64,25 +65,13 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             );
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
-                "ticket-linked-objects-widget", "Verknüpfte Objekte",
+                "linked-objects-widget", "Verknüpfte Objekte",
                 ['ticket-print-action', 'linked-objects-edit-action'],
                 {
-                    groups: [
-                        [
-                            "Ticket", new TableConfiguration(null, 7, [
-                                new TableColumnConfiguration(
-                                    TicketProperty.TICKET_NUMBER, true, false, true, true, 100, DataType.STRING),
-                                new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 100),
-                                new TableColumnConfiguration(TicketProperty.TYPE_ID, true, false, true, true, 100),
-                                new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                                new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 100),
-                                new TableColumnConfiguration(
-                                    TicketProperty.CREATED, true, false, true, true, 100, DataType.DATE_TIME
-                                ),
-                                new TableColumnConfiguration(TicketProperty.LINKED_AS, true, false, true, true, 100)
-                            ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                            )
-                        ]
+                    linkedObjectTypes: [
+                        ["Tickets", KIXObjectType.TICKET],
+                        ["Config Items", KIXObjectType.CONFIG_ITEM],
+                        ["FAQs", KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
                 true, true, WidgetSize.BOTH, null, false)
