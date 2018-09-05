@@ -39,7 +39,7 @@ class Component {
                 explorerBarToggled: () => { return; },
                 sidebarToggled: () => { return; },
                 objectChanged: () => { return; },
-                objectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                objectListChanged: () => { return; },
                 filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
             });
         }
