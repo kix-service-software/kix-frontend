@@ -49,7 +49,7 @@ class Component {
                         this.showSuccessHint();
                         DialogService.getInstance().closeMainDialog();
                         ContextService.getInstance().setContext(
-                            null, KIXObjectType.FAQ_ARTICLE, ContextMode.DETAILS, FAQArticleProperty.ID
+                            null, KIXObjectType.FAQ_ARTICLE, ContextMode.DETAILS, faqArticleId
                         );
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading();
