@@ -1,0 +1,21 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "") contentActions=state.actions>
+    <@icon/>
+    <@content>
+        <div.history-content>
+            <if(state.configItem)>
+                <div.history-filter>
+                    <span.header>Änderungsverlauf</span>
+                    <filter on-filter('filter')/>
+                </div>
+                <div.history-container>
+                    <if(state.standardTable)>
+                        <standard-table standardTable=state.standardTable/>
+                    </if>
+                </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
+        </div>
+    </@content>
+</widget>

@@ -4,6 +4,10 @@ import {
     WidgetSize,
     KIXObjectType
 } from "@kix/core/dist/model";
+import {
+    TableColumnConfiguration, TableConfiguration,
+    TableHeaderHeight, TableRowHeight
+} from '@kix/core/dist/browser';
 import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
 
 export class Extension implements IModuleFactoryExtension {
@@ -26,6 +30,20 @@ export class Extension implements IModuleFactoryExtension {
                     ['config-item-edit-action', 'config-item-print-action'],
                     {}, false, true, WidgetSize.LARGE, null, false
                 )
+            );
+
+        const configItemHistoryLane =
+            new ConfiguredWidget("config-item-history-widget", new WidgetConfiguration(
+                "config-item-history-widget", "Historie", ['config-item-print-action'],
+                new TableConfiguration(
+                    null, 7, [
+                        new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
+                        new TableColumnConfiguration('Comment', true, false, true, true, 200),
+                        new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
+                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
+                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ),
+                true, true, WidgetSize.BOTH, null, false)
             );
 
         const configItemLinkedObjectsLane =
@@ -57,9 +75,9 @@ export class Extension implements IModuleFactoryExtension {
         const laneTabs = ['config-item-info-lane'];
         const laneTabWidgets = [configItemInfoLaneTab];
 
-        const lanes = ['config-item-linked-objects-widget', 'config-item-graph-widget'];
+        const lanes = ['config-item-linked-objects-widget', 'config-item-graph-widget', 'config-item-history-widget'];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget, configItemLinkedObjectsLane, configItemGraphLane
+            configItemDetailsWidget, configItemLinkedObjectsLane, configItemGraphLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];
