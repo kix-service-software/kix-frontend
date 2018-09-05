@@ -28,12 +28,14 @@ export class Component {
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTreeNodes(objectData.queuesHierarchy);
 
-        this.showAll();
+        this.setActiveNode(context.queue);
     }
 
     private setActiveNode(queue: Queue): void {
         if (queue) {
             this.state.activeNode = this.getActiveNode(queue);
+        } else {
+            this.showAll();
         }
     }
 
@@ -90,6 +92,7 @@ export class Component {
                 TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, queue.QueueID
             )
         ]);
+        context.setQueue(queue);
         context.setAdditionalInformation(this.getStructureInformation());
     }
 
