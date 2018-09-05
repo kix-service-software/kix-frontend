@@ -107,9 +107,9 @@ class Component {
     }
 
     private checkLink(link: Link, objectType: KIXObjectType): boolean {
-        const ticketId = this.state.kixObject.ObjectId.toString();
-        return (link.SourceObject === objectType && link.SourceKey !== ticketId) ||
-            (link.TargetObject === objectType && link.TargetKey !== ticketId);
+        const objectId = this.state.kixObject.ObjectId.toString();
+        return (link.SourceObject === objectType && link.SourceKey !== objectId) ||
+            (link.TargetObject === objectType && link.TargetKey !== objectId);
     }
 
 }

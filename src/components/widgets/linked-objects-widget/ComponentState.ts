@@ -1,4 +1,4 @@
-import { WidgetComponentState, AbstractAction, Ticket, KIXObject } from "@kix/core/dist/model";
+import { WidgetComponentState, AbstractAction,  KIXObject } from "@kix/core/dist/model";
 import { StandardTable } from "@kix/core/dist/browser";
 
 export class ComponentState extends WidgetComponentState {
