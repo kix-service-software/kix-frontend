@@ -9,14 +9,10 @@ export class StandardTableComponentState<T extends KIXObject<T>> {
 
     public resizeSettings: ResizeSettings = new ResizeSettings();
 
-    public resizeActive: boolean = false;
-
     public tableId: string = null;
 
     public sortedColumnId: string = null;
 
     public sortOrder: SortOrder = null;
-
-    public rowWidth: number = 0;
 
 }
