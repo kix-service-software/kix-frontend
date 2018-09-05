@@ -9,7 +9,7 @@ import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 class StandardTableComponent<T extends KIXObject<T>> {
 
     private state: StandardTableComponentState<T>;
-    private loadMoreTimeout: any = null;
+    private resizeTimeout: any;
 
     public onCreate(input: StandardTableInput<T>): void {
         this.state = new StandardTableComponentState<T>();
@@ -50,7 +50,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (headerRow) {
             let rowWidth = 0;
             this.getColumns().forEach((c) => rowWidth += c.size);
-            this.state.rowWidth = rowWidth;
+            const rows = (this as any).getEls(this.state.tableId + 'row');
+            rows.forEach((r) => r.style.width = rowWidth + 'px');
+            headerRow.style.width = rowWidth + 'px';
         }
     }
 
@@ -65,23 +67,30 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public mousedown(col: string, event: any): void {
         this.state.resizeSettings.columnId = col;
         this.state.resizeSettings.startOffset = event.pageX;
-        this.state.resizeActive = true;
     }
 
+    private resizeX: number;
     private mousemove(event: any): void {
         if (this.state.resizeSettings.columnId) {
-            const headerColumn = (this as any).getEl(this.state.tableId + this.state.resizeSettings.columnId);
-            this.state.resizeSettings.currentSize
-                = headerColumn.offsetWidth + event.pageX - this.state.resizeSettings.startOffset;
-            this.state.resizeSettings.startOffset = event.pageX;
-            headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
+            if (this.resizeX !== event.pageX) {
+                this.resizeX = event.pageX;
+                clearTimeout(this.resizeTimeout);
+                this.resizeTimeout = setTimeout(() => {
+                    this.resizeTimeout = null;
+                    const headerColumn = (this as any).getEl(this.state.tableId + this.state.resizeSettings.columnId);
+                    this.state.resizeSettings.currentSize
+                        = headerColumn.offsetWidth + this.resizeX - this.state.resizeSettings.startOffset;
+                    this.state.resizeSettings.startOffset = this.resizeX;
+                    headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
 
-            const elements: any = (this as any).getEls(
-                this.state.tableId.toString() + this.state.resizeSettings.columnId
-            );
-            elements.forEach((element: any) => {
-                element.style.width = this.state.resizeSettings.currentSize + 'px';
-            });
+                    const elements: any = (this as any).getEls(
+                        this.state.tableId.toString() + this.state.resizeSettings.columnId
+                    );
+                    elements.forEach((element: any) => {
+                        element.style.width = this.state.resizeSettings.currentSize + 'px';
+                    });
+                }, 300);
+            }
         }
     }
 
@@ -90,15 +99,14 @@ class StandardTableComponent<T extends KIXObject<T>> {
             const column = this.getColumns().find((col) => col.id === this.state.resizeSettings.columnId);
             if (column) {
                 column.size = this.state.resizeSettings.currentSize;
+                this.setRowWidth();
                 if (this.state.standardTable.listenerConfiguration.configurationChangeListener) {
                     this.state.standardTable.listenerConfiguration.configurationChangeListener
                         .columnConfigurationChanged(column);
                 }
             }
+            this.state.resizeSettings.columnId = undefined;
         }
-        this.state.resizeSettings.columnId = undefined;
-        this.state.resizeActive = false;
-        this.setRowWidth();
     }
 
     public sortUp(columnId: string): void {
