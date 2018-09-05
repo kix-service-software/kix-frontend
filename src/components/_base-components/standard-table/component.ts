@@ -141,7 +141,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public selectAll(event): void {
         const checked = event.target.checked;
 
-        const elements: any = document.querySelectorAll("[data-id='" + this.state.tableId + "checkbox-input'");
+        const elements: any = (this as any).getEls(this.state.tableId + "checkbox-input");
         elements.forEach((element: any) => {
             element.checked = checked;
         });
@@ -170,29 +170,23 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    private loadMoreFinished: boolean = false;
     public loadMore(): void {
-        const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
-        if (standardTable && standardTable.scrollTop > 0 && !this.loadMoreTimeout) {
-            const checkHeight =
-                this.state.standardTable.getCurrentDisplayLimit()
-                * this.state.standardTable.tableConfiguration.rowHeight
-                * this.getBrowserFontsize();
-
-            if (standardTable.scrollTop > checkHeight) {
-                // TODO: ggf. um fehlende Differenz erhöhen, als immer nur um ein bisschen und dann nochmal zu prüfen...
-                this.state.standardTable.increaseCurrentDisplayLimit();
-
-                // check after increase if still more have to be loaded
-                this.loadMoreTimeout = setTimeout(() => {
-                    this.loadMoreTimeout = null;
-                    this.loadMore();
-                }, 66);
-                this.loadMoreFinished = true;
-
-            } else if (this.loadMoreFinished) {
-                (this as any).setStateDirty();
-                this.loadMoreFinished = false;
+        if (this.state.standardTable.getCurrentRowsLoadLimit() !== this.state.standardTable.getLimit()) {
+            const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
+            if (standardTable && standardTable.scrollTop > 0) {
+                const checkHeight =
+                    (this.state.standardTable.getCurrentRowsLoadLimit()
+                        - Math.floor(this.state.standardTable.getMinRowsLoadLimit() / 4))
+                    * this.state.standardTable.tableConfiguration.rowHeight
+                    * this.getBrowserFontsize();
+                const neededHeight = standardTable.scrollTop
+                    + (this.state.standardTable.tableConfiguration.displayLimit
+                        * this.state.standardTable.tableConfiguration.rowHeight
+                        * this.getBrowserFontsize());
+                if (neededHeight > checkHeight) {
+                    this.state.standardTable.increaseCurrentRowsLoadLimit();
+                    (this as any).setStateDirty();
+                }
             }
         }
     }
@@ -208,9 +202,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (table) {
             table.style.height = 'unset';
             if (!this.state.standardTable.isLoading()) {
-                const rows = this.state.standardTable.getTableRows();
-                const minElements = rows.length > this.state.standardTable.tableConfiguration.displayLimit ?
-                    this.state.standardTable.tableConfiguration.displayLimit : rows.length;
+                const minElements =
+                    this.state.standardTable.getLimit() > this.state.standardTable.tableConfiguration.displayLimit ?
+                        this.state.standardTable.tableConfiguration.displayLimit : this.state.standardTable.getLimit();
                 const rowCount = minElements === 0 ? 1 : minElements;
 
                 const headerRowHeight =
@@ -240,8 +234,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         let spacerHeight = 0;
         const remainder =
             this.state.standardTable.getLimit()
-            - this.state.standardTable.getCurrentDisplayLimit()
-            - Math.ceil(this.state.standardTable.tableConfiguration.displayLimit * 1.5);
+            - this.state.standardTable.getCurrentRowsLoadLimit();
         if (remainder > 0) {
             spacerHeight = remainder * this.state.standardTable.tableConfiguration.rowHeight;
         }
