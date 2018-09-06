@@ -38,8 +38,7 @@ class Component {
         }
 
         if (formId) {
-            const formInstance = FormService.getInstance().getFormInstance(formId);
-            formInstance.reset();
+            FormService.getInstance().getFormInstance(formId, false);
         }
 
         setTimeout(() => {
