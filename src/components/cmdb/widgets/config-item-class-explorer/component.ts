@@ -86,6 +86,8 @@ export class Component {
         this.state.filterValue = null;
         context.setAdditionalInformation(['Alle']);
         context.setCIClass(null);
+
+        (this as any).getComponent('ci-class-explorer-filter').reset();
     }
 
     public async filter(textFilterValue?: string): Promise<void> {
