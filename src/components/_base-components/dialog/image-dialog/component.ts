@@ -31,17 +31,25 @@ export class Component implements IImageDialogListener {
     }
 
     public previosImage(): void {
-        const previosIndex = this.currImageIndex - 1;
-        if (previosIndex > -1 && this.state.imageDescriptions[previosIndex]) {
-            this.currImageIndex = previosIndex;
+        if (this.state.imageDescriptions.length > 1) {
+            const previosIndex = this.currImageIndex - 1;
+            if (previosIndex > -1 && this.state.imageDescriptions[previosIndex]) {
+                this.currImageIndex = previosIndex;
+            } else {
+                this.currImageIndex = this.state.imageDescriptions.length - 1;
+            }
             this.state.image = this.state.imageDescriptions[this.currImageIndex];
         }
     }
 
     public nextImage(): void {
-        const nextIndex = this.currImageIndex + 1;
-        if (nextIndex <= this.state.imageDescriptions.length && this.state.imageDescriptions[nextIndex]) {
-            this.currImageIndex = nextIndex;
+        if (this.state.imageDescriptions.length > 1) {
+            const nextIndex = this.currImageIndex + 1;
+            if (nextIndex <= this.state.imageDescriptions.length && this.state.imageDescriptions[nextIndex]) {
+                this.currImageIndex = nextIndex;
+            } else {
+                this.currImageIndex = 0;
+            }
             this.state.image = this.state.imageDescriptions[this.currImageIndex];
         }
     }

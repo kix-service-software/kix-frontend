@@ -72,12 +72,26 @@ export class Extension implements IModuleFactoryExtension {
                 )
             );
 
+        const configItemImagesLane =
+            new ConfiguredWidget('config-item-images-widget',
+                new WidgetConfiguration(
+                    'config-item-images-widget', 'Bilder',
+                    [],
+                    null,
+                    true, true, WidgetSize.LARGE, null, false
+                )
+            );
+
         const laneTabs = ['config-item-info-lane'];
         const laneTabWidgets = [configItemInfoLaneTab];
 
-        const lanes = ['config-item-linked-objects-widget', 'config-item-graph-widget', 'config-item-history-widget'];
+        const lanes = [
+            'config-item-linked-objects-widget', 'config-item-graph-widget',
+            'config-item-images-widget', 'config-item-history-widget'
+        ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget, configItemLinkedObjectsLane, configItemGraphLane, configItemHistoryLane
+            configItemDetailsWidget, configItemLinkedObjectsLane,
+            configItemGraphLane, configItemImagesLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];
