@@ -184,7 +184,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             if (standardTable && standardTable.scrollTop > 0) {
                 const checkHeight =
                     (this.state.standardTable.getCurrentRowsLoadLimit()
-                        - Math.floor(this.state.standardTable.getMinRowsLoadLimit() / 4))
+                        - this.state.standardTable.getMinRowsLoadLimit())
                     * this.state.standardTable.tableConfiguration.rowHeight
                     * this.getBrowserFontsize();
                 const neededHeight = standardTable.scrollTop
