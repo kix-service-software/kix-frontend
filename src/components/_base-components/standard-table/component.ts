@@ -74,14 +74,16 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (this.state.resizeSettings.columnId) {
             if (this.resizeX !== event.pageX) {
                 this.resizeX = event.pageX;
+
+                const headerColumn = (this as any).getEl(this.state.tableId + this.state.resizeSettings.columnId);
+                this.state.resizeSettings.currentSize
+                    = headerColumn.offsetWidth + this.resizeX - this.state.resizeSettings.startOffset;
+                this.state.resizeSettings.startOffset = this.resizeX;
+                headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
+
                 clearTimeout(this.resizeTimeout);
                 this.resizeTimeout = setTimeout(() => {
                     this.resizeTimeout = null;
-                    const headerColumn = (this as any).getEl(this.state.tableId + this.state.resizeSettings.columnId);
-                    this.state.resizeSettings.currentSize
-                        = headerColumn.offsetWidth + this.resizeX - this.state.resizeSettings.startOffset;
-                    this.state.resizeSettings.startOffset = this.resizeX;
-                    headerColumn.style.width = this.state.resizeSettings.currentSize + 'px';
 
                     const elements: any = (this as any).getEls(
                         this.state.tableId.toString() + this.state.resizeSettings.columnId
@@ -89,7 +91,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     elements.forEach((element: any) => {
                         element.style.width = this.state.resizeSettings.currentSize + 'px';
                     });
-                }, 300);
+                }, 200);
             }
         }
     }
