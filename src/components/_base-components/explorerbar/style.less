@@ -2,25 +2,21 @@
     box-shadow: @shadow-1;
     &.collapsed {
         width: @explorer-collapsed-width;
-        max-height: @explorer-max-height;
-        height: @explorer-width; // TODO: "height" wieder entfernen, wenn das min max Problem unten gelöst ist
+        height: @explorer-collapsed-height;
         .explorer {
             background-color: @secondary-3;
             color: @secondary-0;
             border-radius: @border-radius;
-            box-sizing: border-box; // TODO: min und max, also dynamische Größe nicht einfach machbar, aufgrund von transform-origin und grid-template-columns
-            // müsste somit über javascript gesetzt werden
-            // min-width: @explorer-min-height;
-            // max-width: @explorer-max-height;
-            width: @explorer-width;
+            box-sizing: border-box;
+            width: @explorer-collapsed-height;
             height: @explorer-collapsed-width;
             line-height: @explorer-collapsed-width;
             border: 0;
             transform: rotate(270deg);
-            transform-origin: @explorer-width/2 @explorer-width/2;
+            transform-origin: @explorer-collapsed-height/2 @explorer-collapsed-height/2;
             overflow: hidden;
             display: grid;
-            grid-template-columns: (@explorer-width - @explorer-collapsed-width) @explorer-collapsed-width;
+            grid-template-columns: (@explorer-collapsed-height - @explorer-collapsed-width) @explorer-collapsed-width;
             font-size: @h2-font-size;
             >span {
                 height: @explorer-collapsed-width;
