@@ -3,17 +3,19 @@ import {
     ContextService, ActionFactory, IdService, DialogService
 } from '@kix/core/dist/browser';
 import {
-    KIXObjectType, Context, ConfigItem
+    KIXObjectType, Context, ConfigItem, ImagesLoadingOptions, ConfigItemImage
 } from '@kix/core/dist/model';
+import { DisplayImageDescription } from '@kix/core/dist/browser/components';
 
 class Component {
 
     private state: ComponentState;
     private contextListenerId: string;
+    private images: DisplayImageDescription[];
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.contextListenerId = IdService.generateDateBasedId('config-item-graph-widget');
+        this.contextListenerId = IdService.generateDateBasedId('config-item-images-widget');
     }
 
     public onInput(input: any): void {
@@ -43,7 +45,9 @@ class Component {
         this.state.loading = true;
         this.state.configItem = configItem;
         this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
+
         this.setActions();
+        await this.prepareImages();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -58,8 +62,24 @@ class Component {
         }
     }
 
-    public openImageDialog(): void {
-        DialogService.getInstance().openImageDialog([this.state.fakeGraphBig]);
+    private async prepareImages(): Promise<void> {
+        if (this.state.configItem) {
+            const ciImages: ConfigItemImage[] = await ContextService.getInstance().loadObjects<ConfigItemImage>(
+                KIXObjectType.CONFIG_ITEM_IMAGE,
+                [], null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
+            );
+
+            this.images = ciImages.map(
+                (i) => {
+                    return new DisplayImageDescription(i.ID, i.decodedContent, i.Comment, true);
+                }
+            );
+            this.state.thumbnails = this.images;
+        }
+    }
+
+    public openImageDialog(imageId: string | number): void {
+        DialogService.getInstance().openImageDialog(this.images, imageId);
     }
 }
 
