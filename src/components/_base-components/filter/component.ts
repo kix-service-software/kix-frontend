@@ -45,6 +45,10 @@ class FilterComponent {
         (this as any).emit('filter', this.state.textFilterValue, filter);
     }
 
+    public reset(): void {
+        this.state.textFilterValue = null;
+    }
+
 }
 
 module.exports = FilterComponent;
