@@ -5,9 +5,6 @@ import {
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
 } from '@kix/core/dist/model';
-import { RoutingConfiguration, RoutingService } from '@kix/core/dist/browser/router';
-import { FAQDetailsContext } from '@kix/core/dist/browser/faq';
-import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
 
 class Component {
 

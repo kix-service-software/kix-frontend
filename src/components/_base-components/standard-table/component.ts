@@ -94,7 +94,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     });
 
                     resizeColumnId = undefined;
-                }, 200);
+                }, 100);
             }
         }
     }

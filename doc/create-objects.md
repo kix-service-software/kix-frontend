@@ -28,7 +28,8 @@ ContextService.getInstance().registerContext(newFAQArticleContext);
 ```
 
 ### Erstelldialog implementieren & registrieren
-- Komponente implementieren `src/components/faq/dialogs/new-faq-article-dialog`
+- Komponente implementieren `src/components/faq/dialogs/new-faq-article-dialog` und in `faq-marko.extension.ts` eintragen
+
 - im Service (`FAQService`, ggf. Service anlegen) registrieren
 ```javascript
 DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(

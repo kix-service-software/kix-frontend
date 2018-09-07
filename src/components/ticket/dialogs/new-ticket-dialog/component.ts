@@ -6,14 +6,14 @@ import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
-import { NewTicketDialogComponentState } from "./NewTicketDialogComponentState";
+import { ComponentState } from "./ComponentState";
 
-class NewTicketDialogComponent {
+class Component {
 
-    private state: NewTicketDialogComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new NewTicketDialogComponentState();
+        this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
@@ -85,4 +85,4 @@ class NewTicketDialogComponent {
 
 }
 
-module.exports = NewTicketDialogComponent;
+module.exports = Component;
