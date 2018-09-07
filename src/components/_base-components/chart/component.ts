@@ -11,6 +11,7 @@ class Component {
     public config: ChartConfiguration = null;
     private chart: Chart;
     private timeout: any;
+    private drawTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -29,6 +30,7 @@ class Component {
 
             if (this.timeout) {
                 clearTimeout(this.timeout);
+                clearTimeout(this.drawTimeout);
             }
             this.timeout = setTimeout(() => {
                 const canvasElement = (this as any).getEl(this.state.chartId);
@@ -36,11 +38,12 @@ class Component {
                     const ctx = canvasElement.getContext('2d');
                     if (ctx) {
                         if (this.chart) {
-                            setTimeout(() => {
+                            this.drawTimeout = setTimeout(() => {
                                 this.chart.data.labels = this.config.data.labels;
                                 this.chart.data.datasets = this.config.data.datasets;
 
                                 this.chart.update();
+                                this.drawTimeout = null;
                             }, 1000);
                         } else {
                             this.chart = new Chart(ctx, this.config);
@@ -48,7 +51,7 @@ class Component {
                     }
                 }
                 this.timeout = null;
-            }, 100);
+            }, 350);
         }
     }
 
