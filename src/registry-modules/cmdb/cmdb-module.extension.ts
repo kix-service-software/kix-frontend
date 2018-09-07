@@ -103,7 +103,8 @@ export class Extension implements IModuleFactoryExtension {
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: {
-                    display: false
+                    display: true,
+                    position: "top"
                 },
                 scales: {
                     xAxes: [{

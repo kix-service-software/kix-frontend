@@ -53,35 +53,9 @@ class Component {
             this.cmdbChartConfiguration.property, (objectList as ConfigItem[])
         );
 
-        const labels = [];
-        const datasets = [];
-        data.forEach((count, label) => {
-            labels.push(label);
-
-            count.forEach((c, index) => {
-                if (!datasets[index]) {
-                    datasets[index] = {
-                        backgroundColor: this.getRandomColor(),
-                        data: [c]
-                    };
-                } else {
-                    datasets[index].data.push(c);
-                }
-            });
-        });
-
-        this.cmdbChartConfiguration.chartConfiguration.data.labels = labels;
-        this.cmdbChartConfiguration.chartConfiguration.data.datasets = datasets;
+        this.cmdbChartConfiguration.chartConfiguration.data.labels = data[0];
+        this.cmdbChartConfiguration.chartConfiguration.data.datasets = data[1];
         this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
-    }
-
-    private getRandomColor(): string {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
     }
 
 }
