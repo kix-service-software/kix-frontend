@@ -6,6 +6,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
         const dialog = [
             'ticket/dialogs/new-ticket-dialog',
             'ticket/dialogs/search-ticket-dialog',
+            'ticket/dialogs/edit-ticket-dialog',
             'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
@@ -81,6 +82,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
             ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
+            ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
             ['ticket-contact-info', 'ticket/ticket-contact-info'],
             ['ticket-customer-info', 'ticket/ticket-customer-info'],
             ['article-receiver-list', 'ticket/article-receiver-list'],

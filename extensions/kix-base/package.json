@@ -45,7 +45,8 @@
             "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension",
             "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension",
             "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension",
-            "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension"
+            "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension",
+            "edit-ticket-dialog-context": "../../dist/registry-modules/ticket/edit-ticket-dialog-context.extension"
         }
     }
 }
