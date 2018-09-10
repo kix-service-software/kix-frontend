@@ -47,7 +47,7 @@ export class Extension implements IModuleFactoryExtension {
             }
         });
         const chart1 = new ConfiguredWidget('20180903-cmdb-chart-1', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl pro CI-Klasse', [], chartConfig1,
+            'config-item-chart-widget', 'Anzahl Config Items pro CMDB Klasse', [], chartConfig1,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -89,7 +89,7 @@ export class Extension implements IModuleFactoryExtension {
             }
         });
         const chart2 = new ConfiguredWidget('20180903-cmdb-chart-2', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl pro Verwendungsstatus', [], chartConfig2,
+            'config-item-chart-widget', 'Übersicht Config Items Verwendungsstatus', [], chartConfig2,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -117,7 +117,7 @@ export class Extension implements IModuleFactoryExtension {
             }
         });
         const chart3 = new ConfiguredWidget('20180903-cmdb-chart-3', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl pro Vorfallstatus', [], chartConfig3,
+            'config-item-chart-widget', 'Übersicht Config Items Vorfallstatus', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, true)
         );
 
