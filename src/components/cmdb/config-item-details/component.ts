@@ -13,7 +13,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
         const context = (ContextService.getInstance().getActiveContext() as ConfigItemDetailsContext);
         context.registerListener('config-item-details-component', {
             explorerBarToggled: () => { return; },
@@ -26,6 +25,7 @@ class Component {
                 }
             }
         });
+
         await this.initWidget(context);
     }
 
@@ -35,6 +35,7 @@ class Component {
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);
+        this.state.contentWidgets = context.getContent(true);
 
         setTimeout(() => {
             this.state.loading = false;

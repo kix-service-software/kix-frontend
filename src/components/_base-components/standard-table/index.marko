@@ -1,4 +1,4 @@
-<if(state.standardTable)>
+<if(state.standardTable && !state.loading)>
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
         <div.standard-table class=component.getGridClasses() key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <if(state.standardTable.tableConfiguration.enableSelection && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
@@ -9,7 +9,7 @@
             </if>
             <div.row.header-row.no-select key=(state.tableId + "header-row")
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
-                <for(column in component.getColumns())>
+                <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
                         <if(column.icon)>
                             <icon icon=component.getColumnIcon(column) showUnknown=true/>
@@ -126,3 +126,6 @@
         </div>
     </div>
 </if>
+<else>
+    <loading-spinner/>
+</else>

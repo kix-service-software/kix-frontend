@@ -1,13 +1,12 @@
-import { Ticket } from "@kix/core/dist/model";
-import { ObjectPropertyLabelComponentState } from './ObjectPropertyLabelComponentState';
+import { ComponentState } from './ComponentState';
 import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
 
 export class ObjectPropertyLabelComponent<T> {
 
-    private state: ObjectPropertyLabelComponentState<T>;
+    private state: ComponentState<T>;
 
     public onCreate(): void {
-        this.state = new ObjectPropertyLabelComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: ObjectPropertyLabelInput<T>): void {
@@ -17,19 +16,20 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     public onMount(): void {
-        this.setValues();
+        this.prepareDisplayText();
+        this.preparePropertyName();
     }
 
-    private async setValues(): Promise<void> {
+    private async prepareDisplayText(): Promise<void> {
         this.state.propertyDisplayText = await this.getPropertyDisplayText();
     }
 
-    private getPropertyName(): string {
+    private async preparePropertyName(): Promise<void> {
         let name = this.state.property;
         if (this.state.labelProvider) {
-            name = this.state.labelProvider.getPropertyText(this.state.property);
+            name = await this.state.labelProvider.getPropertyText(this.state.property);
         }
-        return name;
+        this.state.propertyName = name;
     }
 
     private async getPropertyDisplayText(): Promise<string> {
@@ -40,7 +40,7 @@ export class ObjectPropertyLabelComponent<T> {
         return value;
     }
 
-    private getValueClasses(): string {
+    public getValueClasses(): string {
         let classes = [];
         if (this.state.labelProvider) {
             classes = this.state.labelProvider.getDisplayTextClasses(this.state.object, this.state.property);

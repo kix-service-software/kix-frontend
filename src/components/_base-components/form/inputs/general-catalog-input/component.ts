@@ -29,7 +29,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classOption.value.toString()
             )]);
 
-            const items = await service.loadObjects(
+            const items = await service.loadObjects<GeneralCatalogItem>(
                 KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
             );
 

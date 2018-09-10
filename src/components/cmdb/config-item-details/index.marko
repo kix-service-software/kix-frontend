@@ -17,13 +17,20 @@
                         <li.lane>
                             <include(component.getWidgetTemplate(lane.instanceId), { 
                                 contextType: "MAIN",
-                                instanceId: lane.instanceId, 
-                                type: component.LANE_WIDGET_TYPE
+                                instanceId: lane.instanceId
                                 })/>
                         </li>
                     </for>
                 </ul>
             </@content>
         </widget>
+        <div.ci-content>
+            <for(contentWidget in state.contentWidgets)>
+                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                    contextType: "MAIN",
+                    instanceId: contentWidget.instanceId
+                    })/>
+            </for>
+        </div>
     </div>
 </else>

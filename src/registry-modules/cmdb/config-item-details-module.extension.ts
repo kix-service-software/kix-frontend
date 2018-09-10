@@ -100,8 +100,17 @@ export class Extension implements IModuleFactoryExtension {
             'config-item-version-create-action', 'linked-objects-edit-action'
         ];
 
+        const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
+            new WidgetConfiguration(
+                'config-item-version-widget', "Versionsdetails", [], null, false, true
+            ));
+
+        const content = ['config-item-version-widget'];
+        const contentWidgets = [configItemVersionLane];
+
         return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, actions, configItemActions
+            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets,
+            actions, configItemActions, content, contentWidgets
         );
     }
 
