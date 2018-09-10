@@ -126,7 +126,9 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget', new WidgetConfiguration(
-            'config-item-list-widget', 'Übersicht Config Items', [], {}, false, true,
+            'config-item-list-widget', 'Übersicht Config Items', [
+                'config-item-bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
+            ], {}, false, true,
             WidgetSize.LARGE, 'kix-icon-ci', true
         ));
 
