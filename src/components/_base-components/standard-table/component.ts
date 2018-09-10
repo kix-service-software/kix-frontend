@@ -1,18 +1,19 @@
 
-import { StandardTableComponentState } from './StandardTableComponentState';
+import { ComponentState } from './ComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { TableRow, TableColumn, TableValue, ActionFactory, TableRowHeight } from '@kix/core/dist/browser';
+import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class StandardTableComponent<T extends KIXObject<T>> {
 
-    private state: StandardTableComponentState<T>;
+    private state: ComponentState<T>;
     private resizeTimeout: any;
+    private columns: TableColumn[] = [];
 
     public onCreate(input: StandardTableInput<T>): void {
-        this.state = new StandardTableComponentState<T>();
+        this.state = new ComponentState<T>();
     }
 
     public onInput(input: StandardTableInput<T>): void {
@@ -22,7 +23,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
         if (this.state.standardTable) {
@@ -33,6 +34,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 }
             });
         }
+
+        this.columns = await this.state.standardTable.getColumns();
+
+        this.state.loading = false;
 
         setTimeout(() => {
             this.setRowWidth();
@@ -45,11 +50,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
         document.removeEventListener('mouseup', this.mouseup.bind(this));
     }
 
-    private setRowWidth(): void {
+    private async setRowWidth(): Promise<void> {
         const headerRow = (this as any).getEl(this.state.tableId + 'header-row');
         if (headerRow) {
             let rowWidth = 0;
-            this.getColumns().forEach((c) => rowWidth += c.size);
+            for (const c of this.columns) {
+                rowWidth += c.size;
+            }
             const rows = (this as any).getEls(this.state.tableId + 'row');
             rows.forEach((r) => r.style.width = rowWidth + 'px');
             headerRow.style.width = rowWidth + 'px';
@@ -58,10 +65,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public onUpdate(): void {
         this.setTableHeight();
-    }
-
-    private getColumns(): TableColumn[] {
-        return this.state.standardTable ? this.state.standardTable.getColumns() : [];
     }
 
     public mousedown(col: string, event: any): void {
@@ -99,9 +102,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
     }
 
-    private mouseup(): void {
+    private async mouseup(): Promise<void> {
         if (this.state.standardTable && this.state.resizeSettings.columnId) {
-            const column = this.getColumns().find((col) => col.id === this.state.resizeSettings.columnId);
+            const column = this.columns.find((col) => col.id === this.state.resizeSettings.columnId);
             if (column) {
                 column.size = this.state.resizeSettings.currentSize;
                 this.setRowWidth();
@@ -254,11 +257,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return spacerHeight + 'em';
     }
 
-    public getColumnSize(columnId: string): string {
-        const column = this.getColumns().find((col) => col.id === columnId);
-        return column.size + 'px';
-    }
-
     public async toggleRow(row: TableRow<T>): Promise<void> {
         this.state.standardTable.toggleRow(row);
 
@@ -291,7 +289,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public getColumn(value: TableValue): TableColumn {
-        const column = this.state.standardTable.getColumns().find((c) => c.id === value.columnId);
+        const column = this.columns.find((c) => c.id === value.columnId);
         return column;
     }
 

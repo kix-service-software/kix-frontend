@@ -15,7 +15,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.propertyText = this.state.labelProvider.getPropertyText(this.state.property);
+        this.state.propertyText = await this.state.labelProvider.getPropertyText(this.state.property);
         this.state.displayText = await this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
         this.state.title = `${this.state.propertyText}: ${this.state.displayText}`;
     }

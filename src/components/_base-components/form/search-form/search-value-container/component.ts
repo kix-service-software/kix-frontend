@@ -23,15 +23,17 @@ class Component implements IKIXObjectSearchListener {
         this.state.defaultProperties = input.defaultProperties;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         KIXObjectSearchService.getInstance().registerListener(this);
 
         const properties = KIXObjectSearchService.getInstance().getSearchProperties(this.state.objectType);
         if (properties) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
-            this.state.propertyNodes = properties.map(
-                (p) => new TreeNode(p, labelProvider ? labelProvider.getPropertyText(p) : p)
-            );
+            const nodes = [];
+            for (const p of properties) {
+                nodes.push(new TreeNode(p, labelProvider ? await labelProvider.getPropertyText(p) : p));
+            }
+            this.state.propertyNodes = nodes;
         }
 
         const cache = KIXObjectSearchService.getInstance().getSearchCache();

@@ -1,0 +1,13 @@
+<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+    <@icon/>
+    <@content>
+        <div.version-content>
+            <if(!state.table)>
+                <loading-spinner/>
+            </if>
+            <else>
+                <standard-table standardTable=state.table/>
+            </else>
+        </div>
+    </@content>
+</widget>

@@ -38,7 +38,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
 
             const labelProvider = new ContactLabelProvider();
 
-            mapping.forEach((attribute) => {
+            for (const attribute of mapping) {
                 // TODO: USER_CUSTOMER_IDS Behandlung - neuer Feldtyp (Multiselect)?
                 if (attribute.Attribute !== ContactProperty.USER_CUSTOMER_IDS) {
 
@@ -52,7 +52,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                         }
                     }
 
-                    let label = labelProvider.getPropertyText(attribute.Attribute);
+                    let label = await labelProvider.getPropertyText(attribute.Attribute);
                     if (label === attribute.Attribute) {
                         label = attribute.Label;
                     }
@@ -77,7 +77,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                         );
                     }
                 }
-            });
+            }
 
             const form = new Form(formId, 'Neuer Ansprechpartner', [...groups, lastGroup], KIXObjectType.CONTACT);
             await configurationService.saveModuleConfiguration(form.id, null, form);

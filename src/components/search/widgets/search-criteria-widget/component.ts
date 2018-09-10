@@ -38,7 +38,7 @@ class Component implements IKIXObjectSearchListener {
         this.state.displayCriteria = [];
     }
 
-    public searchFinished(): void {
+    public async searchFinished(): Promise<void> {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
@@ -64,7 +64,7 @@ class Component implements IKIXObjectSearchListener {
                         displayValue = labelProvider.getPropertyValueDisplayText(criteria.property, criteria.value);
                     }
 
-                    const displayProperty = labelProvider.getPropertyText(criteria.property);
+                    const displayProperty = await labelProvider.getPropertyText(criteria.property);
                     this.state.displayCriteria.push([
                         displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
                     ]);
