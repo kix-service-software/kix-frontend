@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { Version } from '@kix/core/dist/model';
+import { Version, ConfigItem } from '@kix/core/dist/model';
 import { ConfigItemVersionTreeFactory } from '@kix/core/dist/browser/cmdb';
 
 class Component {
@@ -12,7 +12,11 @@ class Component {
     }
 
     public onInput(input: any): void {
-        this.version = input.version;
+        if (input.version) {
+            this.version = input.version;
+        } else if (input.configItem) {
+            this.version = (input.configItem as ConfigItem).CurrentVersion;
+        }
     }
 
     public async onMount(): Promise<void> {

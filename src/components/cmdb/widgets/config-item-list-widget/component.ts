@@ -79,7 +79,7 @@ class Component {
 
         const table =
             StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CONFIG_ITEM, tableConfiguration, null, null, true
+                KIXObjectType.CONFIG_ITEM, tableConfiguration, null, null, true, true
             );
 
         table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
