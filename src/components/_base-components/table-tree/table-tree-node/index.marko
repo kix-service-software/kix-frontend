@@ -1,0 +1,24 @@
+<li.table-tree-node class={active: component.isNodeActive() | component.hasActiveChild()} id=state.nodeId
+    key=state.nodeId>
+    <span.tree-icon>
+        <if(component.hasChildren())>
+            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleNode')/>
+        </if>
+    </span>
+    <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
+        <for(label in state.node.labels)>
+            <span.node-title class={expanded: state.node.expanded, "title-node": state.title}>${label}</span>
+        </for>
+    </div>
+    <if(state.node.expanded)>
+        <ul.table-tree-list>
+            <for(node in state.node.children)>
+                <if(node.visible)>
+                    <table-tree-node node=node filterValue=state.filterValue activeNode=state.activeNode treeParent=input.treeParent
+                        treeId=state.treeId on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
+                        on-nodeHovered('childNodeHovered')/>
+                </if>
+            </for>
+        </ul>
+    </if>
+</li>
