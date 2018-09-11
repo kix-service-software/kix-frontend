@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { TicketLabelProvider } from "@kix/core/dist/browser/ticket";
 import { ContextService } from '@kix/core/dist/browser/context';
-import { ObjectIcon, KIXObjectType, Ticket } from '@kix/core/dist/model';
+import { ObjectIcon, KIXObjectType, Ticket, SysconfigUtil } from '@kix/core/dist/model';
 import { ActionFactory, IdService } from '@kix/core/dist/browser';
 
 class Component {
@@ -47,6 +47,11 @@ class Component {
 
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.ticket = ticket;
+        if (this.state.ticket) {
+            this.state.isPending = this.state.ticket.hasPendingState();
+            this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
+        }
+
         this.setActions();
     }
 
@@ -58,15 +63,15 @@ class Component {
         }
     }
 
-    private print(): void {
+    public print(): void {
         alert('Drucken ...');
     }
 
-    private edit(): void {
+    public edit(): void {
         alert('Bearbeiten ...');
     }
 
-    private getIncidentStateId(): number {
+    public getIncidentStateId(): number {
         const serviceId = this.state.ticket.ServiceID;
         let incidentStateId = 0;
         const objectData = ContextService.getInstance().getObjectData();
@@ -80,7 +85,7 @@ class Component {
         return incidentStateId;
     }
 
-    private getIcon(object: string, objectId: string): ObjectIcon {
+    public getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
     }
 
