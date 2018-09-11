@@ -3,7 +3,8 @@ import {
     EditTicketDialogContextConfiguration, EditTicketDialogContext, PendingTimeFormValue
 } from '@kix/core/dist/browser/ticket';
 import {
-    ContextConfiguration, FormField, TicketProperty, ArticleProperty, Form, KIXObjectType, FormContext
+    ContextConfiguration, FormField, TicketProperty, ArticleProperty,
+    Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -16,7 +17,21 @@ export class EditTicketDialogModuleExtension implements IModuleFactoryExtension 
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        return new EditTicketDialogContextConfiguration(this.getModuleId());
+
+        const customerInfoSidebar =
+            new ConfiguredWidget("20180524110915", new WidgetConfiguration(
+                "ticket-customer-info-widget", "Kunde", [], {},
+                false, false, null, 'kix-icon-man-house', false)
+            );
+        const contactInfoSidebar =
+            new ConfiguredWidget("20180524110920", new WidgetConfiguration(
+                "ticket-contact-info-widget", "Ansprechpartner", [], {},
+                false, false, null, 'kix-icon-man-bubble', false)
+            );
+        const sidebars = ['20180524110915', '20180524110920'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
+
+        return new EditTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(): Promise<void> {
