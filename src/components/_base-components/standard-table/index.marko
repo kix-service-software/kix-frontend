@@ -53,7 +53,7 @@
                         </div>
                     </if>
                     <div.row key=(state.tableId + "row[]") class={opened: row.isToggled}>
-                        <div.row-columns class=component.getRowClasses(row)
+                        <div.row-columns key=((state.tableId + "row-columns-") + loop.getIndex()) class=component.getRowClasses(row)
                             style={minHeight: component.getRowHeight(), "line-height": component.getRowHeight()}>
                             <for(value in row.values)>
                                 $ var column = component.getColumn(value);

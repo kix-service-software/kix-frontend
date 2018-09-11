@@ -3,10 +3,13 @@ import {
     ConfigItemHistoryTableLabelLayer, ConfigItemHistoryTableContentLayer
 } from '@kix/core/dist/browser/cmdb';
 import { ComponentState } from './ComponentState';
-import { ActionFactory, StandardTableFactoryService } from '@kix/core/dist/browser';
+import { ActionFactory, StandardTableFactoryService, IdService } from '@kix/core/dist/browser';
 import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
+import { EventService, IEventListener } from '@kix/core/dist/browser/event';
 
-class Component {
+class Component implements IEventListener {
+
+    public eventSubscriberId: string = IdService.generateDateBasedId('config-item-version-widget');
 
     private state: ComponentState;
 
@@ -36,6 +39,8 @@ class Component {
             }
         });
 
+        EventService.getInstance().subscribe('GotToConfigItemVersion', this);
+
         await this.initWidget(await context.getObject<ConfigItem>());
     }
 
@@ -63,6 +68,21 @@ class Component {
             table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions);
             await table.loadRows();
             this.state.table = table;
+        }
+    }
+
+    public eventPublished(data: any, eventId: string): void {
+        const widgetComponent = (this as any).getComponent('ci-version-widget');
+        if (widgetComponent) {
+            widgetComponent.state.minimized = false;
+        }
+        if (eventId === 'GotToConfigItemVersion') {
+            setTimeout(() => {
+                const tableComponent = (this as any).getComponent('ci-version-table');
+                if (tableComponent) {
+                    tableComponent.scrollToObject(data);
+                }
+            }, 200);
         }
     }
 

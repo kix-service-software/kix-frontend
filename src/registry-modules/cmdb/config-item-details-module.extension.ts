@@ -40,7 +40,8 @@ export class Extension implements IModuleFactoryExtension {
                         new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
                         new TableColumnConfiguration('Comment', true, false, true, true, 200),
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
-                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
+                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100),
+                        new TableColumnConfiguration('Content', true, false, false, false, 100)
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 true, true, WidgetSize.BOTH, null, false)

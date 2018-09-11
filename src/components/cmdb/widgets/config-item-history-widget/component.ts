@@ -5,10 +5,11 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
-    ActionFactory, TableLayerConfiguration, TableListenerConfiguration,
+    ActionFactory, TableLayerConfiguration, TableListenerConfiguration, ITableClickListener,
 } from '@kix/core/dist/browser';
-import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
+import { KIXObjectType, ConfigItem, ConfigItemHistory } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
+import { EventService } from '@kix/core/dist/browser/event';
 
 class Component {
 
@@ -66,12 +67,23 @@ class Component {
             const configurationListener: ITableConfigurationListener = {
                 columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
             };
-            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
+
+            const clickListener: ITableClickListener = {
+                rowClicked: this.navigateToVersion.bind(this)
+            };
+
+            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
 
             this.state.standardTable = new StandardTable(
                 IdService.generateDateBasedId(),
                 this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
             );
+        }
+    }
+
+    private navigateToVersion(historyEntry: ConfigItemHistory, columnId: string): void {
+        if (columnId === 'Content' && historyEntry.VersionID) {
+            EventService.getInstance().publish('GotToConfigItemVersion', historyEntry.VersionID);
         }
     }
 

@@ -361,6 +361,33 @@ class StandardTableComponent<T extends KIXObject<T>> {
         }
         return classesString;
     }
+
+    public async scrollToObject(objectId: string | number): Promise<void> {
+        const rows = await this.state.standardTable.getTableRows();
+
+        const index = rows.findIndex(
+            (r) => r.object.ObjectId.toString() === objectId.toString()
+        );
+
+        if (index >= 0) {
+            this.state.standardTable.toggleRow(rows[index]);
+
+            setTimeout(() => {
+                let element = (this as any).getEl(this.state.tableId + "row-columns-" + index);
+                if (element) {
+                    let top = 0;
+                    if (element.offsetParent) {
+                        do {
+                            top += element.offsetTop;
+                            element = element.offsetParent;
+                        } while (element !== null);
+                    }
+
+                    window.scroll(0, top);
+                }
+            }, 200);
+        }
+    }
 }
 
 module.exports = StandardTableComponent;
