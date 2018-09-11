@@ -1,6 +1,6 @@
 import { FormField } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
-import { FormService } from "@kix/core/dist/browser";
+import { FormService, IdService } from "@kix/core/dist/browser";
 
 class FieldContainerComponent {
 
@@ -36,9 +36,8 @@ class FieldContainerComponent {
         } else {
             const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
             this.state.fields.splice(index, 1);
-
             const formInstance = FormService.getInstance().getFormInstance(this.formId);
-            formInstance.provideFormFieldValue(field.instanceId, null);
+            formInstance.removeFormField(field);
         }
         this.state.fields = [...this.state.fields];
     }
@@ -56,11 +55,9 @@ class FieldContainerComponent {
             this.setFieldsEmpty(field, false);
         } else {
             const newField = field.clone();
+
             const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
             this.state.fields.splice(index + 1, 0, newField);
-
-            const formInstance = FormService.getInstance().getFormInstance(this.formId);
-            formInstance.provideFormField(newField);
         }
 
         this.state.fields = [...this.state.fields];
