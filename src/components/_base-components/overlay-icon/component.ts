@@ -36,8 +36,7 @@ class OverlayInfoIconComponent {
     private getOverlayIcon(): string {
         let icon = 'kix-icon-icircle';
         if (this.state.isHintOverlay) {
-            // TODO: wird wahrscheinlich mal klein geschrieben
-            icon = 'kix-icon-Question';
+            icon = 'kix-icon-question';
         }
         return icon;
     }

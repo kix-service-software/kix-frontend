@@ -10,12 +10,12 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = objectData.ticketStates.map((t) =>
             new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.STATE_ID, t.ID))
@@ -38,8 +38,7 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
                 if (this.state.pending && defaultStateValue.pendingDate) {
                     const pendingDate = new Date(defaultStateValue.pendingDate);
                     this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
-                    // TODO: "default" Zeit auf Auswahl mappen oder TimeInputComponente verwenden
-                    // this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
+                    this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
                 }
                 this.setValue();
             }

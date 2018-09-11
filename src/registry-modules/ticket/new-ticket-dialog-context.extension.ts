@@ -107,10 +107,12 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
             const group = new FormGroup('Ticketattribute', fields);
 
-            const form = new Form(formIdLinkWithTicket, 'Verknüpfen mit Ticket', [group], KIXObjectType.TICKET, false);
+            const form = new Form(
+                formIdLinkWithTicket, 'Verknüpfen mit Ticket', [group],
+                KIXObjectType.TICKET, false, FormContext.LINK
+            );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-
         configurationService.registerForm(
             [FormContext.LINK], KIXObjectType.TICKET, formIdLinkWithTicket
         );

@@ -6,6 +6,7 @@ import {
     OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
 } from "@kix/core/dist/model";
+import { ContactService } from "@kix/core/dist/browser/contact";
 
 class Component {
 
@@ -19,8 +20,8 @@ class Component {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    private cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    private async cancel(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
@@ -28,14 +29,15 @@ class Component {
     }
 
     private async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             this.showValidationError(result);
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Ansprechpartner wird angelegt");
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CONTACT);
+            const service
+                = KIXObjectServiceRegistry.getInstance().getServiceInstance<ContactService>(KIXObjectType.CONTACT);
             await service.createObjectByForm(KIXObjectType.CONTACT, this.state.formId)
                 .then((contactId) => {
                     DialogService.getInstance().setMainDialogLoading();

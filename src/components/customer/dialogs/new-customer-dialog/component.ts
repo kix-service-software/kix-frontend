@@ -6,6 +6,7 @@ import {
     OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
+import { CustomerService } from "@kix/core/dist/browser/customer";
 
 class NewCustomerDialogComponent {
 
@@ -19,8 +20,8 @@ class NewCustomerDialogComponent {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    private cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    private async cancel(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
@@ -28,14 +29,15 @@ class NewCustomerDialogComponent {
     }
 
     private async submit(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const result = formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             this.showValidationError(result);
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CUSTOMER);
+            const service
+                = KIXObjectServiceRegistry.getInstance().getServiceInstance<CustomerService>(KIXObjectType.CUSTOMER);
             await service.createObjectByForm(KIXObjectType.CUSTOMER, this.state.formId)
                 .then((customerId) => {
                     DialogService.getInstance().setMainDialogLoading();

@@ -11,8 +11,8 @@ class FormComponent {
         this.state = new FormComponentState(input.formId);
     }
 
-    public onMount(): void {
-        this.state.formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async onMount(): Promise<void> {
+        this.state.formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.objectType = this.state.formInstance.getObjectType();
         this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
         WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);

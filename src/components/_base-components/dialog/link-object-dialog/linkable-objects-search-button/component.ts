@@ -14,8 +14,8 @@ class Component {
         this.state.formId = input.formId;
     }
 
-    public onMount(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async onMount(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             this.formListenerId = 'LinkableObjectsSearchButton';
             formInstance.registerListener({
@@ -28,8 +28,8 @@ class Component {
         }
     }
 
-    public onDestroy(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async onDestroy(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.removeListener('LinkableObjectsSearchButton');
         }

@@ -137,7 +137,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     private scrollTableToTop(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
-        table.scrollTop = 0;
+        if (table) {
+            table.scrollTop = 0;
+        }
     }
 
     public isActiveSort(columnId: string, sortOrder: SortOrder): boolean {

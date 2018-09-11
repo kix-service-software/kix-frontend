@@ -1,5 +1,5 @@
 import { ComponentState } from "./CompontentState";
-import { FormDropdownItem, ArchiveFlag, FormInputComponent, TreeNode } from "@kix/core/dist/model";
+import { ArchiveFlag, FormInputComponent, TreeNode } from "@kix/core/dist/model";
 
 
 class Component extends FormInputComponent<number, ComponentState> {
@@ -8,12 +8,12 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.nodes = [
             new TreeNode(ArchiveFlag.ALL, 'Alle Tickets'),
             new TreeNode(ArchiveFlag.ARCHIVED, 'Archivierte Tickets'),

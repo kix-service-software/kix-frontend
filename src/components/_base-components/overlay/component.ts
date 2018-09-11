@@ -145,7 +145,7 @@ class OverlayComponent {
     private getWidgetIcon(type: OverlayType): string {
         switch (type) {
             case OverlayType.HINT:
-                return 'kix-icon-Question';
+                return 'kix-icon-question';
             case OverlayType.INFO:
                 return 'kix-icon-info';
             case OverlayType.WARNING:

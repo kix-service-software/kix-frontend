@@ -1,9 +1,9 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService
+    OverlayService, FormService, ContextService
 } from "@kix/core/dist/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult
+    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, FormFieldValue
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
 
@@ -16,7 +16,12 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance('edit-ticket-form');
+        if (formInstance) {
+            formInstance.reset();
+        }
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        this.state.formId = 'edit-ticket-form';
     }
 
     public cancel(): void {

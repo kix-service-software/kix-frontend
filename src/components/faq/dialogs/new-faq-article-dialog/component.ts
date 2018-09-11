@@ -5,6 +5,7 @@ import {
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
 } from '@kix/core/dist/model';
+import { FAQService } from '@kix/core/dist/browser/faq';
 
 class Component {
 
@@ -15,15 +16,15 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    public cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async cancel(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
@@ -32,14 +33,15 @@ class Component {
 
     public async submit(): Promise<void> {
         setTimeout(async () => {
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             const result = formInstance.validateForm();
             const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
             if (validationError) {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "FAQ Artikel wird angelegt");
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.FAQ_ARTICLE);
+                const service
+                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<FAQService>(KIXObjectType.FAQ_ARTICLE);
                 await service.createObjectByForm(KIXObjectType.FAQ_ARTICLE, this.state.formId)
                     .then((faqArticleId) => {
                         DialogService.getInstance().setMainDialogLoading(false);

@@ -14,12 +14,12 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.dragCounter = 0;
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
@@ -31,8 +31,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
     }
 
-    public onDestroy(): void {
-        super.onDestroy();
+    public async onDestroy(): Promise<void> {
+        await super.onDestroy();
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
             uploadElement.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);

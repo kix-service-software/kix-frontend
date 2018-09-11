@@ -96,7 +96,7 @@
                     </div>
                     <if(state.standardTable.tableConfiguration.toggle)>
                         <div.toggle-row-column class={opened: row.isToggled} key=(state.tableId + "toggle-row-column[]")
-                            on-click('toggleRow', row)>
+                            on-click('toggleRow', row) style={height: component.getRowHeight()}>
                             <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
                                 <if(row.isToggled)>
                                     <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>

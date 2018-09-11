@@ -9,12 +9,12 @@ class Component extends FormInputComponent<number, CompontentState> {
         this.state = new CompontentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData) {
             this.state.nodes = objectData.languages.map((l) => new TreeNode(l[0], l[1]));
