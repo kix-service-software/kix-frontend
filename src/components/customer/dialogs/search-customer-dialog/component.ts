@@ -9,8 +9,8 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async cancel(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }

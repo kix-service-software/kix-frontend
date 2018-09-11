@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '@kix/core/dist/model';
+import { FormInputComponent, FormFieldOptions } from '@kix/core/dist/model';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
@@ -7,8 +7,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
@@ -22,8 +22,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         }
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.dateValue = null;
         this.state.timeValue = null;
         this.setCurrentValue();

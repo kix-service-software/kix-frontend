@@ -2,7 +2,8 @@ import {
     KIXObjectSearchService, DialogService, OverlayService,
     WidgetService, KIXObjectServiceRegistry, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
-    TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer, ITablePreventSelectionLayer
+    TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
+    ITablePreventSelectionLayer, IKIXObjectService
 } from "@kix/core/dist/browser";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
@@ -31,9 +32,9 @@ class LinkDialogComponent {
         this.resultListenerId = input.resultListenerId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.setLinkableObjects();
-        this.setDefaultLinkableObject();
+        await this.setDefaultLinkableObject();
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
         this.setLinkTypes();
@@ -48,7 +49,8 @@ class LinkDialogComponent {
     private setLinkableObjects(): void {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
+            const service
+                = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
             const linkObjectType = service.getLinkObjectName();
             objectData.linkTypes.forEach((lt) => {
                 let linkableObject = null;
@@ -72,7 +74,7 @@ class LinkDialogComponent {
         }
     }
 
-    private setDefaultLinkableObject(): void {
+    private async setDefaultLinkableObject(): Promise<void> {
         if (this.state.linkableObjectNodes.length) {
             const ticketNode = this.state.linkableObjectNodes.find((lo) => lo.label === KIXObjectType.TICKET);
             if (ticketNode) {
@@ -82,7 +84,7 @@ class LinkDialogComponent {
             }
 
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
 
             document.addEventListener('keydown', (event: any) => {
@@ -93,9 +95,9 @@ class LinkDialogComponent {
         }
     }
 
-    public onDestroy(): void {
+    public async onDestroy(): Promise<void> {
         if (this.state.formId) {
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             document.removeEventListener('keydown', (event: any) => {
                 if (event.key === 'Enter' && formInstance.hasValues()) {
                     this.executeSearch();
@@ -104,7 +106,7 @@ class LinkDialogComponent {
         }
     }
 
-    public linkableObjectChanged(nodes: TreeNode[]): void {
+    public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setOverlayDialogLoading(true);
 
         this.state.successHint = null;
@@ -116,7 +118,7 @@ class LinkDialogComponent {
         let formId;
         if (this.state.currentLinkableObjectNode) {
             formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = FormService.getInstance().getFormInstance(formId);
+            const formInstance = await FormService.getInstance().getFormInstance(formId);
             formInstance.reset();
             this.prepareResultTable([]);
         } else {
@@ -137,13 +139,13 @@ class LinkDialogComponent {
 
     private async executeSearch(): Promise<void> {
         DialogService.getInstance().setOverlayDialogLoading(true);
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
             const objects = await KIXObjectSearchService.getInstance().executeSearch(
                 this.state.currentLinkableObjectNode.id
             );
 
-            this.prepareResultTable(objects);
+            await this.prepareResultTable(objects);
             this.state.resultCount = objects.length > 0 ? objects.length : null;
             this.setCanSubmit();
         }
@@ -151,9 +153,10 @@ class LinkDialogComponent {
         DialogService.getInstance().setOverlayDialogLoading(false);
     }
 
-    private prepareResultTable(objects: KIXObject[]): void {
+    private async prepareResultTable(objects: KIXObject[]): Promise<void> {
         if (this.state.currentLinkableObjectNode) {
-            const formInstance = FormService.getInstance().getFormInstance(this.state.currentLinkableObjectNode.id);
+            const formInstance
+                = await FormService.getInstance().getFormInstance(this.state.currentLinkableObjectNode.id);
             const objectType = formInstance.getObjectType();
 
             const tableConfiguration = new TableConfiguration(
@@ -242,7 +245,9 @@ class LinkDialogComponent {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
             if (this.state.currentLinkableObjectNode) {
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(this.state.objectType);
+                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
+                    this.state.objectType
+                );
                 const linkObjectType = service.getLinkObjectName();
                 objectData.linkTypes.forEach((lt) => {
                     if (

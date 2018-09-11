@@ -10,16 +10,16 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 
-    public openDialog(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async openDialog(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const objectType = formInstance.getObjectType();
 
         let dialogTitle = 'Objekt verknüpfen';

@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    ObjectIcon, TicketProperty, Service, TreeNode, TreeUtil, FormInputComponent, FormContext
+    ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponent
 } from "@kix/core/dist/model";
 
 class Component extends FormInputComponent<number, ComponentState> {
@@ -10,12 +10,12 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
         this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
         this.setCurrentNode();

@@ -25,7 +25,7 @@ class Component {
         }
     }
 
-    public classChanged(nodes: TreeNode[]): void {
+    public async classChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true);
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
         this.state.formId = null;
@@ -38,7 +38,7 @@ class Component {
         }
 
         if (formId) {
-            FormService.getInstance().getFormInstance(formId, false);
+            await FormService.getInstance().getFormInstance(formId, false);
         }
 
         setTimeout(() => {
@@ -47,9 +47,9 @@ class Component {
         }, 100);
     }
 
-    public cancel(): void {
+    public async cancel(): Promise<void> {
         if (this.state.formId) {
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
         }
         DialogService.getInstance().closeMainDialog();
@@ -58,7 +58,7 @@ class Component {
     public async submit(): Promise<void> {
         if (this.state.formId) {
 
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             const result = formInstance.validateForm();
             const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
 
@@ -66,8 +66,8 @@ class Component {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CONFIG_ITEM);
-                const cmdbService = (service as CMDBService);
+                const cmdbService
+                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
                 const ciClass = this.state.currentClassNode.id as ConfigItemClass;
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)

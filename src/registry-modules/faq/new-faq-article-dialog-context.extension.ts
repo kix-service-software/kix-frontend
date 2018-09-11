@@ -73,7 +73,10 @@ export class Extension implements IModuleFactoryExtension {
 
             const group = new FormGroup('FAQ-Attribute', fields);
 
-            const form = new Form(linkFormId, 'Verknüpfen mit FAQ', [group], KIXObjectType.FAQ_ARTICLE, false);
+            const form = new Form(
+                linkFormId, 'Verknüpfen mit FAQ', [group],
+                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK
+            );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
 

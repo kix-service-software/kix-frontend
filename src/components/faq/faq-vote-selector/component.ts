@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { EventService, IEventListener } from '@kix/core/dist/browser/event';
-import { FAQEvent } from '@kix/core/dist/browser/faq';
+import { FAQEvent, FAQService } from '@kix/core/dist/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '@kix/core/dist/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent } from '@kix/core/dist/model';
 import { KIXObjectServiceRegistry, OverlayService } from '@kix/core/dist/browser';
@@ -45,7 +45,8 @@ export class Component implements IEventListener {
 
     public async vote(rating: number): Promise<void> {
         if (this.faqArticle) {
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.FAQ_VOTE);
+            const service
+                = KIXObjectServiceRegistry.getInstance().getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
             const faqVote = new FAQVote();
             faqVote.Rating = rating;
             faqVote.Interface = 'agent';

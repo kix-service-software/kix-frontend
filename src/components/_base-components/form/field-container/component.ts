@@ -1,6 +1,6 @@
 import { FormField } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
-import { FormService, IdService } from "@kix/core/dist/browser";
+import { FormService } from "@kix/core/dist/browser";
 
 class FieldContainerComponent {
 
@@ -29,14 +29,15 @@ class FieldContainerComponent {
         return field.countMin !== null && field.countMin < propertyFields.length;
     }
 
-    public removeField(field: FormField): void {
+    public async removeField(field: FormField): Promise<void> {
         const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
         if (propertyFields.length === 1) {
             this.setFieldsEmpty(field, true);
         } else {
             const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
             this.state.fields.splice(index, 1);
-            const formInstance = FormService.getInstance().getFormInstance(this.formId);
+
+            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
             formInstance.removeFormField(field);
         }
         this.state.fields = [...this.state.fields];
@@ -50,7 +51,7 @@ class FieldContainerComponent {
         return field.countMax !== null && field.countMax > propertyFields.length;
     }
 
-    public addField(field: FormField): void {
+    public async addField(field: FormField): Promise<void> {
         if (field.empty) {
             this.setFieldsEmpty(field, false);
         } else {

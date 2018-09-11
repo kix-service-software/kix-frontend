@@ -7,6 +7,7 @@ import {
     KIXObjectType, ContextMode
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
+import { TicketService } from "@kix/core/dist/browser/ticket";
 
 class Component {
 
@@ -17,29 +18,30 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    public cancel(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async cancel(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {
         setTimeout(async () => {
-            const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             const result = formInstance.validateForm();
             const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
             if (validationError) {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird angelegt");
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.TICKET);
+                const service
+                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
                 await service.createObjectByForm(KIXObjectType.TICKET, this.state.formId)
                     .then((ticketId) => {
                         DialogService.getInstance().setMainDialogLoading(false);

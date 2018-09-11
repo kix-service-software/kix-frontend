@@ -12,18 +12,18 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
         this.state = new CompontentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
-        super.onMount();
+        await super.onMount();
 
         const classOption = this.state.field.options.find((o) => o.option === 'GC_CLASS');
         if (classOption) {
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<GeneralCatalogService>(
                 KIXObjectType.GENERAL_CATALOG_ITEM
-            ) as GeneralCatalogService;
+            );
 
             const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classOption.value.toString()

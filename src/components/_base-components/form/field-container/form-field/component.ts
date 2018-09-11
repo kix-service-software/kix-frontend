@@ -21,21 +21,21 @@ class Component {
         }
     }
 
-    public onMount(): void {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    public async onMount(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.registerListener({
             formListenerId: IdService.generateDateBasedId('form-field'),
             formValueChanged: () => { return; },
-            updateForm: () => {
+            updateForm: async () => {
                 if (this.hasChildren()) {
-                    this.state.minimized = this.state.minimized && !this.hasInvalidChildren();
+                    this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
             }
         });
     }
 
-    private hasInvalidChildren(field: FormField = this.state.field): boolean {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+    private async hasInvalidChildren(field: FormField = this.state.field): Promise<boolean> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         let hasInavlidChildren = false;
         for (const child of field.children) {
             const value = formInstance.getFormFieldValue(child.instanceId);
@@ -43,7 +43,7 @@ class Component {
                 return true;
             }
 
-            hasInavlidChildren = this.hasInvalidChildren(child);
+            hasInavlidChildren = await this.hasInvalidChildren(child);
         }
 
         return hasInavlidChildren;

@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, Customer, KIXObjectType,
-    ContextMode, TreeNode, KIXObjectLoadingOptions
+    TreeNode, KIXObjectLoadingOptions
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
 import { ContextService } from "@kix/core/dist/browser";
@@ -14,14 +14,14 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        super.onInput(input);
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
     }
 
-    public onMount(): void {
-        super.onMount();
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.searchCallback = this.searchCustomers.bind(this);
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
         this.setCurrentNode();
     }
