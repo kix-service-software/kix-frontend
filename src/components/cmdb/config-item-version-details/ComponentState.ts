@@ -1,9 +1,9 @@
-import { TreeNode } from "@kix/core/dist/model";
+import { TableTreeNode } from "@kix/core/dist/model";
 
 export class ComponentState {
 
     public constructor(
-        public nodes: TreeNode[] = []
+        public nodes: TableTreeNode[] = []
     ) { }
 
 }
