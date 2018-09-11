@@ -12,7 +12,6 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
-        this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : this.state.invalid;
     }
 
     public onMount(): void {

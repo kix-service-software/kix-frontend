@@ -1,5 +1,7 @@
 import { ComponentsService } from "@kix/core/dist/browser/components";
 import { ComponentState } from "./ComponentState";
+import { FormService, IdService } from "@kix/core/dist/browser";
+import { FormField } from "@kix/core/dist/model";
 
 class Component {
 
@@ -17,6 +19,34 @@ class Component {
         if (this.state.level > 14) {
             this.state.level = 14;
         }
+    }
+
+    public onMount(): void {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        formInstance.registerListener({
+            formListenerId: IdService.generateDateBasedId('form-field'),
+            formValueChanged: () => { return; },
+            updateForm: () => {
+                if (this.hasChildren()) {
+                    this.state.minimized = this.state.minimized && !this.hasInvalidChildren();
+                }
+            }
+        });
+    }
+
+    private hasInvalidChildren(field: FormField = this.state.field): boolean {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        let hasInavlidChildren = false;
+        for (const child of field.children) {
+            const value = formInstance.getFormFieldValue(child.instanceId);
+            if (!value.valid) {
+                return true;
+            }
+
+            hasInavlidChildren = this.hasInvalidChildren(child);
+        }
+
+        return hasInavlidChildren;
     }
 
     public getInputComponent(): any {
