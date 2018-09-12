@@ -29,7 +29,7 @@ class TicketHistoryWidgetComponent {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener('ticket-dynamic-fields-widget', {
+        context.registerListener('ticket-history-widget', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },

@@ -24,23 +24,15 @@ class Component {
         context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
-            objectChanged: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
-        });
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
-        context.registerListener('ticket-dynamic-fields-widget', {
-            explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
-            objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
-            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+            objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
             }
         });
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         await this.initWidget(await context.getObject<Ticket>());
     }
