@@ -11,9 +11,6 @@
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                 <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
-                        <if(column.icon)>
-                            <icon icon=component.getColumnIcon(column) showUnknown=true/>
-                        </if>
                         ${column.text}
                         <if(column.sortable)>
                             <span.sortable>
@@ -64,8 +61,8 @@
                                         <div.table-cell.row-column.row-link class={"only-icon": column.showIcon && (!column.showText)}
                                             style={width: column.size} on-click('rowClicked', row, column.id)
                                             title=value.displayValue key=key>
-                                            <if(column.showIcon && value.objectValue)>
-                                                <icon icon=component.getValueIcon(column, value) showUnknown=true/>
+                                            <if(column.showIcon)>
+                                                <icon icon=value.icon showUnknown=true/>
                                             </if>
                                             <if(column.showIcon && column.showText)>&nbsp;</if>
                                             <if(column.showText)>
