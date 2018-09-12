@@ -27,7 +27,9 @@ class Component {
 
     public async cancel(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.reset();
+        if (formInstance) {
+            formInstance.reset();
+        }
         DialogService.getInstance().closeMainDialog();
     }
 
