@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode, TableTreeNode } from '@kix/core/dist/model';
+import { AttachmentUtil, BrowserUtil } from '@kix/core/dist/browser';
 
 class TreeNodeComponent {
 
@@ -21,13 +22,11 @@ class TreeNodeComponent {
 
         if (!this.hasListener && input.treeParent) {
             this.state.treeParent = input.treeParent;
-            this.state.treeParent.addEventListener('keydown', this.navigateTree.bind(this));
             this.hasListener = true;
         }
     }
 
     public onDestroy(): void {
-        this.state.treeParent.removeEventListener('keydown', this.navigateTree);
         this.state.node = null;
         this.state.filterValue = null;
     }
@@ -52,7 +51,7 @@ class TreeNodeComponent {
         );
     }
 
-    private toggleNode(event: any): void {
+    public toggleNode(event: any): void {
         event.stopPropagation();
         event.preventDefault(event);
         this.state.node.expanded = !this.state.node.expanded;
@@ -60,70 +59,32 @@ class TreeNodeComponent {
         (this as any).setStateDirty();
     }
 
-    private nodeClicked(): void {
+    public nodeClicked(): void {
         (this as any).emit('nodeClicked', this.state.node);
     }
 
-    private nodeHovered(): void {
+    public nodeHovered(): void {
         if (!this.isNodeActive()) {
             (this as any).emit('nodeHovered', this.state.node);
         }
     }
 
-    private childNodeHovered(node: TreeNode): void {
+    public childNodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
     }
 
-    private childNodeToggled(node: TreeNode): void {
+    public childNodeToggled(node: TreeNode): void {
         (this as any).emit('nodeToggled', node);
     }
 
-    private childNodeClicked(node: TreeNode): void {
+    public childNodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
 
-    // TODO: Tastatur-Steuerung wieder aktivieren, falls nötig
-    private navigateTree(event: any): void {
-        // if (this.state.node && this.navigationKeyPressed(event) && this.isNodeActive()) {
-        //     if (event.preventDefault) {
-        //         event.preventDefault();
-        //         event.stopPropagation();
-        //     }
-
-        //     switch (event.key) {
-        //         case 'ArrowUp':
-        //             if (this.state.node.previousNode) {
-        //                 this.childNodeHovered(this.state.node.previousNode);
-        //             }
-        //             break;
-        //         case 'ArrowDown':
-        //             if (this.state.node.nextNode) {
-        //                 this.childNodeHovered(this.state.node.nextNode);
-        //             }
-        //             break;
-        //         case 'ArrowLeft':
-        //             this.state.node.expanded = false;
-        //             this.childNodeToggled(this.state.node);
-        //             (this as any).setStateDirty();
-        //             break;
-        //         case 'ArrowRight':
-        //             if (TreeUtil.hasChildrenToShow(this.state.node, this.state.filterValue)) {
-        //                 this.state.node.expanded = true;
-        //                 this.childNodeToggled(this.state.node);
-        //                 (this as any).setStateDirty();
-        //             }
-        //             break;
-        //         default:
-        //     }
-        // }
+    public isAttachment(object: any): boolean {
+        return AttachmentUtil.isAttachmentObject(object);
     }
 
-    private navigationKeyPressed(event: any): boolean {
-        return event.key === 'ArrowLeft'
-            || event.key === 'ArrowRight'
-            || event.key === 'ArrowUp'
-            || event.key === 'ArrowDown';
-    }
 }
 
 module.exports = TreeNodeComponent;
