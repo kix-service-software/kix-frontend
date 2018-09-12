@@ -1,22 +1,20 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
+import { TicketContext, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
 
-export class TicketsMainMenuExtension implements IMainMenuExtension {
+export class Extension implements IMainMenuExtension {
 
-    public link: string = "/tickets";
+    public mainContextId: string = TicketContext.CONTEXT_ID;
 
-    public icon: string = "ticket";
+    public contextIds: string[] = [TicketContext.CONTEXT_ID, TicketDetailsContext.CONTEXT_ID];
+
+    public primaryMenu: boolean = true;
+
+    public icon: string = "kix-icon-ticket";
 
     public text: string = "Tickets";
-
-    public contextId: string = "tickets";
-
-    public contextMode: ContextMode = ContextMode.DASHBOARD;
-
-    public KIXObjectType: KIXObjectType = KIXObjectType.TICKET;
 
 }
 
 module.exports = (data, host, options) => {
-    return new TicketsMainMenuExtension();
+    return new Extension();
 };

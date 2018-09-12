@@ -1,17 +1,10 @@
 import {
-    SocketEvent,
-    MenuEntry,
-    MainMenuEntriesRequest,
-    MainMenuEntriesResponse,
-    MenuEntryConfiguration,
-    MainMenuConfiguration,
-    MainMenuEvent
+    MenuEntry, MainMenuEntriesRequest, MainMenuEntriesResponse,
+    MainMenuConfiguration, MainMenuEvent
 } from '@kix/core/dist/model';
 
 import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { IServerConfiguration, ICommunicator, CommunicatorResponse } from '@kix/core/dist/common';
-import { IAuthenticationService, ILoggingService, IConfigurationService } from '@kix/core/dist/services';
-
+import { CommunicatorResponse } from '@kix/core/dist/common';
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class MainMenuCommunicator extends KIXCommunicator {
@@ -56,11 +49,16 @@ export class MainMenuCommunicator extends KIXCommunicator {
         extensions: IMainMenuExtension[], userId: number
     ): Promise<MainMenuConfiguration> {
 
-        const primaryConfiguration = extensions.map(
-            (me) => new MenuEntryConfiguration(me.contextId, me.KIXObjectType, me.contextMode, true)
-        );
+        const primaryConfiguration = extensions
+            .filter((me) => me.primaryMenu).map(
+                (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
+            );
 
-        const configuration = new MainMenuConfiguration(primaryConfiguration, []);
+        const secondaryConfiguration = extensions
+            .filter((me) => !me.primaryMenu).map(
+                (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
+            );
+        const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
         await this.configurationService.saveComponentConfiguration(
             "personal-settings", "main-menu", userId, configuration);
@@ -97,12 +95,12 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         configuration.primaryMenuEntryConfigurations = configuration.primaryMenuEntryConfigurations.filter(
             (pme) => {
-                return extensions.findIndex((me) => me.contextId === pme.contextId) !== -1;
+                return extensions.findIndex((me) => me.mainContextId === pme.mainContextId) !== -1;
             });
 
         configuration.secondaryMenuEntryConfigurations = configuration.secondaryMenuEntryConfigurations.filter(
             (sme) => {
-                return extensions.findIndex((me) => me.contextId === sme.contextId) !== -1;
+                return extensions.findIndex((me) => me.mainContextId === sme.mainContextId) !== -1;
             });
 
         return configuration;
@@ -114,11 +112,19 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         const newExtensions = this.findNewMenuExtensions(extensions, configuration);
 
-        for (const me of newExtensions) {
-            configuration.primaryMenuEntryConfigurations.push(
-                new MenuEntryConfiguration(me.contextId, me.KIXObjectType, me.contextMode, true)
-            );
-        }
+        const newPrimary = newExtensions.filter((e) => e.primaryMenu)
+            .map((me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds));
+        configuration.primaryMenuEntryConfigurations = [
+            ...configuration.primaryMenuEntryConfigurations,
+            ...newPrimary
+        ];
+
+        const newSecondary = newExtensions.filter((e) => !e.primaryMenu)
+            .map((me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds));
+        configuration.secondaryMenuEntryConfigurations = [
+            ...configuration.primaryMenuEntryConfigurations,
+            ...newSecondary
+        ];
 
         return configuration;
     }
@@ -129,11 +135,11 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         return extensions.filter((me) => {
             const primaryIndex = configuration.primaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.contextId === me.contextId;
+                return pme.mainContextId === me.mainContextId;
             });
 
             const secondaryIndex = configuration.secondaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.contextId === me.contextId;
+                return pme.mainContextId === me.mainContextId;
             });
 
             return primaryIndex === -1 && secondaryIndex === -1;
@@ -141,14 +147,12 @@ export class MainMenuCommunicator extends KIXCommunicator {
     }
 
     private getMenuEntries(
-        extensions: IMainMenuExtension[], entryConfigurations: MenuEntryConfiguration[]
+        extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
     ): MenuEntry[] {
 
-        const entries = entryConfigurations.filter((ec) => ec.visible).map((ec) => {
-            const menu = extensions.find((me) => me.contextId === ec.contextId);
-            return new MenuEntry(
-                menu.link, menu.icon, menu.text, menu.contextId, menu.KIXObjectType, menu.contextMode
-            );
+        const entries = entryConfigurations.map((ec) => {
+            const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
+            return new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds);
         });
 
         return entries;

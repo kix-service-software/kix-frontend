@@ -1,20 +1,17 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
-import { CMDBContext } from '@kix/core/dist/browser/cmdb';
+import { CMDBContext, ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
 
 export class Extension implements IMainMenuExtension {
 
-    public link: string = "/cmdb";
+    public mainContextId: string = CMDBContext.CONTEXT_ID;
 
-    public icon: string = "cmdb";
+    public contextIds: string[] = [CMDBContext.CONTEXT_ID, ConfigItemDetailsContext.CONTEXT_ID];
+
+    public primaryMenu: boolean = true;
+
+    public icon: string = "kix-icon-cmdb";
 
     public text: string = "CMDB";
-
-    public contextId: string = CMDBContext.CONTEXT_ID;
-
-    public contextMode: ContextMode = ContextMode.DASHBOARD;
-
-    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
 
 }
 

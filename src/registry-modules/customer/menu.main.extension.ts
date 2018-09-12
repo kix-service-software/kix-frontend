@@ -1,20 +1,22 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { CustomerContext } from '@kix/core/dist/browser/customer';
-import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
+import { CustomerContext, CustomerDetailsContext } from '@kix/core/dist/browser/customer';
+import { ContactDetailsContext } from '@kix/core/dist/browser/contact';
 
 export class CustomerMainMenuExtension implements IMainMenuExtension {
 
-    public link: string = "/" + CustomerContext.CONTEXT_ID;
+    public mainContextId: string = CustomerContext.CONTEXT_ID;
 
-    public icon: string = "customers";
+    public contextIds: string[] = [
+        CustomerContext.CONTEXT_ID, CustomerDetailsContext.CONTEXT_ID, ContactDetailsContext.CONTEXT_ID
+    ];
+
+    public primaryMenu: boolean = true;
+
+    public icon: string = "kix-icon-customers";
 
     public text: string = "Kunden";
 
-    public contextId: string = CustomerContext.CONTEXT_ID;
 
-    public contextMode: ContextMode = ContextMode.DASHBOARD;
-
-    public KIXObjectType: KIXObjectType = KIXObjectType.CUSTOMER;
 }
 
 module.exports = (data, host, options) => {
