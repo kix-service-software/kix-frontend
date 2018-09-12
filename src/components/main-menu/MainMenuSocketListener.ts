@@ -1,5 +1,5 @@
 import {
-    SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MenuEntryConfiguration, MainMenuEntriesRequest, MenuEntry
+    SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MainMenuEntriesRequest, MenuEntry
 } from '@kix/core/dist/model';
 import { SocketListener } from '@kix/core/dist/browser/SocketListener';
 import { ClientStorageService } from '@kix/core/dist/browser';

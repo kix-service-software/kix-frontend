@@ -1,4 +1,4 @@
-import { MenuEntry, Context, ContextType } from '@kix/core/dist/model';
+import { MenuEntry, Context, ContextType, ContextMode } from '@kix/core/dist/model';
 import { MenuComponentState } from './MenuComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
@@ -36,18 +36,18 @@ class KIXMenuComponent implements IContextServiceListener {
 
     public getRoutingConfiguration(menuEntry: MenuEntry): RoutingConfiguration {
         return new RoutingConfiguration(
-            null, menuEntry.contextId, menuEntry.kixObjectType, menuEntry.contextMode, null
+            null, menuEntry.mainContextId, null, ContextMode.DASHBOARD, null
         );
     }
 
     private setActiveMenuEntry(context: Context): void {
         if (context && context.getDescriptor()) {
             this.state.primaryMenuEntries.forEach(
-                (me) => me.active = me.contextId === context.getDescriptor().contextId
+                (me) => me.active = me.contextIds.some((id) => id === context.getDescriptor().contextId)
             );
 
             this.state.secondaryMenuEntries.forEach(
-                (me) => me.active = me.contextId === context.getDescriptor().contextId
+                (me) => me.active = me.contextIds.some((id) => id === context.getDescriptor().contextId)
             );
 
             (this as any).setStateDirty('primaryMenuEntries');
