@@ -34,7 +34,7 @@ class Component {
     public async submit(): Promise<void> {
         setTimeout(async () => {
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            const result = formInstance.validateForm();
+            const result = await formInstance.validateForm();
             const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
             if (validationError) {
                 this.showValidationError(result);
