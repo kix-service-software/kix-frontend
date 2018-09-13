@@ -47,7 +47,7 @@ export class Extension implements IModuleFactoryExtension {
             }
         });
         const chart1 = new ConfiguredWidget('20180903-cmdb-chart-1', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl Config Items pro CMDB Klasse', [], chartConfig1,
+            'config-item-chart-widget', 'Anzahl Config Items', [], chartConfig1,
             false, true, WidgetSize.SMALL, null, true)
         );
 
