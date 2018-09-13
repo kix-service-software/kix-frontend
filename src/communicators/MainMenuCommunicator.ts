@@ -1,17 +1,10 @@
 import {
-    SocketEvent,
-    MenuEntry,
-    MainMenuEntriesRequest,
-    MainMenuEntriesResponse,
-    MenuEntryConfiguration,
-    MainMenuConfiguration,
-    MainMenuEvent
+    MenuEntry, MainMenuEntriesRequest, MainMenuEntriesResponse,
+    MainMenuConfiguration, MainMenuEvent
 } from '@kix/core/dist/model';
 
 import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { IServerConfiguration, ICommunicator, CommunicatorResponse } from '@kix/core/dist/common';
-import { IAuthenticationService, ILoggingService, IConfigurationService } from '@kix/core/dist/services';
-
+import { CommunicatorResponse } from '@kix/core/dist/common';
 import { KIXCommunicator } from './KIXCommunicator';
 
 export class MainMenuCommunicator extends KIXCommunicator {
@@ -38,8 +31,6 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         if (!configuration) {
             configuration = await this.createDefaultConfiguration(extensions, user.UserID);
-        } else {
-            configuration = await this.validateConfiguration(extensions, configuration, user.UserID);
         }
 
         const primaryEntries =
@@ -56,99 +47,30 @@ export class MainMenuCommunicator extends KIXCommunicator {
         extensions: IMainMenuExtension[], userId: number
     ): Promise<MainMenuConfiguration> {
 
-        const primaryConfiguration = extensions.map(
-            (me) => new MenuEntryConfiguration(me.contextId, me.KIXObjectType, me.contextMode, true)
-        );
-
-        const configuration = new MainMenuConfiguration(primaryConfiguration, []);
-
-        await this.configurationService.saveComponentConfiguration(
-            "personal-settings", "main-menu", userId, configuration);
-
-        return configuration;
-    }
-
-    /**
-     * Als erstes wird geprüft ob es zu jeder {@link MenuEntryConfiguration} eine passende Extension gibt.
-     * Wenn nicht wird die {@link MenuEntryConfiguration} herausgefiltert.
-     *
-     * Im Zweiten Schritt wird geprüft ob es neue Extension gibt, welche noch nicht in der Konfiguration vorhanden sind.
-     * Diese werden dann, wie auch bei der DefaultConfiguration in die primäre Liste eingetragen.
-     *
-     * @param extensions Die Liste der aktuellen Extensions
-     * @param configuration Die aktuelle Konfiguration des Menüs
-     */
-    private async validateConfiguration(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration, userId: number
-    ): Promise<MainMenuConfiguration> {
-
-        configuration = this.removeInvalidConfigurations(extensions, configuration);
-        configuration = this.addMissingConfigurations(extensions, configuration);
-
-        await this.configurationService.saveComponentConfiguration(
-            "personal-settings", "main-menu", userId, configuration);
-
-        return configuration;
-    }
-
-    private removeInvalidConfigurations(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): MainMenuConfiguration {
-
-        configuration.primaryMenuEntryConfigurations = configuration.primaryMenuEntryConfigurations.filter(
-            (pme) => {
-                return extensions.findIndex((me) => me.contextId === pme.contextId) !== -1;
-            });
-
-        configuration.secondaryMenuEntryConfigurations = configuration.secondaryMenuEntryConfigurations.filter(
-            (sme) => {
-                return extensions.findIndex((me) => me.contextId === sme.contextId) !== -1;
-            });
-
-        return configuration;
-    }
-
-    private addMissingConfigurations(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): MainMenuConfiguration {
-
-        const newExtensions = this.findNewMenuExtensions(extensions, configuration);
-
-        for (const me of newExtensions) {
-            configuration.primaryMenuEntryConfigurations.push(
-                new MenuEntryConfiguration(me.contextId, me.KIXObjectType, me.contextMode, true)
+        const primaryConfiguration = extensions
+            .filter((me) => me.primaryMenu).map(
+                (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
             );
-        }
+
+        const secondaryConfiguration = extensions
+            .filter((me) => !me.primaryMenu).map(
+                (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
+            );
+        const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
+
+        await this.configurationService.saveComponentConfiguration(
+            "personal-settings", "main-menu", userId, configuration);
 
         return configuration;
-    }
-
-    private findNewMenuExtensions(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): IMainMenuExtension[] {
-
-        return extensions.filter((me) => {
-            const primaryIndex = configuration.primaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.contextId === me.contextId;
-            });
-
-            const secondaryIndex = configuration.secondaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.contextId === me.contextId;
-            });
-
-            return primaryIndex === -1 && secondaryIndex === -1;
-        });
     }
 
     private getMenuEntries(
-        extensions: IMainMenuExtension[], entryConfigurations: MenuEntryConfiguration[]
+        extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
     ): MenuEntry[] {
 
-        const entries = entryConfigurations.filter((ec) => ec.visible).map((ec) => {
-            const menu = extensions.find((me) => me.contextId === ec.contextId);
-            return new MenuEntry(
-                menu.link, menu.icon, menu.text, menu.contextId, menu.KIXObjectType, menu.contextMode
-            );
+        const entries = entryConfigurations.map((ec) => {
+            const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
+            return new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds);
         });
 
         return entries;

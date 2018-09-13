@@ -6,8 +6,13 @@
         </if>
     </span>
     <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
-        <for(label in state.node.labels)>
-            <span.node-title class={expanded: state.node.expanded, "title-node": state.title}>${label}</span>
+        <for(tableTreeNode in state.node.labels)>
+            <if(component.isAttachment(tableTreeNode.label))>
+                <file-entry attachment=tableTreeNode.label/>
+            </if>
+            <else>
+                <span.node-title class={expanded: state.node.expanded, "title-node": state.title}>${tableTreeNode.label}</span>
+            </else>
         </for>
     </div>
     <if(state.node.expanded)>

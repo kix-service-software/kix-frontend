@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { TreeNode, TableTreeNode } from '@kix/core/dist/model';
+import { TreeNode, TableTreeNode, TableTreeNodeLabel } from '@kix/core/dist/model';
 import { IdService } from '@kix/core/dist/browser/IdService';
 
 class TreeComponent {
@@ -17,7 +17,7 @@ class TreeComponent {
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
         if (input.titles) {
-            this.state.titleNode = new TableTreeNode('title', input.titles);
+            this.state.titleNode = new TableTreeNode('title', input.titles.map((t) => new TableTreeNodeLabel(t)));
         }
     }
 

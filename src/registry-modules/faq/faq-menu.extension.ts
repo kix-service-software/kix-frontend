@@ -1,23 +1,22 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
-import { FAQContext } from '@kix/core/dist/browser/faq';
+import { FAQContext, FAQDetailsContext } from '@kix/core/dist/browser/faq';
 
-export class DashboardMainMenuExtension implements IMainMenuExtension {
+export class Extension implements IMainMenuExtension {
 
-    public link: string = "/faq";
+    public mainContextId: string = FAQContext.CONTEXT_ID;
 
-    public icon: string = "faq";
+    public contextIds: string[] = [FAQContext.CONTEXT_ID, FAQDetailsContext.CONTEXT_ID];
+
+    public primaryMenu: boolean = true;
+
+    public icon: string = "kix-icon-faq";
 
     public text: string = "FAQ";
 
-    public contextId: string = FAQContext.CONTEXT_ID;
 
-    public contextMode: ContextMode = ContextMode.DASHBOARD;
-
-    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardMainMenuExtension();
+    return new Extension();
 };

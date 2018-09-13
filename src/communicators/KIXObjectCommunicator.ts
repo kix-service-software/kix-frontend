@@ -1,6 +1,7 @@
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
-    CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse
+    CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse,
+    UpdateObjectRequest, UpdateObjectResponse
 } from "@kix/core/dist/model";
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
@@ -15,6 +16,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     protected registerEvents(client: SocketIO.Socket): void {
         this.registerEventHandler(client, KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
+        this.registerEventHandler(client, KIXObjectEvent.UPDATE_OBJECT, this.updateObject.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
@@ -64,6 +66,32 @@ export class KIXObjectCommunicator extends KIXCommunicator {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             this.loggingService.error(errorMessage);
             response = new CommunicatorResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, errorMessage);
+        }
+
+        return response;
+    }
+
+    private async updateObject(data: UpdateObjectRequest): Promise<CommunicatorResponse<UpdateObjectResponse>> {
+        let response;
+
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        if (service) {
+            await service.updateObject(data.token, data.objectType, data.parameter, data.objectId, data.updateOptions)
+                .then((id) => {
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.UPDATE_OBJECT_FINISHED, new UpdateObjectResponse(data.requestId, id)
+                    );
+                }).catch((error) => {
+                    this.loggingService.error(error);
+                    response = new CommunicatorResponse(
+                        KIXObjectEvent.UPDATE_OBJECT_ERROR, this.getErrorMessage(error)
+                    );
+                });
+
+        } else {
+            const errorMessage = 'No API service registered for object type ' + data.objectType;
+            this.loggingService.error(errorMessage);
+            response = new CommunicatorResponse(KIXObjectEvent.UPDATE_OBJECT_ERROR, errorMessage);
         }
 
         return response;

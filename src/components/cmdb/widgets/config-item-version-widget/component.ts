@@ -46,7 +46,7 @@ class Component implements IEventListener {
 
     private async initWidget(configItem: ConfigItem): Promise<void> {
         this.configItem = configItem;
-        this.state.title = `${configItem.Name} Versionsdetails (${configItem.Versions.length})`;
+        this.state.title = `Übersicht Versionsdetails (${configItem.Versions.length})`;
         this.setActions();
         this.prepareVersionTable();
     }

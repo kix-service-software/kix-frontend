@@ -1,23 +1,20 @@
 import { IMainMenuExtension } from '@kix/core/dist/extensions';
 import { HomeContext } from '@kix/core/dist/browser/home';
-import { ContextMode, KIXObjectType } from '@kix/core/dist/model';
 
-export class DashboardMainMenuExtension implements IMainMenuExtension {
+export class Extensions implements IMainMenuExtension {
 
-    public link: string = "/home";
+    public mainContextId: string = HomeContext.CONTEXT_ID;
 
-    public icon: string = "home";
+    public contextIds: string[] = [HomeContext.CONTEXT_ID];
+
+    public primaryMenu: boolean = true;
+
+    public icon: string = "kix-icon-home";
 
     public text: string = "Home";
-
-    public contextId: string = HomeContext.CONTEXT_ID;
-
-    public contextMode: ContextMode = ContextMode.DASHBOARD;
-
-    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardMainMenuExtension();
+    return new Extensions();
 };

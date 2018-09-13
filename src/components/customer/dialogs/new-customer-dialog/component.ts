@@ -20,7 +20,7 @@ class NewCustomerDialogComponent {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
-    private async cancel(): Promise<void> {
+    public async cancel(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
@@ -28,9 +28,9 @@ class NewCustomerDialogComponent {
         DialogService.getInstance().closeMainDialog();
     }
 
-    private async submit(): Promise<void> {
+    public async submit(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const result = formInstance.validateForm();
+        const result = await formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             this.showValidationError(result);
