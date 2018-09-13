@@ -6,6 +6,8 @@ class EditorComponent {
 
     public state: EditorComponentState;
 
+    private autocompleteConfig: any;
+
     public onCreate(input: any): void {
         this.state = new EditorComponentState(
             input.inline,
@@ -47,6 +49,8 @@ class EditorComponent {
                 });
             }
 
+            this.initAutocompleteConfiguration();
+
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
             // - siehe bei Notes-Sidebar (toggleEditMode))
@@ -55,6 +59,49 @@ class EditorComponent {
                 (this as any).emit('valueChanged', value);
             });
         }
+    }
+
+    private initAutocompleteConfiguration(): void {
+        const matchCallback = (text, offset) => {
+            // Get the text before the caret.
+            const left = text.slice(0, offset);
+            const match = left.match(/#\w*$/);
+
+            if (!match) {
+                return null;
+            }
+
+            return { start: match.index, end: offset };
+        };
+
+        this.autocompleteConfig = {
+
+            textTestCallback: (range) => {
+                if (!range.collapsed) {
+                    return null;
+                }
+                return CKEDITOR.plugins.textMatch.match(range, matchCallback);
+            },
+
+            dataCallback: (matchInfo, callback) => {
+                const query = matchInfo.query.substring(1);
+                const result = [
+                    { id: 'Bloh', name: 'Bloh' },
+                    { id: 'Bleh', name: 'Bleh' },
+                    { id: 'Blah', name: 'Blah' },
+                    { id: 'Blih', name: 'Blih' },
+                ].filter((o) => o.name.indexOf(query) !== -1);
+
+                callback(result);
+            },
+            itemTemplate: '<li data-id="{id}">{name}</li>',
+            outputTemplate: '<span>{name} (#{id})</span>'
+        };
+
+        setTimeout(() => {
+            // tslint:disable-next-line:no-unused-expression
+            new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], this.autocompleteConfig);
+        }, 500);
     }
 
     // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
