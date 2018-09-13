@@ -31,8 +31,6 @@ export class MainMenuCommunicator extends KIXCommunicator {
 
         if (!configuration) {
             configuration = await this.createDefaultConfiguration(extensions, user.UserID);
-        } else {
-            configuration = await this.validateConfiguration(extensions, configuration, user.UserID);
         }
 
         const primaryEntries =
@@ -64,86 +62,6 @@ export class MainMenuCommunicator extends KIXCommunicator {
             "personal-settings", "main-menu", userId, configuration);
 
         return configuration;
-    }
-
-    /**
-     * Als erstes wird geprüft ob es zu jeder {@link MenuEntryConfiguration} eine passende Extension gibt.
-     * Wenn nicht wird die {@link MenuEntryConfiguration} herausgefiltert.
-     *
-     * Im Zweiten Schritt wird geprüft ob es neue Extension gibt, welche noch nicht in der Konfiguration vorhanden sind.
-     * Diese werden dann, wie auch bei der DefaultConfiguration in die primäre Liste eingetragen.
-     *
-     * @param extensions Die Liste der aktuellen Extensions
-     * @param configuration Die aktuelle Konfiguration des Menüs
-     */
-    private async validateConfiguration(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration, userId: number
-    ): Promise<MainMenuConfiguration> {
-
-        configuration = this.removeInvalidConfigurations(extensions, configuration);
-        configuration = this.addMissingConfigurations(extensions, configuration);
-
-        await this.configurationService.saveComponentConfiguration(
-            "personal-settings", "main-menu", userId, configuration);
-
-        return configuration;
-    }
-
-    private removeInvalidConfigurations(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): MainMenuConfiguration {
-
-        configuration.primaryMenuEntryConfigurations = configuration.primaryMenuEntryConfigurations.filter(
-            (pme) => {
-                return extensions.findIndex((me) => me.mainContextId === pme.mainContextId) !== -1;
-            });
-
-        configuration.secondaryMenuEntryConfigurations = configuration.secondaryMenuEntryConfigurations.filter(
-            (sme) => {
-                return extensions.findIndex((me) => me.mainContextId === sme.mainContextId) !== -1;
-            });
-
-        return configuration;
-    }
-
-    private addMissingConfigurations(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): MainMenuConfiguration {
-
-        const newExtensions = this.findNewMenuExtensions(extensions, configuration);
-
-        const newPrimary = newExtensions.filter((e) => e.primaryMenu)
-            .map((me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds));
-        configuration.primaryMenuEntryConfigurations = [
-            ...configuration.primaryMenuEntryConfigurations,
-            ...newPrimary
-        ];
-
-        const newSecondary = newExtensions.filter((e) => !e.primaryMenu)
-            .map((me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds));
-        configuration.secondaryMenuEntryConfigurations = [
-            ...configuration.primaryMenuEntryConfigurations,
-            ...newSecondary
-        ];
-
-        return configuration;
-    }
-
-    private findNewMenuExtensions(
-        extensions: IMainMenuExtension[], configuration: MainMenuConfiguration
-    ): IMainMenuExtension[] {
-
-        return extensions.filter((me) => {
-            const primaryIndex = configuration.primaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.mainContextId === me.mainContextId;
-            });
-
-            const secondaryIndex = configuration.secondaryMenuEntryConfigurations.findIndex((pme) => {
-                return pme.mainContextId === me.mainContextId;
-            });
-
-            return primaryIndex === -1 && secondaryIndex === -1;
-        });
     }
 
     private getMenuEntries(
