@@ -23,8 +23,8 @@
             line-height: @widget-header-height;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
-                line-height: @widget-header-height;
-                font-size: @h2-font-size;
+                line-height: @widget-header-height-0.25em;
+                .icon-font-size-normal();
             }
             display: grid;
             grid-auto-columns: max-content;
@@ -54,6 +54,10 @@
                     height: 2em;
                     line-height: 2em;
                     text-align: center;
+                    >.path1,
+                    >.path2 {
+                        .icon-font-size-normal();
+                    }
                 }
             }
             >.action-list-wrapper {
