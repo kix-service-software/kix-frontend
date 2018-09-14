@@ -23,7 +23,6 @@ class Component {
             formInstance.reset();
         }
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
-        this.state.formId = 'edit-ticket-form';
     }
 
     public async cancel(): Promise<void> {
@@ -49,8 +48,8 @@ class Component {
                 if (service && context) {
                     await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())
                         .then((ticketId) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
                             context.getObject(KIXObjectType.TICKET, true);
+                            DialogService.getInstance().setMainDialogLoading(false);
                             this.showSuccessHint();
                             DialogService.getInstance().closeMainDialog();
                         }).catch((error) => {
