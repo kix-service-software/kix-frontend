@@ -12,6 +12,7 @@ import {
     IUserService,
     IProfilingService,
     IMarkoService,
+    ITextModuleService,
 } from '@kix/core/dist/services';
 import { SocketEvent } from '@kix/core/dist/model';
 import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/core/dist/common';
@@ -34,6 +35,7 @@ export abstract class KIXCommunicator implements ICommunicator {
         @inject('IObjectIconService') protected objectIconService: IObjectIconService,
         @inject('IGeneralCatalogService') protected generalCatalogService: IGeneralCatalogService,
         @inject('IProfilingService') protected profilingService: IProfilingService,
+        @inject('ITextModuleService') protected textmoduleService: ITextModuleService,
         @inject('IMarkoService') protected markoService: IMarkoService
     ) { }
 

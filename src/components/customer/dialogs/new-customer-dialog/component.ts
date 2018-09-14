@@ -1,6 +1,6 @@
 import { NewCustomerDialogComponentState } from "./NewCustomerDialogComponentState";
 import {
-    DialogService, ContextService, FormService, OverlayService, KIXObjectServiceRegistry
+    DialogService, ContextService, FormService, OverlayService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
@@ -37,7 +37,7 @@ class NewCustomerDialogComponent {
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Kunde wird angelegt");
             const service
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<CustomerService>(KIXObjectType.CUSTOMER);
+                = ServiceRegistry.getInstance().getServiceInstance<CustomerService>(KIXObjectType.CUSTOMER);
             await service.createObjectByForm(KIXObjectType.CUSTOMER, this.state.formId)
                 .then((customerId) => {
                     DialogService.getInstance().setMainDialogLoading();

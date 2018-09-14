@@ -1,6 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, KIXObjectServiceRegistry
+    OverlayService, FormService, ContextService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -44,7 +44,7 @@ class Component {
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird aktualisiert");
                 const service
-                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
+                    = ServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
                 const context = ContextService.getInstance().getActiveContext();
                 if (service && context) {
                     await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())

@@ -1,5 +1,5 @@
 import {
-    ContextService, DialogService, OverlayService, FormService, KIXObjectServiceRegistry
+    ContextService, DialogService, OverlayService, FormService, ServiceRegistry
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
@@ -67,7 +67,7 @@ class Component {
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
                 const cmdbService
-                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                    = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
                 const ciClass = this.state.currentClassNode.id as ConfigItemClass;
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)

@@ -4,7 +4,7 @@ import {
 } from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
 import {
-    WidgetService, DialogService, KIXObjectSearchService, OverlayService, KIXObjectServiceRegistry,
+    WidgetService, DialogService, KIXObjectSearchService, OverlayService, ServiceRegistry,
     IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
     TableRowHeight,
     IKIXObjectService
@@ -148,7 +148,7 @@ class Component implements ISearchFormListener {
         this.state.resultCount = objects ? objects.length : 0;
 
         const objectService
-            = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
+            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         const objectProperties = searchCache ? searchCache.criteria.map((c) => c.property) : [];
         const columns = objectService.getTableColumnConfiguration(objectProperties);

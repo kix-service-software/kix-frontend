@@ -3,7 +3,7 @@ import {
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem
 } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
-import { KIXObjectServiceRegistry, SearchOperator } from "@kix/core/dist/browser";
+import { ServiceRegistry, SearchOperator } from "@kix/core/dist/browser";
 import { GeneralCatalogService } from "@kix/core/dist/browser/general-catalog";
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
@@ -21,7 +21,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
         const classOption = this.state.field.options.find((o) => o.option === 'GC_CLASS');
         if (classOption) {
-            const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<GeneralCatalogService>(
+            const service = ServiceRegistry.getInstance().getServiceInstance<GeneralCatalogService>(
                 KIXObjectType.GENERAL_CATALOG_ITEM
             );
 

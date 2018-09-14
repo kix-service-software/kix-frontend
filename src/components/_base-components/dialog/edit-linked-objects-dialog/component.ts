@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     DialogService, OverlayService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
-    TableHighlightLayer, LabelService, KIXObjectServiceRegistry, SearchOperator,
+    TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
     ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService
 } from '@kix/core/dist/browser';
 import {
@@ -73,7 +73,7 @@ class Component {
         let objectIds = iterator.next();
         while (objectIds && objectIds.value) {
             const service
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectIds.value[0]);
+                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectIds.value[0]);
             if (service && objectIds.value[1].length) {
                 const objects = await service.loadObjects(
                     objectIds.value[0], objectIds.value[1], null
@@ -86,7 +86,7 @@ class Component {
 
         this.linkedObjects.forEach((o) => {
             const service
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(o.KIXObjectType);
+                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(o.KIXObjectType);
             const linkObject = this.availableLinkObjects.find(
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
@@ -210,7 +210,7 @@ class Component {
     private addNewLinks(newLinkDescriptions): void {
         if (newLinkDescriptions.length) {
             const newLinkObjects: LinkObject[] = newLinkDescriptions.map((ld: CreateLinkDescription) => {
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
+                const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
                     ld.linkableObject.KIXObjectType
                 );
                 return new LinkObject({
@@ -275,7 +275,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service
-            = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
+            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
@@ -294,7 +294,7 @@ class Component {
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
         const service
-            = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK);
+            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
         let ok = true;
         for (const linkId of linkIdsToDelete) {

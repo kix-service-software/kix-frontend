@@ -4,7 +4,7 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
-    Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration
+    Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration, FormFieldOption, FormFieldOptions
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -57,7 +57,9 @@ export class EditTicketDialogModuleExtension implements IModuleFactoryExtension 
             fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
 
             fields.push(new FormField("Artikelbetreff", ArticleProperty.SUBJECT, null, true, "Artikelbetreff"));
-            fields.push(new FormField("Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Artikelinhalt"));
+            fields.push(new FormField("Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Artikelinhalt", [
+                new FormFieldOption(FormFieldOptions.AUTO_FILL, [KIXObjectType.TEXT_MODULE])
+            ]));
 
             fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));
             fields.push(new FormField(
