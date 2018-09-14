@@ -175,17 +175,17 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const toReceiverOverlay =
             new ConfiguredWidget("to-receiver-overlay", new WidgetConfiguration(
                 "article-receiver-list", "Empfänger: An", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-To', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-To', false)
             );
         const ccReceiverOverlay =
             new ConfiguredWidget("cc-receiver-overlay", new WidgetConfiguration(
                 "article-receiver-list", "Empfänger: Cc", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Cc', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-Cc', false)
             );
         const bccReceiverOverlay =
             new ConfiguredWidget("bcc-receiver-overlay", new WidgetConfiguration(
                 "article-receiver-list", "Empfänger: Bcc", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-Man-Mail-Bcc', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-Bcc', false)
             );
         const articleAttachmentOverlay =
             new ConfiguredWidget("article-attachment-widget", new WidgetConfiguration(

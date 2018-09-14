@@ -1,5 +1,5 @@
-@tree-icon-size: .625rem;
-@tree-node-size: .25rem+@tree-icon-size;
+@tree-icon-size: .875rem;
+@tree-node-size: @tree-icon-size;
 @tree-column-gap: .375rem;
 .tree-list {
     overflow: hidden;
@@ -8,7 +8,7 @@
         grid-template-columns: @tree-node-size auto;
         grid-column-gap: @tree-column-gap;
         cursor: pointer;
-        line-height: @form-list-tree-node-size;
+        line-height: @tree-node-size;
         >.tree-icon {
             padding-top: .25rem;
             [class^="kix-icon-"],
@@ -20,7 +20,6 @@
                 height: @tree-node-size;
                 display: inline-block;
                 box-sizing: border-box;
-                padding: .125rem;
                 border-radius: @border-radius;
             }
         }
