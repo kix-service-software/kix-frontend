@@ -18,8 +18,6 @@
         grid-template-columns: 6fr 4fr;
         grid-gap: @widget-header-grid-gap;
         >.header-left {
-            .shorten-text;
-            overflow: visible;
             line-height: @widget-header-height;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
@@ -27,10 +25,14 @@
                 .icon-font-size-normal();
             }
             display: grid;
-            grid-auto-columns: max-content;
+            grid-auto-columns: auto;
             grid-auto-flow: column;
             grid-gap: @widget-header-grid-gap;
+            &.with-icon {
+                grid-template-columns: min-content;
+            }
             >h2 {
+                .shorten-text;
                 display: inline;
                 &.minimizable {
                     cursor: pointer;
