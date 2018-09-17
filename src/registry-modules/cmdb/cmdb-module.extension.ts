@@ -16,7 +16,7 @@ export class Extension implements IModuleFactoryExtension {
 
         const notesSidebar = new ConfiguredWidget('20180830-cmdb-notes-sidebar',
             new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-notes', false
+                'notes-widget', 'Notizen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-note', false
             ));
 
         const sidebarWidgets = [notesSidebar];
