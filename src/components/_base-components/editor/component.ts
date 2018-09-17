@@ -67,7 +67,10 @@ class EditorComponent {
                 const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                 if (config) {
                     // tslint:disable-next-line:no-unused-expression
-                    new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], config);
+                    const plugin = new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], config);
+                    plugin.getHtmlToInsert = function (item) {
+                        return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                    };
                 }
             }
         });
