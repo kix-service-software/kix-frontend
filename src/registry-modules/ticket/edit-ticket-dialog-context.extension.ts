@@ -9,6 +9,7 @@ import {
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
+import { AutocompleteFormFieldOption, AutocompleteOption } from '@kix/core/dist/browser/components';
 
 export class EditTicketDialogModuleExtension implements IModuleFactoryExtension {
 
@@ -58,7 +59,9 @@ export class EditTicketDialogModuleExtension implements IModuleFactoryExtension 
 
             fields.push(new FormField("Artikelbetreff", ArticleProperty.SUBJECT, null, true, "Artikelbetreff"));
             fields.push(new FormField("Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Artikelinhalt", [
-                new FormFieldOption(FormFieldOptions.AUTO_FILL, [KIXObjectType.TEXT_MODULE])
+                new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
+                    new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                ]))
             ]));
 
             fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));

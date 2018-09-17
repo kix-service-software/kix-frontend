@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { FormInputComponent, KIXObjectType } from "@kix/core/dist/model";
-import { IAutofillConfiguration } from "@kix/core/dist/browser/components";
+import { FormInputComponent, KIXObjectType, FormFieldOptions } from "@kix/core/dist/model";
+import { IAutofillConfiguration, AutocompleteFormFieldOption } from "@kix/core/dist/browser/components";
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -16,12 +16,12 @@ class Component extends FormInputComponent<string, ComponentState> {
         await super.onMount();
         this.setCurrentValue();
 
-        const autofillOption = this.state.field.options.find((o) => o.option === 'Autofill');
+        const autofillOption = this.state.field.options.find((o) => o.option === FormFieldOptions.AUTO_COMPLETE);
         if (autofillOption) {
-            const objectTypes = (autofillOption.value as string[]);
+            const autocompleteOption = (autofillOption.value as AutocompleteFormFieldOption);
             const component = (this as any).getComponent(this.state.field.instanceId);
             if (component) {
-                component.setAutocompleteConfiguration(objectTypes);
+                component.setAutocompleteConfiguration(autocompleteOption);
             }
         }
     }

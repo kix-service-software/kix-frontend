@@ -1,6 +1,7 @@
 import { EditorComponentState } from './EditorComponentState';
 import { AutoCompleteConfiguration, KIXObjectType } from '@kix/core/dist/model';
 import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
+import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
 
 declare var CKEDITOR: any;
 
@@ -59,11 +60,11 @@ class EditorComponent {
         }
     }
 
-    public setAutocompleteConfiguration(objectTypes: KIXObjectType[]): void {
-        objectTypes.forEach((ot) => {
-            const service = (ServiceRegistry.getInstance().getServiceInstance(ot) as IKIXObjectService);
+    public setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): void {
+        autocompleteOption.autocompleteObjects.forEach((ao) => {
+            const service = (ServiceRegistry.getInstance().getServiceInstance(ao.objectType) as IKIXObjectService);
             if (service) {
-                const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch);
+                const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                 if (config) {
                     // tslint:disable-next-line:no-unused-expression
                     new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], config);
