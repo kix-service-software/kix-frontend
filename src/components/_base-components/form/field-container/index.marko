@@ -1,6 +1,6 @@
 <for(field in state.fields)>
     <if(component.showSeparator(field) && state.level === 0)>
-        <div.form-field>
+        <div.form-field.form-separator-container>
             <div.form-separator/>
         </div>
     </if>
@@ -29,7 +29,7 @@
         </@additionalFieldControls>
     </form-field>
     <if(component.showSeparator(field) && state.level === 0)>
-        <div.form-field>
+        <div.form-field.form-separator-container>
             <div.form-separator/>
         </div>
     </if>
