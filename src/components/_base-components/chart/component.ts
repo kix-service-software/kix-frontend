@@ -61,7 +61,9 @@ class Component {
     }
 
     public onDestroy(): void {
-        this.chart.destroy();
+        if (this.chart) {
+            this.chart.destroy();
+        }
     }
 
     private rebuildChart(): void {
