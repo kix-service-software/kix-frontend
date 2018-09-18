@@ -6,21 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
         <lasso-head/>
-        <if(data.themeCSS)>
-            <link rel="stylesheet" href=data.themeCSS/>
-        </if>
-        <for(specificCSS in data.specificCSS)>
-            <link rel="stylesheet" href=specificCSS/>
-        </for>
     </head>
     <body>
-        <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
-            tagLib=input.data.tagLib actionLib=input.data.actionLib/>
+        <_login logout=input.data.logout/>
         <script src="/static/thirdparty/polyfill-array.js"/>
         <script src="/static/thirdparty/bluebird.min.js"/>
         <script src="/static/thirdparty/socket.io.js"/>
-        <script src="/static/thirdparty/ckeditor-4.10.1/ckeditor.js"/>
-        <script src="/static/thirdparty/chart.min.js"/>
         <lasso-body/>
     </body>
 </html>

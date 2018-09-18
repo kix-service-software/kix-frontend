@@ -1,4 +1,4 @@
-export class LoginComponentState {
+export class ComponentState {
 
     public constructor(
         public loading: boolean = true,

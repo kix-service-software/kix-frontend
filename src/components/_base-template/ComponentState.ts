@@ -9,7 +9,8 @@ export class ComponentState {
         public objectData: ObjectData,
         public objectId: string,
         public gridColumns: string = null,
-        public hasExplorer: boolean = false
+        public hasExplorer: boolean = false,
+        public loading: boolean = true
     ) { }
 
 }

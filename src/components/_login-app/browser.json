@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "require @kix/core/dist/browser/authentication",
+        "require ../_login"
+    ]
+}

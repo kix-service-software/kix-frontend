@@ -57,6 +57,7 @@ class Component {
         ContextService.getInstance().setObjectData(this.state.objectData);
         this.bootstrapServices();
         this.setContext();
+        this.state.loading = false;
     }
 
     private bootstrapServices(): void {
