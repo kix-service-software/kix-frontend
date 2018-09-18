@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { KIXObjectType, WidgetType, Contact, ContextType } from "@kix/core/dist/model";
 import {
-    ContextService, ActionFactory, IdService, WidgetService, KIXObjectServiceRegistry
+    ContextService, ActionFactory, IdService, WidgetService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";

@@ -370,7 +370,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         );
 
         if (index >= 0) {
-            this.state.standardTable.toggleRow(rows[index]);
+            if (!rows[index].isToggled) {
+                this.state.standardTable.toggleRow(rows[index]);
+            }
 
             setTimeout(() => {
                 let element = (this as any).getEl(this.state.tableId + "row-columns-" + index);

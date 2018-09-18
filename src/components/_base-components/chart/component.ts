@@ -11,7 +11,6 @@ class Component {
     public config: ChartConfiguration = null;
     private chart: Chart;
     private timeout: any;
-    private drawTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -21,16 +20,13 @@ class Component {
         this.config = input.config;
         if (this.config) {
             if (!this.config.options) {
-                this.config.options = { animation: { duration: 300 } };
+                this.config.options = { animation: { duration: 600 } };
             } else if (!this.config.options.animation) {
-                this.config.options.animation = { duration: 300 };
+                this.config.options.animation = { duration: 600 };
             }
-
-            this.config.options.animation.duration = 300;
 
             if (this.timeout) {
                 clearTimeout(this.timeout);
-                clearTimeout(this.drawTimeout);
             }
             this.timeout = setTimeout(() => {
                 const canvasElement = (this as any).getEl(this.state.chartId);
@@ -38,20 +34,17 @@ class Component {
                     const ctx = canvasElement.getContext('2d');
                     if (ctx) {
                         if (this.chart) {
-                            this.drawTimeout = setTimeout(() => {
-                                this.chart.data.labels = this.config.data.labels;
-                                this.chart.data.datasets = this.config.data.datasets;
+                            this.chart.data.labels = this.config.data.labels;
+                            this.chart.data.datasets = this.config.data.datasets;
 
-                                this.chart.update();
-                                this.drawTimeout = null;
-                            }, 1000);
+                            this.chart.update();
                         } else {
                             this.chart = new Chart(ctx, this.config);
                         }
                     }
                 }
                 this.timeout = null;
-            }, 350);
+            }, 100);
         }
     }
 
@@ -65,6 +58,12 @@ class Component {
             filteredObjectListChanged: () => { return; }
 
         });
+    }
+
+    public onDestroy(): void {
+        if (this.chart) {
+            this.chart.destroy();
+        }
     }
 
     private rebuildChart(): void {

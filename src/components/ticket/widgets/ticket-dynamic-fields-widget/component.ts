@@ -32,7 +32,7 @@ class DynamicFieldWidgetComponent {
         context.registerListener('ticket-dynamic-fields-widget', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
-            objectListChanged: async () => { return; },
+            objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {

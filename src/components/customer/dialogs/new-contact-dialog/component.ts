@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import {
-    DialogService, ContextService, FormService, OverlayService, KIXObjectServiceRegistry
+    DialogService, ContextService, FormService, OverlayService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
@@ -37,7 +37,7 @@ class Component {
         } else {
             DialogService.getInstance().setMainDialogLoading(true, "Ansprechpartner wird angelegt");
             const service
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<ContactService>(KIXObjectType.CONTACT);
+                = ServiceRegistry.getInstance().getServiceInstance<ContactService>(KIXObjectType.CONTACT);
             await service.createObjectByForm(KIXObjectType.CONTACT, this.state.formId)
                 .then((contactId) => {
                     DialogService.getInstance().setMainDialogLoading();
