@@ -1,5 +1,5 @@
 <div.wrapper>
-    <if(state.initialized)>
+    <if(state.initialized && !state.loading)>
         <kix-header/>
         <div.content-wrapper class={"with-explorer": state.hasExplorer} style=("grid-template-columns: " + state.gridColumns)
             no-update-body>
@@ -23,4 +23,10 @@
         <overlay-dialog/>
         <overlay/>
     </if>
+    <else>
+        <div.app-loading-shield>
+            <loading-spinner/>
+            <span>Lade KIX ...</span>
+        </div>
+    </else>
 </div>
