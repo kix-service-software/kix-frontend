@@ -43,6 +43,7 @@ class Component {
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
         this.setActions();
+        this.setContentActions();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -50,22 +51,20 @@ class Component {
     }
 
     private setActions(): void {
-        const config = this.state.configuration;
-        if (config && this.state.customer) {
+        if (this.state.configuration && this.state.customer) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, true, [this.state.customer]
+                this.state.configuration.generalActions, true, [this.state.customer]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
     }
 
-    public getCustomerActions(): string[] {
-        let actions = [];
-        const config = this.state.configuration;
-        if (config && this.state.customerId) {
-            actions = ActionFactory.getInstance().generateActions(config.customerActions, true, [this.state.customer]);
+    private setContentActions(): void {
+        if (this.state.configuration && this.state.customer) {
+            this.state.contentActions = ActionFactory.getInstance().generateActions(
+                this.state.configuration.customerActions, true, [this.state.customer]
+            );
         }
-        return actions;
     }
 
     public getTitle(): string {
