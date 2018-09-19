@@ -31,8 +31,14 @@ export class Component {
     }
 
     private async initWidget(context: TicketDetailsContext, ticket?: Ticket): Promise<void> {
+        this.state.error = null;
         this.state.loading = true;
-        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>();
+        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>().catch((error) => null);
+
+        if (!this.state.ticket) {
+            this.state.error = `Kein Ticket mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.ticketDetailsConfiguration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();

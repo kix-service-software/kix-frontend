@@ -31,8 +31,14 @@ class Component {
     }
 
     private async initWidget(context: CustomerDetailsContext, customer?: Customer): Promise<void> {
+        this.state.error = null;
         this.state.loading = true;
-        this.state.customer = customer ? customer : await context.getObject<Customer>();
+        this.state.customer = customer ? customer : await context.getObject<Customer>().catch((error) => null);
+
+        if (!this.state.customer) {
+            this.state.error = `Kein Kunde mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
