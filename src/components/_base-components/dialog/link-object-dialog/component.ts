@@ -40,7 +40,9 @@ class LinkDialogComponent {
         this.setLinkTypes();
         if (this.state.currentLinkableObjectNode) {
             this.prepareResultTable([]);
-            this.highlightLayer.setHighlightedObjects([]);
+            if (this.state.standardTable) {
+                this.highlightLayer.setHighlightedObjects([]);
+            }
         }
 
         this.setCanSubmit();
