@@ -80,7 +80,7 @@ class Component {
     }
 
     public focusLost(): void {
-        // TODO: ggf. irrelevant
+        (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
