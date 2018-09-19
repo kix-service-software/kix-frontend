@@ -1,19 +1,7 @@
-.list-with-title-and-icon {
-    display: grid;
-    grid-template-columns: auto;
-    grid-auto-flow: column;
-    >div {
-        &:first-child:not(:last-child) {
-            width: 4rem;
-            >[class*="kix-icon-"] {
-                font-size: 1.75rem;
-            }
-            align-self: center;
-        }
-        >.list-with-title {
-            >li {
-                margin-left: 1rem;
-            }
+.list-with-title {
+    >ul {
+        >li {
+            margin-left: 1rem;
         }
     }
 }

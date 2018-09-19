@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, ContextMode, KIXObjectType
+    ValidationSeverity, ValidationResult, ContextMode, KIXObjectType, ToastContent
 } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
 
@@ -54,12 +54,11 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'Ansprechpartner wurde erfolgreich angelegt.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Ansprechpartner wurde erfolgreich angelegt.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

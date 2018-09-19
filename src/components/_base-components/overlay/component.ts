@@ -58,17 +58,15 @@ class OverlayComponent {
         this.state.keepShow = true;
         this.state.show = true;
 
-        // TODO: Prüfen auf "einfachere" Methode bzw. Umbauen, falls es anders funktionieren soll
-        if (type === OverlayType.TOAST) {
+        if (this.isToast()) {
             this.toastTimeout = setTimeout(() => {
                 const toast = (this as any).getEl('overlay');
                 if (toast) {
-                    // TODO: ggf. über Marko triggern (Funktionen implementieren), falls es so bleibt
                     toast.addEventListener('mouseover', (e) => {
                         clearTimeout(this.toastTimeout);
                     });
                     toast.addEventListener('mouseleave', (e) => {
-                        this.state.overlayClass = 'toast-overlay';
+                        this.state.overlayClass = this.getOverlayTypeClass(this.state.type);
                         this.toastTimeout = setTimeout(() => {
                             this.closeOverlay();
                         }, 200);
@@ -76,7 +74,7 @@ class OverlayComponent {
                 }
                 this.state.overlayClass += ' show-toast';
                 this.toastTimeout = setTimeout(() => {
-                    this.state.overlayClass = 'toast-overlay';
+                    this.state.overlayClass = this.getOverlayTypeClass(this.state.type);
                     this.toastTimeout = setTimeout(() => {
                         this.closeOverlay();
                     }, 200);
@@ -135,7 +133,9 @@ class OverlayComponent {
                 return 'info-overlay';
             case OverlayType.WARNING:
                 return 'warning-overlay';
-            case OverlayType.TOAST:
+            case OverlayType.SUCCESS_TOAST:
+                return 'toast-overlay success-toast';
+            case OverlayType.HINT_TOAST:
                 return 'toast-overlay';
             default:
                 return '';
@@ -159,7 +159,7 @@ class OverlayComponent {
         return this.state.content instanceof ComponentContent;
     }
 
-    private getTemplate(): any {
+    public getTemplate(): any {
         if (this.isComponentContent()) {
             const content = (this.state.content as ComponentContent<any>);
             return ComponentsService.getInstance().getComponentTemplate(content.getValue());
@@ -171,8 +171,9 @@ class OverlayComponent {
         return this.state.type === OverlayType.WARNING;
     }
 
-    private isToast(): boolean {
-        return this.state.type === OverlayType.TOAST;
+    public isToast(): boolean {
+        return this.state.type === OverlayType.SUCCESS_TOAST
+            || this.state.type === OverlayType.HINT_TOAST;
     }
 }
 

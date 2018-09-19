@@ -3,7 +3,8 @@ import {
     FormService, DialogService, OverlayService, ServiceRegistry, ContextService
 } from '@kix/core/dist/browser';
 import {
-    ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
+    ValidationSeverity, ComponentContent, OverlayType, ValidationResult,
+     StringContent, KIXObjectType, ContextMode, ToastContent
 } from '@kix/core/dist/model';
 import { FAQService } from '@kix/core/dist/browser/faq';
 
@@ -59,12 +60,11 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'FAQ Artikel wurde erfolgreich angelegt.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('FAQ Artikel wurde erfolgreich angelegt.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
