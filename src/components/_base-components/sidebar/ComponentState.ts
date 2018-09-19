@@ -9,5 +9,6 @@ export class ComponentState {
     public sidebarBarExpanded: boolean = false;
     public showSidebar: boolean = false;
     public contextType: ContextType = null;
+    public showEmpty: boolean = false;
 
 }

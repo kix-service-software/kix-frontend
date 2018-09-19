@@ -13,18 +13,16 @@
             </ul>
         </@headerContent>
         <@content>
-            <div class={"tab-sidebar-grid": state.hasSidebars}>
-                <if(state.activeTab)>
-                    <div.tab-content>
+            <div class="tab-sidebar-grid">
+                <div.tab-content>
+                    <if(state.activeTab)>
                         <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
-                    </div>
-                </if>
-                <if(state.hasSidebars)>
-                    <sidebar contextType=state.contextType/>
-                    <div.site-menu-wrapper>
-                        <sidebar-menu contextType=state.contextType/>
-                    </div>
-                </if>
+                    </if>
+                </div>
+                <sidebar contextType=state.contextType showEmpty=true/>
+                <div.site-menu-wrapper>
+                    <sidebar-menu contextType=state.contextType/>
+                </div>
             </div>
         </@content>
     </widget>

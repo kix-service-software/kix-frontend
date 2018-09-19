@@ -34,7 +34,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getGeneralWidgetDependencies(): string[] {
         return [
             'widgets/notes-widget',
-            'widgets/linked-objects-widget'
+            'widgets/linked-objects-widget',
+            'widgets/help-widget'
         ];
     }
 
@@ -68,7 +69,8 @@ export class KIXMarkoDependencyExtension implements IMarkoDependencyExtension {
     private getGeneralWidgetTags(): Array<[string, string]> {
         return [
             ['notes-widget', 'widgets/notes-widget'],
-            ['linked-objects-widget', 'widgets/linked-objects-widget']
+            ['linked-objects-widget', 'widgets/linked-objects-widget'],
+            ['help-widget', 'widgets/help-widget']
         ];
     }
 
