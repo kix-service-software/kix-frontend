@@ -1,10 +1,10 @@
 import { IdService } from "@kix/core/dist/browser";
-import { ChartConfiguration } from "chart.js";
 
 export class ComponentState {
 
     public constructor(
-        public chartId: string = IdService.generateDateBasedId()
+        public chartId: string = IdService.generateDateBasedId(),
+        public loading: boolean = false
     ) { }
 
 }
