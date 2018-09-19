@@ -1,7 +1,7 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm
+    FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -15,7 +15,16 @@ export class ModuleExtension implements IModuleFactoryExtension {
     }
 
     public getDefaultConfiguration(): ContextConfiguration {
-        return new FAQArticleSearchContextConfiguration(FAQArticleSearchContext.CONTEXT_ID, [], [], [], [], []);
+        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
+            'help-widget', 'Hilfe', [], {
+                helpText: '<h1>Komplexsuche</h1><h2>Suchoperatoren</h2><ul><li>EQUALS</li><li>CONTAINS</li></ul>'
+            }, false, false, WidgetSize.BOTH, 'kix-icon-query', false, null, false
+        ));
+        const sidebarWidgets = [helpWidget];
+        const sidebars = ['20180919-help-widget'];
+        return new FAQArticleSearchContextConfiguration(
+            FAQArticleSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        );
     }
 
     public async createFormDefinitions(): Promise<void> {

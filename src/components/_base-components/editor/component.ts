@@ -1,16 +1,15 @@
-import { EditorComponentState } from './EditorComponentState';
-import { AutoCompleteConfiguration, KIXObjectType } from '@kix/core/dist/model';
+import { ComponentState } from './ComponentState';
 import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
-import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
+import { AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
 
 declare var CKEDITOR: any;
 
 class EditorComponent {
 
-    public state: EditorComponentState;
+    public state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new EditorComponentState(
+        this.state = new ComponentState(
             input.inline,
             input.simple,
             input.readOnly,
