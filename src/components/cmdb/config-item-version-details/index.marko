@@ -1,5 +1,5 @@
 <if(state.nodes && state.nodes.length)>
-    <table-tree tree=state.nodes titles=["Eigenschaft", "Wert"]/>
+    <table-tree tree=state.nodes titles=["Eigenschaft", "Wert"] on-nodeClicked('nodeClicked')/>
 </if>
 <else>
     <span>Keine Versionsdaten verfügbar.</span>
