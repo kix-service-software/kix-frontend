@@ -13,7 +13,6 @@ export class ComponentState {
         public currentLinkTypeNode: TreeNode = null,
         public currentLinkTypeDescription: LinkTypeDescription = null,
         public linkDescriptions: CreateLinkDescription[] = [],
-        public successHint: string = null,
         public objectType: KIXObjectType = null,
         public formId: string = null,
         public canSubmit: boolean = false

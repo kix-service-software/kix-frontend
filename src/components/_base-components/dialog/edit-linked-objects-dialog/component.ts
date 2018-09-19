@@ -9,7 +9,7 @@ import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent
 } from '@kix/core/dist/model';
 import { LinkUtil } from '@kix/core/dist/browser/link';
 
@@ -308,12 +308,11 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'Verknüpfungen aktualisiert.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Verknüpfungen aktualisiert.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showError(error: any): void {
