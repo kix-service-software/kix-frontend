@@ -11,6 +11,7 @@ class Component {
     public config: ChartConfiguration = null;
     private chart: Chart;
     private timeout: any;
+    private drawTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -27,24 +28,25 @@ class Component {
 
             if (this.timeout) {
                 clearTimeout(this.timeout);
+                clearTimeout(this.drawTimeout);
             }
-            this.timeout = setTimeout(() => {
-                const canvasElement = (this as any).getEl(this.state.chartId);
-                if (canvasElement) {
-                    const ctx = canvasElement.getContext('2d');
-                    if (ctx) {
-                        if (this.chart) {
-                            this.chart.data.labels = this.config.data.labels;
-                            this.chart.data.datasets = this.config.data.datasets;
 
-                            this.chart.update();
-                        } else {
+            this.state.loading = true;
+            this.onDestroy();
+            this.timeout = setTimeout(() => {
+                this.state.loading = false;
+                this.drawTimeout = setTimeout(() => {
+                    const canvasElement = (this as any).getEl(this.state.chartId);
+                    if (canvasElement) {
+                        const ctx = canvasElement.getContext('2d');
+                        if (ctx) {
                             this.chart = new Chart(ctx, this.config);
                         }
                     }
-                }
+                    this.drawTimeout = null;
+                }, 500);
                 this.timeout = null;
-            }, 100);
+            }, 1500);
         }
     }
 
@@ -63,6 +65,7 @@ class Component {
     public onDestroy(): void {
         if (this.chart) {
             this.chart.destroy();
+            this.chart = null;
         }
     }
 
