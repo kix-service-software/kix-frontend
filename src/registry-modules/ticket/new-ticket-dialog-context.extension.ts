@@ -4,11 +4,12 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue
+    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
+import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
 
 export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
@@ -28,8 +29,14 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
                 "ticket-contact-info-widget", "Ansprechpartner", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
-        const sidebars = ['20180524110915', '20180524110920'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
+
+        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
+            'help-widget', 'Textbausteine', [], { helpText: '<h1>Textbausteine</h1>' },
+            false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+        ));
+
+        const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar, helpWidget];
 
         return new NewTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
@@ -56,7 +63,11 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
             fields.push(new FormField("Betreff", TicketProperty.TITLE, null, true, "Betreff"));
             fields.push(new FormField(
-                "Ticketbeschreibung", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung")
+                "Ticketbeschreibung", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
+                    new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
+                        new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                    ]))
+                ])
             );
             fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));
             fields.push(new FormField(
