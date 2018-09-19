@@ -10,7 +10,7 @@ class Component {
     }
 
     public onInput(input: ComponentState): void {
-        this.state.routingConfiguration = input.routingConfiguration;
+        this.state.routingConfiguration = { ...input.routingConfiguration };
         this.state.objectId = input.objectId;
         this.setURL();
     }
