@@ -15,6 +15,7 @@ import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
 import { GeneralCatalogService } from '@kix/core/dist/browser/general-catalog';
 import { TextModuleService } from '@kix/core/dist/browser/text-modules';
+import { EventService } from '@kix/core/dist/browser/event';
 
 declare var io: any;
 
@@ -31,9 +32,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.loading = true;
+        this.state.loadingHint = 'Lade KIX ...';
 
         await ComponentsService.getInstance().init();
-        this.state.initialized = true;
 
         const token = ClientStorageService.getToken();
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
@@ -57,6 +59,18 @@ class Component {
         ContextService.getInstance().setObjectData(this.state.objectData);
         this.bootstrapServices();
         this.setContext();
+
+        EventService.getInstance().subscribe('APP_LOADING', {
+            eventSubscriberId: 'BASE-TEMPLATE',
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === 'APP_LOADING') {
+                    this.state.loading = data.loading;
+                    this.state.loadingHint = data.hint;
+                }
+            }
+        });
+
+        this.state.initialized = true;
         this.state.loading = false;
     }
 
