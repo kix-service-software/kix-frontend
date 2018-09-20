@@ -3,56 +3,15 @@
     <h1>KIX Professional 2018</h1>
     <nav>
         <!-- Neues Objekt -->
-        <ul>
-            <li>
-                <button.special-button type="button" on-click("openDialog") title=state.title>
-                    <span.kix-icon-plus-blank/>
-                    Neu
-                </button>
-            </li>
-        </ul>
+        <button.special-button type="button" on-click("openDialog") title=state.title>
+            <span.kix-icon-plus-blank/>
+            Neu
+        </button>
         <!-- Lesezeichen & Suchvorlagen -->
-        <ul>
-            <li>
-                <bookmarks/>
-            </li>
-        </ul>
+        <bookmarks/>
         <!-- Schnellsuche -->
-        <ul>
-            <li>
-                <quick-search/>
-            </li>
-        </ul>
+        <quick-search/>
         <!-- persönliche Toolbar -->
-        <ul.toolbar>
-            <li>
-                <ul>
-                    <li>
-                        <span.kix-icon-man.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                    <li>
-                        <span.kix-icon-man.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <span.kix-icon-eye.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                    <li>
-                        <span.kix-icon-eye.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <span.kix-icon-lock-close.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                    <li>
-                        <span.kix-icon-lock-close.as-button title="Dummy" on-click('showTemporaryCommingSoon')/>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!-- Sonderfunktionen -->
         <ul.kix-toolbar>
             <li>
                 <span.kix-icon-gear.as-button title=state.title on-click('showTemporaryCommingSoon')/>

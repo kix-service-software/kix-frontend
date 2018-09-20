@@ -1,5 +1,4 @@
-<span.quick-search-input>
-    <input on-click('searchInputClicked') disabled=state.searching type="text" placeholder="| Schnellsuche"
-        value=state.searchValue on-keyup('searchValueChanged')/>
-    <span.kix-icon-search-quick title="Suchen" on-click('searchClicked')/>
-</span>
+<div.quick-search-input>
+    <filter on-filter('search') key="quick-search-filter" placeholder="Schnellsuche (Tickets)"
+        icon="kix-icon-search-quick"/>
+</div>
