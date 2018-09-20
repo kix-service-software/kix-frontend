@@ -45,36 +45,35 @@ span.error {
     color: red;
 }
 
-.button-color(@button-bg-color: @secondary-5, @button-icon-bg-color: @secondary-3, @button-font-color: @default-dark-font-color, @border-color: @secondary-7) {
+.button-color(@border-color: @secondary-7, @button-bg-color: @secondary-6, @button-icon-bg-color: @secondary-7, @button-font-color: @default-dark-font-color, @button-icon-color: @secondary-6) {
     background-color: @button-bg-color;
     color: @button-font-color;
     border-color: @border-color;
     >[class^="kix-icon-"],
     >[class*=" kix-icon-"] {
         background-color: @button-icon-bg-color;
-        color: @border-color;
+        color: @button-icon-color;
         border-color: @border-color;
     }
     &:hover:not(:disabled) {
         background-color: darken(@button-bg-color, 10%);
-        color: darken(@button-font-color, 10%);
         border-color: darken(@border-color, 10%);
         >[class^="kix-icon-"],
         >[class*=" kix-icon-"] {
             background-color: darken(@button-icon-bg-color, 10%);
-            color: darken(@border-color, 10%);
+            color: darken(@button-icon-color, 10%);
             border-color: darken(@border-color, 10%);
         }
     }
     &:disabled {
-        background-color: lighten(@button-bg-color, 20%);
-        color: lighten(@button-font-color, 20%);
-        border-color: lighten(@border-color, 20%);
+        background-color: @secondary-6;
+        color: @secondary-2;
+        border-color: @secondary-2;
         >[class^="kix-icon-"],
         >[class*=" kix-icon-"] {
-            background-color: lighten(@button-icon-bg-color, 70%);
-            color: lighten(@border-color, 70%);
-            border-color: lighten(@border-color, 70%);
+            background-color: @secondary-2;
+            color: @secondary-6;
+            border-color: @secondary-2;
         }
     }
 }
@@ -91,6 +90,9 @@ button {
     border-radius: @border-radius;
     border: 1px solid;
     position: relative;
+    &:not(:hover) {
+        box-shadow: @shadow-1;
+    }
     &:not(.button-without-text) {
         min-width: 10rem;
         padding-left: .625rem+@default-button-icon-width;
@@ -120,17 +122,41 @@ button {
         box-sizing: border-box;
         font-size: 1.5rem;
     }
-    &.form-button {
-        .button-color(@secondary-4, @secondary-3, @secondary-0, @primary-2);
+    &.submit-button {
+        .button-color(@primary-6, @secondary-6, @primary-6, @secondary-0);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
     }
     &.cancel-button {
-        .button-color(@secondary-6, @secondary-3, @secondary-0, @tertiary-0);
+        .button-color(@tertiary-0, @secondary-6, @tertiary-0, @secondary-0 );
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
     }
-    &.submit-button {
-        .button-color(@secondary-6, @secondary-3, @secondary-0, @primary-6);
+    &.form-button {
+        .button-color(@primary-2, @secondary-4, @secondary-3, @secondary-0, @primary-2);
     }
-    &.login-button {
-        .button-color(@primary-6, @secondary-6, @secondary-6, @primary-6);
+    &.form-blank-button {
+        .button-color(@primary-2, @secondary-6, @secondary-3, @secondary-0, @primary-2);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+    }
+    &.form-blank-red-button {
+        .button-color(@tertiary-0, @secondary-6, @secondary-3, @secondary-0, @tertiary-0);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+    }
+    &.special-button {
+        .button-color(@primary-6, @primary-6, @secondary-6, @secondary-6, @primary-6);
+        &:hover:not(:disabled) {
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                background-color: @secondary-6;
+            }
+        }
     }
     &::-moz-focus-inner {
         border: none;
