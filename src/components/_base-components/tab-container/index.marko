@@ -19,10 +19,12 @@
                         <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
                     </if>
                 </div>
-                <sidebar contextType=state.contextType showEmpty=true/>
-                <div.site-menu-wrapper>
-                    <sidebar-menu contextType=state.contextType/>
-                </div>
+                <if(state.hasSidebars)>
+                    <sidebar contextType=state.contextType showEmpty=true/>
+                    <div.site-menu-wrapper>
+                        <sidebar-menu contextType=state.contextType/>
+                    </div>
+                </if>
             </div>
         </@content>
     </widget>
