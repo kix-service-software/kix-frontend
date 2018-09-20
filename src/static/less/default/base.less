@@ -126,12 +126,20 @@ button {
         .button-color(@primary-6, @secondary-6, @primary-6, @secondary-0);
         &:hover:not(:disabled) {
             background-color: @secondary-6;
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                color: tint(@primary-6, 60%);
+            }
         }
     }
     &.cancel-button {
         .button-color(@tertiary-0, @secondary-6, @tertiary-0, @secondary-0 );
         &:hover:not(:disabled) {
             background-color: @secondary-6;
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                color: tint(@tertiary-0, 70%);
+            }
         }
     }
     &.form-button {

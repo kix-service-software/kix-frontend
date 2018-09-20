@@ -199,9 +199,10 @@ class Component {
             if (containerEnd < dropdownListEnd) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
-                    + formListTree.getBoundingClientRect().height;
+                    + formListTree.getBoundingClientRect().height
+                    - 1;
             } else {
-                transformValue = 0;
+                transformValue = 1;
             }
 
         }
