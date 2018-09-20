@@ -54,7 +54,7 @@ textarea.input-style {
         top: @default-input-height;
         left: 0;
         right: 0;
-        border: 1px solid @secondary-4;
+        border: 1px solid @secondary-2;
         background-color: @secondary-6;
         min-height: @default-input-height;
         padding: .25rem;
@@ -93,6 +93,7 @@ textarea.input-style {
         }
         &:hover,
         &.list-shown {
+            border-color: darken(@secondary-3, 20%);
             >input.input-style:not(:disabled),
             >input.input-style:not(:disabled)~.form-list-button,
             >.selected-nodes~.form-list-button {

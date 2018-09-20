@@ -37,7 +37,7 @@
             }
             margin-bottom: .5rem;
         }
-        &:hover {
+        &:hover:not(.active) {
             >.node-value {
                 background: @secondary-5;
                 font-weight: bold;
@@ -45,12 +45,11 @@
         }
         &.active {
             >.node-value {
-                background: @tertiary-4;
-                font-weight: bold;
+                background: fadeout(@tertiary-4, 30%);
             }
             &:hover {
                 >.node-value {
-                    background: darken(@tertiary-4, 20%);
+                    background: @tertiary-4;
                 }
             }
         }
