@@ -39,14 +39,7 @@
                 display: inline-block;
                 border-right: 1px solid @secondary-6;
                 padding-right: 16px;
-                margin-right: 16px; // &::after {
-                //     content: "|";
-                //     margin: 0 1em;
-                // }
-                // &:last-of-type::after{
-                //     content: "";
-                //     margin: 0;
-                // }
+                margin-right: 16px;
                 &:last-of-type {
                     border-right: 0 none;
                     padding-right: 0;
@@ -77,45 +70,6 @@
                     [class^="kix-icon-"],
                     [class*=" kix-icon-"] {
                         font-size: 1.5em;
-                    }
-                }
-            }
-            .dropdown {
-                position: relative;
-                min-width: 265px;
-                top: -1.125em;
-                ul {
-                    position: absolute;
-                    z-index: 2;
-                    margin: 0;
-                    li {
-                        position: relative;
-                        display: none;
-                        &:first-of-type {
-                            display: block;
-                            input {
-                                background-color: @secondary-6;
-                            }
-                        }
-                        input {
-                            padding-left: 2em;
-                            border-color: transparent;
-                            border-radius: 3px;
-                            height: 24px;
-                            background-color: @secondary-0;
-                        }
-                        span[class^="kix-icon-"],
-                        span[class*=" kix-icon-"] {
-                            font-size: 1.25em;
-                            line-height: 24px;
-                            position: absolute;
-                            left: 6px;
-                            top: 1px;
-                        }
-                        span.kix-icon-bookmark,
-                        span.kix-icon-dropdown-ticket {
-                            color: @secondary-0;
-                        }
                     }
                 }
             }

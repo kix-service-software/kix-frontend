@@ -213,6 +213,10 @@ class Component {
         return `Keine ${objectName} gefunden (mind. ${this.state.autoCompleteConfiguration.charCount} ` +
             'Zeichen für die Suche eingeben).';
     }
+
+    public clear(): void {
+        this.state.selectedNodes = [];
+    }
 }
 
 module.exports = Component;
