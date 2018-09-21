@@ -75,6 +75,7 @@ class Component {
                 }
             );
             this.state.thumbnails = this.images;
+            this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${this.images.length})`;
         }
     }
 
