@@ -1,22 +1,23 @@
+@filter-height: 1.5rem;
 .filter {
-    font-size: 0.875rem;
+    .font-size-small;
+    align-self: center;
     display: grid;
     grid-auto-columns: max-content;
     grid-auto-flow: column;
     align-items: center;
-    width: 11.75rem;
-    height: 1.5rem;
+    grid-gap: @margin-small;
     >input {
-        // TODO: prüfen ob Angaben stimmen
-        margin: 0 .5em 0 0.5em;
+        width: 11.75rem;
+        height: @filter-height;
         border: 1px solid @secondary-1;
-        border-radius: 3px;
+        border-radius: @border-radius;
         box-sizing: border-box;
-        padding: 2px 5px;
+        padding: 0 5px;
         color: @default-dark-font-color;
     }
     >span.icon {
+        .icon-font-size-small;
         cursor: pointer;
-        font-size: 1rem;
     }
 }
