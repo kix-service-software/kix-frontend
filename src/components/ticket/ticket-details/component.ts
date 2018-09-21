@@ -23,14 +23,16 @@ export class Component {
             sidebarToggled: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
-                    this.initWidget(context, ticket);
+                    this.initWidget(context, ticket, true);
                 }
             }
         });
         await this.initWidget(context);
     }
 
-    private async initWidget(context: TicketDetailsContext, ticket?: Ticket): Promise<void> {
+    private async initWidget(
+        context: TicketDetailsContext, ticket?: Ticket, scrollToArticle: boolean = false
+    ): Promise<void> {
         this.state.error = null;
         this.state.loading = true;
         this.state.ticket = ticket ? ticket : await context.getObject<Ticket>().catch((error) => null);
@@ -42,10 +44,24 @@ export class Component {
         this.state.ticketDetailsConfiguration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
+        this.state.contentWidgets = context.getContent(true);
+
         this.setActions();
 
         setTimeout(() => {
             this.state.loading = false;
+            if (scrollToArticle) {
+                this.scrollToContent();
+            }
+        }, 100);
+    }
+
+    private scrollToContent(): void {
+        setTimeout(() => {
+            const element = (this as any).getEl("ticket-content");
+            if (element) {
+                element.scrollIntoView(true);
+            }
         }, 100);
     }
 

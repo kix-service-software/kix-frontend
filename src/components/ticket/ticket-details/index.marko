@@ -25,6 +25,13 @@
                 </ul>
             </@content>
         </widget>
-        <article-list-widget ticketId=state.ticketId instanceId="article-list"/>
+        <div.ticket-content key="ticket-content">
+            <for(contentWidget in state.contentWidgets)>
+                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                    contextType: "MAIN",
+                    instanceId: contentWidget.instanceId
+                    })/>
+            </for>
+        </div>
     </div>
 </else>
