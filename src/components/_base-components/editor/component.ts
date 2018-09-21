@@ -62,7 +62,6 @@ class EditorComponent {
                 (this as any).emit('valueChanged', value);
             });
 
-
             if (this.state.readOnly) {
                 this.editor.on('contentDom', () => {
                     const editable = this.editor.editable();
