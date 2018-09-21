@@ -17,11 +17,19 @@ html {
 
 a,
 a:active,
-a:visited {
+a:visited,
+a:link {
     color: @secondary-0;
     text-decoration: none;
     &:hover {
         color: @secondary-1;
+    }
+    &.simple-text {
+        color: @primary-0;
+        &:hover {
+            color: @primary-0;
+            text-decoration: unset;
+        }
     }
 }
 
@@ -128,7 +136,7 @@ button {
             background-color: @secondary-6;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
-                color: tint(@primary-6, 60%);
+                color: fade(@secondary-6, 70%);
             }
         }
     }
@@ -138,7 +146,7 @@ button {
             background-color: @secondary-6;
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
-                color: tint(@tertiary-0, 70%);
+                color: fade(@secondary-6, 70%);
             }
         }
     }

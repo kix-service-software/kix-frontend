@@ -17,8 +17,10 @@ export class ModuleExtension implements IModuleFactoryExtension {
     public getDefaultConfiguration(): ContextConfiguration {
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Hilfe', [], {
-                helpText: '<h1>Komplexsuche</h1><h2>Suchoperatoren</h2><ul><li>EQUALS</li><li>CONTAINS</li></ul>'
-            }, false, false, WidgetSize.BOTH, 'kix-icon-query', false, null, false
+                helpText: 'Eine <b>Erläuterung zu den Suchoperatoren</b> finden Sie hier: '
+                    + '<a class="simple-text" href="faqarticle/75">'
+                    + 'FAQ#100075 - Hilfe zur Komplexsuche</a>'
+            }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
