@@ -8,6 +8,7 @@ export class ComponentState {
         public ticketId: number = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],
+        public contentWidgets: ConfiguredWidget[] = [],
         public generalActions: AbstractAction[] = [],
         public ticketActions: AbstractAction[] = [],
         public loading: boolean = true,

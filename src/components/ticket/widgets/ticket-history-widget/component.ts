@@ -81,7 +81,7 @@ class TicketHistoryWidgetComponent {
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
         if (columnId === ArticleProperty.ARTICLE_ID && historyEntry[columnId]) {
-            EventService.getInstance().publish('ShowArticleInTicketDetails', historyEntry[columnId]);
+            EventService.getInstance().publish('GotToTicketArticle', historyEntry[columnId]);
         }
     }
 

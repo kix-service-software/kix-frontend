@@ -22,7 +22,8 @@ export class Component implements IEventListener {
     public eventSubscriberId: string = 'ArticleList';
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(Number(input.ticketId), 'article-list');
+        this.state = new ComponentState(Number(input.ticketId));
+        this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
@@ -41,8 +42,7 @@ export class Component implements IEventListener {
             }
         });
 
-        EventService.getInstance().subscribe('ShowArticleInTicketDetails', this);
-        EventService.getInstance().subscribe('ArticleTableRowToggled', this);
+        EventService.getInstance().subscribe('GotToTicketArticle', this);
 
         await this.initWidget(await context.getObject<Ticket>());
     }
@@ -50,9 +50,9 @@ export class Component implements IEventListener {
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.loading = true;
         this.state.ticket = ticket;
-        this.setArticles();
-        this.setActions();
-        this.setArticleTableConfiguration();
+        this.prepareArticles();
+        this.prepareActions();
+        this.prepareArticleTableConfiguration();
         setTimeout(() => {
             this.state.loading = false;
         }, 100);
@@ -63,7 +63,7 @@ export class Component implements IEventListener {
         EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
     }
 
-    private setActions(): void {
+    private prepareActions(): void {
         if (this.state.widgetConfiguration && this.state.ticket) {
             this.state.generalArticleActions = ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.settings.generalActions, true, [this.state.ticket]);
@@ -72,7 +72,7 @@ export class Component implements IEventListener {
         }
     }
 
-    private setArticleTableConfiguration(): void {
+    private prepareArticleTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
 
             const tableConfiguration = this.state.widgetConfiguration.settings.tableConfiguration;
@@ -113,7 +113,7 @@ export class Component implements IEventListener {
         }
     }
 
-    private setArticles(): void {
+    private prepareArticles(): void {
         if (this.state.ticket) {
             this.state.articles = [...this.state.ticket.Articles];
             this.state.title = 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
@@ -139,13 +139,18 @@ export class Component implements IEventListener {
     }
 
     public eventPublished(data: any, eventId: string): void {
-        if (eventId === 'ArticleTableRowToggled') {
-            this.state.standardTable.loadRows();
-        } else {
-            EventService.getInstance().publish(this.state.eventSubscriberWidgetPrefix + 'SetMinimizedToFalse');
+        const widgetComponent = (this as any).getComponent('article-list-widget');
+        if (widgetComponent && widgetComponent.state.minimized) {
+            widgetComponent.state.minimized = false;
+        }
+
+        if (eventId === 'GotToTicketArticle') {
             setTimeout(() => {
-                EventService.getInstance().publish('ScrollToArticleInArticleTable', data);
-            }, 500);
+                const tableComponent = (this as any).getComponent('article-list-table');
+                if (tableComponent) {
+                    tableComponent.scrollToObject(data);
+                }
+            }, 200);
         }
     }
 }
