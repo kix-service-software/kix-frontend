@@ -117,7 +117,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // actions
         const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'ticket-edit-action', 'ticket-merge-action', 'linked-objects-edit-action',
+            'ticket-edit-action', 'article-new-note-action', 'ticket-merge-action', 'linked-objects-edit-action',
             'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
             'ticket-print-action',
         ];
@@ -163,10 +163,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             new ConfiguredWidget("20180921-article-list", new WidgetConfiguration(
                 "article-list-widget", "Artikelübersicht", [],
                 {
-                    generalActions: [
-                        'article-bulk-action', 'article-new-email-action', 'article-new-note-action',
-                        'article-call-outgoing-action', 'article-call-incoming-action'
-                    ],
+                    generalActions: ['article-bulk-action', 'article-new-note-action'],
                     tableConfiguration: new TableConfiguration(
                         null, null, [
                             new TableColumnConfiguration(
