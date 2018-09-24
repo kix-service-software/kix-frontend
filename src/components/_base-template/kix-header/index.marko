@@ -1,7 +1,6 @@
 <header>
     <img#logo alt="KIX Professional 2018" src="/static/img/kixpro-logo.png"/>
-    <h1>KIX Professional 2018</h1>
-    <nav>
+    <div>
         <!-- Neues Objekt -->
         <button.special-button type="button" on-click("openDialog") title=state.title>
             <span.kix-icon-plus-blank/>
@@ -12,21 +11,52 @@
         <!-- Schnellsuche -->
         <quick-search/>
         <!-- persönliche Toolbar -->
-        <ul.kix-toolbar>
-            <li>
-                <span.kix-icon-gear.as-button title=state.title on-click('showTemporaryCommingSoon')/>
-            </li>
-            <li>
-                <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend" on-click('showTemporaryCommingSoon')/>
-            </li>
-            <li>
-                <span.kix-icon-query.as-button title="Hilfe" on-click('showTemporaryCommingSoon')/>
-            </li>
-            <li>
-                <a href="/auth?logout" on-click('logout')>
-                    <span.kix-icon-logout title="Logout"/>
-                </a>
-            </li>
-        </ul>
-    </nav>
+        <div.kix-toolbar>
+            <for(group in state.toolbarGroups)>
+                <div.toolbar-group>
+                    <for(action in group)>
+                        <div title=action.title on-click('showTemporaryCommingSoon')>
+                            <div.action-icon>
+                                <icon icon=action.icon showUnknown=true/>
+                            </div>
+                            <if(action.withNew)>
+                                <span.kix-icon-i-orange.new-icon>
+                                    <span.path1/>
+                                    <span.path2/>
+                                </span>
+                            </if>
+                            <div.action-text>${action.number}</div>
+                        </div>
+                    </for>
+                </div>
+            </for>
+        </div>
+        <!-- persönliche Toolbar -->
+        <div.kix-toolbar>
+            <div.toolbar-group>
+                <div>
+                    <div.action-icon>
+                        <span.kix-icon-gear.as-button title=state.title on-click('showTemporaryCommingSoon')/>
+                    </div>
+                </div>
+                <div>
+                    <div.action-icon>
+                        <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend" on-click('showTemporaryCommingSoon')/>
+                    </div>
+                </div>
+                <div>
+                    <div.action-icon>
+                        <span.kix-icon-query.as-button title="Hilfe" on-click('showTemporaryCommingSoon')/>
+                    </div>
+                </div>
+                <div>
+                    <div.action-icon>
+                        <a href="/auth?logout" on-click('logout')>
+                            <span.kix-icon-logout title="Logout"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
