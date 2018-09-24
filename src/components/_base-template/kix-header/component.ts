@@ -7,14 +7,60 @@ class KIXHeaderComponent {
     public state: any;
 
     public onCreate(input: any): void {
-        this.state = {};
+        this.state = {
+            // TODO: durch registrierte Werte ersetzen
+            toolbarGroups: [
+                [
+                    {
+                        icon: 'kix-icon-man',
+                        title: 'Meine Tickets mit neuen Artikeln',
+                        withNew: true,
+                        number: 3
+                    },
+                    {
+                        icon: 'kix-icon-man',
+                        title: 'Meine Tickets',
+                        withNew: false,
+                        number: 15
+                    }
+                ],
+                [
+                    {
+                        icon: 'kix-icon-eye',
+                        title: 'Meine beobachteten Tickets mit neuen Artikeln',
+                        withNew: true,
+                        number: 4
+                    },
+                    {
+                        icon: 'kix-icon-eye',
+                        title: 'Meine beobachteten Tickets',
+                        withNew: false,
+                        number: 8
+                    }
+                ],
+                [
+                    {
+                        icon: 'kix-icon-lock-close',
+                        title: 'Meine gesperrten Tickets mit neuen Artikeln',
+                        withNew: true,
+                        number: 2
+                    },
+                    {
+                        icon: 'kix-icon-lock-close',
+                        title: 'Meine gesperrten Tickets',
+                        withNew: false,
+                        number: 37
+                    },
+                ]
+            ]
+        };
     }
 
-    private openDialog(): void {
+    public openDialog(): void {
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
     }
 
-    private logout(): void {
+    public logout(): void {
         ClientStorageService.destroyToken();
     }
 
