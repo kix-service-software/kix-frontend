@@ -6,32 +6,37 @@
             <span.kix-icon-plus-blank/>
             Neu
         </button>
+        <div.header-separator/>
         <!-- Lesezeichen & Suchvorlagen -->
         <bookmarks/>
+        <div.header-separator/>
         <!-- Schnellsuche -->
         <quick-search/>
+        <div.header-separator/>
         <!-- persönliche Toolbar -->
-        <div.kix-toolbar>
-            <for(group in state.toolbarGroups)>
-                <div.toolbar-group>
-                    <for(action in group)>
-                        <div title=action.title on-click('showTemporaryCommingSoon')>
-                            <div.action-icon>
-                                <icon icon=action.icon showUnknown=true/>
+        <if(state.toolbarGroups && !!state.toolbarGroups.length)>
+            <div.kix-toolbar>
+                <for(group in state.toolbarGroups)>
+                    <div.toolbar-group>
+                        <for(action in group)>
+                            <div title=action.title on-click('showTemporaryCommingSoon')>
+                                <div.action-icon>
+                                    <icon icon=action.icon showUnknown=true/>
+                                </div>
+                                <if(action.withNew)>
+                                    <span.kix-icon-i-orange.new-icon>
+                                        <span.path1/>
+                                        <span.path2/>
+                                    </span>
+                                </if>
+                                <div.action-text>${action.number}</div>
                             </div>
-                            <if(action.withNew)>
-                                <span.kix-icon-i-orange.new-icon>
-                                    <span.path1/>
-                                    <span.path2/>
-                                </span>
-                            </if>
-                            <div.action-text>${action.number}</div>
-                        </div>
-                    </for>
-                </div>
-            </for>
-        </div>
-        <!-- persönliche Toolbar -->
+                        </for>
+                    </div>
+                </for>
+            </div>
+            <div.header-separator/>
+        </if>
         <div.kix-toolbar>
             <div.toolbar-group>
                 <div>

@@ -182,7 +182,7 @@ class Component {
     private setDropdownStyle(): void {
         const formListTree = (this as any).getComponent(this.state.treeId) ?
             (this as any).getComponent(this.state.treeId).getTreeDOMElement() : null;
-        let transformValue = 0;
+        let transformValue = 1;
         if (formListTree) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = formListInputContainer;
@@ -201,10 +201,7 @@ class Component {
                     = formListInputContainer.getBoundingClientRect().height
                     + formListTree.getBoundingClientRect().height
                     - 1;
-            } else {
-                transformValue = 1;
             }
-
         }
         this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
