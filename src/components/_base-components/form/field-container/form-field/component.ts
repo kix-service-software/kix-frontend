@@ -67,9 +67,8 @@ class Component {
     }
 
     public getPaddingRight(): string {
-        const paddingRight = (this.state.level - 1) * 1.75 + "rem";
         if (this.state.level > 1) {
-            return paddingRight;
+            return "1.75rem";
         } else {
             return "0";
         }
