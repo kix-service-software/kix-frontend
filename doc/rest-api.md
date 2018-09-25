@@ -87,7 +87,7 @@ export class FAQService extends KIXObjectService implements IFAQService {
 
     public constructor(@inject("IHttpService") httpService: IHttpService) {
         super(httpService);
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        ServiceRegistry.getInstance().registerServiceInstance(this);
     }
 
     public isServiceFor(type: KIXObjectType): boolean {

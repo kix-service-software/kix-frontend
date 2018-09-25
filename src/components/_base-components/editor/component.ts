@@ -1,4 +1,7 @@
 import { EditorComponentState } from './EditorComponentState';
+import { AutoCompleteConfiguration, KIXObjectType } from '@kix/core/dist/model';
+import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
+import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
 
 declare var CKEDITOR: any;
 
@@ -55,6 +58,22 @@ class EditorComponent {
                 (this as any).emit('valueChanged', value);
             });
         }
+    }
+
+    public setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): void {
+        autocompleteOption.autocompleteObjects.forEach((ao) => {
+            const service = (ServiceRegistry.getInstance().getServiceInstance(ao.objectType) as IKIXObjectService);
+            if (service) {
+                const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                if (config) {
+                    // tslint:disable-next-line:no-unused-expression
+                    const plugin = new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], config);
+                    plugin.getHtmlToInsert = function (item) {
+                        return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                    };
+                }
+            }
+        });
     }
 
     // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->

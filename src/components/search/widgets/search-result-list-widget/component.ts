@@ -6,7 +6,7 @@ import {
     LabelService, StandardTableFactoryService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory, KIXObjectSearchCache, IKIXObjectService
 } from '@kix/core/dist/browser';
-import { KIXObjectServiceRegistry } from '@kix/core/dist/browser';
+import { ServiceRegistry } from '@kix/core/dist/browser';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -90,7 +90,7 @@ class Component implements IKIXObjectSearchListener {
             if (isSearchMainObject) {
                 const objectProperties = cache.criteria.map((c) => c.property);
                 const objectService
-                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
+                    = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
                 this.state.resultTable.setColumns(columns);
             }

@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    FormService, DialogService, OverlayService, KIXObjectServiceRegistry, ContextService
+    FormService, DialogService, OverlayService, ServiceRegistry, ContextService
 } from '@kix/core/dist/browser';
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult, StringContent, KIXObjectType, ContextMode
@@ -41,7 +41,7 @@ class Component {
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "FAQ Artikel wird angelegt");
                 const service
-                    = KIXObjectServiceRegistry.getInstance().getServiceInstance<FAQService>(KIXObjectType.FAQ_ARTICLE);
+                    = ServiceRegistry.getInstance().getServiceInstance<FAQService>(KIXObjectType.FAQ_ARTICLE);
                 await service.createObjectByForm(KIXObjectType.FAQ_ARTICLE, this.state.formId)
                     .then((faqArticleId) => {
                         DialogService.getInstance().setMainDialogLoading(false);

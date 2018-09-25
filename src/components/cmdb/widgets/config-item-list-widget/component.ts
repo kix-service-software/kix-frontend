@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, KIXObjectServiceRegistry
+    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject, ConfigItemClass, ConfigItemProperty
@@ -47,7 +47,7 @@ class Component {
     }
 
     private async prepareFilter(): Promise<void> {
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<CMDBService>(
+        const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
             KIXObjectType.CONFIG_ITEM
         );
 

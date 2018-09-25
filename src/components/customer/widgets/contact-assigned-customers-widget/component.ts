@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, TableFilterLayer, TableSortLayer,
     TableColumn, ITableConfigurationListener, ActionFactory,
-    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, KIXObjectServiceRegistry
+    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
 import {

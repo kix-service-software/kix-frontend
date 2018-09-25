@@ -5,7 +5,7 @@ import {
     IKIXObjectSearchListener,
     KIXObjectSearchService,
     SearchResultCategory,
-    KIXObjectServiceRegistry,
+    ServiceRegistry,
     IKIXObjectService
 } from '@kix/core/dist/browser';
 import { TreeNode, KIXObjectType } from '@kix/core/dist/model';
@@ -63,7 +63,7 @@ export class Component implements IKIXObjectSearchListener {
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         if (searchCache && categories) {
             const objectService
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(searchCache.objectType);
+                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
                 nodes = categories.map((category: SearchResultCategory) => {
                     category.objectIds = objectService.determineDependendObjects(

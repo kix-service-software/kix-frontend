@@ -1,6 +1,6 @@
 import {
     KIXObjectSearchService, DialogService, OverlayService,
-    WidgetService, KIXObjectServiceRegistry, StandardTableFactoryService,
+    WidgetService, ServiceRegistry, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
     ITablePreventSelectionLayer, IKIXObjectService
@@ -50,7 +50,7 @@ class LinkDialogComponent {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
             const service
-                = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
+                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
             const linkObjectType = service.getLinkObjectName();
             objectData.linkTypes.forEach((lt) => {
                 let linkableObject = null;
@@ -245,7 +245,7 @@ class LinkDialogComponent {
         const objectData = ContextService.getInstance().getObjectData();
         if (objectData && objectData.linkTypes) {
             if (this.state.currentLinkableObjectNode) {
-                const service = KIXObjectServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
+                const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
                     this.state.objectType
                 );
                 const linkObjectType = service.getLinkObjectName();
