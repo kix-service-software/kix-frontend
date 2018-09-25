@@ -1,12 +1,12 @@
-import { FilterComponentState } from './FilterComponentState';
-import { FormDropdownItem, TableFilterCriteria, KIXObjectPropertyFilter, TreeNode } from '@kix/core/dist/model';
+import { ComponentState } from './ComponentState';
+import { KIXObjectPropertyFilter, TreeNode } from '@kix/core/dist/model';
 
-class FilterComponent {
+class Component {
 
-    private state: FilterComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new FilterComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -21,6 +21,10 @@ class FilterComponent {
         }
         this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
             input.predefinedFilterPlaceholder : "Alle Objekte";
+
+        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : 'Filtern in Liste';
+
+        this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
     }
 
     private textFilterValueChanged(event: any): void {
@@ -51,4 +55,4 @@ class FilterComponent {
 
 }
 
-module.exports = FilterComponent;
+module.exports = Component;

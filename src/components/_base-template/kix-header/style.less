@@ -1,3 +1,4 @@
+@toolbar-icon-size: 1.5rem;
 .wrapper {
     >header {
         background: @primary-1;
@@ -8,6 +9,9 @@
         box-sizing: border-box;
         position: fixed;
         top: 0;
+        display: grid;
+        grid-auto-flow: column;
+        align-content: center;
         a,
         a:visited,
         a:hover,
@@ -16,105 +20,57 @@
             text-decoration: none;
         }
         #logo {
-            position: relative;
             background-color: @secondary-6;
-            top: 9px;
             padding: 2px 2px 2px 12px;
             width: 52px;
             height: 52px;
             border-top-right-radius: 14px;
             border-bottom-right-radius: 14px;
         }
-        h1 {
-            display: none;
-            margin-left: 1em;
-        }
-        nav {
-            position: absolute;
-            right: 0;
-            top: 0;
-            margin: 1.5em 1.5em 0 0;
-            line-height: 27px;
-            ul {
-                display: inline-block;
-                border-right: 1px solid @secondary-6;
-                padding-right: 16px;
-                margin-right: 16px; // &::after {
-                //     content: "|";
-                //     margin: 0 1em;
-                // }
-                // &:last-of-type::after{
-                //     content: "";
-                //     margin: 0;
-                // }
-                &:last-of-type {
-                    border-right: 0 none;
-                    padding-right: 0;
-                    margin-right: 0;
-                }
-                li {
-                    display: inline-block;
-                    margin: 0 .25em;
-                    &:first-of-type {
-                        margin-left: 0;
-                    }
-                    &:last-of-type {
-                        margin-right: 0;
-                    }
-                    ul {
-                        border-right: 0 none;
-                        margin: 0;
-                    }
-                    [class^="kix-icon-"],
-                    [class*=" kix-icon-"] {
-                        font-size: 1.75em;
-                        line-height: 27px;
-                        vertical-align: middle;
-                    }
-                }
-                &.toolbar,
-                &.kix-toolbar {
-                    [class^="kix-icon-"],
-                    [class*=" kix-icon-"] {
-                        font-size: 1.5em;
-                    }
-                }
+        >div {
+            justify-self: end;
+            display: grid;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
+            grid-column-gap: 1rem;
+            align-items: center;
+            margin-right: 1rem;
+            .special-button {
+                width: 5rem;
+                min-width: unset;
+                font-weight: bold;
+                box-shadow: none;
             }
-            .dropdown {
-                position: relative;
-                min-width: 265px;
-                top: -1.125em;
-                ul {
-                    position: absolute;
-                    z-index: 2;
-                    margin: 0;
-                    li {
-                        position: relative;
-                        display: none;
-                        &:first-of-type {
-                            display: block;
-                            input {
-                                background-color: @secondary-6;
+            >.kix-toolbar {
+                display: grid;
+                grid-gap: .75rem;
+                grid-auto-flow: column;
+                align-self: end;
+                >div.toolbar-group {
+                    display: grid;
+                    grid-auto-flow: column;
+                    grid-gap: 0.125rem;
+                    >div {
+                        display: grid;
+                        grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
+                        grid-template-columns: auto auto;
+                        justify-items: center;
+                        cursor: pointer;
+                        >.action-icon {
+                            [class^="kix-icon-"],
+                            [class*=" kix-icon-"] {
+                                .icon-font-size-normal;
                             }
                         }
-                        input {
-                            padding-left: 2em;
-                            border-color: transparent;
-                            border-radius: 3px;
-                            height: 24px;
-                            background-color: @secondary-0;
+                        >.new-icon {
+                            font-size: .875rem;
+                            vertical-align: super;
+                            margin-left: -5px;
+                            margin-right: -3px;
                         }
-                        span[class^="kix-icon-"],
-                        span[class*=" kix-icon-"] {
-                            font-size: 1.25em;
-                            line-height: 24px;
-                            position: absolute;
-                            left: 6px;
-                            top: 1px;
-                        }
-                        span.kix-icon-bookmark,
-                        span.kix-icon-dropdown-ticket {
-                            color: @secondary-0;
+                        >.action-text {
+                            .font-size-normal;
+                            grid-row: 2;
                         }
                     }
                 }

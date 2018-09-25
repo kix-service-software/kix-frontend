@@ -1,16 +1,16 @@
-import { EditorComponentState } from './EditorComponentState';
-import { AutoCompleteConfiguration, KIXObjectType } from '@kix/core/dist/model';
+import { ComponentState } from './ComponentState';
 import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
-import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
+import { AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
 
 declare var CKEDITOR: any;
 
 class EditorComponent {
 
-    public state: EditorComponentState;
+    public state: ComponentState;
+    private editor: any;
 
     public onCreate(input: any): void {
-        this.state = new EditorComponentState(
+        this.state = new ComponentState(
             input.inline,
             input.simple,
             input.readOnly,
@@ -22,16 +22,16 @@ class EditorComponent {
     public async onInput(input: any): Promise<void> {
         if (await this.isEditorReady()) {
             if (input.addValue) {
-                CKEDITOR.instances[this.state.id].insertHtml(input.addValue);
+                this.editor.insertHtml(input.addValue);
             } else if (input.value) {
-                const currentValue = CKEDITOR.instances[this.state.id].getData();
+                const currentValue = this.editor.getData();
                 if (input.value !== currentValue) {
-                    CKEDITOR.instances[this.state.id].setData(input.value);
+                    this.editor.setData(input.value);
                 }
             }
             if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
                 this.state.readOnly = input.readOnly;
-                CKEDITOR.instances[this.state.id].setReadOnly(this.state.readOnly);
+                this.editor.setReadOnly(this.state.readOnly);
             }
         }
 
@@ -41,11 +41,11 @@ class EditorComponent {
     public async onMount(): Promise<void> {
         if (!this.instanceExists()) {
             if (this.state.inline) {
-                CKEDITOR.inline(this.state.id, {
+                this.editor = CKEDITOR.inline(this.state.id, {
                     ...this.state.config
                 });
             } else {
-                CKEDITOR.replace(this.state.id, {
+                this.editor = CKEDITOR.replace(this.state.id, {
                     ...this.state.config
                 });
             }
@@ -53,10 +53,22 @@ class EditorComponent {
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
             // - siehe bei Notes-Sidebar (toggleEditMode))
-            CKEDITOR.instances[this.state.id].on('blur', (event) => {
+            this.editor.on('blur', (event) => {
                 const value = event.editor.getData();
                 (this as any).emit('valueChanged', value);
             });
+
+            if (this.state.readOnly) {
+                this.editor.on('contentDom', () => {
+                    const editable = this.editor.editable();
+                    editable.attachListener(editable, 'click', (evt) => {
+                        const link = new CKEDITOR.dom.elementPath(evt.data.getTarget(), this).contains('a');
+                        if (link && evt.data.$.button !== 2 && link.isReadOnly()) {
+                            window.open(link.getAttribute('href'));
+                        }
+                    });
+                });
+            }
         }
     }
 
@@ -67,7 +79,7 @@ class EditorComponent {
                 const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                 if (config) {
                     // tslint:disable-next-line:no-unused-expression
-                    const plugin = new CKEDITOR.plugins.autocomplete(CKEDITOR.instances[this.state.id], config);
+                    const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
                     plugin.getHtmlToInsert = function (item) {
                         return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
                     };
@@ -80,7 +92,7 @@ class EditorComponent {
     // weil der Editor schon kurz nach Instanziierung wieder zerstört wird)
     public async onDestroy(): Promise<void> {
         if (this.instanceExists()) {
-            CKEDITOR.instances[this.state.id].destroy();
+            this.editor.destroy();
         }
     }
 
@@ -95,7 +107,7 @@ class EditorComponent {
         return new Promise<boolean>((resolve) => {
             if (
                 this.instanceExists() &&
-                CKEDITOR.instances[this.state.id].status === 'ready'
+                this.editor.status === 'ready'
             ) {
                 resolve(true);
             } else if (retryCount < 10) {
@@ -116,7 +128,6 @@ class EditorComponent {
     private instanceExists(): boolean {
         return CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[this.state.id];
     }
-
 }
 
 module.exports = EditorComponent;

@@ -31,12 +31,19 @@ class Component {
     }
 
     private async initWidget(context: CustomerDetailsContext, customer?: Customer): Promise<void> {
+        this.state.error = null;
         this.state.loading = true;
-        this.state.customer = customer ? customer : await context.getObject<Customer>();
+        this.state.customer = customer ? customer : await context.getObject<Customer>().catch((error) => null);
+
+        if (!this.state.customer) {
+            this.state.error = `Kein Kunde mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
         this.setActions();
+        this.setContentActions();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -44,22 +51,20 @@ class Component {
     }
 
     private setActions(): void {
-        const config = this.state.configuration;
-        if (config && this.state.customer) {
+        if (this.state.configuration && this.state.customer) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, true, [this.state.customer]
+                this.state.configuration.generalActions, true, [this.state.customer]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
     }
 
-    public getCustomerActions(): string[] {
-        let actions = [];
-        const config = this.state.configuration;
-        if (config && this.state.customerId) {
-            actions = ActionFactory.getInstance().generateActions(config.customerActions, true, [this.state.customer]);
+    private setContentActions(): void {
+        if (this.state.configuration && this.state.customer) {
+            this.state.contentActions = ActionFactory.getInstance().generateActions(
+                this.state.configuration.customerActions, true, [this.state.customer]
+            );
         }
-        return actions;
     }
 
     public getTitle(): string {

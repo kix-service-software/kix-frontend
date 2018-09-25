@@ -80,7 +80,7 @@ class Component {
     }
 
     public focusLost(): void {
-        // TODO: ggf. irrelevant
+        (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
@@ -199,9 +199,10 @@ class Component {
             if (containerEnd < dropdownListEnd) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
-                    + formListTree.getBoundingClientRect().height;
+                    + formListTree.getBoundingClientRect().height
+                    - 1;
             } else {
-                transformValue = 0;
+                transformValue = 1;
             }
 
         }
@@ -212,6 +213,10 @@ class Component {
         const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objekte';
         return `Keine ${objectName} gefunden (mind. ${this.state.autoCompleteConfiguration.charCount} ` +
             'Zeichen für die Suche eingeben).';
+    }
+
+    public clear(): void {
+        this.state.selectedNodes = [];
     }
 }
 

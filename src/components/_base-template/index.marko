@@ -23,4 +23,12 @@
         <overlay-dialog/>
         <overlay/>
     </if>
+    <if(state.loading)>
+        <div.app-loading-shield>
+            <div.loading-info>
+                <loading-spinner/>
+                <span>${state.loadingHint}</span>
+            </div>
+        </div>
+    </if>
 </div>

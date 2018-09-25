@@ -11,8 +11,8 @@ export class ComponentState extends WidgetComponentState {
 
         // TODO: bei korrekter Graph-Implementierung wieder entfernen
         public fakeGraph: string = 'graph_klein.jpg',
-        public fakeGraphBig: DisplayImageDescription =
-            new DisplayImageDescription(1, '/static/img/config-item-graph/graph_groß.jpg', 'Verknüpfungsgraph')
+        public fakeGraphLarge: DisplayImageDescription =
+            new DisplayImageDescription(1, '/static/img/config-item-graph/graph_gross.jpg', 'Verknüpfungsgraph')
     ) {
         super();
     }

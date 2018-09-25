@@ -1,4 +1,4 @@
-import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory, WidgetService, DialogService } from "@kix/core/dist/browser";
 import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, AbstractAction, WidgetType } from "@kix/core/dist/model";
@@ -35,8 +35,14 @@ class Component {
     }
 
     private async initWidget(context: FAQDetailsContext, faqArticle?: FAQArticle): Promise<void> {
+        this.state.error = null;
         this.state.loading = true;
-        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
+        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>().catch((error) => null);
+
+        if (!this.state.faqArticle) {
+            this.state.error = `Kein FAQ-Artikel mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);

@@ -5,11 +5,9 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = '20180710-customer-details',
-        public customerId: string = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],
-        public generalActions: AbstractAction[] = [],
-        public customerActions: AbstractAction[] = [],
+        public contentActions: AbstractAction[] = [],
         public loading: boolean = false,
         public configuration: CustomerDetailsContextConfiguration = null,
         public customer: Customer = null,

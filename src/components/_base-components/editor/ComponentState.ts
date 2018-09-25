@@ -1,6 +1,6 @@
 import { IdService } from '@kix/core/dist/browser/IdService';
 
-export class EditorComponentState {
+export class ComponentState {
 
     public id: string;
     public config: object = {};
@@ -72,7 +72,7 @@ export class EditorComponentState {
             resize_minHeight: 200,
             resize_maxWidth: 1200,
             resize_maxHeight: 1000,
-            extraAllowedContent: 'div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
+            extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',

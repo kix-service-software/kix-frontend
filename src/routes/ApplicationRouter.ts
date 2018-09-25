@@ -1,15 +1,6 @@
 import { KIXRouter } from '@kix/core/dist/routes/';
-import { IAuthenticationService, IConfigurationService } from '@kix/core/dist/services';
-
-import { IServerConfiguration } from '@kix/core/dist/common';
-import { IRouter } from '@kix/core/dist/routes';
-import {
-    IModuleFactoryExtension, ISpecificCSSExtension, KIXExtensions
-} from '@kix/core/dist/extensions';
-
-import { inject, injectable } from 'inversify';
+import { ISpecificCSSExtension, KIXExtensions } from '@kix/core/dist/extensions';
 import { Request, Response, Router } from 'express';
-import { AbstractAction } from '@kix/core/dist/model';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -55,6 +46,12 @@ export class ApplicationRouter extends KIXRouter {
 
         this.router.get(
             "/:moduleId/:objectId",
+            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            this.getModule.bind(this)
+        );
+
+        this.router.get(
+            "/:moduleId/:objectId/*",
             this.authenticationService.isAuthenticated.bind(this.authenticationService),
             this.getModule.bind(this)
         );

@@ -38,15 +38,7 @@ class ArticleAttachmentComponent {
     }
 
     public onClick(): void {
-        if (this.content) {
-            this.download();
-        } else {
-            (this as any).emit('fileClicked');
-        }
-    }
-
-    public async download(): Promise<void> {
-        BrowserUtil.startBrowserDownload(this.state.fileName, this.content, this.contentType);
+        (this as any).emit('fileClicked');
     }
 
 }

@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    KIXObjectType, ContextMode
+    KIXObjectType, ContextMode, ToastContent
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
 import { TicketService } from "@kix/core/dist/browser/ticket";
@@ -61,12 +61,11 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'Ticket wurde erfolgreich angelegt.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Ticket wurde erfolgreich angelegt.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

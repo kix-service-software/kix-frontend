@@ -4,7 +4,7 @@ import {
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode
+    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent
 } from "@kix/core/dist/model";
 import { CustomerService } from "@kix/core/dist/browser/customer";
 
@@ -54,12 +54,11 @@ class NewCustomerDialogComponent {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'Kunde wurde erfolgreich angelegt.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Kunde wurde erfolgreich angelegt.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

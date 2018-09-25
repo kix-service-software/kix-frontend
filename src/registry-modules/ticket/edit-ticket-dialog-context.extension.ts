@@ -4,7 +4,8 @@ import {
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
-    Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration, FormFieldOption, FormFieldOptions
+    Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
+    FormFieldOption, FormFieldOptions, WidgetSize
 } from '@kix/core/dist/model';
 import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
@@ -29,8 +30,16 @@ export class EditTicketDialogModuleExtension implements IModuleFactoryExtension 
                 "ticket-contact-info-widget", "Ansprechpartner", [], {},
                 false, false, null, 'kix-icon-man-bubble', false)
             );
-        const sidebars = ['20180524110915', '20180524110920'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
+
+        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
+            'help-widget', 'Textbausteine', [], {
+                // tslint:disable-next-line:max-line-length
+                helpText: 'Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie "::" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben.'
+            }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+        ));
+
+        const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar, helpWidget];
 
         return new EditTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }

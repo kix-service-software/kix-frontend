@@ -117,49 +117,10 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // actions
         const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'ticket-edit-action', 'ticket-merge-action', 'linked-objects-edit-action',
+            'ticket-edit-action', 'article-new-note-action', 'ticket-merge-action', 'linked-objects-edit-action',
             'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
             'ticket-print-action',
         ];
-
-        const articleWidget =
-            new ConfiguredWidget("article-list", new WidgetConfiguration(
-                "article-list-widget", "Artikelübersicht", [],
-                {
-                    generalActions: [
-                        'article-bulk-action', 'article-new-email-action', 'article-new-note-action',
-                        'article-call-outgoing-action', 'article-call-incoming-action'
-                    ],
-                    tableConfiguration: new TableConfiguration(
-                        null, null, [
-                            new TableColumnConfiguration(
-                                'Number', true, false, false, true, 50, DataType.NUMBER
-                            ),
-                            new TableColumnConfiguration(
-                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
-                            ),
-                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
-                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
-                            new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
-                            new TableColumnConfiguration(
-                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
-                            ),
-                            new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
-                        ], null, true,
-                        true, new ToggleOptions('ticket-article-details', 'article', [
-                            'article-print-action',
-                            'article-edit-action',
-                            'article-communication-action',
-                            'article-tag-action',
-                            'article-maximize-action'
-                        ], true),
-                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
-                },
-                false, true, WidgetSize.LARGE, null, false)
-            );
 
         // Overlays
         const customerInfoOverlay =
@@ -198,20 +159,55 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             articleAttachmentOverlay
         ];
 
+        const articleListWidget =
+            new ConfiguredWidget("20180921-article-list", new WidgetConfiguration(
+                "article-list-widget", "Artikelübersicht", [],
+                {
+                    generalActions: ['article-bulk-action', 'article-new-note-action'],
+                    tableConfiguration: new TableConfiguration(
+                        null, null, [
+                            new TableColumnConfiguration(
+                                'Number', true, false, false, true, 50, DataType.NUMBER
+                            ),
+                            new TableColumnConfiguration(
+                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
+                            ),
+                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
+                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
+                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
+                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
+                            new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
+                            new TableColumnConfiguration(
+                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
+                            ),
+                            new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
+                        ], null, true,
+                        true, new ToggleOptions('ticket-article-details', 'article', [
+                            'article-print-action',
+                            'article-edit-action',
+                            'article-communication-action',
+                            'article-tag-action',
+                            'article-maximize-action'
+                        ], true),
+                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                },
+                false, true, WidgetSize.LARGE, null, false)
+            );
+
+        const content = ['20180921-article-list'];
+        const contentWidgets = [articleListWidget];
+
         return new TicketDetailsContextConfiguration(
             this.getModuleId(),
             [],
-            sidebars,
-            sidebarWidgets,
+            sidebars, sidebarWidgets,
             [],
-            lanes,
-            laneTabs,
-            laneWidgets,
-            laneTabWidgets,
-            articleWidget,
-            generalActions,
-            ticketActions,
-            infoOverlayWidgets
+            lanes, laneTabs,
+            laneWidgets, laneTabWidgets,
+            generalActions, ticketActions,
+            infoOverlayWidgets,
+            content, contentWidgets
         );
     }
 

@@ -30,7 +30,13 @@ class Component {
     }
 
     private async initWidget(context: ContactDetailsContext, contact?: Contact): Promise<void> {
-        this.state.contact = contact ? contact : await context.getObject<Contact>();
+        this.state.error = null;
+        this.state.contact = contact ? contact : await context.getObject<Contact>().catch((error) => null);
+
+        if (!this.state.contact) {
+            this.state.error = `Kein Ansprechpartner mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();

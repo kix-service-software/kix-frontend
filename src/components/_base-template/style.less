@@ -3,6 +3,26 @@
     box-sizing: border-box;
     background: @secondary-5;
     color: @secondary-2;
+    >.app-loading-shield {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: -@header-height - @margin-default;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.7);
+        z-index: 1000;
+        >.loading-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            >span {
+                font-size: 3rem;
+                color: @secondary-7;
+            }
+        }
+    }
     >header {
         z-index: 200
     }

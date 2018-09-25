@@ -3,7 +3,7 @@ import {
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService } from '@kix/core/dist/browser/cmdb';
@@ -87,12 +87,11 @@ class Component {
     }
 
     private showSuccessHint(): void {
-        const content = new ComponentContent('list-with-title', {
-            title: 'Config Item wurde erfolgreich angelegt.',
-            list: [],
-            icon: 'kix-icon-check'
-        });
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Config Item wurde erfolgreich angelegt.', 'kix-icon-check')
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

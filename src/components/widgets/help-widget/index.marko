@@ -1,0 +1,11 @@
+<div.help-container class={"note-editor-active": state.editorActive}>
+    <widget instanceId=input.instanceId minimizable=false contextType=state.contextType
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Hilfe")>
+        <@icon>
+            <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-query")/>
+        </@icon>
+        <@content>
+            <editor value=state.helpText simple=true readOnly=true keyValue="help-sidebar"/>
+        </@content>
+    </widget>
+</div>

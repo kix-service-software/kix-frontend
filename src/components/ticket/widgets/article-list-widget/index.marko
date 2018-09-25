@@ -1,27 +1,15 @@
-<if(state.loading)>
-    <loading-spinner/>
-</if>
-<else>
-    <div.article-table-widget>
-        <if(state.ticket)>
-            <widget instanceId=state.instanceId title=state.title eventSubscriberPrefix=state.eventSubscriberWidgetPrefix>
-                <@headerContent>
-                    <div.header-attachments on-click('attachmentsClicked')>
-                        <span.kix-icon-attachement/>(${state.attachmentCount})
-                    </div>
-                    <filter on-filter('filter')/>
-                </@headerContent>
-                <@content>
-                    <div.article-table-wrapper>
-                        <if(state.standardTable)>
-                            <standard-table standardTable=state.standardTable/>
-                        </if>
-                    </div>
-                </@content>
-            </widget>
-        </if>
-        <else>
-            <loading-spinner/>
-        </else>
-    </div>
-</else>
+<widget key="article-list-widget" instanceId=state.instanceId title=state.title>
+    <@headerContent>
+        <div.header-attachments on-click('attachmentsClicked')>
+            <span.kix-icon-attachement/>(${state.attachmentCount})
+        </div>
+        <filter on-filter('filter')/>
+    </@headerContent>
+    <@content>
+        <div.article-table-wrapper>
+            <if(state.standardTable)>
+                <standard-table standardTable=state.standardTable key="article-list-table"/>
+            </if>
+        </div>
+    </@content>
+</widget>

@@ -32,6 +32,11 @@ class Component {
     private async initWidget(context: ConfigItemDetailsContext, configItem?: ConfigItem): Promise<void> {
         this.state.loading = true;
         this.state.configItem = configItem ? configItem : await context.getObject<ConfigItem>();
+
+        if (!this.state.configItem) {
+            this.state.error = `Kein Config Item mit ID ${context.getObjectId()} verfügbar.`;
+        }
+
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);

@@ -9,7 +9,7 @@ import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    OverlayType, ComponentContent, TreeNode, DataType
+    OverlayType, ComponentContent, TreeNode, DataType, ToastContent
 } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 
@@ -40,7 +40,9 @@ class LinkDialogComponent {
         this.setLinkTypes();
         if (this.state.currentLinkableObjectNode) {
             this.prepareResultTable([]);
-            this.highlightLayer.setHighlightedObjects([]);
+            if (this.state.standardTable) {
+                this.highlightLayer.setHighlightedObjects([]);
+            }
         }
 
         this.setCanSubmit();
@@ -109,7 +111,6 @@ class LinkDialogComponent {
     public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setOverlayDialogLoading(true);
 
-        this.state.successHint = null;
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.state.selectedObjects = [];
 
@@ -227,14 +228,13 @@ class LinkDialogComponent {
     }
 
     private showSuccessHint(count: number): void {
-        this.state.successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
-        const content = new ComponentContent('list-with-title', {
-            title: 'Erfolgreich ausgeführt',
-            list: [this.state.successHint],
-            icon: 'kix-icon-check'
-        });
+        const successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('Erfolgreich ausgeführt', 'kix-icon-check', successHint)
+        );
 
-        OverlayService.getInstance().openOverlay(OverlayType.TOAST, null, content, '');
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private setLinkTypes(): void {

@@ -1,13 +1,13 @@
-import { LoginComponentState } from './LoginComponentState';
+import { ComponentState } from './ComponentState';
 import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { AuthenticationService } from '@kix/core/dist/browser/authentication';
 
-class LoginFormComponent {
+class Component {
 
-    public state: LoginComponentState;
+    public state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new LoginComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -29,11 +29,11 @@ class LoginFormComponent {
         }, 200);
     }
 
-    private userNameChanged(event: any): void {
+    public userNameChanged(event: any): void {
         this.state.userName = event.target.value;
     }
 
-    private passwordChanged(event: any): void {
+    public passwordChanged(event: any): void {
         this.state.password = event.target.value;
     }
 
@@ -51,7 +51,7 @@ class LoginFormComponent {
         }
     }
 
-    private keyDown(event: any): void {
+    public keyDown(event: any): void {
         // 13 == Enter
         if (event.keyCode === 13 || event.key === 'Enter') {
             this.login(event);
@@ -59,4 +59,4 @@ class LoginFormComponent {
     }
 }
 
-module.exports = LoginFormComponent;
+module.exports = Component;

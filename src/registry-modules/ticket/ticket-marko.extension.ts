@@ -7,6 +7,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/new-ticket-dialog',
             'ticket/dialogs/search-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
+            'ticket/dialogs/new-ticket-article-dialog',
             'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
@@ -20,6 +21,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/inputs/ticket-input-archive-search',
         ];
         const widgets = [
+            'ticket/widgets/article-list-widget',
             'ticket/widgets/ticket-list-widget',
             'ticket/widgets/ticket-info-widget',
             'ticket/widgets/ticket-history-widget',
@@ -47,6 +49,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
     public getComponentTags(): Array<[string, string]> {
         const widgets: Array<[string, string]> = [
+            ['article-list-widget', 'ticket/widgets/article-list-widget'],
             ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
             ['ticket-list-configuration', 'ticket/widgets/ticket-list-widget/ticket-list-configuration'],
             ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
@@ -83,6 +86,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
             ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
             ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
+            ['new-ticket-article-dialog', 'ticket/dialogs/new-ticket-article-dialog'],
             ['ticket-contact-info', 'ticket/ticket-contact-info'],
             ['ticket-customer-info', 'ticket/ticket-customer-info'],
             ['article-receiver-list', 'ticket/article-receiver-list'],

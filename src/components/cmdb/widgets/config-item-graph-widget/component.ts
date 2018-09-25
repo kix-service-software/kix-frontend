@@ -59,7 +59,7 @@ class Component {
     }
 
     public openImageDialog(): void {
-        DialogService.getInstance().openImageDialog([this.state.fakeGraphBig]);
+        DialogService.getInstance().openImageDialog([this.state.fakeGraphLarge]);
     }
 }
 
