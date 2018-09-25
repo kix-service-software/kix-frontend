@@ -13,6 +13,11 @@
         <if(!state.field.empty)>
             <include(component.getInputComponent(), { field: state.field, fieldId: state.field.property, formId: state.formId })/>
         </if>
+        <else>
+            <div.form-separator-container>
+                <div.form-separator/>
+            </div>
+        </else>
     </div>
     <if(component.hasChildren() && (!state.field.empty || state.field.asStructure))>
         <span.minimize-icon-container>

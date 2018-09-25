@@ -30,12 +30,16 @@
             margin-top: .25rem;
             margin-left: .25rem;
         }
-        >.form-separator {
-            grid-column: 3;
-            width: 100%;
-            background-color: @secondary-3;
-            align-self: center;
-            height: 1px;
+        >.field-input {
+            >.form-separator-container {
+                display: grid;
+                height: 100%;
+                >.form-separator {
+                    background-color: @secondary-3;
+                    align-self: center;
+                    height: 1px;
+                }
+            }
         }
     }
     >.group-widget,

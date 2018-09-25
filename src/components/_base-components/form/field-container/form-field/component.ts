@@ -67,7 +67,11 @@ class Component {
     }
 
     public getPaddingRight(): string {
-        return this.hasChildren() ? "0" : "1.75rem";
+        if (this.state.level > 1) {
+            return "1.75rem";
+        } else {
+            return "0";
+        }
     }
 
 }
