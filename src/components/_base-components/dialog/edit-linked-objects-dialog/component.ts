@@ -3,13 +3,13 @@ import {
     DialogService, OverlayService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
     TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
-    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService
+    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent, LinkType
 } from '@kix/core/dist/model';
 import { LinkUtil } from '@kix/core/dist/browser/link';
 
@@ -43,11 +43,11 @@ class Component {
         if (context) {
             this.mainObject = await context.getObject();
 
-            this.availableLinkObjects = LinkUtil.getLinkObjects(this.mainObject);
+            this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
             await this.reviseLinkObjects();
-            this.setInitialLinkDescriptions();
+            await this.setInitialLinkDescriptions();
             this.prepareTable();
         }
         this.state.loading = false;
@@ -84,16 +84,16 @@ class Component {
             objectIds = iterator.next();
         }
 
-        this.linkedObjects.forEach((o) => {
+        for (const o of this.linkedObjects) {
             const service
                 = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(o.KIXObjectType);
             const linkObject = this.availableLinkObjects.find(
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
             if (linkObject) {
-                linkObject.title = service.getDetailsTitle(o);
+                linkObject.title = await service.getDetailsTitle(o);
             }
-        });
+        }
     }
 
     private initPredefinedFilter(linkedObjectIds: Map<KIXObjectType, string[]>): void {
@@ -108,16 +108,19 @@ class Component {
         });
     }
 
-    private setInitialLinkDescriptions(): void {
+    private async setInitialLinkDescriptions(): Promise<void> {
+
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE);
+
         this.availableLinkObjects.forEach((lo) => {
             const linkedObject = this.linkedObjects.find(
                 (ldo) => ldo.ObjectId.toString() === lo.linkedObjectKey && ldo.KIXObjectType === lo.linkedObjectType
             );
-            const objectData = ContextService.getInstance().getObjectData();
-            if (linkedObject && objectData) {
+
+            if (linkedObject) {
                 const link = this.mainObject.Links.find((l) => l.ID === lo.ObjectId);
                 if (link) {
-                    const linkType = objectData.linkTypes.find(
+                    const linkType = linkTypes.find(
                         (lt) => LinkUtil.isLinkType(lt, link, lo, this.mainObject)
                     );
                     if (linkType) {
@@ -207,24 +210,30 @@ class Component {
         this.setCanSubmit();
     }
 
-    private addNewLinks(newLinkDescriptions): void {
+    private async addNewLinks(newLinkDescriptions): Promise<void> {
         if (newLinkDescriptions.length) {
-            const newLinkObjects: LinkObject[] = newLinkDescriptions.map((ld: CreateLinkDescription) => {
+            const newLinkObjects: LinkObject[] = [];
+
+            for (const ld of newLinkDescriptions) {
                 const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
                     ld.linkableObject.KIXObjectType
                 );
-                return new LinkObject({
+
+                const title = await service.getDetailsTitle(ld.linkableObject);
+
+                newLinkObjects.push(new LinkObject({
                     ObjectId: 'NEW-' + ld.linkableObject.KIXObjectType + '-' +
                         ld.linkableObject.ObjectId + '-' + ld.linkTypeDescription.linkType.TypeID,
                     linkedObjectKey: ld.linkableObject.ObjectId,
                     linkedObjectType: ld.linkableObject.KIXObjectType,
-                    title: service.getDetailsTitle(ld.linkableObject),
+                    title,
                     linkedAs: ld.linkTypeDescription.asSource ?
                         ld.linkTypeDescription.linkType.SourceName : ld.linkTypeDescription.linkType.TargetName,
                     linkType: ld.linkTypeDescription.linkType,
                     isSource: ld.linkTypeDescription.asSource
-                } as LinkObject);
-            });
+                } as LinkObject));
+            }
+
             this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
 

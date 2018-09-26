@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService } from '@kix/core/dist/browser';
+import { ContextService, IdService, KIXObjectService } from '@kix/core/dist/browser';
 import {
     TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
 } from '@kix/core/dist/model';
@@ -23,7 +23,7 @@ export class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['ConfigItemStats']);
-        const ciClasses = await ContextService.getInstance().loadObjects<ConfigItemClass>(
+        const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions
         );
         this.state.nodes = this.prepareTreeNodes(ciClasses);

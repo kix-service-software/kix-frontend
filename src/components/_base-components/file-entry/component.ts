@@ -29,10 +29,12 @@ class ArticleAttachmentComponent {
 
     private getIcon(attachment: any): ObjectIcon {
         const fileName = attachment.Filename;
-        const idx = fileName.lastIndexOf('.');
-        if (idx >= 0) {
-            const extension = fileName.substring(idx + 1, fileName.length);
-            return new ObjectIcon("Filetype", extension);
+        if (fileName) {
+            const idx = fileName.lastIndexOf('.');
+            if (idx >= 0) {
+                const extension = fileName.substring(idx + 1, fileName.length);
+                return new ObjectIcon("Filetype", extension);
+            }
         }
         return null;
     }

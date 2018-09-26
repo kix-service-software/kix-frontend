@@ -1,18 +1,16 @@
 import { ActionFactory } from '@kix/core/dist/browser';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
 import { ContextService } from '@kix/core/dist/browser/context';
-import { TicketService } from '@kix/core/dist/browser/ticket';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
-import { DynamicFieldWidgetComponentState } from './DynamicFieldWidgetComponentState';
-import { KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
+import { ComponentState } from './ComponentState';
+import { KIXObjectType, Ticket } from '@kix/core/dist/model';
 
-class DynamicFieldWidgetComponent {
+class Component {
 
-    private state: DynamicFieldWidgetComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new DynamicFieldWidgetComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -71,19 +69,6 @@ class DynamicFieldWidgetComponent {
             });
         }
     }
-
-    private expandWidget(): void {
-        alert('Großansicht ...');
-    }
-
-    private print(): void {
-        alert('Drucken ...');
-    }
-
-    private edit(): void {
-        alert('Bearbeiten ...');
-    }
-
 }
 
-module.exports = DynamicFieldWidgetComponent;
+module.exports = Component;

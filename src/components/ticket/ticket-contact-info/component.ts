@@ -1,6 +1,7 @@
 import { ContextService } from "@kix/core/dist/browser/context";
 import { Contact, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { ContactInfoComponentState } from "./ContactInfoComponentState";
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 class ContactInfoComponent {
 
@@ -24,7 +25,7 @@ class ContactInfoComponent {
         this.state.contact = null;
 
         if (this.state.contactId) {
-            const contacts = await ContextService.getInstance().loadObjects<Contact>(
+            const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, [this.state.contactId]
             ).catch((error) => {
                 this.state.error = error;

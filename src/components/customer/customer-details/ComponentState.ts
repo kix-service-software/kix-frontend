@@ -11,7 +11,8 @@ export class ComponentState {
         public loading: boolean = false,
         public configuration: CustomerDetailsContextConfiguration = null,
         public customer: Customer = null,
-        public error: any = null
+        public error: any = null,
+        public title: string = ''
     ) { }
 
 }

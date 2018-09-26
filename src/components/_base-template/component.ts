@@ -16,6 +16,8 @@ import { HomeContext } from '@kix/core/dist/browser/home';
 import { GeneralCatalogService } from '@kix/core/dist/browser/general-catalog';
 import { TextModuleService } from '@kix/core/dist/browser/text-modules';
 import { EventService } from '@kix/core/dist/browser/event';
+import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
+import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
 
 declare var io: any;
 
@@ -84,6 +86,8 @@ class Component {
         LinkService.getInstance();
         GeneralCatalogService.getInstance();
         TextModuleService.getInstance();
+        SysConfigService.getInstance();
+        DynamicFieldService.getInstance();
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,

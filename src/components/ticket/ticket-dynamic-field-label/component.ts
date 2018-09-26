@@ -1,6 +1,7 @@
-import { DateTimeUtil } from "@kix/core/dist/model/";
+import { DateTimeUtil, DynamicField, KIXObjectType } from "@kix/core/dist/model/";
 import { ContextService } from "@kix/core/dist/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 export class TicketPriorityLabelComponent {
 
@@ -19,10 +20,12 @@ export class TicketPriorityLabelComponent {
         this.setDisplayValue();
     }
 
-    private setDisplayValue(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            this.state.field = objectData.dynamicFields.find((df) => df.ID === this.state.fieldId);
+    private async setDisplayValue(): Promise<void> {
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, [this.state.fieldId]
+        );
+        if (dynamicFields && dynamicFields.length) {
+            this.state.field = dynamicFields[0];
             if (this.state.field && this.state.ticket) {
                 const field = this.state.ticket.DynamicFields.find((df) => df.ID === this.state.fieldId);
                 if (field) {

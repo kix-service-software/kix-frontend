@@ -1,6 +1,7 @@
 import { ContextService } from "@kix/core/dist/browser/context";
 import { Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
 import { CustomerInfoComponentState } from "./CustomerInfoComponentState";
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 class CustomerInfoComponent {
 
@@ -24,7 +25,7 @@ class CustomerInfoComponent {
         this.state.customer = null;
 
         if (this.state.customerId) {
-            const customers = await ContextService.getInstance().loadObjects<Customer>(
+            const customers = await KIXObjectService.loadObjects<Customer>(
                 KIXObjectType.CUSTOMER, [this.state.customerId]
             ).catch((error) => {
                 this.state.error = error;

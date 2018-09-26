@@ -1,9 +1,10 @@
 import {
-    ContextService, DialogService, OverlayService, FormService, ServiceRegistry
+    ContextService, DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService
 } from '@kix/core/dist/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
+    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService } from '@kix/core/dist/browser/cmdb';
@@ -16,13 +17,19 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData.configItemClasses) {
-            this.state.classNodes = objectData.configItemClasses.map(
-                (ci) => new TreeNode(ci, ci.Name)
-            );
-        }
+    public async onMount(): Promise<void> {
+        const configItemClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, null,
+            new KIXObjectLoadingOptions(null, [
+                new FilterCriteria(
+                    ConfigItemClassProperty.CURRENT_DEFINITION, SearchOperator.NOT_EQUALS,
+                    FilterDataType.STRING, FilterType.AND, null
+                )], null, null, null,
+                ['CurrentDefinition,Definitions'])
+        );
+        this.state.classNodes = configItemClasses.map(
+            (ci) => new TreeNode(ci, ci.Name)
+        );
     }
 
     public async classChanged(nodes: TreeNode[]): Promise<void> {

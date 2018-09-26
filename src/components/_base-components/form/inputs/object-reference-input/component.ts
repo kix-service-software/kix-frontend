@@ -5,7 +5,7 @@ import {
     TreeNode, KIXObjectLoadingOptions, KIXObject
 } from "@kix/core/dist/model";
 import { FormService } from "@kix/core/dist/browser/form";
-import { LabelService } from "@kix/core/dist/browser";
+import { LabelService, KIXObjectService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<KIXObject, ComponentState> {
 
@@ -53,18 +53,16 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
             const objectType = option.value as KIXObjectType;
 
             const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
-            this.objects = await ContextService.getInstance().loadObjects<KIXObject>(
+            this.objects = await KIXObjectService.loadObjects<KIXObject>(
                 objectType, null, loadingOptions
             );
 
             if (searchValue && searchValue !== '') {
-                this.state.nodes = this.objects.map(
-                    (o) => new TreeNode(
-                        o.ObjectId,
-                        LabelService.getInstance().getText(o),
-                        LabelService.getInstance().getIcon(o)
-                    )
-                );
+                this.state.nodes = [];
+                for (const o of this.objects) {
+                    const text = await LabelService.getInstance().getText(o);
+                    this.state.nodes.push(new TreeNode(o.ObjectId, text, LabelService.getInstance().getIcon(o)));
+                }
             }
         }
 

@@ -1,5 +1,7 @@
 import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "@kix/core/dist/model";
-import { ContextService, ActionFactory, WidgetService, BrowserUtil, IdService } from "@kix/core/dist/browser";
+import {
+    ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService
+} from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
 import { FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions } from "@kix/core/dist/model/kix/faq";
 import { EventService, IEventListener } from "@kix/core/dist/browser/event";
@@ -102,7 +104,7 @@ class Component implements IEventListener {
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID
         );
-        const attachments = await ContextService.getInstance().loadObjects<Attachment>(
+        const attachments = await KIXObjectService.loadObjects<Attachment>(
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions
         );
 

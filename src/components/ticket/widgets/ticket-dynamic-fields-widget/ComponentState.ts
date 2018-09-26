@@ -1,9 +1,8 @@
-import { AbstractAction, WidgetComponentState, Ticket } from '@kix/core/dist/model';
-import { DynamicField } from '@kix/core/dist/model/kix/ticket/DynamicField';
+import { AbstractAction, WidgetComponentState, Ticket, DynamicField } from '@kix/core/dist/model';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 
-export class DynamicFieldWidgetComponentState extends WidgetComponentState<DynamicFieldsSettings> {
+export class ComponentState extends WidgetComponentState<DynamicFieldsSettings> {
 
     public constructor(
         public ticketId: number = null,

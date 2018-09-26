@@ -15,7 +15,8 @@ export class ComponentState {
         public ticketDetailsConfiguration: TicketDetailsContextConfiguration = null,
         public ticket: Ticket = null,
         public hasError: boolean = false,
-        public error: any = null
+        public error: any = null,
+        public title: string = ''
     ) { }
 
 }

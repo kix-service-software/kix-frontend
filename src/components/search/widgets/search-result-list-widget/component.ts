@@ -1,10 +1,11 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, ContextMode, } from '@kix/core/dist/model/';
+import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
     LabelService, StandardTableFactoryService, WidgetService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory, KIXObjectSearchCache, IKIXObjectService
+    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
+    KIXObjectSearchCache, IKIXObjectService, KIXObjectService
 } from '@kix/core/dist/browser';
 import { ServiceRegistry } from '@kix/core/dist/browser';
 
@@ -68,7 +69,7 @@ class Component implements IKIXObjectSearchListener {
                 const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
                 if (activeCategory) {
                     resultCount = activeCategory ? activeCategory.objectIds.length : 0;
-                    resultObjects = await ContextService.getInstance().loadObjects(
+                    resultObjects = await KIXObjectService.loadObjects(
                         objectType, activeCategory.objectIds
                     );
                 }
@@ -81,26 +82,32 @@ class Component implements IKIXObjectSearchListener {
             const tableConfiguration = new TableConfiguration(
                 null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            this.state.resultTable = StandardTableFactoryService.getInstance().createStandardTable(
+            const table = StandardTableFactoryService.getInstance().createStandardTable(
                 objectType, tableConfiguration, null, null, true, true
             );
 
-            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
-            this.state.resultTable.loadRows();
+            table.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
+
+            await table.loadRows();
+
             if (isSearchMainObject) {
                 const objectProperties = cache.criteria.map((c) => c.property);
                 const objectService
                     = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
-                this.state.resultTable.setColumns(columns);
+                table.setColumns(columns);
             }
 
-            this.state.resultTable.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
+            table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
-            WidgetService.getInstance().setActionData(this.state.instanceId, this.state.resultTable);
+            WidgetService.getInstance().setActionData(this.state.instanceId, table);
 
-            this.state.loading = false;
-            (this as any).setStateDirty('loading');
+            setTimeout(() => {
+                this.state.tableId = 'Search-Table-' + cache.objectType;
+                this.state.resultTable = table;
+                this.state.loading = false;
+                (this as any).setStateDirty('loading');
+            }, 300);
         } else {
             this.state.resultIcon = null;
             this.state.resultTitle = 'Trefferliste';
