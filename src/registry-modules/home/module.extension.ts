@@ -37,8 +37,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -66,8 +64,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: 'right'
@@ -91,8 +87,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }

@@ -25,6 +25,8 @@ class Component {
             } else if (!this.config.options.animation) {
                 this.config.options.animation = { duration: 600 };
             }
+            this.config.options.responsive = true;
+            this.config.options.maintainAspectRatio = false;
 
             if (this.timeout) {
                 clearTimeout(this.timeout);
@@ -41,6 +43,9 @@ class Component {
                         const ctx = canvasElement.getContext('2d');
                         if (ctx) {
                             this.chart = new Chart(ctx, this.config);
+                        }
+                        if (canvasElement.width <= 300) {
+                            canvasElement.width = 10;
                         }
                     }
                     this.drawTimeout = null;
@@ -82,6 +87,9 @@ class Component {
                 const ctx = canvasElement.getContext('2d');
                 if (ctx) {
                     this.chart = new Chart(ctx, this.config);
+                }
+                if (canvasElement.width <= 300) {
+                    canvasElement.width = 10;
                 }
             }
             this.timeout = null;

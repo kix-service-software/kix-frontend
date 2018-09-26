@@ -69,8 +69,6 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -105,8 +103,6 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: 'right',
@@ -135,8 +131,6 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 },
