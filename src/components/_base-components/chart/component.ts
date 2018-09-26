@@ -12,6 +12,7 @@ class Component {
     private chart: Chart;
     private timeout: any;
     private drawTimeout: any;
+    private resizeTimeout: any = null;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -28,31 +29,35 @@ class Component {
             this.config.options.responsive = true;
             this.config.options.maintainAspectRatio = false;
 
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-                clearTimeout(this.drawTimeout);
-            }
-
             this.state.loading = true;
             this.onDestroy();
-            this.timeout = setTimeout(() => {
-                this.state.loading = false;
-                this.drawTimeout = setTimeout(() => {
-                    const canvasElement = (this as any).getEl(this.state.chartId);
-                    if (canvasElement) {
-                        const ctx = canvasElement.getContext('2d');
-                        if (ctx) {
-                            this.chart = new Chart(ctx, this.config);
-                        }
-                        if (canvasElement.width <= 300) {
-                            canvasElement.width = 10;
-                        }
-                    }
-                    this.drawTimeout = null;
-                }, 500);
-                this.timeout = null;
-            }, 1500);
+
+            this.setDrawTimeout();
         }
+    }
+
+    private setDrawTimeout(): void {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            clearTimeout(this.drawTimeout);
+        }
+        this.timeout = setTimeout(() => {
+            this.state.loading = false;
+            this.drawTimeout = setTimeout(() => {
+                const canvasElement = (this as any).getEl(this.state.chartId);
+                if (canvasElement) {
+                    const ctx = canvasElement.getContext('2d');
+                    if (ctx) {
+                        this.chart = new Chart(ctx, this.config);
+                    }
+                    if (canvasElement.width <= 300) {
+                        canvasElement.width = 10;
+                    }
+                }
+                this.drawTimeout = null;
+            }, 500);
+            this.timeout = null;
+        }, 1500);
     }
 
     public onMount(): void {
@@ -65,6 +70,21 @@ class Component {
             filteredObjectListChanged: () => { return; }
 
         });
+
+        window.addEventListener("resize", this.windowResizeThrottler.bind(this), false);
+    }
+
+    private windowResizeThrottler() {
+        if (!this.resizeTimeout) {
+            this.resizeTimeout = setTimeout(() => {
+                this.resizeTimeout = null;
+
+                this.state.loading = true;
+                this.onDestroy();
+
+                this.setDrawTimeout();
+            }, 66);
+        }
     }
 
     public onDestroy(): void {
@@ -72,6 +92,7 @@ class Component {
             this.chart.destroy();
             this.chart = null;
         }
+        window.removeEventListener("resize", this.windowResizeThrottler.bind(this), false);
     }
 
     private rebuildChart(): void {
