@@ -39,8 +39,6 @@ export class Extension implements IModuleFactoryExtension {
                 datasets: []
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -75,8 +73,6 @@ export class Extension implements IModuleFactoryExtension {
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: 'right',
@@ -100,8 +96,6 @@ export class Extension implements IModuleFactoryExtension {
                 datasets: []
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: "top"
