@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, TableColumn, ITableConfigurationListener,
-    ActionFactory, TableListenerConfiguration, StandardTableFactoryService
+    ActionFactory, TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
@@ -77,7 +77,7 @@ class Component {
                 null, null, null, null, null, ['TicketStats']
             );
             const contactIds = this.state.customer.Contacts.map((c) => typeof c === 'string' ? c : c.ContactID);
-            const contacts = await ContextService.getInstance().loadObjects(
+            const contacts = await KIXObjectService.loadObjects(
                 KIXObjectType.CONTACT, contactIds, loadingOptions, null, false
             );
 

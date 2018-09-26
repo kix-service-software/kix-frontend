@@ -1,7 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService } from '@kix/core/dist/browser';
-import { TreeNode } from '@kix/core/dist/model';
-import { FAQCategory } from '@kix/core/dist/model/kix/faq';
+import { ContextService, IdService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
+import {
+    TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterDataType, FilterType, FilterCriteria
+} from '@kix/core/dist/model';
+import { FAQCategory, FAQCategoryProperty } from '@kix/core/dist/model/kix/faq';
 import { FAQContext } from '@kix/core/dist/browser/faq';
 
 export class Component {
@@ -23,8 +25,20 @@ export class Component {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = this.prepareTreeNodes(objectData.faqCategories);
+        const categoryFilter = [
+            new FilterCriteria(
+                FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
+            )
+        ];
+        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null, null,
+            ['SubCategories', 'Articles'], ['SubCategories']
+        );
+
+        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+            KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+        );
+
+        this.state.nodes = this.prepareTreeNodes(faqCategories);
 
         this.setActiveNode(context.currentFAQCategory);
     }

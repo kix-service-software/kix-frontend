@@ -1,8 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TicketProperty, TreeNode, DateTimeUtil } from "@kix/core/dist/model";
+import {
+    ObjectIcon, TicketProperty, TreeNode, DateTimeUtil, TicketState, KIXObjectType, StateType
+} from "@kix/core/dist/model";
 import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
 import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
 
@@ -16,8 +18,9 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = objectData.ticketStates.map((t) =>
+
+        const states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE, null);
+        this.state.nodes = states.map((t) =>
             new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.STATE_ID, t.ID))
         );
         this.setCurrentNode();
@@ -52,13 +55,18 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
         this.setValue();
     }
 
-    private showPendingTime(): void {
+    private async showPendingTime(): Promise<void> {
         this.state.pending = false;
         if (this.state.currentNode && this.checkPendingOption()) {
-            const objectData = ContextService.getInstance().getObjectData();
-            const state = objectData.ticketStates.find((s) => s.ID === this.state.currentNode.id);
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null
+            );
+            const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                KIXObjectType.TICKET_STATE_TYPE, null
+            );
+            const state = states.find((s) => s.ID === this.state.currentNode.id);
             if (state) {
-                const stateType = objectData.ticketStateTypes.find((t) => t.ID === state.TypeID);
+                const stateType = stateTypes.find((t) => t.ID === state.TypeID);
                 this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
             }
         }

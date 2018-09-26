@@ -1,8 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent
+    ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent, KIXObjectType
 } from "@kix/core/dist/model";
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -16,8 +17,12 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = this.prepareTree(objectData.queuesHierarchy);
+
+        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
+            KIXObjectType.QUEUE_HIERARCHY, null
+        );
+
+        this.state.nodes = this.prepareTree(queuesHierarchy);
         this.setCurrentNode();
     }
 

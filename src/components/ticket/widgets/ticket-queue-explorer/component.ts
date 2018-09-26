@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, SearchOperator } from '@kix/core/dist/browser';
+import { ContextService, IdService, SearchOperator, KIXObjectService } from '@kix/core/dist/browser';
 import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType
+    TicketProperty, FilterDataType, FilterType, KIXObjectType
 } from '@kix/core/dist/model';
 import { TicketContext } from '@kix/core/dist/browser/ticket';
 
@@ -25,8 +25,11 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = this.prepareTreeNodes(objectData.queuesHierarchy);
+        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
+            KIXObjectType.QUEUE_HIERARCHY, null
+        );
+
+        this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
 
         this.setActiveNode(context.queue);
     }
@@ -39,8 +42,7 @@ export class Component {
         }
     }
 
-    private getActiveNode(queue: Queue, nodes: TreeNode[] = this.state.nodes
-    ): TreeNode {
+    private getActiveNode(queue: Queue, nodes: TreeNode[] = this.state.nodes): TreeNode {
         let activeNode = nodes.find((n) => n.id.QueueID === queue.QueueID);
         if (!activeNode) {
             for (let index = 0; index < nodes.length; index++) {

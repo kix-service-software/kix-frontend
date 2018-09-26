@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService
+    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
 } from "@kix/core/dist/browser";
 import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "@kix/core/dist/model";
 import { FAQArticleProperty, FAQCategory } from "@kix/core/dist/model/kix/faq";
@@ -36,16 +36,16 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        this.prepareFilter();
+        await this.prepareFilter();
         this.prepareActions();
         this.prepareTable();
 
         this.state.loading = false;
     }
 
-    private prepareFilter(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.predefinedTableFilter = objectData.languages.map(
+    private async prepareFilter(): Promise<void> {
+        const languages = await LanguageUtil.getLanguages();
+        this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
                 l[1], [new TableFilterCriteria(FAQArticleProperty.LANGUAGE, SearchOperator.EQUALS, l[0])]
             )

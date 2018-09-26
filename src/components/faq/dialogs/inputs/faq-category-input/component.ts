@@ -1,7 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import { ObjectIcon, TreeNode, FormInputComponent } from "@kix/core/dist/model";
+import {
+    ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
+    FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions
+} from "@kix/core/dist/model";
 import { FAQCategory, FAQCategoryProperty } from "@kix/core/dist/model/kix/faq";
+import { KIXObjectService, SearchOperator } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -15,8 +18,21 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = this.prepareTree(objectData.faqCategories);
+
+        const categoryFilter = [
+            new FilterCriteria(
+                FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
+            )
+        ];
+        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null, null,
+            ['SubCategories', 'Articles'], ['SubCategories']
+        );
+
+        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+            KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+        );
+
+        this.state.nodes = this.prepareTree(faqCategories);
         this.setCurrentNode();
     }
 

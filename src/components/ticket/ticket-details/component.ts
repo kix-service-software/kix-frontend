@@ -46,6 +46,8 @@ export class Component {
         this.state.tabWidgets = context.getLaneTabs();
         this.state.contentWidgets = context.getContent(true);
 
+        await this.getTitle();
+
         this.setActions();
 
         setTimeout(() => {
@@ -90,9 +92,9 @@ export class Component {
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
-    public getTitle(): string {
+    public async getTitle(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        return context.getDisplayText();
+        this.state.title = await context.getDisplayText();
     }
 
     public getLaneKey(): string {

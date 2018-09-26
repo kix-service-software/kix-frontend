@@ -54,14 +54,16 @@ class Component implements IKIXObjectSearchListener {
                     if (Array.isArray(criteria.value)) {
                         const valueStrings = [];
                         for (const v of criteria.value) {
-                            const value = labelProvider.getPropertyValueDisplayText(criteria.property, v);
+                            const value = await labelProvider.getPropertyValueDisplayText(criteria.property, v);
                             valueStrings.push(value);
                         }
                         displayValue = valueStrings.join(', ');
                     } else if (criteria.value instanceof KIXObject) {
                         displayValue = criteria.value.toString();
                     } else {
-                        displayValue = labelProvider.getPropertyValueDisplayText(criteria.property, criteria.value);
+                        displayValue = await labelProvider.getPropertyValueDisplayText(
+                            criteria.property, criteria.value
+                        );
                     }
 
                     const displayProperty = await labelProvider.getPropertyText(criteria.property);

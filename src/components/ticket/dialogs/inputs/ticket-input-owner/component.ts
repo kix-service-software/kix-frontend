@@ -15,7 +15,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = objectData.agents.map((a) => new TreeNode(a.UserID, a.UserFullname, 'kix-icon-man'));
+        this.state.nodes = objectData.users.map((a) => new TreeNode(a.UserID, a.UserFullname, 'kix-icon-man'));
         this.setCurrentNode();
     }
 

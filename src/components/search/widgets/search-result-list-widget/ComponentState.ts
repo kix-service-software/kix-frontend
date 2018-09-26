@@ -11,7 +11,8 @@ export class ComponentState {
         public resultTable: StandardTable<KIXObject> = null,
         public noSearch: boolean = true,
         public actions: IAction[] = [],
-        public loading: boolean = false
+        public loading: boolean = false,
+        public tableId: string = null
     ) { }
 
 }

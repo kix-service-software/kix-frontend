@@ -47,14 +47,16 @@ class Component {
         this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);
 
+        await this.prepareTitle();
+
         setTimeout(() => {
             this.state.loading = false;
         }, 50);
     }
 
-    public getTitle(): string {
+    public async prepareTitle(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        return context.getDisplayText();
+        this.state.title = await context.getDisplayText();
     }
 
     public getFAQActions(): AbstractAction[] {
