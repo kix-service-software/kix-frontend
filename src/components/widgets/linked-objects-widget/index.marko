@@ -4,13 +4,14 @@
             <loading-spinner/>
         </if>
         <else-if(state.linkedObjectGroups.length)>
-            <for(group in state.linkedObjectGroups)>
-                <widget instanceId="linked-object-group" title=group[0]>
+            <for(group in state.linkedObjectGroups | status-var=loop)>
+                <widget instanceId="linked-object-group" key=("linked-object-group-" + loop.getIndex()) title=group[0]>
                     <@content>
                         <standard-table standardTable=group[1]/>
                     </@content>
                 </widget>
             </for>
+            $ component.setGroupMinimizedStates();
         </else-if>
         <else>
             <span>Es sind keine verknüpften Objekte vorhanden.</span>
