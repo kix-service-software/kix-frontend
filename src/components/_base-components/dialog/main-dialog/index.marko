@@ -2,13 +2,13 @@
     <div.main-dialog-container>
         <div.shield/>
         <div.main-dialog>
-            <widget key="main-dialog-tab-container" isDialog=true title=state.dialogTitle minimizable=false>
+            <widget key="main-dialog-tab-container-widget" isDialog=true title=state.dialogTitle minimizable=false>
                 <@icon>
                     <icon icon=state.dialogIcon/>
                 </@icon>
                 <@content>
-                    <tab-container tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false contextType="DIALOG"
-                        on-tabChanged('tabChanged')/>
+                    <tab-container key="main-dialog-tab-container" tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false
+                        contextType="DIALOG" on-tabChanged('tabChanged')/>
                     <div.dialog-footer>
                         <span.dialog-hint>${state.dialogHint}</span>
                         <version/>
