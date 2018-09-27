@@ -120,7 +120,7 @@ class LinkDialogComponent {
             formId = this.state.currentLinkableObjectNode.id.toString();
             const formInstance = await FormService.getInstance().getFormInstance(formId);
             formInstance.reset();
-            this.prepareResultTable([]);
+            await this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
             formId = null;
@@ -155,9 +155,13 @@ class LinkDialogComponent {
     }
 
     private async prepareResultTable(objects: KIXObject[]): Promise<void> {
+        this.state.standardTable = null;
+
         if (this.state.currentLinkableObjectNode) {
-            const formInstance
-                = await FormService.getInstance().getFormInstance(this.state.currentLinkableObjectNode.id);
+            const formInstance = await FormService.getInstance().getFormInstance(
+                this.state.currentLinkableObjectNode.id
+            );
+
             const objectType = formInstance.getObjectType();
 
             const tableConfiguration = new TableConfiguration(
@@ -186,9 +190,12 @@ class LinkDialogComponent {
                 this.setLinkedObjectsToTableLayer(table);
 
                 table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-                table.loadRows();
+                await table.loadRows();
 
-                this.state.standardTable = table;
+                setTimeout(() => {
+                    this.state.standardTable = table;
+                    this.state.tableId = 'Table-Links-' + objectType;
+                }, 300);
             }
         }
     }
