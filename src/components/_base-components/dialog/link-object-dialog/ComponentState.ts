@@ -15,6 +15,7 @@ export class ComponentState {
         public linkDescriptions: CreateLinkDescription[] = [],
         public objectType: KIXObjectType = null,
         public formId: string = null,
-        public canSubmit: boolean = false
+        public canSubmit: boolean = false,
+        public tableId: string = null
     ) { }
 }
