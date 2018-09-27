@@ -35,6 +35,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
         return [
             'ticket/ticket-module',
+            'ticket/ticket-list-module',
             'ticket/ticket-details',
             'ticket/ticket-dynamic-fields-container',
             'ticket/ticket-article-details',
@@ -80,6 +81,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
         return [
             ['tickets', 'ticket/ticket-module'],
+            ['ticket-list-module', 'ticket/ticket-list-module'],
             ['ticket-article-attachment-list', 'ticket/ticket-article-attachment-list'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-article-details', 'ticket/ticket-article-details'],

@@ -27,6 +27,7 @@
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
             "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
+            "ticket-list-module": "../../dist/registry-modules/ticket/ticket-list-module.extension",
             "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension",
             "customer-module": "../../dist/registry-modules/customer/customer-module.extension",
             "customer-details-module": "../../dist/registry-modules/customer/customer-details-module.extension",
