@@ -37,12 +37,12 @@ class Component {
             ],
             [
                 new ToolbarAction(
-                    'kix-icon-close', 'Meine gesperrten Tickets mit neuen Artikeln', true,
+                    'kix-icon-lock-close', 'Meine gesperrten Tickets mit neuen Artikeln', true,
                     user.Tickets.OwnedAndLockedAndUnseen.length,
                     'show-user-tickets', user.Tickets.OwnedAndLockedAndUnseen
                 ),
                 new ToolbarAction(
-                    'kix-icon-close', 'Meine gesperrten Tickets', false,
+                    'kix-icon-lock-close', 'Meine gesperrten Tickets', false,
                     user.Tickets.OwnedAndLocked.length,
                     'show-user-tickets', user.Tickets.OwnedAndLocked
                 )
