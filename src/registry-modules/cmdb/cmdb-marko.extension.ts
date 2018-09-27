@@ -5,6 +5,7 @@ export class Extension implements IMarkoDependencyExtension {
     public getDependencies(): string[] {
         return [
             'cmdb/cmdb-module',
+            'cmdb/config-item-info',
             'cmdb/dialogs/new-config-item-dialog',
             'cmdb/config-item-details',
             'cmdb/inputs/ci-class-input',
@@ -24,6 +25,7 @@ export class Extension implements IMarkoDependencyExtension {
     public getComponentTags(): Array<[string, string]> {
         return [
             ['cmdb-module', 'cmdb/cmdb-module'],
+            ['config-item-info', 'cmdb/config-item-info'],
             ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog'],
             ['config-item-details', 'cmdb/config-item-details'],
             ['config-item-version-details', 'cmdb/config-item-version-details'],

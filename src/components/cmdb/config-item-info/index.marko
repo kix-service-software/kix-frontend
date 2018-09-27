@@ -1,0 +1,16 @@
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else-if(state.configItem)>
+    <object-property-label object=state.configItem property="Name" labelProvider=component.labelProvider/>
+    <object-property-label object=state.configItem property="Number" labelProvider=component.labelProvider/>
+    <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=component.labelProvider/>
+    <object-property-label object=state.configItem property="CurInciStateID" labelProvider=component.labelProvider>
+        <@icon>
+            <icon icon=state.icon/>
+        </@icon>
+    </object-property-label>
+</else-if>
+<else>
+    <span.error>Kein Config Item verfügbar</span>
+</else>
