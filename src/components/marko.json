@@ -11,6 +11,7 @@
         "ticket",
         "customer",
         "search",
-        "faq"
+        "faq",
+        "cmdb"
     ]
 }
