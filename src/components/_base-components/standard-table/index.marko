@@ -58,9 +58,8 @@
                                 <link-target routingConfiguration=component.getRoutingConfiguration(column, value)
                                     objectId=component.getRoutingObjectId(column, row)>
                                     <@content>
-                                        <div.table-cell.row-column.row-link class={"only-icon": column.showIcon && (!column.showText)}
-                                            style={width: column.size} on-click('rowClicked', row, column.id)
-                                            title=value.displayValue key=key>
+                                        <div.table-cell.row-column.row-link class=component.getValueClasses(value) style={width: column.size}
+                                            on-click('rowClicked', row, column.id) title=value.displayValue key=key>
                                             <if(column.showIcon)>
                                                 <icon icon=value.icon showUnknown=true/>
                                             </if>

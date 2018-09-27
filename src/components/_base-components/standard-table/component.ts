@@ -327,6 +327,15 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return classes;
     }
 
+    public getValueClasses(value: TableValue): string[] {
+        const classes = [...value.classes];
+        const column = this.getColumn(value);
+        if (column.showIcon && (!column.showText)) {
+            classes.push("only-icon");
+        }
+        return classes;
+    }
+
     public getRoutingConfiguration(column: TableColumn, value: TableValue): RoutingConfiguration {
         let config;
         if (column.routingConfiguration) {
