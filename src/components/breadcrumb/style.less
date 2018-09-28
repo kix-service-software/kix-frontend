@@ -2,22 +2,31 @@
     background: @secondary-6;
     color: @secondary-0;
     margin-bottom: @margin-small;
-    padding: 2px .5em 0;
+    padding: @margin-small @margin-small 0;
     border-radius: @border-radius;
     box-shadow: @shadow-1;
     height: @breadcrumb-height;
     box-sizing: border-box;
     overflow: hidden;
-    line-height: @breadcrumb-height;
-    [class^="kix-icon-"],
-    [class*=" kix-icon-"] {
-        color: @primary-6;
-        margin-right: @margin-small;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    grid-gap: @margin-small;
+    font-size: @h2-font-size;
+    >span.icon {
+        padding-top: .085rem;
+        [class^="kix-icon-"],
+        [class*=" kix-icon-"] {
+            color: @primary-6;
+            line-height: @h2-font-size;
+        }
     }
     >span.context {
-        margin-right: @margin-small;
+        >a {
+            font-size: @h2-font-size;
+        }
         &:not(:last-of-type)::after {
-            content: '|';
+            content: '>>';
             margin-left: @margin-small;
         }
     }
