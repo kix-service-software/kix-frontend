@@ -293,19 +293,14 @@
         top: @default-widget-header-height;
         border: 3px solid @primary-3;
         padding: @margin-middle @margin-default;
-        >.dialog-footer {
-            .font-size-small();
-            color: @secondary-2;
-            text-align: center;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            height: 2.25em;
-            align-content: center;
-            position: absolute;
-            bottom: -0.25rem;
-            .dialog-hint {
-                text-align: left;
+        >.kix-footer {
+            margin: 0;
+            height: @margin-middle + .25rem;
+            >div:first-child {
+                padding-left: 0;
+            }
+            >div:last-child {
+                padding-right: 0;
             }
         }
     }
