@@ -9,10 +9,7 @@
                 <@content>
                     <tab-container key="main-dialog-tab-container" tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false
                         contextType="DIALOG" on-tabChanged('tabChanged')/>
-                    <div.dialog-footer>
-                        <span.dialog-hint>${state.dialogHint}</span>
-                        <version/>
-                    </div>
+                    <kix-footer leftText=state.dialogHint/>
                 </@content>
             </widget>
             <if(state.isLoading)>
