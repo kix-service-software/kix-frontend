@@ -153,6 +153,7 @@ export class Extension implements IModuleFactoryExtension {
                 )
             );
             fields.push(new FormField('Name', ConfigItemProperty.NAME, null, false, 'Name'));
+            fields.push(new FormField('Nummer', ConfigItemProperty.NUMBER, null, false, 'Nummer'));
             fields.push(new FormField(
                 'Verwendungsstatus', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
                 false, 'Verwendungsstatus', [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
