@@ -126,6 +126,8 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         let errorMessage = error;
         if (error.message) {
             errorMessage = error.message;
+        } else if (error.errorMessage) {
+            errorMessage = error.errorMessage.body;
         }
 
         return errorMessage;

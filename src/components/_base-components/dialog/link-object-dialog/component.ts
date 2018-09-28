@@ -49,7 +49,8 @@ class LinkDialogComponent {
     }
 
     private async setLinkableObjects(): Promise<void> {
-        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE);
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE)
+            .catch((error) => [] as LinkType[]);
 
         const service
             = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
