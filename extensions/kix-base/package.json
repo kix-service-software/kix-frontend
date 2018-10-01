@@ -19,10 +19,10 @@
         "kix:menu:main": {
             "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
             "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension",
+            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension",
             "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
-            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension",
             "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension",
-            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension"
+            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension"
         },
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
