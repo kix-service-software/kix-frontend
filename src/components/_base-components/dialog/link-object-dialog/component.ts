@@ -3,13 +3,13 @@ import {
     WidgetService, ServiceRegistry, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
-    ITablePreventSelectionLayer, IKIXObjectService, KIXObjectService
+    ITablePreventSelectionLayer, IKIXObjectService, KIXObjectService, SearchOperator
 } from "@kix/core/dist/browser";
-import { ContextService } from "@kix/core/dist/browser/context";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    OverlayType, ComponentContent, TreeNode, DataType, ToastContent, LinkType
+    OverlayType, ComponentContent, TreeNode, DataType, ToastContent, LinkType, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
 } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 
@@ -52,8 +52,7 @@ class LinkDialogComponent {
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE)
             .catch((error) => [] as LinkType[]);
 
-        const service
-            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
+        const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
         const linkObjectType = service.getLinkObjectName();
         linkTypes.forEach((lt) => {
             let linkableObject = null;
@@ -88,23 +87,15 @@ class LinkDialogComponent {
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             formInstance.reset();
-
-            document.addEventListener('keydown', (event: any) => {
-                if (event.key === 'Enter' && formInstance.hasValues()) {
-                    this.executeSearch();
-                }
-            });
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public async keyPressed(event: any): Promise<void> {
         if (this.state.formId) {
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            document.removeEventListener('keydown', (event: any) => {
-                if (event.key === 'Enter' && formInstance.hasValues()) {
-                    this.executeSearch();
-                }
-            });
+            if (event.key === 'Enter' && formInstance.hasValues()) {
+                this.executeSearch();
+            }
         }
     }
 
@@ -251,36 +242,31 @@ class LinkDialogComponent {
 
         this.linkTypeDescriptions = [];
 
-        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE);
-
         if (this.state.currentLinkableObjectNode) {
-            const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
-                this.state.objectType
+            const loadingOptions = new KIXObjectLoadingOptions(null, [
+                new FilterCriteria(
+                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.state.objectType
+                ),
+                new FilterCriteria(
+                    'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                    this.state.currentLinkableObjectNode.label
+                )
+            ]);
+
+            const linkTypes = await KIXObjectService.loadObjects<LinkType>(
+                KIXObjectType.LINK_TYPE, null, loadingOptions
             );
-            const linkObjectType = service.getLinkObjectName();
+
             linkTypes.forEach((lt) => {
-                if (
-                    (
-                        lt.Source === linkObjectType &&
-                        lt.Target === this.state.currentLinkableObjectNode.label
-                    ) ||
-                    (
-                        lt.Target === linkObjectType &&
-                        lt.Source === this.state.currentLinkableObjectNode.label
-                    )
-                ) {
-                    if (!this.state.linkTypeNodes.some((lo) => lo.label === lt.SourceName)) {
-                        const id = this.linkTypeDescriptions.length;
-                        this.linkTypeDescriptions.push(new LinkTypeDescription(lt, true));
-                        const node = new TreeNode(id, lt.SourceName);
-                        this.state.linkTypeNodes.push(node);
-                    }
-                    if (lt.Pointed !== 0 && !this.state.linkTypeNodes.some((lo) => lo.label === lt.TargetName)) {
-                        const id = this.linkTypeDescriptions.length;
-                        this.linkTypeDescriptions.push(new LinkTypeDescription(lt, false));
-                        const node = new TreeNode(id, lt.TargetName);
-                        this.state.linkTypeNodes.push(node);
-                    }
+                const id = this.linkTypeDescriptions.length;
+                this.linkTypeDescriptions.push(new LinkTypeDescription(lt, true));
+                const node = new TreeNode(id, lt.SourceName);
+                this.state.linkTypeNodes.push(node);
+                if (lt.Pointed === 1) {
+                    const pointedLinkType = new LinkType(lt, true);
+                    this.linkTypeDescriptions.push(new LinkTypeDescription(pointedLinkType, true));
+                    const pointedNode = new TreeNode(id + 1, pointedLinkType.SourceName);
+                    this.state.linkTypeNodes.push(pointedNode);
                 }
             });
         } else {
