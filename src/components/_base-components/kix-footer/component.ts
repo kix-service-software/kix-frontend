@@ -6,9 +6,11 @@ class Component {
 
     public state: ComponentState;
 
-    public async onCreate(input: any): Promise<void> {
+    public onCreate(input: any): void {
         this.state = new ComponentState();
+    }
 
+    public async onMount(): Promise<void> {
         // FIXME: führt aktuell zu (im Login)
         // Unhandled promise rejection (rejection id: 2): Error: No service registered for object type SysConfigItem
         // ggf. ist es erstmal auch nicht notwendig und der Text "KIX 18 Alpha" würde auch reichen
