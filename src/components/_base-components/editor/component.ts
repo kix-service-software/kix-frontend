@@ -40,10 +40,6 @@ class EditorComponent {
 
     public async onMount(): Promise<void> {
         if (!this.instanceExists()) {
-            if (this.state.readOnly) {
-                CKEDITOR.addCss('body { margin: 0; }');
-            }
-
             if (this.state.inline) {
                 this.editor = CKEDITOR.inline(this.state.id, {
                     ...this.state.config

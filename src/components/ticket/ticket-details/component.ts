@@ -5,6 +5,7 @@ import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { EventService } from '@kix/core/dist/browser/event';
 
 export class Component {
 
@@ -46,6 +47,8 @@ export class Component {
         this.state.tabWidgets = context.getLaneTabs();
         this.state.contentWidgets = context.getContent(true);
 
+        await this.getTitle();
+
         this.setActions();
 
         setTimeout(() => {
@@ -61,6 +64,9 @@ export class Component {
             const element = (this as any).getEl("ticket-content");
             if (element) {
                 element.scrollIntoView(true);
+                setTimeout(() => {
+                    window.scrollBy(0, 450);
+                }, 100);
             }
         }, 100);
     }
@@ -90,9 +96,9 @@ export class Component {
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
-    public getTitle(): string {
+    public async getTitle(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        return context.getDisplayText();
+        this.state.title = await context.getDisplayText();
     }
 
     public getLaneKey(): string {

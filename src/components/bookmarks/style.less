@@ -1,5 +1,23 @@
 .bookmark-container {
     >.form-list {
-        width: 20rem;
+        width: 19.5rem;
+        >div.form-list-input-container {
+            min-height: @header-inputs-height;
+            height: @header-inputs-height;
+            &:not(.autocomplete) {
+                padding-right: @header-inputs-height - .25rem;
+            }
+            >input {
+                height: @header-inputs-height;
+            }
+            >span.form-list-button {
+                height: @header-inputs-height;
+                width: @header-inputs-height;
+                line-height: @header-inputs-height;
+            }
+        }
+        >ul.form-list-tree {
+            top: @header-inputs-height;
+        }
     }
 }

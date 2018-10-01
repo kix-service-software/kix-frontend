@@ -5,8 +5,10 @@ export class Extension implements IMarkoDependencyExtension {
     public getDependencies(): string[] {
         return [
             'cmdb/cmdb-module',
+            'cmdb/config-item-info',
             'cmdb/dialogs/new-config-item-dialog',
             'cmdb/config-item-details',
+            'cmdb/inputs/ci-class-input',
             'cmdb/inputs/ci-class-reference-input',
             'cmdb/config-item-version-details',
             'cmdb/widgets/config-item-info-widget',
@@ -23,10 +25,12 @@ export class Extension implements IMarkoDependencyExtension {
     public getComponentTags(): Array<[string, string]> {
         return [
             ['cmdb-module', 'cmdb/cmdb-module'],
+            ['config-item-info', 'cmdb/config-item-info'],
             ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog'],
             ['config-item-details', 'cmdb/config-item-details'],
             ['config-item-version-details', 'cmdb/config-item-version-details'],
             ['ci-class-reference-input', 'cmdb/inputs/ci-class-reference-input'],
+            ['ci-class-input', 'cmdb/inputs/ci-class-input'],
             ['config-item-info-widget', 'cmdb/widgets/config-item-info-widget'],
             ['config-item-history-widget', 'cmdb/widgets/config-item-history-widget'],
             ['config-item-graph-widget', 'cmdb/widgets/config-item-graph-widget'],

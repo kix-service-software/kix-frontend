@@ -42,7 +42,7 @@ class Component implements IKIXObjectSearchListener {
                 const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);
 
                 const searchValue = new FormSearchValue(this.state.objectType);
-                searchValue.setPropertyNode(property);
+                await searchValue.setPropertyNode(property);
                 searchValue.setOperationNode(null, criteria.operator);
                 searchValue.setCurrentValue(criteria.value);
                 this.state.searchValues.push(searchValue);
@@ -58,7 +58,7 @@ class Component implements IKIXObjectSearchListener {
 
     public async propertyChanged(searchValue: FormSearchValue, nodes: TreeNode[]): Promise<void> {
         await this.removeValue(searchValue, false);
-        searchValue.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
+        await searchValue.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
         await this.provideFilterCriteria(searchValue);
         this.checkSearchValueList();
         (this as any).setStateDirty('searchValues');
@@ -122,7 +122,7 @@ class Component implements IKIXObjectSearchListener {
             const property = this.state.propertyNodes.find((pn) => pn.id === defaultProp);
             if (property) {
                 const searchValue = new FormSearchValue(this.state.objectType);
-                searchValue.setPropertyNode(property);
+                await searchValue.setPropertyNode(property);
                 this.state.searchValues.push(searchValue);
                 await this.provideFilterCriteria(searchValue);
             }

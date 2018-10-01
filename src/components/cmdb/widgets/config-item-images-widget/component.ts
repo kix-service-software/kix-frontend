@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, IdService, DialogService
+    ContextService, ActionFactory, IdService, DialogService, KIXObjectService
 } from '@kix/core/dist/browser';
 import {
     KIXObjectType, Context, ConfigItem, ImagesLoadingOptions, ConfigItemImage
@@ -64,7 +64,7 @@ class Component {
 
     private async prepareImages(): Promise<void> {
         if (this.state.configItem) {
-            const ciImages: ConfigItemImage[] = await ContextService.getInstance().loadObjects<ConfigItemImage>(
+            const ciImages: ConfigItemImage[] = await KIXObjectService.loadObjects<ConfigItemImage>(
                 KIXObjectType.CONFIG_ITEM_IMAGE,
                 [], null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
             );

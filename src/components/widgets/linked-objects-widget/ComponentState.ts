@@ -1,4 +1,4 @@
-import { WidgetComponentState, AbstractAction,  KIXObject } from "@kix/core/dist/model";
+import { WidgetComponentState, AbstractAction, KIXObject } from "@kix/core/dist/model";
 import { StandardTable } from "@kix/core/dist/browser";
 
 export class ComponentState extends WidgetComponentState {
@@ -7,7 +7,7 @@ export class ComponentState extends WidgetComponentState {
         public kixObject: KIXObject = null,
         public actions: AbstractAction[] = [],
         public loading: boolean = true,
-        public linkedObjectGroups: Array<[string, StandardTable]> = [],
+        public linkedObjectGroups: Array<[string, StandardTable, number]> = [],
         public widgetTitle: string = ''
     ) {
         super();

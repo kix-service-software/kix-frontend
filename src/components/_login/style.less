@@ -125,33 +125,20 @@
                 text-align: right;
                 color: @secondary-0;
                 label {
-                    display: block;
-                    line-height: 2.5em;
-                    input {
-                        box-sizing: border-box;
-                        margin-left: 1em;
-                        padding: 0 10px;
-                        background-color: @secondary-5;
-                        border: 1px solid @secondary-4;
-                        border-radius: @border-radius;
-                        width: 307px;
-                        height: 34px;
-                        color: @default-dark-font-color;
-                    }
-                    input:hover {
-                        border-color: @secondary-7;
-                    }
+                    display: grid;
+                    align-items: center;
+                    grid-template-columns: 10rem auto;
+                    grid-column-gap: 0.5rem;
+                    margin-bottom: 0.5rem;
                 }
                 .dialog-buttons {
                     margin-top: 2em;
                 }
             }
         }
-        .login-footer {
-            .font-size-small();
-            position: relative;
-            color: @secondary-2;
-            text-align: center;
+        >.kix-footer {
+            position: absolute;
+            bottom: 0;
         }
     }
 }

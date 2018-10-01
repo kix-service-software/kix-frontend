@@ -81,10 +81,6 @@ class TreeNodeComponent {
         (this as any).emit('nodeClicked', node);
     }
 
-    public isAttachment(object: any): boolean {
-        return AttachmentUtil.isAttachmentObject(object);
-    }
-
 }
 
 module.exports = TreeNodeComponent;

@@ -1,0 +1,19 @@
+.kix-footer {
+    .font-size-small();
+    color: @secondary-2;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-content: center;
+    margin: @margin-default 0 .625rem;
+    >div {
+        .shorten-text;
+        padding: 0 1rem;
+    }
+    >div:not(:first-child):not(:last-child) {
+        justify-self: center;
+    }
+    >div:last-child {
+        justify-self: end;
+    }
+}

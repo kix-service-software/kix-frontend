@@ -1,5 +1,5 @@
 import { MenuEntry, Context, ContextType, ContextMode } from '@kix/core/dist/model';
-import { MenuComponentState } from './MenuComponentState';
+import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
 import { IContextServiceListener } from '@kix/core/dist/browser';
@@ -7,10 +7,10 @@ import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class KIXMenuComponent implements IContextServiceListener {
 
-    public state: MenuComponentState;
+    public state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new MenuComponentState();
+        this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {

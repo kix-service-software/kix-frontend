@@ -4,27 +4,12 @@ import { ContextMode, ComponentContent, ToastContent, OverlayType } from "@kix/c
 
 class KIXHeaderComponent {
 
-    public state: any;
-
-    public onCreate(input: any): void {
-        this.state = {};
-    }
-
-    private openDialog(): void {
+    public openDialog(): void {
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
     }
 
-    private logout(): void {
+    public logout(): void {
         ClientStorageService.destroyToken();
-    }
-
-    // TODO: wieder entfernen, wenn nicht mehr gebraucht!
-    public showTemporaryCommingSoon(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('Comming Soon', 'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 
 }

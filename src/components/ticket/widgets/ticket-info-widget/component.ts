@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { TicketLabelProvider } from "@kix/core/dist/browser/ticket";
+import { TicketLabelProvider, TicketService } from "@kix/core/dist/browser/ticket";
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ObjectIcon, KIXObjectType, Ticket, SysconfigUtil } from '@kix/core/dist/model';
 import { ActionFactory, IdService } from '@kix/core/dist/browser';
@@ -40,8 +40,8 @@ class Component {
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.ticket = ticket;
         if (this.state.ticket) {
-            this.state.isPending = this.state.ticket.hasPendingState();
-            this.state.isAccountTimeEnabled = SysconfigUtil.isTimeAccountingEnabled();
+            this.state.isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
+            this.state.isAccountTimeEnabled = await SysconfigUtil.isTimeAccountingEnabled();
         }
 
         this.setActions();

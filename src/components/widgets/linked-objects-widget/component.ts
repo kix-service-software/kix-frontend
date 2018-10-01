@@ -96,14 +96,27 @@ class Component {
 
                     objectsCount += objects.length;
                     const title = `${lot[0]} (${objects.length})`;
-                    this.state.linkedObjectGroups.push([title, table]);
+                    this.state.linkedObjectGroups.push([title, table, objects.length]);
                 }
 
             }
 
             this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${objectsCount})`;
         }
+    }
 
+    // FIXME: nur vorhanden, um eventl. Marko-Bug zu umgehen (hochzählen eines Indexes für Components)
+    private componentIndex: number = 0;
+    public setGroupMinimizedStates(): void {
+        setTimeout(() => {
+            this.state.linkedObjectGroups.forEach((log, index) => {
+                const widgetComponent = (this as any).getComponent('linked-object-group-' + index, this.componentIndex);
+                if (widgetComponent && !log[2] && !widgetComponent.state.minimized) {
+                    widgetComponent.state.minimized = true;
+                }
+            });
+            this.componentIndex = this.componentIndex ? this.componentIndex + 1 : 1;
+        }, 100);
     }
 
     private checkLink(link: Link, objectType: KIXObjectType): boolean {

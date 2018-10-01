@@ -1,13 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, TableFilterLayer, TableSortLayer,
-    TableColumn, ITableConfigurationListener, ActionFactory,
-    TableLayerConfiguration, TableListenerConfiguration, StandardTableFactoryService, ServiceRegistry
+    ContextService, TableColumn, ITableConfigurationListener, ActionFactory,
+    TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
 } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
-import {
-    CustomerTableContentLayer, CustomerTableLabelLayer, CustomerService
-} from "@kix/core/dist/browser/customer";
+import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "@kix/core/dist/model";
+import { CustomerService } from "@kix/core/dist/browser/customer";
 
 class Component {
 
@@ -73,7 +70,7 @@ class Component {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, null, null, ['TicketStats']
             );
-            const customer = await ContextService.getInstance().loadObjects(
+            const customer = await KIXObjectService.loadObjects(
                 KIXObjectType.CUSTOMER, this.state.contact.UserCustomerIDs, loadingOptions, null, false
             );
 

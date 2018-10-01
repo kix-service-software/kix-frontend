@@ -1,7 +1,10 @@
 import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
-import { WidgetType, Ticket, KIXObjectType, Context } from '@kix/core/dist/model/';
-import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
+import {
+    WidgetType, Ticket, KIXObjectType, Context, DynamicField, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
+} from '@kix/core/dist/model/';
+import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
 
 class TicketDescriptionWidgetComponent {
 
@@ -61,12 +64,19 @@ class TicketDescriptionWidgetComponent {
         }
     }
 
-    private getTicketNotes(): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
+    private async getTicketNotes(): Promise<void> {
+        const loadingOptions = new KIXObjectLoadingOptions(['DynamicField.ID'], [
+            new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'TicketNotes')
+        ]);
+
+        const danymicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+        );
+
+        if (danymicFields && danymicFields.length) {
             if (this.state.ticket) {
                 const ticketNotesDF = this.state.ticket.DynamicFields.find(
-                    (df) => df.ID === objectData.ticketNotesDFId
+                    (df) => df.ID === danymicFields[0].ID
                 );
                 if (ticketNotesDF) {
                     this.state.ticketNotes = ticketNotesDF.DisplayValue;

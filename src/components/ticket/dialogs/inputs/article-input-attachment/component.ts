@@ -63,19 +63,19 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
     }
 
-    private appendFiles(files: File[]): void {
+    private async appendFiles(files: File[]): Promise<void> {
         const fileErrors: Array<[File, AttachmentError]> = [];
 
-        files.forEach((f: File) => {
+        for (const f of files) {
             if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
-                const fileError = AttachmentUtil.checkFile(f);
+                const fileError = await AttachmentUtil.checkFile(f);
                 if (fileError) {
                     fileErrors.push([f, fileError]);
                 } else {
                     this.state.files.push(f);
                 }
             }
-        });
+        }
 
         super.provideValue(this.state.files);
         this.createLabels();

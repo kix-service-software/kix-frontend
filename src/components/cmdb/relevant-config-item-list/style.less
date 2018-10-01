@@ -1,0 +1,23 @@
+ul.ci-list-content {
+    border: 1px solid @secondary-2;
+    border-radius: @border-radius;
+    list-style: none;
+    padding-right: 0.5rem;
+    >li {
+        display: grid;
+        grid-template-columns: 1rem auto;
+        align-items: center;
+        grid-column-gap: 0.5rem;
+        >span.overlay-icon {
+            font-size: 1rem;
+        }
+        >span.ci-name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

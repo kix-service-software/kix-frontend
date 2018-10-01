@@ -30,7 +30,7 @@ export class FormSearchValue {
         public currentOperationNode: TreeNode = null
     ) { }
 
-    public setPropertyNode(propertyNode: TreeNode): void {
+    public async setPropertyNode(propertyNode: TreeNode): Promise<void> {
         this.currentPropertyNode = propertyNode;
         this.nodes = [];
         this.currentValueNodes = [];
@@ -56,7 +56,7 @@ export class FormSearchValue {
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
 
             if (this.isDropdown) {
-                this.nodes = KIXObjectSearchService.getInstance().getTreeNodes(
+                this.nodes = await KIXObjectSearchService.getInstance().getTreeNodes(
                     this.objectType, this.currentPropertyNode.id
                 );
             }

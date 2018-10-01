@@ -68,7 +68,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
     }
 
-    private appendFiles(files: File[]): void {
+    private async appendFiles(files: File[]): Promise<void> {
         const fileErrors: Array<[File, AttachmentError]> = [];
 
         const option = this.state.field.options.find((o) => o.option === 'MimeTypes');
@@ -79,22 +79,22 @@ class Component extends FormInputComponent<any, ComponentState> {
             files = files.length > 0 ? [files[0]] : [];
         }
 
-        files.forEach((f: File) => {
+        for (const f of files) {
             if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
-                const fileError = AttachmentUtil.checkFile(f, mimeTypes);
+                const fileError = await AttachmentUtil.checkFile(f, mimeTypes);
                 if (fileError) {
                     fileErrors.push([f, fileError]);
                 } else {
                     this.state.files.push(f);
                 }
             }
-        });
+        }
 
         super.provideValue(this.state.files);
         this.createLabels();
 
         if (fileErrors.length) {
-            const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
+            const errorMessages = await AttachmentUtil.buildErrorMessages(fileErrors);
             const content = new ComponentContent('list-with-title',
                 {
                     title: 'Fehler beim Hinzufügen von Anlagen:',

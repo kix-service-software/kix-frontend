@@ -28,11 +28,11 @@ class BreadcrumbComponent implements IContextServiceListener {
             this.state.icon = breadcrumbInformation.icon;
             for (const contextId of breadcrumbInformation.contextIds) {
                 const context = await ContextService.getInstance().getContext(contextId);
-                const displayText = context.getDisplayText();
+                const displayText = await context.getDisplayText();
                 this.state.contexts.push([contextId, displayText]);
             }
 
-            const currentContextDisplayText = newContext.getDisplayText();
+            const currentContextDisplayText = await newContext.getDisplayText(true);
             this.state.contexts.push([newContextId, currentContextDisplayText]);
 
             this.state.loading = false;

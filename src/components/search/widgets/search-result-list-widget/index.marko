@@ -11,7 +11,7 @@
         </@headerContent>
         <@content>
             <if(state.resultTable && !state.noSearch)>
-                <standard-table standardTable=state.resultTable/>
+                <standard-table standardTable=state.resultTable key=state.tableId/>
             </if>
             <else>Keine Suche verfügbar.</else>
         </@content>

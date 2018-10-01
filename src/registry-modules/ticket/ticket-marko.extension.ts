@@ -7,6 +7,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/new-ticket-dialog',
             'ticket/dialogs/search-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
+            'ticket/dialogs/new-ticket-article-dialog',
             'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
@@ -34,6 +35,7 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
         return [
             'ticket/ticket-module',
+            'ticket/ticket-list-module',
             'ticket/ticket-details',
             'ticket/ticket-dynamic-fields-container',
             'ticket/ticket-article-details',
@@ -79,12 +81,14 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
 
         return [
             ['tickets', 'ticket/ticket-module'],
+            ['ticket-list-module', 'ticket/ticket-list-module'],
             ['ticket-article-attachment-list', 'ticket/ticket-article-attachment-list'],
             ['ticket-details', 'ticket/ticket-details'],
             ['ticket-article-details', 'ticket/ticket-article-details'],
             ['new-ticket-dialog', 'ticket/dialogs/new-ticket-dialog'],
             ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
             ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
+            ['new-ticket-article-dialog', 'ticket/dialogs/new-ticket-article-dialog'],
             ['ticket-contact-info', 'ticket/ticket-contact-info'],
             ['ticket-customer-info', 'ticket/ticket-customer-info'],
             ['article-receiver-list', 'ticket/article-receiver-list'],

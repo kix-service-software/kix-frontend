@@ -1,9 +1,4 @@
 <for(field in state.fields)>
-    <if(component.showSeparator(field) && state.level === 0)>
-        <div.form-field>
-            <div.form-separator/>
-        </div>
-    </if>
     <form-field field=field level=state.level formId=input.formId objectType=input.objectType>
         <@additionalFieldControls>
             <div.additionalFieldControls>
@@ -28,9 +23,4 @@
             </div>
         </@additionalFieldControls>
     </form-field>
-    <if(component.showSeparator(field) && state.level === 0)>
-        <div.form-field>
-            <div.form-separator/>
-        </div>
-    </if>
 </for>

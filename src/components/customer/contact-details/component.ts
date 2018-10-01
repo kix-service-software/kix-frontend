@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Contact, ContextType } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Contact } from "@kix/core/dist/model";
 import {
-    ContextService, ActionFactory, IdService, WidgetService, ServiceRegistry
+    ContextService, ActionFactory, IdService, WidgetService
 } from "@kix/core/dist/browser";
 import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -41,6 +41,7 @@ class Component {
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
         this.setActions();
+        await this.prepareTitle();
     }
 
     private setActions(): void {
@@ -57,9 +58,9 @@ class Component {
         }
     }
 
-    public getTitle(): string {
+    public async prepareTitle(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        return context.getDisplayText();
+        this.state.title = await context.getDisplayText();
 
     }
 

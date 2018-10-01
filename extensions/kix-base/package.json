@@ -19,14 +19,15 @@
         "kix:menu:main": {
             "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
             "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension",
+            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension",
             "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
-            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension",
             "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension",
-            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension"
+            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension"
         },
         "kix:module": {
             "home-module": "../../dist/registry-modules/home/module.extension",
             "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
+            "ticket-list-module": "../../dist/registry-modules/ticket/ticket-list-module.extension",
             "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension",
             "customer-module": "../../dist/registry-modules/customer/customer-module.extension",
             "customer-details-module": "../../dist/registry-modules/customer/customer-details-module.extension",
@@ -35,6 +36,7 @@
             "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension",
             "search-module": "../../dist/registry-modules/search/search-module.extension",
             "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
+            "new-ticket-article-dialog-context": "../../dist/registry-modules/ticket/new-ticket-article-dialog-context.extension",
             "search-ticket-dialog-context": "../../dist/registry-modules/ticket/search-ticket-dialog-context.extension",
             "search-contact-dialog-context": "../../dist/registry-modules/customer/search-contact-dialog-context.extension",
             "search-customer-dialog-context": "../../dist/registry-modules/customer/search-customer-dialog-context.extension",

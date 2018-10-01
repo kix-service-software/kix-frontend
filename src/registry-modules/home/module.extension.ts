@@ -37,8 +37,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -66,8 +64,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: 'right'
@@ -91,8 +87,6 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -118,6 +112,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['ticket-bulk-action'], new TableConfiguration(
                 500, 10, [
                     new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 90),
+                    new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 75),
                     new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
                     new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                     new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
@@ -161,6 +156,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 'ticket-list-widget', 'Neue Tickets', ['ticket-bulk-action'], new TableConfiguration(
                     500, 10, [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 90),
+                        new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 75),
                         new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
                         new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 250),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 150),

@@ -10,7 +10,7 @@
             <form-list nodes=state.linkableObjectNodes on-nodesChanged('linkableObjectChanged')
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
-        <div.linkable-objects-form>
+        <div.linkable-objects-form on-keydown("keyPressed")>
             <widget instanceId="link-object-dialog-form-widget" title="Suche" key="link-object-form-widget">
                 <@content>
                     <if(state.formId)>
@@ -24,7 +24,7 @@
             <if(state.currentLinkableObjectNode)>
                 <div.result-title>Trefferliste (${state.resultCount})</div>
                 <if(state.standardTable)>
-                    <standard-table standardTable=state.standardTable/>
+                    <standard-table standardTable=state.standardTable key=state.tableId/>
                 </if>
             </if>
         </div>

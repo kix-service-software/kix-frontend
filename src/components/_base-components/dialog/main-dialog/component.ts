@@ -19,12 +19,16 @@ export class MainDialogComponent implements IMainDialogListener {
         dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string, dialogIcon?: string | ObjectIcon
     ): void {
         if (!this.state.show) {
+            this.state.isLoading = true;
             this.state.dialogTitle = dialogTitle;
             this.state.dialogIcon = dialogIcon;
             this.state.dialogWidgets = dialogs;
             this.state.show = true;
             setTimeout(() => {
                 this.tabChanged(dialogs.find((d) => d.instanceId === dialogId));
+                setTimeout(() => {
+                    this.state.isLoading = false;
+                }, 100);
             }, 100);
         }
     }

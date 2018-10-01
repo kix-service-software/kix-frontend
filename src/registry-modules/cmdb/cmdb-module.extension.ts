@@ -1,8 +1,12 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty
+    ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
+    FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form
 } from '@kix/core/dist/model';
 import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '@kix/core/dist/browser/cmdb';
+import { IConfigurationService } from '@kix/core/dist/services';
+import { ServiceContainer } from '@kix/core/dist/common';
+import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -39,8 +43,6 @@ export class Extension implements IModuleFactoryExtension {
                 datasets: []
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: false
                 }
@@ -56,27 +58,25 @@ export class Extension implements IModuleFactoryExtension {
             data: {
                 labels: [],
                 datasets: [{
-                    label: "",
+                    label: '',
                     data: [],
                     fill: true,
                     backgroundColor: [
-                        "rgba(255, 0, 0, 0.8)",
-                        "rgba(255, 0, 0, 0.6)",
-                        "rgba(255, 0, 0, 0.4)",
-                        "rgba(255, 0, 0, 0.2)",
-                        "rgba(0, 0, 255, 0.8)",
-                        "rgba(0, 0, 255, 0.6)",
-                        "rgba(0, 0, 255, 0.4)",
-                        "rgba(0, 0, 255, 0.2)",
-                        "rgba(0, 255, 0, 0.8)",
-                        "rgba(0, 255, 0, 0.6)",
-                        "rgba(0, 255, 0, 0.4)"
+                        'rgba(255, 0, 0, 0.8)',
+                        'rgba(255, 0, 0, 0.6)',
+                        'rgba(255, 0, 0, 0.4)',
+                        'rgba(255, 0, 0, 0.2)',
+                        'rgba(0, 0, 255, 0.8)',
+                        'rgba(0, 0, 255, 0.6)',
+                        'rgba(0, 0, 255, 0.4)',
+                        'rgba(0, 0, 255, 0.2)',
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(0, 255, 0, 0.6)',
+                        'rgba(0, 255, 0, 0.4)'
                     ]
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
                     position: 'right',
@@ -100,11 +100,9 @@ export class Extension implements IModuleFactoryExtension {
                 datasets: []
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 legend: {
                     display: true,
-                    position: "top"
+                    position: 'top'
                 },
                 scales: {
                     xAxes: [{
@@ -139,8 +137,44 @@ export class Extension implements IModuleFactoryExtension {
         );
     }
 
-    public createFormDefinitions(): void {
-        // do nothing
+    public async createFormDefinitions(): Promise<void> {
+        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>(
+            'IConfigurationService'
+        );
+
+        const linkFormId = 'link-config-item-search-form';
+        const existingForm = configurationService.getModuleConfiguration(linkFormId, null);
+        if (!existingForm) {
+            const fields: FormField[] = [];
+            fields.push(
+                new FormField(
+                    'Config Item Klasse', ConfigItemProperty.CLASS_ID,
+                    'ci-class-input', false, 'Config Item Klasse'
+                )
+            );
+            fields.push(new FormField('Name', ConfigItemProperty.NAME, null, false, 'Name'));
+            fields.push(new FormField('Nummer', ConfigItemProperty.NUMBER, null, false, 'Nummer'));
+            fields.push(new FormField(
+                'Verwendungsstatus', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
+                false, 'Verwendungsstatus', [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
+                null, null, null, 1, 1, 1, null, null, null, false, false
+            ));
+            fields.push(new FormField(
+                'Vorfallstatus', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
+                false, 'Vorfallstatus', [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
+                null, null, null, 1, 1, 1, null, null, null, false, false
+            ));
+
+            const group = new FormGroup('Config Item Daten', fields);
+
+            const form = new Form(
+                linkFormId, 'Verknüpfen mit Config Item', [group], KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
+            );
+            await configurationService.saveModuleConfiguration(form.id, null, form);
+        }
+        configurationService.registerForm(
+            [FormContext.LINK], KIXObjectType.CONFIG_ITEM, linkFormId
+        );
     }
 
 }

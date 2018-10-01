@@ -3,7 +3,7 @@ import {
     Article, Ticket, KIXObjectType, ContextMode,
     KIXObjectLoadingOptions, ArticlesLoadingOptions
 } from '@kix/core/dist/model';
-import { ContextService } from '@kix/core/dist/browser';
+import { ContextService, KIXObjectService } from '@kix/core/dist/browser';
 
 export class TicketArticleDetailsComponent {
 
@@ -22,7 +22,7 @@ export class TicketArticleDetailsComponent {
             this.state.article = this.state.inputObject;
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
-            const articles = await ContextService.getInstance().loadObjects<Article>(
+            const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(), new ArticlesLoadingOptions(ticket.TicketID)
             );

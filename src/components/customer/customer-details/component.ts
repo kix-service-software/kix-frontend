@@ -45,6 +45,8 @@ class Component {
         this.setActions();
         this.setContentActions();
 
+        await this.prepareTitle();
+
         setTimeout(() => {
             this.state.loading = false;
         }, 50);
@@ -67,9 +69,9 @@ class Component {
         }
     }
 
-    public getTitle(): string {
+    public async prepareTitle(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        return context.getDisplayText();
+        this.state.title = await context.getDisplayText();
 
     }
 
