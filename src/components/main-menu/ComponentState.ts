@@ -1,6 +1,6 @@
 import { MenuEntry } from '@kix/core/dist/model';
 
-export class MenuComponentState {
+export class ComponentState {
 
     public primaryMenuEntries: MenuEntry[] = [];
 
