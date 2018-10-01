@@ -5,6 +5,7 @@ import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
+import { EventService } from '@kix/core/dist/browser/event';
 
 export class Component {
 
@@ -63,6 +64,9 @@ export class Component {
             const element = (this as any).getEl("ticket-content");
             if (element) {
                 element.scrollIntoView(true);
+                setTimeout(() => {
+                    window.scrollBy(0, 450);
+                }, 100);
             }
         }, 100);
     }
