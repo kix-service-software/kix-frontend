@@ -89,12 +89,12 @@ export class Component {
 
         const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
+        context.setQueue(queue);
         context.loadTickets(null, [
             new FilterCriteria(
                 TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, queue.QueueID
             )
         ]);
-        context.setQueue(queue);
         context.setAdditionalInformation(this.getStructureInformation());
     }
 
