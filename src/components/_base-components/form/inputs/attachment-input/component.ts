@@ -94,7 +94,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.createLabels();
 
         if (fileErrors.length) {
-            const errorMessages = AttachmentUtil.buildErrorMessages(fileErrors);
+            const errorMessages = await AttachmentUtil.buildErrorMessages(fileErrors);
             const content = new ComponentContent('list-with-title',
                 {
                     title: 'Fehler beim Hinzufügen von Anlagen:',
