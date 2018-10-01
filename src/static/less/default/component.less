@@ -1,20 +1,27 @@
 .details-container {
     >.content-widget {
+        box-shadow: unset;
         margin-top: 1.5em;
         &:first-of-type {
             margin-top: 0;
         }
+        >.widget-header {
+            box-shadow: @shadow-1;
+        }
         >.widget-content {
             background-color: transparent;
-        }
-        .action-list-wrapper {
-            li.list-button {
-                span {
-                    box-shadow: @shadow-1;
-                }
-                &.active {
-                    span {
-                        box-shadow: inset @shadow-1;
+            >.content-actions {
+                box-shadow: @shadow-1;
+                .action-list-wrapper {
+                    li.list-button {
+                        span {
+                            box-shadow: @shadow-1;
+                        }
+                        &.active {
+                            span {
+                                box-shadow: inset @shadow-1;
+                            }
+                        }
                     }
                 }
             }
@@ -22,6 +29,20 @@
         .lane-list {
             list-style: none;
             margin-bottom: 1.5em;
+        }
+    }
+    >div {
+        >.content-widget {
+            &.minimized {
+                border-radius: @border-radius;
+                >.widget-header {
+                    border-radius: @border-radius
+                }
+            }
+            >.widget-header {
+                background-color: @primary-0;
+                color: @secondary-6;
+            }
         }
     }
 }
