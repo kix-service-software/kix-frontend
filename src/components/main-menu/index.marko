@@ -1,34 +1,38 @@
 <div.main-menu-wrapper>
-    <ul.main-menu class=(state.showText ? "" : "image-only")>
+    <ul.main-menu class={"image-only": !state.showText}>
         <for(menuEntry in state.primaryMenuEntries)>
-            <li class=(menuEntry.active ? "active" : "")>
+            <li class={active: menuEntry.active}>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
                     <@content>
-                        <span class="hover-label">${menuEntry.text}</span>
+                        <span class="hover-label">
+                            <icon icon=menuEntry.icon/>
+                            <div>${menuEntry.text}</div>
+                        </span>
                         <span class="label-wrapper">
                             <icon icon=menuEntry.icon/>
-                            <span class="inline-label">
-                                <br/>${menuEntry.text}
-                            </span>
+                            <if(state.showText)>
+                                <div>${menuEntry.text}</div>
+                            </if>
                         </span>
                     </@content>
                 </link-target>
             </li>
         </for>
     </ul>
-    <ul.user-menu class=(state.showText ? "" : "image-only")>
+    <ul.user-menu class={"image-only": !state.showText}>
         <for(menuEntry in state.secondaryMenuEntries)>
-            <li class=(menuEntry.active ? "active" : "")>
+            <li class={active: menuEntry.active}>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
                     <@content>
-                        <span class="menu-item-wrapper cf">
-                            <span class="hover-label">${menuEntry.text}</span>
-                            <span class="label-wrapper">
-                                <icon icon=menuEntry.icon/>
-                                <span class="inline-label">
-                                    <br/>${menuEntry.text}
-                                </span>
-                            </span>
+                        <span class="hover-label">
+                            <icon icon=menuEntry.icon/>
+                            <div>${menuEntry.text}</div>
+                        </span>
+                        <span class="label-wrapper">
+                            <icon icon=menuEntry.icon/>
+                            <if(state.showText)>
+                                <div>${menuEntry.text}</div>
+                            </if>
                         </span>
                     </@content>
                 </link-target>

@@ -1,33 +1,45 @@
 ul.main-menu,
 ul.user-menu {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
     margin-bottom: @margin-small/4;
+    box-shadow: @shadow-1;
     li {
+        .font-size-normal;
         background: @primary-3;
         color: @default-light-font-color;
         height: @main-menu-height;
         width: @main-menu-width;
-        border-top: 1px solid #35a5de;
-        border-bottom: 1px solid #005a85;
-        transition: width .5s, border-radius .25s;
+        border-top: 1px solid @primary-4;
+        border-bottom: 1px solid @primary-0;
+        transition: width .25s, border-radius .25s;
         display: block;
         box-sizing: border-box;
+        font-weight: bold;
         &:first-child {
-            border-top-right-radius: 3px;
+            border-top-right-radius: @border-radius;
         }
         &:last-child {
-            border-bottom-right-radius: 3px;
+            border-bottom-right-radius: @border-radius;
+        }
+        &.active,
+        &:hover {
+            width: @main-menu-active-width;
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            padding-right: @main-menu-active-width - @main-menu-width;
+            box-shadow: @shadow-1;
+            border-top: 1px solid @primary-3;
         }
         &:hover:not(.active) {
-            width: 80px;
-            border-top-right-radius: 3px;
-            border-bottom-right-radius: 3px;
+            transition: width 1s, border-radius 1s;
             a {
+                width: @main-menu-active-width;
+                border-top-right-radius: @border-radius;
+                border-bottom-right-radius: @border-radius;
+                border-left: 0;
                 span.hover-label {
-                    width: 78px;
-                    border-top-right-radius: 3px;
-                    border-bottom-right-radius: 3px;
+                    width: @main-menu-active-width;
                 }
                 span.label-wrapper {
                     opacity: 0;
@@ -36,16 +48,11 @@ ul.user-menu {
         }
         &.active {
             background: @primary-1;
-            color: @default-light-font-color;
-            width: @main-menu-active-width;
-            border-top-right-radius: 3px;
-            border-bottom-right-radius: 3px;
-            padding-right: 6px;
-            box-sizing: border-box;
         }
-        &.active+li {
-            border-top: 0 none;
-        } // TODO: should be removed or replaced with other link solution
+        &.active+li:not(:hover),
+        &:hover+li:not(.active) {
+            border-top: 1px solid @primary-3;
+        }
         a {
             display: block;
             height: 100%;
@@ -55,46 +62,40 @@ ul.user-menu {
             text-align: center;
             overflow: hidden;
             position: relative;
-            span.label-wrapper {
-                opacity: 1;
-                transition: opacity .125s;
+            &:hover {
+                color: inherit;
+            }
+            >span {
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
-                    font-size: .875em;
+                    .icon-font-size-small;
                     position: relative;
                     top: 5px;
                 }
-                span.inline-label {
-                    position: relative;
-                    top: 3px;
-                }
+            }
+            span.label-wrapper {
+                opacity: 1;
+                transition: opacity .125s;
             }
             span.hover-label {
                 position: absolute;
                 display: inline-block;
-                background-color: @primary-1;
                 height: 100%;
                 left: 0;
                 width: 0;
-                transition: width .5s, border-radius .5s;
+                transition: width .5s, border-radius .25s;
                 z-index: 5;
                 overflow: hidden;
-                line-height: 40px;
+                background: @primary-1;
             }
         }
     }
     &.image-only li {
         span.label-wrapper {
-            line-height: 45px;
-            font-size: 1.5em;
+            line-height: @main-menu-height;
             [class^="kix-icon-"],
             [class*=" kix-icon-"] {
-                font-size: inherit;
-                position: relative;
-                top: auto;
-            }
-            .inline-label {
-                display: none;
+                .icon-font-size-normal;
             }
         }
     }
