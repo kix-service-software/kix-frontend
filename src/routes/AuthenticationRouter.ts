@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { KIXRouter, IRouter } from '@kix/core/dist/routes';
+import { ReleaseInfo } from '@kix/core/dist/model';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -12,18 +13,19 @@ export class AuthenticationRouter extends KIXRouter {
         return "/auth";
     }
 
-    public login(req: Request, res: Response): void {
+    public async login(req: Request, res: Response): Promise<void> {
         const template = require('../components/_login-app/');
         this.setFrontendSocketUrl(res);
 
         const logout = req.query.logout !== undefined;
 
+        const releaseInfo =
+            (await this.configurationService.getModuleConfiguration('release-info', null) as ReleaseInfo);
+
         res.marko(template, {
             login: true,
-            data: {
-                frontendSocketUrl: this.getServerUrl(),
-                logout
-            }
+            logout,
+            releaseInfo
         });
     }
 

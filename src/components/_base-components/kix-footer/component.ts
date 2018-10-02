@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectService } from '@kix/core/dist/browser';
-import { SysConfigItem, SysConfigKey, KIXObjectType } from '@kix/core/dist/model';
+import { ContextService } from '@kix/core/dist/browser';
+import { ReleaseInfo } from '@kix/core/dist/model';
 
 class Component {
 
@@ -10,20 +10,25 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
-        // FIXME: führt aktuell zu (im Login)
-        // Unhandled promise rejection (rejection id: 2): Error: No service registered for object type SysConfigItem
-        // ggf. ist es erstmal auch nicht notwendig und der Text "KIX 18 Alpha" würde auch reichen
-        const productConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.KIX_PRODUCT]
-        );
-        const versionConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.KIX_VERSION]
-        );
+    public onInput(input: any): void {
+        this.state.releaseInfo = input.releaseInfo;
+    }
 
-        this.state.kixProduct = productConfig && productConfig.length ? productConfig[0].Data : '';
-        this.state.kixVersion = versionConfig && versionConfig.length ? versionConfig[0].Data : '';
-        this.state.buildNumber = '123c.123';
+    public async onMount(): Promise<void> {
+        if (!this.state.releaseInfo) {
+            const objectData = ContextService.getInstance().getObjectData();
+            this.state.releaseInfo = objectData.releaseInfo;
+        }
+
+        if (this.state.releaseInfo) {
+            this.state.kixProduct = this.state.releaseInfo.product;
+            this.state.kixVersion = this.state.releaseInfo.version;
+            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
+        }
+    }
+
+    private getBuildNumber(releaseInfo: ReleaseInfo): string {
+        return `(${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber})`;
     }
 }
 
