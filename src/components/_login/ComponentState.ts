@@ -1,3 +1,5 @@
+import { ReleaseInfo } from "@kix/core/dist/model";
+
 export class ComponentState {
 
     public constructor(
@@ -7,7 +9,8 @@ export class ComponentState {
         public valid: boolean = false,
         public error: boolean = false,
         public doLogin: boolean = false,
-        public logout: boolean = false
+        public logout: boolean = false,
+        public releaseInfo: ReleaseInfo = null
     ) { }
 
 }

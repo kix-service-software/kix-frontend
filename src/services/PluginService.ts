@@ -1,9 +1,7 @@
 import { injectable, inject } from 'inversify';
 import Plugins = require('js-plugins');
 
-import {
-    IWidgetFactoryExtension, IModuleFactoryExtension, KIXExtensions
-} from '@kix/core/dist/extensions';
+import { IModuleFactoryExtension, KIXExtensions } from '@kix/core/dist/extensions';
 import { IPluginService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
 import { IServerConfiguration } from '@kix/core/dist/common';
 
@@ -16,7 +14,7 @@ export class PluginService implements IPluginService {
 
     public constructor(
         @inject("ILoggingService") protected loggingService: ILoggingService,
-        @inject("IConfigurationService") configurationService: IConfigurationService) {
+        @inject("IConfigurationService") protected configurationService: IConfigurationService) {
         const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
         this.pluginManager = new Plugins();
 

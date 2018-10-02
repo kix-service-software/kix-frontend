@@ -11,6 +11,7 @@ import {
     IConfigurationService,
     ISocketCommunicationService,
     IPluginService,
+    IClientRegistrationService,
 } from '@kix/core/dist/services';
 
 import { KIXExtensions, IStaticContentExtension } from '@kix/core/dist/extensions';
@@ -30,6 +31,8 @@ import fs = require('fs');
 import http = require('http');
 import https = require('https');
 import forceSsl = require('express-force-ssl');
+import { ReleaseInfoUtil } from './ReleaseInfoUtil';
+import { CreateClientRegistration } from '@kix/core/dist/api';
 
 @injectable()
 export class Server {
@@ -47,7 +50,8 @@ export class Server {
         @inject("IConfigurationService") configurationService: IConfigurationService,
         @inject("IPluginService") pluginService: IPluginService,
         @inject("ISocketCommunicationService") socketService: ISocketCommunicationService,
-        @inject("IMarkoService") markoService: IMarkoService
+        @inject("IMarkoService") markoService: IMarkoService,
+        @inject("IClientRegistrationService") protected clientRegistrationService: IClientRegistrationService
     ) {
         this.loggingService = loggingService;
         this.configurationService = configurationService;
@@ -57,6 +61,7 @@ export class Server {
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
         this.initHttpServer();
+        this.createReleaseInfoConfig();
     }
 
     private initializeApplication(): void {
@@ -80,6 +85,24 @@ export class Server {
         this.registerStaticContent();
 
         this.router = new ServerRouter(this.application);
+    }
+
+    private async createReleaseInfoConfig(): Promise<void> {
+        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
+
+        const createClientRegistration = new CreateClientRegistration(
+            Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345'
+        );
+
+        const systemInfo = await this.clientRegistrationService.createClientRegistration(
+            this.serverConfig.BACKEND_API_TOKEN, createClientRegistration
+        ).catch((error) => {
+            this.loggingService.error(error);
+            return null;
+        });
+
+        releaseInfo.backendSystemInfo = systemInfo;
+        this.configurationService.saveModuleConfiguration('release-info', null, releaseInfo);
     }
 
     private initHttpServer(): void {
