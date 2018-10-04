@@ -54,11 +54,12 @@
                             style={minHeight: component.getRowHeight(), "line-height": component.getRowHeight()}>
                             <for(value in row.values)>
                                 $ var column = component.getColumn(value);
+                                $ var key = state.tableId.toString() + column.id + '[]';
                                 <link-target routingConfiguration=component.getRoutingConfiguration(column, value)
                                     objectId=component.getRoutingObjectId(column, row)>
                                     <@content>
                                         <div.table-cell.row-column.row-link class=component.getValueClasses(value) style={width: column.size}
-                                            on-click('rowClicked', row, column.id) title=value.displayValue>
+                                            on-click('rowClicked', row, column.id) title=value.displayValue key=key>
                                             <if(column.showIcon)>
                                                 <icon icon=value.icon showUnknown=true/>
                                             </if>
