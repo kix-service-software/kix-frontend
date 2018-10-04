@@ -137,6 +137,7 @@ export class Extension implements IModuleFactoryExtension {
         );
     }
 
+    // tslint:disable:max-line-length
     public async createFormDefinitions(): Promise<void> {
         const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>(
             'IConfigurationService'
@@ -149,19 +150,21 @@ export class Extension implements IModuleFactoryExtension {
             fields.push(
                 new FormField(
                     'Config Item Klasse', ConfigItemProperty.CLASS_ID,
-                    'ci-class-input', false, 'Config Item Klasse'
+                    'ci-class-input', false, 'Wählen Sie eine Config Item Klasse aus der Liste und suchen Sie nach Config Items innerhalb der gewählten Klasse.'
                 )
             );
-            fields.push(new FormField('Name', ConfigItemProperty.NAME, null, false, 'Name'));
-            fields.push(new FormField('Nummer', ConfigItemProperty.NUMBER, null, false, 'Nummer'));
+            fields.push(new FormField('Name', ConfigItemProperty.NAME, null, false, 'Geben Sie einen Config Item Name oder Teile eines Namens (mindestens 1 Zeichen) ein und suchen Sie nach Config Items mit diesem Name oder Teilen des Namens.'));
+            fields.push(new FormField('Nummer', ConfigItemProperty.NUMBER, null, false, 'Geben Sie eine Config Item Nummer oder Teile einer Nummer (mindestens 1 Zeichen) ein und suchen Sie nach Config Items mit dieser Nummer oder Teilen der Nummer.'));
             fields.push(new FormField(
                 'Verwendungsstatus', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
-                false, 'Verwendungsstatus', [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
+                false, 'Wählen Sie einen Verwendungsstatus aus der Liste und suchen Sie nach Config Items mit diesem Verwendungsstatus.',
+                [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
                 'Vorfallstatus', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
-                false, 'Vorfallstatus', [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
+                false, 'Wählen Sie einen Vorfallstatus aus der Liste und suchen Sie nach Config Items mit diesem Vorfallstatus.',
+                [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
 

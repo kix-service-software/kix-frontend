@@ -57,7 +57,8 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                     componentId = 'valid-input';
                 }
 
-                const formField = new FormField(label, attribute.Attribute, componentId, attribute.Required, label);
+                const hint = this.getHint(label, attribute.Attribute);
+                const formField = new FormField(label, attribute.Attribute, componentId, attribute.Required, hint);
                 group.formFields.push(formField);
             }
 
@@ -65,6 +66,42 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CUSTOMER, formId);
+    }
+
+    private getHint(label: string, attribute: string): string {
+        // tslint:disable:max-line-length
+        let hint = label;
+        switch (attribute) {
+            case CustomerProperty.CUSTOMER_ID:
+                hint = 'Geben Sie einen eindeutigen Identifier (z.B. eine Kundennummer) für den Kunden ein. (Pflichtfeld)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_NAME:
+                hint = 'Geben Sie eine Bezeichnung für den Kunden ein. (Pflichtfeld)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_STREET:
+                hint = 'Geben Sie die Straße der Kundenadresse ein. (Optional)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_ZIP:
+                hint = 'Geben Sie die PLZ der Kundenadresse ein. (Optional)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_City:
+                hint = 'Geben Sie einen Ort für die Kunden-Adresse ein. (Optional)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_URL:
+                hint = 'Geben Sie den URL der Website des Kunden ein. (Optional)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
+                hint = 'Geben Sie das Land des Kunden ein. (Optional)';
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_COMMENT:
+                hint = 'Geben Sie zusätzliche Informationen zum Kunden ein. (Optional)';
+                break;
+            case CustomerProperty.VALID_ID:
+                hint = 'Legen Sie fest, ob der Kunde „gültig“, „temporär ungültig“ oder „ungültig“ ist. (Pflichtfeld)';
+                break;
+            default:
+        }
+        return hint;
     }
 
 }
