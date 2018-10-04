@@ -205,9 +205,9 @@ class Component {
             );
     }
 
-    private linksChanged(result: CreateLinkDescription[][]): void {
+    private async linksChanged(result: CreateLinkDescription[][]): Promise<void> {
         this.linkDescriptions = result[0];
-        this.addNewLinks(result[1]);
+        await this.addNewLinks(result[1]);
         this.setCanSubmit();
     }
 
