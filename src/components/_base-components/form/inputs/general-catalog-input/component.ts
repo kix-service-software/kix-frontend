@@ -1,6 +1,6 @@
 import {
     FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem
+    FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
 } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
 import { ServiceRegistry, SearchOperator } from "@kix/core/dist/browser";
@@ -33,7 +33,16 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
                 KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
             );
 
-            this.state.nodes = items.map((item) => new TreeNode(item, item.Name));
+            let hasIcon: boolean = false;
+            const iconOption = this.state.field.options.find((o) => o.option === 'ICON');
+            if (iconOption) {
+                hasIcon = iconOption.value;
+            }
+
+            this.state.nodes = items.map((item) => new TreeNode(item, item.Name, hasIcon
+                ? new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
+                : null));
+
             this.state.loading = false;
         } else {
             this.state.error = 'No gc class configured!';
