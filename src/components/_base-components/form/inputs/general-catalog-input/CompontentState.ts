@@ -6,7 +6,7 @@ export class CompontentState extends FormInputComponentState<GeneralCatalogItem>
         public nodes: TreeNode[] = [],
         public currentNode: TreeNode = null,
         public loading: boolean = true,
-        public error: string = null
+        public error: string = null,
     ) {
         super();
     }
