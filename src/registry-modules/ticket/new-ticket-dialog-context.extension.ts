@@ -48,46 +48,48 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         const configurationService =
             ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
+        // tslint:disable:max-line-length
         const formIdNewTicket = 'new-ticket-form';
         const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ansprechpartner")
+                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ein Ansprechpartner ist ein Kontakt oder eine Person, die eine Anfrage im Kontext eines Kunden stellt. Geben Sie mindestens 3 Zeichen ein, um nach einem Ansprechpartner zu suchen und wählen Sie einen Ansprechpartner für das Ticket aus der Liste. „***“ zeigt alle Einträge an. (Pflichtfeld)")
             );
-            fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, "Kunde"));
-            fields.push(new FormField("Tickettyp", TicketProperty.TYPE_ID, 'ticket-input-type', true, "TicketTyp"));
+            fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, "Der oder die Kunden werden nach Auswahl eines Ansprechpartners automatisch zugewiesen. (Pflichtfeld)"));
+            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', true, "Der Ticket-Typ klassifiziert den Geschäftsprozess einer Anfrage. Wählen Sie einen Ticket - Ttyp aus der Liste.Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Pflichtfeld)"));
             fields.push(new FormField(
-                "Zuordnung zu Bereich / Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', true, "Queue")
+                "Zuordnung zu Bereich / Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', true, "Eine Queue ist ein Ordnungselement für Anfragen, vergleichbar mit Ordnern im Dateisystem eines Computers. Wählen Sie  eine Queue aus der Liste, der das Ticket zugeordnet werden soll. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Pflichtfeld)")
             );
             fields.push(new FormField(
-                "Betroffener Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Service")
+                "Betroffener Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Ein Service definiert, welche Leistung im Geschäftsprozess für eine Anfrage/Ticket angefragt wird. Wählen Sie einen Service aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Optional)")
             );
-            fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
-            fields.push(new FormField("Betreff", TicketProperty.TITLE, null, true, "Betreff"));
+            fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "Ein Servicevertrag definiert, in welcher Zeit auf eine Anfrage/ein Ticket reagiert werden muss. Wählen Sie einen SLA/Servicevertrag aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Optional)"));
+            fields.push(new FormField("Betreff", TicketProperty.TITLE, null, true, "Geben Sie einen Betreff für das Ticket ein. Der Betreff bildet nach der Ticketerstellung zusammen mit der Ticketnummer den Titel eines Tickets. (Pflichtfeld)"));
             fields.push(new FormField(
-                "Ticketbeschreibung", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
+                "Ticketbeschreibung", ArticleProperty.BODY, 'rich-text-input', true, "Beschreiben Sie Ihr Anliegen so genau wie möglich. (Pflichtfeld)", [
                     new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
                         new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
                     ]))
                 ])
             );
-            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));
+            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Wählen Sie hier ggf. Dateien (Dateigröße maximal 25 MB  pro Datei) aus, die Sie an das Ticket anhängen möchten. Einfügen per Drag & Drop ist möglich."));
             fields.push(new FormField(
-                "Ticket verknüpfen mit", TicketProperty.LINK, 'link-input', false, "Verknüpfungen")
+                "Ticket verknüpfen mit", TicketProperty.LINK, 'link-input', false, "Verknüpfen Sie das Ticket  mit einem anderen Ticket, Config Item oder einem FAQ-Artikel. (Optional)")
             );
             fields.push(new FormField(
-                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Bearbeiter")
+                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket  zuständig ist. Wählen Sie einen Bearbeiter für das Ticket aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Optional)")
             );
             fields.push(new FormField(
-                "Verantwortlicher", TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, "Verantwortlicher")
+                "Verantwortlicher", TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, "Der Verantwortliche ist die Person, die dafür verantwortlich ist, dass das Ticket gelöst wird (kann mit Bearbeiter identisch sein). Wählen Sie einen Verantwortlichen für das Ticket aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Optional)")
             );
             fields.push(new FormField<number>(
                 "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority',
-                true, "Priorität", null, new FormFieldValue(3)
+                true, "Prioritäten kennzeichnen farblich unterschiedliche Dringlichkeiten und können zur Kategorisierung von Tickets genutzt werden. Wählen Sie die Priorität für das Ticket aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Pflichtfeld)",
+                null, new FormFieldValue(3)
             ));
             fields.push(new FormField<PendingTimeFormValue>(
-                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-state', true, "Status", null,
+                "Status", TicketProperty.STATE_ID, 'ticket-input-state', true, "Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket befindet.  Wählen Sie den Status für das Ticket aus der Liste. Sie können durch Texteingabe nach Einträgen in der Liste filtern. (Pflichtfeld)", null,
                 new FormFieldValue(new PendingTimeFormValue(4))
             ));
 
@@ -98,26 +100,24 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
 
+        // tslint:disable:max-line-length
         const formIdLinkWithTicket = 'link-ticket-search-form';
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Volltext"));
-            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Ticketnummer"));
-            fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Title"));
-            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', false, "Typ"));
-            fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Queue"));
+            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Geben Sie einen Begriff ein und suchen Sie Tickets mit diesem Begriff im Volltext des Tickets. Es wird in folgenden Feldern nach dem Begriff gesucht:  Nummer, Titel, Artikelinhalt, Von, An, CC"));
+            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen) und suchen Sie nach Tickets mit dieser Ticketnummer oder Teilen der Ticketnummer."));
+            fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Geben Sie den Titel oder Teile eines Tickettitels ein."));
+            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', false, "Wählen Sie einen Tickettyp aus der Liste und suchen Sie nach Tickets des gewählten Typs."));
+            fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Wählen Sie eine Queue aus der Liste und suchen Sie nach Tickets in der gewählten Queue."));
             fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Priorität")
+                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Wählen Sie eine Priorität aus der Liste und suchen Sie Tickets mit der gewählten Priorität.")
             );
             fields.push(new FormField<number>(
-                "Status des Tickets", TicketProperty.STATE_ID, 'ticket-input-state', false, "Status")
+                "Status", TicketProperty.STATE_ID, 'ticket-input-state', false, "Wählen Sie einen Status aus der Liste und suchen Sie Tickets mit dem gewählten Status.")
             );
-            fields.push(new FormField(
-                "Archiv", TicketProperty.ARCHIVE_FLAG, 'ticket-input-archive-search', false, "Archiv")
-            );
-            fields.push(new FormField("Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Service"));
-            fields.push(new FormField("SLA", TicketProperty.SLA_ID, 'ticket-input-sla', false, "SLA"));
+            fields.push(new FormField("Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Wählen Sie einen Service aus der Liste und suchen Sie nach Tickets, die mit dem gewählten Service verknüpft sind."));
+            fields.push(new FormField("SLA", TicketProperty.SLA_ID, 'ticket-input-sla', false, "Wählen Sie einen SLA aus der Liste und suchen Sie nach Tickets, die mit dem gewählten SLA verknüpft sind."));
 
             const group = new FormGroup('Ticketattribute', fields);
 

@@ -7,7 +7,9 @@
         </span>
     </div>
     <div.field-icon>
-        <overlay-icon isHint=true content=state.field.hint title=state.field.label/>
+        <if(state.field.hint)>
+            <overlay-icon isHint=true content=state.field.hint title=state.field.label/>
+        </if>
     </div>
     <div.field-input style={"padding-left": component.getPaddingLeft(), "padding-right": component.getPaddingRight()}>
         <if(!state.field.empty)>
