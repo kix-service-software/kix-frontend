@@ -263,9 +263,9 @@ class LinkDialogComponent {
                 const node = new TreeNode(id, lt.SourceName);
                 this.state.linkTypeNodes.push(node);
                 if (lt.Pointed === 1) {
-                    const pointedLinkType = new LinkType(lt, true);
-                    this.linkTypeDescriptions.push(new LinkTypeDescription(pointedLinkType, true));
-                    const pointedNode = new TreeNode(id + 1, pointedLinkType.SourceName);
+                    const pointedLinkType = new LinkType(lt);
+                    this.linkTypeDescriptions.push(new LinkTypeDescription(pointedLinkType, false));
+                    const pointedNode = new TreeNode(id + 1, pointedLinkType.TargetName);
                     this.state.linkTypeNodes.push(pointedNode);
                 }
             });
