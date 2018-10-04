@@ -8,6 +8,13 @@ class KIXHeaderComponent {
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
     }
 
+    public showTemporaryComingSoon(): void {
+        const content = new ComponentContent('toast', new ToastContent(
+            'Coming Soon', 'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.'
+        ));
+        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
+    }
+
     public logout(): void {
         ClientStorageService.destroyToken();
     }
