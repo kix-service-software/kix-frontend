@@ -102,7 +102,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            await service.deleteObject(data.token, data.objectType, data.objectId)
+            await service.deleteObject(data.token, data.objectType, data.objectId, data.deleteOptions)
                 .then(() => {
                     response = new CommunicatorResponse(
                         KIXObjectEvent.DELETE_OBJECT_FINISHED, new DeleteObjectResponse(data.requestId)
