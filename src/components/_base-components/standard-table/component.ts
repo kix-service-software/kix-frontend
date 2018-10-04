@@ -89,13 +89,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 this.resizeTimeout = setTimeout(() => {
                     this.resizeTimeout = null;
 
-                    const elements: any = (this as any).getEls(
-                        this.state.tableId.toString() + resizeColumnId
+                    const elements = document.getElementsByClassName(
+                        this.state.tableId + resizeColumnId
                     );
-                    elements.forEach((element: any) => {
+                    for (let i = 0; i < elements.length; i++) {
+                        const element: any = elements.item(i);
                         element.style.width = this.state.resizeSettings.currentSize + 'px';
-                    });
-
+                    }
                     resizeColumnId = undefined;
                 }, 100);
             }
@@ -333,6 +333,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (column.showIcon && (!column.showText)) {
             classes.push("only-icon");
         }
+        classes.push(this.state.tableId + column.id);
         return classes;
     }
 
