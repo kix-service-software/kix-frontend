@@ -8,6 +8,7 @@ class EditorComponent {
 
     public state: ComponentState;
     private editor: any;
+    private autoCompletePlugins: any[] = [];
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -39,6 +40,8 @@ class EditorComponent {
     }
 
     public async onMount(): Promise<void> {
+        this.autoCompletePlugins = [];
+
         if (!this.instanceExists()) {
             if (this.state.inline) {
                 this.editor = CKEDITOR.inline(this.state.id, {
@@ -78,11 +81,11 @@ class EditorComponent {
             if (service) {
                 const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                 if (config) {
-                    // tslint:disable-next-line:no-unused-expression
                     const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
                     plugin.getHtmlToInsert = function (item) {
                         return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
                     };
+                    this.autoCompletePlugins.push(plugin);
                 }
             }
         });
@@ -92,6 +95,7 @@ class EditorComponent {
     // weil der Editor schon kurz nach Instanziierung wieder zerstört wird)
     public async onDestroy(): Promise<void> {
         if (this.instanceExists()) {
+            this.autoCompletePlugins.forEach((p) => p.close());
             this.editor.destroy();
         }
     }
