@@ -28,10 +28,12 @@ class Component {
     }
 
     public linkClicked(event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault(event);
+        if (!this.state.routingConfiguration.externalLink) {
+            if (event.preventDefault) {
+                event.preventDefault(event);
+            }
+            RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
         }
-        RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
     }
 
 }

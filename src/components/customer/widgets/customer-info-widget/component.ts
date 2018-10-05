@@ -1,9 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Context } from "@kix/core/dist/model";
+import { KIXObjectType, Customer } from "@kix/core/dist/model";
+import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class Component {
     private state: ComponentState;
+
+    private routingConfiguration: RoutingConfiguration;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();

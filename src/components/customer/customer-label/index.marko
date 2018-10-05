@@ -1,4 +1,8 @@
 <div title=state.title key=("ticket-customer-attribute-" + state.property)>
     <span>${state.propertyText}:</span>
-    <if(state.displayText)>${state.displayText}</if>
+    <if(state.displayText)>
+        <link-target routingConfiguration=component.routingConfiguration objectId=component.objectId>
+            <@content>${state.displayText}</@content>
+        </link-target>
+    </if>
 </div>

@@ -8,9 +8,13 @@
         </if>
     </div>
     <div.value title=state.propertyDisplayText class=component.getValueClasses()>
-        ${state.propertyDisplayText}
-        <if(input.icon)>
-            <include(input.icon)/>
-        </if>
+        <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+            <@content>
+                ${state.propertyDisplayText}
+                <if(input.icon)>
+                    <include(input.icon)/>
+                </if>
+            </@content>
+        </link-target>
     </div>
 </div>
