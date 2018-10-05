@@ -7,7 +7,8 @@ export class CustomerInfoComponentState {
         public customer: Customer = null,
         public customerId: string = null,
         public labelProvider: CustomerLabelProvider = new CustomerLabelProvider(),
-        public error: any = null
+        public error: any = null,
+        public info: Array<[string, Array<[string, string]>]> = []
     ) { }
 
 }

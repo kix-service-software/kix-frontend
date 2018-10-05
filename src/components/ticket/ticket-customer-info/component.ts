@@ -33,6 +33,7 @@ class CustomerInfoComponent {
 
             if (customers && customers.length) {
                 this.state.customer = customers[0];
+                this.state.info = this.state.customer.getCustomerInfoData().filter((g) => g[0] !== 'UNKNOWN');
             }
         }
     }
