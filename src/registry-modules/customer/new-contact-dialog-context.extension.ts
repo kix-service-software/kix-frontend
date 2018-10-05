@@ -73,7 +73,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {
                         group.formFields.push(
                             // tslint:disable-next-line:max-line-length
-                            new FormField('Password', ContactProperty.USER_PASSWORD, null, true, 'Legen Sie ein Passwort für den Ansprechpartner fest. (Pflichtfeld)',
+                            new FormField('Password', ContactProperty.USER_PASSWORD, null, true, 'Legen Sie ein Passwort für den Ansprechpartner fest.',
                                 [
                                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                                 ])
@@ -93,37 +93,37 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
         let hint = label;
         switch (attribute) {
             case ContactProperty.USER_FIRST_NAME:
-                hint = 'Geben Sie den Vornamen des Ansprechpartners ein. (Pflichtfeld)';
+                hint = 'Geben Sie den Vornamen des Ansprechpartners ein.';
                 break;
             case ContactProperty.USER_LAST_NAME:
-                hint = 'Geben Sie den Nachname des Ansprechpartners ein. (Pflichtfeld)';
+                hint = 'Geben Sie den Nachname des Ansprechpartners ein.';
                 break;
             case ContactProperty.USER_LOGIN:
-                hint = 'Geben Sie den Login (Nutzername) des Ansprechpartners ein. (Pflichtfeld)';
+                hint = 'Geben Sie den Login (Nutzername) des Ansprechpartners ein.';
                 break;
             case ContactProperty.USER_PHONE:
-                hint = 'Geben Sie eine Telefonnummer für den Ansprechpartner ein. (Optional)';
+                hint = 'Geben Sie eine Telefonnummer für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_FAX:
-                hint = 'Geben Sie eine Faxnummer für den Ansprechpartner ein. (Optional)';
+                hint = 'Geben Sie eine Faxnummer für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_EMAIL:
-                hint = 'Geben Sie eine gültige E-Mail-Adresse ein. (Pflichtfeld)';
+                hint = 'Geben Sie eine gültige E-Mail-Adresse für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_STREET:
-                hint = 'Geben Sie die Straße der  Ansprechpartner-Adresse ein. (Optional)';
+                hint = 'Geben Sie die Straße der  Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_ZIP:
-                hint = 'Geben Sie die PLZ der  Ansprechpartner-Adresse ein. (Optional)';
+                hint = 'Geben Sie die Postleitzahl (PLZ) der  Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_CITY:
-                hint = 'Geben Sie den Ort der  Ansprechpartner-Adresse ein. (Optional)';
+                hint = 'Geben Sie den Ort der  Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_TITLE:
-                hint = 'Geben Sie einen Titel für den Ansprechpartner ein. (Optional)';
+                hint = 'Geben Sie einen Titel für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_CUSTOMER_ID:
-                hint = 'Geben Sie mindestens 3 Zeichen ein, um einen Kunden für den Ansprechpartner zu suchen.  „***“ zeigt alle Einträge an. Sie können  Zeichen aus „Kunden-ID“ oder „Kunde“ eingeben. (Pflichtfeld)';
+                hint = 'Wählen Sie den Kunden, für welchen der Ansprechpartner zugeordnet sein soll. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit bereits im System angelegten Kunden angezeigt.  „***“ zeigt alle Einträge an. (Suchfelder: „Kunden ID“ und „Kundenname“)';
                 break;
             case ContactProperty.USER_MOBILE:
                 hint = 'Geben Sie  eine Mobilfunknummer für den Ansprechpartner ein.';
@@ -132,10 +132,10 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                 hint = 'Geben Sie  ein Land für die Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_COMMENT:
-                hint = 'Geben Sie zusätzliche Informationen zum Kunden an. (Optional)';
+                hint = 'Geben Sie zusätzliche Informationen zum Kunden an.';
                 break;
             case ContactProperty.VALID_ID:
-                hint = 'Legen Sie fest, ob der Ansprechpartner „gültig“, „temporär ungültig“ oder „ungültig“ ist. (Pflichtfeld)';
+                hint = 'Legen Sie fest, ob der Ansprechpartner-Eintrag „gültig“, „temporär ungültig“ oder „ungültig“ ist.';
                 break;
             default:
         }

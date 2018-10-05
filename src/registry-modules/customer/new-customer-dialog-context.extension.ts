@@ -73,31 +73,31 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
         let hint = label;
         switch (attribute) {
             case CustomerProperty.CUSTOMER_ID:
-                hint = 'Geben Sie einen eindeutigen Identifier (z.B. eine Kundennummer) für den Kunden ein. (Pflichtfeld)';
+                hint = 'Geben Sie einen eindeutigen Identifier (z.B. eine Kundennummer) für den Kunden ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_NAME:
-                hint = 'Geben Sie eine Bezeichnung für den Kunden ein. (Pflichtfeld)';
+                hint = 'Geben Sie eine Bezeichnung für den Kunden ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_STREET:
-                hint = 'Geben Sie die Straße der Kundenadresse ein. (Optional)';
+                hint = 'Geben Sie die Straße der Kundenadresse ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_ZIP:
-                hint = 'Geben Sie die PLZ der Kundenadresse ein. (Optional)';
+                hint = 'Geben Sie die Postleitzahl (PLZ) der Kundenadresse ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_City:
-                hint = 'Geben Sie einen Ort für die Kunden-Adresse ein. (Optional)';
+                hint = 'Geben Sie den Ort für die Kundenadresse ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_URL:
-                hint = 'Geben Sie den URL der Website des Kunden ein. (Optional)';
+                hint = 'Geben Sie die URL der Website des Kunden ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
-                hint = 'Geben Sie das Land des Kunden ein. (Optional)';
+                hint = 'Geben Sie das Land für die Kundenadresse ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COMMENT:
-                hint = 'Geben Sie zusätzliche Informationen zum Kunden ein. (Optional)';
+                hint = 'Hinterlegen Sie hier zusätzliche Informationen zum Kunden.';
                 break;
             case CustomerProperty.VALID_ID:
-                hint = 'Legen Sie fest, ob der Kunde „gültig“, „temporär ungültig“ oder „ungültig“ ist. (Pflichtfeld)';
+                hint = 'Legen Sie fest, ob der Kundeneintrag „gültig“, „temporär ungültig“ oder „ungültig“ ist.';
                 break;
             default:
         }
