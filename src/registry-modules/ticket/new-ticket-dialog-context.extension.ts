@@ -106,7 +106,7 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         if (!existingFormLinkWithTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC"));
-            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen)"));
+            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen)."));
             fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Geben Sie den Titel oder Teile eines Tickettitels ein."));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', false, "Suche nach Tickets des gewählten Typs."));
             fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Suche nach Tickets in der gewählten Queue."));
