@@ -41,7 +41,7 @@ class Component {
                 const context = await ContextService.getInstance().getContext(CustomerDetailsContext.CONTEXT_ID);
                 const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
-                    contextDescriptor.urlPath, CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
+                    contextDescriptor.urlPaths[0], CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
                     ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false, true
                 );
             }
@@ -52,7 +52,7 @@ class Component {
                 const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
                 const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
-                    contextDescriptor.urlPath, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                    contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
                     ContextMode.DETAILS, ContactProperty.ContactID, false, true
                 );
             }
