@@ -20,10 +20,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance('new-ticket-article-form');
-        if (formInstance) {
-            formInstance.reset();
-        }
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
@@ -61,6 +57,10 @@ class Component {
                             this.showError(error);
                         });
                 }
+            }
+
+            if (formInstance) {
+                formInstance.reset();
             }
         }, 300);
     }
