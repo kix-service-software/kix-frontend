@@ -31,7 +31,11 @@ class Component {
             );
 
             this.state.configItems = configItems.sort(
-                (a, b) => (a.CurrentVersion.Name.localeCompare(b.CurrentVersion.Name))
+                (a, b) => {
+                    const aName = a.CurrentVersion ? a.CurrentVersion.Name : '';
+                    const bName = b.CurrentVersion ? b.CurrentVersion.Name : '';
+                    return (aName.localeCompare(bName));
+                }
             );
         } else {
             this.state.configItems = [];
