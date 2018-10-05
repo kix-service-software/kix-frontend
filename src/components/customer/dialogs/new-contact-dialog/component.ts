@@ -4,9 +4,10 @@ import {
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, ContextMode, KIXObjectType, ToastContent
+    ValidationSeverity, ValidationResult, ContextMode, KIXObjectType, ToastContent, ContactProperty
 } from "@kix/core/dist/model";
-import { ContactService } from "@kix/core/dist/browser/contact";
+import { ContactService, ContactDetailsContext } from "@kix/core/dist/browser/contact";
+import { RoutingService, RoutingConfiguration } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -43,9 +44,11 @@ class Component {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    ContextService.getInstance().setContext(
-                        null, KIXObjectType.CONTACT, ContextMode.DETAILS, contactId
+                    const routingConfiguration = new RoutingConfiguration(
+                        null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                        ContextMode.DETAILS, ContactProperty.ContactID, true
                     );
+                    RoutingService.getInstance().routeToContext(routingConfiguration, contactId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);

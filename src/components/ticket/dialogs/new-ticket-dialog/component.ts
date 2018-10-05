@@ -4,10 +4,11 @@ import {
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    KIXObjectType, ContextMode, ToastContent
+    KIXObjectType, ContextMode, ToastContent, TicketProperty
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import { TicketService, TicketDetailsContext } from "@kix/core/dist/browser/ticket";
+import { RoutingService, RoutingConfiguration } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -49,9 +50,11 @@ class Component {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();
                         DialogService.getInstance().closeMainDialog();
-                        ContextService.getInstance().setContext(
-                            null, KIXObjectType.TICKET, ContextMode.DETAILS, ticketId
+                        const routingConfiguration = new RoutingConfiguration(
+                            null, TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
+                            ContextMode.DETAILS, TicketProperty.TICKET_ID, true
                         );
+                        RoutingService.getInstance().routeToContext(routingConfiguration, ticketId);
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showError(error);
