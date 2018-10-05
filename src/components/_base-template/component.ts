@@ -91,7 +91,7 @@ class Component {
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'home', 'home', HomeContext
+            false, 'home', ['home'], HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
         RoutingService.getInstance().routeToInitialContext();
