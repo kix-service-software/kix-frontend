@@ -4,7 +4,8 @@
             <if(state.standardTable.tableConfiguration.enableSelection && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
                 <div.checkbox-column.check-all.no-select title="Select all"
                     style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
-                    <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()/>
+                    <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()
+                        style={height: component.getHeaderHeight()}/>
                 </div>
             </if>
             <div.row.header-row.no-select key=(state.tableId + "header-row")
@@ -44,7 +45,7 @@
                                 <div.margin-placeholder/>
                                 <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
                                     <input type="checkbox" on-click('selectRow', row) key=(state.tableId + "checkbox-input[]")
-                                        checked=component.isSelected(row)/>
+                                        checked=component.isSelected(row) style={height: component.getRowHeight()}/>
                                 </div>
                             </if>
                         </div>
@@ -92,7 +93,7 @@
                     <if(state.standardTable.tableConfiguration.toggle)>
                         <div.toggle-row-column class={opened: row.isToggled} key=(state.tableId + "toggle-row-column[]")
                             on-click('toggleRow', row) style={height: component.getRowHeight()}>
-                            <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                            <div>
                                 <if(row.isToggled)>
                                     <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
                                         <span.path1/>

@@ -16,8 +16,17 @@
             content: ":"
         }
     }
+    .info {
+        display: grid;
+        align-content: center;
+    }
     .value {
+        display: grid;
+        grid-template-columns: max-content max-content;
         >span.icon {
+            display: grid;
+            grid-auto-columns: max-content;
+            align-items: center;
             [class^="kix-icon-"],
             [class*=" kix-icon-"],
             .svg-icon {

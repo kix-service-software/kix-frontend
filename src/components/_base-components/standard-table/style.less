@@ -195,6 +195,12 @@
                 &.table-header-cell {
                     padding: 0 @margin-small;
                 }
+                >span.icon {
+                    display: grid;
+                    grid-auto-columns: max-content;
+                    align-content: center;
+                    min-height: 1.75rem;
+                }
             }
             &.opened {
                 .row-columns {
@@ -228,6 +234,8 @@
                             box-sizing: border-box;
                             padding-top: 3px;
                             box-shadow: @shadow-1;
+                            display: grid;
+                            align-content: center;
                             cursor: pointer;
                             &:first-of-type {
                                 margin-top: .75em;
@@ -331,7 +339,7 @@
             left: 0;
             background-color: @secondary-6;
             &.check-all {
-                padding-left: @margin-small; // TODO: entspricht nicht ganz dem SG, Checkboxen haben aber eigenen browserbedingten Abstand
+                padding-left: @margin-small*2;
             }
             &:not(.check-all) {
                 display: grid;
@@ -340,6 +348,7 @@
             >div:not(.margin-placeholder) {
                 border-bottom-left-radius: @border-radius;
                 border-top-left-radius: @border-radius;
+                padding-left: @margin-small;
             }
         }
         >.toggle-row-column {
@@ -354,6 +363,12 @@
             }
             >div {
                 background-color: @secondary-6;
+                display: grid;
+                align-content: center;
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    .icon-font-size-normal;
+                }
             }
             >:not(.margin-placeholder) {
                 padding: 0 @margin-small;
