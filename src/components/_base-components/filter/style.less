@@ -7,6 +7,50 @@
     grid-auto-flow: column;
     align-items: center;
     grid-gap: @margin-small;
+    >.predefined-filter {
+        >.form-list {
+            .font-size-small;
+            width: 11.75rem;
+            >div.form-list-input-container {
+                min-height: @filter-height;
+                height: @filter-height;
+                border-color: @secondary-1;
+                &:not(.autocomplete) {
+                    padding-right: @filter-height - .25rem;
+                }
+                >.selected-nodes {
+                    padding: .125rem .125rem 0;
+                    line-height: @filter-height;
+                    .selected-node {
+                        .font-size-small;
+                        grid-template-rows: @filter-height - .25rem;
+                        line-height: @filter-height - .5rem;
+                        >[class^="kix-icon-"],
+                        >[class*=" kix-icon-"] {
+                            font-size: .75rem;
+                        }
+                    }
+                }
+                >input {
+                    .font-size-small;
+                    height: @filter-height;
+                    display: block;
+                }
+                >span.form-list-button {
+                    height: @filter-height;
+                    width: @filter-height;
+                    line-height: @filter-height;
+                    border-color: @secondary-1;
+                }
+            }
+            >ul.form-list-tree {
+                top: @filter-height;
+                li {
+                    grid-template-rows: @filter-height;
+                }
+            }
+        }
+    }
     >input {
         width: 11.75rem;
         height: @filter-height;
@@ -18,7 +62,7 @@
         padding-top: .25rem;
     }
     >span.icon {
-        .icon-font-size-small;
+        font-size: 1.25rem;
         cursor: pointer;
     }
 }

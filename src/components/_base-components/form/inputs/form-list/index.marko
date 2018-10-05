@@ -4,7 +4,7 @@
         <if(state.selectedNodes && state.selectedNodes.length)>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click('toggleList', false)>
                 <for(node in state.selectedNodes)>
-                    <div.selected-node key=(("form-list-selected-node-" + state.listId) + "[]")>
+                    <div.selected-node title=node.label key=(("form-list-selected-node-" + state.listId) + "[]")>
                         <icon icon=node.icon showUnknown=true/>
                         <span.item-text>${node.label}</span>
                         <if(node.secondaryIcon)>

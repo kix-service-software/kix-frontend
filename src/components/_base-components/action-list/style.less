@@ -1,44 +1,44 @@
+@action-max-width: 8rem; // TODO: max-width ggf. ändern
+@action-min-width: 1.5rem;
 .action-list-wrapper {
     ul {
         display: block;
         list-style: none;
+        color: @secondary-0;
         li {
-            cursor: pointer;
             display: inline-block;
-            padding: 0 .5em 0;
-            margin: 0 .5em;
             box-sizing: border-box;
-            line-height: 32px;
-            [class^="kix-icon-"],
-            [class*=" kix-icon-"] {
-                margin-right: .25em;
-            }
-            div {
-                .shorten-text;
-            }
-            /* TODO: nur vorübergehend */
+            line-height: 2.25rem;
+            min-width: @action-min-width;
             &.inactive {
-                color: red;
+                color: @secondary-1;
+            }
+            &:hover:not(.list-button):not(.inactive) {
+                color: @secondary-7;
+            }
+            &:not(.inactive) {
+                cursor: pointer;
+            }
+            >div.action {
+                display: grid;
+                grid-template-columns: @action-min-width;
+                grid-auto-columns: max-content;
+                grid-auto-flow: column;
+                align-items: center;
+                grid-gap: .375rem;
             }
         }
         &.action-list {
-            padding: 0 .5em 0 1em;
-            height: 32px;
+            padding: 0 1em;
+            height: 2.25rem;
             text-align: right;
             white-space: nowrap;
             display: grid;
             grid-auto-flow: column;
+            justify-content: end;
+            grid-gap: 1.5rem;
             li {
-                max-width: 110px;
-                text-align: right;
-                &:first-of-type {
-                    margin-left: 0;
-                    padding-left: 0;
-                }
-                &:last-of-type {
-                    padding-left: 0;
-                    margin-right: 0;
-                }
+                max-width: @action-max-width;
                 &.list-button {
                     span {
                         padding: 3px 2px 0px 2px;
@@ -50,6 +50,12 @@
                             position: relative;
                             top: 2px;
                         }
+                    }
+                }
+                >.action {
+                    >span.text {
+                        .shorten-text;
+                        max-width: @action-max-width - @action-min-width - .375rem;
                     }
                 }
             }
@@ -66,15 +72,22 @@
             z-index: 1;
             text-align: left;
             li {
-                height: 32px;
+                height: 2.25rem;
                 display: block;
-                margin: 0 .5em;
-                padding: 0 .5em 0 0.625em;
+                margin: 0 @margin-small;
+                padding: 0 @margin-small;
+                &.inactive {
+                    color: @secondary-1;
+                }
+                &:hover:not(.inactive) {
+                    color: @secondary-7;
+                }
             }
         }
     }
     [class^="kix-icon-"],
     [class*=" kix-icon-"] {
-        font-size: 1.125em;
+        .icon-font-size-normal;
+        margin-top: -.125rem;
     }
 }
