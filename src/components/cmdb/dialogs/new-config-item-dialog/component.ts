@@ -4,10 +4,11 @@ import {
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType
+    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty
 } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService } from '@kix/core/dist/browser/cmdb';
+import { CMDBService, ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
+import { RoutingService, RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 class Component {
 
@@ -82,9 +83,11 @@ class Component {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();
                         DialogService.getInstance().closeMainDialog();
-                        ContextService.getInstance().setContext(
-                            null, KIXObjectType.CONFIG_ITEM, ContextMode.DETAILS, configItemId
+                        const routingConfiguration = new RoutingConfiguration(
+                            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                            ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
+                        RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showError(error);

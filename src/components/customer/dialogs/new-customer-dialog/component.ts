@@ -4,9 +4,10 @@ import {
 } from "@kix/core/dist/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent
+    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent, CustomerProperty
 } from "@kix/core/dist/model";
-import { CustomerService } from "@kix/core/dist/browser/customer";
+import { CustomerService, CustomerDetailsContext } from "@kix/core/dist/browser/customer";
+import { RoutingService, RoutingConfiguration } from "@kix/core/dist/browser/router";
 
 class NewCustomerDialogComponent {
 
@@ -43,9 +44,11 @@ class NewCustomerDialogComponent {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    ContextService.getInstance().setContext(
-                        null, KIXObjectType.CUSTOMER, ContextMode.DETAILS, customerId
+                    const routingConfiguration = new RoutingConfiguration(
+                        null, CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
+                        ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, true
                     );
+                    RoutingService.getInstance().routeToContext(routingConfiguration, customerId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     this.showError(error);
