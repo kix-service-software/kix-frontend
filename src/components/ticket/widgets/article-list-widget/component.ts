@@ -1,4 +1,4 @@
-import { Ticket, KIXObjectType, Context } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, Context, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
@@ -11,7 +11,7 @@ import {
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration, WidgetService
+    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration, WidgetService, OverlayService
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
 import { IEventListener, EventService } from "@kix/core/dist/browser/event";
@@ -130,7 +130,10 @@ export class Component implements IEventListener {
     }
 
     public attachmentsClicked(): void {
-        alert('Alle Anlagen ...');
+        const content = new ComponentContent('toast', new ToastContent(
+            'Coming Soon', 'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.'
+        ));
+        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 
     public filter(filterValue: string): void {
