@@ -52,18 +52,19 @@
                     </if>
                     <div.row key=(state.tableId + "row[]") class={opened: row.isToggled}>
                         <div.row-columns key=((state.tableId + "row-columns-") + loop.getIndex()) class=component.getRowClasses(row)
-                            style={minHeight: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                            style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
                             <for(value in row.values)>
                                 $ var column = component.getColumn(value);
                                 <link-target routingConfiguration=component.getRoutingConfiguration(column)
                                     objectId=component.getRoutingObjectId(column, row)>
                                     <@content>
-                                        <div.table-cell.row-column.row-link class=component.getValueClasses(value) style={width: column.size}
+                                        <div.table-cell.row-column.row-link class=component.getValueClasses(value)
+                                            style={height: component.getRowHeight(), width: column.size}
                                             on-click('rowClicked', row, column.id) title=value.displayValue>
-                                            <if(column.showIcon)>
+                                            <if(column.showIcon && value.icon)>
                                                 <icon icon=value.icon showUnknown=true/>
                                             </if>
-                                            <if(column.showIcon && column.showText)>&nbsp;</if>
+                                            <if(column.showIcon && value.icon && column.showText)>&nbsp;</if>
                                             <if(column.showText)>
                                                 <span>${value.displayValue}</span>
                                             </if>

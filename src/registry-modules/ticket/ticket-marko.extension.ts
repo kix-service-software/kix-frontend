@@ -8,7 +8,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
             'ticket/dialogs/search-ticket-dialog',
             'ticket/dialogs/edit-ticket-dialog',
             'ticket/dialogs/new-ticket-article-dialog',
-            'ticket/dialogs/inputs/article-input-attachment',
             'ticket/dialogs/inputs/ticket-input-owner',
             'ticket/dialogs/inputs/ticket-input-type',
             'ticket/dialogs/inputs/ticket-input-priority',
@@ -66,7 +65,6 @@ export class TicketMarkoDependencyExtension implements IMarkoDependencyExtension
         ];
 
         const inputs: Array<[string, string]> = [
-            ['article-input-attachment', 'ticket/dialogs/inputs/article-input-attachment'],
             ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
             ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
             ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],

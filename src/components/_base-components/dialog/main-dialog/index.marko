@@ -13,12 +13,7 @@
                 </@content>
             </widget>
             <if(state.isLoading)>
-                <div.loading-shield>
-                    <div.loading-info>
-                        <loading-spinner/>
-                        <span.loading-hint>${state.loadingHint}</span>
-                    </div>
-                </div>
+                <loading-shield loadingHint=state.loadingHint/>
             </if>
             <if(!state.isLoading || state.showClose)>
                 <span.kix-icon-close.close-button on-click('close')/>

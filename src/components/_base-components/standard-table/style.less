@@ -184,7 +184,6 @@
                 display: inline-block;
                 vertical-align: top;
                 position: relative;
-                min-height: 1.75em;
                 padding: 0 .5rem;
                 box-sizing: border-box;
                 &:not(.table-header-cell):not(.checkbox-column):not(.toggle-row-column):not(.only-icon)::before {
@@ -195,11 +194,8 @@
                 &.table-header-cell {
                     padding: 0 @margin-small;
                 }
-                >span.icon {
-                    display: grid;
-                    grid-auto-columns: max-content;
-                    align-content: center;
-                    min-height: 1.75rem;
+                span.icon>* {
+                    vertical-align: middle;
                 }
             }
             &.opened {
@@ -323,6 +319,7 @@
             z-index: 4;
             cursor: pointer;
             box-sizing: border-box;
+            overflow: hidden;
             &.opened {
                 >div:not(.margin-placeholder) {
                     background-color: @primary-5;
