@@ -330,7 +330,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public getValueClasses(value: TableValue): string[] {
         const classes = [...value.classes];
         const column = this.getColumn(value);
-        if (column.showIcon && (!column.showText)) {
+        if (column && column.showIcon && (!column.showText)) {
             classes.push("only-icon");
         }
         classes.push(this.state.tableId + column.id);
