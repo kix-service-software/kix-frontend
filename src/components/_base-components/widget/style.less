@@ -271,6 +271,7 @@
     box-shadow: unset;
     >.widget-header {
         padding: 0;
+        grid-template-columns: max-content auto;
         >.header-left {
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
@@ -282,28 +283,24 @@
                 font-weight: bold;
             }
         }
+        >.header-right {
+            grid-template-columns: auto max-content;
+            width: 100%;
+            >div.action-list-wrapper {
+                height: 1px;
+                background-color: @secondary-3;
+                align-self: center;
+                >.action-list {
+                    display: none;
+                }
+            }
+        }
     }
     >.widget-content {
         border: 0;
         padding: 0;
         margin-left: 1.5em;
         min-height: auto;
-    }
-    &.minimized {
-        >.widget-header {
-            border-bottom: 1px solid @secondary-2;
-            >.header-left {
-                >[class^="kix-icon-"],
-                >[class*=" kix-icon-"] {
-                    .font-size-normal();
-                }
-                >h2 {
-                    .font-size-normal();
-                    color: @secondary-7;
-                    font-weight: bold;
-                }
-            }
-        }
     }
 }
 

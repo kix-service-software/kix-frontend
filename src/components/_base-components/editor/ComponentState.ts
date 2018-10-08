@@ -69,7 +69,7 @@ export class ComponentState {
             language: navigator.language || 'de',
             toolbar,
             resize_minWidth: 200,
-            resize_minHeight: 200,
+            resize_minHeight: 122,
             resize_maxWidth: 1200,
             resize_maxHeight: 1000,
             extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',

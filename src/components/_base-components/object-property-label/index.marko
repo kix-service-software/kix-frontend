@@ -10,7 +10,7 @@
     <div.value title=state.propertyDisplayText class=component.getValueClasses()>
         <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
             <@content>
-                ${state.propertyDisplayText}
+                <span>${state.propertyDisplayText}</span>
                 <if(input.icon)>
                     <include(input.icon)/>
                 </if>
