@@ -115,7 +115,7 @@ export class Extension implements IModuleFactoryExtension {
             }
         });
         const chart3 = new ConfiguredWidget('20180903-cmdb-chart-3', new WidgetConfiguration(
-            'config-item-chart-widget', 'Übersicht Config Items Vorfallstatus', [], chartConfig3,
+            'config-item-chart-widget', 'Anzahl Config Items mit kritischem Vorfallsstatus', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, true)
         );
 
