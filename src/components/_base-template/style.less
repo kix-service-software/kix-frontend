@@ -10,7 +10,7 @@
         bottom: 0;
         top: -@header-height - @margin-default;
         text-align: center;
-        background: rgba(255, 255, 255, 0.7);
+        background: fade(@secondary-6, 70%);
         z-index: 1000;
         >.loading-info {
             position: absolute;
@@ -18,8 +18,9 @@
             left: 50%;
             transform: translateY(-50%) translateX(-50%);
             >span {
-                font-size: 3rem;
-                color: @secondary-7;
+                font-size: @h1-font-size;
+                color: @primary-0;
+                margin-top: @margin-default;
             }
         }
     }

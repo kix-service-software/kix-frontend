@@ -64,7 +64,9 @@ class Component {
 
     private async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.reset();
+        if (formInstance) {
+            formInstance.reset();
+        }
     }
 
     public async submit(): Promise<void> {

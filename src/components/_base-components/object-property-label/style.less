@@ -1,6 +1,6 @@
 .key-value-pair {
     display: grid;
-    grid-template-columns: 5em 2em 5em;
+    grid-template-columns: 5rem 2rem 5rem;
     .key,
     .value {
         .shorten-text;
@@ -22,7 +22,10 @@
     }
     .value {
         display: grid;
-        grid-template-columns: max-content max-content;
+        grid-template-columns: minmax(3rem, min-content) max-content;
+        >span:not(.icon) {
+            .shorten-text;
+        }
         >span.icon {
             display: grid;
             grid-auto-columns: max-content;
