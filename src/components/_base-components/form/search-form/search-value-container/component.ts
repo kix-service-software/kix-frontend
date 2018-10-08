@@ -2,9 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService
 } from '@kix/core/dist/browser';
-import {
-    TreeNode, SearchFormInstance
-} from '@kix/core/dist/model';
+import { TreeNode, SearchFormInstance, CacheState } from '@kix/core/dist/model';
 import { FormSearchValue } from './FormSearchValue';
 
 class Component implements IKIXObjectSearchListener {
@@ -37,7 +35,7 @@ class Component implements IKIXObjectSearchListener {
         }
 
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        if (cache && (!cache.isFulltext || !cache.fulltextValue)) {
+        if (cache && cache.status === CacheState.VALID && (!cache.isFulltext || !cache.fulltextValue)) {
             for (const criteria of cache.criteria) {
                 const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);
 

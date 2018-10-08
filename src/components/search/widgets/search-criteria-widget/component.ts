@@ -3,7 +3,7 @@ import {
     IKIXObjectSearchListener, KIXObjectSearchService,
     LabelService, ContextService, SearchOperatorUtil, SearchOperator
 } from '@kix/core/dist/browser';
-import { KIXObject, ContextMode } from '@kix/core/dist/model';
+import { KIXObject, ContextMode, CacheState } from '@kix/core/dist/model';
 class Component implements IKIXObjectSearchListener {
 
     public listenerId: string = 'search-criteria-widget';
@@ -23,13 +23,17 @@ class Component implements IKIXObjectSearchListener {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         const objectType = cache ? cache.objectType : null;
 
-        KIXObjectSearchService.getInstance().clearSearchCache();
+        if (cache) {
+            cache.status = CacheState.INVALID;
+        }
+
         ContextService.getInstance().setDialogContext(null, objectType, ContextMode.SEARCH);
     }
 
     public openEditSearchDialog(): void {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
+            cache.status = CacheState.VALID;
             ContextService.getInstance().setDialogContext(null, cache.objectType, ContextMode.SEARCH);
         }
     }
@@ -43,9 +47,9 @@ class Component implements IKIXObjectSearchListener {
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = labelProvider.getObjectName(true);
-            this.state.displayCriteria = [];
+            const displayCriteria = [];
             if (cache.isFulltext && cache.fulltextValue) {
-                this.state.displayCriteria.push([
+                displayCriteria.push([
                     "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), cache.fulltextValue
                 ]);
             } else {
@@ -67,11 +71,12 @@ class Component implements IKIXObjectSearchListener {
                     }
 
                     const displayProperty = await labelProvider.getPropertyText(criteria.property);
-                    this.state.displayCriteria.push([
+                    displayCriteria.push([
                         displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
                     ]);
                 }
             }
+            setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
         } else {
             this.state.title = "";
         }

@@ -19,19 +19,22 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
+        this.state.loading = true;
+        await this.reset();
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        this.state.loading = false;
     }
 
     public async cancel(): Promise<void> {
+        await this.reset();
+        DialogService.getInstance().closeMainDialog();
+    }
+
+    private async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             formInstance.reset();
         }
-        DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {

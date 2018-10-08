@@ -11,7 +11,8 @@ export class MainDialogComponentState {
         public contextId: string = null,
         public dialogId: string = null,
         public dialogTitle: string = null,
-        public dialogIcon: string | ObjectIcon = null
+        public dialogIcon: string | ObjectIcon = null,
+        public showClose: boolean = false
     ) { }
 
 }

@@ -55,7 +55,7 @@
                             style={minHeight: component.getRowHeight(), "line-height": component.getRowHeight()}>
                             <for(value in row.values)>
                                 $ var column = component.getColumn(value);
-                                <link-target routingConfiguration=component.getRoutingConfiguration(column, value)
+                                <link-target routingConfiguration=component.getRoutingConfiguration(column)
                                     objectId=component.getRoutingObjectId(column, row)>
                                     <@content>
                                         <div.table-cell.row-column.row-link class=component.getValueClasses(value) style={width: column.size}

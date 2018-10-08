@@ -337,9 +337,9 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return classes;
     }
 
-    public getRoutingConfiguration(column: TableColumn, value: TableValue): RoutingConfiguration {
+    public getRoutingConfiguration(column: TableColumn): RoutingConfiguration {
         let config;
-        if (column.routingConfiguration) {
+        if (column && column.routingConfiguration) {
             config = column.routingConfiguration;
         } else {
             config = this.state.standardTable.tableConfiguration.routingConfiguration;
@@ -349,7 +349,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public getRoutingObjectId(column: TableColumn, row: TableRow): string | number {
         let id;
-        if (column.routingConfiguration) {
+        if (column && column.routingConfiguration) {
             id = row.object[column.routingConfiguration.objectIdProperty];
         } else if (this.state.standardTable.tableConfiguration.routingConfiguration) {
             id = row.object[this.state.standardTable.tableConfiguration.routingConfiguration.objectIdProperty];

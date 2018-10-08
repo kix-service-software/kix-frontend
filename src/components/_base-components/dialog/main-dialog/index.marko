@@ -20,9 +20,9 @@
                     </div>
                 </div>
             </if>
-            <else>
+            <if(!state.isLoading || state.showClose)>
                 <span.kix-icon-close.close-button on-click('close')/>
-            </else>
+            </if>
         </div>
     </div>
 </if>
