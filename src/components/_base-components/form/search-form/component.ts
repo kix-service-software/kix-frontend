@@ -77,7 +77,17 @@ class Component implements ISearchFormListener {
         await this.setCanSearch();
     }
 
+    public formReseted(): void {
+        return;
+    }
+
     public async reset(): Promise<void> {
+        this.state.loading = true;
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.INVALID;
+        }
+
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         if (formInstance) {
             formInstance.reset();
@@ -85,6 +95,7 @@ class Component implements ISearchFormListener {
 
         this.state.fulltextValue = null;
         await this.setSearchResult([]);
+        this.state.loading = false;
     }
 
     public cancel(): void {

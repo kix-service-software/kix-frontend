@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService
 } from '@kix/core/dist/browser';
-import { TreeNode, SearchFormInstance, CacheState } from '@kix/core/dist/model';
+import { TreeNode, SearchFormInstance, CacheState, ISearchFormListener } from '@kix/core/dist/model';
 import { FormSearchValue } from './FormSearchValue';
 
 class Component implements IKIXObjectSearchListener {
@@ -34,7 +34,25 @@ class Component implements IKIXObjectSearchListener {
             this.state.propertyNodes = nodes;
         }
 
+        await this.initSearchForm();
+
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            const listener: ISearchFormListener = {
+                listenerId: 'search-form-value-container',
+                searchCriteriaChanged: () => { return; },
+                formReseted: () => { this.initSearchForm(); }
+            };
+            formInstance.registerSearchFormListener(listener);
+        }
+
+
+        this.state.loading = false;
+    }
+
+    private async initSearchForm(): Promise<void> {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        this.state.searchValues = [];
         if (cache && cache.status === CacheState.VALID && (!cache.isFulltext || !cache.fulltextValue)) {
             for (const criteria of cache.criteria) {
                 const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);
@@ -51,7 +69,6 @@ class Component implements IKIXObjectSearchListener {
         }
 
         this.checkSearchValueList();
-        this.state.loading = false;
     }
 
     public async propertyChanged(searchValue: FormSearchValue, nodes: TreeNode[]): Promise<void> {
