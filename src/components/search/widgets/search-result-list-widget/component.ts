@@ -88,15 +88,14 @@ class Component implements IKIXObjectSearchListener {
 
             table.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
 
-            await table.loadRows();
-
             if (isSearchMainObject) {
                 const objectProperties = cache.criteria.map((c) => c.property);
-                const objectService
-                    = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
+                const objectService = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
                 table.setColumns(columns);
             }
+
+            await table.loadRows();
 
             table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
