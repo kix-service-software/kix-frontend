@@ -18,7 +18,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Hilfe', [], {
                 helpText: 'Eine <b>Erläuterung zu den Suchoperatoren</b> finden Sie hier: '
-                    + '<a class="simple-text" href="faqarticle/75">'
+                    + '<a class="simple-text" href="faqarticles/75">'
                     + 'FAQ#100075 - Hilfe zur Komplexsuche</a>'
             }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
