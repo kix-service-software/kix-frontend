@@ -46,7 +46,7 @@ class Component implements IKIXObjectSearchListener {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
-            this.state.title = labelProvider.getObjectName(true);
+            this.state.title = `Gewählte Suchkriterien: ${labelProvider.getObjectName(true)}`;
             const displayCriteria = [];
             if (cache.isFulltext && cache.fulltextValue) {
                 displayCriteria.push([
@@ -78,7 +78,7 @@ class Component implements IKIXObjectSearchListener {
             }
             setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
         } else {
-            this.state.title = "";
+            this.state.title = "Gewählte Suchkriterien:";
         }
     }
 

@@ -77,10 +77,16 @@ class Component implements IKIXObjectSearchListener {
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste: ${labelProvider.getObjectName(true)} (${resultCount})`;
+            this.state.resultTitle = `Trefferliste ${labelProvider.getObjectName(true)} (${resultCount})`;
+
+            let emptyResultHint;
+            if (!cache) {
+                emptyResultHint = 'Keine Suche ausgeführt';
+            }
 
             const tableConfiguration = new TableConfiguration(
-                null, 10, null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                null, 10, null, null, true, null, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.LARGE, emptyResultHint
             );
             const table = StandardTableFactoryService.getInstance().createStandardTable(
                 objectType, tableConfiguration, null, null, true, true
