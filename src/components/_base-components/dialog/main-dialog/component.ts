@@ -24,6 +24,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.dialogIcon = dialogIcon;
             this.state.dialogWidgets = dialogs;
             this.state.show = true;
+            document.body.style.overflow = 'hidden';
             setTimeout(() => {
                 this.tabChanged(dialogs.find((d) => d.instanceId === dialogId));
                 setTimeout(() => {
@@ -35,6 +36,7 @@ export class MainDialogComponent implements IMainDialogListener {
 
     public close(): void {
         this.state.show = false;
+        document.body.style.overflow = 'unset';
     }
 
     public tabChanged(tab: ConfiguredDialogWidget): void {

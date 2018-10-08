@@ -39,9 +39,15 @@
                         border-width: 2px;
                         margin: 0;
                         padding: 0;
-                        overflow: auto;
-                        >div {
-                            padding: @margin-default 0;
+                        overflow: hidden;
+                        >div.tab-sidebar-grid {
+                            .full-size();
+                            top: @margin-default;
+                            bottom: @margin-default;
+                            display: grid;
+                            grid-template-columns: auto max-content max-content;
+                            grid-column-gap: @margin-default;
+                            overflow: auto;
                             >.tab-content {
                                 margin: 0;
                                 height: 100%;
@@ -51,6 +57,9 @@
                                         background-color: @secondary-5;
                                     }
                                 }
+                            }
+                            >.site-menu-wrapper {
+                                width: 2.25rem
                             }
                         }
                     }
@@ -68,31 +77,6 @@
         cursor: pointer;
         &:hover {
             color: darken(@primary-3, 10%);
-        }
-    }
-    >.loading-shield {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        background-color: #000;
-        opacity: 0.2;
-        >.loading-info {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateY(-50%) translateX(-50%);
-            >.loading-spinner {
-                width: 10em;
-                height: 10em;
-            }
-            >.loading-hint {
-                font-weight: bold;
-                font-size: 3em;
-                color: @secondary-6;
-                display: block;
-            }
         }
     }
 }
