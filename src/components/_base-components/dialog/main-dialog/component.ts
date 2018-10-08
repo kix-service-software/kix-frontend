@@ -50,9 +50,10 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.dialogHint = hint;
     }
 
-    public setLoading(isLoading: boolean, loadingHint: string): void {
+    public setLoading(isLoading: boolean, loadingHint: string, showClose: boolean = false): void {
         this.state.loadingHint = loadingHint;
         this.state.isLoading = isLoading;
+        this.state.showClose = showClose;
     }
 
 }

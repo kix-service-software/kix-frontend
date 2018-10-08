@@ -46,7 +46,7 @@ class Component {
         }
 
         if (formId) {
-            await FormService.getInstance().getFormInstance(formId, false);
+            await this.reset();
         }
 
         setTimeout(() => {
@@ -57,10 +57,14 @@ class Component {
 
     public async cancel(): Promise<void> {
         if (this.state.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            formInstance.reset();
+            await this.reset();
         }
         DialogService.getInstance().closeMainDialog();
+    }
+
+    private async reset(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        formInstance.reset();
     }
 
     public async submit(): Promise<void> {
