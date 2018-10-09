@@ -5,7 +5,7 @@
             <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-query")/>
         </@icon>
         <@content>
-            <editor value=state.helpText simple=true readOnly=true keyValue="help-sidebar"/>
+            <span>$!{state.helpText}</span>
         </@content>
     </widget>
 </div>

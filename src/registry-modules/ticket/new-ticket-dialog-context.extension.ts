@@ -21,19 +21,27 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
         const customerInfoSidebar =
             new ConfiguredWidget("20180524110915", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {},
+                "ticket-customer-info-widget", "Kunde", [], {
+                    groups: [
+                        'Stammdaten', 'Adresse'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
             new ConfiguredWidget("20180524110920", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Ansprechpartner", [], {},
+                "ticket-contact-info-widget", "Ansprechpartner", [], {
+                    groups: [
+                        'Stammdaten', 'Kommunikation'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Textbausteine', [], {
                 // tslint:disable-next-line:max-line-length
-                helpText: 'Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie "::" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben.'
+                helpText: '<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie "::" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben.</p>'
             },
             false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
         ));
