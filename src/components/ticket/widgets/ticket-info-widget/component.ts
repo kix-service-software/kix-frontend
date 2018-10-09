@@ -34,6 +34,11 @@ class Component {
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        const customerInfoOverlayConfig = context ? context.getWidgetConfiguration('customer-info-overlay') : undefined;
+        if (customerInfoOverlayConfig && customerInfoOverlayConfig.settings) {
+            this.state.customerInfoGroups = customerInfoOverlayConfig.settings.groups;
+        }
+
         await this.initWidget(await context.getObject<Ticket>());
     }
 

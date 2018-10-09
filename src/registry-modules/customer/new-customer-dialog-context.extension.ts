@@ -31,7 +31,7 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
             const mapping: CustomerSourceAttributeMapping[] = await customerService.getAttributeMapping(token);
-            const groups: FormGroup[] = [];
+            let groups: FormGroup[] = [];
             const lastGroup = new FormGroup("Default", []);
 
             const labelProvider = new CustomerLabelProvider();
@@ -62,7 +62,9 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                 group.formFields.push(formField);
             }
 
-            const form = new Form(formId, 'Neuer Kunde', [...groups, lastGroup], KIXObjectType.CUSTOMER);
+            groups = [...groups, lastGroup].filter((g) => g.formFields.length);
+
+            const form = new Form(formId, 'Neuer Kunde', groups, KIXObjectType.CUSTOMER);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CUSTOMER, formId);

@@ -1,6 +1,6 @@
 import { OverlayWidgetData, ComponentContent, StringContent } from '@kix/core/dist/model';
 
-export class OverlayIconComponentState {
+export class ComponentState {
 
     public constructor(
         public show: boolean = false,

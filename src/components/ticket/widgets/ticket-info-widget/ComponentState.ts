@@ -8,7 +8,8 @@ export class ComponentState extends WidgetComponentState<any> {
         public isPending: boolean = false,
         public isAccountTimeEnabled: boolean = false,
         public labelProvider: ILabelProvider<Ticket> = null,
-        public actions: AbstractAction[] = []
+        public actions: AbstractAction[] = [],
+        public customerInfoGroups: string[] = null
     ) {
         super();
     }

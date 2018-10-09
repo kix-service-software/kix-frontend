@@ -1,4 +1,4 @@
-import { OverlayComponentState } from "./OverlayComponentState";
+import { ComponentState } from "./ComponentState";
 import { OverlayService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import {
     OverlayType, IWidgetContent, ObjectIcon, ComponentContent, Context, WidgetType, KIXObject
@@ -8,11 +8,11 @@ import { ComponentsService } from "@kix/core/dist/browser/components";
 
 class OverlayComponent {
 
-    private state: OverlayComponentState;
+    private state: ComponentState;
     private toastTimeout: any;
 
     public onCreate(): void {
-        this.state = new OverlayComponentState();
+        this.state = new ComponentState();
     }
 
     public onMount(): void {
@@ -31,7 +31,7 @@ class OverlayComponent {
         }, false);
     }
 
-    private overlayClicked(): void {
+    public overlayClicked(): void {
         this.state.keepShow = true;
     }
 
@@ -100,7 +100,7 @@ class OverlayComponent {
 
     private closeOverlay(): void {
         this.state.show = false;
-        this.state = new OverlayComponentState();
+        this.state = new ComponentState();
         if (this.toastTimeout) {
             clearTimeout(this.toastTimeout);
         }
