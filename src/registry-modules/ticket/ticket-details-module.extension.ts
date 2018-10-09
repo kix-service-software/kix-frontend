@@ -103,7 +103,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // Sidebars
         const customerInfoSidebar =
             new ConfiguredWidget("20180116143215", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {},
+                "ticket-customer-info-widget", "Kunde", [], {
+                    groups: [
+                        'Stammdaten', 'Adresse'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
@@ -125,7 +129,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         // Overlays
         const customerInfoOverlay =
             new ConfiguredWidget("customer-info-overlay", new WidgetConfiguration(
-                "ticket-customer-info", "Kunde", [], {},
+                "ticket-customer-info", "Kunde", [], {
+                    groups: [
+                        'Stammdaten', 'Adresse'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoOverlay =

@@ -9,7 +9,7 @@
                             <@info>
                                 <if(state.ticket.CustomerID)>
                                     <overlay-icon content="ticket-customer-info" instanceId="customer-info-overlay"
-                                        data={customerId: state.ticket.CustomerID}/>
+                                        data={customerId: state.ticket.CustomerID, groups: state.customerInfoGroups}/>
                                 </if>
                             </@info>
                         </object-property-label>

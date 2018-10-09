@@ -1,18 +1,18 @@
-import { ContextService } from "@kix/core/dist/browser/context";
-import { Customer, KIXObjectType, ContextMode } from "@kix/core/dist/model";
-import { CustomerInfoComponentState } from "./CustomerInfoComponentState";
+import { Customer, KIXObjectType } from "@kix/core/dist/model";
 import { KIXObjectService } from "@kix/core/dist/browser";
+import { ComponentState } from './ComponentState';
 
 class CustomerInfoComponent {
 
-    private state: CustomerInfoComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new CustomerInfoComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.customerId = input.customerId;
+        this.state.groups = input.groups;
         this.loadCustomer();
     }
 
@@ -33,7 +33,12 @@ class CustomerInfoComponent {
 
             if (customers && customers.length) {
                 this.state.customer = customers[0];
-                this.state.info = this.state.customer.getCustomerInfoData().filter((g) => g[0] !== 'UNKNOWN');
+                this.state.info = this.state.customer.getCustomerInfoData();
+                if (this.state.groups && this.state.groups.length) {
+                    this.state.info = this.state.info.filter(
+                        (g) => this.state.groups.some((group) => group === g[0])
+                    );
+                }
             }
         }
     }

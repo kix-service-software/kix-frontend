@@ -1,13 +1,13 @@
 import { OverlayType, ComponentContent, StringContent } from '@kix/core/dist/model';
-import { OverlayIconComponentState } from './OverlayIconComponentState';
+import { ComponentState } from './ComponentState';
 import { OverlayService } from '@kix/core/dist/browser';
 
 class OverlayInfoIconComponent {
 
-    private state: OverlayIconComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new OverlayIconComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -22,7 +22,7 @@ class OverlayInfoIconComponent {
         this.state.title = input.title;
     }
 
-    private showOverlay(event: any) {
+    public showOverlay(event: any) {
         OverlayService.getInstance().openOverlay(
             this.state.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
             this.state.instanceId,
@@ -33,7 +33,7 @@ class OverlayInfoIconComponent {
         );
     }
 
-    private getOverlayIcon(): string {
+    public getOverlayIcon(): string {
         let icon = 'kix-icon-icircle';
         if (this.state.isHintOverlay) {
             icon = 'kix-icon-question';

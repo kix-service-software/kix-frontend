@@ -1,5 +1,5 @@
 import { ContextService } from "@kix/core/dist/browser/context";
-import { KIXObjectType, Customer, Context } from "@kix/core/dist/model";
+import { KIXObjectType, Customer, Context, WidgetConfiguration } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 import { IdService } from "@kix/core/dist/browser";
 
@@ -20,6 +20,10 @@ class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        const settings = this.state.widgetConfiguration.settings;
+        if (settings && settings.groups) {
+            this.state.groups = this.state.widgetConfiguration.settings.groups;
+        }
         this.setCustomerId(context);
 
         context.registerListener(this.contextListernerId, {

@@ -6,7 +6,8 @@ export class ComponentState {
         public instanceId: string = null,
         public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
-        public customerId: string = null
+        public customerId: string = null,
+        public groups: string[] = []
     ) { }
 
 }
