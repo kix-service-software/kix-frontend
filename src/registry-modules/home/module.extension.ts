@@ -78,7 +78,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATE_TIME, {
             type: 'line',
             data: {
-                labels: ["1", "2", "3", "4", "5", "6", "7"],
+                labels: ["7", "6", "5", "4", "3", "2", "1 (heute)"],
                 datasets: [{
                     data: [5, 25, 12, 3, 30, 16, 24],
                     backgroundColor: [
