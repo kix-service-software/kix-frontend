@@ -1,5 +1,5 @@
 import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
-import { Ticket, WidgetType, KIXObjectType } from '@kix/core/dist/model';
+import { Ticket, WidgetType, KIXObjectType, TicketProperty } from '@kix/core/dist/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
@@ -22,9 +22,12 @@ export class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
-            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType, changedProperties: string[]) => {
                 if (type === KIXObjectType.TICKET) {
-                    this.initWidget(context, ticket, true);
+                    const scrollToArticle = changedProperties
+                        ? changedProperties.some((p) => p === TicketProperty.ARTICLES)
+                        : false;
+                    this.initWidget(context, ticket, scrollToArticle);
                 }
             }
         });
