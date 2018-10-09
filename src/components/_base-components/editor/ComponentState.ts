@@ -76,6 +76,7 @@ export class ComponentState {
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
+            removePlugins: 'elementspath',
             codeSnippet_theme: 'github'
         };
         if (resize || resize === undefined) {
