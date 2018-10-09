@@ -5,7 +5,8 @@ import {
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType,
-    ToastContent
+    ToastContent,
+    TicketProperty
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
 import { TicketService } from "@kix/core/dist/browser/ticket";
@@ -49,7 +50,7 @@ class Component {
                 if (service && context) {
                     await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())
                         .then((ticketId) => {
-                            context.getObject(KIXObjectType.TICKET, true);
+                            context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
                             DialogService.getInstance().setMainDialogLoading(false);
                             this.showSuccessHint();
                             DialogService.getInstance().closeMainDialog();
