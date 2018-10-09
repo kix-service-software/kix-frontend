@@ -112,7 +112,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             );
         const contactInfoSidebar =
             new ConfiguredWidget("20180116143216", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Ansprechpartner", [], {},
+                "ticket-contact-info-widget", "Ansprechpartner", [], {
+                    groups: [
+                        'Stammdaten', 'Kommunikation'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
@@ -138,7 +142,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             );
         const contactInfoOverlay =
             new ConfiguredWidget("contact-info-overlay", new WidgetConfiguration(
-                "ticket-contact-info", "Ansprechpartner", [], {},
+                "ticket-contact-info", "Ansprechpartner", [], {
+                    groups: [
+                        'Stammdaten', 'Kommunikation'
+                    ]
+                },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const toReceiverOverlay =
