@@ -176,7 +176,9 @@ class LinkDialogComponent {
                 table.addAdditionalLayerOnTop(this.objectLinkLayer);
 
                 table.setColumns([
-                    new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                    new TableColumn(
+                        'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, false, false, null
+                    )
                 ]);
 
                 this.setLinkedObjectsToTableLayer(table);

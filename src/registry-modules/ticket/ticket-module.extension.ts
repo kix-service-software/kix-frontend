@@ -152,16 +152,16 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
                 'ticket-list-widget', 'Übersicht Tickets', [
-                    'ticket-create-action', 'ticket-search-action', 'csv-export-action'
+                    'ticket-create-action', 'ticket-bulk-action', 'csv-export-action', 'ticket-search-action'
                 ], new TableConfiguration(
-                    2500, 25, null, [new FilterCriteria(
+                    1000, 25, null, [new FilterCriteria(
                         'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
                     )],
                     true, true,
                     new ToggleOptions('ticket-article-details', 'article', [], true),
                     null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 ),
-                false, false, WidgetSize.LARGE, null, true, predefinedTicketFilter)
+                false, false, WidgetSize.LARGE, 'kix-icon-ticket', true, predefinedTicketFilter)
             );
 
         const content = [

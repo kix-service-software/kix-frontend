@@ -183,7 +183,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     tableConfiguration: new TableConfiguration(
                         null, null, [
                             new TableColumnConfiguration(
-                                'Number', true, false, false, true, 50, DataType.NUMBER
+                                'Number', true, false, false, true, 50, true, true, DataType.NUMBER
                             ),
                             new TableColumnConfiguration(
                                 ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
@@ -194,7 +194,8 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                             new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
                             new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
                             new TableColumnConfiguration(
-                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120, DataType.DATE_TIME
+                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120,
+                                true, true, DataType.DATE_TIME
                             ),
                             new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
                         ], null, true,

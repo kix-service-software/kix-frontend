@@ -90,7 +90,9 @@ class Component {
                     table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
 
                     table.setColumns([
-                        new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                        new TableColumn(
+                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, false, null
+                        )
                     ]);
                     table.loadRows();
 

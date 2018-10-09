@@ -22,12 +22,13 @@ export class TicketArticleDetailsComponent {
             this.state.article = this.state.inputObject;
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
-            const articles = await KIXObjectService.loadObjects<Article>(
+            let articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(), new ArticlesLoadingOptions(ticket.TicketID)
             );
 
             if (articles) {
+                articles = articles.sort((a, b) => b.IncomingTime - a.IncomingTime);
                 this.state.article = articles[0];
             }
         }

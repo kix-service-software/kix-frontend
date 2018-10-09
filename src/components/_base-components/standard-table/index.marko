@@ -12,7 +12,7 @@
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                 <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
-                        ${column.text}
+                        <if(column.columnTitle)>${column.text}</if>
                         <if(column.sortable)>
                             <span.sortable>
                                 <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")

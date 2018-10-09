@@ -42,7 +42,7 @@ export class Extension implements IModuleFactoryExtension {
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
                         new TableColumnConfiguration('CreateTime', true, false, true, true, 150),
                         new TableColumnConfiguration(
-                            'Content', true, true, false, false, 150, null, null, 'kix-icon-open-right'
+                            'Content', true, true, false, false, 150, true, false, null, null, 'kix-icon-open-right'
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
