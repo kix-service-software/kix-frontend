@@ -1,18 +1,18 @@
-import { ContextService } from "@kix/core/dist/browser/context";
-import { Contact, KIXObjectType, ContextMode } from "@kix/core/dist/model";
-import { ContactInfoComponentState } from "./ContactInfoComponentState";
+import { Contact, KIXObjectType } from "@kix/core/dist/model";
+import { ComponentState } from "./ComponentState";
 import { KIXObjectService } from "@kix/core/dist/browser";
 
 class ContactInfoComponent {
 
-    private state: ContactInfoComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new ContactInfoComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.contactId = input.contactId;
+        this.state.groups = input.groups;
         this.loadContact();
     }
 
@@ -33,6 +33,12 @@ class ContactInfoComponent {
 
             if (contacts && contacts.length) {
                 this.state.contact = contacts[0];
+                this.state.info = this.state.contact.getContactInfoData();
+                if (this.state.groups && this.state.groups.length) {
+                    this.state.info = this.state.info.filter(
+                        (g) => this.state.groups.some((group) => group === g[0])
+                    );
+                }
             }
         }
     }

@@ -19,7 +19,7 @@
                             <@info>
                                 <if(state.ticket.CustomerUserID)>
                                     <overlay-icon content="ticket-contact-info" instanceId="contact-info-overlay"
-                                        data={contactId: state.ticket.CustomerUserID}/>
+                                        data={contactId: state.ticket.CustomerUserID, groups: state.contactInfoGroups}/>
                                 </if>
                             </@info>
                         </object-property-label>

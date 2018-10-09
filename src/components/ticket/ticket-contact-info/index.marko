@@ -1,5 +1,5 @@
 <if(state.contact)>
-    <for(groupTuple in state.contact.getContactInfoData())>
+    <for(groupTuple in state.info)>
         <div.contact-attribute-group key=("ticket-contact-attribute-group-" + groupTuple[0])>
             <for(attributeTuple in groupTuple[1])>
                 <customer-label object=state.contact property=attributeTuple[0] labelProvider=state.labelProvider/>

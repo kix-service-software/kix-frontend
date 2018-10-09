@@ -33,7 +33,7 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
             const mapping: ContactSourceAttributeMapping[] = await contactService.getAttributeMapping(token);
-            const groups: FormGroup[] = [];
+            let groups: FormGroup[] = [];
             const lastGroup = new FormGroup("Default", []);
 
             const labelProvider = new ContactLabelProvider();
@@ -82,7 +82,8 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                 }
             }
 
-            const form = new Form(formId, 'Neuer Ansprechpartner', [...groups, lastGroup], KIXObjectType.CONTACT);
+            groups = [...groups, lastGroup].filter((g) => g.formFields.length);
+            const form = new Form(formId, 'Neuer Ansprechpartner', groups, KIXObjectType.CONTACT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CONTACT, formId);
