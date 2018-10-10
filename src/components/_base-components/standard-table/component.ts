@@ -334,6 +334,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
             if (column.pipe) {
                 classes.push('cell-pipe');
             }
+
+            if (column.action) {
+                classes.push('row-link');
+            }
         }
         classes.push(this.state.tableId + column.id);
         return classes;

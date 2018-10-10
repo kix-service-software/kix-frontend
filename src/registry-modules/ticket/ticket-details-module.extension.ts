@@ -35,9 +35,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     null, 7, [
                         new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
                         new TableColumnConfiguration('Name', true, false, true, true, 200),
-                        new TableColumnConfiguration(ArticleProperty.ARTICLE_ID, true, false, true, true, 100),
+                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100),
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
-                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100)
+                        new TableColumnConfiguration(
+                            ArticleProperty.ARTICLE_ID, true, false, true, true, 100, true, false, true
+                        ),
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 true, true, WidgetSize.BOTH, null, false)
@@ -48,21 +50,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                 ['ticket-print-action', 'ticket-edit-action', 'article-maximize-action'], {},
                 false, true, WidgetSize.BOTH, null, false)
             );
-        const processLane =
-            new ConfiguredWidget("ticket-process-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Prozessinformationen", ['ticket-print-action'], {
-                    dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
-                },
-                true, true, WidgetSize.BOTH, null, false)
-            );
-        const dynamicFieldsLane =
-            new ConfiguredWidget("ticket-dynamic-fields-lane", new WidgetConfiguration(
-                "ticket-dynamic-fields-widget", "Zusätzliche Informationen & Felder",
-                ['ticket-print-action', 'ticket-edit-action', 'article-maximize-action'], {
-                    dynamicFields: [2530, 2531, 2532, 2533, 2534, 2535, 2536, 2537, 2538]
-                },
-                true, true, WidgetSize.BOTH, null, false)
-            );
+
         const linkedObjectsLane =
             new ConfiguredWidget("ticket-linked-objects-lane", new WidgetConfiguration(
                 "linked-objects-widget", "Verknüpfte Objekte",
@@ -71,7 +59,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     linkedObjectTypes: [
                         ["Tickets", KIXObjectType.TICKET],
                         ["Config Items", KIXObjectType.CONFIG_ITEM],
-                        ["FAQs", KIXObjectType.FAQ_ARTICLE],
+                        ["FAQ", KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
                 true, true, WidgetSize.BOTH, null, false)
@@ -81,14 +69,11 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
             [
                 "ticket-history-lane",
                 "ticket-description-lane",
-                "ticket-dynamic-fields-lane",
-                "ticket-process-lane",
                 "ticket-linked-objects-lane"
             ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            descriptionLane, linkedObjectsLane, processLane,
-            dynamicFieldsLane, ticketHistoryLane, ticketDetailsWidget
+            descriptionLane, linkedObjectsLane, ticketHistoryLane, ticketDetailsWidget
         ];
 
         const ticketInfoLane =
@@ -183,7 +168,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     tableConfiguration: new TableConfiguration(
                         null, null, [
                             new TableColumnConfiguration(
-                                'Number', true, false, false, true, 50, true, true, DataType.NUMBER
+                                'Number', true, false, false, true, 50, true, true, false, DataType.NUMBER
                             ),
                             new TableColumnConfiguration(
                                 ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
@@ -195,7 +180,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                             new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
                             new TableColumnConfiguration(
                                 ArticleProperty.INCOMING_TIME, true, false, true, true, 120,
-                                true, true, DataType.DATE_TIME
+                                true, true, false, DataType.DATE_TIME
                             ),
                             new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
                         ], null, true,

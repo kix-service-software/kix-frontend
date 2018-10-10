@@ -61,6 +61,7 @@
             }
         }
         >.widget-content {
+            max-height: unset;
             >div {
                 >.tab-content {
                     >.lane-tab-widget {
@@ -68,17 +69,11 @@
                         >.widget-header {
                             display: none;
                         }
+                        >ul.content-actions {
+                            display: none;
+                        }
                         >.widget-content {
                             background-color: unset;
-                            >ul.content-actions {
-                                right: -4rem;
-                                >li {
-                                    box-shadow: @shadow-1;
-                                }
-                                >li:first-of-type {
-                                    margin-top: 0;
-                                }
-                            }
                         }
                     }
                 }
