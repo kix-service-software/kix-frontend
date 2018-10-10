@@ -40,12 +40,14 @@ export class Component {
 
         this.state.nodes = this.prepareTreeNodes(faqCategories);
 
-        this.setActiveNode(context.currentFAQCategory);
+        this.setActiveNode(context.faqCategory);
     }
 
     private setActiveNode(category: FAQCategory): void {
         if (category) {
-            this.state.activeNode = this.getActiveNode(category);
+            this.activeNodeChanged(this.getActiveNode(category));
+        } else {
+            this.showAll();
         }
     }
 

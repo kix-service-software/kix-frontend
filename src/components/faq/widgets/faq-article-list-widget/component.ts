@@ -28,13 +28,15 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener('faq-article-list-context-listener', {
-            explorerBarToggled: () => { return; },
-            sidebarToggled: () => { return; },
-            objectChanged: this.contextObjectChanged.bind(this),
-            objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
-        });
+        if (this.state.widgetConfiguration.contextDependent) {
+            context.registerListener('faq-article-list-context-listener', {
+                explorerBarToggled: () => { return; },
+                sidebarToggled: () => { return; },
+                objectChanged: () => { return; },
+                objectListChanged: this.contextObjectListChanged.bind(this),
+                filteredObjectListChanged: () => { return; }
+            });
+        }
 
         await this.prepareFilter();
         this.prepareActions();
@@ -83,7 +85,7 @@ class Component {
 
         const context = ContextService.getInstance().getActiveContext();
         if (context.getDescriptor().contextId === FAQContext.CONTEXT_ID) {
-            this.setCategoryFilter((context as FAQContext).currentFAQCategory);
+            this.setCategoryFilter((context as FAQContext).faqCategory);
         }
     }
 
@@ -111,12 +113,20 @@ class Component {
             );
 
             this.state.table.setFilterSettings(textFilterValue, newFilter);
+
+            const context = ContextService.getInstance().getActiveContext();
+            const rows = this.state.table.getTableRows();
+            context.setFilteredObjectList(rows.map((r) => r.object));
         }
     }
 
-    private contextObjectChanged(objectId: string | number, object: KIXObject, type: KIXObjectType): void {
-        if (type === KIXObjectType.FAQ_CATEGORY) {
-            this.setCategoryFilter((object as FAQCategory));
+    private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
+        if (this.state.table) {
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
+            await this.state.table.loadRows();
+
+            const context = ContextService.getInstance().getActiveContext();
+            context.setFilteredObjectList(context.getObjectList());
         }
     }
 
