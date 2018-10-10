@@ -17,7 +17,8 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.labelProvider = new ConfigItemLabelProvider();
-        this.state.icon = await this.labelProvider.getIcon(this.state.configItem, "CurInciStateID");
+        const icons = await this.labelProvider.getIcons(this.state.configItem, "CurInciStateID");
+        this.state.icon = icons && icons.length ? icons[0] : null;
         this.state.loading = false;
     }
 

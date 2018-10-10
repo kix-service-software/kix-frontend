@@ -15,7 +15,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 'faq-article-list-widget', 'Übersicht FAQ', [
                     'faq-article-create-action', 'csv-export-action'
                 ], {},
-                false, false, WidgetSize.BOTH, null, false)
+                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
             );
 
         const content = ['20180727-faq-article-list-widget'];
@@ -23,7 +23,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const faqCategoryExplorer =
             new ConfiguredWidget('20180625-faq-category-explorer', new WidgetConfiguration(
-                'faq-category-explorer', 'FAQ Kategorien', [], {},
+                'faq-category-explorer', 'FAQ Kategorien', ['csv-export-action'], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-faq', false)
             );
 
