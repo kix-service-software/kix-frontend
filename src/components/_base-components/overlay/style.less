@@ -1,13 +1,30 @@
 .overlay {
-    .full-size();
+    position: absolute;
+    top: 0;
     >.overlay-content {
         position: absolute;
-        left: 50%;
+        opacity: 0;
+        >.overlay-widget {
+            border-radius: @border-radius;
+            >.widget-header {
+                cursor: move;
+            }
+            >.widget-content {
+                overflow: hidden;
+                border: 2px solid @tertiary-0;
+                border-top: none;
+            }
+        }
         &.info-overlay {
+            width: @default-widget-width;
+            height: @default-widget-height;
+            min-width: @default-widget-width;
+            min-height: @default-widget-height;
             >.overlay-widget {
+                height: 100%;
+                display: grid;
+                grid-template-rows: @overlay-widget-header-height auto;
                 .widget(@tertiary-1, @secondary-6, @overlay-widget-header-height);
-                width: @default-widget-width;
-                height: @default-widget-height;
                 >.widget-header {
                     >.header-right {
                         >.action-list-wrapper {
@@ -15,18 +32,43 @@
                                 background-color: @tertiary-1;
                                 color: @secondary-6;
                                 top: @overlay-widget-header-height;
+                                >ul.action-list-expansion {
+                                    >li {
+                                        border-color: @secondary-6;
+                                    }
+                                }
                             }
                         }
                     }
                 }
                 >.widget-content {
                     .font-size-small();
-                    border: 2px solid @tertiary-1;
-                    border-top: none;
+                    border-color: @tertiary-1;
                     background-color: @secondary-6;
-                    overflow: auto;
-                    padding: @margin-widget-content;
-                    height: @default-widget-height - @overlay-widget-header-height;
+                    >div:not(.overlay-resize) {
+                        .full-size;
+                        margin: 1rem;
+                        overflow: auto;
+                    }
+                    >div.overlay-resize {
+                        cursor: nwse-resize;
+                        position: absolute;
+                        right: -1.5rem;
+                        bottom: -1.5rem;
+                        height: 2.75rem;
+                        width: 2.75rem;
+                        background-color: @tertiary-1;
+                        transform: rotate(-45deg);
+                        >div {
+                            background-color: @secondary-6;
+                            height: .2rem;
+                            margin: .2rem auto;
+                            width: 1rem;
+                            &:last-child {
+                                width: .5rem;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -37,33 +79,31 @@
                 min-height: 6rem;
                 >.widget-content {
                     .font-size-small();
-                    border: 2px solid @secondary-2;
-                    border-top: none;
+                    border-color: @secondary-2;
                     background-color: @secondary-6;
                     color: @secondary-0;
-                    overflow: hidden;
-                    padding: @margin-widget-content;
-                    min-height: 6rem - @overlay-widget-header-height;
                     text-align: justify;
+                    min-height: 6rem - @overlay-widget-header-height;
+                    >div {
+                        margin: 1rem;
+                    }
                 }
             }
         }
         &.warning-overlay {
             position: fixed;
-            top: 12rem;
             >.overlay-widget {
                 .widget(@tertiary-0, @secondary-6, @overlay-widget-header-height);
                 width: 24.25rem;
                 min-height: 12.25rem;
                 >.widget-content {
                     .font-size-small();
-                    border: 2px solid @tertiary-0;
-                    border-top: none;
                     background-color: @secondary-6;
                     color: @secondary-0;
-                    overflow: hidden;
-                    padding: 1.875rem 1.875rem 0;
                     min-height: 12.25rem - @overlay-widget-header-height;
+                    >div {
+                        margin: 1.875rem 1.875rem 0;
+                    }
                     >.message-button {
                         left: 50%;
                         transform: translateX(-50%);
@@ -76,7 +116,6 @@
         &.toast-overlay {
             position: fixed;
             top: 10rem;
-            opacity: 0;
             transition: opacity .20s ease-in, top .20s ease-in;
             &.show-toast {
                 top: 12rem;
@@ -87,14 +126,13 @@
                 width: 17.5rem;
                 height: 6.25rem;
                 border: 1px solid @secondary-1;
-                border-radius: @border-radius;
                 >.widget-header {
                     display: none;
                 }
                 >.widget-content {
                     background-color: @secondary-6;
                     color: @secondary-0;
-                    overflow: hidden;
+                    border: none;
                     .toast-content {
                         .toast-icon {
                             background-color: lighten(@secondary-1, 10%);

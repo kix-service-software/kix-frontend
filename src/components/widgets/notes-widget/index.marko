@@ -1,9 +1,7 @@
 <div.notes-container class={"note-editor-active": state.editorActive}>
     <widget instanceId=input.instanceId minimizable=false
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Notizen")>
-        <@icon>
-            <span class=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")/>
-        </@icon>
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Notizen")
+        icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")>
         <@content>
             <if(state.value || state.editorActive)>
                 <editor value=state.value on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)

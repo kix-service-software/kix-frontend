@@ -68,8 +68,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public mousedown(col: string, event: any): void {
-        this.state.resizeSettings.columnId = col;
-        this.state.resizeSettings.startOffset = event.pageX;
+        if (event.button === 0) {
+            this.state.resizeSettings.columnId = col;
+            this.state.resizeSettings.startOffset = event.pageX;
+        }
     }
 
     private resizeX: number;
@@ -215,6 +217,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             .getPropertyValue("font-size");
         return Number(browserFontSizeSetting.replace('px', ''));
     }
+
     public setTableHeight(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
         if (table) {

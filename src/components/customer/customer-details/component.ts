@@ -30,6 +30,10 @@ class Component {
         await this.initWidget(context);
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private async initWidget(context: CustomerDetailsContext, customer?: Customer): Promise<void> {
         this.state.error = null;
         this.state.loading = true;

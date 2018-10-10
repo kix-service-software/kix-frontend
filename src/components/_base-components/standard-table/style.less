@@ -174,8 +174,10 @@
             >a:active,
             >a:visited {
                 color: unset;
-                &:hover {
-                    color: unset;
+                &:hover,
+                &:active {
+                    color: @secondary-1;
+                    text-decoration: none;
                 }
             }
             .table-cell {
@@ -223,7 +225,7 @@
                             border-top-right-radius: @border-radius;
                             border-bottom-right-radius: @border-radius;
                             border-left: 0 none;
-                            margin: 0.25rem 0 0 0px;
+                            margin: 0.25rem 0 0 0;
                             height: 1.75rem;
                             color: @secondary-0;
                             background-color: @primary-5;

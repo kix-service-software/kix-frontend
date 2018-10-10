@@ -2,10 +2,7 @@
     <loading-spinner/>
 </if>
 <else>
-    <widget instanceId=state.instanceId title=state.resultTitle>
-        <@icon>
-            <icon icon=state.resultIcon/>
-        </@icon>
+    <widget instanceId=state.instanceId title=state.resultTitle icon=state.resultIcon>
         <@headerContent>
             <filter on-filter('filter')/>
         </@headerContent>

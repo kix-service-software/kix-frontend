@@ -122,6 +122,7 @@ textarea.input-style {
             margin-top: -1px;
             margin-bottom: -1px;
             >.selected-node {
+                .font-size-small;
                 display: grid;
                 grid-auto-flow: column;
                 align-items: center;
@@ -133,13 +134,12 @@ textarea.input-style {
                 height: 1.5rem;
                 box-sizing: border-box;
                 margin: 0 .25rem .25rem 0;
-                span:first-child[class^="kix-icon-"],
-                span:first-child[class*=" kix-icon-"] {
-                    font-size: .875rem;
+                span:first-child,
+                span:first-child {
+                    height: .875rem;
                 }
                 .item-text {
                     .shorten-text;
-                    align-self: end;
                 }
                 .kix-icon-close {
                     font-size: .75rem;

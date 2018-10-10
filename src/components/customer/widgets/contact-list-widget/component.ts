@@ -33,6 +33,10 @@ class Component {
         this.setTableConfiguration();
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private setTableConfiguration(): void {
         if (this.state.widgetConfiguration) {
             const configurationListener: ITableConfigurationListener = {

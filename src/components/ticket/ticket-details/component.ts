@@ -34,6 +34,10 @@ export class Component {
         await this.initWidget(context);
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private async initWidget(
         context: TicketDetailsContext, ticket?: Ticket, scrollToArticle: boolean = false
     ): Promise<void> {

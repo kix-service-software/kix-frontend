@@ -27,6 +27,10 @@ export class Component {
         this.editorValue = this.state.value;
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     public valueChanged(value): void {
         this.editorValue = value;
     }

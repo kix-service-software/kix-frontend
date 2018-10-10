@@ -45,6 +45,10 @@ class Component {
         this.state.loading = false;
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private async prepareFilter(): Promise<void> {
         const languages = await LanguageUtil.getLanguages();
         this.state.predefinedTableFilter = languages.map(
