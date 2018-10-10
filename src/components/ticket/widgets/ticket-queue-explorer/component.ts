@@ -36,7 +36,7 @@ export class Component {
 
     private setActiveNode(queue: Queue): void {
         if (queue) {
-            this.state.activeNode = this.getActiveNode(queue);
+            this.activeNodeChanged(this.getActiveNode(queue));
         } else {
             this.showAll();
         }
@@ -90,11 +90,6 @@ export class Component {
         const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         context.setQueue(queue);
-        context.loadTickets(null, [
-            new FilterCriteria(
-                TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, queue.QueueID
-            )
-        ]);
         context.setAdditionalInformation(this.getStructureInformation());
     }
 
@@ -112,8 +107,8 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
+        context.setQueue(null);
         context.setAdditionalInformation(['Alle']);
-        context.loadTickets(null);
     }
 
 }
