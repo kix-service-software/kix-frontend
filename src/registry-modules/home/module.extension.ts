@@ -123,10 +123,10 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
                     new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
                     new TableColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 100, true, true, DataType.DATE_TIME
+                        TicketProperty.CHANGED, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                     ),
                     new TableColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 100, true, true, DataType.DATE_TIME
+                        TicketProperty.AGE, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                     ),
                 ],
                 [
@@ -163,7 +163,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 150),
                         new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
                         new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 100, true, true, DataType.DATE_TIME
+                            TicketProperty.AGE, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                         ),
                     ],
                     [

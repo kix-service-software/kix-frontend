@@ -91,7 +91,7 @@ class Component {
 
                     table.setColumns([
                         new TableColumn(
-                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, false, null
+                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, false, false, null
                         )
                     ]);
                     table.loadRows();

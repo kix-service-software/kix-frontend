@@ -177,7 +177,7 @@ class LinkDialogComponent {
 
                 table.setColumns([
                     new TableColumn(
-                        'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, false, false, null
+                        'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, false, false, false, null
                     )
                 ]);
 

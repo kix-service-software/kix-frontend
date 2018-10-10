@@ -1,4 +1,5 @@
 import { ILabelProvider } from '@kix/core/dist/browser';
+import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
 export class ObjectPropertyLabelInput<T> {
 
@@ -9,5 +10,7 @@ export class ObjectPropertyLabelInput<T> {
     public labelProvider: ILabelProvider<T>;
 
     public info: any;
+
+    public routingConfiguration: RoutingConfiguration;
 
 }
