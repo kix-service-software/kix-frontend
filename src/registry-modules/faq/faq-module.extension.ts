@@ -23,7 +23,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const faqCategoryExplorer =
             new ConfiguredWidget('20180625-faq-category-explorer', new WidgetConfiguration(
-                'faq-category-explorer', 'FAQ Kategorien', ['csv-export-action'], {},
+                'faq-category-explorer', 'FAQ Kategorien', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-faq', false)
             );
 
