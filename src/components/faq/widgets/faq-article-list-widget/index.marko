@@ -1,9 +1,5 @@
-<widget instanceId=state.instanceId title=state.title actions=state.actions>
-    <@icon>
-        <if(state.widgetConfiguration)>
-            <span class=(state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")/>
-        </if>
-    </@icon>
+<widget instanceId=state.instanceId title=state.title actions=state.actions
+    icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")>
     <@headerContent>
         <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle FAQ" on-filter('filter')/>
     </@headerContent>

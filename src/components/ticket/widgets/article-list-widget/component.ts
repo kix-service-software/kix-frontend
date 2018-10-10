@@ -61,6 +61,8 @@ export class Component implements IEventListener {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
         EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
+
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
     private prepareActions(): void {

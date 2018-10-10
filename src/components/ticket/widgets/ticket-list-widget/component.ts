@@ -53,6 +53,10 @@ class Component {
         this.setTableConfiguration();
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private prepareActions(): void {
         if (this.state.widgetConfiguration) {
             this.state.actions = ActionFactory.getInstance().generateActions(

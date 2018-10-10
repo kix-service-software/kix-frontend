@@ -59,19 +59,19 @@ class WidgetComponent implements IEventListener {
         }
 
         if (this.state.minimizable) {
-            if (force) {
-                this.state.minimized = !this.state.minimized;
-            } else {
-                if (event.target.tagName === 'DIV'
-                    || event.target.tagName === 'SPAN'
-                    || event.target.tagName === 'UL') {
-                    if (event.target.classList.contains('widget-header')
+            if (
+                force
+                || (
+                    (event.target.tagName === 'DIV'
+                        || event.target.tagName === 'SPAN'
+                        || event.target.tagName === 'UL')
+                    && (event.target.classList.contains('widget-header')
                         || event.target.classList.contains('header-left')
                         || event.target.classList.contains('header-right')
-                        || event.target.classList.contains('tab-list')) {
-                        this.state.minimized = !this.state.minimized;
-                    }
-                }
+                        || event.target.classList.contains('tab-list'))
+                )
+            ) {
+                this.state.minimized = !this.state.minimized;
             }
         }
     }
@@ -79,7 +79,6 @@ class WidgetComponent implements IEventListener {
     public minimizeExplorer(): void {
         ContextService.getInstance().getActiveContext(this.state.contextType).toggleExplorerBar();
     }
-
 
     public hasHeaderContent(headerContent: any): boolean {
         return this.isInputDefined(headerContent);
@@ -160,6 +159,23 @@ class WidgetComponent implements IEventListener {
     public eventPublished(data: any, eventId: string): void {
         if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
             this.state.minimized = false;
+        }
+    }
+
+    public headerMousedown(force: boolean = false, event: any): void {
+        if (
+            force
+            || (
+                (event.target.tagName === 'DIV'
+                    || event.target.tagName === 'SPAN'
+                    || event.target.tagName === 'UL')
+                && (event.target.classList.contains('widget-header')
+                    || event.target.classList.contains('header-left')
+                    || event.target.classList.contains('header-right')
+                    || event.target.classList.contains('tab-list'))
+            )
+        ) {
+            (this as any).emit('headerMousedown', event);
         }
     }
 }
