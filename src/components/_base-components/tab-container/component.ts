@@ -54,11 +54,13 @@ class TabLaneComponent {
         this.state.activeTab = tab;
         if (tab) {
             const context = await ContextService.getInstance().getActiveContext(this.state.contextType);
-            const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
+            if (context) {
+                const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 
-            this.state.contentActions = ActionFactory.getInstance().generateActions(
-                tab.configuration.actions, false, [object]
-            );
+                this.state.contentActions = ActionFactory.getInstance().generateActions(
+                    tab.configuration.actions, false, [object]
+                );
+            }
         }
         (this as any).emit('tabChanged', tab);
     }
