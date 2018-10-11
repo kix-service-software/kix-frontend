@@ -171,18 +171,18 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                                 'Number', true, false, false, true, 50, true, true, false, DataType.NUMBER
                             ),
                             new TableColumnConfiguration(
-                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50
+                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50, true
                             ),
                             new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 50),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TAG, false, true, true, false, 50),
+                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 75),
                             new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
                             new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
                             new TableColumnConfiguration(
                                 ArticleProperty.INCOMING_TIME, true, false, true, true, 120,
                                 true, true, false, DataType.DATE_TIME
                             ),
-                            new TableColumnConfiguration(ArticleProperty.ATTACHMENT, true, false, true, false, 50),
+                            new TableColumnConfiguration(
+                                ArticleProperty.ATTACHMENT, true, true, true, false, 75, true, true, true),
                         ], null, true,
                         true, new ToggleOptions('ticket-article-details', 'article', [
                             'article-print-action',
