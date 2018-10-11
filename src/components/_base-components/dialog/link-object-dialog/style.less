@@ -37,15 +37,16 @@
         }
     }
     >.linkable-objects-result {
-        margin-bottom: @margin-default;
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        grid-gap: @margin-small (@margin-small*2);
-        .result-title {
-            font-weight: bold;
-        }
-        >div:last-child {
-            grid-column: 1 / span 2;
+        .result-table-head {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-gap: @margin-default;
+            margin-bottom: @margin-small;
+            align-items: center;
+            >span:first-child {
+                font-weight: bold;
+                display: inline-block;
+            }
         }
     }
     >.linkable-objects-submit {

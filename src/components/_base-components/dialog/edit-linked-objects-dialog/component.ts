@@ -48,7 +48,7 @@ class Component {
 
             await this.reviseLinkObjects();
             await this.setInitialLinkDescriptions();
-            this.prepareTable();
+            await this.prepareTable();
         }
         this.state.loading = false;
     }
@@ -65,7 +65,7 @@ class Component {
             }
         });
         await this.prepareLinkedObjects(linkedObjectIds);
-        this.initPredefinedFilter(linkedObjectIds);
+        await this.initPredefinedFilter();
     }
 
     private async prepareLinkedObjects(linkedObjectIds: Map<KIXObjectType, string[]>): Promise<void> {
@@ -96,12 +96,16 @@ class Component {
         }
     }
 
-    private initPredefinedFilter(linkedObjectIds: Map<KIXObjectType, string[]>): void {
-        linkedObjectIds.forEach((ids, type) => {
+    private async initPredefinedFilter(): Promise<void> {
+        const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
+
+        linkPartners.forEach((lp) => {
             this.state.predefinedTableFilter.push(
-                new KIXObjectPropertyFilter(type.toString(), [
+                new KIXObjectPropertyFilter(lp[0].toString(), [
                     new TableFilterCriteria(
-                        LinkObjectProperty.LINKED_OBJECT_TYPE, SearchOperator.EQUALS, type.toString()
+                        LinkObjectProperty.LINKED_OBJECT_TYPE,
+                        SearchOperator.EQUALS,
+                        lp[1].toString()
                     )
                 ]),
             );
@@ -134,7 +138,7 @@ class Component {
         });
     }
 
-    private prepareTable(): void {
+    private async prepareTable(): Promise<void> {
         const table = StandardTableFactoryService.getInstance().createStandardTable(
             KIXObjectType.LINK_OBJECT
         );
@@ -152,7 +156,7 @@ class Component {
         this.preventSelectionLayer.setPreventSelectionFilter([...this.deleteLinkObjects, ...this.newLinkObjects]);
 
         table.layerConfiguration.contentLayer.setPreloadedObjects(this.availableLinkObjects);
-        table.loadRows(true);
+        await table.loadRows(true);
         table.listenerConfiguration.selectionListener.addListener(
             this.objectSelectionChanged.bind(this)
         );
@@ -169,14 +173,14 @@ class Component {
         this.state.table.setFilterSettings(textFilterValue, filter);
     }
 
-    public markToDelete(): void {
+    public async markToDelete(): Promise<void> {
         this.selectedLinkObjects.forEach((slo) => {
             if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
                 this.deleteLinkObjects.push(slo);
             }
         });
 
-        this.prepareTable();
+        await this.prepareTable();
 
         this.state.canDelete = false;
         this.setCanSubmit();
@@ -186,7 +190,7 @@ class Component {
         let dialogTitle = 'Objekt verknüpfen';
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
         if (labelProvider) {
-            dialogTitle = `${labelProvider.getObjectName(false)} verknüpfen`;
+            dialogTitle = `${labelProvider.getObjectName()} verknüpfen`;
         }
         const resultListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
         DialogService.getInstance().openOverlayDialog(
@@ -238,9 +242,14 @@ class Component {
             this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
 
-            this.prepareTable();
+            await this.prepareTable();
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
+
+            const filter = (this as any).getComponent('edit-linked-objects-filter');
+            if (filter) {
+                filter.reset();
+            }
         }
     }
 

@@ -20,13 +20,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.state.standardTable = input.standardTable;
         if (this.state.standardTable) {
             this.state.tableId = this.state.standardTable.tableId;
-        }
-    }
-
-    public async onMount(): Promise<void> {
-        document.addEventListener('mousemove', this.mousemove.bind(this));
-        document.addEventListener('mouseup', this.mouseup.bind(this));
-        if (this.state.standardTable) {
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
                 (this as any).setStateDirty();
                 if (scrollToTop) {
@@ -34,6 +27,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 }
             });
         }
+    }
+
+    public async onMount(): Promise<void> {
+        document.addEventListener('mousemove', this.mousemove.bind(this));
+        document.addEventListener('mouseup', this.mouseup.bind(this));
 
         this.columns = await this.state.standardTable.getColumns();
 
