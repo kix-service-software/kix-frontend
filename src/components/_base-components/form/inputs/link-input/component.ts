@@ -25,7 +25,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         let dialogTitle = 'Objekt verknüpfen';
         const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
         if (labelProvider) {
-            dialogTitle = `${labelProvider.getObjectName(false)} verknüpfen`;
+            dialogTitle = `${labelProvider.getObjectName()} verknüpfen`;
         }
 
         const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
