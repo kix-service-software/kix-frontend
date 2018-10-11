@@ -52,16 +52,17 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
                     label = attribute.Label;
                 }
 
-                let componentId = null;
+                const hint = this.getHint(label, attribute.Attribute);
+                const formField = new FormField(label, attribute.Attribute, null, attribute.Required, hint);
+
                 if (attribute.Attribute === CustomerProperty.VALID_ID) {
-                    componentId = 'valid-input';
+                    formField.inputComponent = 'valid-input';
                 }
                 if (attribute.Attribute === CustomerProperty.CUSTOMER_COMPANY_COMMENT) {
-                    componentId = 'text-area-input';
+                    formField.inputComponent = 'text-area-input';
+                    formField.maxLength = 250;
                 }
 
-                const hint = this.getHint(label, attribute.Attribute);
-                const formField = new FormField(label, attribute.Attribute, componentId, attribute.Required, hint);
                 group.formFields.push(formField);
             }
 

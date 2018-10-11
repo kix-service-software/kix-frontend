@@ -40,8 +40,10 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public tabChanged(tab: ConfiguredDialogWidget): void {
-        this.state.dialogId = tab.instanceId;
-        ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
+        if (tab) {
+            this.state.dialogId = tab.instanceId;
+            ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
+        }
     }
 
     public setTitle(title: string): void {
