@@ -151,10 +151,13 @@ export class Component implements IEventListener {
 
         if (eventId === 'GotToTicketArticle') {
             setTimeout(() => {
-                const tableComponent = (this as any).getComponent('article-list-table');
-                if (tableComponent) {
-                    tableComponent.scrollToObject(data);
-                }
+                this.filter('');
+                setTimeout(() => {
+                    const tableComponent = (this as any).getComponent('article-list-table');
+                    if (tableComponent) {
+                        tableComponent.scrollToObject(data);
+                    }
+                }, 100);
             }, 200);
         }
     }
