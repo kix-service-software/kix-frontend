@@ -24,14 +24,29 @@ html {
 }
 
 a,
-a:active,
 a:visited,
 a:link {
     color: @primary-0;
     text-decoration: none;
-    &:hover {
+    &:hover,
+    &:active {
         color: @primary-2;
         text-decoration: underline;
+    }
+}
+
+ul {
+    >li {
+        >a,
+        >a:visited,
+        >a:link {
+            color: inherit;
+            &:hover,
+            &:active {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
     }
 }
 

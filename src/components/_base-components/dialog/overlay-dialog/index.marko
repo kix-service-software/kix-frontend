@@ -5,9 +5,11 @@
             <widget instanceId="overlay-dialog" title=state.title minimizable=false closable=true on-closeWidget('close')
                 icon=state.icon>
                 <@content>
-                    <if(state.dialogTemplate)>
-                        <include(state.dialogTemplate, state.dialogInput)/>
-                    </if>
+                    <div.overlay-dialog-spacer>
+                        <if(state.dialogTemplate)>
+                            <include(state.dialogTemplate, state.dialogInput)/>
+                        </if>
+                    </div>
                 </@content>
             </widget>
             <if(state.loading)>

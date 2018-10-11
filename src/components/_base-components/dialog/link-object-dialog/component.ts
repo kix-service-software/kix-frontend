@@ -284,6 +284,10 @@ class LinkDialogComponent {
             this.linkTypeDescriptions[this.state.currentLinkTypeNode.id] : null;
         this.setCanSubmit();
     }
+
+    public filter(filterValue: string): void {
+        this.state.standardTable.setFilterSettings(filterValue);
+    }
 }
 
 module.exports = LinkDialogComponent;

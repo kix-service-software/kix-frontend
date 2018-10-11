@@ -24,6 +24,7 @@
             <if(state.currentLinkableObjectNode)>
                 <div.result-title>Trefferliste (${state.resultCount})</div>
                 <if(state.standardTable)>
+                    <filter on-filter('filter')/>
                     <standard-table standardTable=state.standardTable key=state.tableId/>
                 </if>
             </if>
