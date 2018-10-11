@@ -33,10 +33,12 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                 "ticket-history-widget", "Historie", ['ticket-print-action'],
                 new TableConfiguration(
                     null, 7, [
-                        new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
+                        new TableColumnConfiguration('HistoryType', true, false, true, true, 150),
                         new TableColumnConfiguration('Name', true, false, true, true, 200),
-                        new TableColumnConfiguration('CreateTime', true, false, true, true, 100),
-                        new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
+                        new TableColumnConfiguration(
+                            'CreateTime', true, false, true, true, 150, true, true, false, DataType.DATE_TIME
+                        ),
+                        new TableColumnConfiguration('CreateBy', true, false, true, true, 200),
                         new TableColumnConfiguration(
                             ArticleProperty.ARTICLE_ID, true, false, true, true, 100, true, false, true
                         ),
