@@ -1,53 +1,27 @@
 import { ComponentState } from './ComponentState';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
-import { FAQEvent, FAQService, FAQDetailsContext } from '@kix/core/dist/browser/faq';
+import { FAQService, FAQDetailsContext } from '@kix/core/dist/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '@kix/core/dist/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '@kix/core/dist/model';
-import { ServiceRegistry, OverlayService, ContextService } from '@kix/core/dist/browser';
+import { ServiceRegistry, OverlayService, ContextService, BrowserUtil } from '@kix/core/dist/browser';
 
-export class Component implements IEventListener {
-    public eventSubscriberId: string = 'FAQ_VOTE_COMPONENT';
+export class Component {
 
     private state: ComponentState;
 
     private faqArticle: FAQArticle;
+    public rating: number = 0;
+    public voteCount: number = 0;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
-        EventService.getInstance().subscribe(FAQEvent.SHOW_FAQ_VOTE, this);
-
-        document.addEventListener("click", (event: any) => {
-            if (this.state.show) {
-                if (this.state.keepShow) {
-                    this.state.keepShow = false;
-                } else {
-                    this.state.show = false;
-                }
-            }
-        }, false);
-    }
-
-    public eventPublished(data: any): void {
-        this.faqArticle = data.faqArticle;
-        this.state.show = true;
-        this.state.keepShow = true;
-
-        setTimeout(() => {
-            const element = (this as any).getEl('faq-vote-selector');
-            if (element) {
-                element.style.top = data.event.target.offsetTop + 'px';
-            }
-        }, 100);
-    }
-
-    public selectorClicked(event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault(event);
+    public onInput(input: any) {
+        this.faqArticle = input.faqArticle;
+        if (this.faqArticle && this.faqArticle.Votes) {
+            this.rating = BrowserUtil.calculateAverage(this.faqArticle.Votes.map((v) => v.Rating));
+            this.voteCount = this.faqArticle.Votes.length;
         }
-        this.state.keepShow = true;
     }
 
     public setCurrentRating(rating: number): void {
@@ -84,7 +58,6 @@ export class Component implements IEventListener {
                     );
                 });
 
-            this.state.show = false;
             const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
             await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
         }
