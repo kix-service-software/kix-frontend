@@ -1,9 +1,11 @@
 import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "@kix/core/dist/model";
 import {
-    ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService
+    ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService, LabelService
 } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
-import { FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions } from "@kix/core/dist/model/kix/faq";
+import {
+    FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
+} from "@kix/core/dist/model/kix/faq";
 
 class Component {
 
@@ -11,6 +13,9 @@ class Component {
 
     private state: ComponentState;
     private contextListenerId: string = null;
+
+    private stars: Array<string | ObjectIcon> = [];
+    private rating: number;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -39,12 +44,19 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        this.initWidget(context, await context.getObject<FAQArticle>());
+        await this.initWidget(context, await context.getObject<FAQArticle>());
+        this.state.loading = false;
     }
 
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.faqArticle = faqArticle;
-        this.setActions();
+
+        if (faqArticle) {
+            const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE);
+            this.stars = await labelProvider.getIcons(faqArticle, FAQArticleProperty.VOTES);
+            this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
+            this.setActions();
+        }
     }
 
     private setActions(): void {
@@ -55,29 +67,9 @@ class Component {
         }
     }
 
-    public getRating(): number {
-        if (this.state.faqArticle && this.state.faqArticle.Votes) {
-            let sum = 0;
-            this.state.faqArticle.Votes.forEach((v) => sum += v.Rating);
-
-            return this.round(sum / this.state.faqArticle.Votes.length);
-        }
-        return 0;
-    }
-
-    private round(value: number, step: number = 0.5): number {
-        const inv = 1.0 / step;
-        return Math.round(value * inv) / inv;
-    }
-
     public getRatingTooltip(): string {
         const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
         return `Anzahl Bewertungen: ${count}`;
-    }
-
-    public fillStar(index: number): boolean {
-        const rating = this.getRating() * 2;
-        return index <= rating;
     }
 
     public getIcon(attachment: Attachment): ObjectIcon {

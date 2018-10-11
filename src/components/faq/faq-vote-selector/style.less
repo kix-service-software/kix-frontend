@@ -1,25 +1,26 @@
 .faq-vote-selector {
     position: absolute;
-    top: 5rem;
+    top: 1rem;
     right: 0;
     box-sizing: border-box;
-    color: @primary-2;
-    width: 15rem;
-    height: 2rem;
-    background-color: @secondary-6;
-    padding-top: 3px;
+    color: #0a7cb3;
+    height: 1.75rem;
+    background-color: #ffffff;
     border: 1px solid #0a7cb3;
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
     border-right: 0 none;
-    line-height: 2rem;
-    >span {
-        margin-right: @margin-small;
-        size: 1.25rem;
-        :hover {
-            color: @secondary-6;
-            background: @primary-2;
-            cursor: pointer;
-        }
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr;
+    grid-column-gap: 0.5rem;
+    box-sizing: border-box;
+    padding: 0 0.5rem 0 0.5rem;
+    span {
+        font-size: 1.125rem;
+        padding: 0;
+        margin: 0;
+        line-height: unset;
+        cursor: pointer;
     }
 }

@@ -30,10 +30,17 @@ export class Component implements IEventListener {
         }, false);
     }
 
-    public eventPublished(faqArticle: FAQArticle): void {
-        this.faqArticle = faqArticle;
+    public eventPublished(data: any): void {
+        this.faqArticle = data.faqArticle;
         this.state.show = true;
         this.state.keepShow = true;
+
+        setTimeout(() => {
+            const element = (this as any).getEl('faq-vote-selector');
+            if (element) {
+                element.style.top = data.event.target.offsetTop + 'px';
+            }
+        }, 100);
     }
 
     public selectorClicked(event: any): void {
@@ -41,6 +48,17 @@ export class Component implements IEventListener {
             event.preventDefault(event);
         }
         this.state.keepShow = true;
+    }
+
+    public setCurrentRating(rating: number): void {
+        this.state.currentRating = rating;
+    }
+
+    public getIcon(rating: number): string {
+        if (this.state.currentRating && rating <= this.state.currentRating) {
+            return 'kix-icon-star-fully';
+        }
+        return 'kix-icon-star-empty';
     }
 
     public async vote(rating: number): Promise<void> {

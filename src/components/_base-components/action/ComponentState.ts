@@ -1,6 +1,6 @@
 import { AbstractAction } from '@kix/core/dist/model';
 
-export class ActionComponentState {
+export class ComponentState {
 
     public constructor(
         public action: AbstractAction = null,
