@@ -334,8 +334,12 @@
         .full-size();
         top: @overlay-widget-header-height;
         border: 2px solid @primary-0;
-        padding: @margin-default (@margin-default + 1rem);
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
+        >.overlay-dialog-spacer {
+            .full-size;
+            margin: (@margin-default - @margin-small);
+            padding: 0 1.5rem 1rem;
+            overflow: auto;
+        }
     }
 }

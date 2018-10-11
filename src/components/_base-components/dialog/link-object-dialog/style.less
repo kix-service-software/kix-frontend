@@ -38,9 +38,14 @@
     }
     >.linkable-objects-result {
         margin-bottom: @margin-default;
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        grid-gap: @margin-small (@margin-small*2);
         .result-title {
             font-weight: bold;
-            margin-bottom: @margin-small;
+        }
+        >div:last-child {
+            grid-column: 1 / span 2;
         }
     }
     >.linkable-objects-submit {
