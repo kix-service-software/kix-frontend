@@ -4,10 +4,8 @@ import {
 } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
 import { FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions } from "@kix/core/dist/model/kix/faq";
-import { EventService, IEventListener } from "@kix/core/dist/browser/event";
-import { FAQEvent } from "@kix/core/dist/browser/faq";
 
-class Component implements IEventListener {
+class Component {
 
     public eventSubscriberId: string = 'FAQContentComponent';
 
@@ -29,8 +27,6 @@ class Component implements IEventListener {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        EventService.getInstance().subscribe(FAQEvent.VOTE_UPDATED, this);
-
         context.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
@@ -49,11 +45,6 @@ class Component implements IEventListener {
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.faqArticle = faqArticle;
         this.setActions();
-    }
-
-    public async eventPublished(faqArticle: FAQArticle): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        await this.initWidget(context);
     }
 
     private setActions(): void {
