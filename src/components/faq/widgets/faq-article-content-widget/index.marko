@@ -28,14 +28,13 @@
                     </div>
                     <div>
                         <div.faq-rating title=component.getRatingTooltip()>
-                            <span>Bewertung:</span>
-                            <span>
+                            <span.faq-rating-label>Bewertung:</span>
+                            <span.faq-rating-info>
                                 <if(state.faqArticle.Votes.length)>
-                                    <for(i from 1 to 10)>
-                                        <if(component.fillStar(i))>+</if>
-                                        <else>-</else>
+                                    <for(icon in component.stars)>
+                                        <icon icon=icon/>
                                     </for>
-                                    (${component.getRating()})
+                                    (${component.rating})
                                 </if>
                                 <else>
                                     <b>Keine Bewertung abgegeben</b>
