@@ -33,11 +33,20 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
         const content: string[] = ['201800709-search-result-list-widget'];
         const contentWidgets = [searchResultListWidget];
 
+        const notesSidebar =
+            new ConfiguredWidget('20181010-search-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+            );
+
+        const sidebars = ['20181010-search-notes'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+
         return new SearchContextConfiguration(
             this.getModuleId(),
             explorer,
-            [],
-            [],
+            sidebars,
+            sidebarWidgets,
             explorerWidgets,
             content,
             contentWidgets,

@@ -73,7 +73,19 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const content: string[] = ['20180529102830', '20180529144530'];
         const contentWidgets = [customerListWidget, contactListWidget];
-        return new CustomerContextConfiguration(this.getModuleId(), [], [], [], [], content, contentWidgets);
+
+        const notesSidebar =
+            new ConfiguredWidget('20181010-customer-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+            );
+
+        const sidebars = ['20181010-customer-notes'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+
+        return new CustomerContextConfiguration(
+            this.getModuleId(), sidebars, [], sidebarWidgets, [], content, contentWidgets
+        );
     }
 
     public createFormDefinitions(): void {
