@@ -25,10 +25,12 @@
                 </ul>
             </@content>
         </widget>
-        <include(component.getWidgetTemplate('faq-article-content-widget'), { 
+        <div.faq-content>
+            <include(component.getWidgetTemplate('faq-article-content-widget'), { 
             contextType: "MAIN",
             instanceId: 'faq-article-content-widget', 
             type: component.LANE_WIDGET_TYPE
         })/>
+        </div>
     </div>
 </else>

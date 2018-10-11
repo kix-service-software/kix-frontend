@@ -6,16 +6,24 @@
                 <div.faq-article-content-container>
                     <div>
                         <widget instanceId="faq-article-group" title="Symptom">
-                            <@content>$!{state.faqArticle.Field1}</@content>
+                            <@content>
+                                <editor readOnly=true value=state.faqArticle.Field1/>
+                            </@content>
                         </widget>
                         <widget instanceId="faq-article-group" title="Ursache">
-                            <@content>$!{state.faqArticle.Field2}</@content>
+                            <@content>
+                                <editor readOnly=true value=state.faqArticle.Field2/>
+                            </@content>
                         </widget>
                         <widget instanceId="faq-article-group" title="Lösung">
-                            <@content>$!{state.faqArticle.Field3}</@content>
+                            <@content>
+                                <editor readOnly=true value=state.faqArticle.Field3/>
+                            </@content>
                         </widget>
                         <widget instanceId="faq-article-group" title="Kommentar">
-                            <@content>$!{state.faqArticle.Field6}</@content>
+                            <@content>
+                                <editor readOnly=true value=state.faqArticle.Field6/>
+                            </@content>
                         </widget>
                     </div>
                     <div>
@@ -29,7 +37,9 @@
                                     </for>
                                     (${component.getRating()})
                                 </if>
-                                <else>Keine Bewertung abgegeben</else>
+                                <else>
+                                    <b>Keine Bewertung abgegeben</b>
+                                </else>
                             </span>
                         </div>
                         <div.faq-attachments>

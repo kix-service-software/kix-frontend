@@ -1,20 +1,48 @@
 .faq-article-information-container {
     display: grid;
+    grid-template-columns: 5fr 1fr;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    div {
+    grid-gap: @margin-small;
+    .keyword-list {
+        >span {
+            font-weight: bold;
+            display: block;
+        }
+        >.label-list {
+            margin: 0;
+            height: 10rem;
+        }
+    }
+    .information-list {
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+        grid-column-gap: @margin-small;
+        grid-template-rows: repeat(1, auto);
         .key-value-pair {
-            grid-template-columns: 35% 0em minmax(3em, auto);
+            grid-template-columns: 2fr minmax(1rem, auto) 5fr;
+            grid-column-gap: @margin-small;
+            line-height: 1.5rem;
             >.key {
                 font-weight: bold;
             }
-            >.value {
-                white-space: nowrap;
+            &::after {
+                clear: none;
+            }
+            &::before,
+            &::after {
+                display: none;
             }
         }
-        @media only screen and (max-width: 1440px) {
+        @media only screen and (max-width: 1920px) {
             .key-value-pair {
-                grid-template-columns: 40% 0em minmax(3em, auto);
+                grid-template-columns: 3.5fr minmax(1rem, auto) 5fr;
+            }
+        }
+        @media only screen and (max-width: 1439px) {
+            grid-template-rows: repeat(2, auto);
+            .key-value-pair {
+                grid-template-columns: 3fr minmax(1rem, auto) 5fr;
             }
         }
     }

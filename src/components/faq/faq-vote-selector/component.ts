@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
 import { EventService, IEventListener } from '@kix/core/dist/browser/event';
-import { FAQEvent, FAQService } from '@kix/core/dist/browser/faq';
+import { FAQEvent, FAQService, FAQDetailsContext } from '@kix/core/dist/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '@kix/core/dist/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '@kix/core/dist/model';
-import { ServiceRegistry, OverlayService } from '@kix/core/dist/browser';
+import { ServiceRegistry, OverlayService, ContextService } from '@kix/core/dist/browser';
 
 export class Component implements IEventListener {
     public eventSubscriberId: string = 'FAQ_VOTE_COMPONENT';
@@ -60,13 +60,15 @@ export class Component implements IEventListener {
                     );
 
                     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-                    EventService.getInstance().publish(FAQEvent.VOTE_UPDATED, this.faqArticle);
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
                         OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
                     );
                 });
+
             this.state.show = false;
+            const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
+            await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
         }
     }
 
