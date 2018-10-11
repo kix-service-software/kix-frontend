@@ -40,7 +40,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                         ),
                         new TableColumnConfiguration('CreateBy', true, false, true, true, 200),
                         new TableColumnConfiguration(
-                            ArticleProperty.ARTICLE_ID, true, false, true, true, 100, true, false, true
+                            ArticleProperty.ARTICLE_ID, true, true, true, true, 150, true, false, true
                         ),
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
