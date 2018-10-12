@@ -19,6 +19,10 @@ export class MarkoService implements IMarkoService {
         this.registerMarkoDependencies();
     }
 
+    public initCache(): Promise<void> {
+        return;
+    }
+
     public async registerMarkoDependencies(): Promise<void> {
         const markoDependencies: IMarkoDependencyExtension[] =
             await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
