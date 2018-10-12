@@ -18,12 +18,12 @@
                 text-align: right;
                 height: @default-input-height;
                 >.required-field {
-                    &:after {
+                    &::after {
                         content: " ";
                     }
                 }
             }
-            &:after {
+            &:not(.no-label)::after {
                 content: ":"
             }
         }
@@ -53,5 +53,10 @@
             background-color: unset;
             margin-left: 0;
         }
+    }
+    .separator {
+        text-align: center;
+        font-weight: bold;
+        margin: @margin-small;
     }
 }

@@ -112,26 +112,30 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         const formIdLinkWithTicket = 'link-ticket-search-form';
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
-            const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", TicketProperty.FULLTEXT, null, false, "Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC"));
-            fields.push(new FormField("Ticketnummer", TicketProperty.TICKET_NUMBER, null, false, "Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen)."));
-            fields.push(new FormField("Titel", TicketProperty.TITLE, null, false, "Geben Sie den Titel oder Teile eines Tickettitels ein."));
-            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', false, "Suche nach Tickets des gewählten Typs."));
-            fields.push(new FormField("Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', false, "Suche nach Tickets in der gewählten Queue."));
-            fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, "Suche nach Tickets mit der gewählten Priorität.")
-            );
-            fields.push(new FormField<number>(
-                "Status", TicketProperty.STATE_ID, 'ticket-input-state', false, "Suche nach Tickets mit dem gewählten Status.")
-            );
-            fields.push(new FormField("Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Suche nach Tickets, die mit dem gewählten Service verknüpft sind."));
-            fields.push(new FormField("SLA", TicketProperty.SLA_ID, 'ticket-input-sla', false, "Suche nach Tickets, die mit dem gewählten SLA verknüpft sind."));
+            const fulltextFields = [
+                new FormField('', TicketProperty.FULLTEXT, null, false, 'Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC')
+            ];
 
-            const group = new FormGroup('Ticketattribute', fields);
+            const fields: FormField[] = [];
+            fields.push(new FormField('Ticketnummer', TicketProperty.TICKET_NUMBER, null, false, 'Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen).'));
+            fields.push(new FormField('Titel', TicketProperty.TITLE, null, false, 'Geben Sie den Titel oder Teile eines Tickettitels ein.'));
+            fields.push(new FormField('Typ', TicketProperty.TYPE_ID, 'ticket-input-type', false, 'Suche nach Tickets des gewählten Typs.'));
+            fields.push(new FormField('Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', false, 'Suche nach Tickets in der gewählten Queue.'));
+            fields.push(new FormField<number>(
+                'Priorität', TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, 'Suche nach Tickets mit der gewählten Priorität.')
+            );
+            fields.push(new FormField<number>(
+                'Status', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Suche nach Tickets mit dem gewählten Status.')
+            );
+            fields.push(new FormField('Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Suche nach Tickets, die mit dem gewählten Service verknüpft sind.'));
+            fields.push(new FormField('SLA', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Suche nach Tickets, die mit dem gewählten SLA verknüpft sind.'));
+
+            const fulltextGroup = new FormGroup('Volltext', fulltextFields, 'Oder');
+            const attributeGroup = new FormGroup('Ticket-Attribute', fields);
 
             const form = new Form(
-                formIdLinkWithTicket, 'Verknüpfen mit Ticket', [group],
-                KIXObjectType.TICKET, false, FormContext.LINK
+                formIdLinkWithTicket, 'Verknüpfen mit Ticket', [fulltextGroup, attributeGroup],
+                KIXObjectType.TICKET, false, FormContext.LINK, null, true
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

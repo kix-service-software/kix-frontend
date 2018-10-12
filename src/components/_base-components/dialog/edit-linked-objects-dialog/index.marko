@@ -12,11 +12,12 @@
                 </div>
                 <standard-table standardTable=state.table/>
                 <div.dialog-button-container>
-                    <button.cancel-button type="button" on-click("markToDelete") title="Verknüpfung löschen" disabled=(!state.canDelete)>
+                    <button.form-blank-red-button type="button" on-click("markToDelete") title="Verknüpfung löschen"
+                        disabled=(!state.canDelete)>
                         <span.kix-icon-trash/>
                         Verknüpfung löschen
                     </button>
-                    <button.form-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
+                    <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
                         <span.kix-icon-new-link/>
                         Verknüpfung zuordnen
                     </button>

@@ -128,7 +128,9 @@ class Component implements ISearchFormListener {
     }
 
     public submit(): void {
-        DialogService.getInstance().closeMainDialog();
+        if (!this.state.resultCount) {
+            DialogService.getInstance().closeMainDialog();
+        }
     }
 
     public removeValue(): void {

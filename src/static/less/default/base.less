@@ -115,11 +115,8 @@ button {
     border-radius: @border-radius;
     border: 1px solid;
     position: relative;
-    &:not(:hover) {
+    &:not(:hover):not(:disabled) {
         .shadow-1;
-    }
-    &:disabled {
-        box-shadow: none
     }
     &:not(.button-without-text) {
         min-width: 10rem;
@@ -179,12 +176,14 @@ button {
         &:hover:not(:disabled) {
             background-color: @secondary-6;
         }
+        box-shadow: none;
     }
     &.form-blank-red-button {
         .button-color(@tertiary-0, @secondary-6, @secondary-3, @secondary-0, @tertiary-0);
         &:hover:not(:disabled) {
             background-color: @secondary-6;
         }
+        box-shadow: none;
     }
     &.special-button {
         .button-color(@primary-6, @primary-6, @secondary-6, @secondary-6, @primary-6);

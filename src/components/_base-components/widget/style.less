@@ -63,6 +63,9 @@
                 [class*=" kix-icon-"] {
                     .icon-font-size-normal;
                 }
+                &:hover {
+                    color: darken(@header-color, 10%);
+                }
             }
             >.action-list-wrapper {
                 >.action-list {
@@ -92,6 +95,7 @@
         width: 1.75rem;
         right: 0.5rem;
         top: @overlay-widget-header-height;
+        z-index: 1;
         li {
             border: 1px solid @primary-2;
             border-top-right-radius: @border-radius;
@@ -270,9 +274,19 @@
     margin-bottom: @margin-small;
     overflow: unset;
     box-shadow: unset;
+    &.minimized {
+        >.widget-header {
+            >.header-right {
+                >div.action-list-wrapper {
+                    background-color: @secondary-1;
+                }
+            }
+        }
+    }
     >.widget-header {
         padding: 0;
         grid-template-columns: max-content auto;
+        grid-gap: 1rem;
         >.header-left {
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
@@ -302,6 +316,10 @@
         padding: 0;
         margin-left: 1.5em;
         min-height: auto;
+        >.group-widget,
+        >*>.group-widget {
+            margin-right: 1.75rem;
+        }
     }
 }
 
