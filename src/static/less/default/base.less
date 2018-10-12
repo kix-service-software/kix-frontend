@@ -106,7 +106,7 @@ button {
     border-radius: @border-radius;
     border: 1px solid;
     position: relative;
-    &:not(:hover) {
+    &:not(:hover):not(:disabled):not(.form-button) {
         .shadow-1;
     }
     &:not(.button-without-text) {
