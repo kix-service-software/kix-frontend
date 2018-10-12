@@ -107,7 +107,7 @@ class Component {
         const contextDescriptor = context.getDescriptor();
         return new RoutingConfiguration(
             contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-            ContextMode.DETAILS, ContactProperty.ContactID, false, true
+            ContextMode.DETAILS, ContactProperty.ContactID, false, false
         );
     }
 
@@ -116,7 +116,7 @@ class Component {
         const contextDescriptor = context.getDescriptor();
         return new RoutingConfiguration(
             contextDescriptor.urlPaths[0], CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
-            ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false, true
+            ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false, false
         );
     }
 
