@@ -35,7 +35,7 @@ class Startup {
         container.register<IService>('IPluginService', PluginService);
         container.register<IService>('IMarkoService', MarkoService);
 
-        CoreServiceRegistry.getInstance().registerCoreServices();
+        await CoreServiceRegistry.getInstance().registerCoreServices();
 
         const pluginService = ServiceContainer.getInstance().getClass<IPluginService>('IPluginService');
         const servicesExtensions = await pluginService.getExtensions<IServiceRegistryExtension>(KIXExtensions.SERVICES);

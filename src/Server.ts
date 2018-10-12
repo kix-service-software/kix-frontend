@@ -3,7 +3,7 @@ import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 
-import { Environment, IServerConfiguration, } from '@kix/core/dist/common';
+import { Environment, IServerConfiguration, ServiceContainer, IService, } from '@kix/core/dist/common';
 
 import {
     IMarkoService,
@@ -40,31 +40,20 @@ export class Server {
     public application: express.Application;
     private router: ServerRouter;
     private serverConfig: IServerConfiguration;
-    private loggingService: ILoggingService;
-    private configurationService: IConfigurationService;
-    private socketCommunicationService: ISocketCommunicationService;
-    private pluginService: IPluginService;
 
     public constructor(
-        @inject("ILoggingService") loggingService: ILoggingService,
-        @inject("IConfigurationService") configurationService: IConfigurationService,
-        @inject("IPluginService") pluginService: IPluginService,
-        @inject("ISocketCommunicationService") socketService: ISocketCommunicationService,
-        @inject("IMarkoService") markoService: IMarkoService,
-        @inject("IClientRegistrationService") protected clientRegistrationService: IClientRegistrationService
+        @inject("ILoggingService") private loggingService: ILoggingService,
+        @inject("IConfigurationService") private configurationService: IConfigurationService,
+        @inject("IPluginService") private pluginService: IPluginService,
+        @inject("IClientRegistrationService") private clientRegistrationService: IClientRegistrationService,
+        @inject("ISocketCommunicationService") private socketService: ISocketCommunicationService,
     ) {
-        this.loggingService = loggingService;
-        this.configurationService = configurationService;
-        this.pluginService = pluginService;
-        this.socketCommunicationService = socketService;
-
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
-        this.initHttpServer();
-        this.createReleaseInfoConfig();
+
     }
 
-    private initializeApplication(): void {
+    private async initializeApplication(): Promise<void> {
         lasso.configure(this.configurationService.getLassoConfiguration());
 
         this.application = express();
@@ -82,7 +71,9 @@ export class Server {
         });
         this.application.use(forceSsl);
 
-        this.registerStaticContent();
+        await this.registerStaticContent();
+        await this.createReleaseInfoConfig();
+        await this.initHttpServer();
 
         this.router = new ServerRouter(this.application);
     }
@@ -115,7 +106,7 @@ export class Server {
             passphrase: 'kix2018'
         };
         const server = https.createServer(options, this.application);
-        this.socketCommunicationService.initialize(server);
+        this.socketService.initialize(server);
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
