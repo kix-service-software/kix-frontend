@@ -1,5 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { RoutingService } from '@kix/core/dist/browser/router';
+import { ContextService } from '@kix/core/dist/browser';
+import { ContextType } from '@kix/core/dist/model';
 
 class Component {
 
@@ -28,7 +30,12 @@ class Component {
     }
 
     public linkClicked(event: any): void {
-        if (!this.state.routingConfiguration.externalLink) {
+        let externalLink = this.state.routingConfiguration.externalLink;
+        if (typeof externalLink === 'undefined') {
+            const context = ContextService.getInstance().getActiveContext();
+            externalLink = context ? context.getDescriptor().contextType === ContextType.DIALOG : false;
+        }
+        if (!externalLink) {
             if (event.preventDefault) {
                 event.preventDefault(event);
             }

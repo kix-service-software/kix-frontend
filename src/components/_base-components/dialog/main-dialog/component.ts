@@ -1,7 +1,7 @@
 import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
 import { IMainDialogListener, ContextService } from '@kix/core/dist/browser';
-import { ConfiguredDialogWidget, ObjectIcon } from '@kix/core/dist/model';
+import { ConfiguredDialogWidget, ObjectIcon, Context } from '@kix/core/dist/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -37,6 +37,7 @@ export class MainDialogComponent implements IMainDialogListener {
     public close(): void {
         this.state.show = false;
         document.body.style.overflow = 'unset';
+        ContextService.getInstance().closeDialogContext();
     }
 
     public tabChanged(tab: ConfiguredDialogWidget): void {

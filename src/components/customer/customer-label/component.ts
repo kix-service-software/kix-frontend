@@ -42,7 +42,7 @@ class Component {
                 const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
                     contextDescriptor.urlPaths[0], CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
-                    ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false, true
+                    ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false
                 );
             }
         } else if (this.state.object.KIXObjectType === KIXObjectType.CONTACT) {
@@ -53,7 +53,7 @@ class Component {
                 const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
                     contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-                    ContextMode.DETAILS, ContactProperty.ContactID, false, true
+                    ContextMode.DETAILS, ContactProperty.ContactID, false
                 );
             }
         }
