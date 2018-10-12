@@ -23,11 +23,11 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     private async loadObjects(data: LoadObjectsRequest): Promise<CommunicatorResponse<LoadObjectsResponse<any>>> {
         let response;
 
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.kixObjectType);
+        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
             const loadingOptions = data.loadingOptions ? data.loadingOptions : new KIXObjectLoadingOptions();
             await service.loadObjects(
-                data.token, data.kixObjectType, data.objectIds, loadingOptions, data.objectLoadingOptions
+                data.token, data.objectType, data.objectIds, loadingOptions, data.objectLoadingOptions
             ).then((objects: any[]) => {
                 response = new CommunicatorResponse(
                     KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
@@ -37,7 +37,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, this.getErrorMessage(error));
             });
         } else {
-            const errorMessage = 'No API service registered for object type ' + data.kixObjectType;
+            const errorMessage = 'No API service registered for object type ' + data.objectType;
             this.loggingService.error(errorMessage);
             response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, errorMessage);
         }
