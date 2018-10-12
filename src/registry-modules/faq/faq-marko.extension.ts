@@ -6,6 +6,7 @@ export class Extension implements IMarkoDependencyExtension {
         return [
             'faq/faq-module',
             'faq/faq-details',
+            'faq/faq-vote-selector',
             'faq/dialogs/new-faq-article-dialog',
             'faq/dialogs/search-faq-article-dialog',
             'faq/dialogs/inputs/faq-category-input',
@@ -22,6 +23,7 @@ export class Extension implements IMarkoDependencyExtension {
         return [
             ['faq', 'faq/faq-module'],
             ['faq-details', 'faq/faq-details'],
+            ['faq-vote-selector', 'faq/faq-vote-selector'],
             ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
             ['search-faq-article-dialog', 'faq/dialogs/search-faq-article-dialog'],
             ['faq-category-input', 'faq/dialogs/inputs/faq-category-input'],

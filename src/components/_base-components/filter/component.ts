@@ -51,6 +51,7 @@ class Component {
 
     public reset(): void {
         this.state.textFilterValue = null;
+        this.state.currentFilter = null;
     }
 
 }

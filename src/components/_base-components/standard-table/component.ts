@@ -20,13 +20,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.state.standardTable = input.standardTable;
         if (this.state.standardTable) {
             this.state.tableId = this.state.standardTable.tableId;
-        }
-    }
-
-    public async onMount(): Promise<void> {
-        document.addEventListener('mousemove', this.mousemove.bind(this));
-        document.addEventListener('mouseup', this.mouseup.bind(this));
-        if (this.state.standardTable) {
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
                 (this as any).setStateDirty();
                 if (scrollToTop) {
@@ -34,6 +27,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 }
             });
         }
+    }
+
+    public async onMount(): Promise<void> {
+        document.addEventListener('mousemove', this.mousemove.bind(this));
+        document.addEventListener('mouseup', this.mouseup.bind(this));
 
         this.columns = await this.state.standardTable.getColumns();
 
@@ -68,8 +66,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public mousedown(col: string, event: any): void {
-        this.state.resizeSettings.columnId = col;
-        this.state.resizeSettings.startOffset = event.pageX;
+        if (event.button === 0) {
+            this.state.resizeSettings.columnId = col;
+            this.state.resizeSettings.startOffset = event.pageX;
+        }
     }
 
     private resizeX: number;
@@ -215,6 +215,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
             .getPropertyValue("font-size");
         return Number(browserFontSizeSetting.replace('px', ''));
     }
+
     public setTableHeight(): void {
         const table = (this as any).getEl(this.state.tableId + 'standard-table');
         if (table) {
@@ -330,8 +331,14 @@ class StandardTableComponent<T extends KIXObject<T>> {
     public getValueClasses(value: TableValue): string[] {
         const classes = [...value.classes];
         const column = this.getColumn(value);
-        if (column && column.showIcon && (!column.showText)) {
-            classes.push("only-icon");
+        if (column) {
+            if (column.pipe) {
+                classes.push('cell-pipe');
+            }
+
+            if (column.action) {
+                classes.push('row-link');
+            }
         }
         classes.push(this.state.tableId + column.id);
         return classes;

@@ -28,7 +28,7 @@
         z-index: 200
     }
     >.content-wrapper {
-        margin: @margin-default + @header-height 0 0;
+        padding: @margin-default + @header-height 0 0;
         display: grid;
         grid-template-rows: max-content 1fr;
         grid-gap: @margin-middle @margin-default;
@@ -36,7 +36,7 @@
         >.site-menu-wrapper {
             grid-row: 1 / span 2;
             .widget-bar {
-                margin-top: @margin-large;
+                margin-top: 14.5rem - @margin-default;
             }
         }
         >.site-navigation {
@@ -70,7 +70,10 @@
     }
     .image-dialog-container~.overlay,
     .main-dialog-container~.overlay,
-    .overlay-dialog-container~.overlay {
+    .overlay-dialog-container~.overlay,
+    .image-dialog-container~.overlay-shield,
+    .main-dialog-container~.overlay-shield,
+    .overlay-dialog-container~.overlay-shield {
         z-index: 550;
     }
 }

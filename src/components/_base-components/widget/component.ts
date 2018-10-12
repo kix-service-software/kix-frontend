@@ -1,5 +1,5 @@
 import { ContextService } from '@kix/core/dist/browser/context/ContextService';
-import { BaseWidgetComponentState } from './BaseWidgetComponentState';
+import { ComponentState } from './ComponentState';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { WidgetType } from '@kix/core/dist/model';
 import { WidgetService } from '@kix/core/dist/browser';
@@ -7,24 +7,24 @@ import { IEventListener, EventService } from '@kix/core/dist/browser/event';
 
 class WidgetComponent implements IEventListener {
 
-    private state: BaseWidgetComponentState;
+    private state: ComponentState;
     public eventSubscriberId: string;
 
     public onCreate(input: any): void {
-        this.state = new BaseWidgetComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.explorer = input.explorer;
-        this.state.hasConfigOverlay = typeof input.hasConfigOverlay !== 'undefined' ? input.hasConfigOverlay : false;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;
-        this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined' ?
-            input.eventSubscriberPrefix : 'GeneralWidget';
+        this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
+            ? input.eventSubscriberPrefix
+            : 'GeneralWidget';
     }
 
     public onMount(): void {
@@ -53,25 +53,34 @@ class WidgetComponent implements IEventListener {
         EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
     }
 
-    private minimizeWidget(): void {
+    public minimizeWidget(force: boolean = false, event: any): void {
+        if (event.preventDefault) {
+            event.preventDefault(event);
+        }
+
         if (this.state.minimizable) {
-            if (this.state.explorer) {
-                // ContextService.getInstance().getContext().toggleExplorer();
-            } else {
+            if (
+                force
+                || (
+                    (event.target.tagName === 'DIV'
+                        || event.target.tagName === 'SPAN'
+                        || event.target.tagName === 'UL')
+                    && (event.target.classList.contains('widget-header')
+                        || event.target.classList.contains('header-left')
+                        || event.target.classList.contains('header-right')
+                        || event.target.classList.contains('tab-list'))
+                )
+            ) {
                 this.state.minimized = !this.state.minimized;
             }
         }
     }
 
-    private minimizeExplorer(): void {
+    public minimizeExplorer(): void {
         ContextService.getInstance().getActiveContext(this.state.contextType).toggleExplorerBar();
     }
 
-    private resetConfiguration(): void {
-        this.state.configChanged = false;
-    }
-
-    private hasHeaderContent(headerContent: any): boolean {
+    public hasHeaderContent(headerContent: any): boolean {
         return this.isInputDefined(headerContent);
     }
 
@@ -79,7 +88,7 @@ class WidgetComponent implements IEventListener {
         return input && Boolean(Object.keys(input).length);
     }
 
-    private getWidgetClasses(): string[] {
+    public getWidgetClasses(): string[] {
         const classes = [];
 
         if (this.state.minimized) {
@@ -135,21 +144,38 @@ class WidgetComponent implements IEventListener {
     }
 
     // TODO: ggf. wieder entfernen, wenn Unterscheidung nur noch CSS betrifft (contentActions)
-    private isContentWidget(): boolean {
+    public isContentWidget(): boolean {
         return this.state.widgetType === WidgetType.CONTENT;
     }
 
-    private isLaneOrLaneTabWidget(): boolean {
+    public isLaneOrLaneTabWidget(): boolean {
         return this.state.widgetType === WidgetType.LANE || this.state.widgetType === WidgetType.LANE_TAB;
     }
 
-    private closeClicked(): void {
+    public closeClicked(): void {
         (this as any).emit('closeWidget');
     }
 
     public eventPublished(data: any, eventId: string): void {
         if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
             this.state.minimized = false;
+        }
+    }
+
+    public headerMousedown(force: boolean = false, event: any): void {
+        if (
+            force
+            || (
+                (event.target.tagName === 'DIV'
+                    || event.target.tagName === 'SPAN'
+                    || event.target.tagName === 'UL')
+                && (event.target.classList.contains('widget-header')
+                    || event.target.classList.contains('header-left')
+                    || event.target.classList.contains('header-right')
+                    || event.target.classList.contains('tab-list'))
+            )
+        ) {
+            (this as any).emit('headerMousedown', event);
         }
     }
 }

@@ -1,4 +1,3 @@
-import { Ticket } from '@kix/core/dist/model';
 import { ILabelProvider } from '@kix/core/dist/browser';
 
 export class ComponentState<T> {

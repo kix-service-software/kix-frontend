@@ -1,46 +1,38 @@
 import { ComponentState } from './ComponentState';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
-import { FAQEvent, FAQService } from '@kix/core/dist/browser/faq';
+import { FAQService, FAQDetailsContext } from '@kix/core/dist/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '@kix/core/dist/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '@kix/core/dist/model';
-import { ServiceRegistry, OverlayService } from '@kix/core/dist/browser';
+import { ServiceRegistry, OverlayService, ContextService, BrowserUtil } from '@kix/core/dist/browser';
 
-export class Component implements IEventListener {
-    public eventSubscriberId: string = 'FAQ_VOTE_COMPONENT';
+export class Component {
 
     private state: ComponentState;
 
     private faqArticle: FAQArticle;
+    public rating: number = 0;
+    public voteCount: number = 0;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
-        EventService.getInstance().subscribe(FAQEvent.SHOW_FAQ_VOTE, this);
-
-        document.addEventListener("click", (event: any) => {
-            if (this.state.show) {
-                if (this.state.keepShow) {
-                    this.state.keepShow = false;
-                } else {
-                    this.state.show = false;
-                }
-            }
-        }, false);
-    }
-
-    public eventPublished(faqArticle: FAQArticle): void {
-        this.faqArticle = faqArticle;
-        this.state.show = true;
-        this.state.keepShow = true;
-    }
-
-    public selectorClicked(event: any): void {
-        if (event.preventDefault) {
-            event.preventDefault(event);
+    public onInput(input: any) {
+        this.faqArticle = input.faqArticle;
+        if (this.faqArticle && this.faqArticle.Votes) {
+            this.rating = BrowserUtil.calculateAverage(this.faqArticle.Votes.map((v) => v.Rating));
+            this.voteCount = this.faqArticle.Votes.length;
         }
-        this.state.keepShow = true;
+    }
+
+    public setCurrentRating(rating: number): void {
+        this.state.currentRating = rating;
+    }
+
+    public getIcon(rating: number): string {
+        if (this.state.currentRating && rating <= this.state.currentRating) {
+            return 'kix-icon-star-fully';
+        }
+        return 'kix-icon-star-empty';
     }
 
     public async vote(rating: number): Promise<void> {
@@ -60,13 +52,14 @@ export class Component implements IEventListener {
                     );
 
                     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-                    EventService.getInstance().publish(FAQEvent.VOTE_UPDATED, this.faqArticle);
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
                         OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
                     );
                 });
-            this.state.show = false;
+
+            const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
+            await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
         }
     }
 

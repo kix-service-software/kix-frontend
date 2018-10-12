@@ -174,8 +174,10 @@
             >a:active,
             >a:visited {
                 color: unset;
-                &:hover {
-                    color: unset;
+                &:hover,
+                &:active {
+                    color: @secondary-1;
+                    text-decoration: none;
                 }
             }
             .table-cell {
@@ -186,9 +188,10 @@
                 position: relative;
                 padding: 0 .5rem;
                 box-sizing: border-box;
-                &:not(.table-header-cell):not(.checkbox-column):not(.toggle-row-column):not(.only-icon)::before {
+                &.cell-pipe:not(.table-header-cell):not(.checkbox-column):not(.toggle-row-column)::before {
                     display: inline-block;
                     content: "|";
+                    color: @secondary-7;
                     margin-right: 2px;
                 }
                 &.table-header-cell {
@@ -215,16 +218,16 @@
                     .toggle-actions {
                         list-style: none;
                         position: absolute;
-                        width: 2em;
-                        right: 0.25em;
+                        width: 1.75rem;
+                        right: 0.5rem;
                         z-index: 2;
                         li {
                             border: 1px solid @primary-3;
                             border-top-right-radius: @border-radius;
                             border-bottom-right-radius: @border-radius;
                             border-left: 0 none;
-                            margin: 0.25em 0;
-                            height: 2em;
+                            margin: 0.25rem 0 0 0;
+                            height: 1.75rem;
                             color: @secondary-0;
                             background-color: @primary-5;
                             text-align: center;
@@ -238,14 +241,14 @@
                                 margin-top: .75em;
                             }
                             &:last-of-type {
-                                margin-bottom: .5em;
+                                margin-bottom: 1.75em;
                             }
                             label {
                                 display: none;
                             }
                             [class^="kix-icon-"],
                             [class*=" kix-icon-"] {
-                                font-size: 1.25em;
+                                font-size: 1.125em;
                             }
                         }
                     }

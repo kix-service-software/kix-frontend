@@ -1,9 +1,9 @@
 import {
     KIXObjectSearchService, DialogService, OverlayService,
-    WidgetService, ServiceRegistry, StandardTableFactoryService,
+    WidgetService, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
-    ITablePreventSelectionLayer, IKIXObjectService, KIXObjectService, SearchOperator
+    ITablePreventSelectionLayer, KIXObjectService, SearchOperator
 } from "@kix/core/dist/browser";
 import { FormService } from "@kix/core/dist/browser/form";
 import {
@@ -12,6 +12,7 @@ import {
     FilterCriteria, FilterDataType, FilterType
 } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
+import { LinkUtil } from "@kix/core/dist/browser/link";
 
 class LinkDialogComponent {
 
@@ -21,6 +22,7 @@ class LinkDialogComponent {
     private highlightLayer: ITableHighlightLayer;
     private preventSelectionLayer: ITablePreventSelectionLayer;
     private resultListenerId: string;
+    private linkPartners: Array<[string, KIXObjectType]> = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -49,25 +51,12 @@ class LinkDialogComponent {
     }
 
     private async setLinkableObjects(): Promise<void> {
-        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE)
-            .catch((error) => [] as LinkType[]);
+        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.state.objectType);
 
-        const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(this.state.objectType);
-        const linkObjectType = service.getLinkObjectName();
-        linkTypes.forEach((lt) => {
-            let linkableObject = null;
-
-            if (lt.Source === linkObjectType) {
-                linkableObject = lt.Target;
-            } else if (lt.Target === linkObjectType) {
-                linkableObject = lt.Source;
-            }
-
-            if (linkableObject && !this.state.linkableObjectNodes.some((lo) => lo.label === linkableObject)) {
-                const formId = FormService.getInstance().getFormIdByContext(FormContext.LINK, linkableObject);
-                if (formId) {
-                    this.state.linkableObjectNodes.push(new TreeNode(formId, linkableObject));
-                }
+        this.linkPartners.forEach((lp) => {
+            const formId = FormService.getInstance().getFormIdByContext(FormContext.LINK, lp[1]);
+            if (formId) {
+                this.state.linkableObjectNodes.push(new TreeNode(formId, lp[0]));
             }
         });
         if (this.state.linkableObjectNodes.length) {
@@ -176,7 +165,9 @@ class LinkDialogComponent {
                 table.addAdditionalLayerOnTop(this.objectLinkLayer);
 
                 table.setColumns([
-                    new TableColumn('LinkedAs', DataType.STRING, '', null, true, true, 100, true, false, null)
+                    new TableColumn(
+                        'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, false, false, false, null
+                    )
                 ]);
 
                 this.setLinkedObjectsToTableLayer(table);
@@ -243,13 +234,15 @@ class LinkDialogComponent {
         this.linkTypeDescriptions = [];
 
         if (this.state.currentLinkableObjectNode) {
+            const linkPartner = this.linkPartners.find(
+                (lp) => lp[0] === this.state.currentLinkableObjectNode.label
+            );
             const loadingOptions = new KIXObjectLoadingOptions(null, [
                 new FilterCriteria(
                     'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.state.objectType
                 ),
                 new FilterCriteria(
-                    'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
-                    this.state.currentLinkableObjectNode.label
+                    'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, linkPartner[1]
                 )
             ]);
 
@@ -281,6 +274,10 @@ class LinkDialogComponent {
         this.state.currentLinkTypeDescription = this.state.currentLinkTypeNode ?
             this.linkTypeDescriptions[this.state.currentLinkTypeNode.id] : null;
         this.setCanSubmit();
+    }
+
+    public filter(filterValue: string): void {
+        this.state.standardTable.setFilterSettings(filterValue);
     }
 }
 

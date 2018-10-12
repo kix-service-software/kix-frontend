@@ -1,25 +1,34 @@
 .faq-vote-selector {
-    position: absolute;
-    top: 5rem;
-    right: 0;
-    box-sizing: border-box;
-    color: @primary-2;
-    width: 15rem;
-    height: 2rem;
-    background-color: @secondary-6;
-    padding-top: 3px;
-    border: 1px solid #0a7cb3;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-    border-right: 0 none;
-    line-height: 2rem;
-    >span {
-        margin-right: @margin-small;
-        size: 1.25rem;
-        :hover {
-            color: @secondary-6;
-            background: @primary-2;
+    .vote-title {
+        font-weight: bold;
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .star-list {
+        color: #0a7cb3;
+        background-color: #ffffff;
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: @margin-small;
+        justify-content: center;
+        padding: 0 0.5rem;
+        border-radius: 3px;
+        font-size: 2rem;
+        span {
+            margin: 0;
+            line-height: unset;
             cursor: pointer;
+        }
+    }
+    .vote-footer {
+        display: block;
+        text-align: center;
+        font-size: 1rem;
+        margin-top: 1rem;
+        >span {
+            font-weight: bold;
+            margin-right: @margin-small;
         }
     }
 }

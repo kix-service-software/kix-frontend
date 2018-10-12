@@ -33,6 +33,10 @@ class Component implements IKIXObjectSearchListener {
         this.searchFinished();
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     public searchCleared(): void {
         this.state.resultTable = null;
         this.searchResultCategoryChanged(null);

@@ -5,7 +5,9 @@
             <div.ticket-information>
                 <div.information-list>
                     <div>
-                        <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider>
+                        <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider
+                            routingConfiguration=component.customerRoutingConfiguration
+                            objectId=state.ticket.CustomerID>
                             <@info>
                                 <if(state.ticket.CustomerID)>
                                     <overlay-icon content="ticket-customer-info" instanceId="customer-info-overlay"
@@ -15,7 +17,9 @@
                         </object-property-label>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider>
+                        <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider
+                            routingConfiguration=component.contactRoutingConfiguration
+                            objectId=state.ticket.CustomerUserID>
                             <@info>
                                 <if(state.ticket.CustomerUserID)>
                                     <overlay-icon content="ticket-contact-info" instanceId="contact-info-overlay"
@@ -85,7 +89,7 @@
                     </if>
                 </div>
                 <div.ci-list-wrapper>
-                    <div>CI:</div>
+                    <div>Relevante Config Items:</div>
                     <relevant-config-item-list/>
                 </div>
             </div>

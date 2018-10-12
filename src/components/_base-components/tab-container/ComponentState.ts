@@ -1,6 +1,6 @@
-import { ConfiguredWidget, ContextType } from "@kix/core/dist/model";
+import { ConfiguredWidget, ContextType, IAction } from "@kix/core/dist/model";
 
-export class TabContainerComponentState {
+export class ComponentState {
 
     public constructor(
         public tabWidgets: ConfiguredWidget[] = [],
@@ -10,7 +10,8 @@ export class TabContainerComponentState {
         public minimizable: boolean = true,
         public hasSidebars: boolean = false,
         public contextType: ContextType = null,
-        public showSidebar: boolean = true
+        public showSidebar: boolean = true,
+        public contentActions: IAction[] = []
     ) { }
 
 }

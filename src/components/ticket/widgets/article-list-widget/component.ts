@@ -61,6 +61,8 @@ export class Component implements IEventListener {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
         EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
+
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
     private prepareActions(): void {
@@ -149,10 +151,13 @@ export class Component implements IEventListener {
 
         if (eventId === 'GotToTicketArticle') {
             setTimeout(() => {
-                const tableComponent = (this as any).getComponent('article-list-table');
-                if (tableComponent) {
-                    tableComponent.scrollToObject(data);
-                }
+                this.filter('');
+                setTimeout(() => {
+                    const tableComponent = (this as any).getComponent('article-list-table');
+                    if (tableComponent) {
+                        tableComponent.scrollToObject(data);
+                    }
+                }, 100);
             }, 200);
         }
     }

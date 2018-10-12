@@ -29,6 +29,10 @@ class Component {
         await this.initWidget(context);
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private async initWidget(context: ContactDetailsContext, contact?: Contact): Promise<void> {
         this.state.error = null;
         this.state.contact = contact ? contact : await context.getObject<Contact>().catch((error) => null);

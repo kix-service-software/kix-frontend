@@ -15,7 +15,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 'faq-article-list-widget', 'Übersicht FAQ', [
                     'faq-article-create-action', 'csv-export-action'
                 ], {},
-                false, false, WidgetSize.BOTH, null, false)
+                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
             );
 
         const content = ['20180727-faq-article-list-widget'];

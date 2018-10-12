@@ -57,17 +57,18 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
                         label = attribute.Label;
                     }
 
-                    let componentId = null;
+                    const hint = this.getHint(label, attribute.Attribute);
+                    const formField = new FormField(label, attribute.Attribute, null, attribute.Required, hint);
                     if (attribute.Attribute === ContactProperty.USER_CUSTOMER_ID) {
-                        componentId = 'contact-input-customer';
+                        formField.inputComponent = 'contact-input-customer';
                     } else if (attribute.Attribute === ContactProperty.VALID_ID) {
-                        componentId = 'valid-input';
+                        formField.inputComponent = 'valid-input';
+                    } else if (attribute.Attribute === ContactProperty.USER_COMMENT) {
+                        formField.inputComponent = 'text-area-input';
+                        formField.maxLength = 250;
                     }
 
-                    const hint = this.getHint(label, attribute.Attribute);
-                    group.formFields.push(
-                        new FormField(label, attribute.Attribute, componentId, attribute.Required, hint)
-                    );
+                    group.formFields.push(formField);
 
                     // TODO: eventuell wieder entfernen?
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {

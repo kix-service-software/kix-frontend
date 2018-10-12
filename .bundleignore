@@ -4,9 +4,9 @@
 .bundleignore
 .vscode
 .gitlab-ci.yml
-marko.json
 gulpfile.js
-node_modules
+marko.json
+package-lock.json
 src
 tsconfig.json
 tslint.json

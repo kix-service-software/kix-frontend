@@ -33,8 +33,17 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
         const content = ['20180927-ticket-list-widget'];
         const contentWidgets = [ticketListWidget];
 
+        const notesSidebar =
+            new ConfiguredWidget('20181010-ticket-notes', new WidgetConfiguration(
+                'notes-widget', 'Notizen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+            );
+
+        const sidebars = ['20181010-ticket-notes'];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+
         return new TicketListContextConfiguration(
-            this.getModuleId(), [], [], [], [], content, contentWidgets, []
+            this.getModuleId(), sidebars, sidebarWidgets, [], [], content, contentWidgets, []
         );
     }
 

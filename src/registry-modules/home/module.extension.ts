@@ -109,12 +109,13 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['ticket-bulk-action'], new TableConfiguration(
+            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['ticket-bulk-action', 'csv-export-action'],
+            new TableConfiguration(
                 500, 10, [
-                    new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 90),
-                    new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 75),
-                    new TableColumnConfiguration(TicketProperty.TICKET_FLAG, false, true, false, true, 90),
-                    new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
+                    new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75, false),
+                    new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 75, false, false),
+                    new TableColumnConfiguration(TicketProperty.WATCHERS, false, true, false, true, 75, false, false),
+                    new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 150),
                     new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 200),
                     new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 75),
                     new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 75),
@@ -122,10 +123,10 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
                     new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
                     new TableColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 100, DataType.DATE_TIME
+                        TicketProperty.CHANGED, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                     ),
                     new TableColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
+                        TicketProperty.AGE, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                     ),
                 ],
                 [
@@ -148,22 +149,21 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                 TableHeaderHeight.LARGE,
                 TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.LARGE, null, false, predefinedToDoTableFilter)
+            false, true, WidgetSize.LARGE, 'kix-icon-ticket', false, predefinedToDoTableFilter)
         );
 
         const newTicketsListWidget =
             new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Neue Tickets', ['ticket-bulk-action'], new TableConfiguration(
+                'ticket-list-widget', 'Neue Tickets', ['ticket-bulk-action', 'csv-export-action'],
+                new TableConfiguration(
                     500, 10, [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 90),
-                        new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 75),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 130),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 250),
+                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 75, false),
+                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 150),
+                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 425),
                         new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 150),
                         new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
                         new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 100, DataType.DATE_TIME
+                            TicketProperty.AGE, true, false, true, true, 100, true, true, false, DataType.DATE_TIME
                         ),
                     ],
                     [
@@ -177,7 +177,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                     TableHeaderHeight.LARGE,
                     TableRowHeight.SMALL
                 ),
-                false, true, WidgetSize.LARGE, null, false)
+                false, true, WidgetSize.LARGE, 'kix-icon-ticket', false)
             );
 
         const content: string[] = [

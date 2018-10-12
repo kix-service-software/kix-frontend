@@ -46,6 +46,10 @@ class Component {
         this.state.loading = false;
     }
 
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
     private async prepareFilter(): Promise<void> {
         const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
             KIXObjectType.CONFIG_ITEM

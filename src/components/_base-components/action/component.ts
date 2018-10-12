@@ -1,11 +1,11 @@
-import { ActionComponentState } from './ActionComponentState';
+import { ComponentState } from './ComponentState';
 
 class ActionComponent {
 
-    private state: ActionComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new ActionComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -13,7 +13,7 @@ class ActionComponent {
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : undefined;
     }
 
-    private isDisplayText(): boolean {
+    public isDisplayText(): boolean {
         if (typeof this.state.displayText !== 'undefined') {
             return this.state.displayText;
         } else {
@@ -21,8 +21,8 @@ class ActionComponent {
         }
     }
 
-    private doAction(): void {
-        this.state.action.run();
+    public doAction(event: any): void {
+        this.state.action.run(event);
     }
 
 }

@@ -26,6 +26,16 @@
         >a {
             font-size: @h2-font-size;
         }
+        a,
+        >a:active,
+        >a:visited {
+            color: unset;
+            &:hover,
+            &:active {
+                color: @secondary-1;
+                text-decoration: none;
+            }
+        }
         &:not(:last-of-type)::after {
             content: '>>';
             margin-left: @margin-small;

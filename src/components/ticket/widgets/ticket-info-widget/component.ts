@@ -1,13 +1,22 @@
 import { ComponentState } from './ComponentState';
 import { TicketLabelProvider, TicketService } from "@kix/core/dist/browser/ticket";
 import { ContextService } from '@kix/core/dist/browser/context';
-import { ObjectIcon, KIXObjectType, Ticket, SysconfigUtil } from '@kix/core/dist/model';
+import {
+    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
+    ContextMode, CustomerProperty, ContactProperty
+} from '@kix/core/dist/model';
 import { ActionFactory, IdService } from '@kix/core/dist/browser';
+import { RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { ContactDetailsContext } from '@kix/core/dist/browser/contact';
+import { CustomerDetailsContext } from '@kix/core/dist/browser/customer';
 
 class Component {
 
     private state: ComponentState;
     private contextListernerId: string;
+
+    private customerRoutingConfiguration: RoutingConfiguration;
+    private contactRoutingConfiguration: RoutingConfiguration;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -54,6 +63,8 @@ class Component {
             this.state.isAccountTimeEnabled = await SysconfigUtil.isTimeAccountingEnabled();
         }
 
+        this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
+        this.customerRoutingConfiguration = await this.getCustomerRoutingConfiguration();
         this.setActions();
     }
 
@@ -89,6 +100,24 @@ class Component {
 
     public getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
+    }
+
+    private async getContactRoutingConfiguration(): Promise<RoutingConfiguration> {
+        const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
+        const contextDescriptor = context.getDescriptor();
+        return new RoutingConfiguration(
+            contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContextMode.DETAILS, ContactProperty.ContactID, false, true
+        );
+    }
+
+    private async getCustomerRoutingConfiguration(): Promise<RoutingConfiguration> {
+        const context = await ContextService.getInstance().getContext(CustomerDetailsContext.CONTEXT_ID);
+        const contextDescriptor = context.getDescriptor();
+        return new RoutingConfiguration(
+            contextDescriptor.urlPaths[0], CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
+            ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false, true
+        );
     }
 
 }

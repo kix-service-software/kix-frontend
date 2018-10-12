@@ -16,10 +16,13 @@
         }
         .lane-list {
             list-style: none;
-            margin-bottom: 1.5em;
+            li.lane:not(:first-of-type) {
+                margin-top: 0.625rem;
+            }
         }
     }
     >div {
+        margin-top: 1.25rem;
         >.content-widget {
             &.minimized {
                 border-radius: @border-radius;

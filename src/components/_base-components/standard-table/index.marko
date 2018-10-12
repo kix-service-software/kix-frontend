@@ -12,7 +12,7 @@
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                 <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
-                        ${column.text}
+                        <if(column.columnTitle)>${column.text}</if>
                         <if(column.sortable)>
                             <span.sortable>
                                 <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")
@@ -58,13 +58,15 @@
                                 <link-target routingConfiguration=component.getRoutingConfiguration(column)
                                     objectId=component.getRoutingObjectId(column, row)>
                                     <@content>
-                                        <div.table-cell.row-column.row-link class=component.getValueClasses(value)
+                                        <div.table-cell.row-column class=component.getValueClasses(value)
                                             style={height: component.getRowHeight(), width: column.size}
                                             on-click('rowClicked', row, column.id) title=value.displayValue>
-                                            <if(column.showIcon && value.icon)>
-                                                <icon icon=value.icon showUnknown=true/>
+                                            <if(column.showIcon && value.icons)>
+                                                <for(icon in value.icons)>
+                                                    <icon icon=icon showUnknown=true/>
+                                                </for>
                                             </if>
-                                            <if(column.showIcon && value.icon && column.showText)>&nbsp;</if>
+                                            <if(column.showIcon && value.icons && value.icons.length && column.showText)>&nbsp;</if>
                                             <if(column.showText)>
                                                 <span>${value.displayValue}</span>
                                             </if>

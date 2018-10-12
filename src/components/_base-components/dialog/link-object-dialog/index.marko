@@ -22,8 +22,12 @@
         </div>
         <div.linkable-objects-result>
             <if(state.currentLinkableObjectNode)>
-                <div.result-title>Trefferliste (${state.resultCount})</div>
+                <div.result-table-head>
+                    <span>Trefferliste (${state.resultCount})</span>
+                    <filter on-filter('filter')/>
+                </div>
                 <if(state.standardTable)>
+                    <filter on-filter('filter')/>
                     <standard-table standardTable=state.standardTable key=state.tableId/>
                 </if>
             </if>
