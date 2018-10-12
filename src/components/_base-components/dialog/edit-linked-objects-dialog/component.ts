@@ -9,7 +9,7 @@ import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent, LinkType
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent, LinkType, ContextType
 } from '@kix/core/dist/model';
 import { LinkUtil } from '@kix/core/dist/browser/link';
 
@@ -39,7 +39,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context) {
             this.mainObject = await context.getObject();
 
@@ -97,19 +97,21 @@ class Component {
     }
 
     private async initPredefinedFilter(): Promise<void> {
-        const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
+        if (this.mainObject) {
+            const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
 
-        linkPartners.forEach((lp) => {
-            this.state.predefinedTableFilter.push(
-                new KIXObjectPropertyFilter(lp[0].toString(), [
-                    new TableFilterCriteria(
-                        LinkObjectProperty.LINKED_OBJECT_TYPE,
-                        SearchOperator.EQUALS,
-                        lp[1].toString()
-                    )
-                ]),
-            );
-        });
+            linkPartners.forEach((lp) => {
+                this.state.predefinedTableFilter.push(
+                    new KIXObjectPropertyFilter(lp[0].toString(), [
+                        new TableFilterCriteria(
+                            LinkObjectProperty.LINKED_OBJECT_TYPE,
+                            SearchOperator.EQUALS,
+                            lp[1].toString()
+                        )
+                    ]),
+                );
+            });
+        }
     }
 
     private async setInitialLinkDescriptions(): Promise<void> {
