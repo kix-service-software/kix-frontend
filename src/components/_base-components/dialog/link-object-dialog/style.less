@@ -14,7 +14,7 @@
                 .shorten-text;
                 text-align: right;
             }
-            &:after {
+            &::after {
                 content: ":"
             }
         }
@@ -23,10 +23,13 @@
         margin-bottom: 1rem;
         .group-widget>.widget-content {
             margin-left: 0;
-            >.form>.form-field {
-                grid-template-columns: 7rem 2rem auto;
-                >.field-label {
-                    font-weight: normal;
+            >.form {
+                >.group-widget>.widget-content>.form-field,
+                >.form-field {
+                    grid-template-columns: 7rem 2rem auto;
+                    >.field-label {
+                        font-weight: normal;
+                    }
                 }
             }
         }

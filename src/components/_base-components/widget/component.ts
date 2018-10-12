@@ -54,7 +54,7 @@ class WidgetComponent implements IEventListener {
     }
 
     public minimizeWidget(force: boolean = false, event: any): void {
-        if (event.preventDefault) {
+        if (event && event.preventDefault) {
             event.preventDefault(event);
         }
 
@@ -72,7 +72,14 @@ class WidgetComponent implements IEventListener {
                 )
             ) {
                 this.state.minimized = !this.state.minimized;
+                (this as any).emit('minimizedChanged', this.state.minimized);
             }
+        }
+    }
+
+    public setMinizedState(state: boolean = false): void {
+        if (this.state.minimized !== state) {
+            this.minimizeWidget(true, null);
         }
     }
 
@@ -178,6 +185,7 @@ class WidgetComponent implements IEventListener {
             (this as any).emit('headerMousedown', event);
         }
     }
+
 }
 
 module.exports = WidgetComponent;

@@ -76,7 +76,7 @@
                     border: 2px solid @primary-6;
                     box-sizing: border-box;
                     overflow: hidden;
-                    &:before {
+                    &::before {
                         content: " ";
                         display: block;
                         float: left;
@@ -90,7 +90,7 @@
                     }
                     &.message-error {
                         border-color: @tertiary-0;
-                        &:before {
+                        &::before {
                             border-right-color: @tertiary-0;
                             color: @tertiary-0;
                         }
@@ -101,7 +101,7 @@
                     }
                     &.message-success {
                         border-color: @primary-6;
-                        &:before {
+                        &::before {
                             border-right-color: @primary-6;
                             color: @primary-6;
                         }

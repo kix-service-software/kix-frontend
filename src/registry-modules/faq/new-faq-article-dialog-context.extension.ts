@@ -63,8 +63,11 @@ export class Extension implements IModuleFactoryExtension {
         const linkFormId = 'link-faq-search-form';
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
+            const fulltextFields = [
+                new FormField("Volltext", FAQArticleProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit")
+            ];
+
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", FAQArticleProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit"));
             fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen)."));
             fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens 1 Zeichen)."));
             fields.push(new FormField(
@@ -72,11 +75,12 @@ export class Extension implements IModuleFactoryExtension {
             );
             fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."));
 
-            const group = new FormGroup('FAQ-Attribute', fields);
+            const fulltextGroup = new FormGroup('Volltext', fulltextFields, 'Oder');
+            const attributeGroup = new FormGroup('FAQ-Attribute', fields);
 
             const form = new Form(
-                linkFormId, 'Verknüpfen mit FAQ', [group],
-                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK
+                linkFormId, 'Verknüpfen mit FAQ', [fulltextGroup, attributeGroup],
+                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
