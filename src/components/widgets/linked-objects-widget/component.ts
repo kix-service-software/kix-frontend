@@ -107,17 +107,14 @@ class Component {
         }
     }
 
-    // FIXME: nur vorhanden, um eventl. Marko-Bug zu umgehen (hochzählen eines Indexes für Components)
-    private componentIndex: number = 0;
     public setGroupMinimizedStates(): void {
         setTimeout(() => {
             this.state.linkedObjectGroups.forEach((log, index) => {
-                const widgetComponent = (this as any).getComponent('linked-object-group-' + index, this.componentIndex);
-                if (widgetComponent && !log[2] && !widgetComponent.state.minimized) {
-                    widgetComponent.state.minimized = true;
+                const widgetComponent = (this as any).getComponent('linked-object-group-' + index);
+                if (widgetComponent && !log[2]) {
+                    widgetComponent.setMinizedState(true);
                 }
             });
-            this.componentIndex = this.componentIndex ? this.componentIndex + 1 : 1;
         }, 100);
     }
 
