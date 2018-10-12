@@ -118,6 +118,9 @@ button {
     &:not(:hover) {
         .shadow-1;
     }
+    &:disabled {
+        box-shadow: none
+    }
     &:not(.button-without-text) {
         min-width: 10rem;
         padding-left: .625rem+@default-button-icon-width;
@@ -169,6 +172,7 @@ button {
     }
     &.form-button {
         .button-color(@primary-2, @secondary-4, @secondary-3, @secondary-0, @primary-2);
+        box-shadow: none;
     }
     &.form-blank-button {
         .button-color(@primary-2, @secondary-6, @secondary-3, @secondary-0, @primary-2);
@@ -190,6 +194,7 @@ button {
                 background-color: @secondary-6;
             }
         }
+        box-shadow: none;
     }
     &::-moz-focus-inner {
         border: none;
