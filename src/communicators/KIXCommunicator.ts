@@ -14,7 +14,7 @@ import {
     IMarkoService,
     ITextModuleService,
 } from '@kix/core/dist/services';
-import { SocketEvent } from '@kix/core/dist/model';
+import { SocketEvent, ISocketRequest } from '@kix/core/dist/model';
 import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/core/dist/common';
 
 @injectable()
@@ -52,13 +52,14 @@ export abstract class KIXCommunicator implements ICommunicator {
             });
     }
 
-    protected registerEventHandler<RQ, RS>(
+    protected registerEventHandler<RQ extends ISocketRequest, RS>(
         client: SocketIO.Socket, event: string, handler: (data: RQ) => Promise<CommunicatorResponse<RS>>
     ): void {
         client.on(event, async (data: RQ) => {
 
             // start profiling
-            const profileTaskId = this.profilingService.start('SocketIO', this.getNamespace() + '/' + event, data);
+            const message = `${this.getNamespace()} / ${event} (${data.objectType})`;
+            const profileTaskId = this.profilingService.start('SocketIO', message, data);
 
             const response: CommunicatorResponse<RS> = await handler(data);
             client.emit(response.event, response.data);
