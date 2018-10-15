@@ -105,7 +105,7 @@ class LinkDialogComponent {
         } else {
             this.state.standardTable = null;
             formId = null;
-            this.state.resultCount = null;
+            this.state.resultCount = 0;
         }
 
         await this.setLinkTypes();
@@ -128,7 +128,7 @@ class LinkDialogComponent {
             );
 
             await this.prepareResultTable(objects);
-            this.state.resultCount = objects.length > 0 ? objects.length : null;
+            this.state.resultCount = objects.length;
             this.setCanSubmit();
         }
 
