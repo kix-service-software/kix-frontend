@@ -4,40 +4,44 @@
     </if>
     <else>
         <if(state.fulltextSearch)>
-            <div.fulltext-search on-click('toggleFulltext', true)>
-                <span>Volltext:</span>
-                <input.input-style key="fulltext-input" value=state.fulltextValue on-keyup('fulltextValueChanged')
-                    on-change('fulltextValueChanged')/>
-                <if(!state.fulltextActive)>
-                    <div.form-shield title="Volltextsuche aktivieren"/>
-                </if>
-            </div>
+            <widget instanceId="search-form-group" title="Volltext:"
+                on-minimizedChanged('handleSearchFormGroupMinimizeState', 'fulltext') key="fulltext">
+                <@content>
+                    <div.fulltext-search>
+                        <input.input-style key="fulltext-input" value=state.fulltextValue on-keyup('fulltextValueChanged')
+                            on-change('fulltextValueChanged')/>
+                    </div>
+                </@content>
+            </widget>
             <div.or-delimiter>
-                <span>oder</span>
+                <span>Oder</span>
             </div>
         </if>
-        <div.search-criteria on-click('toggleFulltext', false)>
-            <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
-            <if(state.fulltextActive)>
-                <div.form-shield title="Attributsuche aktivieren"/>
-            </if>
-        </div>
+        <widget instanceId="search-form-group" title=component.getAttributeSearchTitle()
+            on-minimizedChanged('handleSearchFormGroupMinimizeState', 'attributes') key="attributes">
+            <@content>
+                <div.search-criteria>
+                    <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
+                </div>
+            </@content>
+        </widget>
     </else>
     <div.dialog-button-container>
-        <button.cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
-            <span.kix-icon-close/>Daten zurücksetzen
+        <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
+            <span.kix-icon-delete/>Daten zurücksetzen
         </button>
-        <button.submit-button type="button" on-click("search") title="Suche starten" disabled=(!state.canSearch)>
+        <button.form-blank-submit-button type="button" on-click("search") title="Suche starten" disabled=(!state.canSearch)>
             <span.kix-icon-search/>Suche starten
         </button>
     </div>
-    <widget instanceId="result-list-preview" title=component.getResultTitle()>
-        <@content>
-            <if(state.table)>
-                <standard-table standardTable=state.table/>
-            </if>
-        </@content>
-    </widget>
+    <if(state.table)>
+        <div.result-table>
+            <div.result-table-head>
+                <span>Treffervorschau (${state.resultCount})</span>
+            </div>
+            <standard-table standardTable=state.table/>
+        </div>
+    </if>
     <div.dialog-button-container>
         <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
             <span.kix-icon-close/>Abbrechen

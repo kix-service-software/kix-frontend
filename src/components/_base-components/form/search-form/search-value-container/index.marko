@@ -5,7 +5,7 @@
     <for(searchValue in state.searchValues | status-var=loop)>
         <div.form-search-value>
             <span>
-                <if(loop.getIndex() > 0)>und</if>
+                <if(loop.getIndex() > 0)>Und:</if>
             </span>
             <form-list nodes=state.propertyNodes selectedNodes=[searchValue.currentPropertyNode]
                 on-nodesChanged('propertyChanged', searchValue)/>
@@ -29,8 +29,8 @@
                     </else>
                 </if>
             </div>
-            <if(state.searchValues.length > 1 && loop.getIndex() !== state.searchValues.length-1)>
-                <button.form-button.button-without-text type="button" title="Suchparameter entfernen"
+            <if(state.searchValues.length > 2 && loop.getIndex() !== (state.searchValues.length - 1))>
+                <button.form-control-button.button-without-text type="button" title="Suchparameter entfernen"
                     on-click('removeValue', searchValue)>
                     <span.kix-icon-minus/>
                 </button>

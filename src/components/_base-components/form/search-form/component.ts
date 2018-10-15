@@ -8,7 +8,8 @@ import {
     IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
     TableRowHeight,
     IKIXObjectService,
-    StandardTable
+    StandardTable,
+    LabelService
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
@@ -28,7 +29,7 @@ class Component implements ISearchFormListener {
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('result-list-preview', WidgetType.GROUP);
+        WidgetService.getInstance().setWidgetType('search-form-group', WidgetType.GROUP);
 
         this.state.table = this.createTable();
 
@@ -53,6 +54,7 @@ class Component implements ISearchFormListener {
             }
         }
 
+        this.setFulltextGroupActive();
         this.state.loading = false;
     }
 
@@ -137,19 +139,51 @@ class Component implements ISearchFormListener {
         return;
     }
 
-    public getResultTitle(): string {
-        return `Trefferliste (${this.state.resultCount})`;
-    }
-
-    public async toggleFulltext(enable: boolean): Promise<void> {
-        this.state.fulltextActive = enable;
-        if (this.state.fulltextActive) {
-            const fulltextInput = (this as any).getEl('fulltext-input');
-            if (fulltextInput) {
-                fulltextInput.focus();
+    private setFulltextGroupActive(): void {
+        if (this.state.fulltextSearch) {
+            const formElement = (this as any).getEl();
+            if (formElement) {
+                formElement.style.opacity = 0;
+                setTimeout(() => {
+                    this.handleSearchFormGroupMinimizeState('fulltext');
+                    formElement.style.opacity = null;
+                }, 50);
             }
         }
-        await this.setCanSearch();
+    }
+
+    public async handleSearchFormGroupMinimizeState(groupName: string, minimized: boolean = false): Promise<void> {
+        if (this.state.fulltextSearch) {
+            if (minimized === false) {
+                let otherGroupName;
+                if (groupName === 'fulltext') {
+                    this.state.fulltextActive = true;
+                    otherGroupName = 'attributes';
+                    const fulltextInput = (this as any).getEl('fulltext-input');
+                    if (fulltextInput) {
+                        fulltextInput.focus();
+                    }
+                } else {
+                    this.state.fulltextActive = false;
+                    otherGroupName = 'fulltext';
+                }
+                const groupComponent = (this as any).getComponent(otherGroupName);
+                if (groupComponent) {
+                    groupComponent.setMinizedState(true);
+                }
+                await this.setCanSearch();
+            }
+        }
+    }
+
+    public getAttributeSearchTitle(): string {
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
+        let title = 'Attribute:';
+        if (labelProvider) {
+            const objectName = labelProvider.getObjectName();
+            title = objectName ? `${objectName}-${title}` : title;
+        }
+        return title;
     }
 
     private async setSearchResult(objects: KIXObject[]): Promise<void> {
@@ -187,7 +221,8 @@ class Component implements ISearchFormListener {
             const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
             if (formInstance) {
                 this.state.canSearch = formInstance.getCriteria().some(
-                    (c) => c.property !== null && c.operator !== null && c.value !== null
+                    (c) => c.property !== null && c.operator !== null
+                        && c.value !== null && c.value !== '' && !/^\s+$/.test(c.value.toString())
                 );
             }
         }

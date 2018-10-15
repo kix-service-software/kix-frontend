@@ -45,7 +45,7 @@
                             top: @margin-default;
                             bottom: @margin-default;
                             display: grid;
-                            grid-template-columns: auto @sidebar-width @margin-default;
+                            grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width @margin-default;
                             grid-column-gap: @margin-default;
                             overflow: auto;
                             >.tab-content {

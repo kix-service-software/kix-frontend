@@ -42,7 +42,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
                 FormContext.SEARCH,
                 null,
                 false,
-                [CustomerProperty.CUSTOMER_COMPANY_NAME]
+                [CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

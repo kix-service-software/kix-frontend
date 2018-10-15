@@ -29,7 +29,7 @@ class FormComponent {
                 formElement.style.opacity = 0;
                 setTimeout(() => {
                     this.handleFormGroupMinimizeState(form.groups[0].name, false);
-                    formElement.style.opacity = 1;
+                    formElement.style.opacity = null;
                 }, 50);
             }
         }
