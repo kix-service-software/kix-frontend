@@ -80,11 +80,13 @@ class Component {
     }
 
     public focusLost(): void {
+        this.state.autocompleteSearchValue = null;
+        this.state.filterValue = null;
         (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
-    private keyDown(event: any): void {
+    public keyDown(event: any): void {
         if (this.state.expanded) {
             if (event.key === 'Escape' || event.key === 'Tab') {
                 this.toggleList();
