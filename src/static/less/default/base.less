@@ -104,6 +104,7 @@ span.error {
 }
 
 @default-button-icon-width: @default-button-height;
+@control-button-size: 1rem;
 button {
     .button-color();
     &:not(:disabled) {
@@ -115,8 +116,11 @@ button {
     border-radius: @border-radius;
     border: 1px solid;
     position: relative;
-    &:not(:hover):not(:disabled) {
+    &:not(:disabled) {
         .shadow-1;
+    }
+    &:hover {
+        box-shadow: none;
     }
     &:not(.button-without-text) {
         min-width: 10rem;
@@ -171,6 +175,21 @@ button {
         .button-color(@primary-2, @secondary-4, @secondary-3, @secondary-0, @primary-2);
         box-shadow: none;
     }
+    &.form-control-button {
+        @control-button-icon-size: @control-button-size - .125rem;
+        .button-color(@secondary-2, @secondary-3, @secondary-3, @secondary-1, @secondary-1);
+        height: @control-button-size;
+        width: @control-button-size;
+        overflow: hidden;
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            font-size: @control-button-icon-size;
+            width: @control-button-icon-size;
+            height: @control-button-icon-size;
+            line-height: @control-button-icon-size;
+        }
+        box-shadow: none;
+    }
     &.form-blank-button {
         .button-color(@primary-2, @secondary-6, @secondary-3, @secondary-0, @primary-2);
         &:hover:not(:disabled) {
@@ -178,8 +197,15 @@ button {
         }
         box-shadow: none;
     }
-    &.form-blank-red-button {
+    &.form-blank-cancel-button {
         .button-color(@tertiary-0, @secondary-6, @secondary-3, @secondary-0, @tertiary-0);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+        box-shadow: none;
+    }
+    &.form-blank-submit-button {
+        .button-color(@primary-6, @secondary-6, @secondary-3, @secondary-0, @primary-6);
         &:hover:not(:disabled) {
             background-color: @secondary-6;
         }
