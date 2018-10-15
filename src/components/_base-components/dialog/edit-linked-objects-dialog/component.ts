@@ -141,6 +141,8 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
+        this.state.table = null;
+
         const table = StandardTableFactoryService.getInstance().createStandardTable(
             KIXObjectType.LINK_OBJECT
         );
@@ -155,7 +157,7 @@ class Component {
 
         this.preventSelectionLayer = new TablePreventSelectionLayer();
         table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-        this.preventSelectionLayer.setPreventSelectionFilter([...this.deleteLinkObjects, ...this.newLinkObjects]);
+        this.preventSelectionLayer.setPreventSelectionFilter([...this.deleteLinkObjects]);
 
         table.layerConfiguration.contentLayer.setPreloadedObjects(this.availableLinkObjects);
         await table.loadRows(true);
@@ -163,7 +165,9 @@ class Component {
             this.objectSelectionChanged.bind(this)
         );
 
-        this.state.table = table;
+        setTimeout(() => {
+            this.state.table = table;
+        }, 50);
     }
 
     public objectSelectionChanged(newSelectedLinkObjects: LinkObject[]): void {
@@ -177,8 +181,17 @@ class Component {
 
     public async markToDelete(): Promise<void> {
         this.selectedLinkObjects.forEach((slo) => {
-            if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
-                this.deleteLinkObjects.push(slo);
+            const newLinkIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(slo));
+            if (newLinkIndex !== -1) {
+                this.newLinkObjects.splice(newLinkIndex, 1);
+                const index = this.availableLinkObjects.findIndex((alo) => alo.equals(slo));
+                if (index !== -1) {
+                    this.availableLinkObjects.splice(index, 1);
+                }
+            } else {
+                if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
+                    this.deleteLinkObjects.push(slo);
+                }
             }
         });
 

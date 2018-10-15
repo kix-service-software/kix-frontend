@@ -91,10 +91,11 @@ class Component {
 
                     table.setColumns([
                         new TableColumn(
-                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, false, false, null
+                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, true, false, null
                         )
                     ]);
-                    table.loadRows();
+
+                    await table.loadRows();
 
                     objectsCount += objects.length;
                     const title = `${lot[0]} (${objects.length})`;
