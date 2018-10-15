@@ -7,7 +7,7 @@ export class ComponentState {
         public linkableObjectNodes: TreeNode[] = [],
         public currentLinkableObjectNode: TreeNode = null,
         public standardTable: StandardTable = null,
-        public resultCount: number = null,
+        public resultCount: number = 0,
         public selectedObjects: KIXObject[] = [],
         public linkTypeNodes: TreeNode[] = [],
         public currentLinkTypeNode: TreeNode = null,
