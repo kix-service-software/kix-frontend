@@ -53,6 +53,9 @@ class Component {
                     if (canvasElement.width <= 300) {
                         canvasElement.width = 10;
                     }
+
+                    canvasElement.style.width = '100%';
+                    canvasElement.style.height = '100%';
                 }
                 this.drawTimeout = null;
             }, 500);
@@ -112,6 +115,8 @@ class Component {
                 if (canvasElement.width <= 300) {
                     canvasElement.width = 10;
                 }
+                canvasElement.style.width = '100%';
+                canvasElement.style.height = '100%';
             }
             this.timeout = null;
         }, 100);
