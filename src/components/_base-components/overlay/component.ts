@@ -199,6 +199,8 @@ class OverlayComponent {
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
                 return 'toast-overlay';
+            case OverlayType.CONTENT_OVERLAY:
+                return 'content-overlay';
             default:
                 return '';
         }
@@ -238,8 +240,8 @@ class OverlayComponent {
             || this.state.type === OverlayType.HINT_TOAST;
     }
 
-    public isInfo(): boolean {
-        return this.state.type === OverlayType.INFO;
+    public canResize(): boolean {
+        return this.state.type === OverlayType.INFO || this.state.type === OverlayType.CONTENT_OVERLAY;
     }
 
     public startMove(event: any) {
