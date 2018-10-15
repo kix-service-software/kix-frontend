@@ -15,6 +15,7 @@
                 border-top: none;
             }
         }
+        &.content-overlay,
         &.info-overlay {
             width: @default-widget-width;
             height: @default-widget-height;
@@ -68,6 +69,18 @@
                                 width: .5rem;
                             }
                         }
+                    }
+                }
+            }
+        }
+        &.content-overlay {
+            >.overlay-widget {
+                .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
+                >.widget-content {
+                    .font-size-small();
+                    border-color: @primary-0;
+                    >div.overlay-resize {
+                        background-color: @primary-0;
                     }
                 }
             }
@@ -149,63 +162,6 @@
                         .toast-content {
                             .toast-icon {
                                 background-color: lighten(@primary-6, 10%);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        &.content-overlay {
-            width: @default-widget-width;
-            height: @default-widget-height;
-            min-width: @default-widget-width;
-            min-height: @default-widget-height;
-            >.overlay-widget {
-                height: 100%;
-                display: grid;
-                grid-template-rows: @overlay-widget-header-height auto;
-                .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
-                >.widget-header {
-                    >.header-right {
-                        >.action-list-wrapper {
-                            >.action-list-expansion-container {
-                                background-color: @primary-0;
-                                color: @secondary-6;
-                                top: @overlay-widget-header-height;
-                                >ul.action-list-expansion {
-                                    >li {
-                                        border-color: @secondary-6;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                >.widget-content {
-                    .font-size-small();
-                    border-color: @primary-0;
-                    background-color: @secondary-6;
-                    >div:not(.overlay-resize) {
-                        .full-size;
-                        margin: 1rem;
-                        overflow: auto;
-                    }
-                    >div.overlay-resize {
-                        cursor: nwse-resize;
-                        position: absolute;
-                        right: -1.5rem;
-                        bottom: -1.5rem;
-                        height: 2.75rem;
-                        width: 2.75rem;
-                        background-color: @primary-0;
-                        transform: rotate(-45deg);
-                        >div {
-                            background-color: @secondary-6;
-                            height: .2rem;
-                            margin: .2rem auto;
-                            width: 1rem;
-                            &:last-child {
-                                width: .5rem;
                             }
                         }
                     }
