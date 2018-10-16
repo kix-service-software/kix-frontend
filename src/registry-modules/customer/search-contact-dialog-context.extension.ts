@@ -41,7 +41,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
                 KIXObjectType.CONTACT,
                 FormContext.SEARCH,
                 null,
-                false,
+                true,
                 [
                     ContactProperty.USER_FIRST_NAME, ContactProperty.USER_LAST_NAME, ContactProperty.USER_LOGIN
                 ]

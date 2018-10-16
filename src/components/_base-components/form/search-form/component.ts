@@ -130,7 +130,7 @@ class Component implements ISearchFormListener {
     }
 
     public submit(): void {
-        if (!this.state.resultCount) {
+        if (this.state.resultCount) {
             DialogService.getInstance().closeMainDialog();
         }
     }
