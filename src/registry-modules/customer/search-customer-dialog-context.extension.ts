@@ -41,7 +41,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
                 KIXObjectType.CUSTOMER,
                 FormContext.SEARCH,
                 null,
-                false,
+                true,
                 [CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
