@@ -112,7 +112,6 @@ button {
     }
     height: @default-button-height;
     box-sizing: border-box;
-    line-height: @default-button-height;
     border-radius: @border-radius;
     border: 1px solid;
     position: relative;
@@ -251,16 +250,24 @@ button {
 textarea::placeholder,
 input::placeholder {
     color: @secondary-2;
+    opacity: 1;
     font-style: italic;
-    font-family: Carlito, Arial, Helvetica, sans-serif; // TODO: für Firefox scheinbar nötig
-    opacity: 1; // TODO: für Firefox scheinbar nötig
-} // TODO: extra (noch testen in IE / Edge), weil sonst Regel für Chrome/Firefox nicht greift 
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
 textarea:-ms-input-placeholder,
 input:-ms-input-placeholder,
 textarea::-ms-input-placeholder,
 input::-ms-input-placeholder {
     color: @secondary-2;
     font-style: italic;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
 }
 
 .full-size() {

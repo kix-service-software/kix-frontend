@@ -2,7 +2,7 @@
     background: @secondary-6;
     color: @secondary-0;
     margin-bottom: @margin-small;
-    padding: @margin-small @margin-small 0;
+    padding: 0 @margin-small;
     border-radius: @border-radius;
     box-shadow: @shadow-1;
     height: @breadcrumb-height;
@@ -13,13 +13,13 @@
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     grid-gap: @margin-small;
+    align-items: center;
     font-size: @h2-font-size;
     >span.icon {
-        padding-top: .085rem;
         [class^="kix-icon-"],
         [class*=" kix-icon-"] {
             color: @primary-6;
-            line-height: @h2-font-size;
+            line-height: @breadcrumb-height;
         }
     }
     >span.context {
