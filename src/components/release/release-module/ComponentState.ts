@@ -4,7 +4,7 @@ export class ComponentState {
 
     public constructor(
         public contentWidgets: ConfiguredWidget[] = [],
-        public kixVersionString: string = ''
+        public kixVersion: string = ''
     ) { }
 
 }
