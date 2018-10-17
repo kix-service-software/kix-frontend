@@ -1,60 +1,57 @@
-<div.faq-content>
-    <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-        contentActions=state.actions>
-        <@content>
-            <if(state.faqArticle)>
-                <div.faq-article-content-container>
-                    <div>
-                        <widget instanceId="faq-article-group" title="Symptom">
-                            <@content>
-                                <editor readOnly=true value=state.faqArticle.Field1/>
-                            </@content>
-                        </widget>
-                        <widget instanceId="faq-article-group" title="Ursache">
-                            <@content>
-                                <editor readOnly=true value=state.faqArticle.Field2/>
-                            </@content>
-                        </widget>
-                        <widget instanceId="faq-article-group" title="Lösung">
-                            <@content>
-                                <editor readOnly=true value=state.faqArticle.Field3/>
-                            </@content>
-                        </widget>
-                        <widget instanceId="faq-article-group" title="Kommentar">
-                            <@content>
-                                <editor readOnly=true value=state.faqArticle.Field6/>
-                            </@content>
-                        </widget>
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    actions=state.actions>
+    <@content>
+        <if(state.faqArticle)>
+            <div.faq-article-content-container>
+                <div>
+                    <widget instanceId="faq-article-group" title="Symptom">
+                        <@content>
+                            <editor readOnly=true value=state.faqArticle.Field1/>
+                        </@content>
+                    </widget>
+                    <widget instanceId="faq-article-group" title="Ursache">
+                        <@content>
+                            <editor readOnly=true value=state.faqArticle.Field2/>
+                        </@content>
+                    </widget>
+                    <widget instanceId="faq-article-group" title="Lösung">
+                        <@content>
+                            <editor readOnly=true value=state.faqArticle.Field3/>
+                        </@content>
+                    </widget>
+                    <widget instanceId="faq-article-group" title="Kommentar">
+                        <@content>
+                            <editor readOnly=true value=state.faqArticle.Field6/>
+                        </@content>
+                    </widget>
+                </div>
+                <div>
+                    <div.faq-rating title=component.getRatingTooltip()>
+                        <span.faq-rating-label>Bewertung:</span>
+                        <span.faq-rating-info>
+                            <if(state.faqArticle.Votes.length)>
+                                <for(icon in component.stars)>
+                                    <icon icon=icon/>
+                                </for>
+                                (${component.rating})
+                            </if>
+                            <else>
+                                <b>Keine Bewertung abgegeben</b>
+                            </else>
+                        </span>
                     </div>
-                    <div>
-                        <div.faq-rating title=component.getRatingTooltip()>
-                            <span.faq-rating-label>Bewertung:</span>
-                            <span.faq-rating-info>
-                                <if(state.faqArticle.Votes.length)>
-                                    <for(icon in component.stars)>
-                                        <icon icon=icon/>
-                                    </for>
-                                    (${component.rating})
-                                </if>
-                                <else>
-                                    <b>Keine Bewertung abgegeben</b>
-                                </else>
-                            </span>
-                        </div>
-                        <div.faq-attachments>
-                            <span>Anlagen</span>
-                            <for(attachment in state.faqArticle.Attachments)>
-                                <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
-                                    on-fileClicked('download', attachment)/>
-                            </for>
-                        </div>
+                    <div.faq-attachments>
+                        <span>Anlagen:</span>
+                        <for(attachment in state.faqArticle.Attachments)>
+                            <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
+                                on-fileClicked('download', attachment)/>
+                        </for>
                     </div>
                 </div>
-            </if>
-            <else>
-                <span.error>No FAQ Article available</span>
-            </else>
-            <faq-vote-selector/>
-        </@content>
-    </widget>
-</div>
+            </div>
+        </if>
+        <else>
+            <span.error>No FAQ Article available</span>
+        </else>
+    </@content>
+</widget>

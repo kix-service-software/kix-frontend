@@ -14,8 +14,8 @@ class Component {
     private state: ComponentState;
     private contextListenerId: string = null;
 
-    private stars: Array<string | ObjectIcon> = [];
-    private rating: number;
+    public stars: Array<string | ObjectIcon> = [];
+    public rating: number;
 
     public onCreate(): void {
         this.state = new ComponentState();

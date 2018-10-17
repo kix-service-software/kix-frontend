@@ -50,10 +50,10 @@ export class Extension implements IModuleFactoryExtension {
                 )
             );
 
-        const faqArticleLane =
-            new ConfiguredWidget('faq-article-content-widget',
+        const faqArticleWidget =
+            new ConfiguredWidget('20181017-faq-article-content-widget',
                 new WidgetConfiguration(
-                    'faq-article-content-widget', 'FAQ-Artikel',
+                    'faq-article-content-widget', 'FAQ Artikel',
                     ['faq-article-vote-action', 'faq-article-edit-action', 'faq-article-print-action'],
                     {},
                     false, true, WidgetSize.LARGE, null, false
@@ -65,7 +65,7 @@ export class Extension implements IModuleFactoryExtension {
 
         const lanes = ['faq-article-linked-objects-widget', 'faq-article-history-widget'];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            faqDetailsWidget, faqArticleLane, faqLinkedObjectsLane, faqHistoryLane
+            faqDetailsWidget, faqLinkedObjectsLane, faqHistoryLane
         ];
 
         const actions = ['faq-article-create-action'];
@@ -75,7 +75,8 @@ export class Extension implements IModuleFactoryExtension {
         ];
 
         return new FAQDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, actions, faqActions
+            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets, actions, faqActions,
+            ['20181017-faq-article-content-widget'], [faqArticleWidget]
         );
     }
 
