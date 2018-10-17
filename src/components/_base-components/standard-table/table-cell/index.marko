@@ -1,0 +1,11 @@
+<if(!state.loading)>
+    <if(component.column.showIcon && state.icons)>
+        <for(icon in state.icons)>
+            <icon icon=icon showUnknown=true/>
+        </for>
+    </if>
+    <if(component.column.showIcon && state.icons && state.icons.length && component.column.showText)>&nbsp;</if>
+    <if(component.column.showText)>
+        <span>${state.displayValue}</span>
+    </if>
+</if>

@@ -1,17 +1,17 @@
-import { TicketDescriptionComponentState } from './TicketDescriptionComponentState';
+import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 import {
     WidgetType, Ticket, KIXObjectType, Context, DynamicField, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType
+    FilterCriteria, FilterDataType, FilterType, ArticlesLoadingOptions, Article
 } from '@kix/core/dist/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
 
-class TicketDescriptionWidgetComponent {
+class Component {
 
-    private state: TicketDescriptionComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketDescriptionComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -42,17 +42,30 @@ class TicketDescriptionWidgetComponent {
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
+        this.state.loading = true;
         this.state.ticket = ticket;
-        this.getFirstArticle();
+        await this.getFirstArticle();
         this.setActions();
-        this.getTicketNotes();
+        await this.getTicketNotes();
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 100);
     }
 
     private async getFirstArticle(): Promise<void> {
-        if (this.state.ticket && this.state.ticket.Articles && this.state.ticket.Articles.length) {
-            const articles = new Array(...this.state.ticket.Articles);
-            articles.sort((a, b) => a.IncomingTime - b.IncomingTime);
-            this.state.firstArticle = articles[0];
+        if (this.state.ticket) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, null, ['Attachments'], ['Attachments']
+            );
+
+            const articleOptions = new ArticlesLoadingOptions(this.state.ticket.TicketID, false, true);
+
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, null, loadingOptions, articleOptions
+            );
+
+            this.state.firstArticle = articles && articles.length ? articles[0] : null;
         }
     }
 
@@ -86,4 +99,4 @@ class TicketDescriptionWidgetComponent {
     }
 }
 
-module.exports = TicketDescriptionWidgetComponent;
+module.exports = Component;

@@ -35,8 +35,9 @@ export class Component implements IEventListener {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
-            objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
+            objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
+                    ticket = await context.getObject<Ticket>(KIXObjectType.ARTICLE);
                     this.initWidget(ticket);
                 }
             }
@@ -44,7 +45,7 @@ export class Component implements IEventListener {
 
         EventService.getInstance().subscribe('GotToTicketArticle', this);
 
-        await this.initWidget(await context.getObject<Ticket>());
+        await this.initWidget(await context.getObject<Ticket>(KIXObjectType.ARTICLE));
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {

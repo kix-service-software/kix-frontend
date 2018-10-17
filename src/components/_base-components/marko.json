@@ -9,6 +9,7 @@
         "form",
         "overlay",
         "tree",
-        "table-tree"
+        "table-tree",
+        "standard-table"
     ]
 }
