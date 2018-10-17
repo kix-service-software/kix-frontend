@@ -13,4 +13,6 @@ export class ObjectPropertyLabelInput<T> {
 
     public routingConfiguration: RoutingConfiguration;
 
+    public showIcon: boolean;
+
 }

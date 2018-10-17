@@ -6,11 +6,8 @@
         <object-property-label object=state.configItem property="Name" labelProvider=component.labelProvider/>
         <object-property-label object=state.configItem property="Number" labelProvider=component.labelProvider/>
         <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=component.labelProvider/>
-        <object-property-label object=state.configItem property="CurInciStateID" labelProvider=component.labelProvider>
-            <@icon>
-                <icon icon=state.icon/>
-            </@icon>
-        </object-property-label>
+        <object-property-label object=state.configItem property="CurInciStateID" labelProvider=component.labelProvider
+            showIcon=true/>
     </div>
 </else-if>
 <else>
