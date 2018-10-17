@@ -18,6 +18,7 @@ import { TextModuleService } from '@kix/core/dist/browser/text-modules';
 import { EventService } from '@kix/core/dist/browser/event';
 import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
 import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
+import { ReleaseContext } from '@kix/core/dist/browser/release';
 
 declare var io: any;
 
@@ -94,6 +95,12 @@ class Component {
             false, 'home', ['home'], HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
+        const releaseContext = new ContextDescriptor(
+            ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'release', ['release'], ReleaseContext
+        );
+        ContextService.getInstance().registerContext(releaseContext);
+
         RoutingService.getInstance().routeToInitialContext();
     }
 

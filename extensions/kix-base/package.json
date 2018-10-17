@@ -8,7 +8,8 @@
             "home-marko": "../../dist/registry-modules/home/home-marko.extension",
             "search-marko": "../../dist/registry-modules/search/search-marko.extension",
             "faq-marko": "../../dist/registry-modules/faq/faq-marko.extension",
-            "cmdb-marko": "../../dist/registry-modules/cmdb/cmdb-marko.extension"
+            "cmdb-marko": "../../dist/registry-modules/cmdb/cmdb-marko.extension",
+            "release-marko": "../../dist/registry-modules/release/release-marko.extension"
         },
         "kix:communicator": {
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
@@ -48,7 +49,8 @@
             "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension",
             "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension",
             "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension",
-            "edit-ticket-dialog-context": "../../dist/registry-modules/ticket/edit-ticket-dialog-context.extension"
+            "edit-ticket-dialog-context": "../../dist/registry-modules/ticket/edit-ticket-dialog-context.extension",
+            "release-module": "../../dist/registry-modules/release/module.extension"
         }
     }
 }

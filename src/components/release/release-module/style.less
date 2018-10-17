@@ -1,0 +1,75 @@
+.release-dashboard {
+    >.content-widget {
+        >.widget-header {
+            text-transform: uppercase;
+            h2 {
+                font-weight: bold;
+            }
+        }
+        >.widget-content {
+            padding: @margin-default - .25rem;
+            >.box-container {
+                margin: (@margin-default - .25rem) 0;
+                display: grid;
+                grid-template-columns: 3fr 2fr;
+                grid-auto-rows: max-content;
+                grid-gap: 1.5rem @margin-default;
+                >div {
+                    background-color: @secondary-4;
+                    padding: (@margin-default - .25rem) @margin-default;
+                    &.box3 {
+                        grid-column: 2;
+                        grid-row: 1 / span 2;
+                    }
+                    &.box1,
+                    &.box3>.list-container {
+                        >ul {
+                            >li:not(:last-child) {
+                                margin-bottom: 1rem;
+                            }
+                        }
+                    }
+                    >.list-container {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                    }
+                    ul {
+                        list-style: none;
+                        list-style-position: inside;
+                        >li {
+                            &::before {
+                                content: "•";
+                                margin-right: @margin-small;
+                            }
+                            >ul {
+                                margin-left: 1.75rem;
+                                >li::before {
+                                    content: '-';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            >.box-container>div,
+            >.outro {
+                >h2 {
+                    font-weight: bold;
+                    color: @primary-0;
+                }
+                >*:not(:first-child) {
+                    margin-top: 1rem;
+                }
+                p {
+                    text-align: justify;
+                }
+            }
+            >.outro {
+                >p:last-of-type {
+                    font-weight: bold;
+                    margin-top: (@margin-default - .25rem);
+                }
+            }
+        }
+    }
+}
