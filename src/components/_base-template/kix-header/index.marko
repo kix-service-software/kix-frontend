@@ -27,11 +27,15 @@
                         <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend" on-click('showTemporaryComingSoon')/>
                     </div>
                 </div>
-                <div>
-                    <div.action-icon>
-                        <span.kix-icon-query.as-button title="Hilfe" on-click('showTemporaryComingSoon')/>
-                    </div>
-                </div>
+                <link-target routingConfiguration=component.getReleaseRoutingConfig()>
+                    <@content>
+                        <div>
+                            <div.action-icon>
+                                <span.kix-icon-query.as-button title="Hilfe"/>
+                            </div>
+                        </div>
+                    </@content>
+                </link-target>
                 <div>
                     <div.action-icon>
                         <a href="/auth?logout" on-click('logout')>
