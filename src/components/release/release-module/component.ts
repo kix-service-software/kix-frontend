@@ -17,13 +17,12 @@ class Component {
 
         if (releaseInfo) {
             // TODO:  build nummern mit Releasenummer ersetzen, wenn es eine geben sollte
-            this.state.kixVersionString
-                = `${releaseInfo.product} ${releaseInfo.version} ${this.getBuildNumber(releaseInfo)}`;
+            this.state.kixVersion = `${releaseInfo.product} ${releaseInfo.version} ${this.getBuildNumber(releaseInfo)}`;
         }
     }
 
     private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        return `[${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber}]`;
+        return `Build: [${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber}]`;
     }
 
 }
