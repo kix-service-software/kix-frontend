@@ -6,10 +6,15 @@
         <filter on-filter('filter')/>
     </@headerContent>
     <@content>
-        <div.article-table-wrapper>
-            <if(state.standardTable)>
-                <standard-table standardTable=state.standardTable key="article-list-table"/>
-            </if>
-        </div>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div.article-table-wrapper>
+                <if(state.standardTable)>
+                    <standard-table standardTable=state.standardTable key="article-list-table"/>
+                </if>
+            </div>
+        </else>
     </@content>
 </widget>

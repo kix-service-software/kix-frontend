@@ -16,7 +16,7 @@ export class ComponentState extends WidgetComponentState<ArticleListSettings> {
         public ticket: Ticket = null,
         public title: string = null,
         public attachmentCount: number = 0,
-        public loading: boolean = false,
+        public loading: boolean = true,
         public eventSubscriberWidgetPrefix: string = 'ArticleListWidget'
     ) {
         super();

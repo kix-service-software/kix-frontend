@@ -1,11 +1,7 @@
 import {
-    CreateArticle,
-    CreateTicket,
-} from '@kix/core/dist/api';
-
-import {
     Contact, Customer,
-    LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, LoadTicketRequest, LoadTicketResponse,
+    LoadArticleAttachmentResponse, LoadArticleAttachmentRequest,
+    LoadTicketRequest, LoadTicketResponse,
     SetArticleSeenFlagRequest,
     SearchTicketsRequest, SearchTicketsResponse,
     Ticket, TicketEvent,
