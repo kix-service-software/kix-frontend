@@ -11,6 +11,7 @@ export class ComponentState {
         public error: any = null,
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],
+        public contentWidgets: ConfiguredWidget[] = [],
         public loading: boolean = true,
         public title: string = ''
     ) { }

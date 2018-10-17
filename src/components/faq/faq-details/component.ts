@@ -46,6 +46,7 @@ class Component {
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes(true);
         this.state.tabWidgets = context.getLaneTabs(true);
+        this.state.contentWidgets = context.getContent();
 
         await this.prepareTitle();
 

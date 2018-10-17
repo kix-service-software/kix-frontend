@@ -26,11 +26,12 @@
             </@content>
         </widget>
         <div.faq-content>
-            <include(component.getWidgetTemplate('faq-article-content-widget'), { 
-            contextType: "MAIN",
-            instanceId: 'faq-article-content-widget', 
-            type: component.LANE_WIDGET_TYPE
-        })/>
+            <for(contentWidget in state.contentWidgets)>
+                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                    contextType: "MAIN",
+                    instanceId: contentWidget.instanceId
+                    })/>
+            </for>
         </div>
     </div>
 </else>
