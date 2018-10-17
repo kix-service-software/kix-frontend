@@ -6,7 +6,8 @@ import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType,
     ToastContent,
-    TicketProperty
+    TicketProperty,
+    ContextType
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
 import { TicketService } from "@kix/core/dist/browser/ticket";
@@ -20,10 +21,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance('edit-ticket-form');
-        if (formInstance) {
-            formInstance.reset();
-        }
+        await FormService.getInstance().getFormInstance('edit-ticket-form');
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
@@ -44,9 +42,8 @@ class Component {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird aktualisiert");
-                const service
-                    = ServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
-                const context = ContextService.getInstance().getActiveContext();
+                const service = ServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
+                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                 if (service && context) {
                     await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())
                         .then((ticketId) => {
