@@ -35,34 +35,22 @@
                         <object-property-label object=state.ticket property="Age" labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider>
-                            <@icon>
-                                <icon icon=component.getIcon("LockID", state.ticket.LockID)/>
-                            </@icon>
-                        </object-property-label>
+                        <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="TypeID" labelProvider=state.labelProvider/>
+                        <object-property-label object=state.ticket property="TypeID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider>
-                            <@icon>
-                                <icon icon=component.getIcon("CurInciStateID", component.getIncidentStateId())/>
-                            </@icon>
-                        </object-property-label>
+                        <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <div>
                         <object-property-label object=state.ticket property="SLAID" labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="QueueID" labelProvider=state.labelProvider/>
+                        <object-property-label object=state.ticket property="QueueID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider>
-                            <@icon>
-                                <icon icon=component.getIcon("PriorityID", state.ticket.PriorityID)/>
-                            </@icon>
-                        </object-property-label>
+                        <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <div>
                         <object-property-label object=state.ticket property="ResponsibleID" labelProvider=state.labelProvider/>
@@ -76,11 +64,7 @@
                         </div>
                     </if>
                     <div>
-                        <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider>
-                            <@icon>
-                                <icon icon=component.getIcon("StateID", state.ticket.StateID)/>
-                            </@icon>
-                        </object-property-label>
+                        <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider showIcon=true/>
                     </div>
                     <if(state.isPending)>
                         <div>

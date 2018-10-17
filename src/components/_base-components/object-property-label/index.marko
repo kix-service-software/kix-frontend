@@ -11,9 +11,7 @@
         <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
             <@content>
                 <span>${state.propertyDisplayText}</span>
-                <if(input.icon)>
-                    <include(input.icon)/>
-                </if>
+                <icon icon=state.propertyIcon/>
             </@content>
         </link-target>
     </div>

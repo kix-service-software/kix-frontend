@@ -1,9 +1,12 @@
 import { ComponentState } from './ComponentState';
 import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
+import { ObjectIcon } from '@kix/core/dist/model';
 
 export class ObjectPropertyLabelComponent<T> {
 
     private state: ComponentState<T>;
+
+    private hasIcon: boolean = false;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -13,6 +16,7 @@ export class ObjectPropertyLabelComponent<T> {
         this.state.object = input.object;
         this.state.property = input.property;
         this.state.labelProvider = input.labelProvider;
+        this.hasIcon = typeof input.showIcon !== 'undefined' ? input.showIcon : false;
     }
 
     public onMount(): void {
@@ -22,6 +26,7 @@ export class ObjectPropertyLabelComponent<T> {
 
     private async prepareDisplayText(): Promise<void> {
         this.state.propertyDisplayText = await this.getPropertyDisplayText();
+        this.state.propertyIcon = await this.getIcon();
     }
 
     private async preparePropertyName(): Promise<void> {
@@ -30,6 +35,15 @@ export class ObjectPropertyLabelComponent<T> {
             name = await this.state.labelProvider.getPropertyText(this.state.property);
         }
         this.state.propertyName = name;
+    }
+
+    private async getIcon(): Promise<string | ObjectIcon> {
+        const icons = await this.state.labelProvider.getIcons(this.state.object, this.state.property);
+        let icon = null;
+        if (icons && icons.length) {
+            icon = icons[0];
+        }
+        return icon;
     }
 
     private async getPropertyDisplayText(): Promise<string> {
