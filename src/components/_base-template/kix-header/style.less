@@ -38,11 +38,8 @@
             grid-column-gap: 1.25rem;
             align-items: center;
             >.header-separator {
-                padding-top: .25rem;
-                font-size: @header-inputs-height;
-                &::before {
-                    content: "|";
-                }
+                height: @header-inputs-height - .25rem;
+                border-left: 2px solid @secondary-6;
             }
             .special-button {
                 width: 5rem;
