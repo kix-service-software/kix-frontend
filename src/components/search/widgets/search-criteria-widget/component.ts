@@ -4,6 +4,7 @@ import {
     LabelService, ContextService, SearchOperatorUtil, SearchOperator
 } from '@kix/core/dist/browser';
 import { KIXObject, ContextMode, CacheState } from '@kix/core/dist/model';
+import { Label } from '@kix/core/dist/browser/components';
 class Component implements IKIXObjectSearchListener {
 
     public listenerId: string = 'search-criteria-widget';
@@ -47,32 +48,39 @@ class Component implements IKIXObjectSearchListener {
         if (cache) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = `Gewählte Suchkriterien: ${labelProvider.getObjectName(true)}`;
-            const displayCriteria = [];
+            const displayCriteria: Array<[string, string, Label[]]> = [];
             if (cache.isFulltext && cache.fulltextValue) {
+                const label = new Label(
+                    null, cache.fulltextValue, null, cache.fulltextValue, null, cache.fulltextValue
+                );
                 displayCriteria.push([
-                    "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), cache.fulltextValue
+                    "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), [label]
                 ]);
             } else {
                 for (const criteria of cache.criteria) {
-                    let displayValue;
+                    const labels: Label[] = [];
                     if (Array.isArray(criteria.value)) {
-                        const valueStrings = [];
                         for (const v of criteria.value) {
                             const value = await labelProvider.getPropertyValueDisplayText(criteria.property, v);
-                            valueStrings.push(value);
+                            const icons = await labelProvider.getIcons(null, criteria.property, v);
+                            labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                         }
-                        displayValue = valueStrings.join(', ');
                     } else if (criteria.value instanceof KIXObject) {
-                        displayValue = criteria.value.toString();
+                        labels.push(new Label(
+                            null, criteria.property, null, criteria.value.toString(),
+                            null, criteria.value.toString(), false
+                        ));
                     } else {
-                        displayValue = await labelProvider.getPropertyValueDisplayText(
+                        const value = await labelProvider.getPropertyValueDisplayText(
                             criteria.property, criteria.value
                         );
+                        const icons = await labelProvider.getIcons(null, criteria.property, criteria.value);
+                        labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                     }
 
                     const displayProperty = await labelProvider.getPropertyText(criteria.property);
                     displayCriteria.push([
-                        displayProperty, SearchOperatorUtil.getText(criteria.operator), displayValue
+                        displayProperty, SearchOperatorUtil.getText(criteria.operator), labels
                     ]);
                 }
             }

@@ -2,7 +2,7 @@
     <for(label in state.labels)>
         <span.label-list-container title=label.tooltip>
             <div.label-item>
-                <icon icon=label.icon showUnknown=true/>
+                <icon icon=label.icon showUnknown=label.showUnknownIcon/>
                 <span.label-text>${label.text}</span>
                 <span>${label.additionalText}</span>
                 <if(state.removeLabels)>
