@@ -66,7 +66,7 @@ class Component {
 
     private createLabels(): void {
         this.state.labels = this.state.faqArticle.Keywords.map(
-            (k) => new Label(null, k, 'kix-icon-unknown', k, null, k)
+            (k) => new Label(null, k, null, k, null, k, false)
         );
     }
 

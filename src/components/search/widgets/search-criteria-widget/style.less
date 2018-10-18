@@ -5,28 +5,25 @@
     padding: 1rem;
     color: @secondary-7;
     .search-criteria-list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 0 0.75rem;
-        height: 8.75rem;
         overflow-y: auto;
+        height: 15rem - @default-widget-header-height - (@margin-widget-content * 2);
+        background-color: @secondary-5;
+        padding: 0.875rem;
         .search-criteria-list-item {
             display: grid;
-            grid-template-columns: 1fr 1fr 3fr;
-            border-radius: @border-radius;
-            height: 1.75rem;
-            padding: 0 0.875rem;
+            grid-template-columns: 1fr 3fr;
+            border-radius: 3px;
+            height: 2rem;
             align-items: center;
-            div {
-                .shorten-text;
-                box-sizing: border-box;
-                &.operator::after {
-                    content: ":";
-                }
+            .key {
+                .shorten-text();
             }
-            &:nth-of-type(4n+1),
-            &:nth-of-type(4n+2) {
-                background: @secondary-3;
+            &:not(:first-child) {
+                margin-top: @margin-small;
+            }
+            >.label-list {
+                margin: unset;
+                height: 2rem;
             }
         }
     }

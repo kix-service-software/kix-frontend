@@ -172,7 +172,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private createLabels(): void {
         this.state.labels = this.state.files.map(
-            (f) => new Label(null, f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name)
+            (f) => new Label(null, f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name, true)
         );
     }
 }

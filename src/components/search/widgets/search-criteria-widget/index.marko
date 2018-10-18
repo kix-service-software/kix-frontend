@@ -4,16 +4,10 @@
             <div.search-criteria-list>
                 <for(criteria in state.displayCriteria)>
                     <div.search-criteria-list-item>
-                        <div.key title=criteria[0]>${criteria[0]}</div>
-                        <div.operator title=criteria[1]>(${criteria[1]})</div>
-                        <div.value title=criteria[2]>${criteria[2]}</div>
+                        <div.key title=(((criteria[0] + " (") + criteria[1]) + ")")>${criteria[0]} (${criteria[1]}):</div>
+                        <label-list labels=criteria[2] removeLabels=false/>
                     </div>
                 </for>
-                <if(state.displayCriteria.length < 10)>
-                    <for(i from state.displayCriteria.length to 9 step 1)>
-                        <div.search-criteria-list-item>&nbsp;</div>
-                    </for>
-                </if>
             </div>
             <div.search-criteria-buttons>
                 <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
