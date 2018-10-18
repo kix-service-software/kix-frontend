@@ -61,8 +61,7 @@ class Component {
     }
 
     private prepareTable(): void {
-        const table =
-            StandardTableFactoryService.getInstance().createStandardTable(KIXObjectType.FAQ_ARTICLE_HISTORY);
+        const table = StandardTableFactoryService.getInstance().createStandardTable(KIXObjectType.FAQ_ARTICLE_HISTORY);
 
         table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.faqArticle.History);
         table.loadRows();
