@@ -9,6 +9,7 @@ class EditorComponent {
     public state: ComponentState;
     private editor: any;
     private autoCompletePlugins: any[] = [];
+    private useReadonlyStyle: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -21,6 +22,7 @@ class EditorComponent {
     }
 
     public async onInput(input: any): Promise<void> {
+        this.useReadonlyStyle = typeof input.useReadonlyStyle ? input.useReadonlyStyle : false;
         if (await this.isEditorReady()) {
             if (input.addValue) {
                 this.editor.insertHtml(input.addValue);
@@ -35,7 +37,6 @@ class EditorComponent {
                 this.editor.setReadOnly(this.state.readOnly);
             }
         }
-
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
     }
 
@@ -71,6 +72,20 @@ class EditorComponent {
                         }
                     });
                 });
+
+                if (this.useReadonlyStyle) {
+                    if (await this.isEditorReady()) {
+                        setTimeout(() => {
+                            const element = document.getElementById('cke_' + this.state.id);
+                            if (element) {
+                                const iframe = element.getElementsByTagName('iframe')[0];
+                                iframe.contentWindow.document.body.style.backgroundColor = 'transparent';
+                                iframe.classList.remove('cke_wysiwyg_frame', 'cke_reset');
+                                iframe.classList.add('readonly-ck-editor');
+                            }
+                        }, 500);
+                    }
+                }
             }
         }
     }
