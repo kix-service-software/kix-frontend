@@ -180,10 +180,12 @@ class Component {
         this.state.canDelete = !!this.selectedLinkObjects.length;
     }
 
-    public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
+    public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
         this.textFilter = textFilterValue;
         this.propertyFilter = filter;
-        this.state.table.setFilterSettings(this.textFilter, this.propertyFilter);
+        if (this.state.table) {
+            await this.state.table.setFilterSettings(textFilterValue, filter);
+        }
     }
 
     public async markToDelete(): Promise<void> {

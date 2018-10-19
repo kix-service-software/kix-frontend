@@ -21,10 +21,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (this.state.standardTable) {
             this.state.tableId = this.state.standardTable.tableId;
             this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
-                (this as any).setStateDirty();
-                if (scrollToTop) {
-                    this.scrollTableToTop();
-                }
+                this.state.loading = true;
+                setTimeout(() => {
+                    this.state.loading = false;
+                    if (scrollToTop) {
+                        this.scrollTableToTop();
+                    }
+                }, 20);
             });
         }
     }
