@@ -50,8 +50,10 @@ class Component {
             );
             this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
 
-            setTimeout(() => {
-                this.state.standardTable.loadRows();
+            setTimeout(async () => {
+                await this.state.standardTable.loadRows();
+                const rows = this.state.standardTable.getTableRows(true);
+                this.state.title = this.state.widgetConfiguration.title + ` (${rows.length})`;
             }, 200);
         }
     }

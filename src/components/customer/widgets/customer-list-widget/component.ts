@@ -1,11 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
-    StandardTable, IdService, TableSortLayer, TableFilterLayer,
-    TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService, AbstractTableLayer
+    TableListenerConfiguration, WidgetService, StandardTableFactoryService
 } from "@kix/core/dist/browser";
-import { Customer, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
-import { CustomerTableContentLayer, CustomerTableLabelLayer } from "@kix/core/dist/browser/customer";
+import { KIXObjectType, KIXObjectPropertyFilter } from "@kix/core/dist/model";
 
 class Component {
 
@@ -49,8 +47,10 @@ class Component {
                 null, listenerConfiguration, true
             );
             this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
-            setTimeout(() => {
-                this.state.standardTable.loadRows();
+            setTimeout(async () => {
+                await this.state.standardTable.loadRows();
+                const rows = this.state.standardTable.getTableRows(true);
+                this.state.title = this.state.widgetConfiguration.title + ` (${rows.length})`;
             }, 200);
         }
     }
