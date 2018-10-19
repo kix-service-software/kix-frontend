@@ -22,7 +22,7 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
 
         const contactInfoLane =
             new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
-                'contact-info-widget', 'Ansprechpartnerinformationen', [
+                'contact-info-widget', 'Ansprechpartner Informationen', [
                     'contact-edit-action', 'contact-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, false)
