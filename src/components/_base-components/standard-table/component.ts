@@ -331,9 +331,8 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return classes;
     }
 
-    public getValueClasses(value: TableValue): string[] {
+    public getValueClasses(value: TableValue, column: TableColumn): string[] {
         const classes = [...value.classes];
-        const column = this.getColumn(value);
         if (column) {
             if (column.pipe) {
                 classes.push('cell-pipe');
@@ -342,8 +341,8 @@ class StandardTableComponent<T extends KIXObject<T>> {
             if (column.action) {
                 classes.push('row-link');
             }
+            classes.push(this.state.tableId + column.id);
         }
-        classes.push(this.state.tableId + column.id);
         return classes;
     }
 

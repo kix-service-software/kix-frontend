@@ -45,14 +45,16 @@ class Component implements IKIXObjectSearchListener {
     public searchFinished<T extends KIXObject = KIXObject>(): void {
         this.state.resultTable = null;
 
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        if (cache) {
-            this.state.noSearch = false;
-            const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
-            this.initWidget(category ? category.objectType : cache.objectType, cache);
-        } else {
-            this.state.noSearch = true;
-        }
+        setTimeout(() => {
+            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+            if (cache) {
+                this.state.noSearch = false;
+                const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+                this.initWidget(category ? category.objectType : cache.objectType, cache);
+            } else {
+                this.state.noSearch = true;
+            }
+        }, 100);
     }
 
     private async initWidget(
@@ -61,6 +63,8 @@ class Component implements IKIXObjectSearchListener {
     ): Promise<void> {
         if (objectType) {
             this.state.loading = true;
+            this.state.resultTable = null;
+
             const isSearchMainObject = cache.objectType === objectType;
 
             let resultCount: number = 0;
@@ -115,8 +119,7 @@ class Component implements IKIXObjectSearchListener {
                 this.state.tableId = 'Search-Table-' + cache.objectType;
                 this.state.resultTable = table;
                 this.state.loading = false;
-                (this as any).setStateDirty('loading');
-            }, 300);
+            }, 500);
         } else {
             this.state.resultIcon = null;
             this.state.resultTitle = 'Trefferliste';
