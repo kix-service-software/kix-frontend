@@ -84,7 +84,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
         return new CustomerContextConfiguration(
-            this.getModuleId(), sidebars, [], sidebarWidgets, [], content, contentWidgets
+            this.getModuleId(), [], sidebars, sidebarWidgets, [], content, contentWidgets
         );
     }
 
