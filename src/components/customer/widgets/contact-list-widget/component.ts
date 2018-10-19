@@ -52,8 +52,10 @@ class Component {
 
             setTimeout(async () => {
                 await this.state.standardTable.loadRows();
-                const rows = this.state.standardTable.getTableRows(true);
-                this.state.title = this.state.widgetConfiguration.title + ` (${rows.length})`;
+                this.state.title = this.getTitle();
+                this.state.standardTable.setTableListener(() => {
+                    this.state.title = this.getTitle();
+                });
             }, 200);
         }
     }
@@ -68,6 +70,14 @@ class Component {
                 this.state.instanceId, this.state.widgetConfiguration
             );
         }
+    }
+
+    private getTitle(): string {
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        if (this.state.standardTable) {
+            title = `${title} (${this.state.standardTable.getTableRows(true).length})`;
+        }
+        return title;
     }
 
     public filter(filterValue: string, filter: KIXObjectPropertyFilter): void {
