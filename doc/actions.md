@@ -9,10 +9,9 @@ Am Beispiel von LinkedObjectsEditAction.
 ```javascript
 export class LinkedObjectsEditAction extends AbstractAction {
 
-    public initAction(displayText: boolean): void {
+    public initAction(): void {
         this.text = "Bearbeiten";
         this.icon = "kix-icon-edit";
-        this.displayText = displayText;
     }
 
     public run(): void {

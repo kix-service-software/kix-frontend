@@ -21,8 +21,8 @@ export class Component implements IActionListener {
     }
 
     public onInput(input: any): void {
-        // TODO: noch notwendig für Content-Actions (siehe "base"-widget)
         this.state.actionList = input.list;
+        this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.prepareActionLists();
     }
 
@@ -39,7 +39,6 @@ export class Component implements IActionListener {
             WidgetService.getInstance().registerActionListener(this);
             this.actionsChanged();
         } else {
-            // TODO: noch notwendig für Content-Actions (siehe "base"-widget)
             this.prepareActionLists();
         }
 
@@ -65,11 +64,19 @@ export class Component implements IActionListener {
     public prepareActionLists() {
         const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
         if (listWidth > 0 && this.state.actionList) {
-            // TODO: 110px Breite für jede Action (ggf. aus CSS ermitteln) + 50px Puffer (... + margin/padding)
-            const maxActions = Math.floor((listWidth - 50) / 110);
+            // displayable action = container width / (action-width + action-gap)
+            const actionWidth = this.state.displayText ? 8.5 : 1.75;
+            const maxActions = Math.floor(listWidth / (this.getBrowserFontsize() * (actionWidth + 1.5)));
             this.state.listDefault = this.state.actionList.slice(0, maxActions);
             this.state.listExpansion = this.state.actionList.slice(maxActions);
         }
+    }
+
+    private getBrowserFontsize(): number {
+        const browserFontSizeSetting = window
+            .getComputedStyle(document.getElementsByTagName("body")[0], null)
+            .getPropertyValue("font-size");
+        return Number(browserFontSizeSetting.replace('px', ''));
     }
 
     public toggleListExpansion(): any {
@@ -78,8 +85,12 @@ export class Component implements IActionListener {
     }
 
     public actionsChanged(): void {
-        this.state.actionList = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
-        this.prepareActionLists();
+        const actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
+        if (actions) {
+            this.state.actionList = actions[0];
+            this.state.displayText = actions[1];
+            this.prepareActionLists();
+        }
     }
 
     public actionDataChanged(): void {

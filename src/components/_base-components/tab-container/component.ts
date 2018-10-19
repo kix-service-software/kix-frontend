@@ -58,7 +58,7 @@ class TabLaneComponent {
                 const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 
                 this.state.contentActions = ActionFactory.getInstance().generateActions(
-                    tab.configuration.actions, false, [object]
+                    tab.configuration.actions, [object]
                 );
             }
         }

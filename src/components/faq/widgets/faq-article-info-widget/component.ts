@@ -59,7 +59,7 @@ class Component {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }
     }

@@ -117,9 +117,9 @@ class OverlayComponent {
             const widgetConfiguration = context.getWidgetConfiguration(widgetInstanceId);
             if (widgetConfiguration) {
                 this.state.actions = ActionFactory.getInstance().generateActions(
-                    widgetConfiguration.actions, false, this.state.content.getActionObject()
+                    widgetConfiguration.actions, this.state.content.getActionObject()
                 );
-                WidgetService.getInstance().registerActions(this.state.overlayInstanceId, this.state.actions);
+                WidgetService.getInstance().registerActions(this.state.overlayInstanceId, this.state.actions, false);
                 this.state.title = widgetConfiguration.title;
                 this.state.icon = widgetConfiguration.icon;
             }

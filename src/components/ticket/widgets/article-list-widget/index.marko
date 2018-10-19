@@ -3,8 +3,10 @@
         <div.header-attachments on-click('attachmentsClicked')>
             <span.kix-icon-attachement/>(${state.attachmentCount})
         </div>
-        <filter on-filter('filter')/>
     </@headerContent>
+    <@headerFilter>
+        <filter on-filter('filter')/>
+    </@headerFilter>
     <@content>
         <if(state.loading)>
             <loading-spinner/>

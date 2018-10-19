@@ -64,7 +64,7 @@ class Component {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.faqArticle) {
-            actions = ActionFactory.getInstance().generateActions(config.faqActions, true, [this.state.faqArticle]);
+            actions = ActionFactory.getInstance().generateActions(config.faqActions, [this.state.faqArticle]);
         }
         return actions;
     }
@@ -73,7 +73,7 @@ class Component {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.faqArticle) {
-            actions = ActionFactory.getInstance().generateActions(config.actions, true, [this.state.faqArticle]);
+            actions = ActionFactory.getInstance().generateActions(config.actions, [this.state.faqArticle]);
         }
         return actions;
     }

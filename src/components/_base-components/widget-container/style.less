@@ -9,6 +9,10 @@
         &.small {
             >.content-widget {
                 max-height: 15rem;
+                >.widget-header {
+                    // TODO: da aktuell keine "actions" --> wieder auf 8 zu 2 ändern
+                    grid-template-columns: 9fr 1fr;
+                }
                 >.widget-content {
                     height: 15rem - @default-widget-header-height;
                     overflow: hidden;

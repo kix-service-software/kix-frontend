@@ -27,6 +27,7 @@
                 grid-template-rows: @overlay-widget-header-height auto;
                 .widget(@tertiary-1, @secondary-6, @overlay-widget-header-height);
                 >.widget-header {
+                    grid-template-columns: 8fr 2fr;
                     >.header-right {
                         >.action-list-wrapper {
                             >.action-list-expansion-container {
@@ -76,6 +77,9 @@
         &.content-overlay {
             >.overlay-widget {
                 .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
+                >.widget-header {
+                    grid-template-columns: 8fr 2fr;
+                }
                 >.widget-content {
                     .font-size-small();
                     border-color: @primary-0;
@@ -90,6 +94,9 @@
                 .widget(@secondary-2, @secondary-0, @overlay-widget-header-height);
                 width: 22rem;
                 min-height: 6rem;
+                >.widget-header {
+                    grid-template-columns: 8fr 2fr;
+                }
                 >.widget-content {
                     .font-size-small();
                     border-color: @secondary-2;
@@ -109,6 +116,9 @@
                 .widget(@tertiary-0, @secondary-6, @overlay-widget-header-height);
                 width: 24.25rem;
                 min-height: 12.25rem;
+                >.widget-header {
+                    grid-template-columns: 8fr 2fr;
+                }
                 >.widget-content {
                     .font-size-small();
                     background-color: @secondary-6;

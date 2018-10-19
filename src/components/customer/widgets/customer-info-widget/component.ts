@@ -45,7 +45,7 @@ class Component {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.customer) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.state.customer]
+                this.state.widgetConfiguration.actions, [this.state.customer]
             );
         }
     }

@@ -1,9 +1,6 @@
-<if(component.isDisplayText())>
-    <div.action on-click('doAction') title=state.action.text>
-        <span class=state.action.icon/>
+<div.action on-click('doAction') title=state.action.text>
+    <span class=state.action.icon/>
+    <if(state.displayText)>
         <span.text>${state.action.text}</span>
-    </div>
-</if>
-<else>
-    <span class=state.action.icon on-click('doAction') title=state.action.text/>
-</else>
+    </if>
+</div>
