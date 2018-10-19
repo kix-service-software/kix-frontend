@@ -191,7 +191,7 @@ class Component implements ISearchFormListener {
 
         const table = this.createTable();
         table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-
+        table.tableConfiguration.routingConfiguration.externalLink = false;
 
         const objectService = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
             this.state.objectType
