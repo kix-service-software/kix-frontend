@@ -38,16 +38,17 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const customerListWidget =
             new ConfiguredWidget('20180529102830', new WidgetConfiguration(
-                'customer-list-widget', 'Kunden-Liste', [
+                'customer-list-widget', 'Kunden Übersicht', [
                     'customer-search-action',
-                    'customer-create-action'
+                    'customer-create-action',
+                    'csv-export-action'
                 ], tableConfiguration,
-                false, true, WidgetSize.LARGE, null, true)
+                false, true, WidgetSize.LARGE, 'kix-icon-man-house', true)
             );
 
         const contactListWidget =
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(
-                'contact-list-widget', 'Ansprechpartner-Liste', [
+                'contact-list-widget', 'ÜbersichtAnsprechpartner', [
                     'contact-search-action',
                     'contact-create-action'
                 ], new TableConfiguration(
@@ -68,7 +69,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
                         new TableColumnConfiguration(ContactProperty.VALID_ID, true, false, true, true, 130)
                     ], null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
                 ),
-                false, true, WidgetSize.LARGE, null, true)
+                false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', true)
             );
 
         const content: string[] = ['20180529102830', '20180529144530'];

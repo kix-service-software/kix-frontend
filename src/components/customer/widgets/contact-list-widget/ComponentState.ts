@@ -5,7 +5,8 @@ export class ComponentState extends WidgetComponentState<TableConfiguration> {
 
     public constructor(
         public actions: AbstractAction[] = [],
-        public standardTable: StandardTable<Contact> = null
+        public standardTable: StandardTable<Contact> = null,
+        public title: string = "Übersicht Ansprechpartner"
     ) {
         super();
     }
