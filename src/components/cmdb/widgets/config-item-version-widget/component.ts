@@ -54,7 +54,7 @@ class Component implements IEventListener {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.configItem) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.configItem]
+                this.state.widgetConfiguration.actions, [this.configItem]
             );
         }
     }

@@ -216,6 +216,7 @@
                     padding-bottom: 1em;
                     box-sizing: border-box;
                     .toggle-actions {
+                        // TODO: wenn möglich mit action-list umsetzen
                         list-style: none;
                         position: absolute;
                         width: 1.75rem;
@@ -243,12 +244,12 @@
                             &:last-of-type {
                                 margin-bottom: 1.75em;
                             }
-                            label {
-                                display: none;
-                            }
-                            [class^="kix-icon-"],
-                            [class*=" kix-icon-"] {
-                                font-size: 1.125em;
+                            >div.action {
+                                display: inherit;
+                                [class^="kix-icon-"],
+                                [class*=" kix-icon-"] {
+                                    font-size: 1.125em;
+                                }
                             }
                         }
                     }

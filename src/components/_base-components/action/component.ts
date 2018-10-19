@@ -10,15 +10,7 @@ class ActionComponent {
 
     public onInput(input: any): void {
         this.state.action = input.action;
-        this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : undefined;
-    }
-
-    public isDisplayText(): boolean {
-        if (typeof this.state.displayText !== 'undefined') {
-            return this.state.displayText;
-        } else {
-            return this.state.action.displayText;
-        }
+        this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
     }
 
     public doAction(event: any): void {

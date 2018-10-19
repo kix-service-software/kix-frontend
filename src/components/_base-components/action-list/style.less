@@ -1,5 +1,5 @@
-@action-max-width: 8rem; // TODO: max-width ggf. ändern
-@action-min-width: 1.5rem;
+@action-max-width: 8.5rem;
+@action-min-width: 1.75rem;
 .action-list-wrapper {
     ul {
         display: block;
@@ -29,7 +29,6 @@
             }
         }
         &.action-list {
-            padding: 0 1em;
             height: 2.25rem;
             text-align: right;
             white-space: nowrap;
@@ -53,6 +52,7 @@
                     }
                 }
                 >.action {
+                    height: 2.25rem;
                     >span.text {
                         .shorten-text;
                         max-width: @action-max-width - @action-min-width - .375rem;

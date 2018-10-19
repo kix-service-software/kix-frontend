@@ -53,7 +53,7 @@ class TicketHistoryWidgetComponent {
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.ticket) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, [this.state.ticket]
+                this.state.widgetConfiguration.actions, [this.state.ticket]
             );
         }
     }

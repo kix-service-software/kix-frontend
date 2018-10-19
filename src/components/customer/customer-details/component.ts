@@ -59,7 +59,7 @@ class Component {
     private setActions(): void {
         if (this.state.configuration && this.state.customer) {
             const actions = ActionFactory.getInstance().generateActions(
-                this.state.configuration.generalActions, true, [this.state.customer]
+                this.state.configuration.generalActions, [this.state.customer]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
@@ -68,7 +68,7 @@ class Component {
     private setContentActions(): void {
         if (this.state.configuration && this.state.customer) {
             this.state.contentActions = ActionFactory.getInstance().generateActions(
-                this.state.configuration.customerActions, true, [this.state.customer]
+                this.state.configuration.customerActions, [this.state.customer]
             );
         }
     }

@@ -69,7 +69,7 @@ export class Component implements IEventListener {
     private prepareActions(): void {
         if (this.state.widgetConfiguration && this.state.ticket) {
             this.state.generalArticleActions = ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.settings.generalActions, true, [this.state.ticket]);
+                .generateActions(this.state.widgetConfiguration.settings.generalActions, [this.state.ticket]);
 
             WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalArticleActions);
         }

@@ -133,7 +133,7 @@ class Component implements IKIXObjectSearchListener {
     private setActions(): void {
         if (this.state.widgetConfiguration) {
             this.state.actions = ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.actions, true);
+                .generateActions(this.state.widgetConfiguration.actions);
         }
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }

@@ -52,12 +52,12 @@ class Component {
         const config = this.state.configuration;
         if (config && this.state.contact) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, true, [this.state.contact]
+                config.generalActions, [this.state.contact]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 
             this.state.contactActions = ActionFactory.getInstance().generateActions(
-                config.contactActions, true, [this.state.contact]
+                config.contactActions, [this.state.contact]
             );
         }
     }

@@ -61,7 +61,7 @@ class Component {
     private prepareActions(): void {
         if (this.state.widgetConfiguration) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, false, null
+                this.state.widgetConfiguration.actions, null
             );
         }
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);

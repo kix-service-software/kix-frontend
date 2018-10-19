@@ -2,7 +2,7 @@
     <ul.action-list key="action-list">
         <for(element in state.listDefault)>
             <li class={inactive: !element.canRun()}>
-                <action action=element/>
+                <action action=element displayText=state.displayText/>
             </li>
         </for>
         <if(state.listExpansion && state.listExpansion.length > 0)>

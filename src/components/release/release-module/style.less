@@ -1,10 +1,8 @@
 .release-dashboard {
     >.content-widget {
-        >.widget-header {
+        h2 {
             text-transform: uppercase;
-            h2 {
-                font-weight: bold;
-            }
+            font-weight: bold;
         }
         >.widget-content {
             padding: @margin-default - .25rem;
@@ -17,21 +15,24 @@
                 >div {
                     background-color: @secondary-4;
                     padding: (@margin-default - .25rem) @margin-default;
-                    &.box3 {
+                    &:last-child {
                         grid-column: 2;
                         grid-row: 1 / span 2;
+                        >ul {
+                            column-count: 2;
+                            >li {
+                                page-break-inside: avoid;
+                                break-inside: avoid;
+                            }
+                        }
                     }
-                    &.box1,
-                    &.box3>.list-container {
+                    &:first-child,
+                    &:last-child {
                         >ul {
                             >li:not(:last-child) {
                                 margin-bottom: 1rem;
                             }
                         }
-                    }
-                    >.list-container {
-                        display: grid;
-                        grid-template-columns: 1fr 1fr;
                     }
                     ul {
                         list-style: none;
@@ -52,7 +53,7 @@
                 }
                 @media only screen and (max-width: 1439px) {
                     grid-template-columns: 1fr;
-                    >div.box3 {
+                    >div:last-child {
                         grid-column: 1;
                         grid-row: 3;
                     }

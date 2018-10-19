@@ -51,7 +51,7 @@ class Component {
     }
 
     public actionClicked(action: ToolbarAction): void {
-        const actions = ActionFactory.getInstance().generateActions([action.actionId], false, action.actionData);
+        const actions = ActionFactory.getInstance().generateActions([action.actionId], action.actionData);
         if (actions && actions.length) {
             const showTicketsAction = actions[0] as ShowUserTicketsAction;
             showTicketsAction.setText(action.title);

@@ -58,7 +58,7 @@ class Component {
         const config = this.state.configuration;
         if (config && this.state.configItem) {
             actions =
-                ActionFactory.getInstance().generateActions(config.configItemActions, true, [this.state.configItem]);
+                ActionFactory.getInstance().generateActions(config.configItemActions, [this.state.configItem]);
         }
         return actions;
     }
@@ -67,7 +67,7 @@ class Component {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.configItem) {
-            actions = ActionFactory.getInstance().generateActions(config.actions, true, [this.state.configItem]);
+            actions = ActionFactory.getInstance().generateActions(config.actions, [this.state.configItem]);
         }
         return actions;
     }

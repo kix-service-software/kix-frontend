@@ -1,25 +1,32 @@
 <div class=component.getWidgetClasses()>
     <div.widget-header class={minimizable: state.minimizable} on-click('minimizeWidget', false)
         on-mousedown('headerMousedown', false)>
-        <span.header-left class={"with-icon": input.explorer || component.isInputDefined(input.icon)}>
+        <span.header-left>
             <if(input.explorer)>
                 <span.kix-icon-triangle-left.as-button on-click('minimizeExplorer')>
                     <span.path1/>
                     <span.path2/>
                 </span>
             </if>
-            <if(component.isInputDefined(input.icon))>
-                <icon icon=input.icon on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)/>
-            </if>
             <if(input.title)>
-                <h2 title=input.title on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)>${input.title}</h2>
+                <div.widget-title class={"with-icon": component.isInputDefined(input.icon)}>
+                    <if(component.isInputDefined(input.icon))>
+                        <icon icon=input.icon on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)/>
+                    </if>
+                    <h2 title=input.title on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)>${input.title}</h2>
+                </div>
             </if>
             <if(component.hasHeaderContent(input.headerContent))>
                 <include(input.headerContent)/>
             </if>
+            <if(component.hasHeaderContent(input.headerFilter))>
+                <div.widget-filter>
+                    <include(input.headerFilter)/>
+                </div>
+            </if>
         </span>
         <span.header-right>
-            <action-list list=input.actions instanceId=state.instanceId/>
+            <action-list list=input.actions instanceId=state.instanceId displayText=component.getWidgetTypeActionDisplaySetting()/>
             <if(state.minimizable)>
                 <span.minimize-icon-wrapper>
                     <if(state.minimized)>
@@ -40,11 +47,11 @@
             </if>
         </span>
     </div>
-    <if(component.isLaneOrLaneTabWidget() && !state.minimized)>
-        <ul.content-actions key=("content-actions" + Math.random())>
+    <if(component.isLaneWidget() && !state.minimized)>
+        <ul.lane-content-actions key=("content-actions" + Math.random())>
             <for(action in input.contentActions)>
                 <li>
-                    <action action=action/>
+                    <action action=action displayText=false/>
                 </li>
             </for>
         </ul>

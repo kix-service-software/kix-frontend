@@ -26,7 +26,7 @@ class Component {
             : undefined;
 
         this.state.actions = ActionFactory.getInstance().generateActions(
-            this.state.widgetConfiguration.actions, true, null
+            this.state.widgetConfiguration.actions, null
         );
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
 

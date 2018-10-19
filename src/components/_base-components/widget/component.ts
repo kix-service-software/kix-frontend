@@ -155,8 +155,8 @@ class WidgetComponent implements IEventListener {
         return this.state.widgetType === WidgetType.CONTENT;
     }
 
-    public isLaneOrLaneTabWidget(): boolean {
-        return this.state.widgetType === WidgetType.LANE || this.state.widgetType === WidgetType.LANE_TAB;
+    public isLaneWidget(): boolean {
+        return this.state.widgetType === WidgetType.LANE;
     }
 
     public closeClicked(): void {
@@ -184,6 +184,14 @@ class WidgetComponent implements IEventListener {
         ) {
             (this as any).emit('headerMousedown', event);
         }
+    }
+
+    public getWidgetTypeActionDisplaySetting(): boolean {
+        return (
+            this.state.widgetType === WidgetType.SIDEBAR
+            || this.state.widgetType === WidgetType.EXPLORER
+            || this.state.widgetType === WidgetType.OVERLAY
+        ) ? false : true;
     }
 
 }

@@ -22,7 +22,7 @@ class Component {
     }
 
     private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        return `Build: [${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber}]`;
+        return `[Build: ${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber}]`;
     }
 
 }

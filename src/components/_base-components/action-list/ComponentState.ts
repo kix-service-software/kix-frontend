@@ -7,6 +7,7 @@ export class ComponentState {
         public listDefault: IAction[] = [],
         public listExpansion: IAction[] = [],
         public showListExpansion: boolean = false,
-        public keepShow: boolean = false
+        public keepShow: boolean = false,
+        public displayText: boolean = true
     ) { }
 }
