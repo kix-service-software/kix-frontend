@@ -10,5 +10,6 @@ export class ComponentState {
     public showSidebar: boolean = false;
     public contextType: ContextType = null;
     public showEmpty: boolean = false;
+    public loading: boolean = false;
 
 }

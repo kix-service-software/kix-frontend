@@ -1,4 +1,4 @@
-<if(state.showSidebar || state.showEmpty)>
+<if(!state.loading && (state.showSidebar || state.showEmpty))>
     <div.sidebar-area>
         <for(sidebar in state.sidebars)>
             <div.sidebar>
