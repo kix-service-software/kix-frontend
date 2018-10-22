@@ -99,6 +99,7 @@ class LinkDialogComponent {
 
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.state.selectedObjects = [];
+        this.state.resultCount = 0;
 
         this.state.formId = null;
 
