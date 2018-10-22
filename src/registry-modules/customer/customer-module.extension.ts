@@ -38,7 +38,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const customerListWidget =
             new ConfiguredWidget('20180529102830', new WidgetConfiguration(
-                'customer-list-widget', 'Kunden Übersicht', [
+                'customer-list-widget', 'Übersicht Kunden', [
                     'customer-search-action',
                     'customer-create-action',
                     'csv-export-action'
@@ -48,7 +48,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
         const contactListWidget =
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(
-                'contact-list-widget', 'ÜbersichtAnsprechpartner', [
+                'contact-list-widget', 'Übersicht Ansprechpartner', [
                     'contact-search-action',
                     'contact-create-action'
                 ], new TableConfiguration(
