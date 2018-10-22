@@ -41,6 +41,7 @@
             "search-ticket-dialog-context": "../../dist/registry-modules/ticket/search-ticket-dialog-context.extension",
             "search-contact-dialog-context": "../../dist/registry-modules/customer/search-contact-dialog-context.extension",
             "search-customer-dialog-context": "../../dist/registry-modules/customer/search-customer-dialog-context.extension",
+            "search-config-item-dialog-context": "../../dist/registry-modules/cmdb/search-config-item-dialog-context.extension",
             "faq-module": "../../dist/registry-modules/faq/faq-module.extension",
             "faq-details-module": "../../dist/registry-modules/faq/faq-details-module.extension",
             "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
