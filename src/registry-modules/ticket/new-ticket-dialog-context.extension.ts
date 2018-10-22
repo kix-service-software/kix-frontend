@@ -10,6 +10,7 @@ import { ServiceContainer } from '@kix/core/dist/common';
 import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
@@ -113,7 +114,7 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
         const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
             const fulltextFields = [
-                new FormField('', TicketProperty.FULLTEXT, null, false, 'Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC')
+                new FormField('', SearchProperty.FULLTEXT, null, false, 'Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC')
             ];
 
             const fields: FormField[] = [];

@@ -3,22 +3,7 @@
         <loading-spinner/>
     </if>
     <else>
-        <if(state.fulltextSearch)>
-            <widget instanceId="search-form-group" title="Volltext:"
-                on-minimizedChanged('handleSearchFormGroupMinimizeState', 'fulltext') key="fulltext">
-                <@content>
-                    <div.fulltext-search>
-                        <input.input-style key="fulltext-input" value=state.fulltextValue on-keyup('fulltextValueChanged')
-                            on-change('fulltextValueChanged')/>
-                    </div>
-                </@content>
-            </widget>
-            <div.or-delimiter>
-                <span>Oder</span>
-            </div>
-        </if>
-        <widget instanceId="search-form-group" title=component.getAttributeSearchTitle()
-            on-minimizedChanged('handleSearchFormGroupMinimizeState', 'attributes') key="attributes">
+        <widget instanceId="search-form-group" title=component.getAttributeSearchTitle() key="attributes">
             <@content>
                 <div.search-criteria>
                     <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>

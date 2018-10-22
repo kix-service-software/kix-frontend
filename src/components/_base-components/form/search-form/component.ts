@@ -9,7 +9,8 @@ import {
     TableRowHeight,
     IKIXObjectService,
     StandardTable,
-    LabelService
+    LabelService,
+    SearchProperty
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
@@ -35,9 +36,13 @@ class Component implements ISearchFormListener {
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
         if (formInstance) {
-            this.state.fulltextSearch = formInstance.form.fulltextSearch;
-            this.state.fulltextActive = this.state.fulltextSearch;
-            this.state.defaultProperties = formInstance.form.defaultSearchProperties;
+            let defaultProperties = formInstance.form.defaultSearchProperties;
+
+            if (formInstance.form.fulltextSearch) {
+                defaultProperties = [SearchProperty.FULLTEXT, ...defaultProperties];
+            }
+
+            this.state.defaultProperties = defaultProperties;
 
             formInstance.registerSearchFormListener(this);
         }
@@ -45,8 +50,6 @@ class Component implements ISearchFormListener {
         if (KIXObjectSearchService.getInstance().getSearchCache()) {
             const cache = KIXObjectSearchService.getInstance().getSearchCache();
             if (cache.status === CacheState.VALID && cache.objectType === this.state.objectType) {
-                this.state.fulltextActive = cache.isFulltext;
-                this.state.fulltextValue = cache.fulltextValue;
                 await this.setSearchResult(cache.result);
                 await this.setCanSearch();
             } else {
@@ -54,7 +57,6 @@ class Component implements ISearchFormListener {
             }
         }
 
-        this.setFulltextGroupActive();
         this.state.loading = false;
     }
 
@@ -74,11 +76,6 @@ class Component implements ISearchFormListener {
         }
     }
 
-    public async fulltextValueChanged(event: any): Promise<void> {
-        this.state.fulltextValue = event.target.value;
-        await this.setCanSearch();
-    }
-
     public formReseted(): void {
         return;
     }
@@ -95,7 +92,6 @@ class Component implements ISearchFormListener {
             formInstance.reset();
         }
 
-        this.state.fulltextValue = null;
         await this.setSearchResult([]);
         this.state.loading = false;
     }
@@ -106,26 +102,15 @@ class Component implements ISearchFormListener {
 
     public async search(): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true, "Suche ...", true);
-        if (this.state.fulltextActive) {
-            if (this.state.fulltextValue && this.state.fulltextValue !== '') {
-                await KIXObjectSearchService.getInstance()
-                    .executeFullTextSearch<KIXObject>(this.state.objectType, this.state.fulltextValue)
-                    .then((objects) => {
-                        this.setSearchResult(objects);
-                    })
-                    .catch((error) => {
-                        this.showError(error);
-                    });
-            }
-        } else {
-            await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.state.formId)
-                .then((objects) => {
-                    this.setSearchResult(objects);
-                })
-                .catch((error) => {
-                    this.showError(error);
-                });
-        }
+
+        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.state.formId)
+            .then((objects) => {
+                this.setSearchResult(objects);
+            })
+            .catch((error) => {
+                this.showError(error);
+            });
+
         DialogService.getInstance().setMainDialogLoading(false);
     }
 
@@ -137,43 +122,6 @@ class Component implements ISearchFormListener {
 
     public removeValue(): void {
         return;
-    }
-
-    private setFulltextGroupActive(): void {
-        if (this.state.fulltextSearch) {
-            const formElement = (this as any).getEl();
-            if (formElement) {
-                formElement.style.opacity = 0;
-                setTimeout(() => {
-                    this.handleSearchFormGroupMinimizeState('fulltext');
-                    formElement.style.opacity = null;
-                }, 50);
-            }
-        }
-    }
-
-    public async handleSearchFormGroupMinimizeState(groupName: string, minimized: boolean = false): Promise<void> {
-        if (this.state.fulltextSearch) {
-            if (minimized === false) {
-                let otherGroupName;
-                if (groupName === 'fulltext') {
-                    this.state.fulltextActive = true;
-                    otherGroupName = 'attributes';
-                    const fulltextInput = (this as any).getEl('fulltext-input');
-                    if (fulltextInput) {
-                        fulltextInput.focus();
-                    }
-                } else {
-                    this.state.fulltextActive = false;
-                    otherGroupName = 'fulltext';
-                }
-                const groupComponent = (this as any).getComponent(otherGroupName);
-                if (groupComponent) {
-                    groupComponent.setMinizedState(true);
-                }
-                await this.setCanSearch();
-            }
-        }
     }
 
     public getAttributeSearchTitle(): string {
@@ -197,7 +145,9 @@ class Component implements ISearchFormListener {
             this.state.objectType
         );
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        const objectProperties = searchCache ? searchCache.criteria.map((c) => c.property) : [];
+        const objectProperties = searchCache
+            ? searchCache.criteria.map((c) => c.property).filter((p) => p !== SearchProperty.FULLTEXT)
+            : [];
 
         const columns = objectService.getTableColumnConfiguration(objectProperties);
         table.setColumns(columns);
@@ -215,16 +165,12 @@ class Component implements ISearchFormListener {
     }
 
     private async setCanSearch(): Promise<void> {
-        if (this.state.fulltextActive) {
-            this.state.canSearch = !!this.state.fulltextValue;
-        } else {
-            const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
-            if (formInstance) {
-                this.state.canSearch = formInstance.getCriteria().some(
-                    (c) => c.property !== null && c.operator !== null
-                        && c.value !== null && c.value !== '' && !/^\s+$/.test(c.value.toString())
-                );
-            }
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        if (formInstance) {
+            this.state.canSearch = formInstance.getCriteria().some(
+                (c) => c.property !== null && c.operator !== null
+                    && c.value !== null && c.value !== '' && !/^\s+$/.test(c.value.toString())
+            );
         }
     }
 

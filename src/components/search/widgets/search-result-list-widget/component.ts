@@ -5,7 +5,7 @@ import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
     LabelService, StandardTableFactoryService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, IKIXObjectService, KIXObjectService
+    KIXObjectSearchCache, IKIXObjectService, KIXObjectService, SearchProperty
 } from '@kix/core/dist/browser';
 import { ServiceRegistry } from '@kix/core/dist/browser';
 
@@ -103,7 +103,9 @@ class Component implements IKIXObjectSearchListener {
             table.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
 
             if (isSearchMainObject) {
-                const objectProperties = cache.criteria.map((c) => c.property);
+                const objectProperties = cache.criteria
+                    .map((c) => c.property)
+                    .filter((p) => p !== SearchProperty.FULLTEXT);
                 const objectService = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
                 const columns = objectService.getTableColumnConfiguration(objectProperties);
                 table.setColumns(columns);

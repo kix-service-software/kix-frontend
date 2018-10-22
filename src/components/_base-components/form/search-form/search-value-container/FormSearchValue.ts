@@ -1,5 +1,5 @@
 import {
-    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil
+    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty
 } from "@kix/core/dist/browser";
 import {
     TreeNode, FilterCriteria, FilterDataType,
@@ -39,9 +39,16 @@ export class FormSearchValue {
         this.currentValue = null;
 
         if (this.currentPropertyNode) {
-            const operations = KIXObjectSearchService.getInstance().getSearchOperations(
-                this.objectType, propertyNode.id
-            );
+            let operations = [];
+
+            if (this.currentPropertyNode.id === SearchProperty.FULLTEXT) {
+                operations = [SearchOperator.CONTAINS];
+            } else {
+                operations = KIXObjectSearchService.getInstance().getSearchOperations(
+                    this.objectType, propertyNode.id
+                );
+            }
+
             this.operationNodes = operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o)));
             if (this.operationNodes && this.operationNodes.length) {
                 this.setOperationNode(this.operationNodes[0]);
