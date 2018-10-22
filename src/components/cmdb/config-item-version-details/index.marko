@@ -1,5 +1,5 @@
-<if(state.nodes && state.nodes.length)>
-    <table-tree tree=state.nodes titles=["Eigenschaft", "Wert"] on-nodeClicked('nodeClicked')/>
+<if(state.groups)>
+    <label-value-group groups=state.groups on-fileClicked('fileClicked')/>
 </if>
 <else>
     <span>Keine Versionsdaten verfügbar.</span>
