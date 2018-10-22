@@ -106,7 +106,8 @@ export class Extension implements IModuleFactoryExtension {
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
-                'config-item-version-widget', "Versionsdetails", [], null, false, true
+                'config-item-version-widget', "Versionsdetails", ['config-item-version-compare-action'],
+                null, false, true
             ));
 
         const content = ['config-item-version-widget'];

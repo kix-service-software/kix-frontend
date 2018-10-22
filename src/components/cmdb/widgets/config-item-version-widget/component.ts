@@ -1,9 +1,6 @@
 import { ContextService } from '@kix/core/dist/browser/context';
-import {
-    ConfigItemHistoryTableLabelLayer, ConfigItemHistoryTableContentLayer
-} from '@kix/core/dist/browser/cmdb';
 import { ComponentState } from './ComponentState';
-import { ActionFactory, StandardTableFactoryService, IdService } from '@kix/core/dist/browser';
+import { ActionFactory, StandardTableFactoryService, IdService, WidgetService } from '@kix/core/dist/browser';
 import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
 import { EventService, IEventListener } from '@kix/core/dist/browser/event';
 
@@ -47,15 +44,21 @@ class Component implements IEventListener {
     private async initWidget(configItem: ConfigItem): Promise<void> {
         this.configItem = configItem;
         this.state.title = `Übersicht Versionsdetails (${configItem.Versions.length})`;
-        this.setActions();
+        this.prepareActions();
         this.prepareVersionTable();
     }
 
-    private setActions(): void {
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+    }
+
+    private prepareActions(): void {
         if (this.state.widgetConfiguration && this.configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.generalVersionActions = ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.configItem]
             );
+
+            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalVersionActions);
         }
     }
 

@@ -5,7 +5,7 @@ import { WidgetComponentState } from '@kix/core/dist/model/';
 export class ComponentState extends WidgetComponentState<TableConfiguration> {
 
     public constructor(
-        public actions: AbstractAction[] = [],
+        public generalVersionActions: AbstractAction[] = [],
         public title: string = 'Versiondetails',
         public table: StandardTable = null
     ) {
