@@ -1,8 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
-    ObjectIcon, TicketProperty, FormInputComponent, TreeNode
+    ObjectIcon, TicketProperty, FormInputComponent, TreeNode, KIXObjectType, Sla
 } from "@kix/core/dist/model";
+import { KIXObjectService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<number, ComponentState>  {
 
@@ -16,12 +17,10 @@ class Component extends FormInputComponent<number, ComponentState>  {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            this.state.nodes = objectData.slas.map((s) =>
-                new TreeNode(s.ID, s.Name, new ObjectIcon(TicketProperty.SLA_ID, s.ID))
-            );
-        }
+        const slas = await KIXObjectService.loadObjects<Sla>(KIXObjectType.SLA);
+        this.state.nodes = slas.map((s) =>
+            new TreeNode(s.SLAID, s.Name, null)
+        );
         this.setCurrentNode();
     }
 
