@@ -10,7 +10,7 @@ import { ContactService } from '@kix/core/dist/browser/contact';
 import { SearchService } from '@kix/core/dist/browser/search';
 import { FAQService } from '@kix/core/dist/browser/faq';
 import { LinkService } from '@kix/core/dist/browser/link';
-import { IdService } from '@kix/core/dist/browser';
+import { IdService, StandardTableFactoryService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
 import { GeneralCatalogService } from '@kix/core/dist/browser/general-catalog';
@@ -18,6 +18,7 @@ import { TextModuleService } from '@kix/core/dist/browser/text-modules';
 import { EventService } from '@kix/core/dist/browser/event';
 import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
 import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
+import { SlaService } from '@kix/core/dist/browser/sla';
 import { ReleaseContext } from '@kix/core/dist/browser/release';
 
 declare var io: any;
@@ -89,6 +90,7 @@ class Component {
         TextModuleService.getInstance();
         SysConfigService.getInstance();
         DynamicFieldService.getInstance();
+        SlaService.getInstance();
 
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
