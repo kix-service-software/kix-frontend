@@ -43,7 +43,8 @@ export class ModuleExtension implements IModuleFactoryExtension {
                 null,
                 true,
                 [
-                    ContactProperty.USER_FIRST_NAME, ContactProperty.USER_LAST_NAME, ContactProperty.USER_LOGIN
+                    ContactProperty.USER_FIRST_NAME, ContactProperty.USER_LAST_NAME,
+                    ContactProperty.USER_EMAIL, ContactProperty.USER_LOGIN
                 ]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
