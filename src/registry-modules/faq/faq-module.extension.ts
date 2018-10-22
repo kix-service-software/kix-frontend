@@ -1,6 +1,14 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize } from '@kix/core/dist/model';
+import {
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
+    FormField, Form, FormContext, KIXObjectType
+} from '@kix/core/dist/model';
 import { FAQContext, FAQContextConfiguration } from '@kix/core/dist/browser/faq';
+import { ServiceContainer } from '@kix/core/dist/common';
+import { IConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
+import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
+import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -44,8 +52,33 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
         );
     }
 
-    public createFormDefinitions(): void {
-        // do nothing
+    // tslint:disable:max-line-length
+    public async createFormDefinitions(): Promise<void> {
+        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const linkFormId = 'link-faq-search-form';
+        const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
+        if (!existingLinkForm) {
+            const fields: FormField[] = [];
+            fields.push(new FormField("Volltext", SearchProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit"));
+            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen)."));
+            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens 1 Zeichen)."));
+            fields.push(new FormField(
+                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie.")
+            );
+            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."));
+
+            const attributeGroup = new FormGroup('FAQ-Attribute', fields);
+
+            const form = new Form(
+                linkFormId, 'Verknüpfen mit FAQ', [attributeGroup],
+                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
+            );
+            await configurationService.saveModuleConfiguration(form.id, null, form);
+        }
+
+        configurationService.registerForm(
+            [FormContext.LINK], KIXObjectType.FAQ_ARTICLE, linkFormId
+        );
     }
 
 }

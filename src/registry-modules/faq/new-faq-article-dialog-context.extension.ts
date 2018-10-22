@@ -21,8 +21,7 @@ export class Extension implements IModuleFactoryExtension {
 
     // tslint:disable:max-line-length
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
         const formId = 'new-faq-article-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
@@ -60,35 +59,6 @@ export class Extension implements IModuleFactoryExtension {
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
-
-        const linkFormId = 'link-faq-search-form';
-        const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
-        if (!existingLinkForm) {
-            const fulltextFields = [
-                new FormField("Volltext", SearchProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit")
-            ];
-
-            const fields: FormField[] = [];
-            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen)."));
-            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens 1 Zeichen)."));
-            fields.push(new FormField(
-                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie.")
-            );
-            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."));
-
-            const fulltextGroup = new FormGroup('Volltext', fulltextFields, 'Oder');
-            const attributeGroup = new FormGroup('FAQ-Attribute', fields);
-
-            const form = new Form(
-                linkFormId, 'Verknüpfen mit FAQ', [fulltextGroup, attributeGroup],
-                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
-            );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
-        }
-
-        configurationService.registerForm(
-            [FormContext.LINK], KIXObjectType.FAQ_ARTICLE, linkFormId
-        );
     }
 
 }
