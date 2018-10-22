@@ -29,9 +29,15 @@ class LinkDialogComponent {
     }
 
     public onInput(input: any): void {
-        this.state.linkDescriptions = input.linkDescriptions || [];
+        this.state.linkDescriptions = !this.state.linkDescriptions
+            ? input.linkDescriptions || []
+            : this.state.linkDescriptions;
         this.state.objectType = input.objectType;
         this.resultListenerId = input.resultListenerId;
+    }
+
+    public onDestroy(): void {
+        this.state.linkDescriptions = null;
     }
 
     public async onMount(): Promise<void> {
@@ -184,9 +190,11 @@ class LinkDialogComponent {
     }
 
     private setLinkedObjectsToTableLayer(table: StandardTable = this.state.standardTable): void {
-        this.objectLinkLayer.setLinkDescriptions(this.state.linkDescriptions);
-        const linkedObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
-        this.preventSelectionLayer.setPreventSelectionFilter(linkedObjects);
+        if (this.state.linkDescriptions) {
+            this.objectLinkLayer.setLinkDescriptions(this.state.linkDescriptions);
+            const linkedObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
+            this.preventSelectionLayer.setPreventSelectionFilter(linkedObjects);
+        }
     }
 
     private objectSelectionChanged(objects: KIXObject[]): void {
