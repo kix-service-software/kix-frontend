@@ -50,7 +50,8 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(
                 'contact-list-widget', 'Übersicht Ansprechpartner', [
                     'contact-search-action',
-                    'contact-create-action'
+                    'contact-create-action',
+                    'csv-export-action'
                 ], new TableConfiguration(
                     null, 10,
                     [
