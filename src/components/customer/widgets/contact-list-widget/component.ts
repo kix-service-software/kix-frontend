@@ -49,7 +49,7 @@ class Component {
                 null, listenerConfiguration, true
             );
             this.state.standardTable.layerConfiguration.contentLayer.setPreloadedObjects(null);
-
+            WidgetService.getInstance().setActionData(this.state.instanceId, this.state.standardTable);
             setTimeout(async () => {
                 await this.state.standardTable.loadRows();
                 this.state.title = this.getTitle();
