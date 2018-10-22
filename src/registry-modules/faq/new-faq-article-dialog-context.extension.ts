@@ -7,6 +7,7 @@ import { IConfigurationService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
 import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
+import { SearchProperty } from "@kix/core/dist/browser";
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -64,7 +65,7 @@ export class Extension implements IModuleFactoryExtension {
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
             const fulltextFields = [
-                new FormField("Volltext", FAQArticleProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit")
+                new FormField("Volltext", SearchProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit")
             ];
 
             const fields: FormField[] = [];

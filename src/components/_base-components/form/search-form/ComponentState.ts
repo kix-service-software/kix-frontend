@@ -9,11 +9,7 @@ export class ComponentState {
         public resultCount: number = 0,
         public canSearch: boolean = false,
         public table: StandardTable<KIXObject> = null,
-        public fulltextSearch: boolean = false,
         public defaultProperties: string[] = [],
-        public fullTextField: FormField[] = [],
-        public fulltextActive: boolean = true,
-        public fulltextValue: string = null,
         public loading: boolean = true
     ) { }
 
