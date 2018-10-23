@@ -3,25 +3,25 @@
         <span.kix-icon-attachement/>Datei wählen
         <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>
     </button>
-    <span.file-upload-notice>
-        <span>
-            <if(state.files.length)>
+    <span.file-upload-notice on-click('minimize') class={"has-text": !(!state.files.length)}>
+        <if(!!state.files.length)>
+            <span>
                 ${state.files.length} Datei(en) angehangen
                 <span.kix-icon-check/>
-            </if>
-        </span>
-        <span.file-upload-line/>
-        <span.minimize-icon-container>
+            </span>
+        </if>
+        <div.toggle>
+            <span.line class={minimized: state.minimized}/>
             <if(state.minimized)>
-                <span.kix-icon-sort-down class={"no-files": state.files.length === 0} on-click('minimize')/>
+                <span.kix-icon-sort-down/>
             </if>
             <else>
-                <span.kix-icon-triangle-up on-click('minimize')>
+                <span.kix-icon-triangle-up>
                     <span.path1/>
                     <span.path2/>
                 </span>
             </else>
-        </span>
+        </div>
     </span>
     <if(!state.minimized)>
         <label-list labels=state.labels on-removeLabel('removeFile')/>

@@ -1,0 +1,153 @@
+.button-color(@border-color: @secondary-7, @button-bg-color: @secondary-6, @button-icon-bg-color: @secondary-7, @button-font-color: @default-dark-font-color, @button-icon-color: @secondary-6) {
+    background-color: @button-bg-color;
+    color: @button-font-color;
+    border-color: @border-color;
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
+        background-color: @button-icon-bg-color;
+        color: @button-icon-color;
+        border-color: @border-color;
+    }
+    &:hover:not(:disabled) {
+        background-color: darken(@button-bg-color, 10%);
+        border-color: darken(@border-color, 10%);
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            background-color: darken(@button-icon-bg-color, 10%);
+            color: darken(@button-icon-color, 10%);
+            border-color: darken(@border-color, 10%);
+        }
+    }
+    &:disabled {
+        background-color: @secondary-6;
+        color: @secondary-2;
+        border-color: @secondary-2;
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            background-color: @secondary-2;
+            color: @secondary-6;
+            border-color: @secondary-2;
+        }
+    }
+}
+
+@default-button-icon-width: @default-button-height;
+@control-button-size: 1rem;
+@button-max-width: 20.5rem;
+button {
+    .button-color();
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+    height: @default-button-height;
+    box-sizing: border-box;
+    border-radius: @border-radius;
+    border: 1px solid;
+    position: relative;
+    &:not(:disabled) {
+        .shadow-1;
+    }
+    &:hover {
+        box-shadow: none;
+    }
+    &:not(.button-without-text) {
+        .shorten-text;
+        min-width: 11.75rem;
+        padding-left: .625rem+@default-button-icon-width;
+        padding-right: .625rem;
+        max-width: @button-max-width;
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            border-right: 1px solid;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+    &.button-without-text {
+        padding: 0; // prevent browser default
+        >span[class^="kix-icon-"],
+        >span[class*=" kix-icon-"] {
+            display: block;
+        }
+    }
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
+        .icon-font-size-normal;
+        width: @default-button-icon-width;
+        height: 100%;
+        line-height: @default-button-height;
+        text-align: center;
+        border-radius: @border-radius;
+        box-sizing: border-box;
+    }
+    &.submit-button {
+        .button-color(@primary-6, @secondary-6, @primary-6, @secondary-0);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                color: fade(@secondary-6, 70%);
+            }
+        }
+    }
+    &.cancel-button {
+        .button-color(@tertiary-0, @secondary-6, @tertiary-0, @secondary-0 );
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                color: fade(@secondary-6, 70%);
+            }
+        }
+    }
+    &.form-button {
+        .button-color(@primary-2, @secondary-4, @secondary-3, @secondary-0, @primary-2);
+    }
+    &.form-control-button {
+        @control-button-icon-size: @control-button-size - .125rem;
+        .button-color(@secondary-2, @secondary-3, @secondary-3, @secondary-1, @secondary-1);
+        height: @control-button-size;
+        width: @control-button-size;
+        overflow: hidden;
+        >[class^="kix-icon-"],
+        >[class*=" kix-icon-"] {
+            font-size: @control-button-icon-size;
+            width: @control-button-icon-size;
+            height: @control-button-icon-size;
+            line-height: @control-button-icon-size;
+        }
+        box-shadow: none;
+    }
+    &.form-blank-button {
+        .button-color(@primary-2, @secondary-6, @secondary-3, @secondary-0, @primary-2);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+    }
+    &.form-blank-cancel-button {
+        .button-color(@tertiary-0, @secondary-6, @secondary-3, @secondary-0, @tertiary-0);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+    }
+    &.form-blank-submit-button {
+        .button-color(@primary-6, @secondary-6, @secondary-3, @secondary-0, @primary-6);
+        &:hover:not(:disabled) {
+            background-color: @secondary-6;
+        }
+    }
+    &.special-button {
+        .button-color(@primary-6, @primary-6, @secondary-6, @secondary-6, @primary-6);
+        &:hover:not(:disabled) {
+            >[class^="kix-icon-"],
+            >[class*=" kix-icon-"] {
+                background-color: @secondary-6;
+            }
+        }
+        .shadow-1(@secondary-3);
+    }
+    &::-moz-focus-inner {
+        border: none;
+    }
+}

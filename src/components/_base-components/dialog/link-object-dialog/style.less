@@ -2,7 +2,7 @@
     >.linkable-objects-selection,
     .linkable-objects-link-type-selection {
         display: grid;
-        grid-template-columns: 8rem auto;
+        grid-template-columns: 8.75rem auto;
         grid-gap: 2rem;
         margin-bottom: 1rem;
         .linkable-objects-selection-label {
@@ -10,6 +10,7 @@
             margin-top: .25rem;
             display: grid;
             grid-template-columns: auto max-content;
+            justify-self: start;
             >span {
                 .shorten-text;
                 text-align: right;
@@ -68,11 +69,10 @@
         grid-auto-flow: column;
         grid-gap: 2rem;
         >.linkable-objects-link-type-selection {
-            grid-template-columns: max-content auto;
-            justify-self: left;
+            justify-self: start;
         }
         >button {
-            justify-self: right
+            justify-self: end;
         }
     }
     >.sucess-hint {
