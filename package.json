@@ -26,6 +26,8 @@
     "lasso": "3.2.6",
     "lasso-less": "3.0.1",
     "lasso-marko": "2.4.4",
+    "lasso-minify": "1.0.4",
+    "lasso-minify-css": "1.1.4",
     "marko": "4.13.8",
     "marko-loader": "1.3.3",
     "reflect-metadata": "0.1.12",
@@ -49,11 +51,13 @@
     "gulp-mocha": "6.0.0",
     "gulp-tsc": "1.3.2",
     "gulp-tslint": "8.1.3",
+    "gulp-uglify-es": "1.0.4",
     "mocha": "5.2.0",
     "nock": "10.0.1",
     "run-sequence": "2.2.1",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
-    "typescript": "^3.0.3"
+    "typescript": "3.0.3",
+    "uglify-es": "3.3.9"
   }
 }
