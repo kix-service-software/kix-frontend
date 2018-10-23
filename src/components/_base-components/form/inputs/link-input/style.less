@@ -1,7 +1,7 @@
 .link-input {
     width: 100%;
     display: grid;
-    grid-template-columns: max-content auto;
+    grid-template-columns: minmax(@button-min-width, min-content) auto;
     grid-template-rows: @default-button-height max-content;
     grid-column-gap: @margin-default;
     align-items: center;
@@ -20,10 +20,7 @@
             }
         }
         &.has-text {
-            grid-template-columns: minmax(auto, min-content) auto;
-        }
-        >span {
-            .shorten-text;
+            grid-template-columns: max-content auto;
         }
         >.toggle {
             .icon-font-size-normal;
