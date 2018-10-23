@@ -2,7 +2,7 @@
     "bundlingEnabled": false,
     "fingerprintsEnabled": false,
     "includeSlotNames": false,
-    "minify": false,
+    "minifyJS": false,
     "plugins": [
         "lasso-marko",
         "lasso-less"

@@ -6,6 +6,7 @@ const mocha = require('gulp-mocha');
 const tslint = require("gulp-tslint");
 const less = require("gulp-less");
 const path = require('path');
+const uglify = require('gulp-uglify-es').default;
 
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
@@ -32,12 +33,18 @@ const prodTSCConfig = {
     experimentalDecorators: true,
     emitDecoratorMetadata: true,
     sourceMap: false,
-    declaration: true,
+    declaration: false,
     strict: true
 };
 
 gulp.task('default', (cb) => {
-    runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+        console.log("Build app for development.");
+        runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+    } else {
+        console.log("Build app for production.");
+        runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
+    }
 });
 
 gulp.task('clean', () => {
@@ -105,11 +112,11 @@ gulp.task('compile-themes', () => {
     }
 
     return gulp
-        .src(['src/static/less/themes/*.less'])
+        .src(['static/less/themes/*.less'])
         .pipe(less({
             paths: [path.join(__dirname, 'less', 'includes')]
         }))
-        .pipe(gulp.dest('dist/static/themes'));
+        .pipe(gulp.dest('dist/themes'));
 });
 
 gulp.task('copy-component-templates', () => {
@@ -122,4 +129,14 @@ gulp.task('copy-static', () => {
     return gulp
         .src(['src/static/**/*'])
         .pipe(gulp.dest('dist/static'));
+});
+
+gulp.task("uglify", function () {
+    return gulp.src("dist/**/*.js")
+        .pipe(uglify({
+            ecma: 6,
+            keep_classnames: false,
+            keep_fnames: false,
+        }))
+        .pipe(gulp.dest("dist/"));
 });
