@@ -34,6 +34,7 @@
 @default-button-icon-width: @default-button-height;
 @control-button-size: 1rem;
 @button-max-width: 20.5rem;
+@button-min-width: 11.75rem;
 button {
     .button-color();
     &:not(:disabled) {
@@ -52,7 +53,7 @@ button {
     }
     &:not(.button-without-text) {
         .shorten-text;
-        min-width: 11.75rem;
+        min-width: @button-min-width;
         padding-left: .625rem+@default-button-icon-width;
         padding-right: .625rem;
         max-width: @button-max-width;
