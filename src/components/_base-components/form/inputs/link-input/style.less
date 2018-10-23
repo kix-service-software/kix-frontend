@@ -1,34 +1,42 @@
-.link-ticket-input {
+.link-input {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 2rem max-content;
+    grid-template-columns: max-content auto;
+    grid-template-rows: @default-button-height max-content;
     grid-column-gap: @margin-default;
     align-items: center;
-    >button {
-        width: 100%;
-    }
-    >.link-ticket-notice {
+    >.link-notice {
         width: 100%;
         display: grid;
-        grid-template-columns: max-content auto max-content;
-        grid-gap: .25rem;
+        grid-template-columns: auto;
+        grid-gap: 1rem;
         align-items: center;
-        grid-template-rows: 2rem;
+        grid-template-rows: @default-button-height;
         color: @secondary-1;
-        >.link-ticket-line {
-            background-color: @secondary-3;
-            height: 1px;
-            margin-top: .375rem;
+        cursor: pointer;
+        &:hover {
+            >.toggle {
+                color: darken(@secondary-0, 20%);
+            }
         }
-        >.minimize-icon-container {
-            margin: .375rem 0 0 .25rem;
+        &.has-text {
+            grid-template-columns: minmax(auto, min-content) auto;
+        }
+        >span {
+            .shorten-text;
+        }
+        >.toggle {
+            .icon-font-size-normal;
+            display: grid;
+            grid-template-columns: auto max-content;
+            grid-gap: @margin-small;
+            align-items: center;
             color: @secondary-0;
-            [class^="kix-icon-"],
-            [class*=" kix-icon-"] {
-                cursor: pointer;
-                >.no-links {
-                    color: @secondary-3;
+            >.line {
+                background-color: @secondary-3;
+                height: 1px;
+                &.minimized {
+                    background-color: @secondary-1;
                 }
             }
         }

@@ -1,4 +1,4 @@
-<div.link-ticket-input>
+<div.link-input>
     <if(state.loading)>
         <loading-spinner/>
     </if>
@@ -6,25 +6,25 @@
         <button.form-button type="button" title="Verknüpfung zuordnen" on-click('openDialog')>
             <span.kix-icon-new-link/>Verknüpfung zuordnen
         </button>
-        <span.link-ticket-notice>
-            <span>
-                <if(state.linkDescriptions.length)>
+        <span.link-notice on-click('minimize') class={"has-text": !(!state.linkDescriptions.length)}>
+            <if(!!state.linkDescriptions.length)>
+                <span>
                     ${state.linkDescriptions.length} Verknüpfungen angelegt
                     <span.kix-icon-check/>
-                </if>
-            </span>
-            <span.link-ticket-line/>
-            <span.minimize-icon-container>
+                </span>
+            </if>
+            <div.toggle>
+                <span.line class={minimized: state.minimized}/>
                 <if(state.minimized)>
-                    <span.kix-icon-sort-down class={"no-links": state.linkDescriptions.length === 0} on-click('minimize')/>
+                    <span.kix-icon-sort-down/>
                 </if>
                 <else>
-                    <span.kix-icon-triangle-up on-click('minimize')>
+                    <span.kix-icon-triangle-up>
                         <span.path1/>
                         <span.path2/>
                     </span>
                 </else>
-            </span>
+            </div>
         </span>
         <if(!state.minimized)>
             <label-list labels=state.labels on-removeLabel('removeLink')/>
