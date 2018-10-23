@@ -176,8 +176,9 @@
 
 .explorer-widget {
     .widget();
+    min-height: 15rem;
+    max-height: 43rem;
     width: @explorer-width;
-    height: 100%;
     background-color: @secondary-6;
     >.widget-header {
         grid-template-columns: 8fr 2fr;
@@ -189,9 +190,10 @@
         overflow: auto;
         padding: 1rem .875rem;
         max-height: 43rem - @default-widget-header-height;
+        min-height: 15rem - @default-widget-header-height;
         >span.show-all {
             display: inline-block;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             cursor: pointer;
             &:hover {
                 color: @primary-0;
