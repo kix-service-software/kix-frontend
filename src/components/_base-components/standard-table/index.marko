@@ -12,15 +12,19 @@
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                 <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
-                        <if(column.columnTitle)>${column.text}</if>
-                        <if(column.sortable)>
-                            <span.sortable>
-                                <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")
-                                    on-click('sortUp', column.id)/>
-                                <span.kix-icon-sort-down class=(component.isActiveSort(column.id, "Down") ? "sort-active" : "")
-                                    on-click('sortDown', column.id)/>
+                        <div.table-header-cell-content>
+                            <span.column-tilte-text>
+                                <if(column.columnTitle)>${column.text}</if>
                             </span>
-                        </if>
+                            <if(column.sortable)>
+                                <span.sortable>
+                                    <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")
+                                        on-click('sortUp', column.id)/>
+                                    <span.kix-icon-sort-down class=(component.isActiveSort(column.id, "Down") ? "sort-active" : "")
+                                        on-click('sortDown', column.id)/>
+                                </span>
+                            </if>
+                        </div>
                         <if(column.resizable)>
                             <div.move-point on-mousedown('mousedown', column.id)/>
                         </if>

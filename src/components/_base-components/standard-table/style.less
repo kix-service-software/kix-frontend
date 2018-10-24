@@ -188,14 +188,10 @@
                 position: relative;
                 padding: 0 .5rem;
                 box-sizing: border-box;
-                &.cell-pipe:not(.table-header-cell):not(.checkbox-column):not(.toggle-row-column)::before {
-                    display: inline-block;
-                    content: "|";
-                    color: @secondary-7;
-                    margin-right: 2px;
-                }
+                border-right: 1px solid @secondary-4;
                 &.table-header-cell {
                     padding: 0 @margin-small;
+                    border-right: 1px solid @secondary-2;
                 }
                 span.icon>* {
                     vertical-align: middle;
@@ -284,31 +280,51 @@
                 overflow: hidden;
                 .table-header-cell {
                     background-color: @secondary-3; // TODO: wieder entfenren, wenn Resize in Componente korrekte Standard-Table-Config aussließt und richtige Header-Row-Breite berechnet
-                    .sortable {
-                        color: @secondary-1;
-                        .sort-active {
-                            color: @secondary-7;
+                    overflow: unset;
+                    >.table-header-cell-content {
+                        display: grid;
+                        grid-template-columns: auto 2rem;
+                        align-content: center;
+                        height: 2.25rem;
+                        >.column-tilte-text {
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
                         }
-                        display: inline-block;
-                        margin-left: .25em;
-                        font-size: .625em;
-                        span {
-                            cursor: pointer;
-                        }
-                        [class^="kix-icon-"],
-                        [class*=" kix-icon-"] {
-                            font-size: 1rem;
+                        .sortable {
+                            color: @secondary-1;
+                            .sort-active {
+                                color: @secondary-7;
+                            }
+                            display: inline-block;
+                            margin-left: .25em;
+                            font-size: .625em;
+                            span {
+                                cursor: pointer;
+                            }
+                            [class^="kix-icon-"],
+                            [class*=" kix-icon-"] {
+                                font-size: 1rem;
+                            }
+                            >.kix-icon-sort-up {
+                                display: inline;
+                            }
+                            >.kix-icon-sort-down {
+                                display: inline;
+                                margin-left: -0.35rem;
+                            }
                         }
                     }
                     .move-point {
                         top: 2px;
-                        right: 0;
+                        right: -3px;
                         bottom: 2px;
                         width: 6px;
                         position: absolute;
                         border-radius: @border-radius;
                         cursor: col-resize;
                         transition: background-color .5s;
+                        z-index: 1000;
                         &:hover,
                         &:active {
                             background-color: @secondary-1;
@@ -325,6 +341,12 @@
             cursor: pointer;
             box-sizing: border-box;
             overflow: hidden;
+            >div {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    color: @secondary-0;
+                }
+            }
             &.opened {
                 >div:not(.margin-placeholder) {
                     background-color: @primary-5;
