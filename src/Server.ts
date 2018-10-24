@@ -47,6 +47,7 @@ export class Server {
         @inject("IPluginService") private pluginService: IPluginService,
         @inject("IClientRegistrationService") private clientRegistrationService: IClientRegistrationService,
         @inject("ISocketCommunicationService") private socketService: ISocketCommunicationService,
+        @inject("IMarkoService") private markoService: IMarkoService
     ) {
         this.serverConfig = this.configurationService.getServerConfiguration();
         this.initializeApplication();
@@ -96,7 +97,9 @@ export class Server {
         this.configurationService.saveModuleConfiguration('release-info', null, releaseInfo);
     }
 
-    private initHttpServer(): void {
+    private async initHttpServer(): Promise<void> {
+        await this.markoService.appIsReady();
+
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         http.createServer(this.application).listen(httpPort);
 
