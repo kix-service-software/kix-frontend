@@ -21,7 +21,7 @@
                     }
                 },
                 "cssMinify": {
-                    "enable": false
+                    "enable": true
                 }
             }
         }
