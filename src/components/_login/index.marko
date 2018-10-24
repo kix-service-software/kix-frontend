@@ -31,13 +31,11 @@
                 <div class="dialog-content" on-keydown('keyDown')>
                     <label>
                         <span>Benutzername:</span>
-                        <input.input-style type="text" value=state.userName on-change('userNameChanged') on-keyup('userNameChanged')
-                            name="username" tabindex="1" key="login-user-name"/>
+                        <input.input-style type="text" name="username" tabindex="1" key="login-user-name"/>
                     </label>
                     <label>
                         <span>Passwort:</span>
-                        <input.input-style type="password" value=state.password on-change('passwordChanged') on-keyup('passwordChanged')
-                            name="password" tabindex="2"/>
+                        <input.input-style type="password" name="password" tabindex="2" key="login-user-password"/>
                     </label>
                     <div class="dialog-buttons">
                         <button.special-button type="button" on-click('login') tabindex="3">
