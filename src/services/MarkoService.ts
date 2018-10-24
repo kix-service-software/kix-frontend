@@ -1,21 +1,23 @@
 import { inject, injectable } from 'inversify';
-import { IMarkoService, IPluginService, ILoggingService } from '@kix/core/dist/services';
+import { IMarkoService, IPluginService, ILoggingService, IProfilingService } from '@kix/core/dist/services';
 import { IMarkoDependencyExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { Response } from 'express';
 import jsonfile = require('jsonfile');
+import { BaseTemplateInput } from '@kix/core/dist/common';
+import { ObjectData } from '@kix/core/dist/model';
 
 @injectable()
 export class MarkoService implements IMarkoService {
 
     private browserJsonPath: string = '../components/_app/browser.json';
-    private pluginService: IPluginService;
-    private loggingService: ILoggingService;
+
+    private ready: boolean = false;
 
     public constructor(
-        @inject("IPluginService") pluginService: IPluginService,
-        @inject("ILoggingService") loggingService: ILoggingService
+        @inject("IPluginService") private pluginService: IPluginService,
+        @inject("ILoggingService") private loggingService: ILoggingService,
+        @inject("IProfilingService") protected profilingService: IProfilingService,
     ) {
-        this.pluginService = pluginService;
-        this.loggingService = loggingService;
         this.registerMarkoDependencies();
     }
 
@@ -30,6 +32,7 @@ export class MarkoService implements IMarkoService {
 
         this.fillDependencies(browserJSON, markoDependencies);
         await this.saveBrowserJSON(browserJSON);
+        await this.buildMarkoApp();
     }
 
     public async getComponentTags(): Promise<Array<[string, string]>> {
@@ -82,4 +85,69 @@ export class MarkoService implements IMarkoService {
                 });
         });
     }
+
+    private async buildMarkoApp(): Promise<void> {
+        const profileTaskId = this.profilingService.start(
+            'MarkoService', 'Build App'
+        );
+
+        const loginTemplate = require('../components/_login-app');
+        await new Promise<void>((resolve, reject) => {
+            loginTemplate.render(
+                {
+                    themeCSS: [],
+                    specificCSS: [],
+                    data: new BaseTemplateInput('home', new ObjectData(), null)
+                }, (error, result) => {
+                    if (error) {
+                        this.profilingService.stop(profileTaskId, 'Login build error.');
+                        this.loggingService.error(error);
+                        reject(error);
+                    } else {
+                        this.loggingService.info("Login app build finished.");
+                        resolve();
+                    }
+                });
+        });
+
+        const appTemplate = require('../components/_app');
+        await new Promise<void>((resolve, reject) => {
+            appTemplate.render(
+                {
+                    themeCSS: [],
+                    specificCSS: [],
+                    data: new BaseTemplateInput('home', new ObjectData(), null)
+                }, (error, result) => {
+                    if (error) {
+                        this.profilingService.stop(profileTaskId, 'App build error.');
+                        this.loggingService.error(error);
+                        reject(error);
+                    } else {
+                        this.profilingService.stop(profileTaskId, 'App build finished.');
+                        this.ready = true;
+                        resolve();
+                    }
+                });
+        });
+    }
+
+    public async appIsReady(): Promise<boolean> {
+        let tryCount = 20;
+        while (!this.ready && tryCount > 0) {
+            await this.waitForReadyState();
+            tryCount -= 1;
+        }
+
+        return true;
+    }
+
+    private async waitForReadyState(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            setTimeout(() => {
+                this.loggingService.info('App build in progress ...');
+                resolve();
+            }, 6000);
+        });
+    }
+
 }
