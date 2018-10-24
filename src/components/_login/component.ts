@@ -21,27 +21,32 @@ class Component {
         }
         this.state.loading = false;
         setTimeout(() => {
-            if (!this.state.userName) {
-                const userNameElement = (this as any).getEl('login-user-name');
-                if (userNameElement) {
-                    userNameElement.focus();
-                }
+            const userElement = (this as any).getEl('login-user-name');
+            if (userElement) {
+                userElement.focus();
             }
         }, 200);
     }
 
-    public userNameChanged(event: any): void {
-        this.state.userName = event.target.value;
-    }
-
-    public passwordChanged(event: any): void {
-        this.state.password = event.target.value;
-    }
-
     private async login(event: any): Promise<void> {
-        if (this.state.userName && this.state.userName !== '' && this.state.password && this.state.password !== '') {
+        this.state.logout = false;
+
+        let userName;
+        let password;
+
+        const userElement = (this as any).getEl("login-user-name");
+        if (userElement) {
+            userName = userElement.value;
+        }
+
+        const passwordElement = (this as any).getEl("login-user-password");
+        if (passwordElement) {
+            password = passwordElement.value;
+        }
+
+        if (userName && userName !== '' && password && password !== '') {
             this.state.error = false;
-            const login = await AuthenticationService.getInstance().login(this.state.userName, this.state.password);
+            const login = await AuthenticationService.getInstance().login(userName, password);
             if (login) {
                 window.location.replace('/');
             } else {
