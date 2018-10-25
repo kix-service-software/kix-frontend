@@ -95,10 +95,6 @@ class Component {
 
             table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
-            table.setTableListener(() => {
-                this.state.title = this.getTitle();
-            });
-
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
 
             if (this.state.widgetConfiguration.contextDependent && context) {
@@ -106,7 +102,12 @@ class Component {
                 await table.loadRows();
             }
 
+            table.setTableListener(() => {
+                this.state.title = this.getTitle();
+            });
+
             this.state.table = table;
+            this.state.title = this.getTitle();
         }
     }
 
