@@ -2,7 +2,7 @@
 import { ComponentState } from './ComponentState';
 import { StandardTableInput } from './StandardTableInput';
 import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
-import { SortOrder, KIXObject, Article, IAction, ObjectIcon } from '@kix/core/dist/model';
+import { SortOrder, KIXObject, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { RoutingConfiguration } from '@kix/core/dist/browser/router';
 
@@ -20,15 +20,19 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.state.standardTable = input.standardTable;
         if (this.state.standardTable) {
             this.state.tableId = this.state.standardTable.tableId;
-            this.state.standardTable.setTableListener((scrollToTop: boolean = true) => {
-                this.state.loading = true;
-                setTimeout(() => {
-                    this.state.loading = false;
-                    if (scrollToTop) {
-                        this.scrollTableToTop();
-                    }
-                }, 20);
+
+            this.state.standardTable.setTableListener((scrollToTop: boolean = false) => {
+                (this as any).setStateDirty();
             });
+
+            if (this.state.standardTable.layerConfiguration.toggleLayer) {
+                this.state.standardTable.layerConfiguration.toggleLayer.registerToggleListener({
+                    rowToggled: async (row: TableRow) => {
+                        await this.state.standardTable.loadRows();
+                        this.scrollToObject(row.object.ObjectId);
+                    }
+                });
+            }
         }
     }
 
@@ -195,18 +199,20 @@ class StandardTableComponent<T extends KIXObject<T>> {
         if (this.state.standardTable.getCurrentRowsLoadLimit() !== this.state.standardTable.getLimit()) {
             const standardTable = (this as any).getEl(this.state.tableId + 'standard-table');
             if (standardTable && standardTable.scrollTop > 0) {
+                const scrollTop = standardTable.scrollTop;
                 const checkHeight =
                     (this.state.standardTable.getCurrentRowsLoadLimit()
                         - this.state.standardTable.getMinRowsLoadLimit())
                     * this.state.standardTable.tableConfiguration.rowHeight
                     * this.getBrowserFontsize();
-                const neededHeight = standardTable.scrollTop
+                const neededHeight = scrollTop
                     + (this.state.standardTable.tableConfiguration.displayLimit
                         * this.state.standardTable.tableConfiguration.rowHeight
                         * this.getBrowserFontsize());
                 if (neededHeight > checkHeight) {
                     this.state.standardTable.increaseCurrentRowsLoadLimit();
                     (this as any).setStateDirty();
+                    setTimeout(() => standardTable.scrollTop = scrollTop, 10);
                 }
             }
         }
@@ -265,8 +271,6 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     public async toggleRow(row: TableRow<T>): Promise<void> {
         this.state.standardTable.toggleRow(row);
-
-        (this as any).forceUpdate();
     }
 
     public getToggleTemplate(): any {
@@ -377,7 +381,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
         return classesString;
     }
 
-    public async scrollToObject(objectId: string | number): Promise<void> {
+    public async scrollToObject(objectId: string | number, toggleRow: boolean = false): Promise<void> {
         const rows = await this.state.standardTable.getTableRows();
 
         const index = rows.findIndex(
@@ -385,24 +389,24 @@ class StandardTableComponent<T extends KIXObject<T>> {
         );
 
         if (index >= 0) {
-            if (!rows[index].isToggled) {
+            if (toggleRow && !rows[index].isToggled) {
                 this.state.standardTable.toggleRow(rows[index]);
-            }
+            } else {
+                setTimeout(() => {
+                    let element = (this as any).getEl(this.state.tableId + "row-columns-" + index);
+                    if (element) {
+                        let top = 0;
+                        if (element.offsetParent) {
+                            do {
+                                top += element.offsetTop;
+                                element = element.offsetParent;
+                            } while (element !== null);
+                        }
 
-            setTimeout(() => {
-                let element = (this as any).getEl(this.state.tableId + "row-columns-" + index);
-                if (element) {
-                    let top = 0;
-                    if (element.offsetParent) {
-                        do {
-                            top += element.offsetTop;
-                            element = element.offsetParent;
-                        } while (element !== null);
+                        window.scroll(0, top);
                     }
-
-                    window.scroll(0, top);
-                }
-            }, 200);
+                }, 200);
+            }
         }
     }
 }

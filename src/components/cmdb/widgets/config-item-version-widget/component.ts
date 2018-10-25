@@ -83,7 +83,7 @@ class Component implements IEventListener {
             setTimeout(() => {
                 const tableComponent = (this as any).getComponent('ci-version-table');
                 if (tableComponent) {
-                    tableComponent.scrollToObject(data);
+                    tableComponent.scrollToObject(data, true);
                 }
             }, 200);
         }
