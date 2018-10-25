@@ -1,6 +1,7 @@
 {
     "HTTP_PORT": 3000,
     "HTTPS_PORT": 3001,
+    "USE_SSL": true,
     "PLUGIN_FOLDERS": [
         "node_modules/@kix",
         "extensions"

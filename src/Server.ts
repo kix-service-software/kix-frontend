@@ -3,7 +3,7 @@ import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 
-import { Environment, IServerConfiguration, ServiceContainer, IService, } from '@kix/core/dist/common';
+import { IServerConfiguration } from '@kix/core/dist/common';
 
 import {
     IMarkoService,
@@ -30,7 +30,7 @@ import cookieParser = require('cookie-parser');
 import fs = require('fs');
 import http = require('http');
 import https = require('https');
-import forceSsl = require('express-force-ssl');
+import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
 import { CreateClientRegistration } from '@kix/core/dist/api';
 
@@ -66,11 +66,13 @@ export class Server {
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
-        this.application.set('forceSSLOptions', {
-            httpsPort,
-            sslRequiredMessage: 'SSL Required.'
-        });
-        this.application.use(forceSsl);
+        if (this.serverConfig.USE_SSL) {
+            this.application.set('forceSSLOptions', {
+                httpsPort,
+                sslRequiredMessage: 'SSL Required.'
+            });
+            this.application.use(forceSSl);
+        }
 
         await this.registerStaticContent();
         await this.createReleaseInfoConfig();
@@ -101,22 +103,29 @@ export class Server {
         await this.markoService.appIsReady();
 
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
-        http.createServer(this.application).listen(httpPort);
-
-        const options = {
-            key: fs.readFileSync(path.join(__dirname, '../cert/key.pem')),
-            cert: fs.readFileSync(path.join(__dirname, '../cert/cert.pem')),
-            passphrase: 'kix2018'
-        };
-        const server = https.createServer(options, this.application);
-        this.socketService.initialize(server);
-
-        const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
-
-        server.listen(httpsPort, () => {
-            console.log("KIXng running on *:" + httpsPort);
-            this.loggingService.info("KIXng running on *:" + httpsPort);
+        const httpServer = http.createServer(this.application).listen(httpPort, () => {
+            this.loggingService.info("KIX (HTTP) running on *:" + httpPort);
         });
+
+        if (this.serverConfig.USE_SSL) {
+            const options = {
+                key: fs.readFileSync(path.join(__dirname, '../cert/key.pem')),
+                cert: fs.readFileSync(path.join(__dirname, '../cert/cert.pem')),
+                passphrase: 'kix2018'
+            };
+
+            const httpsServer = https.createServer(options, this.application);
+
+            const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
+
+            this.socketService.initialize(httpsServer);
+
+            httpsServer.listen(httpsPort, () => {
+                this.loggingService.info("KIX (HTTPS) running on *:" + httpsPort);
+            });
+        } else {
+            this.socketService.initialize(httpServer);
+        }
     }
 
     private async registerStaticContent(): Promise<void> {
