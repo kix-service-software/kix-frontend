@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria
+    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, Context
 } from '@kix/core/dist/model/';
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
@@ -28,7 +28,7 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
@@ -50,7 +50,7 @@ class Component {
         }
 
         this.prepareActions();
-        this.setTableConfiguration();
+        await this.setTableConfiguration(context);
     }
 
     public onDestroy(): void {
@@ -67,7 +67,7 @@ class Component {
         }
     }
 
-    private setTableConfiguration(): void {
+    private async setTableConfiguration(context: Context): Promise<void> {
         if (this.state.widgetConfiguration) {
 
             const tableConfiguration = this.state.widgetConfiguration.settings;
@@ -100,6 +100,11 @@ class Component {
             });
 
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
+
+            if (this.state.widgetConfiguration.contextDependent && context) {
+                table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
+                await table.loadRows();
+            }
 
             this.state.table = table;
         }
