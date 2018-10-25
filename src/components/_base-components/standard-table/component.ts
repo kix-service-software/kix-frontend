@@ -241,6 +241,10 @@ class StandardTableComponent<T extends KIXObject<T>> {
                     this.getBrowserFontsize() * Number(this.state.standardTable.tableConfiguration.rowHeight);
 
                 let height = (rowCount * rowHeight) + headerRowHeight;
+                if (this.state.standardTable.tableConfiguration.displayLimit) {
+                    table.style.maxHeight = height < 525 ? height : 525;
+                }
+
                 const openedRowsContent = (this as any).getEls(this.state.tableId + "row-toggle-content-wrapper");
                 openedRowsContent.forEach((rC) => {
                     height += rC.offsetHeight;
