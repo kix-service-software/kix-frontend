@@ -156,7 +156,7 @@ export class Component implements IEventListener {
                 setTimeout(() => {
                     const tableComponent = (this as any).getComponent('article-list-table');
                     if (tableComponent) {
-                        tableComponent.scrollToObject(data);
+                        tableComponent.scrollToObject(data, true);
                     }
                 }, 100);
             }, 200);
