@@ -1,37 +1,34 @@
-import { TicketArticleContentComponentState } from './TicketArticleContentComponentState';
+import { ComponentState } from './TicketArticleContentComponentState';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { Attachment } from '@kix/core/dist/model/';
+import { Article } from '@kix/core/dist/model';
 
-class TicketArticleContentComponent {
+class Component {
 
-    private state: TicketArticleContentComponentState;
+    private state: ComponentState;
+
+    private article: Article = null;
 
     public onCreate(input: any): void {
-        this.state = new TicketArticleContentComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.article = input.article;
+        this.article = input.article;
         this.prepareContent();
     }
 
     public async prepareContent(): Promise<void> {
-        if (this.state.article) {
-            this.state.isContentHTML = false;
-            this.state.content = this.state.article.Body;
-
-            if (this.state.article.bodyAttachment) {
+        if (this.article) {
+            if (this.article.bodyAttachment) {
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
-                    this.state.article.TicketID, this.state.article.ArticleID, this.state.article.bodyAttachment.ID
+                    this.article.TicketID, this.article.ArticleID, this.article.bodyAttachment.ID
                 );
-
-                if (AttachmentWithContent) {
-                    this.state.isContentHTML = true;
-                    this.state.content = atob(AttachmentWithContent.Content);
-                }
+                this.state.content = atob(AttachmentWithContent.Content);
+            } else {
+                this.state.content = this.article.Body;
             }
         }
     }
 }
 
-module.exports = TicketArticleContentComponent;
+module.exports = Component;
