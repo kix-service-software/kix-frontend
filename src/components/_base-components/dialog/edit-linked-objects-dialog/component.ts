@@ -75,9 +75,8 @@ class Component {
         const iterator = linkedObjectIds.entries();
         let objectIds = iterator.next();
         while (objectIds && objectIds.value) {
-            const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectIds.value[0]);
-            if (service && objectIds.value[1].length) {
-                const objects = await service.loadObjects(
+            if (objectIds.value[1].length) {
+                const objects = await KIXObjectService.loadObjects(
                     objectIds.value[0], objectIds.value[1], null
                 );
                 this.linkedObjects = [...this.linkedObjects, ...objects];

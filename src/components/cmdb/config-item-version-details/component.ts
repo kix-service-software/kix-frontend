@@ -3,7 +3,7 @@ import {
     Version, ConfigItem, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup
 } from '@kix/core/dist/model';
 import { CMDBService } from '@kix/core/dist/browser/cmdb';
-import { ServiceRegistry, BrowserUtil } from '@kix/core/dist/browser';
+import { ServiceRegistry, BrowserUtil, KIXObjectService } from '@kix/core/dist/browser';
 import { PreparedData } from '@kix/core/dist/model/kix/cmdb/PreparedData';
 
 class Component {
@@ -30,11 +30,7 @@ class Component {
     }
 
     public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
-            KIXObjectType.CONFIG_ITEM_ATTACHMENT
-        );
-
-        const attachments = await service.loadObjects<ConfigItemAttachment>(
+        const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
             KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.AttachmentID]
         );
 
