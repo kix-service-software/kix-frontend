@@ -78,7 +78,7 @@ class Component implements IKIXObjectSearchListener {
                 if (activeCategory) {
                     resultCount = activeCategory ? activeCategory.objectIds.length : 0;
                     resultObjects = await KIXObjectService.loadObjects(
-                        objectType, activeCategory.objectIds
+                        objectType, [...activeCategory.objectIds]
                     );
                 }
             }
