@@ -5,6 +5,7 @@ import {
 } from "@kix/core/dist/browser";
 import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
 import { ContactService } from "@kix/core/dist/browser/contact";
+import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
 
 class Component {
 
@@ -19,7 +20,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<CustomerDetailsContext>(
+            CustomerDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         if (this.state.widgetConfiguration) {
