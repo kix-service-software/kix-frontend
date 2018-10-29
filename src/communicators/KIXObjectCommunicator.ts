@@ -1,11 +1,12 @@
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
     CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse,
-    UpdateObjectRequest, UpdateObjectResponse
+    UpdateObjectRequest, UpdateObjectResponse, KIXObjectCache
 } from "@kix/core/dist/model";
 import { KIXCommunicator } from "./KIXCommunicator";
 import { CommunicatorResponse } from "@kix/core/dist/common";
 import { KIXObjectServiceRegistry } from "@kix/core/dist/services";
+import { ServiceMethod } from "@kix/core/dist/browser";
 
 export class KIXObjectCommunicator extends KIXCommunicator {
 
@@ -50,6 +51,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
+            KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.CREATE, data.parameter);
             await service.createObject(data.token, data.objectType, data.parameter, data.createOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(
@@ -76,6 +78,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
+            KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.UPDATE, data.parameter);
             await service.updateObject(data.token, data.objectType, data.parameter, data.objectId, data.updateOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(
@@ -102,6 +105,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
+            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.DELETE);
             await service.deleteObject(data.token, data.objectType, data.objectId, data.deleteOptions)
                 .then(() => {
                     response = new CommunicatorResponse(
