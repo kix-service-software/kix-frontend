@@ -2,10 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
 } from '@kix/core/dist/browser';
-import { WidgetConfiguration, Contact, KIXObjectType, Ticket, ContextMode, Context } from '@kix/core/dist/model';
-import {
-    ContactTableContentLayer, ContactTableLabelLayer, ContactDetailsContext
-} from '@kix/core/dist/browser/contact';
+import { WidgetConfiguration, Contact, KIXObjectType, Ticket } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
 
 class Component {
@@ -150,6 +147,9 @@ class Component {
         this.state.escalatedTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
         this.state.escalatedTicketsTable.loadRows(true);
         this.state.loadEscalatedTickets = false;
+        if (tickets && !!tickets.length) {
+            this.openGroup('contact-escalated-tickets-group');
+        }
     }
 
     private async loadReminderTickets(): Promise<void> {
@@ -165,6 +165,9 @@ class Component {
         this.state.reminderTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
         this.state.reminderTicketsTable.loadRows(true);
         this.state.loadReminderTickets = false;
+        if (tickets && !!tickets.length) {
+            this.openGroup('contact-reminder-tickets-group');
+        }
     }
 
     private async loadNewTickets(): Promise<void> {
@@ -180,6 +183,9 @@ class Component {
         this.state.newTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
         this.state.newTicketsTable.loadRows(true);
         this.state.loadNewTickets = false;
+        if (tickets && !!tickets.length) {
+            this.openGroup('contact-new-tickets-group');
+        }
     }
 
     private async loadOpenTickets(): Promise<void> {
@@ -195,6 +201,9 @@ class Component {
         this.state.openTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
         this.state.openTicketsTable.loadRows(true);
         this.state.loadOpenTickets = false;
+        if (tickets && !!tickets.length) {
+            this.openGroup('contact-open-tickets-group');
+        }
     }
 
     private async loadPendingTickets(): Promise<void> {
@@ -210,6 +219,18 @@ class Component {
         this.state.pendingTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
         this.state.pendingTicketsTable.loadRows(true);
         this.state.loadPendingTickets = false;
+        if (tickets && !!tickets.length) {
+            this.openGroup('contact-pending-tickets-group');
+        }
+    }
+
+    private openGroup(componentKey: string): void {
+        if (componentKey) {
+            const groupComponent = (this as any).getComponent(componentKey);
+            if (groupComponent) {
+                groupComponent.setMinizedState();
+            }
+        }
     }
 
     public getTitle(): string {

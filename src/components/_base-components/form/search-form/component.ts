@@ -65,6 +65,10 @@ class Component implements ISearchFormListener {
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
         }
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.VALID;
+        }
     }
 
     public keyDown(event: any): void {
@@ -146,6 +150,8 @@ class Component implements ISearchFormListener {
         );
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         const objectProperties = searchCache
+            && searchCache.status === CacheState.VALID
+            && searchCache.objectType === this.state.objectType
             ? searchCache.criteria.map((c) => c.property).filter((p) => p !== SearchProperty.FULLTEXT)
             : [];
 
@@ -180,10 +186,10 @@ class Component implements ISearchFormListener {
 
     private createTable(): StandardTable {
         const tableConfiguration = new TableConfiguration(
-            null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            null, null, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = StandardTableFactoryService.getInstance().createStandardTable(
-            this.state.objectType, tableConfiguration, null, null, true
+            this.state.objectType, tableConfiguration, null, null, true, null, true
         );
         return table;
     }

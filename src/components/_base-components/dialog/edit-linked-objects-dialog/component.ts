@@ -9,7 +9,8 @@ import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, ToastContent, LinkType, ContextType
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions,
+    ToastContent, LinkType, ContextType, SortUtil, DataType
 } from '@kix/core/dist/model';
 import { LinkUtil } from '@kix/core/dist/browser/link';
 
@@ -47,6 +48,9 @@ class Component {
             this.mainObject = await context.getObject();
 
             this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
+            this.availableLinkObjects.sort((a, b) => {
+                return SortUtil.compareValues(a.linkedObjectType, b.linkedObjectType, DataType.STRING);
+            });
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
             await this.reviseLinkObjects();
@@ -86,13 +90,12 @@ class Component {
         }
 
         for (const o of this.linkedObjects) {
-            const service
-                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(o.KIXObjectType);
             const linkObject = this.availableLinkObjects.find(
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
             if (linkObject) {
-                linkObject.title = await service.getDetailsTitle(o);
+                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
+                linkObject.title = await LabelService.getInstance().getText(o, false, true);
             }
         }
     }
@@ -102,6 +105,8 @@ class Component {
             const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
 
             linkPartners.forEach((lp) => {
+                const labelProvider = LabelService.getInstance().getLabelProviderForType(lp[1]);
+                const icon = labelProvider ? labelProvider.getObjectIcon(null) : null;
                 this.state.predefinedTableFilter.push(
                     new KIXObjectPropertyFilter(lp[0].toString(), [
                         new TableFilterCriteria(
@@ -109,7 +114,7 @@ class Component {
                             SearchOperator.EQUALS,
                             lp[1].toString()
                         )
-                    ]),
+                    ], icon),
                 );
             });
         }
@@ -184,6 +189,9 @@ class Component {
         this.propertyFilter = filter;
         if (this.state.table) {
             await this.state.table.setFilterSettings(textFilterValue, filter);
+            const table = this.state.table;
+            this.state.table = null;
+            setTimeout(() => { this.state.table = table; }, 10);
         }
     }
 
@@ -251,18 +259,13 @@ class Component {
             const newLinkObjects: LinkObject[] = [];
 
             for (const ld of newLinkDescriptions) {
-                const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
-                    ld.linkableObject.KIXObjectType
-                );
-
-                const title = await service.getDetailsTitle(ld.linkableObject);
-
                 newLinkObjects.push(new LinkObject({
                     ObjectId: 'NEW-' + ld.linkableObject.KIXObjectType + '-' +
                         ld.linkableObject.ObjectId + '-' + ld.linkTypeDescription.linkType.TypeID,
                     linkedObjectKey: ld.linkableObject.ObjectId,
+                    linkedObjectDisplayId: await LabelService.getInstance().getText(ld.linkableObject, true, false),
                     linkedObjectType: ld.linkableObject.KIXObjectType,
-                    title,
+                    title: await LabelService.getInstance().getText(ld.linkableObject, false, true),
                     linkedAs: ld.linkTypeDescription.asSource ?
                         ld.linkTypeDescription.linkType.SourceName : ld.linkTypeDescription.linkType.TargetName,
                     linkType: ld.linkTypeDescription.linkType,

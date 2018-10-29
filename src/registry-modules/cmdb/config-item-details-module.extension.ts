@@ -2,7 +2,8 @@ import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize,
-    KIXObjectType
+    KIXObjectType,
+    DataType
 } from "@kix/core/dist/model";
 import {
     TableColumnConfiguration, TableConfiguration,
@@ -36,14 +37,15 @@ export class Extension implements IModuleFactoryExtension {
             new ConfiguredWidget("config-item-history-widget", new WidgetConfiguration(
                 "config-item-history-widget", "Historie", ['config-item-print-action'],
                 new TableConfiguration(
-                    null, 7, [
-                        new TableColumnConfiguration('HistoryType', true, false, true, true, 100),
-                        new TableColumnConfiguration('Comment', true, false, true, true, 200),
-                        new TableColumnConfiguration('CreateBy', true, false, true, true, 100),
-                        new TableColumnConfiguration('CreateTime', true, false, true, true, 150),
+                    null, null, [
+                        new TableColumnConfiguration('HistoryType', true, false, true, true, 200),
+                        new TableColumnConfiguration('Comment', true, false, true, true, 550),
+                        new TableColumnConfiguration('CreateBy', true, false, true, true, 300),
                         new TableColumnConfiguration(
-                            'Content', true, true, false, false, 150, true,
-                            false, true, null, null, 'kix-icon-open-right'
+                            'CreateTime', true, false, true, true, 150, true, false, DataType.DATE_TIME
+                        ),
+                        new TableColumnConfiguration(
+                            'Content', true, true, false, false, 150, false, true
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),

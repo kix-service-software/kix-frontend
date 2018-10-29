@@ -93,8 +93,8 @@ class Component implements IKIXObjectSearchListener {
             }
 
             const tableConfiguration = new TableConfiguration(
-                null, 10, null, null, true, null, null, null,
-                TableHeaderHeight.LARGE, TableRowHeight.LARGE, emptyResultHint
+                null, null, null, null, true, null, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
             const table = StandardTableFactoryService.getInstance().createStandardTable(
                 objectType, tableConfiguration, null, null, true, true

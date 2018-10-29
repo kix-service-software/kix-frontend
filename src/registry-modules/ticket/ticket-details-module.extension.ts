@@ -31,20 +31,7 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
         const ticketHistoryLane =
             new ConfiguredWidget("ticket-history-lane", new WidgetConfiguration(
                 "ticket-history-widget", "Historie", ['ticket-print-action'],
-                new TableConfiguration(
-                    null, 7, [
-                        new TableColumnConfiguration('HistoryType', true, false, true, true, 150),
-                        new TableColumnConfiguration('Name', true, false, true, true, 200),
-                        new TableColumnConfiguration(
-                            'CreateTime', true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-                        ),
-                        new TableColumnConfiguration('CreateBy', true, false, true, true, 200),
-                        new TableColumnConfiguration(
-                            ArticleProperty.ARTICLE_ID, true, true, true, true, 150, true, false, true
-                        ),
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                true, true, WidgetSize.BOTH, null, false)
+                null, true, true, WidgetSize.BOTH, null, false)
             );
         const descriptionLane =
             new ConfiguredWidget("ticket-description-lane", new WidgetConfiguration(
@@ -170,21 +157,21 @@ export class TicketDetailsModuleFactoryExtension implements IModuleFactoryExtens
                     tableConfiguration: new TableConfiguration(
                         null, null, [
                             new TableColumnConfiguration(
-                                'Number', true, false, false, true, 50, true, true, false, DataType.NUMBER
+                                ArticleProperty.NUMBER, true, false, false, true, 60, true, false, DataType.NUMBER
                             ),
                             new TableColumnConfiguration(
-                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 50, true
+                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 60
                             ),
-                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 100),
+                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 120),
+                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 300),
                             new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 75),
-                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 225),
                             new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
                             new TableColumnConfiguration(
-                                ArticleProperty.INCOMING_TIME, true, false, true, true, 120,
-                                true, true, false, DataType.DATE_TIME
+                                ArticleProperty.INCOMING_TIME, true, false, true, true, 125,
+                                true, false, DataType.DATE_TIME
                             ),
                             new TableColumnConfiguration(
-                                ArticleProperty.ATTACHMENT, true, true, true, false, 75, true, true, true),
+                                ArticleProperty.ATTACHMENT, true, true, false, false, 75, true, true),
                         ], null, true,
                         true, new ToggleOptions('ticket-article-details', 'article', [
                             'article-print-action',

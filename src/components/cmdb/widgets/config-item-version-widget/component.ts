@@ -1,6 +1,8 @@
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentState } from './ComponentState';
-import { ActionFactory, StandardTableFactoryService, IdService, WidgetService } from '@kix/core/dist/browser';
+import {
+    ActionFactory, StandardTableFactoryService, IdService, WidgetService, TableConfiguration
+} from '@kix/core/dist/browser';
 import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
 import { EventService, IEventListener } from '@kix/core/dist/browser/event';
 
@@ -65,7 +67,8 @@ class Component implements IEventListener {
     private async prepareVersionTable(): Promise<void> {
         if (this.state.widgetConfiguration) {
             const table = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CONFIG_ITEM_VERSION, null, null, null, null, true
+                KIXObjectType.CONFIG_ITEM_VERSION,
+                new TableConfiguration(null, this.configItem.Versions.length), null, null, null, true
             );
 
             table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions);
