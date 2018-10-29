@@ -15,7 +15,7 @@ class Component {
                 new ToolbarAction(
                     'kix-icon-man', 'Meine Tickets mit neuen Artikeln', true,
                     user.Tickets.OwnedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.OwnedAndUnseen
+                    'show-user-tickets', user.Tickets.OwnedAndUnseen.map((id) => Number(id))
                 ),
                 new ToolbarAction(
                     'kix-icon-man', 'Meine Tickets', false,
@@ -27,24 +27,24 @@ class Component {
                 new ToolbarAction(
                     'kix-icon-eye', 'Meine beobachteten Tickets mit neuen Artikeln', true,
                     user.Tickets.WatchedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.WatchedAndUnseen
+                    'show-user-tickets', user.Tickets.WatchedAndUnseen.map((id) => Number(id))
                 ),
                 new ToolbarAction(
                     'kix-icon-eye', 'Meine beobachteten Tickets', false,
                     user.Tickets.Watched.length,
-                    'show-user-tickets', user.Tickets.Watched
+                    'show-user-tickets', user.Tickets.Watched.map((id) => Number(id))
                 )
             ],
             [
                 new ToolbarAction(
                     'kix-icon-lock-close', 'Meine gesperrten Tickets mit neuen Artikeln', true,
                     user.Tickets.OwnedAndLockedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.OwnedAndLockedAndUnseen
+                    'show-user-tickets', user.Tickets.OwnedAndLockedAndUnseen.map((id) => Number(id))
                 ),
                 new ToolbarAction(
                     'kix-icon-lock-close', 'Meine gesperrten Tickets', false,
                     user.Tickets.OwnedAndLocked.length,
-                    'show-user-tickets', user.Tickets.OwnedAndLocked
+                    'show-user-tickets', user.Tickets.OwnedAndLocked.map((id) => Number(id))
                 )
             ]
         ]);
