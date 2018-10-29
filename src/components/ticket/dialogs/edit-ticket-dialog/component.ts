@@ -33,6 +33,13 @@ class Component {
         DialogService.getInstance().closeMainDialog();
     }
 
+    public async onDestroy(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.reset();
+        }
+    }
+
     public async submit(): Promise<void> {
         setTimeout(async () => {
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
