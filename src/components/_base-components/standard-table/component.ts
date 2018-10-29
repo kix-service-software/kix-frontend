@@ -62,9 +62,8 @@ class StandardTableComponent<T extends KIXObject<T>> {
             for (const c of this.columns) {
                 rowWidth += c.size;
             }
-            const rows = (this as any).getEls(this.state.tableId + 'row');
+            const rows = (this as any).getEls(this.state.tableId + 'row-columns');
             rows.forEach((r) => r.style.width = rowWidth + 'px');
-            headerRow.style.width = rowWidth + 'px';
         }
     }
 
@@ -413,7 +412,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
                 this.state.standardTable.toggleRow(rows[index]);
             } else {
                 setTimeout(() => {
-                    let element = (this as any).getEl(this.state.tableId + "row-columns-" + index);
+                    let element = (this as any).getEl(this.state.tableId + "row-" + index);
                     if (element) {
                         let top = 0;
                         if (element.offsetParent) {
