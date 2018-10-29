@@ -1,7 +1,6 @@
 .back-to {
     position: relative;
     >.back-to-button {
-        .font-size-normal;
         height: @breadcrumb-height;
         color: @secondary-6;
         background-color: @primary-6;
@@ -13,6 +12,7 @@
         padding: 0 @margin-small;
         border-radius: @border-radius;
         box-sizing: border-box;
+        font-size: @h2-font-size;
         &:hover {
             cursor: pointer;
             background-color: darken(@primary-6, 10%);
@@ -24,14 +24,10 @@
         }
         [class^="kix-icon-"],
         [class*=" kix-icon-"] {
-            font-size: @h2-font-size;
+            font-size: 1.25rem;
         }
         >span:last-child {
             justify-self: end;
-            [class^="kix-icon-"],
-            [class*=" kix-icon-"] {
-                font-size: @h2-font-size + .25rem;
-            }
         }
     }
     >ul.back-to-list {

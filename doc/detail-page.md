@@ -52,23 +52,6 @@ const faqDetailsContextDescriptor = new ContextDescriptor(
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 ```
 
-## getDetailsTitle im service implementieren
-
-```javascript
-public getDetailsTitle(faqArticle: FAQArticle): string {
-    if (faqArticle) {
-        const objectData = ContextService.getInstance().getObjectData();
-        let faqHook: string = '';
-        if (objectData) {
-            faqHook = objectData.faqHook;
-        }
-        return `${faqHook}${faqArticle.Number} - ${faqArticle.Title}`;
-    } else {
-        return "FAQ Article";
-    }
-}
-```
-
 # Detail Modul registrieren & implementieren
 
 ## Extension registrieren

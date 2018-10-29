@@ -182,20 +182,33 @@
                 }
             }
             .table-cell {
-                .shorten-text;
                 min-width: @cell-min-width;
                 display: inline-block;
                 vertical-align: top;
                 position: relative;
-                padding: 0 .5rem;
+                padding: 0 @margin-small;
                 box-sizing: border-box;
                 border-right: 1px solid @secondary-4;
                 &.table-header-cell {
                     padding: 0 @margin-small;
                     border-right: 1px solid @secondary-2;
                 }
-                span.icon>* {
-                    vertical-align: middle;
+                >div {
+                    display: grid;
+                    align-content: center;
+                    overflow: hidden;
+                    &.with-icons {
+                        grid-template-columns: max-content auto;
+                        >*:first-child {
+                            padding-right: @margin-small / 2;
+                        }
+                    }
+                    >span>span.icon>* {
+                        vertical-align: middle;
+                    }
+                    >span.text {
+                        .shorten-text;
+                    }
                 }
             }
             &.opened {
@@ -284,9 +297,10 @@
                     overflow: unset;
                     >.table-header-cell-content {
                         display: grid;
-                        grid-template-columns: auto 2rem;
-                        align-content: center;
-                        height: 2.25rem;
+                        grid-template-columns: auto max-content;
+                        &.with-icon {
+                            grid-template-columns: max-content auto max-content;
+                        }
                         >.column-tilte-text {
                             overflow: hidden;
                             text-overflow: ellipsis;
@@ -298,7 +312,6 @@
                                 color: @secondary-7;
                             }
                             display: inline-block;
-                            margin-left: .25em;
                             font-size: .625em;
                             span {
                                 cursor: pointer;
@@ -365,6 +378,7 @@
             background-color: @secondary-6;
             &.check-all {
                 padding-left: @margin-small*2;
+                border-right: 1px solid @secondary-2;
             }
             &:not(.check-all) {
                 display: grid;
@@ -374,6 +388,7 @@
                 border-bottom-left-radius: @border-radius;
                 border-top-left-radius: @border-radius;
                 padding-left: @margin-small;
+                border-right: 1px solid @secondary-4;
             }
         }
         >.toggle-row-column {

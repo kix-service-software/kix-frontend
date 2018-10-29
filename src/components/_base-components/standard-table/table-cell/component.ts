@@ -1,7 +1,6 @@
-import { TableRow, LabelService, TableColumn, TableValue } from "@kix/core/dist/browser";
+import { TableRow, LabelService, TableColumn } from "@kix/core/dist/browser";
 import { KIXObject } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
 
 class Component {
 
@@ -21,9 +20,10 @@ class Component {
 
     public async onMount(): Promise<void> {
         if (this.row && this.column) {
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(this.row.object.KIXObjectType);
-            this.state.icons = await labelProvider.getIcons(this.row.object, this.column.id);
-            const displayText = await labelProvider.getDisplayText(this.row.object, this.column.id);
+            this.state.icons
+                = await LabelService.getInstance().getPropertyValueDisplayIcons(this.row.object, this.column.id);
+            const displayText
+                = await LabelService.getInstance().getPropertyValueDisplayText(this.row.object, this.column.id);
             if (displayText) {
                 this.state.displayValue = displayText;
             } else {

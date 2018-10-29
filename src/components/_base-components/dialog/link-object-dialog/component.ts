@@ -156,7 +156,7 @@ class LinkDialogComponent {
                 null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = StandardTableFactoryService.getInstance().createStandardTable(
-                objectType, tableConfiguration, null, null, true
+                objectType, tableConfiguration, null, null, true, null, true
             );
 
             if (table) {
@@ -173,7 +173,7 @@ class LinkDialogComponent {
 
                 table.setColumns([
                     new TableColumn(
-                        'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, false, false, false, null
+                        'LinkedAs', DataType.STRING, '', null, true, true, 120, true, false, true, false, null
                     )
                 ]);
 

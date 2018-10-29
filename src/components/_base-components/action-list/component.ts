@@ -64,9 +64,12 @@ export class Component implements IActionListener {
     public prepareActionLists() {
         const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
         if (listWidth > 0 && this.state.actionList) {
-            // displayable action = container width / (action-width + action-gap)
-            const actionWidth = this.state.displayText ? 8.5 : 1.75;
-            const maxActions = Math.floor(listWidth / (this.getBrowserFontsize() * (actionWidth + 1.5)));
+            const actionWidth = (this.state.displayText ? 8.5 : 1.75) * this.getBrowserFontsize();
+            const gapWith = 1.5 * this.getBrowserFontsize();
+            let maxActions = this.state.actionList.length;
+            while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
+                maxActions--;
+            }
             this.state.listDefault = this.state.actionList.slice(0, maxActions);
             this.state.listExpansion = this.state.actionList.slice(maxActions);
         }

@@ -88,6 +88,10 @@
                         &.inactive {
                             color: @secondary-1;
                         }
+                        >div.action {
+                            height: @widget-header-height;
+                            grid-template-rows: @widget-header-height;
+                        }
                     }
                 }
                 .action-list-expansion-container {
@@ -168,7 +172,7 @@
         }
     }
     >.widget-content {
-        min-height: 160px;
+        min-height: @default-widget-height - @default-widget-header-height;
         padding: 1em;
         overflow-x: auto;
     }

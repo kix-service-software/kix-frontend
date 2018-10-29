@@ -78,7 +78,7 @@ class Component {
 
     private prepareTable(): void {
         const tableConfiguration = new TableConfiguration(
-            null, 25, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+            null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
 
         const table =

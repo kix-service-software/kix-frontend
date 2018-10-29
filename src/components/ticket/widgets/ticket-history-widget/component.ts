@@ -1,28 +1,21 @@
 import { ContextService } from '@kix/core/dist/browser/context';
+import { ComponentState } from './ComponentState';
 import {
-    HistoryTableLabelLayer, HistoryTableContentLayer
-} from '@kix/core/dist/browser/ticket';
-import { TicketHistoryComponentState } from './TicketHistoryComponentState';
-import {
-    StandardTable, ITableClickListener, ITableConfigurationListener, TableColumn,
-    ActionFactory, TableLayerConfiguration, TableListenerConfiguration,
+    ITableClickListener, ActionFactory, TableListenerConfiguration, StandardTableFactoryService,
 } from '@kix/core/dist/browser';
-import { TicketHistory, ArticleProperty, KIXObjectType, ContextMode, Ticket } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { TicketHistory, KIXObjectType, Ticket, TicketHistoryProperty } from '@kix/core/dist/model';
 import { EventService } from '@kix/core/dist/browser/event';
 
-class TicketHistoryWidgetComponent {
+class Component {
 
-    private state: TicketHistoryComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TicketHistoryComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.ticketId = Number(input.ticketId);
-        this.setHistoryTableConfiguration();
     }
 
     public async onMount(): Promise<void> {
@@ -45,9 +38,17 @@ class TicketHistoryWidgetComponent {
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
+        this.state.loading = true;
         this.state.ticket = ticket;
-        this.setActions();
-        this.setHistoryTableConfiguration();
+
+        if (this.state.ticket) {
+            this.setActions();
+            this.prepareTable();
+        }
+
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 50);
     }
 
     private setActions(): void {
@@ -58,49 +59,35 @@ class TicketHistoryWidgetComponent {
         }
     }
 
-    private setHistoryTableConfiguration(): void {
-        if (this.state.widgetConfiguration) {
-            const contentLayer = new HistoryTableContentLayer(this.state.ticket);
-            const labelLayer = new HistoryTableLabelLayer();
-            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
+    private prepareTable(): void {
+        const clickListener: ITableClickListener<TicketHistory> = {
+            rowClicked: this.navigateToArticle.bind(this)
+        };
+        const listenerConfiguration = new TableListenerConfiguration(clickListener);
+        const table = StandardTableFactoryService.getInstance().createStandardTable<TicketHistory>(
+            KIXObjectType.TICKET_HISTORY, null, null, listenerConfiguration
+        );
+        if (table) {
+            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.ticket.History);
+            table.loadRows();
 
-            const clickListener: ITableClickListener<TicketHistory> = {
-                rowClicked: this.navigateToArticle.bind(this)
-            };
-            const configurationListener: ITableConfigurationListener = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
-
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
-            );
+            this.state.standardTable = table;
         }
     }
 
     private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
-        if (columnId === ArticleProperty.ARTICLE_ID && historyEntry[columnId]) {
+        if (columnId === TicketHistoryProperty.ARTICLE_ID && historyEntry[columnId]) {
             EventService.getInstance().publish('GotToTicketArticle', historyEntry[columnId]);
         }
     }
 
-    private columnConfigurationChanged(column: TableColumn): void {
-        const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
-
-        if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-        }
-
-        ContextService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
-    }
-
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
-        this.state.standardTable.setFilterSettings(filterValue);
+        if (this.state.standardTable) {
+            this.state.standardTable.setFilterSettings(filterValue);
+        }
     }
 
 }
 
-module.exports = TicketHistoryWidgetComponent;
+module.exports = Component;

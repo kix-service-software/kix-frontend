@@ -4,5 +4,6 @@
 * ContentLayer implementieren
 * LabelLayer implementieren
 * TableFactory implementieren
+* TableFactory durch Service registrieren
 
 Beispiel: `FAQTableFactory`

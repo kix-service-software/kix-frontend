@@ -1,7 +1,7 @@
 
 import { ComponentState } from './ComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { TableRow, TableColumn, TableValue, ActionFactory } from '@kix/core/dist/browser';
+import { TableRow, TableColumn, TableValue, ActionFactory, LabelService } from '@kix/core/dist/browser';
 import { SortOrder, KIXObject, IAction, ObjectIcon } from '@kix/core/dist/model';
 import { ComponentsService } from '@kix/core/dist/browser/components';
 import { RoutingConfiguration } from '@kix/core/dist/browser/router';
@@ -82,6 +82,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     private resizeX: number;
     private mousemove(event: any): void {
         if (this.state.resizeSettings.columnId) {
+            document.body.classList.add('no-select');
             if (this.resizeX !== event.pageX) {
                 this.resizeX = event.pageX;
                 let resizeColumnId = this.state.resizeSettings.columnId;
@@ -111,6 +112,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
 
     private async mouseup(): Promise<void> {
         if (this.state.standardTable && this.state.resizeSettings.columnId) {
+            document.body.classList.remove('no-select');
             const column = this.columns.find((col) => col.id === this.state.resizeSettings.columnId);
             if (column) {
                 column.size = this.state.resizeSettings.currentSize;
@@ -129,6 +131,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
             this.state.standardTable.setSortSettings(columnId, SortOrder.UP);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.UP;
+            // FIXME: sollte eigentlich notwendig sein
+            const table = this.state.standardTable;
+            this.state.standardTable = null;
+            setTimeout(() => {
+                this.state.standardTable = table;
+            }, 10);
+
             this.scrollTableToTop();
         }
     }
@@ -138,6 +147,13 @@ class StandardTableComponent<T extends KIXObject<T>> {
             this.state.standardTable.setSortSettings(columnId, SortOrder.DOWN);
             this.state.sortedColumnId = columnId;
             this.state.sortOrder = SortOrder.DOWN;
+            // FIXME: sollte eigentlich notwendig sein
+            const table = this.state.standardTable;
+            this.state.standardTable = null;
+            setTimeout(() => {
+                this.state.standardTable = table;
+            }, 10);
+
             this.scrollTableToTop();
         }
     }

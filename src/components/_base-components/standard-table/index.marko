@@ -2,20 +2,23 @@
     <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
         <div.standard-table class=component.getGridClasses() key=(state.tableId + "standard-table") on-scroll('loadMore')>
             <if(state.standardTable.tableConfiguration.enableSelection && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
-                <div.checkbox-column.check-all.no-select title="Select all"
+                <div.checkbox-column.check-all title="Select all"
                     style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                     <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()
                         style={height: component.getHeaderHeight()}/>
                 </div>
             </if>
-            <div.row.header-row.no-select key=(state.tableId + "header-row")
+            <div.row.header-row key=(state.tableId + "header-row")
                 style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                 <for(column in component.columns)>
                     <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
-                        <div.table-header-cell-content>
-                            <span.column-tilte-text>
-                                <if(column.columnTitle)>${column.text}</if>
-                            </span>
+                        <div.table-header-cell-content class={"with-icons": column.icon} style={height: component.getHeaderHeight()}>
+                            <if(column.icon)>
+                                <icon icon=column.icon showUnknown=false/>
+                            </if>
+                            <if(column.columnTitle)>
+                                <span.column-tilte-text>${column.text}</span>
+                            </if>
                             <if(column.sortable)>
                                 <span.sortable>
                                     <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")
@@ -32,7 +35,7 @@
                 </for>
             </div>
             <if(state.standardTable.tableConfiguration.toggle && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
-                <div.toggle-row-column.toggle-header-column.no-select style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
+                <div.toggle-row-column.toggle-header-column style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
                     &nbsp;
                 </div>
             </if>
@@ -64,7 +67,7 @@
                                     <@content>
                                         <div.table-cell.row-column class=component.getValueClasses(value, column)
                                             style={height: component.getRowHeight(), width: column.size}
-                                            on-click('rowClicked', row, column.id) title=value.displayValue>
+                                            on-click('rowClicked', row, column.id)>
                                             <table-cell column=column row=row/>
                                         </div>
                                     </@content>

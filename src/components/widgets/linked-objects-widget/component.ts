@@ -74,11 +74,11 @@ class Component {
                 const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
                 const tableConfiguration = new TableConfiguration(
-                    null, 5, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    null, null, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
                 const table = StandardTableFactoryService.getInstance().createStandardTable<KIXObject>(
-                    lot[1], tableConfiguration, null, null, true
+                    lot[1], tableConfiguration, null, null, true, null, true
                 );
 
                 if (table) {
@@ -91,7 +91,7 @@ class Component {
 
                     table.setColumns([
                         new TableColumn(
-                            'LinkedAs', DataType.STRING, '', null, true, true, 100, true, true, true, true, false, null
+                            'LinkedAs', DataType.STRING, '', null, true, true, 120, true, true, true, false, null
                         )
                     ]);
 

@@ -13,7 +13,7 @@ class Component {
         if (input.predefinedFilter) {
             this.state.predefinedFilter = input.predefinedFilter;
             this.state.predefinedFilterList = this.state.predefinedFilter.map(
-                (pf: KIXObjectPropertyFilter, index) => new TreeNode(index, pf.name)
+                (pf: KIXObjectPropertyFilter, index) => new TreeNode(index, pf.name, pf.icon ? pf.icon : null)
             );
         } else {
             this.state.predefinedFilter = [];
