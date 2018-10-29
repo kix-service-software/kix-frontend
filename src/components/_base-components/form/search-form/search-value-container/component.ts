@@ -28,7 +28,9 @@ class Component implements IKIXObjectSearchListener {
         if (properties) {
             const nodes = [];
             for (const p of properties) {
-                nodes.push(new TreeNode(p, await LabelService.getInstance().getPropertyText(p) || p));
+                const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
+                const displayText = await labelProvider.getPropertyText(p);
+                nodes.push(new TreeNode(p, displayText || p));
             }
             this.state.propertyNodes = nodes;
         }
