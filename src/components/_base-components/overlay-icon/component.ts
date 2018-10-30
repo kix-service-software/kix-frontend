@@ -13,6 +13,7 @@ class Component {
 
     public onInput(input: any): void {
         this.state.isHintOverlay = input.isHint || false;
+        this.state.large = typeof input.large !== 'undefined' ? input.large : true;
         if (this.state.isHintOverlay) {
             this.state.content = new StringContent(input.content);
         } else {
@@ -44,7 +45,8 @@ class Component {
                     event.target.getBoundingClientRect().left + window.scrollX,
                     event.target.getBoundingClientRect().top + window.scrollY
                 ],
-                this.iconId
+                this.iconId,
+                this.state.large
             );
         }
     }
