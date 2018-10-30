@@ -7,7 +7,8 @@ export class ComponentState {
         public isHintOverlay: boolean = false,
         public content: StringContent<any> | ComponentContent<any> = null,
         public instanceId: string = null,
-        public title: string = null
+        public title: string = null,
+        public large: boolean = true
     ) { }
 
 }

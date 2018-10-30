@@ -59,7 +59,7 @@ class OverlayComponent {
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: IWidgetContent<T>, title: string,
-        closeButton: boolean, position: [number, number], iconId: string
+        closeButton: boolean, position: [number, number], iconId: string, large: boolean
     ): void {
         if (this.overlayIconId) {
             this.closeOverlay();
@@ -70,7 +70,7 @@ class OverlayComponent {
         this.state.hasCloseButton = closeButton;
         this.state.type = type;
         this.position = position;
-        this.state.overlayClass = this.getOverlayTypeClass(type);
+        this.state.overlayClass = this.getOverlayTypeClass(type, large);
         this.overlayIconId = iconId;
 
         this.applyWidgetConfiguration(widgetInstanceId);
@@ -187,12 +187,12 @@ class OverlayComponent {
         }
     }
 
-    private getOverlayTypeClass(type: OverlayType): string {
+    private getOverlayTypeClass(type: OverlayType, large: boolean = false): string {
         switch (type) {
             case OverlayType.HINT:
                 return 'hint-overlay';
             case OverlayType.INFO:
-                return 'info-overlay';
+                return 'info-overlay' + (large ? ' large' : '');
             case OverlayType.WARNING:
                 return 'warning-overlay';
             case OverlayType.SUCCESS_TOAST:
@@ -200,7 +200,7 @@ class OverlayComponent {
             case OverlayType.HINT_TOAST:
                 return 'toast-overlay';
             case OverlayType.CONTENT_OVERLAY:
-                return 'content-overlay';
+                return 'content-overlay' + (large ? ' large' : '');
             default:
                 return '';
         }
