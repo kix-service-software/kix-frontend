@@ -68,6 +68,7 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public onUpdate(): void {
+        this.setRowWidth();
         this.setTableHeight();
     }
 
