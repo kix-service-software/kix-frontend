@@ -114,6 +114,7 @@
                     >a>div {
                         display: grid;
                         align-content: center;
+                        align-items: center;
                         overflow: hidden;
                         &.with-icons {
                             grid-template-columns: max-content auto;
@@ -177,6 +178,11 @@
                             grid-template-columns: auto max-content;
                             &.with-icon {
                                 grid-template-columns: max-content auto max-content;
+                            }
+                            >.icon {
+                                font-size: 1.125rem;
+                                height: 1.125rem;
+                                line-height: 1.125rem;
                             }
                             >.column-tilte-text {
                                 overflow: hidden;
