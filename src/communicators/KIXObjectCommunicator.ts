@@ -51,7 +51,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.CREATE, data.parameter);
+            KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.CREATE, data.parameter, data.createOptions);
             await service.createObject(data.token, data.objectType, data.parameter, data.createOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(
@@ -105,7 +105,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.DELETE);
+            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.DELETE, null, data.deleteOptions);
             await service.deleteObject(data.token, data.objectType, data.objectId, data.deleteOptions)
                 .then(() => {
                     response = new CommunicatorResponse(

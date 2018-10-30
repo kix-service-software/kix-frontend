@@ -10,7 +10,7 @@ import {
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions,
-    ToastContent, LinkType, ContextType, SortUtil, DataType
+    ToastContent, LinkType, ContextType, SortUtil, DataType, KIXObjectCache
 } from '@kix/core/dist/model';
 import { LinkUtil } from '@kix/core/dist/browser/link';
 
@@ -303,8 +303,11 @@ class Component {
                 this.newLinkObjects.splice(newLinkObjectIndex, 1);
             } else {
                 linkIdsToDelete.push(Number(dlo.ObjectId));
+                KIXObjectCache.removeObject(dlo.KIXObjectType, dlo.ObjectId);
             }
         });
+
+        KIXObjectCache.removeObject(this.mainObject.KIXObjectType, this.mainObject.ObjectId);
 
         let deleteLinksOK: boolean = true;
         if (!!linkIdsToDelete.length) {
@@ -328,8 +331,7 @@ class Component {
     }
 
     private async addLinks(): Promise<boolean> {
-        const service
-            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
+        const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
