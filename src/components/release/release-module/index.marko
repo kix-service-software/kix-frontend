@@ -1,42 +1,84 @@
 <div.release-dashboard>
     <widget title=("Herzlich Willkommen bei " + state.kixVersion)>
         <@content>
-            <!-- Text oben -->
-            <p.intro>
-                Wir freuen uns, Sie in unserem Demo-Center begrüßen zu dürfen. Bitte schauen Sie sich um und entdecken Sie Altbekanntes neu - dank eines neuen Bedienkonzeptes.
-            </p>
             <!-- Boxen -->
             <div.box-container>
+                <!-- Text oben -->
+                <div>
+                    <div>
+                        <p>
+                            <span>Herzlich willkommen</span>
+                            <span>bei KIX Alpha</span>
+                        </p>
+                        <p>
+                            Wir freuen uns, Sie in unserem Demo-Center begrüßen zu dürfen. Bitte schauen Sie sich um und entdecken Sie Altbekanntes neu - dank eines neuen Bedienkonzeptes.
+                        </p>
+                    </div>
+                </div>
                 <!-- Box oben links -->
                 <div>
-                    <h2>WICHTIGE FUNKTIONSELEMENTE KURZ ERKLÄRT</h2>
-                    <p>
-                        <a href="#">Link zum Bedienkonzept</a>
-                    </p>
+                    <div.header>
+                        <icon icon="kix-icon-edit"/>
+                        <span>
+                            <h2>WICHTIGE FUNKTIONSELEMENTE KURZ ERKLÄRT</h2>
+                        </span>
+                    </div>
                     <ul>
                         <li>Grüner Button „Zurück zu“ = Historie Ihrer zuletzt aufgerufenen Seiten</li>
-                        <li>Dreiecke an Zeilenenden = Öffnen und Schließen von Widgets und Informationsbereichen (Lanes)</li>
-                        <li>Button mit 3 Punkten „…“ = hier befinden sich Aktionen</li>
-                        <li>Mauszeigeränderungen im Tabellenkopf = Anfassen und Ziehen zum Vergrößern und Verkleinern von Tabellenspalten</li>
+                        <li>
+                            Klick mittlere Taste der Maus oder Kontextmenü ("rechtsklick") = Dialogfenster oder Detailseite in neuem Tab öffnen
+                        </li>
+                        <li>
+                            Dreiecke an Zeilenenden
+                            <span.sortable>
+                                <icon icon="kix-icon-sort-up"/>
+                                <icon icon="kix-icon-triangle-down"/>
+                            </span>
+                            = Öffnen und Schließen von Widgets und Informationsbereichen (Lanes, Tabellenzeilen, Dropdown-Menüs)
+                        </li>
+                        <li>
+                            Button mit 3 Punkten
+                            <icon icon="kix-icon-dots"/>
+                            = hier befinden sich weitere Aktionen
+                        </li>
                         <li>Eingabe von 3 Sternen „***“ in Formularfeldern = Auflistung der ersten 10 gefundenen Datensätze</li>
-                        <li>Toastmeldung „Coming Soon“ = daran arbeiten wir gerade</li>
+                        <li>Meldung „Coming Soon“  =  daran arbeiten wir gerade</li>
                     </ul>
                 </div>
                 <!-- Box unten links -->
                 <div>
-                    <h2>HELFENDE FAQ-EINTRÄGE</h2>
+                    <div.header>
+                        <icon icon="kix-icon-faq"/>
+                        <span>
+                            <h2>HELFENDE FAQ-EINTRÄGE</h2>
+                        </span>
+                    </div>
                     <p>
                         Um einen grundlegenden Überblick über die Funktionsweise von KIX 18 Alpha zu erhalten, helfen Ihnen folgende FAQ-Einträge:
                     </p>
-                    <ul>
-                        <li>FAQarticle1, Titel „Allgemeine Hinweise zu KIX 18“</li>
-                        <li>FAQarticle2, Titel „Wie erstelle ich ein Ticket“</li>
-                        <li>FAQarticle3, Titel „Wie suche ich in KIX 18“</li>
+                    <ul.link-list>
+                        <li>
+                            <a href="faqarticles/1">Allgemeine Hinweise zum Arbeiten mit KIX 18</a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/2">Wie lege ich ein neues Ticket an?</a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/4">Ausgewählte Ticket-Funktionen</a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/3">Wie suche ich in KIX 18?</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- Box rechts -->
                 <div>
-                    <h2>ÜBERBLICK FUNKTIONSUMFANG DIESER VERSION</h2>
+                    <div.header>
+                        <icon icon="kix-icon-eye"/>
+                        <span>
+                            <h2>ÜBERBLICK FUNKTIONSUMFANG DIESER VERSION</h2>
+                        </span>
+                    </div>
                     <p>In unserer ersten KIX 18 Alpha können Sie folgende Funktionen testen:</p>
                     <ul>
                         <li>Home Dashboard</li>
@@ -85,20 +127,26 @@
                                 <li>Tickets</li>
                                 <li>Kunden</li>
                                 <li>Ansprechpartner</li>
+                                <li>Config Items</li>
                                 <li>FAQ</li>
                             </ul>
                         </li>
                     </ul>
                 </div>
-            </div>
-            <!-- Text unten -->
-            <div.outro>
-                <h2>AUSBLICK</h2>
-                <p>
-                    Wir werden im Laufe der nächsten Monate noch viele weitere Funktionen einbauen, welche wir in regelmäßigen Abständen als neue Testversionen bereitstellen. Um Sie darüber auf dem Laufenden zu halten, möchten wir Ihnen diese Informationen gern an Ihre E-Mail-Adresse senden.
-                </p>
-                <p>Die nächste Version KIX 18 Alpha erscheint voraussichtlich Mitte 12/2018.</p>
-                <p>Und nun, viel Spaß beim Testen :)</p>
+                <!-- Text unten -->
+                <div>
+                    <div.header>
+                        <icon icon="kix-icon-conversationguide"/>
+                        <span>
+                            <h2>AUSBLICK</h2>
+                        </span>
+                    </div>
+                    <p>
+                        Wir werden im Laufe der nächsten Monate noch viele weitere Funktionen einbauen, welche wir in regelmäßigen Abständen als neue Testversionen bereitstellen. Um Sie darüber auf dem Laufenden zu halten, möchten wir Ihnen diese Informationen gern an Ihre E-Mail-Adresse senden.
+                    </p>
+                    <p>Die nächste Version KIX 18 Alpha erscheint voraussichtlich Mitte 12/2018.</p>
+                    <p>Und nun, viel Spaß beim Testen :)</p>
+                </div>
             </div>
         </@content>
     </widget>
