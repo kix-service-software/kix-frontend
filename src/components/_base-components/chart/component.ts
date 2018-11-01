@@ -56,6 +56,16 @@ class Component {
 
                     canvasElement.style.width = '100%';
                     canvasElement.style.height = '100%';
+
+                    if (screen.width < 1500) {
+                        setTimeout(() => {
+                            canvasElement.removeAttribute('height');
+                            canvasElement.removeAttribute('width');
+
+                            canvasElement.style.width = '100%';
+                            canvasElement.style.height = '100%';
+                        }, 500);
+                    }
                 }
                 this.drawTimeout = null;
             }, 500);
