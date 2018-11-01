@@ -1,8 +1,13 @@
 .release-dashboard {
     >.content-widget {
+        a {
+            color: @primary-0;
+            text-decoration: underline;
+        }
         h2 {
             text-transform: uppercase;
             font-weight: bold;
+            color: @primary-0;
         }
         >.widget-content {
             padding: @margin-default - .25rem;
@@ -13,16 +18,86 @@
                 grid-auto-rows: max-content;
                 grid-gap: 1.5rem @margin-default;
                 >div {
+                    border-radius: 5px;
                     background-color: @secondary-4;
                     padding: (@margin-default - .25rem) @margin-default;
-                    &:last-child {
+                    &:first-child {
+                        grid-row: 1;
+                        grid-column: 1 / span 2;
+                        background: url("static/img/background.jpg") 0 0 no-repeat @secondary-5;
+                        background-size: 100% auto;
+                        background-position: bottom;
+                        height: 24rem;
+                        margin-bottom: 2rem;
+                        >div {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            grid-template-rows: auto 4rem;
+                            height: 24rem;
+                            >p {
+                                color: @secondary-6;
+                                text-align: right;
+                                &:first-child {
+                                    grid-row: 1;
+                                    grid-column: 2;
+                                }
+                                &:last-child {
+                                    grid-row: 2;
+                                    grid-column: 1 / span 2;
+                                    padding: 1rem 0;
+                                }
+                                >span {
+                                    text-align: center;
+                                    text-transform: uppercase;
+                                    display: block;
+                                    &:first-child {
+                                        font-size: 5.5rem;
+                                    }
+                                    &:last-child {
+                                        font-size: 4.5rem;
+                                    }
+                                }
+                                &:last-child {
+                                    border-top: 1px solid @secondary-5;
+                                    font-size: 1.75rem;
+                                    text-align: center;
+                                }
+                            }
+                        }
+                    }
+                    &:nth-last-child(2) {
                         grid-column: 2;
-                        grid-row: 1 / span 2;
+                        grid-row: 2 / span 2;
                         >ul {
                             column-count: 2;
                             >li {
                                 page-break-inside: avoid;
                                 break-inside: avoid;
+                            }
+                        }
+                    }
+                    &:last-child {
+                        grid-row: 4;
+                        grid-column: 1 / span 2;
+                        >p:last-child {
+                            font-weight: 900;
+                            margin-top: 2rem;
+                        }
+                    }
+                    >div.header {
+                        display: grid;
+                        grid-template-columns: 4rem auto;
+                        >span.icon {
+                            position: relative;
+                            top: -2.125rem;
+                            left: -3.125rem;
+                            [class^="kix-icon-"],
+                            [class*=" kix-icon-"] {
+                                font-size: 4rem;
+                                color: @primary-0;
+                                border: 2px solid @secondary-1;
+                                border-radius: 50%;
+                                padding: 0.5rem;
                             }
                         }
                     }
@@ -37,16 +112,25 @@
                     ul {
                         list-style: none;
                         list-style-position: inside;
+                        margin-top: 1rem;
+                        &:not(.link-list) {
+                            >li {
+                                padding: 0.5rem;
+                                >ul {
+                                    margin-left: 1.75rem;
+                                    >li {
+                                        padding: 0;
+                                        &::before {
+                                            content: '-';
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         >li {
                             &::before {
                                 content: "•";
                                 margin-right: @margin-small;
-                            }
-                            >ul {
-                                margin-left: 1.75rem;
-                                >li::before {
-                                    content: '-';
-                                }
                             }
                         }
                     }
@@ -57,24 +141,6 @@
                         grid-column: 1;
                         grid-row: 3;
                     }
-                }
-            }
-            >.box-container>div,
-            >.outro {
-                >h2 {
-                    color: @primary-0;
-                }
-                >*:not(:first-child) {
-                    margin-top: 1rem;
-                }
-                p {
-                    text-align: justify;
-                }
-            }
-            >.outro {
-                >p:last-of-type {
-                    font-weight: bold;
-                    margin-top: (@margin-default - .25rem);
                 }
             }
         }
