@@ -128,16 +128,6 @@ class Component implements ISearchFormListener {
         return;
     }
 
-    public getAttributeSearchTitle(): string {
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.objectType);
-        let title = 'Attribute:';
-        if (labelProvider) {
-            const objectName = labelProvider.getObjectName();
-            title = objectName ? `${objectName}-${title}` : title;
-        }
-        return title;
-    }
-
     private async setSearchResult(objects: KIXObject[]): Promise<void> {
         this.state.table = null;
 

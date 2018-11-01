@@ -22,7 +22,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
             }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
         const sidebarWidgets = [helpWidget];
-        const sidebars = ['20180919-help-widget'];
+        const sidebars = ['20181022-help-widget'];
         return new ConfigItemSearchContextConfiguration(
             ConfigItemSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
         );
