@@ -69,7 +69,8 @@
                                 <div.table-cell.row-column class=component.getValueClasses(value, column)
                                     style={height: component.getRowHeight(), width: column.size}
                                     on-click('rowClicked', row, column.id)>
-                                    <link-target routingConfiguration=component.getRoutingConfiguration(column)
+                                    <link-target object=component.getRoutingObject(column, row)
+                                        routingConfiguration=component.getRoutingConfiguration(column)
                                         objectId=component.getRoutingObjectId(column, row)>
                                         <@content>
                                             <table-cell column=column row=row/>
