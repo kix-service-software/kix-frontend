@@ -1,13 +1,17 @@
 .file-entry {
     display: grid;
     grid-column-gap: 0.5em;
-    grid-template-columns: 1.5em auto auto;
+    grid-template-columns: 1rem 4fr 1fr;
     .file-entry-link {
         color: @primary-0;
         cursor: pointer;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .file-size {
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
