@@ -111,6 +111,7 @@ class Component {
                 this.startSearch();
             } else {
                 this.state.filterValue = event.target.value;
+                setTimeout(this.setDropdownStyle.bind(this), 100);
             }
         }
     }
