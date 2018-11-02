@@ -35,7 +35,7 @@ export class Component {
         );
 
         const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+            KIXObjectType.FAQ_CATEGORY_HIERARCHY, null, loadingOptions
         );
 
         this.state.nodes = this.prepareTreeNodes(faqCategories);

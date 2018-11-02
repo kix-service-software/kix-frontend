@@ -29,7 +29,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
         );
 
         const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+            KIXObjectType.FAQ_CATEGORY_HIERARCHY, null, loadingOptions
         );
 
         this.state.nodes = this.prepareTree(faqCategories);
