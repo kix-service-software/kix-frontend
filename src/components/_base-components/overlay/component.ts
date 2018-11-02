@@ -25,7 +25,7 @@ class OverlayComponent {
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
 
         document.addEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler();
+            this.closeOverlayEventHandler(event);
         }, false);
         document.addEventListener('mousemove', this.mouseMove.bind(this));
         document.addEventListener('mouseup', this.mouseUp.bind(this));
@@ -33,14 +33,14 @@ class OverlayComponent {
 
     public onDestroy(): void {
         document.removeEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler();
+            this.closeOverlayEventHandler(event);
         }, false);
         document.removeEventListener('mousemove', this.mouseMove.bind(this));
         document.removeEventListener('mouseup', this.mouseUp.bind(this));
     }
 
-    private closeOverlayEventHandler(): void {
-        if (this.state.show && !this.showShield()) {
+    private closeOverlayEventHandler(event: any): void {
+        if (this.state.show && !this.showShield() && event.button === 0) {
             if (this.state.keepShow) {
                 this.state.keepShow = false;
             } else {
