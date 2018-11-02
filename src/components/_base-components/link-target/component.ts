@@ -28,7 +28,9 @@ class Component {
             this.state.url = '/' + contextUrl;
         } else if (this.state.object) {
             const url = await KIXObjectService.getObjectUrl(this.state.object);
-            this.state.url = '/' + url;
+            if (url) {
+                this.state.url = '/' + url;
+            }
         }
         this.state.loading = false;
     }
