@@ -43,7 +43,7 @@ class Component {
             ? context.getWidgetConfiguration('contact-pending-tickets-group')
             : undefined;
 
-        context.registerListener('contact-details-component', {
+        context.registerListener('contact-assigned-tickets-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
