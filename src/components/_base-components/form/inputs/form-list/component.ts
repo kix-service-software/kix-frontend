@@ -128,7 +128,7 @@ class Component {
 
     public nodeClicked(node: TreeNode): void {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1) {
+        if (nodeIndex !== -1 && this.state.asMultiselect) {
             this.state.selectedNodes.splice(nodeIndex, 1);
         } else {
             if (!this.state.asMultiselect) {
