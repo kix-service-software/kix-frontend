@@ -187,12 +187,7 @@ class Component {
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
         this.textFilter = textFilterValue;
         this.propertyFilter = filter;
-        if (this.state.table) {
-            await this.state.table.setFilterSettings(textFilterValue, filter);
-            const table = this.state.table;
-            this.state.table = null;
-            setTimeout(() => { this.state.table = table; }, 10);
-        }
+        await this.state.table.setFilterSettings(textFilterValue, filter);
     }
 
     public async markToDelete(): Promise<void> {
