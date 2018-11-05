@@ -16,6 +16,9 @@
             &:not(.inactive) {
                 cursor: pointer;
             }
+            &:hover:not(.list-button):not(.inactive) {
+                color: @secondary-7;
+            }
             >div.action {
                 display: grid;
                 grid-template-columns: @action-min-width;

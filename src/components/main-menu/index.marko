@@ -1,5 +1,5 @@
 <div.main-menu-wrapper>
-    <ul.main-menu class={"image-only": !state.showText}>
+    <ul.menu.main-menu class={"image-only": !state.showText}>
         <for(menuEntry in state.primaryMenuEntries)>
             <li class={active: menuEntry.active}>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
@@ -19,7 +19,7 @@
             </li>
         </for>
     </ul>
-    <ul.user-menu class={"image-only": !state.showText}>
+    <ul.menu.user-menu class={"image-only": !state.showText}>
         <for(menuEntry in state.secondaryMenuEntries)>
             <li class={active: menuEntry.active}>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
