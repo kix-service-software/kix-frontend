@@ -66,7 +66,7 @@ class NewCustomerDialogComponent {
     private showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Kunde wurde erfolgreich angelegt.', 'kix-icon-check')
+            new ToastContent('kix-icon-check', 'Kunde wurde erfolgreich angelegt.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }

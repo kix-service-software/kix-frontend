@@ -105,7 +105,7 @@ class Component {
     private showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Config Item wurde erfolgreich angelegt.', 'kix-icon-check')
+            new ToastContent('kix-icon-check', 'Config Item wurde erfolgreich angelegt.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }

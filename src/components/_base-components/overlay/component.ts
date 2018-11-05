@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { OverlayService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
 import {
-    OverlayType, IWidgetContent, ObjectIcon, ComponentContent, Context, WidgetType, KIXObject
+    OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "@kix/core/dist/model";
 import { ContextService } from "@kix/core/dist/browser/context";
 import { ComponentsService } from "@kix/core/dist/browser/components";
@@ -58,7 +58,7 @@ class OverlayComponent {
     }
 
     private openOverlay<T extends KIXObject<T>>(
-        type: OverlayType, widgetInstanceId: string, content: IWidgetContent<T>, title: string,
+        type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         closeButton: boolean, position: [number, number], iconId: string, large: boolean
     ): void {
         if (this.overlayIconId) {
@@ -79,6 +79,12 @@ class OverlayComponent {
         this.state.show = true;
 
         if (this.isToast()) {
+            if (type && type === OverlayType.SUCCESS_TOAST) {
+                const toastContent = this.state.content.getComponentData() as ToastContent;
+                if (toastContent && typeof toastContent.title === 'undefined') {
+                    toastContent.title = 'Erfolgreich';
+                }
+            }
             this.toastTimeout = setTimeout(() => {
                 const toast = (this as any).getEl('overlay');
                 if (toast) {

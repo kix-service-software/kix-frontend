@@ -134,7 +134,7 @@ export class Component implements IEventListener {
 
     public attachmentsClicked(): void {
         const content = new ComponentContent('toast', new ToastContent(
-            'Coming Soon', 'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.'
+            'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon'
         ));
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }

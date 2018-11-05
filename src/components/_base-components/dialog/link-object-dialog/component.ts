@@ -227,10 +227,10 @@ class LinkDialogComponent {
     }
 
     private showSuccessHint(count: number): void {
-        const successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet `;
+        const successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet.`;
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Erfolgreich ausgeführt', 'kix-icon-check', successHint)
+            new ToastContent('kix-icon-check', successHint)
         );
 
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
