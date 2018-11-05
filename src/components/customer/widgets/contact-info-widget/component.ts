@@ -1,6 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { KIXObjectType, Contact, Context } from "@kix/core/dist/model";
+import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
 
 class Component {
     private state: ComponentState;
@@ -14,10 +15,12 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<ContactDetailsContext>(
+            ContactDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener('contact-details-component', {
+        context.registerListener('contact-info-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
@@ -33,8 +36,11 @@ class Component {
     }
 
     private async initWidget(contact?: Contact): Promise<void> {
-        this.state.contact = contact;
-        this.setActions();
+        this.state.contact = null;
+        setTimeout(() => {
+            this.state.contact = contact;
+            this.setActions();
+        }, 100);
     }
     private setActions(): void {
         if (this.state.widgetConfiguration && this.state.contact) {

@@ -16,7 +16,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
-        context.registerListener('contact-details-component', {
+        context.registerListener('customer-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },

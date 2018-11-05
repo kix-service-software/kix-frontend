@@ -29,7 +29,7 @@ class Component {
             this.state.title = this.state.widgetConfiguration.title;
         }
 
-        context.registerListener('contact-details-component', {
+        context.registerListener('customer-assigned-contacts-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },

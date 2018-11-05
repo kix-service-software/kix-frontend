@@ -25,7 +25,7 @@ class Component {
             this.state.title = this.state.widgetConfiguration.title;
         }
 
-        context.registerListener('contact-details-component', {
+        context.registerListener('contact-assigned-customer-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
