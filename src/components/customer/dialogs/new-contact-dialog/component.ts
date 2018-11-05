@@ -66,7 +66,7 @@ class Component {
     private showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Ansprechpartner wurde erfolgreich angelegt.', 'kix-icon-check')
+            new ToastContent('kix-icon-check', 'Ansprechpartner wurde erfolgreich angelegt.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }

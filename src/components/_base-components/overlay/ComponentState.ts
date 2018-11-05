@@ -1,11 +1,11 @@
-import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction } from "@kix/core/dist/model";
+import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction, ComponentContent } from "@kix/core/dist/model";
 import { IdService } from "@kix/core/dist/browser";
 
 export class ComponentState {
 
     public constructor(
         public type: OverlayType = null,
-        public content: IWidgetContent<any> = null,
+        public content: ComponentContent<any> = null,
         public icon: string | ObjectIcon = null,
         public title: string = null,
         public actions: AbstractAction[] = null,

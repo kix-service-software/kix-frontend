@@ -361,7 +361,7 @@ class Component {
     private showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Verknüpfungen aktualisiert.', 'kix-icon-check')
+            new ToastContent('kix-icon-check', 'Verknüpfungen aktualisiert.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }

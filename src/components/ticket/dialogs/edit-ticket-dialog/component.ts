@@ -70,7 +70,7 @@ class Component {
     public showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('Ticketänderung gespeichert.', 'kix-icon-check')
+            new ToastContent('kix-icon-check', 'Ticketänderung gespeichert.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
