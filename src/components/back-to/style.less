@@ -48,10 +48,19 @@
         box-shadow: @shadow-1;
         li {
             padding: @margin-small/2 @margin-small;
+            color: @secondary-0;
             &:hover {
                 font-weight: bold;
                 cursor: pointer;
                 background-color: @secondary-5;
+            }
+            >a,
+            >a:visited,
+            >a:link {
+                &:hover,
+                &:active {
+                    text-decoration: none;
+                }
             }
             a {
                 display: grid;
@@ -59,10 +68,6 @@
                 grid-auto-rows: 1.5rem;
                 grid-column-gap: @margin-small;
                 align-items: center;
-                color: @secondary-0;
-                :hover {
-                    color: @secondary-0;
-                }
                 >span.icon {
                     padding-top: .25rem;
                     [class^="kix-icon-"],

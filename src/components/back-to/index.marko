@@ -10,7 +10,7 @@
         </else>
     </div>
     <if(!state.minimized)>
-        <ul.back-to-list>
+        <ul.menu.back-to-list>
             <for(entry in state.history)>
                 <li title=entry.displayText onClick('navigate', entry)>
                     <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectId>
