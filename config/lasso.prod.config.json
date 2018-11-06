@@ -1,0 +1,30 @@
+{
+    "bundlingEnabled": true,
+    "fingerprintsEnabled": false,
+    "includeSlotNames": false,
+    "minify": false,
+    "plugins": [
+        "lasso-marko",
+        "lasso-less",
+        {
+            "plugin": "lasso-minify",
+            "config": {
+                "babel": {
+                    "enable": false
+                },
+                "jsMinify": {
+                    "enable": true,
+                    "config": {
+                        "ecma": 6,
+                        "keep_classnames": false,
+                        "keep_fnames": false
+                    }
+                },
+                "cssMinify": {
+                    "enable": true
+                }
+            }
+        }
+    ],
+    "outputDir": "dist/static"
+}

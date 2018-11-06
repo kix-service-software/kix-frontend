@@ -1,0 +1,26 @@
+<if(state.article)>
+    <object-property-label object=state.article property="From" labelProvider=state.labelProvider/>
+    <object-property-label object=state.article property="To" labelProvider=state.labelProvider>
+        <@info>
+            <if(state.article.toList.length > 1)>
+                <overlay-icon content="article-receiver-list" instanceId="to-receiver-overlay" data={receiver: state.article.toList}/>
+            </if>
+        </@info>
+    </object-property-label>
+    <object-property-label object=state.article property="Cc" labelProvider=state.labelProvider>
+        <@info>
+            <if(state.article.ccList.length > 1)>
+                <overlay-icon content="article-receiver-list" instanceId="cc-receiver-overlay" data={receiver: state.article.ccList}/>
+            </if>
+        </@info>
+    </object-property-label>
+    <object-property-label object=state.article property="Bcc" labelProvider=state.labelProvider>
+        <@info>
+            <if(state.article.bccList.length > 1)>
+                <overlay-icon content="article-receiver-list" instanceId="bcc-receiver-overlay"
+                    data={receiver: state.article.bccList}/>
+            </if>
+        </@info>
+    </object-property-label>
+    <object-property-label object=state.article property="Subject" labelProvider=state.labelProvider/>
+</if>

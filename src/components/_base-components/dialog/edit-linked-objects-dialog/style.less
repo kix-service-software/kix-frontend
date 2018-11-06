@@ -1,0 +1,31 @@
+.edit-linked-objects-dialog-container {
+    margin-left: 1rem;
+    >.table-head {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        grid-gap: @margin-default;
+        margin-bottom: @margin-small;
+        align-items: center;
+        >span:first-child {
+            font-weight: bold;
+            display: inline-block;
+        }
+    }
+    .standard-table .row .row-columns.link-object-to-delete {
+        color: @tertiary-0;
+        font-weight: bold;
+        >.table-cell {
+            text-decoration: line-through;
+        }
+    }
+    >.dialog-button-container {
+        margin-left: 0;
+        grid-template-columns: max-content max-content;
+        justify-content: right;
+        padding-right: 0;
+    }
+    &+.dialog-button-container {
+        margin-left: 1rem;
+        padding-right: 0;
+    }
+}

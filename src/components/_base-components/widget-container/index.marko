@@ -1,0 +1,7 @@
+<div.widget-container>
+    <for(widget in state.widgets)>
+        <div.widget-frame class={large: component.isLarge(widget), small: !component.isLarge(widget)}>
+            <include(component.getTemplate(widget), { instanceId: widget.instanceId, contextType: "MAIN" })/>
+        </div>
+    </for>
+</div>

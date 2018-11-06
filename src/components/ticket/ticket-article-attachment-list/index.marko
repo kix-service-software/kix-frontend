@@ -1,0 +1,9 @@
+<if(state.article)>
+    <ul.attachment-list>
+        <for(attachment in state.article.Attachments)>
+            <li>
+                <ticket-article-attachment article=state.article attachment=attachment/>
+            </li>
+        </for>
+    </ul>
+</if>

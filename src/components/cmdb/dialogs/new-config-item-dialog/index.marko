@@ -1,0 +1,40 @@
+<if(!state.loading)>
+    <widget instanceId="new-config-item-dialog">
+        <@content>
+            <div.form>
+                <div.form-field.config-item-class-selector title="Config Item Klasse">
+                    <div.field-label>
+                        <span.label-text>Config Item Klasse</span>
+                    </div>
+                    <div.field-icon>
+                        <overlay-icon isHint=true
+                            content="Bitte wählen Sie zunächst eine Config Item-Klasse aus der Liste. Anschließend wird das vollständige Eingabe-Formular geladen."
+                            title="Config Item Klasse"/>
+                    </div>
+                    <div.field-input>
+                        <form-list nodes=state.classNodes placeholder="CI Klasse auswählen" selectedNodes=[state.currentClassNode]
+                            on-nodesChanged('classChanged') multiselect=false/>
+                    </div>
+                </div>
+            </div>
+            <div.ci-create-form-container>
+                <if(state.formId)>
+                    <main-form formId=state.formId/>
+                </if>
+            </div>
+            <div.dialog-button-container>
+                <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+                    <span.kix-icon-close/>
+                    Abbrechen
+                </button>
+                <button.submit-button disabled=(!state.formId) type="button" on-click("submit") title="Speichern">
+                    <span.kix-icon-check/>
+                    Speichern
+                </button>
+            </div>
+        </@content>
+    </widget>
+</if>
+<else>
+    <loading-spinner/>
+</else>

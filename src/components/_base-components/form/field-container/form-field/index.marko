@@ -1,0 +1,45 @@
+<div.form-field>
+    <div.field-label class={"no-label": !state.field.label}>
+        <span.label-text title=state.field.label>
+            <if(state.field.required)>
+                <span.required-field>*</span>
+            </if>${state.field.label}
+        </span>
+    </div>
+    <div.field-icon>
+        <if(state.field.hint)>
+            <overlay-icon isHint=true content=state.field.hint title=state.field.label/>
+        </if>
+    </div>
+    <div.field-input style={"padding-left": component.getPaddingLeft(), "padding-right": component.getPaddingRight()}>
+        <if(!state.field.empty)>
+            <include(component.getInputComponent(), { field: state.field, fieldId: state.field.property, formId: state.formId })/>
+        </if>
+        <else>
+            <div.form-separator-container>
+                <div.form-separator/>
+            </div>
+        </else>
+    </div>
+    <if(component.hasChildren() && (!state.field.empty || state.field.asStructure))>
+        <span.minimize-icon-container>
+            <if(state.minimized)>
+                <span.kix-icon-sort-down on-click('minimize')/>
+            </if>
+            <else>
+                <span.kix-icon-triangle-up on-click('minimize')>
+                    <span.path1/>
+                    <span.path2/>
+                </span>
+            </else>
+        </span>
+    </if>
+    <if(input.additionalFieldControls)>
+        <include(input.additionalFieldControls)/>
+    </if>
+</div>
+<if(!state.minimized && (!state.field.empty || state.field.asStructure))>
+    <div.sub-field-container>
+        <field-container level=(state.level + 1) fields=state.field.children formId=state.formId objectType=state.objectType/>
+    </div>
+</if>

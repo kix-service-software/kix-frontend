@@ -3,6 +3,13 @@
         {
             "taskName": "gulp",
             "command": "gulp",
+            "options": {
+                "env": {
+                    "NODE_ENV": "development",
+                    "http_proxy": "",
+                    "https_proxy": ""
+                }
+            },
             "type": "process"
         }
     ]

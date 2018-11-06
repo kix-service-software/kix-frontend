@@ -1,0 +1,82 @@
+.wrapper {
+    position: relative;
+    box-sizing: border-box;
+    background: @secondary-5;
+    color: @secondary-2;
+    >.app-loading-shield {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: -@header-height - @margin-default;
+        text-align: center;
+        background: fade(@secondary-6, 70%);
+        z-index: 1000;
+        >.loading-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            >span {
+                font-size: @h1-font-size;
+                color: @primary-0;
+                margin-top: @margin-default;
+            }
+        }
+    }
+    >header {
+        z-index: 200
+    }
+    >.content-wrapper {
+        padding: @margin-default + @header-height 0 0;
+        display: grid;
+        grid-template-rows: max-content 1fr;
+        grid-gap: @margin-middle @margin-default;
+        >.main-menu-wrapper,
+        >.site-menu-wrapper {
+            grid-row: 1 / span 2;
+            .widget-bar {
+                margin-top: 14.5rem - @margin-default;
+            }
+        }
+        >.site-navigation {
+            grid-row: 1;
+            display: grid;
+            grid-template-columns: 9rem auto;
+            grid-column-gap: @margin-small;
+        }
+        &.with-explorer {
+            >.site-navigation {
+                grid-column: 2 / span 2;
+            }
+        }
+        >.explorerbar,
+        >.content,
+        >.sidebar-area {
+            grid-row: 2;
+        }
+    }
+    .image-dialog-container {
+        position: relative;
+        z-index: 300;
+    }
+    .main-dialog-container {
+        position: relative;
+        z-index: 400;
+    }
+    .overlay-dialog-container {
+        position: relative;
+        z-index: 500;
+    }
+    .overlay {
+        z-index: 100;
+    }
+    .image-dialog-container~.overlay,
+    .main-dialog-container~.overlay,
+    .overlay-dialog-container~.overlay,
+    .image-dialog-container~.overlay-shield,
+    .main-dialog-container~.overlay-shield,
+    .overlay-dialog-container~.overlay-shield {
+        z-index: 550;
+    }
+}

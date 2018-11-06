@@ -1,0 +1,12 @@
+<if(state.field)>
+    <span.date-time-input>
+        <input.input-style class={invalid: state.invalid} value=state.dateValue type="date"
+            placeholder=(state.field.required ? state.placeholder : "") required=input.required
+            on-change('dateChanged')/>
+        <if(state.inputType === 'DATE_TIME')>
+            <input.input-style class={invalid: state.invalid} value=state.timeValue type="time"
+                placeholder=(state.field.required ? state.placeholder : "") required=input.required
+                on-change('timeChanged')/>
+        </if>
+    </span>
+</if>

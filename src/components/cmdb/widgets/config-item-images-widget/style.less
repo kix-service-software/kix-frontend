@@ -1,0 +1,70 @@
+@config-item-image-title-height: 2.25rem;
+.config-item-images-container {
+    max-height: 30.5rem;
+    padding: 1.25rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 15rem);
+    grid-gap: @margin-default;
+    justify-content: space-evenly;
+    overflow-x: hidden;
+    overflow-y: auto;
+    >.image-container {
+        width: @default-widget-width;
+        height: @default-widget-height;
+        border: 1px solid @primary-0;
+        position: relative;
+        box-sizing: border-box;
+        border-radius: @border-radius;
+        >.image {
+            display: grid;
+            grid-template-rows: auto @config-item-image-title-height;
+            height: 100%;
+            >img {
+                max-height: @default-widget-height - 3.25rem;
+                max-width: @default-widget-width - 3.25rem;
+                justify-self: center;
+                align-self: center;
+            }
+            >.image-title {
+                .font-size-small;
+                .shorten-text;
+                line-height: @config-item-image-title-height;
+                background-color: @primary-0;
+                color: @secondary-6;
+                padding: 0 1rem;
+                box-sizing: border-box;
+            }
+        }
+        >.hover-shield {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background-color: #000;
+            opacity: 0;
+            transition: opacity .20s ease-in;
+            cursor: pointer;
+            &:hover {
+                opacity: 0.2;
+            }
+            >.hover-info {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateY(-50%) translateX(-50%);
+                color: @secondary-6;
+                >.hover-icon {
+                    font-size: 3rem;
+                    display: block;
+                    text-align: center
+                }
+                >.hover-hint {
+                    font-weight: bold;
+                    font-size: 2em;
+                    display: block;
+                }
+            }
+        }
+    }
+}

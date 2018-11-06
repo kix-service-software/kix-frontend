@@ -1,0 +1,35 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div.description-container>
+                <if(state.ticket)>
+                    <widget instanceId="ticket-description-widget" title="Beschreibung"
+                        key=("Widget-ticket-description" + state.ticket.TicketID)>
+                        <@content>
+                            <div.description-text-wrapper>
+                                <ticket-article-content article=state.firstArticle/>
+                            </div>
+                            <div.description-attachments>
+                                <b>Anlagen:</b>
+                                <ticket-article-attachment-list article=state.firstArticle/>
+                            </div>
+                        </@content>
+                    </widget>
+                    <widget instanceId="ticket-description-notes" title="Anmerkungen"
+                        key=("Widget-ticket-description-notes" + state.ticket.TicketID)>
+                        <@content>
+                            <div.ticket-notes>${state.ticketNotes}</div>
+                        </@content>
+                    </widget>
+                </if>
+                <else>
+                    <loading-spinner/>
+                </else>
+            </div>
+        </else>
+    </@content>
+</widget>

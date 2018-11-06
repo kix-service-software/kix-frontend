@@ -1,0 +1,32 @@
+@search-criteria-gap: .5rem;
+@search-dialog-padding-right: (@default-button-icon-width + @search-criteria-gap);
+.search-form {
+    margin-left: 1.75rem;
+    >.group-widget {
+        margin: 0;
+        >.widget-content {
+            padding-top: @margin-small;
+            >.search-criteria {
+                margin-left: 1.5rem;
+            }
+        }
+    }
+    >.dialog-button-container {
+        margin-left: 0;
+        padding: 0;
+    }
+    >.result-table {
+        margin-top: 4rem;
+        .result-table-head {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-gap: @margin-default;
+            margin-bottom: @margin-small;
+            align-items: center;
+            >span:first-child {
+                font-weight: bold;
+                display: inline-block;
+            }
+        }
+    }
+}

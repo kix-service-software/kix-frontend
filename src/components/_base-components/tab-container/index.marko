@@ -1,0 +1,35 @@
+<div.tab-container>
+    <widget instanceId="tab-widget" title=state.title minimizable=state.minimizable contentActions=state.contentActions>
+        <@headerContent>
+            <ul.tab-list>
+                <for(tab in state.tabWidgets)>
+                    <li class={active: component.isActiveTab(tab.instanceId)} on-click('tabClicked', tab)>
+                        <if(tab.configuration.icon)>
+                            <span class=tab.configuration.icon/>
+                        </if>
+                        ${tab.configuration.title}
+                    </li>
+                </for>
+            </ul>
+        </@headerContent>
+        <@content>
+            <div.tab-sidebar-grid>
+                <div.tab-content>
+                    <if(state.activeTab)>
+                        <include(component.getWidgetTemplate(), { instanceId: state.activeTab.instanceId })/>
+                    </if>
+                </div>
+                <div>
+                    <if(state.hasSidebars)>
+                        <sidebar contextType=state.contextType showEmpty=true/>
+                    </if>
+                </div>
+                <if(state.hasSidebars)>
+                    <div.site-menu-wrapper>
+                        <sidebar-menu contextType=state.contextType/>
+                    </div>
+                </if>
+            </div>
+        </@content>
+    </widget>
+</div>

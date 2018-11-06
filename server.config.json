@@ -1,6 +1,0 @@
-{
-    "SERVER_PORT": 3000,
-    "PLUGIN_FOLDERS": [
-        "node_modules/@kix"
-    ]
-}

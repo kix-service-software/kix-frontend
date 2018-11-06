@@ -1,0 +1,35 @@
+.description-container {
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
+    max-height: 29.5rem;
+    overflow: auto;
+    .widget-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        .description-attachments {
+            min-width: 250px;
+            padding: 0 1em;
+            box-sizing: border-box;
+            ul {
+                padding-left: 1em;
+                list-style-type: none;
+                li {
+                    height: 1.5em;
+                    line-height: 1.5em;
+                    vertical-align: middle;
+                    .attachment-link {
+                        .shorten-text;
+                    }
+                }
+                img {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+    .ticket-notes {
+        .ticket-article-content();
+        min-height: unset;
+    }
+}

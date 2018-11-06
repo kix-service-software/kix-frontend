@@ -1,4 +1,11 @@
+config/components/*.json
 .cache
+gulp-*
 dist
 node_modules
 npm-debug.log
+/.project
+/.settings/
+src/log/**/*
+src/logs/**/*
+src/**/.gulp-*

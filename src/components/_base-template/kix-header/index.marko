@@ -1,0 +1,49 @@
+<header>
+    <img#logo alt="KIX 2018" src="/static/img/kix-logo.png"/>
+    <div>
+        <!-- Neues Objekt -->
+        <button.special-button type="button" on-click("openDialog")>
+            <span.kix-icon-plus-blank/>
+            Neu
+        </button>
+        <div.header-separator/>
+        <!-- Lesezeichen & Suchvorlagen -->
+        <bookmarks/>
+        <div.header-separator/>
+        <!-- Schnellsuche -->
+        <quick-search/>
+        <div.header-separator/>
+        <toolbar/>
+        <div.header-separator/>
+        <div.kix-toolbar>
+            <div.toolbar-group>
+                <div>
+                    <div.action-icon>
+                        <span.kix-icon-gear.as-button on-click('showTemporaryComingSoon')/>
+                    </div>
+                </div>
+                <div>
+                    <div.action-icon>
+                        <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend" on-click('showTemporaryComingSoon')/>
+                    </div>
+                </div>
+                <link-target routingConfiguration=component.getReleaseRoutingConfig()>
+                    <@content>
+                        <div>
+                            <div.action-icon>
+                                <span.kix-icon-query.as-button title="Hilfe"/>
+                            </div>
+                        </div>
+                    </@content>
+                </link-target>
+                <div>
+                    <div.action-icon>
+                        <a href="/auth?logout" on-click('logout')>
+                            <span.kix-icon-logout title="Logout"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
