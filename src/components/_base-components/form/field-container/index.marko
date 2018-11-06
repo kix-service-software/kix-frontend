@@ -1,0 +1,26 @@
+<for(field in state.fields)>
+    <form-field field=field level=state.level formId=input.formId objectType=input.objectType>
+        <@additionalFieldControls>
+            <div.additionalFieldControls>
+                <if(!field.asStructure)>
+                    <if(component.canAdd(field))>
+                        <button.form-control-button.button-without-text type="button" title="Hinzufügen" on-click('addField', field)>
+                            <span.kix-icon-plus-blank/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
+                    <if(component.canRemove(field))>
+                        <button.form-control-button.button-without-text type="button" title="Entfernen" on-click('removeField', field)>
+                            <span.kix-icon-minus/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
+                </if>
+            </div>
+        </@additionalFieldControls>
+    </form-field>
+</for>

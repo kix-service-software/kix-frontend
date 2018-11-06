@@ -3,13 +3,22 @@
     "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "es6",
+      "dom",
+      "es2015",
+      "es2016"
+    ],
   },
+  "types": [
+    "node",
+    "reflect-metadata"
+  ],
   "include": [
     "src/**/*.ts"
-  ],
-  "types": [
-    "node"
   ],
   "exclude": [
     "node_modules"

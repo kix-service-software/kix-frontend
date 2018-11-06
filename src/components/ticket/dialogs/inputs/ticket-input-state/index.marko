@@ -1,0 +1,18 @@
+<form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
+    on-nodesChanged('stateChanged') selectedNodes=[state.currentNode] invalid=state.invalid
+    multiselect=state.multiselect/>
+<if(state.pending)>
+    <div.pending-state class={invalid: state.invalid}>
+        <span>*Warten bis:</span>
+        <input.input-style.date-input type="date" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" on-change('dateChanged')
+            value=state.selectedDate/>
+        <span.kix-icon-calendar/>
+        <span>-</span>
+        <select.input-style.time-input required on-change('timeChanged')>
+            <for(time in state.times)>
+                <option selected=(state.selectedTime === time)>${time}</option>
+            </for>
+        </select>
+        <span.kix-icon-time/>
+    </div>
+</if>

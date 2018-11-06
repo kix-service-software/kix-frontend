@@ -1,0 +1,17 @@
+.attachment {
+    display: grid;
+    grid-column-gap: @margin-small;
+    grid-template-columns: 1rem 3fr 1fr;
+    .attachment-link {
+        color: @primary-0;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .inactive-link {
+        color: @secondary-0;
+        cursor: none;
+    }
+    .file-size {
+        white-space: nowrap;
+    }
+}

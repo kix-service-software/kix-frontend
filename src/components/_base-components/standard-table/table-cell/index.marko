@@ -1,0 +1,14 @@
+<if(!state.loading)>
+    <div title=state.displayValue class={"with-icons": component.column.showIcon && state.icons}>
+        <if(component.column.showIcon && state.icons)>
+            <span>
+                <for(icon in state.icons)>
+                    <icon icon=icon showUnknown=true/>
+                </for>
+            </span>
+        </if>
+        <if(component.column.showText)>
+            <span.text>${state.displayValue}</span>
+        </if>
+    </div>
+</if>

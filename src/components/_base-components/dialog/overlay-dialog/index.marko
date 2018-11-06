@@ -1,0 +1,20 @@
+<if(state.show)>
+    <div.overlay-dialog-container>
+        <div.shield/>
+        <div.overlay-dialog>
+            <widget instanceId="overlay-dialog" title=state.title minimizable=false closable=true on-closeWidget('close')
+                icon=state.icon>
+                <@content>
+                    <div.overlay-dialog-spacer>
+                        <if(state.dialogTemplate)>
+                            <include(state.dialogTemplate, state.dialogInput)/>
+                        </if>
+                    </div>
+                </@content>
+            </widget>
+            <if(state.loading)>
+                <loading-shield/>
+            </if>
+        </div>
+    </div>
+</if>

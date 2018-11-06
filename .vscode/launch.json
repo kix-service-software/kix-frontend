@@ -5,10 +5,14 @@
             "args": [],
             "cwd": "${workspaceRoot}",
             "env": {
-                "NODE_ENV": "development"
+                "NODE_ENV": "development",
+                "http_proxy": "",
+                "https_proxy": "",
+                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+                "LASSO_TIMEOUT": "200000"
             },
             "name": "KIXng",
-            "program": "${workspaceRoot}/src/server.ts",
+            "program": "${workspaceRoot}/src/index.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
@@ -18,6 +22,32 @@
             ],
             "console": "integratedTerminal",
             "preLaunchTask": "gulp"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "KIXng Tests",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--no-timeouts",
+                "--reporter",
+                "spec",
+                "--compilers",
+                "ts:ts-node/register",
+                "--require",
+                "source-map-support/register",
+                "${workspaceRoot}/tests/services/api/**/*.test.ts"
+            ],
+            "env": {
+                "NODE_ENV": "test",
+                "http_proxy": "",
+                "https_proxy": ""
+            },
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "console": "integratedTerminal"
         }
     ]
 }

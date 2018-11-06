@@ -1,0 +1,34 @@
+<div.wrapper>
+    <if(state.initialized)>
+        <kix-header/>
+        <div.content-wrapper class={"with-explorer": state.hasExplorer} style=("grid-template-columns: " + state.gridColumns)
+            no-update-body>
+            <main-menu/>
+            <div.site-navigation>
+                <back-to/>
+                <breadcrumb/>
+            </div>
+            <explorerbar contextType="MAIN"/>
+            <div.content>
+                <router-outlet id="base-router"/>
+            </div>
+            <sidebar contextType="MAIN"/>
+            <div.site-menu-wrapper>
+                <sidebar-menu contextType="MAIN"/>
+            </div>
+        </div>
+        <kix-footer no-update/>
+        <image-dialog/>
+        <main-dialog/>
+        <overlay-dialog/>
+        <overlay/>
+    </if>
+    <if(state.loading)>
+        <div.app-loading-shield>
+            <div.loading-info>
+                <loading-spinner/>
+                <span>${state.loadingHint}</span>
+            </div>
+        </div>
+    </if>
+</div>

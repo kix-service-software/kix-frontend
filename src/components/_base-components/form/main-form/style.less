@@ -1,0 +1,65 @@
+.form {
+    padding-left: @margin-widget-content;
+    .form-field {
+        &:not(:last-child) {
+            margin-bottom: @margin-small;
+        }
+        min-height: 2em;
+        display: grid;
+        grid-template-columns: 14.5rem 2rem auto max-content max-content;
+        >.field-label {
+            white-space: nowrap;
+            font-weight: bold;
+            margin-top: .25rem;
+            display: grid;
+            grid-template-columns: auto max-content;
+            >span.label-text {
+                .shorten-text;
+                text-align: right;
+                height: @default-input-height;
+                >.required-field {
+                    &::after {
+                        content: " ";
+                    }
+                }
+            }
+            &:not(.no-label)::after {
+                content: ":"
+            }
+        }
+        >.field-icon {
+            margin-top: .25rem;
+            margin-left: .25rem;
+        }
+        >.field-input {
+            >.form-separator-container {
+                display: grid;
+                height: 100%;
+                >.form-separator {
+                    background-color: @secondary-3;
+                    align-self: center;
+                    height: 1px;
+                }
+            }
+            button {
+                box-shadow: none;
+            }
+        }
+    }
+    >.group-widget,
+    >div>.group-widget {
+        background-color: unset;
+        >.widget-header {
+            background-color: unset;
+        }
+        >.widget-content {
+            background-color: unset;
+            margin-left: 0;
+        }
+    }
+    .separator {
+        text-align: center;
+        font-weight: bold;
+        margin: @margin-small;
+    }
+}

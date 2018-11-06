@@ -1,0 +1,20 @@
+<div.kix-toolbar>
+    <for(group in state.toolbarGroups)>
+        <div.toolbar-group>
+            <for(action in group)>
+                <div title=action.title on-click('actionClicked', action)>
+                    <div.action-icon>
+                        <icon icon=action.icon showUnknown=true/>
+                    </div>
+                    <if(action.infoIcon)>
+                        <span.kix-icon-i-orange.new-icon>
+                            <span.path1/>
+                            <span.path2/>
+                        </span>
+                    </if>
+                    <div.action-text>${action.count}</div>
+                </div>
+            </for>
+        </div>
+    </for>
+</div>

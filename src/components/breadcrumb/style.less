@@ -1,0 +1,45 @@
+.breadcrumb {
+    background: @secondary-6;
+    color: @secondary-0;
+    margin-bottom: @margin-small;
+    padding: 0 @margin-small;
+    border-radius: @border-radius;
+    box-shadow: @shadow-1;
+    height: @breadcrumb-height;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: @h2-font-size;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    grid-gap: @margin-small;
+    align-items: center;
+    font-size: @h2-font-size;
+    >span.icon {
+        [class^="kix-icon-"],
+        [class*=" kix-icon-"] {
+            font-size: 1.25rem;
+            color: @primary-6;
+            line-height: @breadcrumb-height;
+        }
+    }
+    >span.context {
+        >a {
+            font-size: @h2-font-size;
+        }
+        a,
+        >a:active,
+        >a:visited {
+            color: unset;
+            &:hover,
+            &:active {
+                color: @secondary-1;
+                text-decoration: none;
+            }
+        }
+        &:not(:last-of-type)::after {
+            content: '>>';
+            margin-left: @margin-small;
+        }
+    }
+}

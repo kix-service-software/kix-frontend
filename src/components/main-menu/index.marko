@@ -1,0 +1,42 @@
+<div.main-menu-wrapper>
+    <ul.menu.main-menu class={"image-only": !state.showText}>
+        <for(menuEntry in state.primaryMenuEntries)>
+            <li class={active: menuEntry.active}>
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
+                    <@content>
+                        <span class="hover-label">
+                            <icon icon=menuEntry.icon/>
+                            <div>${menuEntry.text}</div>
+                        </span>
+                        <span class="label-wrapper">
+                            <icon icon=menuEntry.icon/>
+                            <if(state.showText)>
+                                <div>${menuEntry.text}</div>
+                            </if>
+                        </span>
+                    </@content>
+                </link-target>
+            </li>
+        </for>
+    </ul>
+    <ul.menu.user-menu class={"image-only": !state.showText}>
+        <for(menuEntry in state.secondaryMenuEntries)>
+            <li class={active: menuEntry.active}>
+                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
+                    <@content>
+                        <span class="hover-label">
+                            <icon icon=menuEntry.icon/>
+                            <div>${menuEntry.text}</div>
+                        </span>
+                        <span class="label-wrapper">
+                            <icon icon=menuEntry.icon/>
+                            <if(state.showText)>
+                                <div>${menuEntry.text}</div>
+                            </if>
+                        </span>
+                    </@content>
+                </link-target>
+            </li>
+        </for>
+    </ul>
+</div>

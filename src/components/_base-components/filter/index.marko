@@ -1,0 +1,17 @@
+<span.filter>
+    <if(state.predefinedFilterList && state.predefinedFilterList.length)>
+        <span.predefined-filter>
+            <form-list nodes=state.predefinedFilterList placeholder=state.predefinedFilterPlaceholder
+                on-nodesChanged('predefinedFilterChanged') selectedNodes=[state.currentFilter]/>
+        </span>
+    </if>
+    <input type="text" placeholder=state.placeholder value=state.textFilterValue on-change('textFilterValueChanged')
+        on-keydown('keyDown')/>
+    <span.icon class=state.icon on-click('filter')>
+        <span.path1/>
+        <span.path2/>
+        <span.path3/>
+        <span.path4/>
+        <span.path5/>
+    </span>
+</span>

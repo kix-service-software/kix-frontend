@@ -1,0 +1,20 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <div.ticket-history-content>
+            <if(state.ticket)>
+                <div.history-filter>
+                    <filter on-filter('filter')/>
+                </div>
+                <div.history-container>
+                    <if(state.standardTable)>
+                        <standard-table standardTable=state.standardTable/>
+                    </if>
+                </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
+        </div>
+    </@content>
+</widget>

@@ -1,0 +1,25 @@
+<form.form autocomplete="off">
+    <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
+    <input id="password" style="display:none" type="password" name="fakepasswordremembered"/>
+    <if(state.isSearchContext)>
+        <search-form formId=state.formId objectType=state.objectType/>
+    </if>
+    <else-if(state.formInstance && state.formInstance.form && state.formId)>
+        <for(group in state.formInstance.form.groups)>
+            <if(state.formInstance.form.groups.length > 1)>
+                <widget instanceId="form-group" title=group.name on-minimizedChanged('handleFormGroupMinimizeState', group.name)
+                    key=group.name>
+                    <@content>
+                        <field-container fields=group.formFields formId=state.formId objectType=state.objectType/>
+                    </@content>
+                </widget>
+                <if(group.separatorString)>
+                    <div.separator>${group.separatorString}</div>
+                </if>
+            </if>
+            <else>
+                <field-container fields=group.formFields formId=state.formId objectType=state.objectType/>
+            </else>
+        </for>
+    </else-if>
+</form>

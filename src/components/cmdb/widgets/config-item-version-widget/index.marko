@@ -1,0 +1,12 @@
+<widget key="ci-version-widget" instanceId=state.instanceId title=state.title>
+    <@content>
+        <div.version-content>
+            <if(!state.table)>
+                <loading-spinner/>
+            </if>
+            <else>
+                <standard-table standardTable=state.table key="ci-version-table"/>
+            </else>
+        </div>
+    </@content>
+</widget>

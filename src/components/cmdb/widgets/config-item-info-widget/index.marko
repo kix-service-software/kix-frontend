@@ -1,0 +1,51 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else-if(!state.configItem)>
+            <span.error>No Config Item available.</span>
+        </else-if>
+        <else>
+            <div.configItem-information-container>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CLASS
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.NAME
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CUR_DEPL_STATE_ID
+                        labelProvider=component.labelProvider showIcon=true/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CUR_INCI_STATE_ID
+                        labelProvider=component.labelProvider showIcon=true/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CREATE_TIME
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CREATE_BY
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CHANGE_TIME
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.CHANGE_BY
+                        labelProvider=component.labelProvider/>
+                </div>
+                <div>
+                    <object-property-label object=state.configItem property=component.properties.VERSIONS
+                        labelProvider=component.labelProvider/>
+                </div>
+            </div>
+        </else>
+    </@content>
+</widget>

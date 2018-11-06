@@ -1,0 +1,135 @@
+<if(state.standardTable && !state.loading)>
+    <div.standard-table-wrapper key=(state.tableId + "standard-table-wrapper")>
+        <div.standard-table class=component.getGridClasses() key=(state.tableId + "standard-table") on-scroll('loadMore')>
+            <div.row.header-row key=(state.tableId + "header-row")
+                style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
+                <if(state.standardTable.tableConfiguration.enableSelection && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
+                    <div.checkbox-column.check-all title="Select all"
+                        style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
+                        <input type="checkbox" on-click('selectAll') checked=component.isAllSelected()
+                            style={height: component.getHeaderHeight()}/>
+                    </div>
+                </if>
+                <div.row-columns key=(state.tableId + "row-columns[]")
+                    style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
+                    <for(column in component.columns)>
+                        <div.table-cell.table-header-cell title=column.text key=(state.tableId + column.id) style={width: column.size}>
+                            <div.table-header-cell-content class={"with-icons": column.icon} style={height: component.getHeaderHeight()}>
+                                <if(column.icon)>
+                                    <icon icon=column.icon showUnknown=false/>
+                                </if>
+                                <if(column.columnTitle)>
+                                    <span.column-tilte-text>${column.text}</span>
+                                </if>
+                                <if(column.sortable)>
+                                    <span.sortable>
+                                        <span.kix-icon-sort-up class=(component.isActiveSort(column.id, "Up") ? "sort-active" : "")
+                                            on-click('sortUp', column.id)/>
+                                        <span.kix-icon-sort-down class=(component.isActiveSort(column.id, "Down") ? "sort-active" : "")
+                                            on-click('sortDown', column.id)/>
+                                    </span>
+                                </if>
+                            </div>
+                            <if(column.resizable)>
+                                <div.move-point on-mousedown('mousedown', column.id)/>
+                            </if>
+                        </div>
+                    </for>
+                </div>
+                <if(state.standardTable.tableConfiguration.toggle && !!state.standardTable.getTableRows().length && !state.standardTable.isLoading())>
+                    <div.toggle-row-column.toggle-header-column style={height: component.getHeaderHeight(), "line-height": component.getHeaderHeight()}>
+                        &nbsp;
+                    </div>
+                </if>
+            </div>
+            <if(state.standardTable.isLoading())>
+                <div.loading-spinner-container.no-select>
+                    <loading-spinner/>
+                </div>
+            </if>
+            <else-if(!!state.standardTable.getTableRows().length)>
+                <for(row in state.standardTable.getTableRows() | status-var=loop)>
+                    <div.row key=((state.tableId + "row-") + loop.getIndex()) class={opened: row.isToggled}>
+                        <if(state.standardTable.tableConfiguration.enableSelection)>
+                            <div.table-cell.checkbox-column.row-column class={opened: row.isToggled} key=(state.tableId + "checkbox-column[]")>
+                                <if(row.selectable)>
+                                    <div.margin-placeholder/>
+                                    <div style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                                        <input type="checkbox" on-click('selectRow', row) key=(state.tableId + "checkbox-input[]")
+                                            checked=component.isSelected(row)
+                                            style={height: component.getRowHeight()}/>
+                                    </div>
+                                </if>
+                            </div>
+                        </if>
+                        <div.row-columns key=(state.tableId + "row-columns[]") class=component.getRowClasses(row)
+                            style={height: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                            <for(value in row.values)>
+                                $ var column = component.getColumn(value);
+                                <div.table-cell.row-column class=component.getValueClasses(value, column)
+                                    style={height: component.getRowHeight(), width: column.size}
+                                    on-click('rowClicked', row, column.id)>
+                                    <link-target object=component.getRoutingObject(column, row)
+                                        routingConfiguration=component.getRoutingConfiguration(column)
+                                        objectId=component.getRoutingObjectId(column, row)>
+                                        <@content>
+                                            <table-cell column=column row=row/>
+                                        </@content>
+                                    </link-target>
+                                </div>
+                            </for>
+                        </div>
+                        <if(state.standardTable.tableConfiguration.toggle)>
+                            <div.toggle-row-column class={opened: row.isToggled} key=(state.tableId + "toggle-row-column[]")
+                                on-click('toggleRow', row) style={height: component.getRowHeight()}>
+                                <div>
+                                    <if(row.isToggled)>
+                                        <span.kix-icon-triangle-up key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")>
+                                            <span.path1/>
+                                            <span.path2/>
+                                        </span>
+                                    </if>
+                                    <else>
+                                        <span.kix-icon-sort-down key=((state.tableId + loop.getIndex()) + "toggle-row-column-icon")/>
+                                    </else>
+                                </div>
+                                <div.margin-placeholder/>
+                            </div>
+                        </if>
+                    </div>
+                    <if(state.standardTable.tableConfiguration.toggle)>
+                        <div.row-toggle-content-wrapper class={opened: row.isToggled} key=(state.tableId + "row-toggle-content-wrapper[]")>
+                            <if(row.isToggled)>
+                                <ul.toggle-actions>
+                                    <for(action in component.getToggleActions(row.object))>
+                                        <li>
+                                            <action action=action displayText=false/>
+                                        </li>
+                                    </for>
+                                </ul>
+                                <div.row-toggle-content-container style={"min-height": component.calculateToggleContentMinHeight(loop.getIndex())}
+                                    key=((state.tableId + "row-toggle-content-") + loop.getIndex())>
+                                    <div.row-toggle-content>
+                                        <include(component.getToggleTemplate(), component.getToggleInput(row))/>
+                                    </div>
+                                </div>
+                            </if>
+                        </div>
+                    </if>
+                </for>
+                <div.row.rowSpacer style={height: component.getSpacerHeight()}/>
+            </else-if>
+            <else>
+                <div.row>
+                    <div.row-columns key=(state.tableId + "row[]")
+                        style={minHeight: component.getRowHeight(), "line-height": component.getRowHeight()}>
+                        <span>${state.standardTable.getEmptyResultHint()}</span>
+                    </div>
+                </div>
+            </else>
+        </div>
+    </div>
+</if>
+<else>
+    <loading-spinner/>
+</else>

@@ -1,0 +1,22 @@
+<widget key="article-list-widget" instanceId=state.instanceId title=state.title>
+    <@headerContent>
+        <div.header-attachments on-click('attachmentsClicked')>
+            <span.kix-icon-attachement/>(${state.attachmentCount})
+        </div>
+    </@headerContent>
+    <@headerFilter>
+        <filter on-filter('filter')/>
+    </@headerFilter>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div.article-table-wrapper>
+                <if(state.standardTable)>
+                    <standard-table standardTable=state.standardTable key="article-list-table"/>
+                </if>
+            </div>
+        </else>
+    </@content>
+</widget>

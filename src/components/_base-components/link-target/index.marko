@@ -1,0 +1,12 @@
+<if(!state.loading)>
+    <if(state.routingConfiguration || (state.object && state.url))>
+        <a href=state.url on-click('linkClicked') target="_blank">
+            <if(input.content)>
+                <${input.content}/>
+            </if>
+        </a>
+    </if>
+    <else-if(input.content)>
+        <${input.content}/>
+    </else-if>
+</if>

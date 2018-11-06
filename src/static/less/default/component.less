@@ -1,0 +1,79 @@
+.details-container {
+    >.content-widget {
+        box-shadow: unset;
+        margin-top: 1.5em;
+        &:first-of-type {
+            margin-top: 0;
+        }
+        >.widget-header {
+            box-shadow: @shadow-1;
+        }
+        >.widget-content {
+            background-color: transparent;
+            >.content-actions {
+                box-shadow: @shadow-1;
+            }
+        }
+        .lane-list {
+            list-style: none;
+            li.lane:not(:first-of-type) {
+                margin-top: 0.625rem;
+            }
+        }
+    }
+    >div {
+        margin-top: 1.25rem;
+        >.content-widget {
+            &.minimized {
+                border-radius: @border-radius;
+                >.widget-header {
+                    border-radius: @border-radius
+                }
+            }
+            >.widget-header {
+                background-color: @primary-0;
+                color: @secondary-6;
+                .action-list-wrapper {
+                    >.action-list {
+                        >li {
+                            color: @secondary-6;
+                            &.inactive {
+                                color: @primary-0;
+                            }
+                            &:hover:not(.list-button):not(.inactive) {
+                                color: @primary-5;
+                            }
+                        }
+                    }
+                    >.action-list-expansion-container {
+                        background-color: @primary-0;
+                        .action-list-expansion {
+                            li {
+                                color: @secondary-6;
+                                border-color: @secondary-6;
+                                &.inactive {
+                                    color: @primary-0;
+                                }
+                                &:hover:not(.inactive) {
+                                    color: @primary-5;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.readonly-ck-editor {
+    border: 1px solid @secondary-4;
+    border-radius: @border-radius;
+    padding: 0;
+    background-color: @secondary-5;
+    overflow: auto;
+    box-sizing: border-box;
+    min-height: 10rem;
+    height: 100%;
+    white-space: normal;
+}

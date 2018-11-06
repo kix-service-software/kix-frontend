@@ -1,0 +1,15 @@
+<if(state.contact)>
+    <for(groupTuple in state.info)>
+        <div.contact-attribute-group key=("ticket-contact-attribute-group-" + groupTuple[0])>
+            <for(attributeTuple in groupTuple[1])>
+                <customer-label object=state.contact property=attributeTuple[0] labelProvider=state.labelProvider/>
+            </for>
+        </div>
+    </for>
+</if>
+<else-if(state.error)>
+    <span.error>${state.error}</span>
+</else-if>
+<else>
+    <span>Kein Ansprechpartner verfügbar</span>
+</else>

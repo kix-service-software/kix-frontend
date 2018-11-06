@@ -1,0 +1,40 @@
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
+    <widget instanceId="edit-linked-objects-dialog">
+        <@content>
+            <div.edit-linked-objects-dialog-container>
+                <div.table-head>
+                    <span>${"Vorhandene Verknüpfungen (" + state.linkObjectCount + ")"}</span>
+                    <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte" on-filter('filter')
+                        key="edit-linked-objects-filter"/>
+                </div>
+                <if(state.table)>
+                    <standard-table standardTable=state.table/>
+                </if>
+                <div.dialog-button-container>
+                    <button.form-blank-cancel-button type="button" on-click("markToDelete") title="Verknüpfung löschen"
+                        disabled=(!state.canDelete)>
+                        <span.kix-icon-trash/>
+                        Verknüpfung löschen
+                    </button>
+                    <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
+                        <span.kix-icon-new-link/>
+                        Verknüpfung zuordnen
+                    </button>
+                </div>
+            </div>
+            <div.dialog-button-container>
+                <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+                    <span.kix-icon-close/>
+                    Abbrechen
+                </button>
+                <button.submit-button type="button" on-click("submit") title="Übernehmen" disabled=(!state.canSubmit)>
+                    <span.kix-icon-check/>
+                    Übernehmen
+                </button>
+            </div>
+        </@content>
+    </widget>
+</else>

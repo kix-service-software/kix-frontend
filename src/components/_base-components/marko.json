@@ -1,0 +1,15 @@
+{
+    "taglibImports": [
+        "./form/marko.json"
+    ],
+    "tags-dir": [
+        "base-html-components",
+        "dialog",
+        "dialog/link-object-dialog",
+        "form",
+        "overlay",
+        "tree",
+        "table-tree",
+        "standard-table"
+    ]
+}
