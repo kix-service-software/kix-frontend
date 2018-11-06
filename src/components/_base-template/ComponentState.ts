@@ -8,6 +8,7 @@ export class ComponentState {
         public objectId: string,
         public gridColumns: string = null,
         public hasExplorer: boolean = false,
+        public showSidebar: boolean = false,
         public loading: boolean = true,
         public loadingHint: string = 'Lade KIX ...',
         public initialized: boolean = false

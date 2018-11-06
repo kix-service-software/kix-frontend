@@ -16,7 +16,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.contextType = input.contextType;
-        this.state.showEmpty = typeof input.showEmpty !== 'undefined' ? input.showEmpty : false;
     }
 
     public onMount(): void {
