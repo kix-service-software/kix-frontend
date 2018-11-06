@@ -93,7 +93,7 @@ class Component {
         });
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
-        table.layerConfiguration.contentLayer.setPreloadedObjects(null);
+        table.layerConfiguration.contentLayer.setPreloadedObjects([]);
         this.state.table = table;
 
         const context = ContextService.getInstance().getActiveContext();
