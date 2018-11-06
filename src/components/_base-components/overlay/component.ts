@@ -82,7 +82,7 @@ class OverlayComponent {
             if (type && type === OverlayType.SUCCESS_TOAST) {
                 const toastContent = this.state.content.getComponentData() as ToastContent;
                 if (toastContent && typeof toastContent.title === 'undefined') {
-                    toastContent.title = 'Erfolgreich';
+                    toastContent.title = 'Erfolgreich!';
                 }
             }
             this.toastTimeout = setTimeout(() => {

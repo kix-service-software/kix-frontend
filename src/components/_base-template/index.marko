@@ -1,19 +1,20 @@
 <div.wrapper>
     <if(state.initialized)>
         <kix-header/>
-        <div.content-wrapper class={"with-explorer": state.hasExplorer} style=("grid-template-columns: " + state.gridColumns)
-            no-update-body>
-            <main-menu/>
-            <div.site-navigation>
+        <div.content-wrapper class={"with-explorer": state.hasExplorer} style=("grid-template-columns: " + state.gridColumns)>
+            <main-menu no-update-body/>
+            <div.site-navigation no-update-body>
                 <back-to/>
                 <breadcrumb/>
             </div>
-            <explorerbar contextType="MAIN"/>
-            <div.content>
+            <explorerbar contextType="MAIN" no-update-body/>
+            <div.content no-update-body>
                 <router-outlet id="base-router"/>
             </div>
-            <sidebar contextType="MAIN"/>
-            <div.site-menu-wrapper>
+            <if(state.showSidebar)>
+                <sidebar contextType="MAIN" no-update-body/>
+            </if>
+            <div.site-menu-wrapper no-update-body>
                 <sidebar-menu contextType="MAIN"/>
             </div>
         </div>

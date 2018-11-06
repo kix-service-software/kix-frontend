@@ -137,6 +137,9 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         if ((context && context.isSidebarShown())) {
             gridColumns += ' [sidebar-area] min-content';
+            this.state.showSidebar = true;
+        } else {
+            this.state.showSidebar = false;
         }
 
         gridColumns += ' [sidebar-menu-wrapper] min-content';
