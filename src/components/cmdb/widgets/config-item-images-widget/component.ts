@@ -66,7 +66,7 @@ class Component {
         if (this.state.configItem) {
             const ciImages: ConfigItemImage[] = await KIXObjectService.loadObjects<ConfigItemImage>(
                 KIXObjectType.CONFIG_ITEM_IMAGE,
-                [], null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
+                null, null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
             );
 
             this.images = ciImages.map(
