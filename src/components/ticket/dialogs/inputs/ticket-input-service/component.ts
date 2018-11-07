@@ -49,7 +49,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                 return new TreeNode(
                     service.ServiceID, service.Name,
                     new ObjectIcon(TicketProperty.SERVICE_ID, service.ServiceID),
-                    new ObjectIcon('CurInciStateID', service.IncidentState.CurInciStateID),
+                    new ObjectIcon('GeneralCatalogItem', service.IncidentState.CurInciStateID),
                     this.prepareTree(service.SubServices)
                 );
             });

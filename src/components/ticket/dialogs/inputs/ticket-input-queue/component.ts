@@ -39,7 +39,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
             nodes = queues.map((queue: Queue) => {
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
-                    new ObjectIcon(TicketProperty.QUEUE_ID, queue.QueueID),
+                    new ObjectIcon('Queue', queue.QueueID),
                     null,
                     this.prepareTree(queue.SubQueues)
                 );
