@@ -7,12 +7,12 @@
         "extensions"
     ],
     "FRONTEND_URL": "https://localhost:3001",
-    "BACKEND_API_URL": "http://kix18-demo-backend.messe.local:8080/api.pl/webservice/core:v1",
+    "BACKEND_API_URL": "http://dev-backend.kix18.docker.vm.devel.cape-it.de/api.pl/webservice/core:v1",
     "LOG_LEVEL": 3,
     "LOG_FILEDIR": "logs",
     "LOG_TRACE": true,
     "DEFAULT_MODULE_ID": "home",
     "ENABLE_PROFILING": true,
-    "BACKEND_API_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOjEsIlRva2VuVHlwZSI6Ik5vcm1hbCIsIkRlc2NyaXB0aW9uIjoiIiwiQ3JlYXRlVGltZVVuaXgiOjE1NDE1NzcwODgsIklnbm9yZU1heElkbGVUaW1lIjowLCJSZW1vdGVJUCI6Ijo6ZmZmZjoxNzIuMTYuMjEuMTgiLCJWYWxpZFVudGlsVGltZVVuaXgiOjE1NDE2MzQ2ODgsIlVzZXJUeXBlIjoiQWdlbnQiLCJEZW5pZWRPcGVyYXRpb25zIjpbXSwiQWxsb3dlZE9wZXJhdGlvbnMiOltdfQ.4FHN6eZ74-5lat78wgg1cCzJUNSOhhWRwK459WVz1vM",
+    "BACKEND_API_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJBbGxvd2VkT3BlcmF0aW9ucyI6W10sIkNyZWF0ZVRpbWVVbml4IjoxNTI4MDk4NzE1LCJVc2VySUQiOjEsIkRlbmllZE9wZXJhdGlvbnMiOltdLCJSZW1vdGVJUCI6IjAuMC4wLjAiLCJVc2VyVHlwZSI6IkFnZW50IiwiVmFsaWRVbnRpbFRpbWVVbml4IjoxNTQ2MzAwNzk5LCJEZXNjcmlwdGlvbiI6ImZyb250ZW5kIGRldmVsb3BtZW50IiwiSWdub3JlTWF4SWRsZVRpbWUiOjEsIlRva2VuVHlwZSI6IkFjY2Vzc1Rva2VuIiwiVmFsaWRVbnRpbCI6IjIwMTgtMTItMzEgMjM6NTk6NTkifQ.W__tm64ZN_J-7p60kap6jlDzioSQsg5V2bY5lH70Bfg",
     "SOCKET_TIMEOUT": 30000
 }
