@@ -44,7 +44,7 @@ export class Component {
     public getGroupStyle(groupIndex: number): string {
         const group = this.state.groups[groupIndex];
         let columnString = `grid-template-columns: ${16 - (this.state.level * 1.75)}rem`;
-        if (group && typeof group.value !== 'undefined' && group.value !== null) {
+        if (group && typeof group.value !== 'undefined' && group.value !== null && group.value !== '') {
             columnString += ' minmax(auto,min-content)';
         }
         return columnString + ';';
