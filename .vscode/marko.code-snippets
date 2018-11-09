@@ -1,0 +1,37 @@
+{
+	"Marko Component": {
+		"scope": "javascript,typescript",
+		"prefix": "marko component",
+		"body": [
+			"import { AbstractMarkoComponent } from '@kix/core/dist/browser';",
+			"import { ComponentState } from './ComponentState';",
+			"",
+			"class Component extends AbstractMarkoComponent {",
+			"",
+			"\t$1public onCreate(): void {",
+			"\t$2this.state = new ComponentState();",
+			"\t$1}",
+			"",
+			"\t$1public async onMount(): Promise<void> { }",
+			"",
+			"}",
+			"",
+			"module.exports = Component;",
+			""
+		],
+		"description": "component class (view model)"
+	},
+	"Marko Component State": {
+		"scope": "javascript,typescript",
+		"prefix": "marko component state",
+		"body": [
+			"export class ComponentState {",
+			"",
+			"\t$1public constructor() { }",
+			"",
+			"}",
+			""
+		],
+		"description": "component state for marko component"
+	}
+}

@@ -1,4 +1,4 @@
-import { ObjectData, AbstractAction } from "@kix/core/dist/model";
+import { ObjectData } from "@kix/core/dist/model";
 
 export class ComponentState {
 
@@ -11,7 +11,8 @@ export class ComponentState {
         public showSidebar: boolean = false,
         public loading: boolean = true,
         public loadingHint: string = 'Lade KIX ...',
-        public initialized: boolean = false
+        public initialized: boolean = false,
+        public moduleTemplates: any[] = []
     ) { }
 
 }

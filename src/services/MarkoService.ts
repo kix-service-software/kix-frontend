@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { IMarkoService, IPluginService, ILoggingService, IProfilingService } from '@kix/core/dist/services';
-import { IMarkoDependencyExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { Response } from 'express';
+import { KIXExtensions, IKIXModuleExtension } from '@kix/core/dist/extensions';
 import jsonfile = require('jsonfile');
 import { BaseTemplateInput } from '@kix/core/dist/common';
 import { ObjectData } from '@kix/core/dist/model';
@@ -26,8 +25,10 @@ export class MarkoService implements IMarkoService {
     }
 
     public async registerMarkoDependencies(): Promise<void> {
-        const markoDependencies: IMarkoDependencyExtension[] =
-            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
+        const markoDependencies: IKIXModuleExtension[] = await this.pluginService.getExtensions<IKIXModuleExtension>(
+            KIXExtensions.MODULES
+        );
+
         const browserJSON = require(this.browserJsonPath);
 
         this.fillDependencies(browserJSON, markoDependencies);
@@ -35,35 +36,15 @@ export class MarkoService implements IMarkoService {
         await this.buildMarkoApp();
     }
 
-    public async getComponentTags(): Promise<Array<[string, string]>> {
-        const markoDependencies: IMarkoDependencyExtension[] =
-            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
-
-        const packageJson = require('../../package.json');
-        const version = packageJson.version;
-        const prePath = '/@kix/frontend$' + version + '/dist/components/';
-
-        const tags: Array<[string, string]> = [];
-
-        for (const plugin of markoDependencies) {
-            for (const tag of plugin.getComponentTags()) {
-                tag[1] = prePath + tag[1];
-                tags.push(tag);
-            }
-        }
-
-        return tags;
-    }
-
-    private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependencyExtension[]): void {
-        for (const plugin of markoDependencies) {
+    private fillDependencies(browserJSON: any, modules: IKIXModuleExtension[]): void {
+        for (const kixModule of modules) {
             let prePath = 'require ../';
-            if (plugin.isExternal()) {
+            if (kixModule.external) {
                 prePath = 'require: ../../../node_modules/';
             }
 
-            for (const dependencyPath of plugin.getDependencies()) {
-                const dependency = prePath + dependencyPath;
+            for (const dependencyPath of kixModule.tags) {
+                const dependency = prePath + dependencyPath[1];
                 const exists = browserJSON.dependencies.find((d) => d === dependency);
                 if (!exists) {
                     browserJSON.dependencies.push(dependency);

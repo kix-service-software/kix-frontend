@@ -1,4 +1,3 @@
-import { ApplicationCommunicator } from './ApplicationCommunicator';
 import { ICommunicatorRegistryExtension } from '@kix/core/dist/extensions';
 import { AuthenticationCommunicator } from '.';
 import { ConfigurationCommunicatior } from './ConfigurationCommunicator';
@@ -8,12 +7,12 @@ import { MainMenuCommunicator } from './MainMenuCommunicator';
 import { TicketCommunicator } from './TicketCommunicator';
 import { KIXObjectCommunicator } from './KIXObjectCommunicator';
 import { NotesCommunicatior } from './NotesCommunicator';
+import { KIXModuleCommunicator } from './KIXModuleCommunicator';
 
 export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
     public getCommunicatorClasses(): any[] {
         return [
-            ApplicationCommunicator,
             AuthenticationCommunicator,
             ConfigurationCommunicatior,
             ContextCommunicator,
@@ -21,7 +20,8 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
             KIXObjectCommunicator,
             MainMenuCommunicator,
             TicketCommunicator,
-            NotesCommunicatior
+            NotesCommunicatior,
+            KIXModuleCommunicator
         ];
     }
 
