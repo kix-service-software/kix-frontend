@@ -1,21 +1,11 @@
 import { inject, injectable } from 'inversify';
 import {
-    IAuthenticationService,
-    IConfigurationService, IContactService, ICustomerService,
-    IDynamicFieldService,
-    IGeneralCatalogService,
-    ILoggingService,
-    IObjectIconService,
-    IPluginService,
-    IServiceService, ISysConfigService,
-    ITicketService,
-    IUserService,
-    IProfilingService,
-    IMarkoService,
-    ITextModuleService,
+    IAuthenticationService, IConfigurationService, IContactService, ICustomerService, IDynamicFieldService,
+    IGeneralCatalogService, ILoggingService, IObjectIconService, IPluginService, IServiceService, ISysConfigService,
+    ITicketService, IUserService, IProfilingService, IMarkoService, ITextModuleService,
 } from '@kix/core/dist/services';
-import { SocketEvent, ISocketRequest } from '@kix/core/dist/model';
-import { ICommunicator, IServerConfiguration, CommunicatorResponse } from '@kix/core/dist/common';
+import { SocketEvent, ISocketRequest, ISocketObjectRequest } from '@kix/core/dist/model';
+import { ICommunicator, CommunicatorResponse } from '@kix/core/dist/common';
 
 @injectable()
 export abstract class KIXCommunicator implements ICommunicator {
@@ -58,7 +48,13 @@ export abstract class KIXCommunicator implements ICommunicator {
         client.on(event, async (data: RQ) => {
 
             // start profiling
-            const message = `${this.getNamespace()} / ${event} (${data.objectType})`;
+
+            let object = "";
+            if (object['objectType']) {
+                object = `(${data['objectType']})`;
+            }
+
+            const message = `${this.getNamespace()} / ${event} ${object}`;
             const profileTaskId = this.profilingService.start('SocketIO', message, data);
 
             const response: CommunicatorResponse<RS> = await handler(data);
