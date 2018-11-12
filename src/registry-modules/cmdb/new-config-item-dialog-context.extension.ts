@@ -1,6 +1,6 @@
 import { ContextConfiguration } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { ICMDBService, ConfigurationService, CMDBService } from "@kix/core/dist/services";
+import { ConfigurationService, CMDBService } from "@kix/core/dist/services";
 import {
     NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from "@kix/core/dist/browser/cmdb";
