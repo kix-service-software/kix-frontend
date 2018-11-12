@@ -5,9 +5,9 @@
 .vscode
 .gitlab-ci.yml
 gulpfile.js
-marko.json
+./marko.json
 package-lock.json
-src
+./src
 tsconfig.json
 tslint.json
 tests
