@@ -1,18 +1,8 @@
-import { inject, injectable } from 'inversify';
 import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 
 import { IServerConfiguration } from '@kix/core/dist/common';
-
-import {
-    IMarkoService,
-    ILoggingService,
-    IConfigurationService,
-    ISocketCommunicationService,
-    IPluginService,
-    IClientRegistrationService,
-} from '@kix/core/dist/services';
 
 import { KIXExtensions, IStaticContentExtension } from '@kix/core/dist/extensions';
 
@@ -33,29 +23,34 @@ import https = require('https');
 import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
 import { CreateClientRegistration } from '@kix/core/dist/api';
+import {
+    ConfigurationService, LoggingService, ClientRegistrationService
+} from '@kix/core/dist/services';
+import { PluginService, MarkoService } from './services';
+import { SocketCommunicationService } from './services/SocketCommuncationService';
 
-@injectable()
 export class Server {
 
+    private static INSTANCE: Server;
+
+    public static getInstance(): Server {
+        if (!Server.INSTANCE) {
+            Server.INSTANCE = new Server();
+        }
+        return Server.INSTANCE;
+    }
+
     public application: express.Application;
-    private router: ServerRouter;
     private serverConfig: IServerConfiguration;
 
-    public constructor(
-        @inject("ILoggingService") private loggingService: ILoggingService,
-        @inject("IConfigurationService") private configurationService: IConfigurationService,
-        @inject("IPluginService") private pluginService: IPluginService,
-        @inject("IClientRegistrationService") private clientRegistrationService: IClientRegistrationService,
-        @inject("ISocketCommunicationService") private socketService: ISocketCommunicationService,
-        @inject("IMarkoService") private markoService: IMarkoService
-    ) {
-        this.serverConfig = this.configurationService.getServerConfiguration();
+    private constructor() {
+        this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         this.initializeApplication();
-
     }
 
     private async initializeApplication(): Promise<void> {
-        lasso.configure(this.configurationService.getLassoConfiguration());
+        lasso.configure(ConfigurationService.getInstance().getLassoConfiguration());
+        await MarkoService.getInstance().registerMarkoDependencies();
 
         this.application = express();
 
@@ -76,9 +71,11 @@ export class Server {
 
         await this.registerStaticContent();
         await this.createReleaseInfoConfig();
+
         await this.initHttpServer();
 
-        this.router = new ServerRouter(this.application);
+        // tslint:disable-next-line:no-unused-expression
+        new ServerRouter(this.application);
     }
 
     private async createReleaseInfoConfig(): Promise<void> {
@@ -88,23 +85,21 @@ export class Server {
             Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345'
         );
 
-        const systemInfo = await this.clientRegistrationService.createClientRegistration(
+        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
             this.serverConfig.BACKEND_API_TOKEN, createClientRegistration
         ).catch((error) => {
-            this.loggingService.error(error);
+            LoggingService.getInstance().error(error);
             return null;
         });
 
         releaseInfo.backendSystemInfo = systemInfo;
-        this.configurationService.saveModuleConfiguration('release-info', null, releaseInfo);
+        ConfigurationService.getInstance().saveModuleConfiguration('release-info', null, releaseInfo);
     }
 
     private async initHttpServer(): Promise<void> {
-        await this.markoService.appIsReady();
-
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         const httpServer = http.createServer(this.application).listen(httpPort, () => {
-            this.loggingService.info("KIX (HTTP) running on *:" + httpPort);
+            LoggingService.getInstance().info("KIX (HTTP) running on *:" + httpPort);
         });
 
         if (this.serverConfig.USE_SSL) {
@@ -118,13 +113,13 @@ export class Server {
 
             const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
-            this.socketService.initialize(httpsServer);
+            await SocketCommunicationService.getInstance().initialize(httpsServer);
 
             httpsServer.listen(httpsPort, () => {
-                this.loggingService.info("KIX (HTTPS) running on *:" + httpsPort);
+                LoggingService.getInstance().info("KIX (HTTPS) running on *:" + httpsPort);
             });
         } else {
-            this.socketService.initialize(httpServer);
+            await SocketCommunicationService.getInstance().initialize(httpServer);
         }
     }
 
@@ -133,7 +128,7 @@ export class Server {
         this.application.use(lassoMiddleware.serveStatic());
         this.application.use(express.static('dist/static/'));
 
-        const extensions = await this.pluginService
+        const extensions = await PluginService.getInstance()
             .getExtensions<IStaticContentExtension>(KIXExtensions.STATIC_CONTENT);
         for (const staticContent of extensions) {
             this.application.use(

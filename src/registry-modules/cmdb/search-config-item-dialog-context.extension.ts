@@ -3,9 +3,8 @@ import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty
 } from '@kix/core/dist/model';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
 import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '@kix/core/dist/browser/cmdb';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class ModuleExtension implements IModuleFactoryExtension {
 
@@ -29,8 +28,7 @@ export class ModuleExtension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-config-item-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);

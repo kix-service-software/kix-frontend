@@ -5,8 +5,22 @@ import {
 
 import { KIXCommunicator } from './KIXCommunicator';
 import { CommunicatorResponse } from '@kix/core/dist/common';
+import { TicketService } from '@kix/core/dist/services';
 
 export class TicketCommunicator extends KIXCommunicator {
+
+    private static INSTANCE: TicketCommunicator;
+
+    public static getInstance(): TicketCommunicator {
+        if (!TicketCommunicator.INSTANCE) {
+            TicketCommunicator.INSTANCE = new TicketCommunicator();
+        }
+        return TicketCommunicator.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     protected getNamespace(): string {
         return 'tickets';
@@ -23,7 +37,7 @@ export class TicketCommunicator extends KIXCommunicator {
     private async loadArticleAttachment(
         data: LoadArticleAttachmentRequest
     ): Promise<CommunicatorResponse<LoadArticleAttachmentResponse>> {
-        const attachemnt = await this.ticketService.loadArticleAttachment(
+        const attachemnt = await TicketService.getInstance().loadArticleAttachment(
             data.token, data.ticketId, data.articleId, data.attachmentId
         );
 
@@ -34,7 +48,7 @@ export class TicketCommunicator extends KIXCommunicator {
     private async loadArticleZipAttachment(
         data: LoadArticleZipAttachmentRequest
     ): Promise<CommunicatorResponse<LoadArticleAttachmentResponse>> {
-        const attachemnt = await this.ticketService.loadArticleZipAttachment(
+        const attachemnt = await TicketService.getInstance().loadArticleZipAttachment(
             data.token, data.ticketId, data.articleId
         );
 
@@ -43,7 +57,7 @@ export class TicketCommunicator extends KIXCommunicator {
     }
 
     private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<CommunicatorResponse<void>> {
-        await this.ticketService.setArticleSeenFlag(data.token, data.ticketId, data.articleId);
+        await TicketService.getInstance().setArticleSeenFlag(data.token, data.ticketId, data.articleId);
         return new CommunicatorResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
     }
 }

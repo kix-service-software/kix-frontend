@@ -7,9 +7,8 @@ import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } f
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator, SearchProperty
 } from '@kix/core/dist/browser';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -179,12 +178,9 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>(
-            "IConfigurationService"
-        );
         // tslint:disable:max-line-length
         const formIdLinkWithTicket = 'link-ticket-search-form';
-        const existingFormLinkWithTicket = configurationService.getModuleConfiguration(formIdLinkWithTicket, null);
+        const existingFormLinkWithTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdLinkWithTicket, null);
         if (!existingFormLinkWithTicket) {
 
             const fields: FormField[] = [];
@@ -208,9 +204,9 @@ export class TicketModuleFactoryExtension implements IModuleFactoryExtension {
                 formIdLinkWithTicket, 'Verknüpfen mit Ticket', [attributeGroup],
                 KIXObjectType.TICKET, false, FormContext.LINK, null, true
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm(
+        ConfigurationService.getInstance().registerForm(
             [FormContext.LINK], KIXObjectType.TICKET, formIdLinkWithTicket
         );
     }

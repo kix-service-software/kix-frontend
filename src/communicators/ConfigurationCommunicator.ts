@@ -1,15 +1,25 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
-    ConfigurationEvent,
-    LoadConfigurationRequest,
-    LoadConfigurationResult,
-    SaveConfigurationRequest,
-    SocketEvent,
-    User
+    ConfigurationEvent, LoadConfigurationRequest, LoadConfigurationResult, SaveConfigurationRequest
 } from '@kix/core/dist/model';
 import { CommunicatorResponse } from '@kix/core/dist/common';
+import { ConfigurationService, UserService } from '@kix/core/dist/services';
+import { PluginService } from '../services';
 
 export class ConfigurationCommunicatior extends KIXCommunicator {
+
+    private static INSTANCE: ConfigurationCommunicatior;
+
+    public static getInstance(): ConfigurationCommunicatior {
+        if (!ConfigurationCommunicatior.INSTANCE) {
+            ConfigurationCommunicatior.INSTANCE = new ConfigurationCommunicatior();
+        }
+        return ConfigurationCommunicatior.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     protected getNamespace(): string {
         return 'configuration';
@@ -27,18 +37,18 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     private async loadModuleConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse<void>> {
         let userId = null;
         if (data.userSpecific) {
-            const user = await this.userService.getUserByToken(data.token);
+            const user = await UserService.getInstance().getUserByToken(data.token);
             userId = user.UserID;
         }
 
-        let configuration = await this.configurationService
+        let configuration = await ConfigurationService.getInstance()
             .getComponentConfiguration(data.contextId, data.componentId, userId);
 
         if (!configuration) {
-            const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
-            await this.configurationService.saveComponentConfiguration(
+            await ConfigurationService.getInstance().saveComponentConfiguration(
                 data.contextId, data.componentId, userId, moduleDefaultConfiguration);
 
             configuration = moduleDefaultConfiguration;
@@ -48,16 +58,16 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     }
 
     private async loadSidebarConfiguration(data: LoadConfigurationRequest): Promise<CommunicatorResponse<void>> {
-        const user = await this.userService.getUserByToken(data.token);
+        const user = await UserService.getInstance().getUserByToken(data.token);
 
-        let configuration = await this.configurationService
+        let configuration = await ConfigurationService.getInstance()
             .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
 
         if (!configuration) {
-            const moduleFactory = await this.pluginService.getModuleFactory(data.componentId);
+            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.componentId);
             const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
 
-            this.configurationService.saveComponentConfiguration(
+            ConfigurationService.getInstance().saveComponentConfiguration(
                 data.contextId, data.componentId, user.UserID, sidebarDefaultConfiguration);
 
             configuration = sidebarDefaultConfiguration;
@@ -69,11 +79,11 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
     private async saveComponentConfiguration(data: SaveConfigurationRequest): Promise<CommunicatorResponse<void>> {
         let userId = null;
         if (data.userSpecific) {
-            const user = await this.userService.getUserByToken(data.token);
+            const user = await UserService.getInstance().getUserByToken(data.token);
             userId = user && user.UserID;
         }
 
-        await this.configurationService
+        await ConfigurationService.getInstance()
             .saveComponentConfiguration(data.contextId, data.componentId,
                 userId, data.configuration
             );

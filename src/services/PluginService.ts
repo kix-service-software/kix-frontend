@@ -1,21 +1,24 @@
-import { injectable, inject } from 'inversify';
 import Plugins = require('js-plugins');
 
 import { IModuleFactoryExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { IPluginService, IConfigurationService, ILoggingService } from '@kix/core/dist/services';
-import { IServerConfiguration } from '@kix/core/dist/common';
+import { LoggingService } from '@kix/core/dist/services';
 
 const host = { debug: true };
 
-@injectable()
-export class PluginService implements IPluginService {
+export class PluginService {
+
+    private static INSTANCE: PluginService;
+
+    public static getInstance(): PluginService {
+        if (!PluginService.INSTANCE) {
+            PluginService.INSTANCE = new PluginService();
+        }
+        return PluginService.INSTANCE;
+    }
 
     public pluginManager: any;
 
-    public constructor(
-        @inject("ILoggingService") protected loggingService: ILoggingService,
-        @inject("IConfigurationService") protected configurationService: IConfigurationService) {
-        const serverConfiguration: IServerConfiguration = configurationService.getServerConfiguration();
+    private constructor() {
         this.pluginManager = new Plugins();
 
         const pluginDirs = [];
@@ -42,7 +45,7 @@ export class PluginService implements IPluginService {
             this.pluginManager.connect(host, extensionId, config,
                 (error, extensions: T[], names) => {
                     if (error) {
-                        this.loggingService.error('Error during http GET request.', error);
+                        LoggingService.getInstance().error('Error during http GET request.', error);
                         reject(error);
                     }
                     resolve(extensions);

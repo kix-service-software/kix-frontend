@@ -4,11 +4,10 @@ import {
     FormField, Form, FormContext, KIXObjectType
 } from '@kix/core/dist/model';
 import { FAQContext, FAQContextConfiguration } from '@kix/core/dist/browser/faq';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
 import { SearchProperty } from '@kix/core/dist/browser';
 import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class DashboardModuleFactoryExtension implements IModuleFactoryExtension {
 
@@ -54,7 +53,7 @@ export class DashboardModuleFactoryExtension implements IModuleFactoryExtension 
 
     // tslint:disable:max-line-length
     public async createFormDefinitions(): Promise<void> {
-        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
         const linkFormId = 'link-faq-search-form';
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
