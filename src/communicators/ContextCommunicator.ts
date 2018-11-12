@@ -1,21 +1,27 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
-    IWidget,
-    ConfiguredWidget,
-    SaveWidgetRequest,
-    SocketEvent,
-    User,
-    WidgetConfiguration,
-    ContextEvent,
-    LoadContextConfigurationRequest,
-    LoadContextConfigurationResponse,
-    ContextConfiguration,
-    SaveContextConfigurationRequest
+    SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
+    ContextConfiguration, SaveContextConfigurationRequest
 } from '@kix/core/dist/model';
 
 import { CommunicatorResponse } from '@kix/core/dist/common';
+import { ConfigurationService, UserService } from '@kix/core/dist/services';
+import { PluginService } from '../services';
 
-export class ContextCommunicator<T extends ContextConfiguration> extends KIXCommunicator {
+export class ContextCommunicator extends KIXCommunicator {
+
+    private static INSTANCE: ContextCommunicator;
+
+    public static getInstance(): ContextCommunicator {
+        if (!ContextCommunicator.INSTANCE) {
+            ContextCommunicator.INSTANCE = new ContextCommunicator();
+        }
+        return ContextCommunicator.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     protected getNamespace(): string {
         return 'context';
@@ -35,17 +41,17 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
 
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
-    ): Promise<CommunicatorResponse<LoadContextConfigurationResponse<T>>> {
-        const user = await this.userService.getUserByToken(data.token);
+    ): Promise<CommunicatorResponse<LoadContextConfigurationResponse<any>>> {
+        const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
-        let configuration = await this.configurationService.getModuleConfiguration(data.contextId, userId);
+        let configuration = await ConfigurationService.getInstance().getModuleConfiguration(data.contextId, userId);
 
         if (!configuration) {
-            const moduleFactory = await this.pluginService.getModuleFactory(data.contextId);
+            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.contextId);
             const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
             if (moduleDefaultConfiguration) {
-                this.configurationService.saveModuleConfiguration(
+                ConfigurationService.getInstance().saveModuleConfiguration(
                     data.contextId, userId, moduleDefaultConfiguration);
 
                 configuration = moduleDefaultConfiguration;
@@ -62,20 +68,20 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
     }
 
     private async saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<CommunicatorResponse<void>> {
-        const user = await this.userService.getUserByToken(data.token);
+        const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user && user.UserID;
 
-        this.configurationService
+        ConfigurationService.getInstance()
             .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
         return new CommunicatorResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED);
     }
 
     private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<CommunicatorResponse<void>> {
-        const user = await this.userService.getUserByToken(data.token);
+        const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user && user.UserID;
 
-        const moduleConfiguration = await this.configurationService.getModuleConfiguration(
+        const moduleConfiguration = await ConfigurationService.getInstance().getModuleConfiguration(
             data.contextId,
             userId
         );
@@ -93,7 +99,7 @@ export class ContextCommunicator<T extends ContextConfiguration> extends KIXComm
                 moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
             }
 
-            this.configurationService.saveModuleConfiguration(
+            ConfigurationService.getInstance().saveModuleConfiguration(
                 data.contextId, userId, moduleConfiguration
             );
             return new CommunicatorResponse(ContextEvent.WIDGET_CONFIGURATION_SAVED);

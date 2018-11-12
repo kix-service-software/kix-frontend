@@ -8,11 +8,11 @@
 			"",
 			"class Component extends AbstractMarkoComponent {",
 			"",
-			"\t$1public onCreate(): void {",
-			"\t$2this.state = new ComponentState();",
-			"\t$1}",
+			"\tpublic onCreate(): void {",
+			"\t\tthis.state = new ComponentState();",
+			"\t}",
 			"",
-			"\t$1public async onMount(): Promise<void> { }",
+			"\tpublic async onMount(): Promise<void> { }",
 			"",
 			"}",
 			"",
@@ -27,11 +27,30 @@
 		"body": [
 			"export class ComponentState {",
 			"",
-			"\t$1public constructor() { }",
+			"\tpublic constructor() { }",
 			"",
 			"}",
 			""
 		],
 		"description": "component state for marko component"
+	},
+	"Singleton Class": {
+		"scope": "javascript,typescript",
+		"prefix": "singleton pattern",
+		"body": [
+			"",
+			"\tprivate static INSTANCE: ${1:class};",
+			"",
+			"\tpublic static getInstance(): ${1:class} {",
+			"\t\tif (!${1:class}.INSTANCE) {",
+			"\t\t\t${1:class}.INSTANCE = new ${1:class}();",
+			"\t\t}",
+			"\t\treturn ${1:class}.INSTANCE;",
+			"\t}",
+			"",
+			"\tprivate constructor() { }",
+			""
+		],
+		"description": "singleton pattern implementation"
 	}
 }

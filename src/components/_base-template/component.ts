@@ -61,6 +61,10 @@ class Component {
 
         this.state.initialized = true;
         this.state.loading = false;
+
+        setTimeout(() => {
+            RoutingService.getInstance().routeToInitialContext();
+        }, 500);
     }
 
     private async checkAuthentication(): Promise<void> {
@@ -87,8 +91,6 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
-
-        RoutingService.getInstance().routeToInitialContext();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

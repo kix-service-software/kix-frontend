@@ -13,15 +13,15 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
     public getCommunicatorClasses(): any[] {
         return [
-            AuthenticationCommunicator,
-            ConfigurationCommunicatior,
-            ContextCommunicator,
-            IconCommunicator,
-            KIXObjectCommunicator,
-            MainMenuCommunicator,
-            TicketCommunicator,
-            NotesCommunicatior,
-            KIXModuleCommunicator
+            AuthenticationCommunicator.getInstance(),
+            ConfigurationCommunicatior.getInstance(),
+            ContextCommunicator.getInstance(),
+            IconCommunicator.getInstance(),
+            KIXObjectCommunicator.getInstance(),
+            MainMenuCommunicator.getInstance(),
+            TicketCommunicator.getInstance(),
+            NotesCommunicatior.getInstance(),
+            KIXModuleCommunicator.getInstance()
         ];
     }
 

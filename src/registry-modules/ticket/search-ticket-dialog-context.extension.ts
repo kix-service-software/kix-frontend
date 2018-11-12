@@ -4,8 +4,7 @@ import {
     ContextConfiguration, KIXObjectType, TicketProperty, FormContext, SearchForm,
     ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '@kix/core/dist/model';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class ModuleExtension implements IModuleFactoryExtension {
 
@@ -29,11 +28,8 @@ export class ModuleExtension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
-
         const formId = 'search-ticket-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = ConfigurationService.getInstance().getModuleConfiguration(formId, null);
         if (!existingForm) {
             const form = new SearchForm(
                 formId,
@@ -44,9 +40,9 @@ export class ModuleExtension implements IModuleFactoryExtension {
                 true,
                 [TicketProperty.TITLE, TicketProperty.QUEUE_ID]
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.TICKET, formId);
+        ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.TICKET, formId);
     }
 
 }

@@ -7,9 +7,8 @@ import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
     NewContactDialogContextConfiguration, NewContactDialogContext, ContactLabelProvider
 } from "@kix/core/dist/browser/contact";
-import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService, IContactService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
+import { ConfigurationService, ContactService } from "@kix/core/dist/services";
 
 export class NewContactDialogModuleExtension implements IModuleFactoryExtension {
 
@@ -22,14 +21,12 @@ export class NewContactDialogModuleExtension implements IModuleFactoryExtension 
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-contact-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
         if (!existingForm) {
-            const contactService =
-                ServiceContainer.getInstance().getClass<IContactService>("IContactService");
+            const contactService = ContactService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
             const mapping: ContactSourceAttributeMapping[] = await contactService.getAttributeMapping(token);

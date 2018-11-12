@@ -1,9 +1,27 @@
 import { Request, Response } from 'express';
 
-import { KIXRouter, IRouter } from '@kix/core/dist/routes';
 import { ReleaseInfo } from '@kix/core/dist/model';
+import { ConfigurationService } from '@kix/core/dist/services';
+import { KIXRouter } from './KIXRouter';
 
 export class AuthenticationRouter extends KIXRouter {
+
+    private static INSTANCE: AuthenticationRouter;
+
+    public static getInstance(): AuthenticationRouter {
+        if (!AuthenticationRouter.INSTANCE) {
+            AuthenticationRouter.INSTANCE = new AuthenticationRouter();
+        }
+        return AuthenticationRouter.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
+
+    protected initialize(): void {
+        this.router.get("/", this.login.bind(this));
+    }
 
     public getContextId(): string {
         return "authentication";
@@ -20,17 +38,13 @@ export class AuthenticationRouter extends KIXRouter {
         const logout = req.query.logout !== undefined;
 
         const releaseInfo =
-            (await this.configurationService.getModuleConfiguration('release-info', null) as ReleaseInfo);
+            (await ConfigurationService.getInstance().getModuleConfiguration('release-info', null) as ReleaseInfo);
 
         res.marko(template, {
             login: true,
             logout,
             releaseInfo
         });
-    }
-
-    protected initialize(): void {
-        this.router.get("/", this.login.bind(this));
     }
 
 }
