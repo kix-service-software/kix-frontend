@@ -41,7 +41,7 @@ export class TicketCommunicator extends KIXCommunicator {
             data.token, data.ticketId, data.articleId, data.attachmentId
         );
 
-        const response = new LoadArticleAttachmentResponse(attachemnt);
+        const response = new LoadArticleAttachmentResponse(data.requestId, attachemnt);
         return new CommunicatorResponse(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
     }
 
@@ -52,7 +52,7 @@ export class TicketCommunicator extends KIXCommunicator {
             data.token, data.ticketId, data.articleId
         );
 
-        const response = new LoadArticleAttachmentResponse(attachemnt);
+        const response = new LoadArticleAttachmentResponse(data.requestId, attachemnt);
         return new CommunicatorResponse(TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED, response);
     }
 
