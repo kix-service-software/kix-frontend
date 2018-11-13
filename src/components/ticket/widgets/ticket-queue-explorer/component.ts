@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService, IdService, SearchOperator, KIXObjectService } from '@kix/core/dist/browser';
 import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType
+    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
 } from '@kix/core/dist/model';
 import { TicketContext } from '@kix/core/dist/browser/ticket';
 
@@ -25,8 +25,11 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, null, null, [['TicketStats.StateType', 'Open']]
+        );
         const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null
+            KIXObjectType.QUEUE_HIERARCHY, null, loadingOptions
         );
 
         this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
