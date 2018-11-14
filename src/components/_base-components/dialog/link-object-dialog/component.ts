@@ -222,7 +222,6 @@ class LinkDialogComponent {
             this.highlightLayer.setHighlightedObjects(newLinks.map((ld) => ld.linkableObject));
             this.setLinkedObjectsToTableLayer();
             this.state.standardTable.loadRows();
-            this.state.currentLinkTypeDescription = null;
         }
     }
 
