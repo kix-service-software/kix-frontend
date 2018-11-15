@@ -1,16 +1,14 @@
 import { IModuleFactoryExtension } from '@kix/core/dist/extensions';
 import {
-    NewTicketDialogContext, NewTicketDialogContextConfiguration, TicketStateOptions, PendingTimeFormValue
+    NewTicketDialogContext, NewTicketDialogContextConfiguration, PendingTimeFormValue
 } from '@kix/core/dist/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
 } from '@kix/core/dist/model';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
-import { SearchProperty } from '@kix/core/dist/browser';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
 
@@ -54,13 +52,9 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>(
-            "IConfigurationService"
-        );
-
         // tslint:disable:max-line-length
         const formIdNewTicket = 'new-ticket-form';
-        const existingFormNewTicket = configurationService.getModuleConfiguration(formIdNewTicket, null);
+        const existingFormNewTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdNewTicket, null);
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField(
@@ -106,9 +100,9 @@ export class NewTicketDialogModuleExtension implements IModuleFactoryExtension {
             const group = new FormGroup('Ticketdaten', fields);
 
             const form = new Form(formIdNewTicket, 'Neues Ticket', [group], KIXObjectType.TICKET);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
     }
 
 }

@@ -21,7 +21,6 @@
     "csso": "3.5.1",
     "express": "4.16.4",
     "express-force-ssl": "0.3.2",
-    "inversify": "4.13.0",
     "js-plugins": "1.0.0",
     "jsonfile": "5.0.0",
     "lasso": "3.2.6",

@@ -1,6 +1,5 @@
-import { IRouter } from '@kix/core/dist/routes';
-import { Application, Router, Request, Response } from 'express';
-import { ServiceContainer } from '@kix/core/dist/common';
+import { Application, Router } from 'express';
+import { IRouter, ApplicationRouter, AuthenticationRouter } from './routes';
 
 export class ServerRouter {
 
@@ -15,11 +14,14 @@ export class ServerRouter {
     }
 
     private initializeRoutes(): void {
-        const registeredRouter = ServiceContainer.getInstance().getClasses<IRouter>("IRouter");
-        for (const router of registeredRouter) {
-            this.expressRouter.use(router.getBaseRoute(), router.getRouter());
+        this.expressRouter.use(
+            AuthenticationRouter.getInstance().getBaseRoute(), AuthenticationRouter.getInstance().getRouter()
+        );
+        AuthenticationRouter.getInstance().setAppTemplate(require('./components/_app'));
 
-            router.setAppTemplate(require('./components/_app'));
-        }
+        this.expressRouter.use(
+            ApplicationRouter.getInstance().getBaseRoute(), ApplicationRouter.getInstance().getRouter()
+        );
+        ApplicationRouter.getInstance().setAppTemplate(require('./components/_app'));
     }
 }

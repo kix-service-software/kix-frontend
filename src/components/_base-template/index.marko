@@ -1,6 +1,9 @@
 <div.wrapper>
     <if(state.initialized)>
         <kix-header/>
+        <for(module in state.moduleTemplates)>
+            <${module}/>
+        </for>
         <div.content-wrapper class={"with-explorer": state.hasExplorer} style=("grid-template-columns: " + state.gridColumns)>
             <main-menu no-update-body/>
             <div.site-navigation no-update-body>

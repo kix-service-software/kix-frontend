@@ -1,7 +1,6 @@
 import { ContextConfiguration } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService, ICMDBService } from "@kix/core/dist/services";
+import { ConfigurationService, CMDBService } from "@kix/core/dist/services";
 import {
     NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from "@kix/core/dist/browser/cmdb";
@@ -17,12 +16,10 @@ export class Extension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
-        const cmdbService =
-            ServiceContainer.getInstance().getClass<ICMDBService>("ICmdbService");
+        const cmdbService = CMDBService.getInstance();
 
         const ciClasses = await cmdbService.loadConfigItemClassWithDefinitions(token);
 

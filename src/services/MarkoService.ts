@@ -1,69 +1,52 @@
-import { inject, injectable } from 'inversify';
-import { IMarkoService, IPluginService, ILoggingService, IProfilingService } from '@kix/core/dist/services';
-import { IMarkoDependencyExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { Response } from 'express';
+import { KIXExtensions, IKIXModuleExtension } from '@kix/core/dist/extensions';
 import jsonfile = require('jsonfile');
 import { BaseTemplateInput } from '@kix/core/dist/common';
 import { ObjectData } from '@kix/core/dist/model';
+import { PluginService } from './PluginService';
+import { ProfilingService, LoggingService } from '@kix/core/dist/services';
 
-@injectable()
-export class MarkoService implements IMarkoService {
+export class MarkoService {
+
+    private static INSTANCE: MarkoService;
+
+    public static getInstance(): MarkoService {
+        if (!MarkoService.INSTANCE) {
+            MarkoService.INSTANCE = new MarkoService();
+        }
+        return MarkoService.INSTANCE;
+    }
 
     private browserJsonPath: string = '../components/_app/browser.json';
 
     private ready: boolean = false;
 
-    public constructor(
-        @inject("IPluginService") private pluginService: IPluginService,
-        @inject("ILoggingService") private loggingService: ILoggingService,
-        @inject("IProfilingService") protected profilingService: IProfilingService,
-    ) {
-        this.registerMarkoDependencies();
-    }
+    private constructor() { }
 
     public initCache(): Promise<void> {
         return;
     }
 
     public async registerMarkoDependencies(): Promise<void> {
-        const markoDependencies: IMarkoDependencyExtension[] =
-            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
+        const modules: IKIXModuleExtension[] = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
+            KIXExtensions.MODULES
+        );
+
         const browserJSON = require(this.browserJsonPath);
 
-        this.fillDependencies(browserJSON, markoDependencies);
+        this.fillDependencies(browserJSON, modules);
         await this.saveBrowserJSON(browserJSON);
         await this.buildMarkoApp();
     }
 
-    public async getComponentTags(): Promise<Array<[string, string]>> {
-        const markoDependencies: IMarkoDependencyExtension[] =
-            await this.pluginService.getExtensions<IMarkoDependencyExtension>(KIXExtensions.MARKO_DEPENDENCIES);
-
-        const packageJson = require('../../package.json');
-        const version = packageJson.version;
-        const prePath = '/@kix/frontend$' + version + '/dist/components/';
-
-        const tags: Array<[string, string]> = [];
-
-        for (const plugin of markoDependencies) {
-            for (const tag of plugin.getComponentTags()) {
-                tag[1] = prePath + tag[1];
-                tags.push(tag);
-            }
-        }
-
-        return tags;
-    }
-
-    private fillDependencies(browserJSON: any, markoDependencies: IMarkoDependencyExtension[]): void {
-        for (const plugin of markoDependencies) {
+    private fillDependencies(browserJSON: any, modules: IKIXModuleExtension[]): void {
+        for (const kixModule of modules) {
             let prePath = 'require ../';
-            if (plugin.isExternal()) {
+            if (kixModule.external) {
                 prePath = 'require: ../../../node_modules/';
             }
 
-            for (const dependencyPath of plugin.getDependencies()) {
-                const dependency = prePath + dependencyPath;
+            for (const dependencyPath of kixModule.tags) {
+                const dependency = prePath + dependencyPath[1];
                 const exists = browserJSON.dependencies.find((d) => d === dependency);
                 if (!exists) {
                     browserJSON.dependencies.push(dependency);
@@ -77,7 +60,7 @@ export class MarkoService implements IMarkoService {
             jsonfile.writeFile(__dirname + "/" + this.browserJsonPath, browserJSON,
                 (fileError: Error) => {
                     if (fileError) {
-                        this.loggingService.error(fileError.message);
+                        LoggingService.getInstance().error(fileError.message);
                         reject(fileError);
                     }
 
@@ -87,9 +70,11 @@ export class MarkoService implements IMarkoService {
     }
 
     private async buildMarkoApp(): Promise<void> {
-        const profileTaskId = this.profilingService.start(
+        const profileTaskId = ProfilingService.getInstance().start(
             'MarkoService', 'Build App'
         );
+
+        this.appIsReady();
 
         const loginTemplate = require('../components/_login-app');
         await new Promise<void>((resolve, reject) => {
@@ -100,11 +85,11 @@ export class MarkoService implements IMarkoService {
                     data: new BaseTemplateInput('home', new ObjectData(), null)
                 }, (error, result) => {
                     if (error) {
-                        this.profilingService.stop(profileTaskId, 'Login build error.');
-                        this.loggingService.error(error);
+                        ProfilingService.getInstance().stop(profileTaskId, 'Login build error.');
+                        LoggingService.getInstance().error(error);
                         reject(error);
                     } else {
-                        this.loggingService.info("Login app build finished.");
+                        LoggingService.getInstance().info("Login app build finished.");
                         resolve();
                     }
                 });
@@ -119,11 +104,11 @@ export class MarkoService implements IMarkoService {
                     data: new BaseTemplateInput('home', new ObjectData(), null)
                 }, (error, result) => {
                     if (error) {
-                        this.profilingService.stop(profileTaskId, 'App build error.');
-                        this.loggingService.error(error);
+                        ProfilingService.getInstance().stop(profileTaskId, 'App build error.');
+                        LoggingService.getInstance().error(error);
                         reject(error);
                     } else {
-                        this.profilingService.stop(profileTaskId, 'App build finished.');
+                        ProfilingService.getInstance().stop(profileTaskId, 'App build finished.');
                         this.ready = true;
                         resolve();
                     }
@@ -138,13 +123,13 @@ export class MarkoService implements IMarkoService {
             tryCount -= 1;
         }
 
-        return true;
+        return this.ready;
     }
 
     private async waitForReadyState(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
-                this.loggingService.info('App build in progress ...');
+                LoggingService.getInstance().info('App build in progress ...');
                 resolve();
             }, 6000);
         });

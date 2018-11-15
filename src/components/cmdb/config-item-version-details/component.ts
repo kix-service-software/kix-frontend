@@ -2,8 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     Version, ConfigItem, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup
 } from '@kix/core/dist/model';
-import { CMDBService } from '@kix/core/dist/browser/cmdb';
-import { ServiceRegistry, BrowserUtil, KIXObjectService } from '@kix/core/dist/browser';
+import { BrowserUtil, KIXObjectService } from '@kix/core/dist/browser';
 import { PreparedData } from '@kix/core/dist/model/kix/cmdb/PreparedData';
 
 class Component {
@@ -31,7 +30,7 @@ class Component {
 
     public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
         const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
-            KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.AttachmentID]
+            KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID]
         );
 
         if (attachments && attachments.length) {
@@ -57,7 +56,7 @@ class Component {
                 null,
                 null,
                 (attr.Sub && attr.Sub.length ? this.prepareLabelValueGroups(attr.Sub) : null),
-                (attr.Type === 'Attachment' ? attr.Value : null)
+                (attr.Type === 'Attachment' ? new ConfigItemAttachment(attr.Value) : null)
             ));
         });
         return groups;

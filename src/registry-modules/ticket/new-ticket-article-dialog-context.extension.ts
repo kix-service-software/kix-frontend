@@ -4,10 +4,9 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
 } from '@kix/core/dist/model';
-import { ServiceContainer } from '@kix/core/dist/common';
-import { IConfigurationService } from '@kix/core/dist/services';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -32,8 +31,7 @@ export class Extension implements IModuleFactoryExtension {
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-ticket-article-form';
         const existing = configurationService.getModuleConfiguration(formId, null);

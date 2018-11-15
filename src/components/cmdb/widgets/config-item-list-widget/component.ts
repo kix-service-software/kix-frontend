@@ -41,7 +41,7 @@ class Component {
 
         this.prepareFilter();
         this.prepareActions();
-        this.prepareTable();
+        await this.prepareTable();
 
         this.state.loading = false;
     }
@@ -76,7 +76,7 @@ class Component {
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
-    private prepareTable(): void {
+    private async prepareTable(): Promise<void> {
         const tableConfiguration = new TableConfiguration(
             null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
@@ -97,8 +97,9 @@ class Component {
         this.state.table = table;
 
         const context = ContextService.getInstance().getActiveContext();
-        if (context.getDescriptor().contextId === CMDBContext.CONTEXT_ID) {
-            this.setConfigItemClassFilter((context as CMDBContext).currentCIClass);
+        if (this.state.widgetConfiguration.contextDependent && context) {
+            table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
+            await table.loadRows();
         }
     }
 

@@ -1,13 +1,13 @@
 import { IconService } from '@kix/core/dist/browser/icon';
 import { ObjectIcon } from '@kix/core/dist/model';
-import { IconComponentState } from './IconComponentState';
+import { ComponentState } from './ComponentState';
 
 class IconComponent {
 
-    private state: IconComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new IconComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -24,10 +24,11 @@ class IconComponent {
         if (this.state.icon instanceof ObjectIcon) {
             const icon = await IconService.getInstance().getIcon(this.state.icon.Object, this.state.icon.ObjectID);
             if (icon) {
-                if (icon.ContentType === 'image/svg') {
-                    this.state.base64 = true;
-                } else if (icon.ContentType === 'text') {
+                if (icon.ContentType === 'text') {
                     this.state.base64 = false;
+                } else {
+                    this.state.base64 = true;
+                    this.state.contentType = icon.ContentType;
                 }
                 this.state.content = icon.Content;
             } else if (this.state.showUnknown) {

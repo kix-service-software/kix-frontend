@@ -4,9 +4,8 @@ import {
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form
 } from '@kix/core/dist/model';
 import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '@kix/core/dist/browser/cmdb';
-import { IConfigurationService } from '@kix/core/dist/services';
-import { ServiceContainer } from '@kix/core/dist/common';
 import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
+import { ConfigurationService } from '@kix/core/dist/services';
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -139,9 +138,7 @@ export class Extension implements IModuleFactoryExtension {
 
     // tslint:disable:max-line-length
     public async createFormDefinitions(): Promise<void> {
-        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>(
-            'IConfigurationService'
-        );
+        const configurationService = ConfigurationService.getInstance();
 
         const linkFormId = 'link-config-item-search-form';
         const existingForm = configurationService.getModuleConfiguration(linkFormId, null);

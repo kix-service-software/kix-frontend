@@ -6,9 +6,8 @@
         </if>
         <else>
             <div.description-container>
-                <if(state.ticket)>
-                    <widget instanceId="ticket-description-widget" title="Beschreibung"
-                        key=("Widget-ticket-description" + state.ticket.TicketID)>
+                <if(state.ticket && state.firstArticle)>
+                    <widget instanceId="ticket-description-widget" title="Beschreibung">
                         <@content>
                             <div.description-text-wrapper>
                                 <ticket-article-content article=state.firstArticle/>

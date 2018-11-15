@@ -64,10 +64,7 @@ export class Component {
                     count = (c.ConfigItemStats.PreProductiveCount + c.ConfigItemStats.ProductiveCount).toString();
                 }
                 const properties = [new TreeNodeProperty(count, `Anzahl Config Items: ${count}`)];
-                return new TreeNode(
-                    c, c.Name, new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, c.ID),
-                    null, null, null, null, null, properties
-                );
+                return new TreeNode(c, c.Name, null, null, null, null, null, null, properties);
             })
             : [];
     }

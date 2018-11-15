@@ -1,15 +1,30 @@
-import { KIXRouter } from '@kix/core/dist/routes/';
 import { ISpecificCSSExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { Request, Response, Router } from 'express';
+import { Request, Response } from 'express';
+import { ConfigurationService, AuthenticationService, UserService } from '@kix/core/dist/services';
+import { KIXRouter } from './KIXRouter';
+import { PluginService } from '../services';
 
 export class ApplicationRouter extends KIXRouter {
+
+    private static INSTANCE: ApplicationRouter;
+
+    public static getInstance(): ApplicationRouter {
+        if (!ApplicationRouter.INSTANCE) {
+            ApplicationRouter.INSTANCE = new ApplicationRouter();
+        }
+        return ApplicationRouter.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     public getBaseRoute(): string {
         return "/";
     }
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
-        const moduleId = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
+        const moduleId = ConfigurationService.getInstance().getServerConfiguration().DEFAULT_MODULE_ID;
         await this.handleRoute(moduleId, null, req, res);
     }
 
@@ -27,39 +42,39 @@ export class ApplicationRouter extends KIXRouter {
 
 
     public getRoot(req: Request, res: Response): void {
-        const defaultRoute = this.configurationService.getServerConfiguration().DEFAULT_MODULE_ID;
+        const defaultRoute = ConfigurationService.getInstance().getServerConfiguration().DEFAULT_MODULE_ID;
         res.redirect(defaultRoute);
     }
 
     protected initialize(): void {
         this.router.get(
             "/",
-            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getDefaultModule.bind(this)
         );
 
         this.router.get(
             "/:moduleId",
-            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );
 
         this.router.get(
             "/:moduleId/:objectId",
-            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );
 
         this.router.get(
             "/:moduleId/:objectId/*",
-            this.authenticationService.isAuthenticated.bind(this.authenticationService),
+            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );
     }
 
     private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
-        const user = await this.userService.getUserByToken(token);
+        const user = await UserService.getInstance().getUserByToken(token);
 
         const themeCSS = await this.getUserThemeCSS(user.UserID);
         const specificCSS = await this.getSpecificCSS();
@@ -74,7 +89,7 @@ export class ApplicationRouter extends KIXRouter {
     private async getUserThemeCSS(userId: number): Promise<string> {
         // TODO: define context id for personal settings.
         const configuration =
-            await this.configurationService.getComponentConfiguration("personal-settings", null, userId);
+            await ConfigurationService.getInstance().getComponentConfiguration("personal-settings", null, userId);
 
         if (configuration) {
             return configuration.theme;
@@ -84,7 +99,9 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     private async getSpecificCSS(): Promise<string[]> {
-        const cssExtensions = await this.pluginService.getExtensions<ISpecificCSSExtension>(KIXExtensions.SPECIFIC_CSS);
+        const cssExtensions = await PluginService.getInstance().getExtensions<ISpecificCSSExtension>(
+            KIXExtensions.SPECIFIC_CSS
+        );
         let specificCSS = [];
 
         for (const extension of cssExtensions) {

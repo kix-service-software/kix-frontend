@@ -23,7 +23,7 @@ class Component {
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
                     this.article.TicketID, this.article.ArticleID, this.article.bodyAttachment.ID
                 );
-                this.state.content = atob(AttachmentWithContent.Content);
+                this.state.content = new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8');
             } else {
                 this.state.content = this.article.Body;
             }

@@ -5,8 +5,7 @@ import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
 import {
     NewCustomerDialogContextConfiguration, NewCustomerDialogContext, CustomerLabelProvider
 } from "@kix/core/dist/browser/customer";
-import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService, ICustomerService } from "@kix/core/dist/services";
+import { CustomerService, ConfigurationService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 
 export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension {
@@ -20,14 +19,12 @@ export class NewCustomerDialogModuleExtension implements IModuleFactoryExtension
     }
 
     public async createFormDefinitions(): Promise<void> {
-        const configurationService =
-            ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-customer-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
         if (!existingForm) {
-            const customerService =
-                ServiceContainer.getInstance().getClass<ICustomerService>("ICustomerService");
+            const customerService = CustomerService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
             const mapping: CustomerSourceAttributeMapping[] = await customerService.getAttributeMapping(token);

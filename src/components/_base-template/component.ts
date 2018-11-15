@@ -3,23 +3,12 @@ import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageServic
 import { ComponentState } from './ComponentState';
 import { ContextService } from '@kix/core/dist/browser/context';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { CustomerService } from '@kix/core/dist/browser/customer';
-import { TicketService } from '@kix/core/dist/browser/ticket';
-import { CMDBService } from '@kix/core/dist/browser/cmdb';
-import { ContactService } from '@kix/core/dist/browser/contact';
-import { SearchService } from '@kix/core/dist/browser/search';
-import { FAQService } from '@kix/core/dist/browser/faq';
-import { LinkService } from '@kix/core/dist/browser/link';
-import { IdService, StandardTableFactoryService } from '@kix/core/dist/browser';
+import { IdService } from '@kix/core/dist/browser';
 import { RoutingService } from '@kix/core/dist/browser/router';
 import { HomeContext } from '@kix/core/dist/browser/home';
-import { GeneralCatalogService } from '@kix/core/dist/browser/general-catalog';
-import { TextModuleService } from '@kix/core/dist/browser/text-modules';
 import { EventService } from '@kix/core/dist/browser/event';
-import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
-import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
-import { SlaService } from '@kix/core/dist/browser/sla';
 import { ReleaseContext } from '@kix/core/dist/browser/release';
+import { KIXModulesService } from '@kix/core/dist/browser/modules';
 
 declare var io: any;
 
@@ -39,17 +28,13 @@ class Component {
         this.state.loading = true;
         this.state.loadingHint = 'Lade KIX ...';
 
-        await ComponentsService.getInstance().init();
+        await this.checkAuthentication();
 
-        const token = ClientStorageService.getToken();
-        const socketUrl = ClientStorageService.getFrontendSocketUrl();
+        await KIXModulesService.getInstance().init();
 
-        const configurationSocket = io.connect(socketUrl + "/configuration", {
-            query: "Token=" + token
-        });
-
-        configurationSocket.on('error', (error) => {
-            window.location.replace('/auth');
+        const modules = KIXModulesService.getInstance().getModules();
+        modules.forEach((m) => {
+            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
         });
 
         ContextService.getInstance().registerListener({
@@ -76,22 +61,26 @@ class Component {
 
         this.state.initialized = true;
         this.state.loading = false;
+
+        setTimeout(() => {
+            RoutingService.getInstance().routeToInitialContext();
+        }, 500);
+    }
+
+    private async checkAuthentication(): Promise<void> {
+        const token = ClientStorageService.getToken();
+        const socketUrl = ClientStorageService.getFrontendSocketUrl();
+
+        const configurationSocket = io.connect(socketUrl + "/configuration", {
+            query: "Token=" + token
+        });
+
+        configurationSocket.on('error', (error) => {
+            window.location.replace('/auth');
+        });
     }
 
     private bootstrapServices(): void {
-        TicketService.getInstance();
-        CMDBService.getInstance();
-        CustomerService.getInstance();
-        ContactService.getInstance();
-        FAQService.getInstance();
-        SearchService.getInstance();
-        LinkService.getInstance();
-        GeneralCatalogService.getInstance();
-        TextModuleService.getInstance();
-        SysConfigService.getInstance();
-        DynamicFieldService.getInstance();
-        SlaService.getInstance();
-
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
@@ -102,8 +91,6 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
-
-        RoutingService.getInstance().routeToInitialContext();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

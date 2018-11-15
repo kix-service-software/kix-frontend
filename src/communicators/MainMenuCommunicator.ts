@@ -6,8 +6,23 @@ import {
 import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
 import { CommunicatorResponse } from '@kix/core/dist/common';
 import { KIXCommunicator } from './KIXCommunicator';
+import { ConfigurationService, UserService } from '@kix/core/dist/services';
+import { PluginService } from '../services';
 
 export class MainMenuCommunicator extends KIXCommunicator {
+
+    private static INSTANCE: MainMenuCommunicator;
+
+    public static getInstance(): MainMenuCommunicator {
+        if (!MainMenuCommunicator.INSTANCE) {
+            MainMenuCommunicator.INSTANCE = new MainMenuCommunicator();
+        }
+        return MainMenuCommunicator.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     protected getNamespace(): string {
         return 'main-menu';
@@ -21,11 +36,11 @@ export class MainMenuCommunicator extends KIXCommunicator {
         data: MainMenuEntriesRequest
     ): Promise<CommunicatorResponse<MainMenuEntriesResponse>> {
 
-        const user = await this.userService.getUserByToken(data.token);
+        const user = await UserService.getInstance().getUserByToken(data.token);
 
-        const extensions = await this.pluginService.getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
+        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
 
-        let configuration: MainMenuConfiguration = await this.configurationService.getComponentConfiguration(
+        let configuration: MainMenuConfiguration = await ConfigurationService.getInstance().getComponentConfiguration(
             "personal-settings", "main-menu", user.UserID
         );
 
@@ -58,7 +73,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
             );
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
-        await this.configurationService.saveComponentConfiguration(
+        await ConfigurationService.getInstance().saveComponentConfiguration(
             "personal-settings", "main-menu", userId, configuration);
 
         return configuration;

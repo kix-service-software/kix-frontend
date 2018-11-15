@@ -2,12 +2,10 @@ import {
     ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
 } from "@kix/core/dist/model";
 import { IModuleFactoryExtension } from "@kix/core/dist/extensions";
-import { ServiceContainer } from "@kix/core/dist/common";
-import { IConfigurationService } from "@kix/core/dist/services";
 import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
 import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
 import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
-import { SearchProperty } from "@kix/core/dist/browser";
+import { ConfigurationService } from "@kix/core/dist/services";
 
 export class Extension implements IModuleFactoryExtension {
 
@@ -21,7 +19,7 @@ export class Extension implements IModuleFactoryExtension {
 
     // tslint:disable:max-line-length
     public async createFormDefinitions(): Promise<void> {
-        const configurationService = ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
+        const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-faq-article-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
