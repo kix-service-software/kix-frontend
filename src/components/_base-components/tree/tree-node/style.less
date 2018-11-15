@@ -1,0 +1,106 @@
+@tree-icon-size: .875rem;
+@tree-node-size: @tree-icon-size;
+@tree-column-gap: .375rem;
+.tree-list {
+    overflow: hidden;
+    .tree-node {
+        display: grid;
+        grid-template-columns: @tree-node-size auto;
+        grid-column-gap: @tree-column-gap;
+        cursor: pointer;
+        line-height: @tree-node-size;
+        >.tree-icon {
+            padding-top: .25rem;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                background-color: @secondary-2;
+                color: @secondary-0;
+                font-size: @tree-icon-size;
+                width: @tree-node-size;
+                height: @tree-node-size;
+                display: inline-block;
+                box-sizing: border-box;
+                border-radius: @border-radius;
+            }
+        }
+        >.node-value {
+            .font-size-small();
+            color: @secondary-7;
+            display: grid;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
+            grid-gap: @tree-column-gap;
+            align-items: center;
+            height: 1.5rem;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                font-size: @tree-node-size;
+            }
+            margin-bottom: .5rem;
+            .node-title {
+                .shorten-text;
+            }
+        }
+        &:hover {
+            >.tree-icon {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    color: @primary-0;
+                }
+            }
+            >.node-value {
+                color: @primary-0;
+            }
+        }
+        &.active {
+            >.tree-icon {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    background-color: @primary-0;
+                    color: @secondary-6;
+                }
+            }
+            >.node-value {
+                color: @primary-0;
+                font-weight: bold;
+            }
+        }
+        /* sub tree */
+        >.tree-list {
+            margin-left: -@tree-node-size;
+            grid-column: 2;
+            .tree-node {
+                >.tree-icon {
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        background-color: @secondary-3;
+                        color: @secondary-1;
+                    }
+                }
+                &:hover {
+                    >.tree-icon {
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            color: @primary-2;
+                        }
+                    }
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
+                &.active {
+                    >.tree-icon {
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            background-color: @primary-2;
+                            color: @secondary-6;
+                        }
+                    }
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
+            }
+        }
+    }
+}

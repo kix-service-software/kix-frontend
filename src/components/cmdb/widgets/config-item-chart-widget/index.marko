@@ -1,0 +1,9 @@
+<widget instanceId=state.instanceId title=state.title>
+    <@content>
+        <div.chart-container>
+            <if(state.chartConfig)>
+                <chart config=state.chartConfig/>
+            </if>
+        </div>
+    </@content>
+</widget>

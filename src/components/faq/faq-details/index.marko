@@ -1,0 +1,37 @@
+<if(state.error)>
+    <span.error>${state.error}</span>
+</if>
+<else-if(state.loading)>
+    <loading-spinner/>
+</else-if>
+<else>
+    <div.details-container>
+        <widget instanceId=state.instanceId minimizable=true title=state.title actions=component.getActions()
+            contentActions=component.getFAQActions()>
+            <@content>
+                <ul.lane-list no-update>
+                    <li>
+                        <tab-container tabWidgets=state.tabWidgets title="FAQ-Informationen" showSidebar=false/>
+                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN",
+                                instanceId: lane.instanceId, 
+                                type: component.LANE_WIDGET_TYPE
+                                })/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+        <div.faq-content>
+            <for(contentWidget in state.contentWidgets)>
+                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                    contextType: "MAIN",
+                    instanceId: contentWidget.instanceId
+                    })/>
+            </for>
+        </div>
+    </div>
+</else>

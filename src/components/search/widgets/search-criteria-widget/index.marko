@@ -1,0 +1,25 @@
+<widget title=state.title>
+    <@content>
+        <div.search-criteria-widget>
+            <div.search-criteria-list>
+                <for(criteria in state.displayCriteria)>
+                    <div.search-criteria-list-item>
+                        <div.key title=(((criteria[0] + " (") + criteria[1]) + ")")>${criteria[0]} (${criteria[1]}):</div>
+                        <label-list labels=criteria[2] removeLabels=false/>
+                    </div>
+                </for>
+            </div>
+            <div.search-criteria-buttons>
+                <button.form-button type="button" on-click("openNewSearchDialog") title="Neue Suche">
+                    <span.kix-icon-search/>
+                    Neue Suche
+                </button>
+                <button.form-button type="button" on-click("openEditSearchDialog") title="Suche bearbeiten"
+                    disabled=(state.displayCriteria.length === 0)>
+                    <span.kix-icon-edit/>
+                    Suche bearbeiten
+                </button>
+            </div>
+        </div>
+    </@content>
+</widget>

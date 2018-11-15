@@ -1,0 +1,41 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else-if(!state.faqArticle)>
+            <span.error>No FAQ Article available.</span>
+        </else-if>
+        <else>
+            <div.faq-article-information-container>
+                <div.information-list>
+                    <div>
+                        <object-property-label object=state.faqArticle property=component.properties.CATEGORY_ID
+                            labelProvider=component.labelProvider/>
+                        <object-property-label object=state.faqArticle property=component.properties.VISIBILITY
+                            labelProvider=component.labelProvider/>
+                        <object-property-label object=state.faqArticle property=component.properties.VALID_ID
+                            labelProvider=component.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.faqArticle property=component.properties.CREATED
+                            labelProvider=component.labelProvider/>
+                        <object-property-label object=state.faqArticle property=component.properties.CREATED_BY
+                            labelProvider=component.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.faqArticle property=component.properties.CHANGED
+                            labelProvider=component.labelProvider/>
+                        <object-property-label object=state.faqArticle property=component.properties.CHANGED_BY
+                            labelProvider=component.labelProvider/>
+                    </div>
+                </div>
+                <div.keyword-list>
+                    <span>Schlagwörter:</span>
+                    <label-list labels=state.labels removeLabels=false/>
+                </div>
+            </div>
+        </else>
+    </@content>
+</widget>

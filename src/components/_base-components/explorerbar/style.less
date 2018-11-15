@@ -1,0 +1,55 @@
+.explorerbar {
+    &.collapsed {
+        width: @explorer-collapsed-width;
+        height: @explorer-collapsed-height;
+        .explorer {
+            background-color: @secondary-3;
+            color: @secondary-0;
+            border-radius: @border-radius;
+            box-sizing: border-box;
+            width: @explorer-collapsed-height;
+            height: @explorer-collapsed-width;
+            line-height: @explorer-collapsed-width;
+            border: 0;
+            transform: rotate(270deg);
+            transform-origin: @explorer-collapsed-height/2 @explorer-collapsed-height/2;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: (@explorer-collapsed-height - @explorer-collapsed-width) @explorer-collapsed-width;
+            font-size: @h2-font-size;
+            >span {
+                height: @explorer-collapsed-width;
+            }
+            .explorer-title {
+                padding: 0.125rem 0.875rem;
+                box-sizing: border-box;
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-gap: @margin-small;
+                justify-content: end;
+                >span.rtl {
+                    .shorten-text;
+                    .last-element {
+                        font-weight: bold;
+                    }
+                }
+            }
+            .explorer-toggle-button {
+                text-align: center;
+                background-color: @secondary-2;
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    line-height: @explorer-collapsed-width;
+                }
+                cursor: pointer;
+            }
+        }
+    }
+    &.expanded {
+        min-height: @explorer-min-height;
+        max-height: @explorer-max-height;
+        >div {
+            height: 100%;
+        }
+    }
+}

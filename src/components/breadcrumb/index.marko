@@ -1,0 +1,10 @@
+<div.breadcrumb>
+    <icon icon=state.icon/>
+    <for(context in state.contexts | status-var=loop)>
+        <span.context>
+            <link-target routingConfiguration=component.getRoutingConfiguration(context[0], loop.getIndex())>
+                <@content>${context[1]}</@content>
+            </link-target>
+        </span>
+    </for>
+</div>

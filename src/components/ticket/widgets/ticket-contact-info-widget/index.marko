@@ -1,0 +1,7 @@
+<widget instanceId=input.instanceId minimizable=false contextType=state.contextType
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Ansprechpartner") type=64
+    icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-man")>
+    <@content>
+        <ticket-contact-info contactId=state.contactId groups=state.groups/>
+    </@content>
+</widget>

@@ -1,0 +1,10 @@
+<widget instanceId=state.instanceId icon="kix-icon-man-bubble" title=state.title>
+    <@headerFilter>
+        <filter on-filter('filter')/>
+    </@headerFilter>
+    <@content>
+        <if(state.standardTable)>
+            <standard-table standardTable=state.standardTable/>
+        </if>
+    </@content>
+</widget>

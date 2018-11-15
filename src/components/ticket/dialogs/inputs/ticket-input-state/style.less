@@ -1,0 +1,19 @@
+.pending-state {
+    display: grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    grid-gap: @margin-small;
+    margin-top: @margin-small;
+    align-items: center;
+    >[class^="kix-icon-"],
+    >[class*=" kix-icon-"] {
+        color: @secondary-1;
+    }
+    >input.date-input,
+    >select.time-input {
+        font: unset;
+    }
+    &.invalid {
+        border: 1px solid @tertiary-0;
+    }
+}

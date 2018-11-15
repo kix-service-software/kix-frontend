@@ -1,0 +1,51 @@
+<div class="login-wrapper">
+    <div class="login-page clearfix">
+        <div class="login-background"/>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div class="login-dialog">
+                <div class="dialog-header">
+                    <div#kix-logo>
+                        <img alt="kix-logo" src="static/img/kix-logo.png"/>
+                    </div>
+                    <h1>Willkommen bei KIX</h1>
+                </div>
+                <if(state.error || state.logout)>
+                    <div class="dialog-message-area">
+                        <if(state.error)>
+                            <div class="message message-error">
+                                <span.kix-icon-warnsign/>
+                                Login fehlgeschlagen
+                            </div>
+                        </if>
+                        <else-if(state.logout)>
+                            <div class="message message-success">
+                                <span.kix-icon-icircle/>
+                                Sie haben sich erfolgreich abgemeldet.
+                            </div>
+                        </else-if>
+                    </div>
+                </if>
+                <div class="dialog-content" on-keydown('keyDown')>
+                    <label>
+                        <span>Benutzername:</span>
+                        <input.input-style type="text" name="username" tabindex="1" key="login-user-name"/>
+                    </label>
+                    <label>
+                        <span>Passwort:</span>
+                        <input.input-style type="password" name="password" tabindex="2" key="login-user-password"/>
+                    </label>
+                    <div class="dialog-buttons">
+                        <button.special-button type="button" on-click('login') tabindex="3">
+                            <span.kix-icon-check/>
+                            Anmelden
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </else>
+        <kix-footer releaseInfo=state.releaseInfo/>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<span.icon>
+    <if(state.content)>
+        <if(state.base64)>
+            <img.svg-icon src=((("data:" + state.contentType) + ";base64,") + state.content) title=input.title key=state.iconId
+                alt=input.title/>
+        </if>
+        <else>
+            <span class=state.content title=input.title key=state.iconId>
+                <span.path1/>
+                <span.path2/>
+                <span.path3/>
+                <span.path4/>
+                <span.path5/>
+            </span>
+        </else>
+    </if>
+</span>

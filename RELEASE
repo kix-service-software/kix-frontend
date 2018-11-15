@@ -1,0 +1,5 @@
+PRODUCT = KIX
+VERSION = 18 Alpha
+BUILDDATE = Thu, 15 Nov 2018 08:59:10 +0100
+BUILDHOST = git.intra.cape-it.de
+BUILDNUMBER = 2157

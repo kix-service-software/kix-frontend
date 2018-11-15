@@ -1,0 +1,10 @@
+<if(!state.loading && state.formId)>
+    <widget instanceId="search-faq-article-dialog">
+        <@content>
+            <main-form formId=state.formId/>
+        </@content>
+    </widget>
+</if>
+<else>
+    <loading-spinner/>
+</else>

@@ -1,0 +1,18 @@
+<ul.ci-list-content>
+    <if(state.loading)>
+        <loading-spinner/>
+    </if>
+    <else>
+        <for(configItem in state.configItems)>
+            <li>
+                <overlay-icon title="Config Item" content="config-item-info" instanceId="config-item-info"
+                    data={configItem: configItem} large=true/>
+                <span.ci-name>
+                    <link-target objectId=configItem.ConfigItemID routingConfiguration=component.getRoutingConfiguration(configItem)>
+                        <@content>${configItem.CurrentVersion.Name}</@content>
+                    </link-target>
+                </span>
+            </li>
+        </for>
+    </else>
+</ul>

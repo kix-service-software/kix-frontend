@@ -1,0 +1,3 @@
+<form-list placeholder=(state.field.required ? "Config Item zuordnen" : "") searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration on-nodesChanged('configItemChanged')
+    selectedNodes=[state.currentNode] invalid=state.invalid autocomplete=true/>

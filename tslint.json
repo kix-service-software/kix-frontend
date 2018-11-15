@@ -1,6 +1,9 @@
 {
     "extends": "tslint:recommended",
     "rules": {
+        "no-misused-new": false,
+        "member-ordering": false,
+        "arrow-parens": true,
         "indent": [
             true,
             "spaces",
@@ -12,7 +15,7 @@
         ],
         "new-parens": true,
         "no-arg": true,
-        "no-bitwise": true,
+        "no-bitwise": false,
         "no-conditional-assignment": true,
         "no-consecutive-blank-lines": false,
         "quotemark": [
@@ -29,7 +32,37 @@
         ],
         "ordered-imports": [
             false
-        ]
+        ],
+        "max-classes-per-file": [
+            true,
+            1
+        ],
+        "no-string-literal": false,
+        "interface-name": [
+            true,
+            "always-prefix"
+        ],
+        "semicolon": [
+            true,
+            "always"
+        ],
+        "variable-name": [
+            "check-format"
+        ],
+        "triple-equals": [
+            true
+        ],
+        "switch-default": true,
+        "no-var-keyword": true,
+        "no-shadowed-variable": true,
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "always",
+                "asyncArrow": "always"
+            }
+        ],
+        "prefer-for-of": false
     },
     "jsRules": {
         "max-line-length": [

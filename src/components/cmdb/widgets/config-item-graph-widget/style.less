@@ -1,0 +1,40 @@
+.config-item-graph-container {
+    position: relative;
+    >.config-item-graph {
+        width: auto;
+        height: 30.5rem; // TODO: nur drin, um die 31.5rem von Lane nicht zu überschreiten
+        margin: 0 auto;
+        display: block;
+    }
+    >.hover-shield {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: #000;
+        opacity: 0;
+        transition: opacity .20s ease-in;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.2;
+        }
+        >.hover-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            color: @secondary-6;
+            >.hover-icon {
+                font-size: 5rem;
+                display: block;
+                text-align: center
+            }
+            >.hover-hint {
+                font-weight: bold;
+                font-size: 3em;
+                display: block;
+            }
+        }
+    }
+}

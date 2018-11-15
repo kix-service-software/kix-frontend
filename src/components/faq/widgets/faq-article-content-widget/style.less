@@ -1,0 +1,28 @@
+.faq-article-content-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-column-gap: 5rem;
+    padding: @margin-widget-content 1.875rem;
+    >div>.group-widget>.widget-content {
+        background-color: @secondary-5;
+        margin-right: 1.5rem;
+    }
+    .faq-rating {
+        height: @default-widget-header-height;
+        line-height: @default-widget-header-height;
+        >span.faq-rating-label {
+            font-weight: bold;
+            margin-right: @margin-small;
+        }
+        >span.faq-rating-info {
+            color: @primary-2;
+        }
+        margin-bottom: 1rem;
+    }
+    .faq-attachments {
+        >span {
+            font-weight: bold;
+            display: block;
+        }
+    }
+}

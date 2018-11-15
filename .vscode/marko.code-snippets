@@ -1,0 +1,56 @@
+{
+	"Marko Component": {
+		"scope": "javascript,typescript",
+		"prefix": "marko component",
+		"body": [
+			"import { AbstractMarkoComponent } from '@kix/core/dist/browser';",
+			"import { ComponentState } from './ComponentState';",
+			"",
+			"class Component extends AbstractMarkoComponent {",
+			"",
+			"\tpublic onCreate(): void {",
+			"\t\tthis.state = new ComponentState();",
+			"\t}",
+			"",
+			"\tpublic async onMount(): Promise<void> { }",
+			"",
+			"}",
+			"",
+			"module.exports = Component;",
+			""
+		],
+		"description": "component class (view model)"
+	},
+	"Marko Component State": {
+		"scope": "javascript,typescript",
+		"prefix": "marko component state",
+		"body": [
+			"export class ComponentState {",
+			"",
+			"\tpublic constructor() { }",
+			"",
+			"}",
+			""
+		],
+		"description": "component state for marko component"
+	},
+	"Singleton Class": {
+		"scope": "javascript,typescript",
+		"prefix": "singleton pattern",
+		"body": [
+			"",
+			"\tprivate static INSTANCE: ${1:class};",
+			"",
+			"\tpublic static getInstance(): ${1:class} {",
+			"\t\tif (!${1:class}.INSTANCE) {",
+			"\t\t\t${1:class}.INSTANCE = new ${1:class}();",
+			"\t\t}",
+			"\t\treturn ${1:class}.INSTANCE;",
+			"\t}",
+			"",
+			"\tprivate constructor() { }",
+			""
+		],
+		"description": "singleton pattern implementation"
+	}
+}

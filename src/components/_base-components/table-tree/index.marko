@@ -1,0 +1,12 @@
+<ul.table-tree-list key=state.treeId style=state.treeStyle>
+    <table-tree-node treeId=state.treeId node=state.titleNode activeNode=state.activeNode filterValue=state.filterValue
+        treeParent=state.treeParent title=true on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked')
+        on-nodeHovered('nodeHovered')/>
+    <for(node in state.tree)>
+        <if(node.visible)>
+            <table-tree-node treeId=state.treeId node=node activeNode=state.activeNode filterValue=state.filterValue
+                treeParent=state.treeParent on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked')
+                on-nodeHovered('nodeHovered')/>
+        </if>
+    </for>
+</ul>

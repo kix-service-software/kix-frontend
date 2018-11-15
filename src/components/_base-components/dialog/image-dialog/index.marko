@@ -1,0 +1,31 @@
+<if(state.show)>
+    <div.image-dialog-container>
+        <div.image-shield/>
+        <div.image-dialog>
+            <div.image-dialog-header>
+                <div.image-title>${state.image ? state.image.title : ''}</div>
+                <div.image-dialog-close on-click('close')>
+                    <span.kix-icon-close/>
+                </div>
+            </div>
+            <div.image-container>
+                <div.previous-image on-click('previosImage') title="vorheriges Bild">
+                    <span.kix-icon-circle-prior/>
+                </div>
+                <div.image>
+                    <if(state.image)>
+                        <if(state.image.isBase64)>
+                            <img alt=state.imageTitle src=("data:image/png;base64, " + state.image.content)/>
+                        </if>
+                        <else>
+                            <img alt=state.imageTitle src=state.image.content/>
+                        </else>
+                    </if>
+                </div>
+                <div.next-image on-click('nextImage') title="nächstes Bild">
+                    <span.kix-icon-circle-next/>
+                </div>
+            </div>
+        </div>
+    </div>
+</if>

@@ -1,0 +1,102 @@
+ul.main-menu,
+ul.user-menu {
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
+    margin-bottom: @margin-small/4;
+    box-shadow: @shadow-1;
+    li {
+        .font-size-normal;
+        background: @primary-3;
+        color: @default-light-font-color;
+        height: @main-menu-height;
+        width: @main-menu-width;
+        border-top: 1px solid @primary-4;
+        border-bottom: 1px solid @primary-0;
+        transition: width .25s, border-radius .25s;
+        display: block;
+        box-sizing: border-box;
+        font-weight: bold;
+        &:first-child {
+            border-top-right-radius: @border-radius;
+        }
+        &:last-child {
+            border-bottom-right-radius: @border-radius;
+        }
+        &.active,
+        &:hover {
+            width: @main-menu-active-width;
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+            padding-right: @main-menu-active-width - @main-menu-width;
+            box-shadow: @shadow-1;
+            border-top: 1px solid @primary-3;
+        }
+        &:hover:not(.active) {
+            transition: width 1s, border-radius 1s;
+            a {
+                width: @main-menu-active-width;
+                border-top-right-radius: @border-radius;
+                border-bottom-right-radius: @border-radius;
+                border-left: 0;
+                span.hover-label {
+                    width: @main-menu-active-width;
+                }
+                span.label-wrapper {
+                    opacity: 0;
+                }
+            }
+        }
+        &.active {
+            background: @primary-1;
+        }
+        &.active+li:not(:hover),
+        &:hover+li:not(.active) {
+            border-top: 1px solid @primary-3;
+        }
+        a {
+            display: block;
+            height: 100%;
+            border-left: 2px solid @primary-1;
+            text-decoration: none;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            >span {
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    .icon-font-size-small;
+                    position: relative;
+                    top: 5px;
+                }
+            }
+            span.label-wrapper {
+                opacity: 1;
+                transition: opacity .125s;
+            }
+            span.hover-label {
+                position: absolute;
+                display: inline-block;
+                height: 100%;
+                left: 0;
+                width: 0;
+                transition: width .5s, border-radius .25s;
+                z-index: 5;
+                overflow: hidden;
+                background: @primary-1;
+            }
+        }
+    }
+    &.image-only li {
+        span.label-wrapper {
+            line-height: @main-menu-height;
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                .icon-font-size-normal;
+            }
+        }
+    }
+}
+
+ul.user-menu li {
+    background-color: @primary-2;
+}

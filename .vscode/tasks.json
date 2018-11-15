@@ -5,7 +5,9 @@
             "command": "gulp",
             "options": {
                 "env": {
-                    "NODE_ENV": "development"
+                    "NODE_ENV": "development",
+                    "http_proxy": "",
+                    "https_proxy": ""
                 }
             },
             "type": "process"

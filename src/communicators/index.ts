@@ -1,0 +1,1 @@
+export { AuthenticationCommunicator } from './AuthenticationCommunicator';
