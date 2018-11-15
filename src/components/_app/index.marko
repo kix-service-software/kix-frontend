@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <title>KIX 2018</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
+        <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
+        <style>            
+            @font-face {
+                font-family: 'kix_font';
+                src: url('/static/font/kix_font.eot?jrp1tp');
+                src: url('/static/font/kix_font.eot?jrp1tp#iefix') format('embedded-opentype'),
+                url('/static/font/kix_font.ttf?jrp1tp') format('truetype'),
+                url('/static/font/kix_font.woff?jrp1tp') format('woff'),
+                url('/static/font/kix_font.svg?jrp1tp#kix_font') format('svg');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-regular.woff') format('woff'),
+                url('/static/font/carlito-regular.ttf') format('truetype');
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-bold.woff') format('woff'),
+                url('/static/font/carlito-bold.ttf') format('truetype');
+                font-weight: bold;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-italic.woff') format('woff'),
+                url(/static/font/carlito-italic.ttf) format('truetype');
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-bold-italic.woff') format('woff'),
+                url('/static/font/carlito-bold-italic.ttf') format('truetype');
+                font-weight: bold;
+                font-style: italic;
+            }
+        </style>
+        <lasso-head/>
+        <if(data.themeCSS)>
+            <link rel="stylesheet" href=data.themeCSS/>
+        </if>
+        <for(specificCSS in data.specificCSS)>
+            <link rel="stylesheet" href=specificCSS/>
+        </for>
+    </head>
+    <body>
+        <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
+            tagLib=input.data.tagLib actionLib=input.data.actionLib/>
+        <script src="/static/thirdparty/socket.io.js"/>
+        <script src="/static/thirdparty/ckeditor-4.10.1/ckeditor.js"/>
+        <script src="/static/thirdparty/chart.min.js"/>
+        <lasso-body/>
+    </body>
+</html>

@@ -1,0 +1,3 @@
+<form-list nodes=state.nodes selectedNodes=[state.currentNode]
+    placeholder=(state.field.required ? "Tickettyp zuordnen" : "") on-nodesChanged("typeChanged") invalid=state.invalid
+    multiselect=state.multiselect/>

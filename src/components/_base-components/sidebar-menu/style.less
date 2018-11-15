@@ -1,0 +1,33 @@
+.bar-icon {
+    .shadow-1;
+    background: @secondary-6;
+    color: @secondary-3;
+    box-sizing: border-box;
+    width: @margin-default;
+    height: @margin-default;
+    text-align: center;
+    margin-bottom: @margin-tiny;
+    font-size: 1.5em;
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
+    cursor: pointer;
+    &.select-active {
+        background: @secondary-3;
+        color: @secondary-0;
+        &:hover {
+            background: @secondary-2;
+            color: @secondary-0;
+        }
+    }
+    &:hover {
+        background: @secondary-4;
+        color: @secondary-2;
+        box-shadow: none;
+    }
+    &>span {
+        .vertical-align;
+    }
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}

@@ -1,0 +1,25 @@
+<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div.config-item-images-container>
+                <for(image in state.thumbnails)>
+                    <div.image-container>
+                        <div.image>
+                            <img alt=image.title src=image.content/>
+                            <div.image-title>${image.title}</div>
+                        </div>
+                        <div.hover-shield on-click('openImageDialog', image.imageId)>
+                            <div.hover-info>
+                                <span.hover-icon.kix-icon-arrow-fullscreen/>
+                                <span.hover-hint.no-select>Großansicht</span>
+                            </div>
+                        </div>
+                    </div>
+                </for>
+            </div>
+        </else>
+    </@content>
+</widget>

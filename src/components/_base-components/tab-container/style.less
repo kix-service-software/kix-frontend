@@ -1,0 +1,84 @@
+.tab-container {
+    >.lane-widget {
+        >.widget-header {
+            padding-left: @margin-default;
+            grid-template-columns: 1fr 0fr; // TODO: ggf. wieder entfernen- wenn lanes actions haben sollten bzw. bessere Lösung gefunden ist
+            >.header-left {
+                padding-left: 1px;
+                >.tab-list {
+                    list-style: none;
+                    margin-top: .25em;
+                    >li {
+                        .shadow-1(@primary-0);
+                        background-color: @primary-4;
+                        color: @primary-0;
+                        border-top-left-radius: @border-radius;
+                        border-top-right-radius: @border-radius;
+                        margin-right: .5em;
+                        padding: 0 .75em;
+                        font-weight: bold;
+                        height: 1.6em;
+                        line-height: unset;
+                        min-width: 13em;
+                        box-sizing: border-box;
+                        float: left;
+                        display: grid;
+                        grid-template-columns: max-content max-content;
+                        align-items: center;
+                        grid-gap: @margin-small;
+                        cursor: pointer;
+                        &.active {
+                            background-color: @secondary-6;
+                        }
+                        &:hover {
+                            &:not(.active) {
+                                background-color: lighten(@primary-4, 20%);
+                            }
+                            color: lighten(@primary-0, 20%);
+                        }
+                        >span {
+                            font-size: 1.125rem;
+                        }
+                    }
+                }
+            }
+        }
+        &.minimized {
+            >.widget-header {
+                >.header-left {
+                    >.tab-list {
+                        display: none;
+                    }
+                }
+            }
+        }
+        &:not(.minimized) {
+            >.widget-header {
+                >.header-left {
+                    >.widget-title {
+                        display: none;
+                    }
+                }
+            }
+        }
+        >.widget-content {
+            max-height: unset;
+            >div {
+                >.tab-content {
+                    >.lane-tab-widget {
+                        display: unset;
+                        >.widget-header {
+                            display: none;
+                        }
+                        >ul.lane-content-actions {
+                            display: none;
+                        }
+                        >.widget-content {
+                            background-color: unset;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

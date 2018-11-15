@@ -1,0 +1,38 @@
+{
+    "dashboard": [
+        {
+            "widgetId": "chart-widget",
+            "isContentWidget": true,
+            "isSidebarWidget": false,
+            "isExplorerWidget": false,
+            "required": false,
+            "configuration": {
+                "title": "1 Monat Statistik",
+                "actions": [],
+                "settings": {
+                    "type": "bar-chart"
+                },
+                "show": true,
+                "size": "small",
+                "icon": null
+            }
+        },
+        {
+            "widgetId": "notes-widget",
+            "isContentWidget": false,
+            "isSidebarWidget": true,
+            "isExplorerWidget": false,
+            "required": true,
+            "configuration": {
+                "title": "Admininfos",
+                "actions": [],
+                "settings": {
+                    "notes": "ich bin <strong>Admin</strong> :D"
+                },
+                "show": true,
+                "size": "small",
+                "icon": "note"
+            }
+        }
+    ]
+}

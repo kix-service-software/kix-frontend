@@ -1,0 +1,49 @@
+import { ComponentState } from "./ComponentState";
+import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "@kix/core/dist/model";
+import { KIXObjectService } from "@kix/core/dist/browser";
+
+class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
+
+    private configItems: ConfigItemClass[];
+
+    public onCreate(): void {
+        this.state = new ComponentState();
+    }
+
+    public async onInput(input: any): Promise<void> {
+        await super.onInput(input);
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+
+        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, null
+        );
+
+        this.state.nodes = classes.map(
+            (c) => new TreeNode(c, c.Name, new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, c.ID))
+        );
+
+        this.setCurrentNode();
+    }
+
+    public setCurrentNode(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
+            const configItem = this.state.currentNode ? this.configItems.find(
+                (cu) => cu.ID === this.state.currentNode.id
+            ) : null;
+            super.provideValue(configItem);
+        }
+    }
+
+    public configItemChanged(nodes: TreeNode[]): void {
+        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
+        const configItemClass = this.state.currentNode ? this.state.currentNode.id : null;
+        super.provideValue(configItemClass);
+    }
+
+}
+
+module.exports = Component;

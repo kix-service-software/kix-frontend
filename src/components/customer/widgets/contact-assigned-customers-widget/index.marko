@@ -1,0 +1,13 @@
+<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+    <@content>
+        <if(state.contact && state.customerTable)>
+            <div.customer-filter>
+                <filter on-filter('filter')/>
+            </div>
+            <standard-table standardTable=state.customerTable/>
+        </if>
+        <else>
+            <loading-spinner/>
+        </else>
+    </@content>
+</widget>

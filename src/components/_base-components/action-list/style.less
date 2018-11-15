@@ -1,0 +1,92 @@
+@action-max-width: 9.5rem;
+@action-min-width: 1.75rem;
+.action-list-wrapper {
+    ul {
+        display: block;
+        list-style: none;
+        color: @secondary-0;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            line-height: 2.25rem;
+            min-width: @action-min-width;
+            &.inactive {
+                color: @secondary-1;
+            }
+            &:not(.inactive) {
+                cursor: pointer;
+            }
+            &:hover:not(.list-button):not(.inactive) {
+                color: @secondary-7;
+            }
+            >div.action {
+                display: grid;
+                grid-template-columns: @action-min-width;
+                grid-auto-columns: max-content;
+                grid-auto-flow: column;
+                align-items: center;
+                grid-gap: .375rem;
+            }
+        }
+        &.action-list {
+            height: 2.25rem;
+            text-align: right;
+            white-space: nowrap;
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: end;
+            grid-gap: 1.5rem;
+            li {
+                max-width: @action-max-width;
+                &.list-button {
+                    span {
+                        padding: 3px 2px 0 2px;
+                        margin: 0;
+                        border-radius: @border-radius;
+                        position: relative;
+                        top: 2px;
+                        &::before {
+                            position: relative;
+                            top: 2px;
+                        }
+                    }
+                }
+                >.action {
+                    >span.text {
+                        .shorten-text;
+                        max-width: @action-max-width - @action-min-width - .375rem;
+                    }
+                }
+            }
+        }
+    }
+    .action-list-expansion-container {
+        position: absolute;
+        right: 0;
+        z-index: 10;
+        top: @margin-default;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
+        .action-list-expansion {
+            z-index: 1;
+            text-align: left;
+            li {
+                height: 2.25rem;
+                display: block;
+                margin: 0 @margin-small;
+                padding: 0 @margin-small;
+                &.inactive {
+                    color: @secondary-1;
+                }
+                &:hover:not(.inactive) {
+                    color: @secondary-7;
+                }
+            }
+        }
+    }
+    [class^="kix-icon-"],
+    [class*=" kix-icon-"] {
+        .icon-font-size-normal;
+        margin-top: -.125rem;
+    }
+}

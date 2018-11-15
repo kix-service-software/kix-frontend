@@ -1,0 +1,32 @@
+.sub-field-container {
+    margin-bottom: @margin-small;
+    >.form-field {
+        >.field-label {
+            font-weight: normal;
+        }
+    }
+}
+
+.minimize-icon-container {
+    align-self: center;
+    margin: .375rem 0 0 .25rem;
+    color: @secondary-0;
+    [class^="kix-icon-"],
+    [class*=" kix-icon-"] {
+        cursor: pointer;
+        .icon-font-size-normal();
+        >.no-links {
+            color: @secondary-3;
+        }
+    }
+}
+
+.additionalFieldControls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: .375rem;
+    justify-content: center;
+    align-content: center;
+    padding-left: @margin-small;
+    width: @control-button-size * 2 + .375rem;
+}

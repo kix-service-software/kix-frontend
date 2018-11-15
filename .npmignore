@@ -1,8 +1,14 @@
 .cache
 .gitignore
 .npmignore
+.bundleignore
+.vscode
+.gitlab-ci.yml
+marko.json
 gulpfile.js
 node_modules
 src
 tsconfig.json
 tslint.json
+tests
+install-unstable.sh

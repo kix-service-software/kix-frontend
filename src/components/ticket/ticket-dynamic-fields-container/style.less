@@ -1,0 +1,71 @@
+.widget-content {
+    .dynamic-fields-group {
+        margin: 0 0 @margin-small;
+        .widget-content {
+            border: 0;
+            padding: 0;
+            min-height: auto;
+            ul.field-container {
+                overflow: auto;
+                background-color: @secondary-5;
+                border-radius: @border-radius;
+                padding: @margin-small;
+                list-style: none;
+                li.dynamic-field {
+                    min-height: @margin-default;
+                    display: block;
+                    margin-bottom: 4px;
+                    line-height: @margin-default;
+                    .key {
+                        width: 160px;
+                        text-align: right;
+                        margin-right: @margin-small;
+                        float: left;
+                        height: 100%;
+                    }
+                    .info {
+                        width: 1.5em;
+                        margin-right: @margin-small;
+                        text-align: center;
+                        float: left;
+                        .overlay-icon {
+                            color: @secondary-7;
+                        }
+                    }
+                    >div {
+                        margin-left: 180px;
+                        height: 100%;
+                        .text {
+                            box-sizing: border-box;
+                            border: 1px solid @secondary-4;
+                            border-radius: @border-radius;
+                            padding: 0 1em;
+                            background-color: @secondary-6;
+                            &.checkbox {
+                                display: inline-block;
+                                input[type=checkbox] {
+                                    margin: @margin-small 0 0 0;
+                                }
+                            }
+                            &.multi-text {
+                                display: inline-block;
+                                &:not(:last-of-type) {
+                                    margin-right: @margin-small;
+                                }
+                            }
+                        }
+                        textarea {
+                            width: 100%;
+                            height: 70px;
+                            overflow: auto;
+                            resize: none;
+                            &.text {
+                                padding: @margin-small 0 @margin-small 1em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

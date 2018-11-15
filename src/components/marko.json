@@ -1,0 +1,17 @@
+{
+    "taglibImports": [
+        "@lasso/marko-taglib/marko.json",
+        "./_base-components/marko.json"
+    ],
+    "tags-dir": [
+        "_base-template",
+        "_base-components",
+        "customer",
+        "home",
+        "ticket",
+        "customer",
+        "search",
+        "faq",
+        "cmdb"
+    ]
+}

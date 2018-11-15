@@ -1,0 +1,129 @@
+// default "css"
+@border-radius: 3px;
+@shadow-color: @secondary-2;
+@shadow-1: 2px 2px 2px 0 @shadow-color;
+@shadow-2: 2px 2px 6px 0 @secondary-0;
+@shadow-3: 2px 2px 10px 3px @shadow-color;
+.shadow-1(@color: @shadow-color) {
+    box-shadow: 2px 2px 2px 0 @color;
+}
+
+.shadow-2(@color: @secondary-0) {
+    box-shadow: 2px 2px 6px 0 @color;
+}
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+    background-color: @secondary-5;
+    body {
+        height: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+}
+
+a,
+a:visited,
+a:link {
+    color: @primary-0;
+    text-decoration: none;
+    &:hover,
+    &:active {
+        color: @primary-2;
+        text-decoration: underline;
+    }
+}
+
+ul.menu {
+    >li {
+        >a,
+        >a:visited,
+        >a:link {
+            color: inherit;
+            &:hover,
+            &:active {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.vertical-align() {
+    display: block;
+    position: relative;
+    top: 50%;
+    -webkit-transform: perspective(1px) translateY(-50%);
+    -ms-transform: perspective(1px) translateY(-50%);
+    transform: perspective(1px) translateY(-50%);
+}
+
+.shield {
+    .full-size();
+    position: fixed;
+    background-color: @secondary-6;
+    opacity: 0.8;
+}
+
+span.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.not-visible {
+    visibility: hidden;
+}
+
+[class^="kix-icon-"],
+[class*=" kix-icon-"] {
+    &.as-button {
+        cursor: pointer;
+    }
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: @secondary-2;
+    opacity: 1;
+    font-style: italic;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
+textarea:-ms-input-placeholder,
+input:-ms-input-placeholder,
+textarea::-ms-input-placeholder,
+input::-ms-input-placeholder {
+    color: @secondary-2;
+    font-style: italic;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
+.full-size() {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: unset;
+}
+
+.rtl {
+    direction: rtl;
+}

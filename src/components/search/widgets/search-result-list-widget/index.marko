@@ -1,0 +1,18 @@
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
+    <widget instanceId=state.instanceId title=state.resultTitle icon=state.resultIcon>
+        <@headerFilter>
+            <filter on-filter('filter')/>
+        </@headerFilter>
+        <@content>
+            <if(state.resultTable && !state.noSearch)>
+                <standard-table standardTable=state.resultTable key=state.tableId/>
+            </if>
+            <else>
+                <span.no-search-label>Keine Suche ausgeführt.</span>
+            </else>
+        </@content>
+    </widget>
+</else>

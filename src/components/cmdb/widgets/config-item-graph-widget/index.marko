@@ -1,0 +1,18 @@
+<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+    <@content>
+        <if(state.loading)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div.config-item-graph-container>
+                <img.config-item-graph alt=state.widgetTitle src=("/static/img/config-item-graph/" + state.fakeGraph)/>
+                <div.hover-shield on-click('openImageDialog')>
+                    <div.hover-info>
+                        <span.hover-icon.kix-icon-arrow-fullscreen/>
+                        <span.hover-hint.no-select>Großansicht</span>
+                    </div>
+                </div>
+            </div>
+        </else>
+    </@content>
+</widget>

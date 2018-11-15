@@ -1,0 +1,9 @@
+<div.file-entry title=(((state.fileName + " (") + state.fileSize) + ")")>
+    <span.file-entry-icon>
+        <icon icon=state.icon showUnknown=true/>
+    </span>
+    <span.file-entry-link on-click('onClick')>${state.fileName}</span>
+    <span.file-size>
+        <if(state.fileSize)>(${state.fileSize})</if>
+    </span>
+</div>

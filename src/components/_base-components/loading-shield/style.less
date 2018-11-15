@@ -1,0 +1,29 @@
+.loading-shield {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: @secondary-7;
+    opacity: 0.2;
+    >.loading-info {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        >.loading-spinner {
+            width: 9em;
+            height: 9em;
+            >.child::before {
+                background-color: @secondary-6;
+            }
+        }
+        >.loading-hint {
+            font-weight: bold;
+            font-size: @h1-font-size;
+            color: @secondary-6;
+            display: block;
+            margin-top: @margin-small;
+        }
+    }
+}

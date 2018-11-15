@@ -1,0 +1,29 @@
+<div.file-upload class={dragging: state.dragging} on-drop("drop")>
+    <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Datei wählen">
+        <span.kix-icon-attachement/>Datei wählen
+        <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>
+    </button>
+    <span.file-upload-notice on-click('minimize') class={"has-text": !(!state.files.length)}>
+        <if(!!state.files.length)>
+            <span>
+                ${state.files.length} Datei(en) angehangen
+                <span.kix-icon-check/>
+            </span>
+        </if>
+        <div.toggle>
+            <span.line class={minimized: state.minimized}/>
+            <if(state.minimized)>
+                <span.kix-icon-sort-down/>
+            </if>
+            <else>
+                <span.kix-icon-triangle-up>
+                    <span.path1/>
+                    <span.path2/>
+                </span>
+            </else>
+        </div>
+    </span>
+    <if(!state.minimized)>
+        <label-list labels=state.labels on-removeLabel('removeFile')/>
+    </if>
+</div>

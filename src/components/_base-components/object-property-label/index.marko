@@ -1,0 +1,18 @@
+<div.key-value-pair>
+    <div.key title=state.propertyName>
+        <span.property-name>${state.propertyName}</span>
+    </div>
+    <div.info>
+        <if(input.info)>
+            <include(input.info)/>
+        </if>
+    </div>
+    <div.value title=state.propertyDisplayText class=component.getValueClasses()>
+        <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+            <@content>
+                <span>${state.propertyDisplayText}</span>
+                <icon icon=state.propertyIcon/>
+            </@content>
+        </link-target>
+    </div>
+</div>

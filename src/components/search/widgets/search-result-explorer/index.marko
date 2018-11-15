@@ -1,0 +1,10 @@
+<div.search-result-explorer>
+    <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true contextType=state.contextType
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Suchergebnisse")>
+        <@content>
+            <if(state.nodes)>
+                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked('activeNodeChanged')/>
+            </if>
+        </@content>
+    </widget>
+</div>

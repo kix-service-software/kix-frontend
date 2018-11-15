@@ -1,0 +1,84 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.ticket)>
+            <div.ticket-information>
+                <div.information-list>
+                    <div>
+                        <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider
+                            routingConfiguration=component.customerRoutingConfiguration
+                            objectId=state.ticket.CustomerID>
+                            <@info>
+                                <if(state.ticket.CustomerID)>
+                                    <overlay-icon content="ticket-customer-info" instanceId="customer-info-overlay"
+                                        data={customerId: state.ticket.CustomerID, groups: state.customerInfoGroups}/>
+                                </if>
+                            </@info>
+                        </object-property-label>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider
+                            routingConfiguration=component.contactRoutingConfiguration
+                            objectId=state.ticket.CustomerUserID>
+                            <@info>
+                                <if(state.ticket.CustomerUserID)>
+                                    <overlay-icon content="ticket-contact-info" instanceId="contact-info-overlay"
+                                        data={contactId: state.ticket.CustomerUserID, groups: state.contactInfoGroups}/>
+                                </if>
+                            </@info>
+                        </object-property-label>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="Created" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="Age" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="LockID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="TypeID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="ServiceID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="SLAID" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="QueueID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="PriorityID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="ResponsibleID" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticket property="OwnerID" labelProvider=state.labelProvider/>
+                    </div>
+                    <if(state.isAccountTimeEnabled)>
+                        <div>
+                            <object-property-label object=state.ticket property="TimeUnits" labelProvider=state.labelProvider/>
+                        </div>
+                    </if>
+                    <div>
+                        <object-property-label object=state.ticket property="StateID" labelProvider=state.labelProvider showIcon=true/>
+                    </div>
+                    <if(state.isPending)>
+                        <div>
+                            <object-property-label object=state.ticket property="PendingTime" labelProvider=state.labelProvider/>
+                        </div>
+                    </if>
+                </div>
+                <div.ci-list-wrapper>
+                    <div>Relevante Config Items:</div>
+                    <div.ci-list-container>
+                        <relevant-config-item-list/>
+                    </div>
+                </div>
+            </div>
+        </if>
+    </@content>
+</widget>

@@ -1,0 +1,21 @@
+<if(state.show)>
+    <div.main-dialog-container>
+        <div.shield/>
+        <div.main-dialog>
+            <widget key="main-dialog-tab-container-widget" isDialog=true title=state.dialogTitle minimizable=false
+                icon=state.dialogIcon>
+                <@content>
+                    <tab-container key="main-dialog-tab-container" tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false
+                        contextType="DIALOG" on-tabChanged('tabChanged')/>
+                    <kix-footer leftText=state.dialogHint/>
+                </@content>
+            </widget>
+            <if(state.isLoading)>
+                <loading-shield loadingHint=state.loadingHint/>
+            </if>
+            <if(!state.isLoading || state.showClose)>
+                <span.kix-icon-close.close-button on-click('close')/>
+            </if>
+        </div>
+    </div>
+</if>

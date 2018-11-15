@@ -1,0 +1,11 @@
+{
+    "taglibImports": [
+        "./inputs/marko.json"
+    ],
+    "tags-dir": [
+        "main-form",
+        "inputs",
+        "search-form",
+        "field-container"
+    ]
+}

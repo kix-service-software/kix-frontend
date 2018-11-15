@@ -1,0 +1,55 @@
+{
+    "name": "kix-base",
+    "extensions": {
+        "kix:communicator": {
+            "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
+        },
+        "kix:personal:settings": {
+            "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
+        },
+        "kix:menu:main": {
+            "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",
+            "tickets-menu-main": "../../dist/registry-modules/ticket/menu.main.extension",
+            "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension",
+            "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
+            "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension",
+            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension"
+        },
+        "kix:module": {
+            "home-module": "../../dist/registry-modules/home/module.extension",
+            "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
+            "ticket-list-module": "../../dist/registry-modules/ticket/ticket-list-module.extension",
+            "ticket-details-module": "../../dist/registry-modules/ticket/ticket-details-module.extension",
+            "customer-module": "../../dist/registry-modules/customer/customer-module.extension",
+            "customer-details-module": "../../dist/registry-modules/customer/customer-details-module.extension",
+            "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
+            "contact-details-module": "../../dist/registry-modules/customer/contact-details-module.extension",
+            "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension",
+            "search-module": "../../dist/registry-modules/search/search-module.extension",
+            "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
+            "new-ticket-article-dialog-context": "../../dist/registry-modules/ticket/new-ticket-article-dialog-context.extension",
+            "search-ticket-dialog-context": "../../dist/registry-modules/ticket/search-ticket-dialog-context.extension",
+            "search-contact-dialog-context": "../../dist/registry-modules/customer/search-contact-dialog-context.extension",
+            "search-customer-dialog-context": "../../dist/registry-modules/customer/search-customer-dialog-context.extension",
+            "search-config-item-dialog-context": "../../dist/registry-modules/cmdb/search-config-item-dialog-context.extension",
+            "faq-module": "../../dist/registry-modules/faq/faq-module.extension",
+            "faq-details-module": "../../dist/registry-modules/faq/faq-details-module.extension",
+            "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
+            "search-faq-article-dialog-context": "../../dist/registry-modules/faq/search-faq-article-dialog-context.extension",
+            "edit-linked-objects-dialog-context": "../../dist/registry-modules/link/edit-linked-objects-dialog-context.extension",
+            "new-config-item-dialog-context": "../../dist/registry-modules/cmdb/new-config-item-dialog-context.extension",
+            "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension",
+            "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension",
+            "edit-ticket-dialog-context": "../../dist/registry-modules/ticket/edit-ticket-dialog-context.extension",
+            "release-module": "../../dist/registry-modules/release/module.extension"
+        },
+        "kix:modules": {
+            "app-module": "../../dist/registry-modules/application/kix-module.extension",
+            "faq-module": "../../dist/registry-modules/faq/kix-module.extension",
+            "contact-module": "../../dist/registry-modules/customer/kix-module-contact.extension",
+            "customer-module": "../../dist/registry-modules/customer/kix-module-customer.extension",
+            "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension",
+            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension"
+        }
+    }
+}
