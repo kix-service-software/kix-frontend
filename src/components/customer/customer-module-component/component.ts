@@ -7,11 +7,12 @@ import {
     CustomerLabelProvider, CustomerBrowserFactory, CustomerContext, CustomerDetailsContext,
     NewCustomerDialogContext, CustomerSearchContext, CustomerSearchAction, CustomerCreateAction,
     CustomerEditAction, CustomerCreateContactAction, CustomerPrintAction, CustomerCreateCIAction,
-    CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition
+    CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition,
+    EditCustomerDialogContext, CustomerFormService
 } from '@kix/core/dist/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize
+    ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
 } from '@kix/core/dist/model';
 
 class Component extends AbstractMarkoComponent {
@@ -21,11 +22,15 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        ServiceRegistry.getInstance().registerServiceInstance(CustomerService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(CustomerFormService.getInstance());
+
         StandardTableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
         LabelService.getInstance().registerLabelProvider(new CustomerLabelProvider());
-        ServiceRegistry.getInstance().registerServiceInstance(CustomerService.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.CUSTOMER, CustomerBrowserFactory.getInstance());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new CustomerSearchDefinition());
+
+        KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
 
         this.registerContexts();
         this.registerDialogs();
@@ -51,6 +56,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newCustomerContext);
 
+        const editCustomerContext = new ContextDescriptor(
+            EditCustomerDialogContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.EDIT,
+            false, 'edit-customer-dialog', ['customers'], EditCustomerDialogContext
+        );
+        ContextService.getInstance().registerContext(editCustomerContext);
+
         const searchContactContext = new ContextDescriptor(
             CustomerSearchContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-customer-dialog', ['customers'], CustomerSearchContext
@@ -69,6 +80,15 @@ class Component extends AbstractMarkoComponent {
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-customer-dialog',
+            new WidgetConfiguration(
+                'edit-customer-dialog', 'Kunde Bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.CUSTOMER,
+            ContextMode.EDIT
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-customer-dialog',
             new WidgetConfiguration(
                 'search-customer-dialog', 'Kundensuche', [], {},
@@ -77,7 +97,6 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.CUSTOMER,
             ContextMode.SEARCH
         ));
-
     }
 
     private registerActions(): void {
