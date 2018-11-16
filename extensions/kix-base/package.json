@@ -25,6 +25,7 @@
             "new-customer-dialog-context": "../../dist/registry-modules/customer/new-customer-dialog-context.extension",
             "contact-details-module": "../../dist/registry-modules/customer/contact-details-module.extension",
             "new-contact-dialog-context": "../../dist/registry-modules/customer/new-contact-dialog-context.extension",
+            "edit-contact-dialog-context": "../../dist/registry-modules/customer/edit-contact-dialog-context.extension",
             "search-module": "../../dist/registry-modules/search/search-module.extension",
             "new-ticket-dialog-context": "../../dist/registry-modules/ticket/new-ticket-dialog-context.extension",
             "new-ticket-article-dialog-context": "../../dist/registry-modules/ticket/new-ticket-article-dialog-context.extension",

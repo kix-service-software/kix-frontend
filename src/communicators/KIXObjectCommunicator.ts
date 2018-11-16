@@ -91,7 +91,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
         if (service) {
-            KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.UPDATE, data.parameter);
+            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.UPDATE, data.parameter);
             await service.updateObject(data.token, data.objectType, data.parameter, data.objectId, data.updateOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(

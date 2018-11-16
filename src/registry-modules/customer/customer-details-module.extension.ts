@@ -24,14 +24,14 @@ export class ModuleFactoryExtension implements IModuleFactoryExtension {
         const customerInfoLane =
             new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
                 'customer-info-widget', 'Kundeninformationen', [
-                    'contact-edit-action', 'contact-print-action'
+                    'customer-edit-action', 'customer-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, false)
             );
 
         const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
             'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [
-                'contact-edit-action', 'contact-print-action'
+                'customer-edit-action', 'customer-print-action'
             ], new TableConfiguration(
                 null, null,
                 [
