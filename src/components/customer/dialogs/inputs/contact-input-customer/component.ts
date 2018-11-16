@@ -29,9 +29,16 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            const customer = this.state.currentNode ? this.customers.find(
+            let customer = this.state.currentNode ? this.customers.find(
                 (cu) => cu.CustomerID === this.state.currentNode.id
             ) : null;
+
+            if (!customer || !this.state.nodes || !this.state.currentNode) {
+                const node = this.createTreeNode(this.state.defaultValue.value);
+                this.state.nodes.push(node);
+                this.state.currentNode = node;
+                customer = this.state.defaultValue.value;
+            }
             super.provideValue(customer);
         }
     }
@@ -52,12 +59,14 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
         this.state.nodes = [];
         if (searchValue && searchValue !== '') {
-            this.state.nodes = this.customers.map(
-                (c) => new TreeNode(c.CustomerID, c.DisplayValue, 'kix-icon-man-house')
-            );
+            this.state.nodes = this.customers.map((c) => this.createTreeNode(c));
         }
 
         return this.state.nodes;
+    }
+
+    private createTreeNode(customer: Customer): TreeNode {
+        return new TreeNode(customer.CustomerID, customer.DisplayValue, 'kix-icon-man-house');
     }
 
 }

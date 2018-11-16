@@ -82,7 +82,7 @@ export class Component {
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, [this.state.ticket]
+                config.generalActions, this.state.ticket
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }

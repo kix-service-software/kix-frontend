@@ -26,6 +26,8 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.getInstance().registerServiceInstance(TicketService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(TicketFormService.getInstance());
+
         KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
