@@ -1,5 +1,5 @@
 import { FormComponentState } from './FormComponentState';
-import { WidgetType, FormContext } from '@kix/core/dist/model';
+import { WidgetType, FormContext, FormField } from '@kix/core/dist/model';
 import { FormService } from '@kix/core/dist/browser/form';
 import { WidgetService } from '@kix/core/dist/browser';
 
@@ -13,12 +13,39 @@ class FormComponent {
 
     public async onMount(): Promise<void> {
         this.state.formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        this.state.objectType = this.state.formInstance.getObjectType();
-        this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
+        if (this.state.formInstance) {
+            this.state.additionalFieldControlsNeeded = false;
+            for (const group of this.state.formInstance.getForm().groups) {
+                for (const field of group.formFields) {
+                    this.state.additionalFieldControlsNeeded = this.additionalFieldControlsNeeded(field);
+                    if (this.state.additionalFieldControlsNeeded) {
+                        break;
+                    }
+                }
+                if (this.state.additionalFieldControlsNeeded) {
+                    break;
+                }
+            }
+            this.state.objectType = this.state.formInstance.getObjectType();
+            this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
+        }
         WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
         this.state.loading = false;
 
         this.prepareMultiGroupHandling();
+    }
+
+    private additionalFieldControlsNeeded(field: FormField): boolean {
+        let needed = field.countMax > 1 || field.countDefault < field.countMax;
+        if (!needed && field.children) {
+            for (const child of field.children) {
+                needed = this.additionalFieldControlsNeeded(child);
+                if (needed) {
+                    break;
+                }
+            }
+        }
+        return needed;
     }
 
     private prepareMultiGroupHandling(): void {

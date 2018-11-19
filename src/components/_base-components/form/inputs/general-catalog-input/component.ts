@@ -3,8 +3,7 @@ import {
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
 } from "@kix/core/dist/model";
 import { CompontentState } from "./CompontentState";
-import { ServiceRegistry, SearchOperator, KIXObjectService } from "@kix/core/dist/browser";
-import { GeneralCatalogService } from "@kix/core/dist/browser/general-catalog";
+import { SearchOperator, KIXObjectService } from "@kix/core/dist/browser";
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 

@@ -30,7 +30,7 @@ class Component extends FormInputComponent<Contact, ComponentState> {
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             const contact = this.state.defaultValue.value;
-            this.state.currentNode = new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
+            this.state.currentNode = this.createTreeNode(contact);
             this.state.nodes = [this.state.currentNode];
             super.provideValue(contact);
         }
@@ -53,11 +53,15 @@ class Component extends FormInputComponent<Contact, ComponentState> {
         this.state.nodes = [];
         if (searchValue && searchValue !== '') {
             this.state.nodes = this.contacts.map(
-                (c) => new TreeNode(c.ContactID, c.DisplayValue, 'kix-icon-man-bubble')
+                (c) => this.createTreeNode(c)
             );
         }
 
         return this.state.nodes;
+    }
+
+    private createTreeNode(contact: Contact): TreeNode {
+        return new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
     }
 
 }

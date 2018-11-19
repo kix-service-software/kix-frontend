@@ -103,12 +103,13 @@ export class Extension implements IModuleFactoryExtension {
         const actions = ['config-item-create-action'];
         const configItemActions = [
             'ticket-create-action', 'config-item-version-compare-action',
-            'config-item-version-create-action', 'linked-objects-edit-action'
+            'config-item-edit-action', 'linked-objects-edit-action'
         ];
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
-                'config-item-version-widget', "Versionsdetails", ['config-item-version-compare-action'],
+                'config-item-version-widget', "Versionsdetails",
+                ['config-item-version-compare-action', 'config-item-edit-action'],
                 null, false, true
             ));
 

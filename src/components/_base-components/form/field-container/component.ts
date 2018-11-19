@@ -16,6 +16,7 @@ class FieldContainerComponent {
         this.state.fields = input.fields;
         this.formId = input.formId;
     }
+
     public canRemove(field: FormField): boolean {
         const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
         if (propertyFields.length === 1 && field.empty) {
