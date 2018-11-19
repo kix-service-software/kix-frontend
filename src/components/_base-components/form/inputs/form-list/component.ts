@@ -13,7 +13,7 @@ class Component {
     }
 
     public onInput(input: any): void {
-        this.state.enabled = typeof input.enabled !== 'undefined' ? input.enabled : true;
+        this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
@@ -50,7 +50,7 @@ class Component {
     private toggleList(close: boolean = true): void {
         if (this.state.expanded && close) {
             this.state.expanded = false;
-        } else if (this.state.enabled) {
+        } else if (!this.state.readonly) {
             this.state.expanded = true;
             this.timeout = setTimeout(this.setDropdownStyle.bind(this), 100);
         }

@@ -16,7 +16,7 @@
             </div>
         </if>
         <else>
-            <input.input-style type="text" class={invalid: state.invalid} readonly=(!state.enabled) disabled=(!state.enabled)
+            <input.input-style type="text" class={invalid: state.invalid} readonly=state.readonly disabled=state.readonly
                 placeholder=(state.selectedNodes && state.selectedNodes.length ? "" : input.placeholder)
                 value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue) on-keydown('keyDown')
                 on-keyup('keyUp') on-click('toggleList', false) on-focus('toggleList', false) on-blur('focusLost')

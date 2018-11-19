@@ -1,2 +1,3 @@
 <form-list nodes=state.nodes placeholder=(state.field.required ? "FAQ Kategorie" : "") selectedNodes=state.currentNodes
-    required=state.field.required on-nodesChanged('queueChanged') invalid=state.invalid multiselect=state.multiselect/>
+    required=state.field.required on-nodesChanged('queueChanged') invalid=state.invalid multiselect=state.multiselect
+    readonly=state.field.readonly/>

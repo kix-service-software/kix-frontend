@@ -3,5 +3,6 @@
 </if>
 <else>
     <form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
-        on-nodesChanged('valueChanged') selectedNodes=[state.currentNode] invalid=state.invalid/>
+        on-nodesChanged('valueChanged') selectedNodes=[state.currentNode] invalid=state.invalid
+        readonly=state.field.readonly/>
 </else>

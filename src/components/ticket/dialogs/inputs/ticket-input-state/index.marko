@@ -1,14 +1,15 @@
 <form-list nodes=state.nodes placeholder=(state.field.required ? state.field.label : "")
     on-nodesChanged('stateChanged') selectedNodes=[state.currentNode] invalid=state.invalid
-    multiselect=state.multiselect/>
+    multiselect=state.multiselect readonly=state.field.readonly/>
 <if(state.pending)>
     <div.pending-state class={invalid: state.invalid}>
         <span>*Warten bis:</span>
         <input.input-style.date-input type="date" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" on-change('dateChanged')
-            value=state.selectedDate/>
+            value=state.selectedDate readonly=state.field.readonly disabled=state.field.readonly/>
         <span.kix-icon-calendar/>
         <span>-</span>
-        <select.input-style.time-input required on-change('timeChanged')>
+        <select.input-style.time-input required on-change('timeChanged') readonly=state.field.readonly
+            disabled=state.field.readonly>
             <for(time in state.times)>
                 <option selected=(state.selectedTime === time)>${time}</option>
             </for>

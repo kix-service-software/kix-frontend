@@ -43,6 +43,7 @@
             "config-item-details-module": "../../dist/registry-modules/cmdb/config-item-details-module.extension",
             "cmdb-module": "../../dist/registry-modules/cmdb/cmdb-module.extension",
             "edit-ticket-dialog-context": "../../dist/registry-modules/ticket/edit-ticket-dialog-context.extension",
+            "edit-config-item-dialog-context": "../../dist/registry-modules/cmdb/edit-config-item-dialog-context.extension",
             "release-module": "../../dist/registry-modules/release/module.extension"
         },
         "kix:modules": {

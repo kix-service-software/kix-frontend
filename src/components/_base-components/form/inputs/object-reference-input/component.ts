@@ -24,15 +24,14 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
         this.state.searchCallback = this.search.bind(this);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
-        this.setCurrentNode();
+        await this.setCurrentNode();
     }
 
-    public setCurrentNode(): void {
+    public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            const object = this.state.currentNode ? this.objects.find(
-                (cu) => cu.ObjectId === this.state.currentNode.id
-            ) : null;
+            const object = this.state.defaultValue.value;
+            this.state.currentNode = await this.createTreeNode(object);
+            this.state.nodes = [this.state.currentNode];
             super.provideValue(object);
         }
     }
@@ -60,13 +59,19 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
             if (searchValue && searchValue !== '') {
                 this.state.nodes = [];
                 for (const o of this.objects) {
-                    const text = await LabelService.getInstance().getText(o);
-                    this.state.nodes.push(new TreeNode(o.ObjectId, text, LabelService.getInstance().getIcon(o)));
+                    const node = await this.createTreeNode(o);
+                    this.state.nodes.push(node);
                 }
             }
         }
 
         return this.state.nodes;
+    }
+
+    private async createTreeNode(o: KIXObject): Promise<TreeNode> {
+        const text = await LabelService.getInstance().getText(o);
+        const icon = LabelService.getInstance().getIcon(o);
+        return new TreeNode(o.ObjectId, text, icon);
     }
 
 }

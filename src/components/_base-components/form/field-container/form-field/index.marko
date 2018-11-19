@@ -1,4 +1,4 @@
-<div.form-field>
+<div.form-field class={additionalFieldControlsNeeded: input.additionalFieldControlsNeeded}>
     <div.field-label class={"no-label": !state.field.label}>
         <span.label-text title=state.field.label>
             <if(state.field.required)>
@@ -40,6 +40,7 @@
 </div>
 <if(!state.minimized && (!state.field.empty || state.field.asStructure))>
     <div.sub-field-container>
-        <field-container level=(state.level + 1) fields=state.field.children formId=state.formId objectType=state.objectType/>
+        <field-container level=(state.level + 1) fields=state.field.children formId=state.formId
+            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded/>
     </div>
 </if>

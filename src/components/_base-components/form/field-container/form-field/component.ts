@@ -13,7 +13,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.field = input.field;
-        this.state.objectType = input.objectType;
         this.state.formId = input.formId;
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         if (this.state.level > 14) {
@@ -24,7 +23,7 @@ class Component {
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         formInstance.registerListener({
-            formListenerId: IdService.generateDateBasedId('form-field'),
+            formListenerId: IdService.generateDateBasedId('form-field-' + this.state.field.instanceId),
             formValueChanged: () => { return; },
             updateForm: async () => {
                 if (this.hasChildren()) {
@@ -36,17 +35,17 @@ class Component {
 
     private async hasInvalidChildren(field: FormField = this.state.field): Promise<boolean> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        let hasInavlidChildren = false;
+        let hasInvalidChildren = false;
         for (const child of field.children) {
             const value = formInstance.getFormFieldValue(child.instanceId);
             if (!value.valid) {
                 return true;
             }
 
-            hasInavlidChildren = await this.hasInvalidChildren(child);
+            hasInvalidChildren = await this.hasInvalidChildren(child);
         }
 
-        return hasInavlidChildren;
+        return hasInvalidChildren;
     }
 
     public getInputComponent(): any {

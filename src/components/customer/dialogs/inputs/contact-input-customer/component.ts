@@ -28,17 +28,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            let customer = this.state.currentNode ? this.customers.find(
-                (cu) => cu.CustomerID === this.state.currentNode.id
-            ) : null;
-
-            if (!customer || !this.state.nodes || !this.state.currentNode) {
-                const node = this.createTreeNode(this.state.defaultValue.value);
-                this.state.nodes.push(node);
-                this.state.currentNode = node;
-                customer = this.state.defaultValue.value;
-            }
+            const customer = this.state.defaultValue.value;
+            this.state.currentNode = this.createTreeNode(customer);
+            this.state.nodes = [this.state.currentNode];
             super.provideValue(customer);
         }
     }

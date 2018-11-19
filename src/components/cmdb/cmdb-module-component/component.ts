@@ -14,7 +14,7 @@ import {
     ConfigItemLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemTableFactory, ConfigItemImageBrowserFactory,
     ConfigItemClassBrowserFactory, ConfigItemBrowserFactory, CMDBService, ConfigItemVersionMaximizeAction,
     ConfigItemCreateAction, ConfigItemEditAction, ConfigItemPrintAction, ConfigItemVersionCompareAction,
-    ConfigItemVersionCreateAction
+    EditConfigItemDialogContext, ConfigItemFormService
 } from '@kix/core/dist/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -25,6 +25,7 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.getInstance().registerServiceInstance(CMDBService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemFormService.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()
@@ -69,6 +70,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
+        const editConfigItemContext = new ContextDescriptor(
+            EditConfigItemDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.EDIT,
+            false, 'edit-config-item-dialog', ['configitems'], EditConfigItemDialogContext
+        );
+        ContextService.getInstance().registerContext(editConfigItemContext);
+
         const searchConfigItemContext = new ContextDescriptor(
             ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
@@ -84,6 +91,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.CREATE
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-config-item-dialog',
+            new WidgetConfiguration(
+                'edit-config-item-dialog', 'Config Item bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.CONFIG_ITEM,
+            ContextMode.EDIT
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
@@ -108,7 +124,6 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'config-item-version-compare-action', ConfigItemVersionCompareAction
         );
-        ActionFactory.getInstance().registerAction('config-item-version-create-action', ConfigItemVersionCreateAction);
     }
 
 }

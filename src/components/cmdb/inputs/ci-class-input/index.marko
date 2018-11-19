@@ -1,2 +1,3 @@
 <form-list nodes=state.nodes placeholder=(state.field.required ? "Config Item Klasse" : "")
-    on-nodesChanged('configItemChanged') selectedNodes=[state.currentNode] invalid=state.invalid autocomplete=false/>
+    on-nodesChanged('configItemChanged') selectedNodes=[state.currentNode] invalid=state.invalid autocomplete=false
+    readonly=state.field.readonly/>
