@@ -15,8 +15,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        const objectData = ContextService.getInstance().getObjectData();
+        this.state.currentUserLogin = objectData.currentUser.UserLogin;
+
         if (!this.state.releaseInfo) {
-            const objectData = ContextService.getInstance().getObjectData();
             this.state.releaseInfo = objectData.releaseInfo;
         }
 
