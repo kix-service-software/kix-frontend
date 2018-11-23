@@ -53,6 +53,7 @@ button {
     }
     &:not(.button-without-text) {
         .shorten-text;
+        overflow: unset;
         min-width: @button-min-width;
         padding-left: .625rem+@default-button-icon-width;
         padding-right: .625rem;
@@ -79,7 +80,8 @@ button {
         height: 100%;
         line-height: @default-button-height;
         text-align: center;
-        border-radius: @border-radius;
+        border-top-right-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
         box-sizing: border-box;
     }
     &.submit-button {
