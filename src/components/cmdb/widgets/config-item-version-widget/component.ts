@@ -71,7 +71,9 @@ class Component implements IEventListener {
                 new TableConfiguration(null, this.configItem.Versions.length), null, null, null, true
             );
 
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions);
+            this.configItem.Versions.forEach((v, index) => v.countNumber = index + 1);
+
+            table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions.reverse());
             await table.loadRows();
             this.state.table = table;
         }

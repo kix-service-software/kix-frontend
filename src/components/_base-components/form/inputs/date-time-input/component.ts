@@ -53,9 +53,9 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     private setValue(): void {
-        this.state.currentValue = new Date(
+        this.state.currentValue = this.state.dateValue ? new Date(
             this.state.dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
-        );
+        ) : null;
         (this as any).emit('valueChanged', this.state.currentValue);
         super.provideValue(this.state.currentValue);
     }

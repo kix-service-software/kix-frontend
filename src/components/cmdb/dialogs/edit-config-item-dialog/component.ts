@@ -1,7 +1,11 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { FormService, ContextService } from "@kix/core/dist/browser";
-import { ValidationSeverity, ContextType } from "@kix/core/dist/model";
+import { FormService, ContextService, OverlayService, ServiceRegistry } from "@kix/core/dist/browser";
+import {
+    ValidationSeverity, ContextType, ValidationResult, ComponentContent,
+    OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
+} from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
+import { CMDBService } from "@kix/core/dist/browser/cmdb";
 
 class Component {
 
@@ -45,37 +49,65 @@ class Component {
             if (formInstance) {
                 const result = await formInstance.validateForm();
                 const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+                if (validationError) {
+                    this.showValidationError(result);
+                } else {
+                    DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird aktualisiert');
+                    const cmdbService
+                        = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                    if (cmdbService && context) {
+                        const configItem = await context.getObject<ConfigItem>();
+                        await cmdbService.createConfigItemVersion(this.state.formId, Number(context.getObjectId()))
+                            .then(async (versionId) => {
+                                const updatedConfigItem = await context.getObject<ConfigItem>(
+                                    KIXObjectType.CONFIG_ITEM, true,
+                                    [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
+                                );
+                                DialogService.getInstance().setMainDialogLoading(false);
+                                this.showSuccessHint(
+                                    configItem.CurrentVersion
+                                    && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
+                                );
+                                DialogService.getInstance().closeMainDialog();
+                            }).catch((error) => {
+                                DialogService.getInstance().setMainDialogLoading(false);
+                                this.showError(error);
+                            });
+                    }
+                }
             }
         }, 300);
     }
 
-    // public showSuccessHint(): void {
-    //     const content = new ComponentContent(
-    //         'toast',
-    //         new ToastContent('kix-icon-check', 'Ticketänderung gespeichert.')
-    //     );
-    //     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-    // }
+    public showSuccessHint(noUpdate: boolean = false): void {
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent(
+                'kix-icon-check',
+                (noUpdate ? 'Änderungen wurden gespeichert' : 'Neue Version wurde erstellt')
+            )
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+    }
 
-    // public showValidationError(result: ValidationResult[]): void {
-    //     const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
-    //     const content = new ComponentContent('list-with-title',
-    //         {
-    //             title: 'Fehler beim Validieren des Formulars:',
-    //             list: errorMessages
-    //         }
-    //     );
+    public showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Fehler beim Validieren des Formulars:',
+                list: errorMessages
+            }
+        );
 
-    //     OverlayService.getInstance().openOverlay(
-    //         OverlayType.WARNING, null, content, 'Validierungsfehler', true
-    //     );
-    // }
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+        );
+    }
 
-    // public showError(error: any): void {
-    //     OverlayService.getInstance().openOverlay(
-    //         OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
-    //         );
-    // }
+    public showError(error: any): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+    }
 
 }
 

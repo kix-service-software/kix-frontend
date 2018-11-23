@@ -1,6 +1,6 @@
 <for(field in state.fields)>
     <form-field field=field level=state.level formId=input.formId
-        additionalFieldControlsNeeded=input.additionalFieldControlsNeeded>
+        additionalFieldControlsNeeded=input.additionalFieldControlsNeeded key=field.instanceId>
         <@additionalFieldControls>
             <if(input.additionalFieldControlsNeeded)>
                 <div.additionalFieldControls>
