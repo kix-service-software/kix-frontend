@@ -46,7 +46,7 @@ class Component {
             let value = attr.DisplayValue;
             if (attr.Type === 'Date') {
                 value = DateTimeUtil.getLocalDateString(value);
-            } else if (attr.Type === 'Attachment') {
+            } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
             }
 
