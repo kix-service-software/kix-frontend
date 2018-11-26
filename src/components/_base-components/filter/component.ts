@@ -25,6 +25,7 @@ class Component {
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : 'Filtern in Liste';
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
+        this.setFilterCount(input.filterCount);
     }
 
     private textFilterValueChanged(event: any): void {
@@ -54,6 +55,19 @@ class Component {
         this.state.currentFilter = null;
     }
 
+    private setFilterCount(filterCount: number = null) {
+        if (
+            (
+                (this.state.textFilterValue !== null && this.state.textFilterValue !== '')
+                || this.state.currentFilter !== null
+            )
+            && typeof filterCount === 'number'
+        ) {
+            this.state.filterCountString = `(${filterCount})`;
+        } else {
+            this.state.filterCountString = '';
+        }
+    }
 }
 
 module.exports = Component;

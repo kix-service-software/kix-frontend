@@ -78,6 +78,10 @@ class Component {
                 IdService.generateDateBasedId(),
                 this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
             );
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
         }
     }
 
@@ -98,11 +102,10 @@ class Component {
         ContextService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
     }
-
 }
 
 module.exports = Component;

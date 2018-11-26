@@ -103,11 +103,17 @@ class Component {
             }
 
             table.setTableListener(() => {
-                this.state.title = this.getTitle();
+                this.state.filterCount = this.state.table.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
             });
 
             this.state.table = table;
-            this.state.title = this.getTitle();
+            if (this.state.widgetConfiguration.contextDependent && context) {
+                this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
+                this.setTitle(context.getObjectList().length);
+            }
+            await this.state.table.loadRows();
+            this.setTitle(this.state.table.getTableRows(true).length);
         }
     }
 
@@ -146,21 +152,22 @@ class Component {
         }
     }
 
-    private getTitle(): string {
+    private setTitle(count: number = 0): void {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
         if (this.state.table) {
-            title = `${title} (${this.state.table.getTableRows(true).length})`;
+            title = `${title} (${count})`;
         }
-        return title;
+        this.state.title = title;
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
+            this.setTitle(objectList.length);
             await this.state.table.loadRows();
 
             const context = ContextService.getInstance().getActiveContext();
-            context.setFilteredObjectList(context.getObjectList());
+            context.setFilteredObjectList(objectList);
         }
     }
 

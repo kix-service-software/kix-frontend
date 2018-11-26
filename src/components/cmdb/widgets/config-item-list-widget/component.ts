@@ -88,18 +88,20 @@ class Component {
 
         table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
-        table.setTableListener(() => {
-            this.state.title = this.getTitle();
-        });
-
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
         table.layerConfiguration.contentLayer.setPreloadedObjects([]);
         this.state.table = table;
 
+        this.state.table.setTableListener(() => {
+            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
+            (this as any).setStateDirty('filterCount');
+        });
+
         const context = ContextService.getInstance().getActiveContext();
         if (this.state.widgetConfiguration.contextDependent && context) {
-            table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-            await table.loadRows();
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
+            this.setTitle(context.getObjectList().length);
+            await this.state.table.loadRows();
         }
     }
 
@@ -107,12 +109,12 @@ class Component {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private getTitle(): string {
+    private setTitle(count: number = 0): void {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
         if (this.state.table) {
-            title = `${title} (${this.state.table.getTableRows(true).length})`;
+            title = `${title} (${count})`;
         }
-        return title;
+        this.state.title = title;
     }
 
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
@@ -137,10 +139,11 @@ class Component {
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
+            this.setTitle(objectList.length);
             await this.state.table.loadRows();
 
             const context = ContextService.getInstance().getActiveContext();
-            context.setFilteredObjectList(context.getObjectList());
+            context.setFilteredObjectList(objectList);
         }
     }
 

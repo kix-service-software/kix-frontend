@@ -72,6 +72,10 @@ class Component {
             table.loadRows();
 
             this.state.standardTable = table;
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
         }
     }
 

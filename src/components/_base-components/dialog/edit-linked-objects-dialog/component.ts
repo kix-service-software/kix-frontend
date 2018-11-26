@@ -173,6 +173,10 @@ class Component {
         table.listenerConfiguration.selectionListener.addListener(
             this.objectSelectionChanged.bind(this)
         );
+        table.setTableListener(() => {
+            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
+            (this as any).setStateDirty('filterCount');
+        });
 
         setTimeout(() => {
             this.state.table = table;

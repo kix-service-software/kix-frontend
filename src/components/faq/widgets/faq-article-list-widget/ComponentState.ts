@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState {
         public table: StandardTable = null,
         public loading: boolean = true,
         public title: string = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = []
+        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
+        public filterCount: number = null
     ) {
         super();
     }

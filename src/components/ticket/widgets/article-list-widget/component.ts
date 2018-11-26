@@ -100,6 +100,10 @@ export class Component implements IEventListener {
                 IdService.generateDateBasedId(),
                 tableConfiguration, layerConfiguration, listenerConfiguration
             );
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
         }
     }
 

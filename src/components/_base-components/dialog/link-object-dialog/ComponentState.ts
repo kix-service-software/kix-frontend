@@ -16,6 +16,7 @@ export class ComponentState {
         public objectType: KIXObjectType = null,
         public formId: string = null,
         public canSubmit: boolean = false,
-        public tableId: string = null
+        public tableId: string = null,
+        public filterCount: number = null
     ) { }
 }
