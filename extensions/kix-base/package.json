@@ -13,9 +13,11 @@
             "cmdb-menu-main": "../../dist/registry-modules/cmdb/cmdb-menu.extension",
             "customer-menu-main": "../../dist/registry-modules/customer/menu.main.extension",
             "faq-menu-main": "../../dist/registry-modules/faq/faq-menu.extension",
-            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension"
+            "search-menu-main": "../../dist/registry-modules/search/search-menu.extension",
+            "admin-menu-main": "../../dist/registry-modules/admin/menu.extension"
         },
         "kix:module": {
+            "admin-module": "../../dist/registry-modules/admin/module.extension",
             "home-module": "../../dist/registry-modules/home/module.extension",
             "ticket-module": "../../dist/registry-modules/ticket/ticket-module.extension",
             "ticket-list-module": "../../dist/registry-modules/ticket/ticket-list-module.extension",
@@ -53,7 +55,8 @@
             "contact-module": "../../dist/registry-modules/customer/kix-module-contact.extension",
             "customer-module": "../../dist/registry-modules/customer/kix-module-customer.extension",
             "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension",
-            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension"
+            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension",
+            "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
         }
     }
 }
