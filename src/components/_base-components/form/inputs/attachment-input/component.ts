@@ -44,7 +44,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public setCurrentValue(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.attachments = this.state.defaultValue.value;
+            if (Array.isArray(this.state.defaultValue.value)) {
+                this.attachments = this.state.defaultValue.value;
+            } else {
+                this.attachments = [this.state.defaultValue.value];
+            }
             this.createLabels();
         }
         this.state.count = this.attachments.length + this.files.length;
@@ -90,6 +94,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         if (!this.state.multiple) {
             this.files = [];
+            this.attachments = [];
             files = files.length > 0 ? [files[0]] : [];
         }
 
@@ -189,18 +194,17 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.createLabels();
     }
 
-    // TODO: richtige Größe für Size übergeben (Einheit entfernen und auf Byte? erhöhen)
     private createLabels(): void {
         const attachmentLabels = this.attachments.map(
-            (ea) => new Label(
-                null, ea.Filename, this.getFileIcon(ea.ContentType),
-                ea.Filename, `(${AttachmentUtil.getFileSize(5000)})`, ea.Filename, true
+            (a) => new Label(
+                null, a.Filename, this.getFileIcon(a.ContentType), a.Filename,
+                `(${AttachmentUtil.getFileSize(a.FilesizeRaw)})`, a.Filename, true
             )
         );
         const fileLabels = this.files.map(
             (f) => new Label(
-                null, f.name, this.getFileIcon(f.type),
-                f.name, `(${AttachmentUtil.getFileSize(f.size)})`, f.name, true
+                null, f.name, this.getFileIcon(f.type), f.name,
+                `(${AttachmentUtil.getFileSize(f.size)})`, f.name, true
             )
         );
         this.state.labels = [...attachmentLabels, ...fileLabels];
