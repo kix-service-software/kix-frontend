@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent
+    ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent, Attachment
 } from "@kix/core/dist/model";
 import { AttachmentUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
@@ -9,6 +9,9 @@ import { Label } from "@kix/core/dist/browser/components";
 class Component extends FormInputComponent<any, ComponentState> {
 
     private dragCounter: number;
+
+    private files: File[] = [];
+    private attachments: Attachment[] = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -20,6 +23,8 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+        this.files = [];
+        this.attachments = [];
         this.dragCounter = 0;
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
@@ -34,6 +39,15 @@ class Component extends FormInputComponent<any, ComponentState> {
         if (option) {
             this.state.multiple = Boolean(option.value);
         }
+        this.setCurrentValue();
+    }
+
+    public setCurrentValue(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.attachments = this.state.defaultValue.value;
+            this.createLabels();
+        }
+        this.state.count = this.attachments.length + this.files.length;
     }
 
     public async onDestroy(): Promise<void> {
@@ -75,22 +89,24 @@ class Component extends FormInputComponent<any, ComponentState> {
         const mimeTypes = option ? option.value as string[] : null;
 
         if (!this.state.multiple) {
-            this.state.files = [];
+            this.files = [];
             files = files.length > 0 ? [files[0]] : [];
         }
 
         for (const f of files) {
-            if (this.state.files.findIndex((sf) => sf.name === f.name) === -1) {
+            if (!this.files.some((sf) => sf.name === f.name) && !this.attachments.some((a) => a.Filename === f.name)) {
                 const fileError = await AttachmentUtil.checkFile(f, mimeTypes);
                 if (fileError) {
                     fileErrors.push([f, fileError]);
                 } else {
-                    this.state.files.push(f);
+                    this.files.push(f);
                 }
             }
         }
 
-        super.provideValue(this.state.files);
+        this.state.count = this.attachments.length + this.files.length;
+
+        super.provideValue([...this.attachments, ...this.files]);
         this.createLabels();
 
         if (fileErrors.length) {
@@ -148,32 +164,46 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.minimized = !this.state.minimized;
     }
 
-    private getFileIcon(file: File): ObjectIcon {
+    private getFileIcon(mimeType: string): ObjectIcon {
         let fileIcon = null;
-        const idx = file.name.lastIndexOf('.');
+        const idx = mimeType.lastIndexOf('/');
         if (idx >= 0) {
-            const extension = file.name.substring(idx + 1, file.name.length);
+            const extension = mimeType.substring(idx + 1, mimeType.length);
             fileIcon = new ObjectIcon("Filetype", extension);
+        } else if (mimeType) {
+            fileIcon = new ObjectIcon("Filetype", mimeType);
         }
         return fileIcon;
     }
 
-    private getFileSize(file: File): string {
-        return AttachmentUtil.getFileSize(file.size);
-    }
-
     public removeFile(label: Label): void {
-        const fileIndex = this.state.files.findIndex((sf) => sf.name === label.id);
-        if (fileIndex > -1) {
-            this.state.files.splice(fileIndex, 1);
-            this.createLabels();
+        const fileIndex = this.files.findIndex((sf) => sf.name === label.id);
+        if (fileIndex !== -1) {
+            this.files.splice(fileIndex, 1);
+        } else {
+            const attachmentIndex = this.attachments.findIndex((sf) => sf.Filename === label.id);
+            if (attachmentIndex !== -1) {
+                this.attachments.splice(attachmentIndex, 1);
+            }
         }
+        this.createLabels();
     }
 
+    // TODO: richtige Größe für Size übergeben (Einheit entfernen und auf Byte? erhöhen)
     private createLabels(): void {
-        this.state.labels = this.state.files.map(
-            (f) => new Label(null, f.name, this.getFileIcon(f), f.name, `(${this.getFileSize(f)})`, f.name, true)
+        const attachmentLabels = this.attachments.map(
+            (ea) => new Label(
+                null, ea.Filename, this.getFileIcon(ea.ContentType),
+                ea.Filename, `(${AttachmentUtil.getFileSize(5000)})`, ea.Filename, true
+            )
         );
+        const fileLabels = this.files.map(
+            (f) => new Label(
+                null, f.name, this.getFileIcon(f.type),
+                f.name, `(${AttachmentUtil.getFileSize(f.size)})`, f.name, true
+            )
+        );
+        this.state.labels = [...attachmentLabels, ...fileLabels];
     }
 }
 

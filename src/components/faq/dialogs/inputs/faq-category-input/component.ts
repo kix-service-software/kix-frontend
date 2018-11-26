@@ -38,8 +38,13 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+            const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            this.state.currentNodes = node ? [node] : [];
+            super.provideValue(
+                this.state.currentNodes && this.state.currentNodes.length
+                    ? this.state.currentNodes[0].id
+                    : null
+            );
         }
     }
 
@@ -59,9 +64,13 @@ class Component extends FormInputComponent<number[], ComponentState> {
         return nodes;
     }
 
-    public queueChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+    public categoryChanged(nodes: TreeNode[]): void {
+        this.state.currentNodes = nodes && nodes;
+        super.provideValue(
+            this.state.currentNodes && this.state.currentNodes.length
+                ? this.state.currentNodes[0].id
+                : null
+        );
 
     }
 
