@@ -6,7 +6,7 @@
                 <@content>
                     <if(state.escalatedTicketsTable && !state.loadEscalatedTickets)>
                         <div.ticket-filter>
-                            <filter on-filter('filterEscalated')/>
+                            <filter filterCount=state.escalatedFilterCount on-filter('filterEscalated')/>
                         </div>
                         <standard-table standardTable=state.escalatedTicketsTable/>
                     </if>
@@ -20,7 +20,7 @@
                 <@content>
                     <if(state.reminderTicketsTable && !state.loadReminderTickets)>
                         <div.ticket-filter>
-                            <filter on-filter('filterReminder')/>
+                            <filter filterCount=state.reminderFilterCount on-filter('filterReminder')/>
                         </div>
                         <standard-table standardTable=state.reminderTicketsTable/>
                     </if>
@@ -33,7 +33,7 @@
                 <@content>
                     <if(state.newTicketsTable && !state.loadNewTickets)>
                         <div.ticket-filter>
-                            <filter on-filter('filterNew')/>
+                            <filter filterCount=state.newFilterCount on-filter('filterNew')/>
                         </div>
                         <standard-table standardTable=state.newTicketsTable/>
                     </if>
@@ -47,7 +47,7 @@
                 <@content>
                     <if(state.openTicketsTable && !state.loadOpenTickets)>
                         <div.ticket-filter>
-                            <filter on-filter('filterOpen')/>
+                            <filter filterCount=state.openFilterCount on-filter('filterOpen')/>
                         </div>
                         <standard-table standardTable=state.openTicketsTable/>
                     </if>
@@ -61,7 +61,7 @@
                 <@content>
                     <if(state.pendingTicketsTable && !state.loadPendingTickets)>
                         <div.ticket-filter>
-                            <filter on-filter('filterPending')/>
+                            <filter filterCount=state.pendingFilterCount on-filter('filterPending')/>
                         </div>
                         <standard-table standardTable=state.pendingTicketsTable/>
                     </if>

@@ -59,7 +59,8 @@ class Component {
                 await this.state.standardTable.loadRows();
                 this.state.title = this.getTitle();
                 this.state.standardTable.setTableListener(() => {
-                    this.state.title = this.getTitle();
+                    this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                    (this as any).setStateDirty('filterCount');
                 });
             }, 200);
         }

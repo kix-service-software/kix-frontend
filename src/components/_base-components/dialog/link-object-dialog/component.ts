@@ -181,6 +181,10 @@ class LinkDialogComponent {
 
                 table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
                 await table.loadRows();
+                table.setTableListener(() => {
+                    this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                    (this as any).setStateDirty('filterCount');
+                });
 
                 setTimeout(() => {
                     this.state.standardTable = table;

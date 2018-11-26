@@ -42,7 +42,9 @@ class Component {
 
     private async initWidget(contact?: Contact): Promise<void> {
         this.state.contact = contact;
-        this.state.title = `${this.state.widgetConfiguration.title} (${this.state.contact.UserCustomerIDs.length})`;
+        this.state.title = this.state.widgetConfiguration.title
+            + (this.state.contact.UserCustomerIDs && !!this.state.contact.UserCustomerIDs.length ?
+                ` (${this.state.contact.UserCustomerIDs.length})` : '');
         this.setTable();
         this.setActions();
     }
@@ -66,6 +68,11 @@ class Component {
                 KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
                 null, listenerConfiguration, true
             );
+
+            this.state.customerTable.setTableListener(() => {
+                this.state.filterCount = this.state.customerTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
 
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, null, null, ['TicketStats']
@@ -91,11 +98,11 @@ class Component {
         }
     }
 
-    private tableRowClicked(customer: Customer, columnId: string): void {
+    public tableRowClicked(customer: Customer, columnId: string): void {
         CustomerService.getInstance().openCustomer(customer.CustomerID, false);
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.customerTable.setFilterSettings(filterValue);
     }

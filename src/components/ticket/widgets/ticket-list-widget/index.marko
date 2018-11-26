@@ -1,6 +1,7 @@
 <widget instanceId=state.instanceId title=state.title actions=state.actions icon="kix-icon-ticket">
     <@headerFilter>
-        <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Tickets" on-filter('filter')/>
+        <filter filterCount=state.filterCount predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle Tickets" on-filter('filter')/>
     </@headerFilter>
     <@content>
         <if(state.table)>

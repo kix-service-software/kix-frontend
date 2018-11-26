@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState<TableConfiguration> {
         public filterValue: string = '',
         public title: string = '',
         public actions: AbstractAction[] = [],
-        public loading: boolean = false
+        public loading: boolean = false,
+        public filterCount: number = null
     ) {
         super();
     }

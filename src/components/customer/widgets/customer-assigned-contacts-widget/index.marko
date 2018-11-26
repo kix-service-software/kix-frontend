@@ -3,7 +3,7 @@
         <div.assigned-contacts-container>
             <if(state.customer && state.contactTable && !state.loading)>
                 <div.contact-filter>
-                    <filter on-filter('filter')/>
+                    <filter filterCount=state.filterCount on-filter('filter')/>
                 </div>
                 <standard-table standardTable=state.contactTable/>
             </if>

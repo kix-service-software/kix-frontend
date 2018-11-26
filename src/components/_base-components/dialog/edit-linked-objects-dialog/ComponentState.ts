@@ -9,7 +9,8 @@ export class ComponentState {
         public table: StandardTable = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public canDelete: boolean = false,
-        public canSubmit: boolean = false
+        public canSubmit: boolean = false,
+        public filterCount: number = null
     ) { }
 
 }

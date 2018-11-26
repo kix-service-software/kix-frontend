@@ -58,22 +58,21 @@ class Component {
                     const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                     if (cmdbService && context) {
                         const configItem = await context.getObject<ConfigItem>();
-                        await cmdbService.createConfigItemVersion(this.state.formId, Number(context.getObjectId()))
-                            .then(async (versionId) => {
-                                const updatedConfigItem = await context.getObject<ConfigItem>(
-                                    KIXObjectType.CONFIG_ITEM, true,
-                                    [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
-                                );
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                this.showSuccessHint(
-                                    configItem.CurrentVersion
-                                    && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
-                                );
-                                DialogService.getInstance().closeMainDialog();
-                            }).catch((error) => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                this.showError(error);
-                            });
+                        const versionId = await cmdbService.createConfigItemVersion(
+                            this.state.formId, Number(context.getObjectId())
+                        );
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        if (versionId) {
+                            const updatedConfigItem = await context.getObject<ConfigItem>(
+                                KIXObjectType.CONFIG_ITEM, true,
+                                [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
+                            );
+                            this.showSuccessHint(
+                                configItem.CurrentVersion
+                                && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
+                            );
+                            DialogService.getInstance().closeMainDialog();
+                        }
                     }
                 }
             }
