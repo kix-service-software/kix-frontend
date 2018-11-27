@@ -191,6 +191,7 @@ class Component extends FormInputComponent<any, ComponentState> {
                 this.attachments.splice(attachmentIndex, 1);
             }
         }
+        this.state.count = this.attachments.length + this.files.length;
         this.createLabels();
     }
 
