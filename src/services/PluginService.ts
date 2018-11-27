@@ -1,6 +1,6 @@
 import Plugins = require('js-plugins');
 
-import { IModuleFactoryExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { IConfigurationExtension, KIXExtensions } from '@kix/core/dist/extensions';
 import { LoggingService } from '@kix/core/dist/services';
 
 const host = { debug: true };
@@ -53,9 +53,9 @@ export class PluginService {
         });
     }
 
-    public async getModuleFactory(moduleId: string): Promise<IModuleFactoryExtension> {
-        const moduleFactories = await this.getExtensions<IModuleFactoryExtension>(KIXExtensions.MODUL);
-        return moduleFactories.find((mf) => mf.getModuleId() === moduleId);
+    public async getConfigurationExtension(moduleId: string): Promise<IConfigurationExtension> {
+        const configExtensions = await this.getExtensions<IConfigurationExtension>(KIXExtensions.CONFIGURATION);
+        return configExtensions.find((mf) => mf.getModuleId() === moduleId);
     }
 
 }
