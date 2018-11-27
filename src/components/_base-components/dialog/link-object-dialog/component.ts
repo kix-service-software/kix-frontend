@@ -23,6 +23,7 @@ class LinkDialogComponent {
     private preventSelectionLayer: ITablePreventSelectionLayer;
     private resultListenerId: string;
     private linkPartners: Array<[string, KIXObjectType]> = [];
+    private rootObject: KIXObject = null;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,6 +35,7 @@ class LinkDialogComponent {
             : this.state.linkDescriptions;
         this.state.objectType = input.objectType;
         this.resultListenerId = input.resultListenerId;
+        this.rootObject = input.rootObject;
     }
 
     public onDestroy(): void {
@@ -131,7 +133,9 @@ class LinkDialogComponent {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
             const objects = await KIXObjectSearchService.getInstance().executeSearch(
-                this.state.currentLinkableObjectNode.id
+                this.state.currentLinkableObjectNode.id,
+                this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
+                    ? [this.rootObject] : null
             );
 
             await this.prepareResultTable(objects);

@@ -236,7 +236,8 @@ class Component {
             {
                 linkDescriptions,
                 objectType: this.mainObject.KIXObjectType,
-                resultListenerId
+                resultListenerId,
+                rootObject: this.mainObject
             },
             dialogTitle,
             'kix-icon-new-link'
