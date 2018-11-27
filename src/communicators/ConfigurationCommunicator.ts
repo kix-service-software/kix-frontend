@@ -45,8 +45,8 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             .getComponentConfiguration(data.contextId, data.componentId, userId);
 
         if (!configuration) {
-            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.contextId);
-            const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+            const moduleFactory = await PluginService.getInstance().getConfigurationExtension(data.contextId);
+            const moduleDefaultConfiguration = await moduleFactory.getDefaultConfiguration();
 
             await ConfigurationService.getInstance().saveComponentConfiguration(
                 data.contextId, data.componentId, userId, moduleDefaultConfiguration);
@@ -64,8 +64,10 @@ export class ConfigurationCommunicatior extends KIXCommunicator {
             .getComponentConfiguration(data.contextId, data.componentId, user.UserID);
 
         if (!configuration) {
-            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.componentId);
-            const sidebarDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(
+                data.componentId
+            );
+            const sidebarDefaultConfiguration = await configurationExtension.getDefaultConfiguration();
 
             ConfigurationService.getInstance().saveComponentConfiguration(
                 data.contextId, data.componentId, user.UserID, sidebarDefaultConfiguration);

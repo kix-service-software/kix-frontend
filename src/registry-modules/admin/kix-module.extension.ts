@@ -8,7 +8,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
 
     public tags: Array<[string, string]> = [
         ['admin-module-component', 'admin/admin-module-component'],
-        ['admin', 'admin/admin-module']
+        ['admin', 'admin/admin-module'],
+        ['admin-modules-explorer', 'admin/widgets/admin-modules-explorer']
     ];
 
 }
