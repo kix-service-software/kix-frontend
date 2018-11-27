@@ -57,6 +57,9 @@
             "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension",
             "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension",
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "ticket-types": "../../dist/registry-modules/ticket/admin-module.extension"
         }
     }
 }

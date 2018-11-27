@@ -11,7 +11,9 @@ import {
     ArticleCallIncomingAction, ArticleCallOutgoingAction, ArticleCommunicationAction, ArticleEditAction,
     ArticleMaximizeAction, ArticleNewEmailAction, ArticleNewNoteAction, ArticlePrintAction, ArticleTagAction,
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
-    TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition
+    TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
+    TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
+    TicketTypeBrowserFactory
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -34,14 +36,17 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketHistoryLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
 
         StandardTableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         StandardTableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
+        StandardTableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TICKET, TicketBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.ARTICLE, ArticleBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(KIXObjectType.TICKET_TYPE, TicketTypeBrowserFactory.getInstance());
 
         TicketFormService.getInstance();
 
@@ -121,6 +126,10 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-search-action', TicketSearchAction);
 
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
+
+        ActionFactory.getInstance().registerAction('ticket-admin-type-create', TicketTypeCreateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-delete', TicketTypeDeleteAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-import', TicketTypeImportAction);
     }
 
     private registerTicketDialogs(): void {
