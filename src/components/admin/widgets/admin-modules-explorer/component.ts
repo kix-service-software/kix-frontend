@@ -17,9 +17,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        const catgeories = this.state.widgetConfiguration.settings;
+        let catgeories = this.state.widgetConfiguration.settings;
 
-        this.state.nodes = this.prepareCategoryTreeNodes(catgeories);
+        if (catgeories) {
+            catgeories = catgeories.map((c) => new AdminModuleCategory(c));
+            this.state.nodes = this.prepareCategoryTreeNodes(catgeories);
+        }
     }
 
     private prepareCategoryTreeNodes(categories: AdminModuleCategory[]): TreeNode[] {
@@ -39,6 +42,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
+        if (node.id instanceof AdminModule) {
+            const module = node.id as AdminModule;
+            const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+            if (context) {
+                context.setAdminModule(module, node.parent.label);
+            }
+        }
     }
 
     public async filter(textFilterValue?: string): Promise<void> {

@@ -1,1 +1,8 @@
-<div.admin-hint>Sie befinden sich im Administrationsbereich. Bitte wählen Sie ein Modul aus dem Explorer.</div>
+<div.admin-content>
+    <if(state.template)>
+        <${state.template}/>
+    </if>
+    <else>
+        <div.admin-hint>Sie befinden sich im Administrationsbereich. Bitte wählen Sie ein Modul aus dem Explorer.</div>
+    </else>
+</div>
