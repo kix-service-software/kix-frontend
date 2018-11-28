@@ -23,6 +23,10 @@ class TreeComponent {
         this.state.treeParent = (this as any).getEl().parentElement;
     }
 
+    public getNodes(): TreeNode[] {
+        return this.state.tree;
+    }
+
     public nodeToggled(node: TreeNode): void {
         TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         (this as any).emit('nodeToggled', node);

@@ -15,7 +15,9 @@ import {
 } from '@kix/core/dist/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '@kix/core/dist/browser/general-catalog';
 import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
-import { TextModuleService, TextModuleBrowserFactory } from '@kix/core/dist/browser/text-modules';
+import {
+    TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
+} from '@kix/core/dist/browser/text-modules';
 import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '@kix/core/dist/browser/sla';
 
@@ -45,9 +47,11 @@ class Component extends AbstractMarkoComponent {
         );
 
         StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
+        StandardTableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);

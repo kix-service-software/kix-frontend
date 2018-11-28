@@ -4,7 +4,8 @@
         <@content>
             <filter on-filter('filter') key="admin-modules-explorer-filter"/>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode filterValue=state.filterValue on-nodeClicked('activeNodeChanged')/>
+                <tree tree=state.nodes key="admin-modules-tree" activeNode=state.activeNode filterValue=state.filterValue
+                    on-nodeClicked('activeNodeChanged')/>
             </if>
         </@content>
     </widget>

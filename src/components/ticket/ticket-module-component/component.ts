@@ -13,7 +13,11 @@ import {
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
-    TicketTypeBrowserFactory
+    TicketTypeBrowserFactory,
+    TicketTypeDetailsContext,
+    TicketTypeTableDeleteAction,
+    TicketTypeEditAction,
+    TicketTypeDuplicateAction
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -69,6 +73,13 @@ class Component extends AbstractMarkoComponent {
             true, 'ticket-details', ['tickets'], TicketDetailsContext
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+
+        const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
+            TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'ticket-type-details', ['tickettypes'], TicketTypeDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
 
         const newTicketContext = new ContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
@@ -128,8 +139,11 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
 
         ActionFactory.getInstance().registerAction('ticket-admin-type-create', TicketTypeCreateAction);
-        ActionFactory.getInstance().registerAction('ticket-admin-type-delete', TicketTypeDeleteAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-table-delete', TicketTypeTableDeleteAction);
         ActionFactory.getInstance().registerAction('ticket-admin-type-import', TicketTypeImportAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-edit', TicketTypeEditAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-duplication', TicketTypeDuplicateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-type-delete', TicketTypeDeleteAction);
     }
 
     private registerTicketDialogs(): void {

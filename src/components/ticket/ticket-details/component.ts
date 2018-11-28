@@ -5,7 +5,6 @@ import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { EventService } from '@kix/core/dist/browser/event';
 
 export class Component {
 
