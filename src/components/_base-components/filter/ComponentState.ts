@@ -10,7 +10,8 @@ export class ComponentState {
         public currentFilter: TreeNode = null,
         public icon: string | ObjectIcon = 'kix-icon-filter',
         public placeholder: string = 'Filtern in Liste',
-        public filterCountString: string = null
+        public filterCountString: string = null,
+        public showFilterCount: boolean = true
     ) { }
 
 }

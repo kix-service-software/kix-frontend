@@ -25,6 +25,7 @@ class Component {
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : 'Filtern in Liste';
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
+        this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
         this.setFilterCount(input.filterCount);
     }
 
