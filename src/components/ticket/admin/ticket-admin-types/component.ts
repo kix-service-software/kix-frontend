@@ -4,7 +4,8 @@ import {
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, TicketType
+    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, TicketType, SortUtil, TicketTypeProperty,
+    DataType, SortOrder
 } from '@kix/core/dist/model';
 import { AdminContext } from '@kix/core/dist/browser/admin';
 
@@ -44,8 +45,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareTable(ticketTypes: TicketType[]): Promise<void> {
         const tableConfiguration = new TableConfiguration(null, null, null, null, true);
         const table = StandardTableFactoryService.getInstance().createStandardTable(
-            KIXObjectType.TICKET_TYPE, tableConfiguration
+            KIXObjectType.TICKET_TYPE, tableConfiguration, null, null, true
         );
+
+        ticketTypes = SortUtil.sortObjects(ticketTypes, TicketTypeProperty.NAME, DataType.STRING, SortOrder.DOWN);
+
         table.layerConfiguration.contentLayer.setPreloadedObjects(ticketTypes);
         table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
@@ -61,7 +65,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private prepareActions(): void {
         this.state.actions = ActionFactory.getInstance().generateActions(
             [
-                'ticket-admin-type-create', 'ticket-admin-type-delete',
+                'ticket-admin-type-create', 'ticket-admin-type-table-delete',
                 'ticket-admin-type-import', 'csv-export-action'
             ], null
         );

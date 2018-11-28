@@ -23,6 +23,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             catgeories = catgeories.map((c) => new AdminModuleCategory(c));
             this.state.nodes = this.prepareCategoryTreeNodes(catgeories);
         }
+
+        this.setActiveNode(context.adminModule);
+    }
+
+    private setActiveNode(adminModule: AdminModule): void {
+        if (adminModule) {
+            this.activeNodeChanged(this.getActiveNode(adminModule));
+        }
+    }
+
+    private getActiveNode(adminModule: AdminModule, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let activeNode = nodes.find((n) => n.id.id === adminModule.id);
+        if (!activeNode) {
+            for (let index = 0; index < nodes.length; index++) {
+                activeNode = this.getActiveNode(adminModule, nodes[index].children);
+                if (activeNode) {
+                    nodes[index].expanded = true;
+                    break;
+                }
+            }
+        }
+        return activeNode;
     }
 
     private prepareCategoryTreeNodes(categories: AdminModuleCategory[]): TreeNode[] {
@@ -43,10 +65,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
         if (node.id instanceof AdminModule) {
-            const module = node.id as AdminModule;
+            const adminModule = node.id as AdminModule;
             const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
             if (context) {
-                context.setAdminModule(module, node.parent.label);
+                context.setAdminModule(adminModule, node.parent ? node.parent.label : '');
             }
         }
     }

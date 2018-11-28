@@ -6,7 +6,7 @@
 			"import { AbstractMarkoComponent } from '@kix/core/dist/browser';",
 			"import { ComponentState } from './ComponentState';",
 			"",
-			"class Component extends AbstractMarkoComponent {",
+			"class Component extends AbstractMarkoComponent<ComponentState> {",
 			"",
 			"\tpublic onCreate(): void {",
 			"\t\tthis.state = new ComponentState();",
