@@ -14,5 +14,7 @@
         <span.path4/>
         <span.path5/>
     </span>
-    <span.filter-count>${state.filterCountString}</span>
+    <if(state.showFilterCount)>
+        <span.filter-count>${state.filterCountString}</span>
+    </if>
 </span>
