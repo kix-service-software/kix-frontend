@@ -47,6 +47,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.ticketType) {
             this.state.error = `Kein Tickettyp mit ID ${context.getObjectId()} verfügbar.`;
+        } else {
+            await this.prepareTitle();
         }
 
         this.configuration = context.getConfiguration();
@@ -54,7 +56,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.tabWidgets = context.getLaneTabs();
         this.state.contentWidgets = context.getContent(true);
 
-        await this.prepareTitle();
         this.prepareActions();
 
         setTimeout(() => {
