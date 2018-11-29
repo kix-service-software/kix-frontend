@@ -48,7 +48,8 @@
             "config-item-details-configuration": "../../dist/registry-modules/cmdb/config-item-details-configuration.extension",
             "cmdb-configuration": "../../dist/registry-modules/cmdb/cmdb-configuration.extension",
             "edit-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/edit-config-item-dialog-configuration.extension",
-            "release-configuration": "../../dist/registry-modules/release/configuration.extension"
+            "release-configuration": "../../dist/registry-modules/release/configuration.extension",
+            "new-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-type-dialog-configuration.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",

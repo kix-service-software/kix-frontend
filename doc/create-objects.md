@@ -8,9 +8,9 @@ Am Beispiel FAQ Artikel
 - "kix-module"-Extension in der package.json registrieren
 
 ```javascript
-"kix:module": {
+"kix:configuration": {
     ...,
-    "new-faq-article-dialog-context": "../../dist/registry-modules/faq/new-faq-article-dialog-context.extension",
+    "new-faq-article-dialog-configuration": "../../dist/registry-modules/faq/new-faq-article-dialog-configuration.extension",
 }
 ```
 - Context und ContextConfiguration implementieren (`@kix/core/browser/faq/context`)
