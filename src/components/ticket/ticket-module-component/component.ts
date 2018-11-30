@@ -15,7 +15,7 @@ import {
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
     TicketTypeBrowserFactory, TicketTypeDetailsContext, TicketTypeTableDeleteAction,
     TicketTypeEditAction, TicketTypeDuplicateAction,
-    NewTicketTypeDialogContext, TicketTypeService, TicketTypeFormService
+    NewTicketTypeDialogContext, TicketTypeService, TicketTypeFormService, EditTicketTypeDialogContext
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -78,13 +78,6 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
-        const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
-            TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-type-details', ['tickettypes'], TicketTypeDetailsContext
-        );
-        ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
-
         const newTicketContext = new ContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext
@@ -117,12 +110,26 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerAdminContexts(): void {
+        const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
+            TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'ticket-type-details', ['tickettypes'], TicketTypeDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
+
         const newTicketTypeContext = new ContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketDialogContext
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
+
+        const editTicketTypeContext = new ContextDescriptor(
+            EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext
+        );
+        ContextService.getInstance().registerContext(editTicketTypeContext);
     }
 
 
@@ -206,6 +213,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-ticket-type-dialog',
+            new WidgetConfiguration(
+                'edit-ticket-type-dialog', 'Typ bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.TICKET_TYPE,
+            ContextMode.EDIT_ADMIN
         ));
 
     }
