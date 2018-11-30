@@ -43,8 +43,7 @@
                     <div.faq-attachments>
                         <span>Anlagen:</span>
                         <for(attachment in state.faqArticle.Attachments)>
-                            <file-entry icon=component.getIcon(attachment) fileName=attachment.Filename fileSize=attachment.Filesize
-                                on-fileClicked('download', attachment)/>
+                            <file-entry attachment=attachment on-fileClicked('download', attachment)/>
                         </for>
                     </div>
                 </div>

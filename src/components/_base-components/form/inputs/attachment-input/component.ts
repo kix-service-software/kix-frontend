@@ -192,6 +192,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             }
         }
         this.state.count = this.attachments.length + this.files.length;
+        super.provideValue([...this.attachments, ...this.files]);
         this.createLabels();
     }
 
@@ -199,7 +200,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         const attachmentLabels = this.attachments.map(
             (a) => new Label(
                 null, a.Filename, this.getFileIcon(a.ContentType), a.Filename,
-                `(${AttachmentUtil.getFileSize(a.FilesizeRaw)})`, a.Filename, true
+                `(${typeof a.FilesizeRaw !== 'undefined' ? AttachmentUtil.getFileSize(a.FilesizeRaw) : a.Filesize})`,
+                a.Filename, true
             )
         );
         const fileLabels = this.files.map(
