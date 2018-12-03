@@ -1,17 +1,13 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, AbstractMarkoComponent, ServiceRegistry, KIXObjectService, ContextService
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ToastContent,
-    KIXObjectType,
-    ContextMode,
-    TicketTypeProperty,
+    ToastContent, KIXObjectType,
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
-import { TicketTypeService, TicketTypeDetailsContext } from "@kix/core/dist/browser/ticket";
-import { RoutingConfiguration, RoutingService } from "@kix/core/dist/browser/router";
+import { TicketTypeDetailsContext } from "@kix/core/dist/browser/ticket";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -24,11 +20,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async cancel(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
+        FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
+    }
+
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     public async submit(): Promise<void> {
@@ -56,10 +53,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showError(error);
                 });
-            }
-
-            if (formInstance) {
-                formInstance.reset();
             }
         }, 300);
     }
