@@ -1,6 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, ServiceRegistry
+    OverlayService, FormService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
