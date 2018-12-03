@@ -8,11 +8,15 @@ import {
     DataType, SortOrder
 } from '@kix/core/dist/model';
 import { AdminContext } from '@kix/core/dist/browser/admin';
+import { EventService, IEventListener } from '@kix/core/dist/browser/event';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventListener {
+
+    public eventSubscriberId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.eventSubscriberId = 'ticket-admin-types';
     }
 
     public async onMount(): Promise<void> {
@@ -33,6 +37,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const ticketTypes = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
         await this.prepareTitle(ticketTypes.length);
         await this.prepareTable(ticketTypes);
+
+        EventService.getInstance().subscribe('TICKET_TYPE_LIST_UPDATED', this);
     }
 
     private async prepareTitle(count: number): Promise<void> {
@@ -60,6 +66,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe('TICKET_TYPE_LIST_UPDATED', this);
     }
 
     private prepareActions(): void {
@@ -82,6 +89,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             await this.state.table.setFilterSettings(textFilterValue, filter);
             this.state.filterCount = this.state.table.getTableRows(true).length;
             (this as any).setStateDirty('filterCount');
+        }
+    }
+
+    public async eventPublished(data: any, eventId: string): Promise<void> {
+        if (eventId === 'TICKET_TYPE_LIST_UPDATED') {
+            const ticketTypes = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
+            await this.prepareTitle(ticketTypes.length);
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(ticketTypes);
+            await this.state.table.loadRows();
+            this.state.table.listenerConfiguration.selectionListener.updateSelections(
+                this.state.table.getTableRows(true)
+            );
         }
     }
 }

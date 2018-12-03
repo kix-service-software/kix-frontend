@@ -1,0 +1,11 @@
+<p>${input.text}</p>
+<div.confirm-overlay-buttons>
+    <button.form-blank-cancel-button type="button" on-click("closeOverlay", false) title=component.getButtonLabel()>
+        <span.kix-icon-close/>
+        ${component.getButtonLabel()}
+    </button>
+    <button.form-blank-submit-button type="button" on-click("closeOverlay", true) title=component.getButtonLabel(true)>
+        <span.kix-icon-check/>
+        ${component.getButtonLabel(true)}
+    </button>
+</div>

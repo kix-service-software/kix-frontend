@@ -48,14 +48,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await KIXObjectService.updateObjectByForm(
                     KIXObjectType.TICKET_TYPE, this.state.formId, context.getObjectId()
                 ).then((typeId) => {
+                    context.getObject(KIXObjectType.TICKET_TYPE, true);
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
-                    const routingConfiguration = new RoutingConfiguration(
-                        null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
-                        ContextMode.DETAILS, TicketTypeProperty.ID, true
-                    );
-                    RoutingService.getInstance().routeToContext(routingConfiguration, typeId);
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showError(error);
@@ -71,7 +67,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('kix-icon-check', 'Typ wurde erfolgreich angelegt.')
+            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
