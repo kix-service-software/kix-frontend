@@ -201,6 +201,8 @@ class OverlayComponent {
                 return 'info-overlay' + (large ? ' large' : '');
             case OverlayType.WARNING:
                 return 'warning-overlay';
+            case OverlayType.CONFIRM:
+                return 'confirm-overlay';
             case OverlayType.SUCCESS_TOAST:
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
