@@ -6,11 +6,9 @@ import { FAQArticle } from "@kix/core/dist/model/kix/faq";
 class Component {
 
     private state: ComponentState;
-    private contextListenerId: string = null;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.contextListenerId = IdService.generateDateBasedId('faq-history-widget');
     }
 
     public onInput(input: any): void {
@@ -21,10 +19,10 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener(this.contextListenerId, {
+        context.registerListener('faq-history-widget', {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, faqArticle);
+                    this.initWidget(faqArticle);
                 }
             },
             sidebarToggled: () => { return; },
@@ -33,13 +31,12 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<FAQArticle>());
+        await this.initWidget(await context.getObject<FAQArticle>());
 
     }
 
-    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
+    private async initWidget(faqArticle?: FAQArticle): Promise<void> {
         this.state.loading = true;
-
         this.state.faqArticle = faqArticle;
 
         if (this.state.faqArticle) {
@@ -63,10 +60,23 @@ class Component {
     private prepareTable(): void {
         const table = StandardTableFactoryService.getInstance().createStandardTable(KIXObjectType.FAQ_ARTICLE_HISTORY);
 
-        table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.faqArticle.History);
-        table.loadRows();
+        if (table) {
+            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.faqArticle.History);
+            table.loadRows();
 
-        this.state.table = table;
+            this.state.standardTable = table;
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
+        }
+    }
+
+    public filter(filterValue: string): void {
+        this.state.filterValue = filterValue;
+        if (this.state.standardTable) {
+            this.state.standardTable.setFilterSettings(filterValue);
+        }
     }
 
 }
