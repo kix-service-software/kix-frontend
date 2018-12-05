@@ -31,7 +31,7 @@ class FieldContainerComponent {
             this.setFieldsEmpty(field, true);
         } else {
             const formInstance = await FormService.getInstance().getFormInstance(this.formId);
-            formInstance.removeFormField(field, this.state.fields);
+            formInstance.removeFormField(field);
         }
         (this as any).setStateDirty('fields');
     }
@@ -52,7 +52,7 @@ class FieldContainerComponent {
             this.setFieldsEmpty(field, false);
         } else {
             const formInstance = await FormService.getInstance().getFormInstance(this.formId);
-            formInstance.cloneFormField(field, this.state.fields);
+            formInstance.addFormField(field);
         }
         (this as any).setStateDirty('fields');
     }

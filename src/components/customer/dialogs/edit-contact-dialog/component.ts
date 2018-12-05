@@ -21,13 +21,13 @@ class Component {
         this.state.loading = false;
     }
 
-    public async cancel(): Promise<void> {
-        this.reset();
-        DialogService.getInstance().closeMainDialog();
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
-    private async reset(): Promise<void> {
+    public async cancel(): Promise<void> {
         FormService.getInstance().deleteFormInstance(this.state.formId);
+        DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {

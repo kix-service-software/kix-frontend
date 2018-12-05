@@ -24,11 +24,12 @@ class Component {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
     public async cancel(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
+        FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
     }
 
