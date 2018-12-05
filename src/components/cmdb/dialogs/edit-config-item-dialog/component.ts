@@ -21,7 +21,12 @@ class Component {
     }
 
     public async onDestroy(): Promise<void> {
-        return;
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
+    public async cancel(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        DialogService.getInstance().closeMainDialog();
     }
 
     public async setFormId(): Promise<void> {
@@ -36,11 +41,6 @@ class Component {
             this.state.formId = formId;
             DialogService.getInstance().setMainDialogLoading(false);
         }, 10);
-    }
-
-    public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-        DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {

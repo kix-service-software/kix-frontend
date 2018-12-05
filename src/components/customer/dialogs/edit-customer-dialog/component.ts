@@ -23,7 +23,12 @@ class Component {
         this.state.loading = false;
     }
 
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
     public async cancel(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
     }
 

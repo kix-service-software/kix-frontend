@@ -19,13 +19,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
     }
 
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
     public async cancel(): Promise<void> {
         FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
-    }
-
-    public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     public async submit(): Promise<void> {
