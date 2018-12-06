@@ -39,8 +39,8 @@ class Component {
     public onMount(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener(this.state.chartId, {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
+            explorerBarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; }
@@ -87,6 +87,7 @@ class Component {
             this.chart = null;
         }
         window.removeEventListener("resize", this.createChart.bind(this), false);
+        window.removeEventListener("beforeprint", this.beforePrint.bind(this));
     }
 
 }
