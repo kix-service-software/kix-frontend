@@ -194,6 +194,10 @@ class WidgetComponent implements IEventListener {
         ) ? false : true;
     }
 
+    public isSidebarWidget(): boolean {
+        return this.state.widgetType === WidgetType.SIDEBAR;
+    }
+
 }
 
 module.exports = WidgetComponent;
