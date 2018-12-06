@@ -9,7 +9,7 @@
                 <@content>
                     <if(component.isComponentContent())>
                         <div>
-                            <include(component.getTemplate(), state.content.getComponentData())/>
+                            <include(component.getTemplate(), state.content.getComponentData()) on-closeOverlay("closeOverlay")/>
                         </div>
                     </if>
                     <else>

@@ -12,7 +12,8 @@ export class ComponentState {
         public noSearch: boolean = true,
         public actions: IAction[] = [],
         public loading: boolean = false,
-        public tableId: string = null
+        public tableId: string = null,
+        public filterCount: number = null
     ) { }
 
 }

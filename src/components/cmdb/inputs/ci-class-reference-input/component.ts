@@ -27,10 +27,9 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
-            const configItem = this.state.currentNode ? this.configItems.find(
-                (cu) => cu.ConfigItemID === this.state.currentNode.id
-            ) : null;
+            const configItem = this.state.defaultValue.value;
+            this.state.currentNode = this.createTreeNode(configItem);
+            this.state.nodes = [this.state.currentNode];
             super.provideValue(configItem);
         }
     }
@@ -53,12 +52,16 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
             if (searchValue && searchValue !== '') {
                 this.state.nodes = this.configItems.map(
-                    (c) => new TreeNode(c, c.Name, 'kix-icon-ci')
+                    (c) => this.createTreeNode(c)
                 );
             }
         }
 
         return this.state.nodes;
+    }
+
+    private createTreeNode(configItem: ConfigItem): TreeNode {
+        return new TreeNode(configItem, configItem.Name, 'kix-icon-ci');
     }
 
 }

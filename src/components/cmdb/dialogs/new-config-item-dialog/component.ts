@@ -33,9 +33,19 @@ class Component {
         );
     }
 
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
+    public async cancel(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        DialogService.getInstance().closeMainDialog();
+    }
+
     public async classChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true);
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        FormService.getInstance().deleteFormInstance(this.state.formId);
         this.state.formId = null;
         let formId;
         if (this.state.currentClassNode) {
@@ -45,28 +55,10 @@ class Component {
             formId = null;
         }
 
-        if (formId) {
-            await this.reset();
-        }
-
         setTimeout(() => {
             this.state.formId = formId;
             DialogService.getInstance().setMainDialogLoading(false);
         }, 100);
-    }
-
-    public async cancel(): Promise<void> {
-        if (this.state.formId) {
-            await this.reset();
-        }
-        DialogService.getInstance().closeMainDialog();
-    }
-
-    private async reset(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
     }
 
     public async submit(): Promise<void> {

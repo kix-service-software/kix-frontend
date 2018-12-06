@@ -48,8 +48,8 @@ export class ContextCommunicator extends KIXCommunicator {
         let configuration = await ConfigurationService.getInstance().getModuleConfiguration(data.contextId, userId);
 
         if (!configuration) {
-            const moduleFactory = await PluginService.getInstance().getModuleFactory(data.contextId);
-            const moduleDefaultConfiguration = moduleFactory.getDefaultConfiguration();
+            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
+            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration();
             if (moduleDefaultConfiguration) {
                 ConfigurationService.getInstance().saveModuleConfiguration(
                     data.contextId, userId, moduleDefaultConfiguration);

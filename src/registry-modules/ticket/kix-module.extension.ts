@@ -40,7 +40,13 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue'],
         ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
         ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
-        ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search']
+        ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
+        ['ticket-admin-types', 'ticket/admin/ticket-admin-types'],
+        ['ticket-type-details', 'ticket/admin/ticket-type-details'],
+        ['ticket-type-info-widget', 'ticket/admin/widgets/ticket-type-info-widget'],
+        ['ticket-type-assigned-textmodules', 'ticket/admin/widgets/ticket-type-assigned-textmodules'],
+        ['new-ticket-type-dialog', 'ticket/admin/dialogs/new-ticket-type-dialog'],
+        ['edit-ticket-type-dialog', 'ticket/admin/dialogs/edit-ticket-type-dialog']
     ];
 
 }

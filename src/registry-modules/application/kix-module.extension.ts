@@ -17,6 +17,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['link-object-dialog', '_base-components/dialog/link-object-dialog'],
         ['edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog'],
         ['toast', '_base-components/overlay/toast'],
+        ['confirm-overlay', '_base-components/overlay/confirm-overlay'],
         ['form-default-input', '_base-components/form/inputs/form-default-input'],
         ['form-list', '_base-components/form/inputs/form-list'],
         ['rich-text-input', '_base-components/form/inputs/rich-text-input'],

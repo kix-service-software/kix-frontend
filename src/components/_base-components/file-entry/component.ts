@@ -16,7 +16,8 @@ class ArticleAttachmentComponent {
     public onInput(input: any): void {
         if (input.attachment) {
             this.state.fileName = input.attachment.Filename;
-            this.state.fileSize = input.attachment.Filesize;
+            this.state.fileSize = typeof input.attachment.FilesizeRaw !== 'undefined' ?
+                AttachmentUtil.getFileSize(input.attachment.FilesizeRaw) : input.attachment.Filesize;
             this.state.icon = this.getIcon(input.attachment);
             this.content = input.attachment.Content;
             this.contentType = input.attachment.ContentType;

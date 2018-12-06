@@ -1,6 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, ServiceRegistry
+    OverlayService, FormService, ServiceRegistry
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -20,21 +20,17 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.loading = true;
-        await this.reset();
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
         this.state.loading = false;
     }
 
-    public async cancel(): Promise<void> {
-        await this.reset();
-        DialogService.getInstance().closeMainDialog();
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
-    private async reset(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
+    public async cancel(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        DialogService.getInstance().closeMainDialog();
     }
 
     public async submit(): Promise<void> {

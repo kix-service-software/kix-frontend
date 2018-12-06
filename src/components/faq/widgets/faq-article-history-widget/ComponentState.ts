@@ -7,8 +7,10 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public faqArticle: FAQArticle = null,
         public actions: AbstractAction[] = [],
-        public table: StandardTable = null,
-        public loading: boolean = true
+        public standardTable: StandardTable = null,
+        public loading: boolean = true,
+        public filterValue: string = '',
+        public filterCount: number = null
     ) {
         super();
     }

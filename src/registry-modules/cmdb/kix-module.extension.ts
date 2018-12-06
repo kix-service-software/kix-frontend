@@ -11,6 +11,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['cmdb-module', 'cmdb/cmdb-module'],
         ['config-item-info', 'cmdb/config-item-info'],
         ['new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog'],
+        ['edit-config-item-dialog', 'cmdb/dialogs/edit-config-item-dialog'],
         ['search-config-item-dialog', 'cmdb/dialogs/search-config-item-dialog'],
         ['config-item-details', 'cmdb/config-item-details'],
         ['config-item-version-details', 'cmdb/config-item-version-details'],

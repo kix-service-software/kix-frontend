@@ -173,6 +173,10 @@ class Component {
         table.listenerConfiguration.selectionListener.addListener(
             this.objectSelectionChanged.bind(this)
         );
+        table.setTableListener(() => {
+            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
+            (this as any).setStateDirty('filterCount');
+        });
 
         setTimeout(() => {
             this.state.table = table;
@@ -232,7 +236,8 @@ class Component {
             {
                 linkDescriptions,
                 objectType: this.mainObject.KIXObjectType,
-                resultListenerId
+                resultListenerId,
+                rootObject: this.mainObject
             },
             dialogTitle,
             'kix-icon-new-link'
@@ -344,18 +349,9 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        const service
-            = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
-        let ok = true;
-        for (const linkId of linkIdsToDelete) {
-            await service.deleteObject(KIXObjectType.LINK_OBJECT, linkId).catch((error) => {
-                this.showError('Verknüpfung nicht entfernbar (' + error + ')');
-                ok = false;
-                return;
-            });
-        }
-        return ok;
+        const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
+        return !failIds || !!!failIds.length;
     }
 
     private showSuccessHint(): void {

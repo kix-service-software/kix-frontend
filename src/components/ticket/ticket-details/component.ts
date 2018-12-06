@@ -5,7 +5,6 @@ import { ContextService } from '@kix/core/dist/browser/context/';
 import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
 import { IdService } from '@kix/core/dist/browser/IdService';
 import { ComponentsService } from '@kix/core/dist/browser/components';
-import { EventService } from '@kix/core/dist/browser/event';
 
 export class Component {
 
@@ -82,7 +81,7 @@ export class Component {
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, [this.state.ticket]
+                config.generalActions, this.state.ticket
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }

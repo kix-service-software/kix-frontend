@@ -11,7 +11,7 @@ import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
     NewContactDialogContext, ContactSearchContext, ContactSearchAction, ContactCreateAction,
     ContactEditAction, ContactCreateCustomerAction, ContactPrintAction, ContactCreateTicketAction,
-    ContactCreateCIAction, ContactSearchDefinition
+    ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService
 } from '@kix/core/dist/browser/contact';
 
 class Component extends AbstractMarkoComponent {
@@ -21,10 +21,11 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        ServiceRegistry.getInstance().registerServiceInstance(ContactService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ContactFormService.getInstance());
 
         StandardTableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());
-        ServiceRegistry.getInstance().registerServiceInstance(ContactService.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         KIXObjectCache.registerCacheHandler(new ContactCacheHandler());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
@@ -47,6 +48,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newContactContext);
 
+        const editContactContext = new ContextDescriptor(
+            EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
+            false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext
+        );
+        ContextService.getInstance().registerContext(editContactContext);
+
         const searchContactContext = new ContextDescriptor(
             ContactSearchContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext
@@ -62,6 +69,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONTACT,
             ContextMode.CREATE
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-contact-dialog',
+            new WidgetConfiguration(
+                'edit-contact-dialog', 'Ansprechpartner Bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.CONTACT,
+            ContextMode.EDIT
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(

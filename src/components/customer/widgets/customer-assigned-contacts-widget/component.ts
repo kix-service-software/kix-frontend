@@ -72,8 +72,8 @@ class Component {
             );
 
             this.state.contactTable.setTableListener(() => {
-                const count = this.state.contactTable.getTableRows(true).length;
-                this.state.title = "Zugeordnete Ansprechpartner " + (count > 0 ? ' (' + count + ')' : '');
+                this.state.filterCount = this.state.contactTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
             });
 
             const loadingOptions = new KIXObjectLoadingOptions(
@@ -85,6 +85,8 @@ class Component {
             );
 
             this.state.contactTable.layerConfiguration.contentLayer.setPreloadedObjects(contacts);
+            this.state.title = "Zugeordnete Ansprechpartner "
+                + (contacts && !!contacts.length ? ` (${contacts.length})` : '');
             this.state.contactTable.loadRows();
 
             this.state.loading = false;

@@ -4,7 +4,7 @@
         <div.ticket-history-content>
             <if(state.ticket)>
                 <div.history-filter>
-                    <filter on-filter('filter')/>
+                    <filter filterCount=state.filterCount on-filter('filter')/>
                 </div>
                 <div.history-container>
                     <if(state.standardTable)>

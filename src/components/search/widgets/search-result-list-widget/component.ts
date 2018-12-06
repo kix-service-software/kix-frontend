@@ -120,6 +120,11 @@ class Component implements IKIXObjectSearchListener {
             setTimeout(() => {
                 this.state.tableId = 'Search-Table-' + cache.objectType;
                 this.state.resultTable = table;
+
+                this.state.resultTable.setTableListener(() => {
+                    this.state.filterCount = this.state.resultTable.getTableRows(true).length || 0;
+                    (this as any).setStateDirty('filterCount');
+                });
                 this.state.loading = false;
             }, 500);
         } else {

@@ -12,6 +12,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['faq-details', 'faq/faq-details'],
         ['faq-vote-selector', 'faq/faq-vote-selector'],
         ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
+        ['edit-faq-article-dialog', 'faq/dialogs/edit-faq-article-dialog'],
         ['search-faq-article-dialog', 'faq/dialogs/search-faq-article-dialog'],
         ['faq-category-input', 'faq/dialogs/inputs/faq-category-input'],
         ['faq-visibility-input', 'faq/dialogs/inputs/faq-visibility-input'],

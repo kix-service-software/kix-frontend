@@ -2,7 +2,6 @@ import { Ticket, KIXObjectType, Context, ComponentContent, ToastContent, Overlay
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
-    ArticleTableFilterLayer,
     ArticleTableLabelLayer,
     ArticleTableClickListener,
     ArticleTableToggleListener,
@@ -11,7 +10,8 @@ import {
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration, WidgetService, OverlayService
+    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration,
+    WidgetService, OverlayService, TableFilterLayer
 } from "@kix/core/dist/browser";
 import { IdService } from "@kix/core/dist/browser/IdService";
 import { IEventListener, EventService } from "@kix/core/dist/browser/event";
@@ -84,7 +84,7 @@ export class Component implements IEventListener {
             const layerConfiguration = new TableLayerConfiguration(
                 new ArticleTableContentLayer(this.state.ticket),
                 new ArticleTableLabelLayer(),
-                [new ArticleTableFilterLayer()],
+                [new TableFilterLayer()],
                 [new TableSortLayer()],
                 new ArticleTableToggleLayer(new ArticleTableToggleListener(), true)
             );
@@ -100,6 +100,10 @@ export class Component implements IEventListener {
                 IdService.generateDateBasedId(),
                 tableConfiguration, layerConfiguration, listenerConfiguration
             );
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
         }
     }
 
