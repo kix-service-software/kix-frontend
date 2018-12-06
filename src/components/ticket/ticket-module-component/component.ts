@@ -14,8 +14,8 @@ import {
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
     TicketTypeBrowserFactory, TicketTypeDetailsContext, TicketTypeTableDeleteAction,
-    TicketTypeEditAction, TicketTypeDuplicateAction,
-    NewTicketTypeDialogContext, TicketTypeService, TicketTypeFormService, EditTicketTypeDialogContext
+    TicketTypeEditAction, TicketTypeDuplicateAction, NewTicketTypeDialogContext, TicketTypeService,
+    TicketTypeFormService, EditTicketTypeDialogContext, TicketTypeEditTextmodulesAction
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -165,6 +165,9 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-admin-type-edit', TicketTypeEditAction);
         ActionFactory.getInstance().registerAction('ticket-admin-type-duplication', TicketTypeDuplicateAction);
         ActionFactory.getInstance().registerAction('ticket-admin-type-delete', TicketTypeDeleteAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-admin-type-textmodules-edit', TicketTypeEditTextmodulesAction
+        );
     }
 
     private registerTicketDialogs(): void {
