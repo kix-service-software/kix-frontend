@@ -4,8 +4,8 @@ import {
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, TicketType, SortUtil, TicketTypeProperty,
-    DataType, SortOrder
+    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, TicketState, SortUtil, TicketStateProperty,
+    DataType, SortOrder, TicketStateType
 } from '@kix/core/dist/model';
 import { AdminContext } from '@kix/core/dist/browser/admin';
 import { EventService, IEventListener } from '@kix/core/dist/browser/event';
@@ -16,49 +16,58 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.eventSubscriberId = 'ticket-admin-types';
+        this.eventSubscriberId = 'ticket-admin-states';
     }
 
     public async onMount(): Promise<void> {
         this.state.predefinedTableFilter = [
             new KIXObjectPropertyFilter(
-                'Gültig', [new TableFilterCriteria(TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 1, false)]
+                'Gültig', [new TableFilterCriteria(TicketStateProperty.VALID_ID, SearchOperator.EQUALS, 1, false)]
             ),
             new KIXObjectPropertyFilter(
-                'Ungültig', [new TableFilterCriteria(TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 2, false)]
+                'Ungültig', [new TableFilterCriteria(TicketStateProperty.VALID_ID, SearchOperator.EQUALS, 2, false)]
             ),
             new KIXObjectPropertyFilter(
                 'Temporär ungültig', [new TableFilterCriteria(
-                    TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 3, false
+                    TicketStateProperty.VALID_ID, SearchOperator.EQUALS, 3, false
                 )]
             )
         ];
 
+        const stateTypes = await KIXObjectService.loadObjects<TicketStateType>(KIXObjectType.TICKET_STATE_TYPE);
+        if (stateTypes && !!stateTypes.length) {
+            stateTypes.forEach((st) => {
+                this.state.predefinedTableFilter.push(new KIXObjectPropertyFilter(st.Name, [
+                    new TableFilterCriteria(TicketStateProperty.TYPE_NAME, SearchOperator.EQUALS, st.Name, false)
+                ]));
+            });
+        }
+
         this.prepareActions();
 
-        const ticketTypes = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
-        await this.prepareTitle(ticketTypes.length);
-        await this.prepareTable(ticketTypes);
+        const ticketState = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
+        await this.prepareTitle(ticketState.length);
+        await this.prepareTable(ticketState);
 
-        EventService.getInstance().subscribe('TICKET_TYPE_LIST_UPDATED', this);
+        EventService.getInstance().subscribe('TICKET_STATE_LIST_UPDATED', this);
     }
 
     private async prepareTitle(count: number): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_TYPE);
-        const typeName = labelProvider.getObjectName(true);
-        this.state.title = `${context.categoryName}: ${typeName} (${count})`;
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_STATE);
+        const stateName = labelProvider.getObjectName(true);
+        this.state.title = `${context.categoryName}: ${stateName} (${count})`;
     }
 
-    private async prepareTable(ticketTypes: TicketType[]): Promise<void> {
+    private async prepareTable(ticketState: TicketState[]): Promise<void> {
         const tableConfiguration = new TableConfiguration(null, null, null, null, true);
         const table = StandardTableFactoryService.getInstance().createStandardTable(
-            KIXObjectType.TICKET_TYPE, tableConfiguration, null, null, true
+            KIXObjectType.TICKET_STATE, tableConfiguration, null, null, true
         );
 
-        ticketTypes = SortUtil.sortObjects(ticketTypes, TicketTypeProperty.NAME, DataType.STRING, SortOrder.DOWN);
+        ticketState = SortUtil.sortObjects(ticketState, TicketStateProperty.NAME, DataType.STRING, SortOrder.DOWN);
 
-        table.layerConfiguration.contentLayer.setPreloadedObjects(ticketTypes);
+        table.layerConfiguration.contentLayer.setPreloadedObjects(ticketState);
         table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
@@ -68,14 +77,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        EventService.getInstance().unsubscribe('TICKET_TYPE_LIST_UPDATED', this);
+        EventService.getInstance().unsubscribe('TICKET_STATE_LIST_UPDATED', this);
     }
 
     private prepareActions(): void {
         this.state.actions = ActionFactory.getInstance().generateActions(
             [
-                'ticket-admin-type-create', 'ticket-admin-type-table-delete',
-                'ticket-admin-type-import', 'csv-export-action'
+                'ticket-admin-state-create', 'ticket-admin-state-table-delete',
+                'ticket-admin-state-import', 'csv-export-action'
             ], null
         );
 
@@ -95,10 +104,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async eventPublished(data: any, eventId: string): Promise<void> {
-        if (eventId === 'TICKET_TYPE_LIST_UPDATED') {
-            const ticketTypes = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
-            await this.prepareTitle(ticketTypes.length);
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(ticketTypes);
+        if (eventId === 'TICKET_STATE_LIST_UPDATED') {
+            const ticketStates = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
+            await this.prepareTitle(ticketStates.length);
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(ticketStates);
             await this.state.table.loadRows();
             this.state.table.listenerConfiguration.selectionListener.updateSelections(
                 this.state.table.getTableRows(true)

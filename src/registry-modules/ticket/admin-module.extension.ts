@@ -8,8 +8,11 @@ class Extension implements IAdminModuleExtension {
                 null, 'base-data', 'Stammdaten', null, [], [
                     new AdminModule(
                         null, 'ticket-types', 'Typen', null, KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
+                    ),
+                    new AdminModule(
+                        null, 'ticket-states', 'Status', null, KIXObjectType.TICKET_STATE, 'ticket-admin-states'
                     )
-                ])
+                ]),
         ];
     }
 
