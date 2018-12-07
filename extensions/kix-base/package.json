@@ -29,6 +29,7 @@
             "ticket-type-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-type-details-configuration.extension",
             "new-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-type-dialog-configuration.extension",
             "edit-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-type-dialog-configuration.extension",
+            "ticket-priority-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-priority-details-configuration.extension",
             "customer-configuration": "../../dist/registry-modules/customer/customer-configuration.extension",
             "customer-details-configuration": "../../dist/registry-modules/customer/customer-details-configuration.extension",
             "new-customer-dialog-configuration": "../../dist/registry-modules/customer/new-customer-dialog-configuration.extension",

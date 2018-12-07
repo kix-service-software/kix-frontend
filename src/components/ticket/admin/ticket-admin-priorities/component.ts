@@ -21,15 +21,17 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public async onMount(): Promise<void> {
         this.state.predefinedTableFilter = [
-            new KIXObjectPropertyFilter(
-                'Gültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 1, false)]
+            new KIXObjectPropertyFilter('Gültig', [
+                new TableFilterCriteria(TicketPriorityProperty.VALID_ID, SearchOperator.EQUALS, 1, false
+                )]
             ),
-            new KIXObjectPropertyFilter(
-                'Ungültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 2, false)]
+            new KIXObjectPropertyFilter('Ungültig', [
+                new TableFilterCriteria(TicketPriorityProperty.VALID_ID, SearchOperator.EQUALS, 2, false
+                )]
             ),
-            new KIXObjectPropertyFilter(
-                'Temporär ungültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 3, false)]
-            )
+            new KIXObjectPropertyFilter('Temporär ungültig', [
+                new TableFilterCriteria(TicketPriorityProperty.VALID_ID, SearchOperator.EQUALS, 3, false)
+            ])
         ];
 
         this.prepareActions();
