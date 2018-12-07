@@ -19,7 +19,10 @@ import {
     EditTicketTypeDialogContext, TicketTypeEditTextmodulesAction, TicketStateService,
     TicketStateLabelProvider, TicketStateTableFactory, TicketStateBrowserFactory, TicketStateCreateAction,
     TicketStateTableDeleteAction, TicketStateImportAction, TicketPriorityCreateAction, TicketTypeDuplicateAction,
-    TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService, TicketTypeService, TicketPriorityService
+    TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService, TicketTypeService, TicketPriorityService,
+    TicketPriorityDetailsContext,
+    TicketPriorityEditAction,
+    TicketPriorityDuplicateAction
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -149,6 +152,13 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext
         );
         ContextService.getInstance().registerContext(editTicketTypeContext);
+
+        const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
+            TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'ticket-priority-details', ['priorities'], TicketPriorityDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
     }
 
     private registerTicketActions(): void {
@@ -195,6 +205,8 @@ class Component extends AbstractMarkoComponent {
         );
         ActionFactory.getInstance().registerAction('ticket-admin-priority-import', TicketPriorityImportAction);
         ActionFactory.getInstance().registerAction('ticket-admin-priority-delete', TicketPriorityDeleteAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-priority-edit', TicketPriorityEditAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-priority-duplication', TicketPriorityDuplicateAction);
 
         ActionFactory.getInstance().registerAction('ticket-admin-state-create', TicketStateCreateAction);
         ActionFactory.getInstance().registerAction('ticket-admin-state-table-delete', TicketStateTableDeleteAction);

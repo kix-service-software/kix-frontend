@@ -1,0 +1,35 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.ticketPriority)>
+            <div.ticket-type-information>
+                <div.information-list>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="Name" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="ICON" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="ValidID" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="Comment" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="CreateTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="CreateBy" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="ChangeTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.ticketPriority property="ChangeBy" labelProvider=state.labelProvider/>
+                    </div>
+                </div>
+            </div>
+        </if>
+    </@content>
+</widget>
