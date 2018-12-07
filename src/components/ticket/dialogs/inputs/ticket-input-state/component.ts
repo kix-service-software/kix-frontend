@@ -21,7 +21,7 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
 
         const states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE, null);
         this.state.nodes = states.map((t) =>
-            new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.STATE_ID, t.ID))
+            new TreeNode(t.ID, t.Name, new ObjectIcon('TicketState', t.ID))
         );
         this.setCurrentNode();
         this.showPendingTime();

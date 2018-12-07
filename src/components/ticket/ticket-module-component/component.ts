@@ -18,7 +18,9 @@ import {
     TicketPriorityTableFactory, TicketPriorityLabelProvider, TicketPriorityBrowserFactory,
     EditTicketTypeDialogContext, TicketTypeEditTextmodulesAction, TicketStateService,
     TicketStateLabelProvider, TicketStateTableFactory, TicketStateBrowserFactory, TicketStateCreateAction,
-    TicketStateTableDeleteAction, TicketStateImportAction, TicketPriorityCreateAction, TicketTypeDuplicateAction,
+    TicketStateTableDeleteAction, TicketStateImportAction, TicketStateDetailsContext, TicketStateEditTextmodulesAction,
+    TicketStateEditAction, TicketStateDuplicateAction, TicketStateDeleteAction,
+    TicketPriorityCreateAction, TicketTypeDuplicateAction,
     TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService, TicketTypeService, TicketPriorityService,
     TicketPriorityDetailsContext,
     TicketPriorityEditAction,
@@ -153,6 +155,13 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(editTicketTypeContext);
 
+        const ticketStateDetailsContextDescriptor = new ContextDescriptor(
+            TicketStateDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'ticket-state-details', ['ticketstates'], TicketStateDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
+
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.MAIN, ContextMode.DETAILS,
@@ -211,6 +220,12 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-admin-state-create', TicketStateCreateAction);
         ActionFactory.getInstance().registerAction('ticket-admin-state-table-delete', TicketStateTableDeleteAction);
         ActionFactory.getInstance().registerAction('ticket-admin-state-import', TicketStateImportAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-state-edit', TicketStateEditAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-state-duplication', TicketStateDuplicateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-state-delete', TicketStateDeleteAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-admin-state-textmodules-edit', TicketStateEditTextmodulesAction
+        );
     }
 
     private registerTicketDialogs(): void {
