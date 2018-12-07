@@ -18,14 +18,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<TicketPriorityDetailsContext>(
             TicketPriorityDetailsContext.CONTEXT_ID
         );
-        context.registerListener('ticket-type-info-widget', {
+        context.registerListener('ticket-priority-info-widget', {
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            objectChanged: async (ticketId: string, ticketType: TicketPriority, type: KIXObjectType) => {
-                if (type === KIXObjectType.TICKET_TYPE) {
-                    this.initWidget(ticketType);
+            objectChanged: async (ticketId: string, ticketPriority: TicketPriority, type: KIXObjectType) => {
+                if (type === KIXObjectType.TICKET_PRIORITY) {
+                    this.initWidget(ticketPriority);
                 }
             }
         });
@@ -34,8 +34,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initWidget(await context.getObject<TicketPriority>());
     }
 
-    private async initWidget(ticketType: TicketPriority): Promise<void> {
-        this.state.ticketPriority = ticketType;
+    private async initWidget(ticketPriority: TicketPriority): Promise<void> {
+        this.state.ticketPriority = ticketPriority;
         this.setActions();
     }
 

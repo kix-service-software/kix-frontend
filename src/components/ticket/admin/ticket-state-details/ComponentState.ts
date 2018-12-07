@@ -3,7 +3,7 @@ import { AbstractAction, ConfiguredWidget } from "@kix/core/dist/model";
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = 'ticket-type-details',
+        public instanceId: string = 'ticket-state-details',
         public lanes: ConfiguredWidget[] = [],
         public tabWidgets: ConfiguredWidget[] = [],
         public contentWidgets: ConfiguredWidget[] = [],

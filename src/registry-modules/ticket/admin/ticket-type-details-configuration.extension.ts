@@ -10,7 +10,7 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ticketDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
+        const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
             'ticket-type-info-widget', 'Typ Informationen', ['ticket-admin-type-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
@@ -23,7 +23,7 @@ export class Extension implements IConfigurationExtension {
         return new TicketTypeDetailsContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
             ['ticket-type-assigned-textmodules'], [textmodulesWidget],
-            ['ticket-type-details-widget'], [ticketDetailsWidget],
+            ['ticket-type-details-widget'], [ticketTypesDetailsWidget],
             [], [],
             ['ticket-admin-type-create'],
             ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']
