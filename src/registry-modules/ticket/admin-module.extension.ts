@@ -10,6 +10,10 @@ class Extension implements IAdminModuleExtension {
                         null, 'ticket-types', 'Typen', null, KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
                     ),
                     new AdminModule(
+                        null, 'ticket-priorities', 'Prioritäten', null,
+                        KIXObjectType.TICKET_PRIORITY, 'ticket-admin-priorities'
+                    ),
+                    new AdminModule(
                         null, 'ticket-states', 'Status', null, KIXObjectType.TICKET_STATE, 'ticket-admin-states'
                     )
                 ]),
