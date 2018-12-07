@@ -271,11 +271,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public getRowHeight(): string {
-        return this.state.standardTable.tableConfiguration.rowHeight + 'em';
+        return this.state.standardTable.tableConfiguration.rowHeight + 'rem';
     }
 
     public getHeaderHeight(): string {
-        return this.state.standardTable.tableConfiguration.headerHeight + 'em';
+        return this.state.standardTable.tableConfiguration.headerHeight + 'rem';
     }
 
     public getSpacerHeight(): string {

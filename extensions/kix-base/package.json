@@ -62,7 +62,7 @@
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
         },
         "kix:admin-module": {
-            "ticket-types": "../../dist/registry-modules/ticket/admin-module.extension"
+            "ticket-admin": "../../dist/registry-modules/ticket/admin-module.extension"
         }
     }
 }
