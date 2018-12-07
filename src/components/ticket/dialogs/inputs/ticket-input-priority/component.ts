@@ -23,7 +23,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         );
 
         this.state.nodes = priorities.map((p) =>
-            new TreeNode(p.ID, p.Name, new ObjectIcon(TicketProperty.PRIORITY_ID, p.ID))
+            new TreeNode(p.ID, p.Name, new ObjectIcon('Priority', p.ID))
         );
         this.setCurrentNode();
     }
