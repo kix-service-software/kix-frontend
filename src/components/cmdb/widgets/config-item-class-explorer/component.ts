@@ -24,7 +24,7 @@ export class Component {
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['ConfigItemStats']);
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions
+            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );
         this.state.nodes = this.prepareTreeNodes(ciClasses);
 

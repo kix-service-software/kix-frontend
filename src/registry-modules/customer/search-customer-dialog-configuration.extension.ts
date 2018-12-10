@@ -5,6 +5,7 @@ import {
 } from '@kix/core/dist/model';
 import { CustomerSearchContext, CustomerSearchContextConfiguration } from '@kix/core/dist/browser/customer';
 import { ConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -39,8 +40,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.CUSTOMER,
                 FormContext.SEARCH,
                 null,
-                true,
-                [CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
+                [SearchProperty.FULLTEXT, CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

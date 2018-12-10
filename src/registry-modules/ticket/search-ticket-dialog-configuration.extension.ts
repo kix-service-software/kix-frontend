@@ -5,6 +5,7 @@ import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '@kix/core/dist/model';
 import { ConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -37,8 +38,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.TICKET,
                 FormContext.SEARCH,
                 null,
-                true,
-                [TicketProperty.TITLE, TicketProperty.QUEUE_ID]
+                [SearchProperty.FULLTEXT, TicketProperty.TITLE, TicketProperty.QUEUE_ID]
             );
             await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
         }

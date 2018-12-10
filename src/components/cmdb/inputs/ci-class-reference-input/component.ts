@@ -61,7 +61,7 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
     }
 
     private createTreeNode(configItem: ConfigItem): TreeNode {
-        return new TreeNode(configItem, configItem.Name, 'kix-icon-ci');
+        return new TreeNode(configItem.ConfigItemID, configItem.Name, 'kix-icon-ci');
     }
 
 }

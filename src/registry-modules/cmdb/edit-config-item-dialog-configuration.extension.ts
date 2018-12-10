@@ -29,7 +29,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
             const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}_EDIT`;
             const existingForm = configurationService.getModuleConfiguration(formId, null);
             if (!existingForm) {
-                const form = ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId, true);
+                const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId, true);
                 await configurationService.saveModuleConfiguration(formId, null, form);
             }
             configurationService.registerFormId(formId);

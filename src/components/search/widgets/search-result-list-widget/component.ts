@@ -103,11 +103,14 @@ class Component implements IKIXObjectSearchListener {
             table.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
 
             if (isSearchMainObject) {
-                const objectProperties = cache.criteria
-                    .map((c) => c.property)
-                    .filter((p) => p !== SearchProperty.FULLTEXT);
-                const objectService = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(objectType);
-                const columns = objectService.getTableColumnConfiguration(objectProperties);
+                const parameter: Array<[string, any]> = [];
+                for (const c of cache.criteria) {
+                    if (c.property !== SearchProperty.FULLTEXT) {
+                        parameter.push([c.property, c.value]);
+                    }
+                }
+                const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(objectType);
+                const columns = await searchDefinition.getTableColumnConfiguration(parameter);
                 table.setColumns(columns);
             }
 

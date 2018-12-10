@@ -25,7 +25,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
             )]);
 
             const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
+                KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
             );
 
             let hasIcon: boolean = false;
@@ -34,7 +34,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
                 hasIcon = iconOption.value;
             }
 
-            this.state.nodes = items.map((item) => new TreeNode(item, item.Name, hasIcon
+            this.state.nodes = items.map((item) => new TreeNode(item.ItemID, item.Name, hasIcon
                 ? new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                 : null));
 
@@ -47,7 +47,8 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
+            const item = this.state.defaultValue.value as GeneralCatalogItem;
+            this.state.currentNode = this.state.nodes.find((n) => item.ItemID === n.id);
             super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
         }
     }

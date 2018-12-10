@@ -6,6 +6,7 @@ import {
 import { FAQArticleSearchContext, FAQArticleSearchContextConfiguration } from '@kix/core/dist/browser/faq';
 import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
 import { ConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -40,8 +41,8 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.FAQ_ARTICLE,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
+                    SearchProperty.FULLTEXT,
                     FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID
                 ]
             );

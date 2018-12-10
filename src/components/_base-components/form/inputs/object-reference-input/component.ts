@@ -1,5 +1,4 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
 import {
     FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions, KIXObject
@@ -53,7 +52,7 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
 
             const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
             this.objects = await KIXObjectService.loadObjects<KIXObject>(
-                objectType, null, loadingOptions
+                objectType, null, loadingOptions, null, false
             );
 
             if (searchValue && searchValue !== '') {

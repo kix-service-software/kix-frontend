@@ -47,7 +47,7 @@ class Component extends FormInputComponent<Contact, ComponentState> {
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
         this.contacts = await KIXObjectService.loadObjects<Contact>(
-            KIXObjectType.CONTACT, null, loadingOptions
+            KIXObjectType.CONTACT, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
