@@ -37,13 +37,13 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Gültigkeit", TicketTypeProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                "Legen Sie fest, ob der Typ „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
                 null, new FormFieldValue(1)
             ));
 
             const group = new FormGroup('Typdaten', fields);
 
-            const form = new Form(formId, 'Typ hinzufügen', [group], KIXObjectType.TICKET_TYPE, true, FormContext.EDIT);
+            const form = new Form(formId, 'Typ bearbeiten', [group], KIXObjectType.TICKET_TYPE, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET_TYPE, formId);

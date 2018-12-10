@@ -39,14 +39,14 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Gültigkeit", TicketPriorityProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                "Legen Sie fest, ob die Priorität „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
                 null, new FormFieldValue(1)
             ));
 
             const group = new FormGroup('Prioritätdaten', fields);
 
             const form = new Form(
-                formId, 'Priorität hinzufügen', [group], KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT
+                formId, 'Priorität bearbeiten', [group], KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
