@@ -25,11 +25,14 @@ import {
     TicketPriorityDetailsContext,
     TicketPriorityEditAction,
     TicketPriorityDuplicateAction,
-    NewTicketPriorityDialogContext
+    NewTicketPriorityDialogContext,
+    EditTicketPriorityDialogContext,
+    TicketPriorityFormService
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
+    TicketPriorityCacheHandler
 } from "@kix/core/dist/model";
 
 class Component extends AbstractMarkoComponent {
@@ -40,15 +43,18 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.getInstance().registerServiceInstance(TicketService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketFormService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(TicketTypeService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(TicketPriorityService.getInstance());
+
+        ServiceRegistry.getInstance().registerServiceInstance(TicketFormService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(TicketTypeFormService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(TicketPriorityFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
         KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());
         KIXObjectCache.registerCacheHandler(new TicketStateCacheHandler());
+        KIXObjectCache.registerCacheHandler(new TicketPriorityCacheHandler());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
@@ -176,6 +182,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext
         );
         ContextService.getInstance().registerContext(newTicketPriorityContext);
+
+        const editTicketPriorityContext = new ContextDescriptor(
+            EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext
+        );
+        ContextService.getInstance().registerContext(editTicketPriorityContext);
     }
 
     private registerTicketActions(): void {
@@ -301,6 +314,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.TICKET_PRIORITY,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-ticket-priority-dialog',
+            new WidgetConfiguration(
+                'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.TICKET_PRIORITY,
+            ContextMode.EDIT_ADMIN
         ));
 
     }
