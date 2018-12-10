@@ -36,7 +36,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         this.prepareActions();
 
-        const priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
+        const priorities = await KIXObjectService.loadObjects<TicketPriority>(
+            KIXObjectType.TICKET_PRIORITY, null, null, null, false
+        );
         await this.prepareTitle(priorities.length);
         await this.prepareTable(priorities);
 
