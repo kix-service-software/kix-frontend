@@ -24,7 +24,8 @@ import {
     TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService, TicketTypeService, TicketPriorityService,
     TicketPriorityDetailsContext,
     TicketPriorityEditAction,
-    TicketPriorityDuplicateAction
+    TicketPriorityDuplicateAction,
+    NewTicketPriorityDialogContext
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -168,6 +169,13 @@ class Component extends AbstractMarkoComponent {
             true, 'ticket-priority-details', ['priorities'], TicketPriorityDetailsContext
         );
         ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
+
+        const newTicketPriorityContext = new ContextDescriptor(
+            NewTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext
+        );
+        ContextService.getInstance().registerContext(newTicketPriorityContext);
     }
 
     private registerTicketActions(): void {
@@ -283,6 +291,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-ticket-priority-dialog',
+            new WidgetConfiguration(
+                'new-ticket-priority-dialog', 'Priorität hinzufügen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.TICKET_PRIORITY,
+            ContextMode.CREATE_ADMIN
         ));
 
     }
