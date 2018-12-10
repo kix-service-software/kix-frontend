@@ -53,7 +53,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-state-assigned-textmodules', 'ticket/admin/widgets/ticket-state-assigned-textmodules'],
         ['ticket-admin-priorities', 'ticket/admin/ticket-admin-priorities'],
         ['ticket-priority-details', 'ticket/admin/ticket-priority-details'],
-        ['ticket-priority-info-widget', 'ticket/admin/widgets/ticket-priority-info-widget']
+        ['ticket-priority-info-widget', 'ticket/admin/widgets/ticket-priority-info-widget'],
+        ['new-ticket-priority-dialog', 'ticket/admin/dialogs/new-ticket-priority-dialog']
     ];
 
 }

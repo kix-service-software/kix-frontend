@@ -1,16 +1,16 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, AbstractMarkoComponent, ServiceRegistry, KIXObjectService
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     ToastContent,
     KIXObjectType,
     ContextMode,
-    TicketTypeProperty,
+    TicketPriorityProperty,
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
-import { TicketTypeService, TicketTypeDetailsContext } from "@kix/core/dist/browser/ticket";
+import { TicketPriorityDetailsContext } from "@kix/core/dist/browser/ticket";
 import { RoutingConfiguration, RoutingService } from "@kix/core/dist/browser/router";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -42,17 +42,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "Typ wird angelegt");
-                await KIXObjectService.createObjectByForm(KIXObjectType.TICKET_TYPE, this.state.formId)
-                    .then((typeId) => {
+                DialogService.getInstance().setMainDialogLoading(true, "Priorität wird angelegt");
+                await KIXObjectService.createObjectByForm(KIXObjectType.TICKET_PRIORITY, this.state.formId)
+                    .then((priorityId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showSuccessHint();
                         DialogService.getInstance().closeMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
-                            null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
-                            ContextMode.DETAILS, TicketTypeProperty.ID, true
+                            null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                            ContextMode.DETAILS, TicketPriorityProperty.ID, true
                         );
-                        RoutingService.getInstance().routeToContext(routingConfiguration, typeId);
+                        RoutingService.getInstance().routeToContext(routingConfiguration, priorityId);
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         this.showError(error);
@@ -68,7 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public showSuccessHint(): void {
         const content = new ComponentContent(
             'toast',
-            new ToastContent('kix-icon-check', 'Typ wurde erfolgreich angelegt.')
+            new ToastContent('kix-icon-check', 'Priorität wurde erfolgreich angelegt.')
         );
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
