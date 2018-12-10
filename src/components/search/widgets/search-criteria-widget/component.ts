@@ -49,40 +49,31 @@ class Component implements IKIXObjectSearchListener {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = `Gewählte Suchkriterien: ${labelProvider.getObjectName(true)}`;
             const displayCriteria: Array<[string, string, Label[]]> = [];
-            if (cache.isFulltext && cache.fulltextValue) {
-                const label = new Label(
-                    null, cache.fulltextValue, null, cache.fulltextValue, null, cache.fulltextValue
-                );
-                displayCriteria.push([
-                    "Volltext", SearchOperatorUtil.getText(SearchOperator.CONTAINS), [label]
-                ]);
-            } else {
-                for (const criteria of cache.criteria) {
-                    const labels: Label[] = [];
-                    if (Array.isArray(criteria.value)) {
-                        for (const v of criteria.value) {
-                            const value = await labelProvider.getPropertyValueDisplayText(criteria.property, v);
-                            const icons = await labelProvider.getIcons(null, criteria.property, v);
-                            labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
-                        }
-                    } else if (criteria.value instanceof KIXObject) {
-                        labels.push(new Label(
-                            null, criteria.property, null, criteria.value.toString(),
-                            null, criteria.value.toString(), false
-                        ));
-                    } else {
-                        const value = await labelProvider.getPropertyValueDisplayText(
-                            criteria.property, criteria.value
-                        );
-                        const icons = await labelProvider.getIcons(null, criteria.property, criteria.value);
+            for (const criteria of cache.criteria) {
+                const labels: Label[] = [];
+                if (Array.isArray(criteria.value)) {
+                    for (const v of criteria.value) {
+                        const value = await labelProvider.getPropertyValueDisplayText(criteria.property, v);
+                        const icons = await labelProvider.getIcons(null, criteria.property, v);
                         labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                     }
-
-                    const displayProperty = await labelProvider.getPropertyText(criteria.property);
-                    displayCriteria.push([
-                        displayProperty, SearchOperatorUtil.getText(criteria.operator), labels
-                    ]);
+                } else if (criteria.value instanceof KIXObject) {
+                    labels.push(new Label(
+                        null, criteria.property, null, criteria.value.toString(),
+                        null, criteria.value.toString(), false
+                    ));
+                } else {
+                    const value = await labelProvider.getPropertyValueDisplayText(
+                        criteria.property, criteria.value
+                    );
+                    const icons = await labelProvider.getIcons(null, criteria.property, criteria.value);
+                    labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                 }
+
+                const displayProperty = await labelProvider.getPropertyText(criteria.property);
+                displayCriteria.push([
+                    displayProperty, SearchOperatorUtil.getText(criteria.operator), labels
+                ]);
             }
             setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
         } else {

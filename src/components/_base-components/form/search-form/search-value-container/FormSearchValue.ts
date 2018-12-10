@@ -1,5 +1,5 @@
 import {
-    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty
+    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
 } from "@kix/core/dist/browser";
 import {
     TreeNode, FilterCriteria, FilterDataType,
@@ -13,6 +13,7 @@ export class FormSearchValue {
     public isMultiselect: boolean = false;
     public isDate: boolean = false;
     public isDateTime: boolean = false;
+    public isAutocomplete: boolean = false;
 
     public nodes: TreeNode[] = [];
     public currentValueNodes: TreeNode[] = [];
@@ -21,16 +22,23 @@ export class FormSearchValue {
     private date: string;
     private time: string = '';
 
+    private searchParameter: Array<[string, any]>;
+
+    public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
+
     public constructor(
-        public objectType: KIXObjectType = null,
+        public objectType: KIXObjectType,
+        public searchDefinition: SearchDefinition,
         public id: string = IdService.generateDateBasedId('searchValue'),
         public removable: boolean = true,
         public operationNodes: TreeNode[] = [],
         public currentPropertyNode: TreeNode = null,
         public currentOperationNode: TreeNode = null
-    ) { }
+    ) {
+        this.autoCompleteCallback = this.doAutocompleteSearch.bind(this);
+    }
 
-    public async setPropertyNode(propertyNode: TreeNode): Promise<void> {
+    public async setPropertyNode(propertyNode: TreeNode, parameter: Array<[string, any]>): Promise<void> {
         this.currentPropertyNode = propertyNode;
         this.nodes = [];
         this.currentValueNodes = [];
@@ -44,8 +52,8 @@ export class FormSearchValue {
             if (this.currentPropertyNode.id === SearchProperty.FULLTEXT) {
                 operations = [SearchOperator.CONTAINS];
             } else {
-                operations = KIXObjectSearchService.getInstance().getSearchOperations(
-                    this.objectType, propertyNode.id
+                operations = await KIXObjectSearchService.getInstance().getSearchOperations(
+                    this.objectType, propertyNode.id, parameter
                 );
             }
 
@@ -54,20 +62,30 @@ export class FormSearchValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            const inputType = KIXObjectSearchService.getInstance().getSearchInputType(
-                this.objectType, this.currentPropertyNode.id
+            const inputType = await KIXObjectSearchService.getInstance().getSearchInputType(
+                this.objectType, this.currentPropertyNode.id, parameter
             );
 
-            this.isDropdown = inputType === InputFieldTypes.DROPDOWN;
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
 
+            this.isDropdown = inputType === InputFieldTypes.DROPDOWN
+                || inputType === InputFieldTypes.CI_REFERENCE
+                || inputType === InputFieldTypes.OBJECT_REFERENCE;
+
+            this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE
+                || inputType === InputFieldTypes.CI_REFERENCE;
+
             if (this.isDropdown) {
                 this.nodes = await KIXObjectSearchService.getInstance().getTreeNodes(
-                    this.objectType, this.currentPropertyNode.id
+                    this.objectType, this.currentPropertyNode.id, parameter
                 );
             }
         }
+    }
+
+    public setSearchParameter(parameter: Array<[string, any]>): void {
+        this.searchParameter = parameter;
     }
 
     public setOperationNode(operationNode?: TreeNode, operator?: SearchOperator): void {
@@ -138,6 +156,12 @@ export class FormSearchValue {
         }
 
         return new FilterCriteria(property, operator, filterDataType, FilterType.AND, value);
+    }
+
+    public doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
+        return this.searchDefinition.searchValues(
+            this.currentPropertyNode.id, this.searchParameter, searchValue, limit
+        );
     }
 
 }

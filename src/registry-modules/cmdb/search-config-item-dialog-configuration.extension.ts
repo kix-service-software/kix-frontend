@@ -5,6 +5,7 @@ import {
 } from '@kix/core/dist/model';
 import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '@kix/core/dist/browser/cmdb';
 import { ConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -39,9 +40,9 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.CONFIG_ITEM,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
-                    ConfigItemProperty.CLASS_ID, ConfigItemProperty.NUMBER
+                    SearchProperty.FULLTEXT, ConfigItemProperty.CLASS_ID,
+                    ConfigItemProperty.NAME, ConfigItemProperty.NUMBER
                 ]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);

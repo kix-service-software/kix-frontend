@@ -43,8 +43,8 @@ export class Component implements IKIXObjectSearchListener {
         this.state.nodes = null;
     }
 
-    public searchFinished(): void {
-        this.prepareTree();
+    public async searchFinished(): Promise<void> {
+        await this.prepareTree();
         this.activeNodeChanged(this.state.nodes[0]);
     }
 
@@ -52,8 +52,8 @@ export class Component implements IKIXObjectSearchListener {
         return;
     }
 
-    private prepareTree(): void {
-        this.rootCategory = KIXObjectSearchService.getInstance().getSearchResultCategories();
+    private async prepareTree(): Promise<void> {
+        this.rootCategory = await KIXObjectSearchService.getInstance().getSearchResultCategories();
         this.state.nodes = this.rootCategory ?
             this.prepareTreeNodes([this.rootCategory], true) : [];
     }

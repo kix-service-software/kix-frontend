@@ -12,14 +12,10 @@ class WidgetComponent implements IEventListener {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-    }
-
-    public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.explorer = input.explorer;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
-        this.state.isLoading = typeof input.isLoading !== 'undefined' ? input.isLoading : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;
         this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'

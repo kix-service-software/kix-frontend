@@ -5,6 +5,7 @@ import {
 } from '@kix/core/dist/model';
 import { ContactSearchContext, ContactSearchContextConfiguration } from '@kix/core/dist/browser/contact';
 import { ConfigurationService } from '@kix/core/dist/services';
+import { SearchProperty } from '@kix/core/dist/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -39,8 +40,8 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.CONTACT,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
+                    SearchProperty.FULLTEXT,
                     ContactProperty.USER_FIRST_NAME, ContactProperty.USER_LAST_NAME,
                     ContactProperty.USER_EMAIL, ContactProperty.USER_LOGIN
                 ]

@@ -52,7 +52,7 @@ class FieldContainerComponent {
             this.setFieldsEmpty(field, false);
         } else {
             const formInstance = await FormService.getInstance().getFormInstance(this.formId);
-            formInstance.addFormField(field);
+            await formInstance.addFormField(field);
         }
         (this as any).setStateDirty('fields');
     }

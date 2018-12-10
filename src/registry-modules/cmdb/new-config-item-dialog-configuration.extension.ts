@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
             const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
             const existingForm = configurationService.getModuleConfiguration(formId, null);
             if (!existingForm) {
-                const form = ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId);
+                const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId);
                 await configurationService.saveModuleConfiguration(formId, null, form);
             }
             configurationService.registerFormId(formId);

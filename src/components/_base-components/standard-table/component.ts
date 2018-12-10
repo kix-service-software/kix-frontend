@@ -16,33 +16,30 @@ class StandardTableComponent<T extends KIXObject<T>> {
         this.state = new ComponentState<T>();
     }
 
-    public onInput(input: StandardTableInput<T>): void {
-        this.state.standardTable = input.standardTable;
-        if (this.state.standardTable) {
-            this.state.tableId = this.state.standardTable.tableId;
-
-            this.state.standardTable.setTableListener((scrollToTop: boolean = false) => {
+    public async onInput(input: StandardTableInput<T>): Promise<void> {
+        const table = input.standardTable;
+        if (table) {
+            this.state.tableId = table.tableId;
+            table.setTableListener((scrollToTop: boolean = false) => {
                 (this as any).setStateDirty();
             });
 
-            if (this.state.standardTable.layerConfiguration.toggleLayer) {
-                this.state.standardTable.layerConfiguration.toggleLayer.registerToggleListener({
+            if (table.layerConfiguration.toggleLayer) {
+                table.layerConfiguration.toggleLayer.registerToggleListener({
                     rowToggled: async (row: TableRow) => {
-                        await this.state.standardTable.loadRows();
+                        await table.loadRows();
                         this.scrollToObject(row.object.ObjectId);
                     }
                 });
             }
+            this.columns = await table.getColumns();
         }
+        this.state.standardTable = table;
     }
 
     public async onMount(): Promise<void> {
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
-
-        this.columns = await this.state.standardTable.getColumns();
-
-        this.state.loading = false;
 
         setTimeout(() => {
             this.setRowWidth();
@@ -319,8 +316,11 @@ class StandardTableComponent<T extends KIXObject<T>> {
     }
 
     public getColumn(value: TableValue): TableColumn {
-        const column = this.columns.find((c) => c.id === value.columnId);
-        return column;
+        if (this.columns) {
+            const column = this.columns.find((c) => c.id === value.columnId);
+            return column;
+        }
+        return null;
     }
 
     public calculateToggleContentMinHeight(index: number): string {

@@ -6,44 +6,33 @@ import { FormService } from '@kix/core/dist/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, ServiceRegistry,
     IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
-    TableRowHeight,
-    IKIXObjectService,
-    StandardTable,
-    LabelService,
-    SearchProperty
+    TableRowHeight, IKIXObjectService, StandardTable, SearchProperty
 } from '@kix/core/dist/browser';
 import { ComponentState } from './ComponentState';
 
 class Component implements ISearchFormListener {
 
     private state: ComponentState;
+    private formId: string;
+
     public listenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
         this.listenerId = IdService.generateDateBasedId('search-form-');
+        WidgetService.getInstance().setWidgetType('search-form-group', WidgetType.GROUP);
     }
 
     public onInput(input: any) {
-        this.state.formId = input.formId;
+        this.formId = input.formId;
         this.state.objectType = input.objectType;
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('search-form-group', WidgetType.GROUP);
-
         this.state.table = this.createTable();
 
-        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
-            let defaultProperties = formInstance.form.defaultSearchProperties;
-
-            if (formInstance.form.fulltextSearch) {
-                defaultProperties = [SearchProperty.FULLTEXT, ...defaultProperties];
-            }
-
-            this.state.defaultProperties = defaultProperties;
-
             formInstance.registerSearchFormListener(this);
         }
 
@@ -56,12 +45,10 @@ class Component implements ISearchFormListener {
                 this.reset();
             }
         }
-
-        this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
         }
@@ -85,19 +72,17 @@ class Component implements ISearchFormListener {
     }
 
     public async reset(): Promise<void> {
-        this.state.loading = true;
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
         if (cache) {
             cache.status = CacheState.INVALID;
         }
 
-        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.reset();
         }
 
         await this.setSearchResult([]);
-        this.state.loading = false;
     }
 
     public cancel(): void {
@@ -107,7 +92,7 @@ class Component implements ISearchFormListener {
     public async search(): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true, "Suche ...", true);
 
-        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.state.formId)
+        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
             .then((objects) => {
                 this.setSearchResult(objects);
             })
@@ -135,17 +120,22 @@ class Component implements ISearchFormListener {
         table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
         table.tableConfiguration.routingConfiguration.externalLink = false;
 
-        const objectService = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
-            this.state.objectType
-        );
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        const objectProperties = searchCache
+        const parameter: Array<[string, any]> = [];
+        if (searchCache
             && searchCache.status === CacheState.VALID
             && searchCache.objectType === this.state.objectType
-            ? searchCache.criteria.map((c) => c.property).filter((p) => p !== SearchProperty.FULLTEXT)
-            : [];
+        ) {
+            for (const c of searchCache.criteria) {
+                if (c.property !== SearchProperty.FULLTEXT) {
+                    parameter.push([c.property, c.value]);
+                }
+            }
+        }
 
-        const columns = objectService.getTableColumnConfiguration(objectProperties);
+        const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(this.state.objectType);
+
+        const columns = await searchDefinition.getTableColumnConfiguration(parameter);
         table.setColumns(columns);
 
         await table.loadRows();
@@ -161,7 +151,7 @@ class Component implements ISearchFormListener {
     }
 
     private async setCanSearch(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.state.formId);
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             this.state.canSearch = formInstance.getCriteria().some(
                 (c) => c.property !== null && c.operator !== null

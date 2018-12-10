@@ -1,12 +1,14 @@
 import { ComponentState } from "./ComponentState";
-import { FormService, DialogService } from "@kix/core/dist/browser";
+import { FormService, DialogService, AbstractMarkoComponent } from "@kix/core/dist/browser";
 
-class Component {
+class Component extends AbstractMarkoComponent {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
         this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        DialogService.getInstance().setMainDialogHint('Es werden nur aktuelle Versionen durchsucht.');
     }
 
     public async cancel(): Promise<void> {

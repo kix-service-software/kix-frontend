@@ -18,7 +18,7 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
         await super.onMount();
 
         const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null
+            KIXObjectType.CONFIG_ITEM_CLASS, null, null, null, false
         );
 
         this.state.nodes = classes.map(
