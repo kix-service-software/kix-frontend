@@ -10,7 +10,8 @@ export class ComponentState<T> {
         public showInfo: boolean = false,
         public propertyDisplayText: string = '',
         public propertyName: string = '',
-        public propertyIcon: string | ObjectIcon = null
+        public propertyIcon: string | ObjectIcon = null,
+        public hasText: boolean = true
     ) { }
 
 }
