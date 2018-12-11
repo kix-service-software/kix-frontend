@@ -66,7 +66,8 @@
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
         },
         "kix:admin-module": {
-            "ticket-admin": "../../dist/registry-modules/ticket/admin-module.extension"
+            "ticket-admin": "../../dist/registry-modules/ticket/admin/admin-module.extension",
+            "cmdb-admin": "../../dist/registry-modules/cmdb/admin/admin-module.extension"
         }
     }
 }
