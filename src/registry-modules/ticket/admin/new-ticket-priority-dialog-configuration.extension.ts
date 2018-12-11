@@ -35,7 +35,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Kommentar", TicketPriorityProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für die Priorität ein."
+                "Geben Sie einen Kommentar für die Priorität ein.", null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
                 "Gültigkeit", TicketPriorityProperty.VALID_ID, 'valid-input', true,

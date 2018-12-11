@@ -17,7 +17,8 @@ import {
     TicketPriorityImportAction, TicketPriorityTableDeleteAction, TicketPriorityDeleteAction,
     TicketPriorityTableFactory, TicketPriorityLabelProvider, TicketPriorityBrowserFactory,
     EditTicketTypeDialogContext, TicketTypeEditTextmodulesAction, TicketStateService,
-    TicketStateLabelProvider, TicketStateTableFactory, TicketStateBrowserFactory, TicketStateCreateAction,
+    TicketStateLabelProvider, TicketStateTypeLabelProvider,
+    TicketStateTableFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, TicketStateCreateAction,
     TicketStateTableDeleteAction, TicketStateImportAction, TicketStateDetailsContext, TicketStateEditTextmodulesAction,
     TicketStateEditAction, TicketStateDuplicateAction, TicketStateDeleteAction,
     TicketPriorityCreateAction, TicketTypeDuplicateAction,
@@ -26,6 +27,7 @@ import {
     TicketPriorityEditAction,
     TicketPriorityDuplicateAction,
     NewTicketPriorityDialogContext,
+    NewTicketStateDialogContext,
     EditTicketPriorityDialogContext,
     TicketPriorityFormService
 } from "@kix/core/dist/browser/ticket";
@@ -64,6 +66,7 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
 
         StandardTableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         StandardTableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
@@ -81,6 +84,9 @@ class Component extends AbstractMarkoComponent {
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_STATE, TicketStateBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
         );
 
         TicketFormService.getInstance();
@@ -168,6 +174,13 @@ class Component extends AbstractMarkoComponent {
             true, 'ticket-state-details', ['ticketstates'], TicketStateDetailsContext
         );
         ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
+
+        const newTicketStateContext = new ContextDescriptor(
+            NewTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext
+        );
+        ContextService.getInstance().registerContext(newTicketStateContext);
 
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
@@ -317,6 +330,16 @@ class Component extends AbstractMarkoComponent {
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-ticket-state-dialog',
+            new WidgetConfiguration(
+                'new-ticket-state-dialog', 'Status hinzufügen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.TICKET_STATE,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-priority-dialog',
             new WidgetConfiguration(
                 'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
@@ -325,7 +348,6 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.TICKET_PRIORITY,
             ContextMode.EDIT_ADMIN
         ));
-
     }
 }
 
