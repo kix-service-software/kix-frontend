@@ -23,6 +23,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['rich-text-input', '_base-components/form/inputs/rich-text-input'],
         ['valid-input', '_base-components/form/inputs/valid-input'],
         ['attachment-input', '_base-components/form/inputs/attachment-input'],
+        ['icon-input', '_base-components/form/inputs/icon-input'],
         ['link-input', '_base-components/form/inputs/link-input'],
         ['language-input', '_base-components/form/inputs/language-input'],
         ['general-catalog-input', '_base-components/form/inputs/general-catalog-input'],

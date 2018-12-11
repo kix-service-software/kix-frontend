@@ -20,6 +20,7 @@ import {
 } from '@kix/core/dist/browser/text-modules';
 import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '@kix/core/dist/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '@kix/core/dist/browser/icon';
 
 class Component extends AbstractMarkoComponent {
 
@@ -35,6 +36,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.getInstance().registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(SlaService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ObjectIconService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
 
@@ -44,6 +46,9 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
         StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
