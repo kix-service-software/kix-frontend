@@ -1,6 +1,6 @@
 import { IKIXModuleExtension } from "@kix/core/dist/extensions";
 
-class KIXModuleExtionsion implements IKIXModuleExtension {
+class Extension implements IKIXModuleExtension {
 
     public initComponentId: string = 'cmdb-module-component';
 
@@ -25,11 +25,16 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['config-item-list-widget', 'cmdb/widgets/config-item-list-widget'],
         ['config-item-version-widget', 'cmdb/widgets/config-item-version-widget'],
         ['config-item-images-widget', 'cmdb/widgets/config-item-images-widget'],
-        ['cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes']
+        ['cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes'],
+        ['config-item-class-details', 'cmdb/admin/config-item-class-details'],
+        ['config-item-class-info-widget', 'cmdb/admin/widgets/config-item-class-info-widget'],
+        ['config-item-class-permissions-widget', 'cmdb/admin/widgets/config-item-class-permissions-widget'],
+        ['config-item-class-versions-widget', 'cmdb/admin/widgets/config-item-class-versions-widget'],
+        ['config-item-class-definition', 'cmdb/config-item-class-definition']
     ];
 
 }
 
 module.exports = (data, host, options) => {
-    return new KIXModuleExtionsion();
+    return new Extension();
 };

@@ -15,4 +15,6 @@ export class ObjectPropertyLabelInput<T> {
 
     public showIcon: boolean;
 
+    public showText: boolean;
+
 }

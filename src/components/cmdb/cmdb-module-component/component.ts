@@ -15,7 +15,8 @@ import {
     ConfigItemClassBrowserFactory, ConfigItemBrowserFactory, CMDBService, ConfigItemVersionMaximizeAction,
     ConfigItemCreateAction, ConfigItemEditAction, ConfigItemPrintAction, ConfigItemVersionCompareAction,
     EditConfigItemDialogContext, ConfigItemFormService, ConfigItemClassLabelProvider, ConfigItemClassTableFactory,
-    ConfigItemClassCreateAction, ConfigItemClassImportAction
+    ConfigItemClassCreateAction, ConfigItemClassImportAction, ConfigItemClassDetailsContext, ConfigItemClassEditAction,
+    ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider
 } from '@kix/core/dist/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -41,15 +42,18 @@ class Component extends AbstractMarkoComponent {
         StandardTableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
         StandardTableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
         StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
+        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new ConfigItemLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
 
         this.registerContexts();
+        this.registerAdminContexts();
         this.registerDialogs();
         this.registerActions();
         this.registerAdminActions();
@@ -85,6 +89,15 @@ class Component extends AbstractMarkoComponent {
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
+    }
+
+    private registerAdminContexts(): void {
+        const configItemClassDetailsContext = new ContextDescriptor(
+            ConfigItemClassDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'config-item-class-details', ['configitemclasses'], ConfigItemClassDetailsContext
+        );
+        ContextService.getInstance().registerContext(configItemClassDetailsContext);
     }
 
     private registerDialogs(): void {
@@ -133,6 +146,7 @@ class Component extends AbstractMarkoComponent {
     private registerAdminActions(): void {
         ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
         ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-import', ConfigItemClassImportAction);
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-edit', ConfigItemClassEditAction);
     }
 
 }

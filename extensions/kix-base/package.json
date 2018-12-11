@@ -54,6 +54,7 @@
             "config-item-details-configuration": "../../dist/registry-modules/cmdb/config-item-details-configuration.extension",
             "cmdb-configuration": "../../dist/registry-modules/cmdb/cmdb-configuration.extension",
             "edit-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/edit-config-item-dialog-configuration.extension",
+            "config-item-class-details-configuration": "../../dist/registry-modules/cmdb/admin/config-item-class-details-configuration.extension",
             "release-configuration": "../../dist/registry-modules/release/configuration.extension"
         },
         "kix:modules": {
