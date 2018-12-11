@@ -29,13 +29,9 @@ class ArticleAttachmentComponent {
     }
 
     private getIcon(attachment: any): ObjectIcon {
-        const fileName = attachment.Filename;
-        if (fileName) {
-            const idx = fileName.lastIndexOf('.');
-            if (idx >= 0) {
-                const extension = fileName.substring(idx + 1, fileName.length);
-                return new ObjectIcon("Filetype", extension);
-            }
+        const contentType = attachment.ContentType;
+        if (contentType) {
+            return new ObjectIcon("MIMEType", contentType);
         }
         return null;
     }
