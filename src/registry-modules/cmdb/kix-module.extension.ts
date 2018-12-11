@@ -24,7 +24,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['config-item-chart-widget', 'cmdb/widgets/config-item-chart-widget'],
         ['config-item-list-widget', 'cmdb/widgets/config-item-list-widget'],
         ['config-item-version-widget', 'cmdb/widgets/config-item-version-widget'],
-        ['config-item-images-widget', 'cmdb/widgets/config-item-images-widget']
+        ['config-item-images-widget', 'cmdb/widgets/config-item-images-widget'],
+        ['cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes']
     ];
 
 }

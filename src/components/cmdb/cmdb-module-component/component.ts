@@ -14,7 +14,8 @@ import {
     ConfigItemLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemTableFactory, ConfigItemImageBrowserFactory,
     ConfigItemClassBrowserFactory, ConfigItemBrowserFactory, CMDBService, ConfigItemVersionMaximizeAction,
     ConfigItemCreateAction, ConfigItemEditAction, ConfigItemPrintAction, ConfigItemVersionCompareAction,
-    EditConfigItemDialogContext, ConfigItemFormService
+    EditConfigItemDialogContext, ConfigItemFormService, ConfigItemClassLabelProvider, ConfigItemClassTableFactory,
+    ConfigItemClassCreateAction, ConfigItemClassImportAction
 } from '@kix/core/dist/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -39,8 +40,10 @@ class Component extends AbstractMarkoComponent {
 
         StandardTableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
         StandardTableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
+        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new ConfigItemLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
 
@@ -49,6 +52,7 @@ class Component extends AbstractMarkoComponent {
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();
+        this.registerAdminActions();
     }
 
     private registerContexts(): void {
@@ -124,6 +128,11 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'config-item-version-compare-action', ConfigItemVersionCompareAction
         );
+    }
+
+    private registerAdminActions(): void {
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-import', ConfigItemClassImportAction);
     }
 
 }
