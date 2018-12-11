@@ -1,7 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import {
-    ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent,
-} from "@kix/core/dist/model";
+import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent } from "@kix/core/dist/model";
 import { AttachmentUtil, BrowserUtil } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
 
@@ -79,14 +77,13 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     private async checkAndSetIcon(files: File[]): Promise<void> {
-        const fileErrors: Array<[File, AttachmentError]> = [];
         const fileError = await AttachmentUtil.checkFile(files[0], this.mimeTypes);
 
         if (fileError) {
-            const errorMessages = await AttachmentUtil.buildErrorMessages(fileErrors);
+            const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]]);
             const content = new ComponentContent('list-with-title',
                 {
-                    title: 'Fehler beim Hinzufügen von Anlagen:',
+                    title: 'Fehler beim Hinzufügen des Bildes:',
                     list: errorMessages
                 }
             );
