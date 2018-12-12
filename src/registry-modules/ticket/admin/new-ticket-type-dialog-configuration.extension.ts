@@ -32,6 +32,10 @@ export class Extension implements IConfigurationExtension {
                 "Name", TicketTypeProperty.NAME, null, true, "Geben Sie einen Namen für den Typ ein."
             ));
             fields.push(new FormField(
+                "Icon", 'ICON', 'icon-input', false,
+                "Wählen Sie ein Icon für den Status aus."
+            ));
+            fields.push(new FormField(
                 "Kommentar", TicketTypeProperty.COMMENT, 'text-area-input', false,
                 "Geben Sie einen Kommentar für den Typ ein.", null, null, null, null, null, null, null, 250
             ));

@@ -43,7 +43,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Icon", 'ICON', 'icon-input', false,
-                "Geben Sie einen Kommentar für den Status ein."
+                "Wählen Sie ein Icon für den Status aus."
             ));
             fields.push(new FormField(
                 "Kommentar", TicketStateProperty.COMMENT, 'text-area-input', false,
