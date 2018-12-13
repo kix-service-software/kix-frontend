@@ -1,0 +1,29 @@
+{
+    "name": "kix-ticket",
+    "extensions": {
+        "kix:configuration": {
+            "ticket-configuration": "../../dist/registry-modules/ticket/configuration.extension",
+            "ticket-list-configuration": "../../dist/registry-modules/ticket/ticket-list-configuration.extension",
+            "ticket-details-configuration": "../../dist/registry-modules/ticket/ticket-details-configuration.extension",
+            "new-ticket-dialog-configuration": "../../dist/registry-modules/ticket/new-ticket-dialog-configuration.extension",
+            "new-ticket-article-dialog-configuration": "../../dist/registry-modules/ticket/new-ticket-article-dialog-configuration.extension",
+            "edit-ticket-dialog-configuration": "../../dist/registry-modules/ticket/edit-ticket-dialog-configuration.extension",
+            "search-ticket-dialog-configuration": "../../dist/registry-modules/ticket/search-ticket-dialog-configuration.extension",
+            "ticket-type-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-type-details-configuration.extension",
+            "new-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-type-dialog-configuration.extension",
+            "edit-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-type-dialog-configuration.extension",
+            "ticket-state-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-state-details-configuration.extension",
+            "new-ticket-state-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-state-dialog-configuration.extension",
+            "edit-ticket-state-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-state-dialog-configuration.extension",
+            "ticket-priority-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-priority-details-configuration.extension",
+            "new-ticket-priority-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-priority-dialog-configuration.extension",
+            "edit-ticket-priority-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-priority-dialog-configuration.extension"
+        },
+        "kix:modules": {
+            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "ticket-admin": "../../dist/registry-modules/ticket/admin/admin-module.extension"
+        }
+    }
+}

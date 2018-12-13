@@ -29,7 +29,9 @@ import {
     NewTicketPriorityDialogContext,
     NewTicketStateDialogContext,
     EditTicketPriorityDialogContext,
-    TicketPriorityFormService
+    TicketPriorityFormService,
+    EditTicketStateDialogContext,
+    TicketStateFormService
 } from "@kix/core/dist/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -52,6 +54,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.getInstance().registerServiceInstance(TicketFormService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(TicketPriorityFormService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(TicketStateFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
         KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());
@@ -181,6 +184,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext
         );
         ContextService.getInstance().registerContext(newTicketStateContext);
+
+        const editTicketStateContext = new ContextDescriptor(
+            EditTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-ticket-state-dialog', ['ticketstates'], EditTicketStateDialogContext
+        );
+        ContextService.getInstance().registerContext(editTicketStateContext);
 
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
@@ -330,6 +340,16 @@ class Component extends AbstractMarkoComponent {
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-ticket-priority-dialog',
+            new WidgetConfiguration(
+                'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.TICKET_PRIORITY,
+            ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-state-dialog',
             new WidgetConfiguration(
                 'new-ticket-state-dialog', 'Status hinzufügen', [], {},
@@ -340,12 +360,11 @@ class Component extends AbstractMarkoComponent {
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-ticket-priority-dialog',
+            'edit-ticket-state-dialog',
             new WidgetConfiguration(
-                'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-state-dialog', 'Status bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
             ),
-            KIXObjectType.TICKET_PRIORITY,
+            KIXObjectType.TICKET_STATE,
             ContextMode.EDIT_ADMIN
         ));
     }
