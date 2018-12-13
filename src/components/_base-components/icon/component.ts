@@ -35,6 +35,10 @@ class IconComponent {
                     this.state.contentType = icon.ContentType;
                 }
                 this.state.content = icon.Content;
+            } else if (this.state.icon.Content) {
+                this.state.base64 = true;
+                this.state.content = this.state.icon.Content;
+                this.state.contentType = this.state.icon.ContentType;
             } else if (this.state.showUnknown) {
                 this.state.base64 = false;
                 this.state.content = 'kix-icon-unknown';

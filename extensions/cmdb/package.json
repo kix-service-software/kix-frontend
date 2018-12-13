@@ -1,0 +1,19 @@
+{
+    "name": "kix-cmdb",
+    "extensions": {
+        "kix:configuration": {
+            "new-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/new-config-item-dialog-configuration.extension",
+            "config-item-details-configuration": "../../dist/registry-modules/cmdb/config-item-details-configuration.extension",
+            "cmdb-configuration": "../../dist/registry-modules/cmdb/cmdb-configuration.extension",
+            "edit-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/edit-config-item-dialog-configuration.extension",
+            "config-item-class-details-configuration": "../../dist/registry-modules/cmdb/admin/config-item-class-details-configuration.extension",
+            "search-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/search-config-item-dialog-configuration.extension"
+        },
+        "kix:modules": {
+            "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "cmdb-admin": "../../dist/registry-modules/cmdb/admin/admin-module.extension"
+        }
+    }
+}

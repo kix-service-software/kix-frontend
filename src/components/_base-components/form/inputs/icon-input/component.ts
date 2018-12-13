@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent } from "@kix/core/dist/model";
-import { AttachmentUtil, BrowserUtil } from "@kix/core/dist/browser";
+import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from "@kix/core/dist/model";
+import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from "@kix/core/dist/browser";
 import { OverlayService } from "@kix/core/dist/browser/OverlayService";
 
 class Component extends FormInputComponent<any, ComponentState> {
@@ -35,12 +35,17 @@ class Component extends FormInputComponent<any, ComponentState> {
         document.addEventListener('dragenter', this.dragEnter.bind(this), false);
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
 
-        this.setCurrentValue();
+        await this.setCurrentValue();
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.icon = this.state.defaultValue.value;
+    public async setCurrentValue(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const object = await context.getObject();
+        if (object) {
+            const icon = LabelService.getInstance().getIcon(object);
+            if (icon instanceof ObjectIcon) {
+                this.state.icon = icon;
+            }
         }
     }
 

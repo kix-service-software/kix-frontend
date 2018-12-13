@@ -5,7 +5,7 @@
     </button>
     <span.icon-preview>
         <if(state.icon)>
-            <img src=((("data:" + state.icon.ContentType) + ";base64,") + state.icon.Content) title=state.title alt=state.title/>
+            <icon icon=state.icon/>
         </if>
     </span>
 </div>
