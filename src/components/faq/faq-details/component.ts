@@ -19,7 +19,7 @@ class Component {
         this.LANE_WIDGET_TYPE = WidgetType.LANE;
         WidgetService.getInstance().setWidgetType('faq-article-widget', WidgetType.LANE);
 
-        const context = (ContextService.getInstance().getActiveContext() as FAQDetailsContext);
+        const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
         context.registerListener('faq-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
