@@ -263,7 +263,7 @@ class LinkDialogComponent {
             ]);
 
             const linkTypes = await KIXObjectService.loadObjects<LinkType>(
-                KIXObjectType.LINK_TYPE, null, loadingOptions
+                KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
             );
 
             linkTypes.forEach((lt) => {
