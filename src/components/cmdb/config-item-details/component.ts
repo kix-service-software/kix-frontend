@@ -1,6 +1,6 @@
-import { ContextService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory } from "@kix/core/dist/browser";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, WidgetType, ConfigItem } from "@kix/core/dist/model";
+import { KIXObjectType, AbstractAction, ConfigItem } from "@kix/core/dist/model";
 import { ComponentsService } from "@kix/core/dist/browser/components";
 import { ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
 
@@ -13,7 +13,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = (ContextService.getInstance().getActiveContext() as ConfigItemDetailsContext);
+        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
+            ConfigItemDetailsContext.CONTEXT_ID
+        );
         context.registerListener('config-item-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
@@ -42,15 +44,10 @@ class Component {
         this.state.tabWidgets = context.getLaneTabs(true);
         this.state.contentWidgets = context.getContent(true);
 
-        await this.prepareTitle();
+        this.state.title = await context.getDisplayText();
         setTimeout(() => {
             this.state.loading = false;
         }, 50);
-    }
-
-    public async prepareTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.title = await context.getDisplayText();
     }
 
     public getConfigItemActions(): AbstractAction[] {
