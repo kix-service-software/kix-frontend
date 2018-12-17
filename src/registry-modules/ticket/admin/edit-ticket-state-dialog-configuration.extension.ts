@@ -55,7 +55,7 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Statusdaten', fields);
 
             const form = new Form(
-                formId, 'Status hinzufügen', [group], KIXObjectType.TICKET_STATE, null, FormContext.EDIT
+                formId, 'Status hinzufügen', [group], KIXObjectType.TICKET_STATE, true, FormContext.EDIT
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
