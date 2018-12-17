@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
         const ciClassPermissionsWidget = new ConfiguredWidget(
             'config-item-class-permissions-widget', new WidgetConfiguration(
                 'config-item-class-permissions-widget', 'CMDB Klassen Berechtigungen',
-                ['cmdb-admin-ci-class-edit'], null, false, true, WidgetSize.BOTH, null, false
+                ['cmdb-admin-ci-class-edit'], null, true, true, WidgetSize.BOTH, null, false
             )
         );
 
