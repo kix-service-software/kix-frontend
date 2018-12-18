@@ -1,6 +1,6 @@
 import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, ServiceRegistry
+    OverlayService, FormService, ContextService, ServiceRegistry, KIXObjectService
 } from "@kix/core/dist/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -10,7 +10,7 @@ import {
     ContextType,
 } from "@kix/core/dist/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import { TicketService, TicketDetailsContext } from "@kix/core/dist/browser/ticket";
 
 class Component {
 
@@ -42,19 +42,21 @@ class Component {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird aktualisiert");
-                const service = ServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                if (service && context) {
-                    await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())
-                        .then((ticketId) => {
-                            context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            this.showSuccessHint();
-                            DialogService.getInstance().closeMainDialog();
-                        }).catch((error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            this.showError(error);
-                        });
+                const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                    TicketDetailsContext.CONTEXT_ID
+                );
+                if (context) {
+                    await KIXObjectService.updateObjectByForm(
+                        KIXObjectType.TICKET, this.state.formId, context.getObjectId()
+                    ).then((ticketId) => {
+                        context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showSuccessHint();
+                        DialogService.getInstance().closeMainDialog();
+                    }).catch((error) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        this.showError(error);
+                    });
                 }
             }
         }, 300);

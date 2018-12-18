@@ -5,6 +5,7 @@ import {
     FilterCriteria, FilterDataType, FilterType, ArticlesLoadingOptions, Article
 } from '@kix/core/dist/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
+import { TicketDetailsContext } from '@kix/core/dist/browser/ticket';
 
 class Component {
 
@@ -20,7 +21,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
@@ -55,17 +58,7 @@ class Component {
 
     private async getFirstArticle(): Promise<void> {
         if (this.state.ticket) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, null, ['Attachments'], ['Attachments']
-            );
-
-            const articleOptions = new ArticlesLoadingOptions(this.state.ticket.TicketID, false, true);
-
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null, loadingOptions, articleOptions
-            );
-
-            this.state.firstArticle = articles && articles.length ? articles[0] : null;
+            this.state.firstArticle = this.state.ticket.getFirstArticle();
         }
     }
 
