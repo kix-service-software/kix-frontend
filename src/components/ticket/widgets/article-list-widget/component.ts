@@ -1,11 +1,12 @@
-import { Ticket, KIXObjectType, Context, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
     ArticleTableLabelLayer,
     ArticleTableClickListener,
     ArticleTableToggleListener,
-    ArticleTableToggleLayer
+    ArticleTableToggleLayer,
+    TicketDetailsContext
 } from "@kix/core/dist/browser/ticket";
 import { ContextService } from "@kix/core/dist/browser/context";
 import {
@@ -27,7 +28,9 @@ export class Component implements IEventListener {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('article-list-widget', {
@@ -37,7 +40,7 @@ export class Component implements IEventListener {
             sidebarToggled: () => { return; },
             objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
-                    ticket = await context.getObject<Ticket>(KIXObjectType.ARTICLE);
+                    ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
                     this.initWidget(ticket);
                 }
             }
@@ -45,7 +48,7 @@ export class Component implements IEventListener {
 
         EventService.getInstance().subscribe('GotToTicketArticle', this);
 
-        await this.initWidget(await context.getObject<Ticket>(KIXObjectType.ARTICLE));
+        await this.initWidget(await context.getObject<Ticket>(KIXObjectType.TICKET));
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
