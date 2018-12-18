@@ -69,11 +69,10 @@ class Component {
                 null, null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
             );
 
-            this.images = ciImages.map(
-                (i) => {
-                    return new DisplayImageDescription(i.ID, i.decodedContent, i.Comment, true);
-                }
-            );
+            this.images = ciImages.map((i) => {
+                const content = `data:${i.ContentType};base64,${i.Content}`;
+                return new DisplayImageDescription(i.ID, content, i.Comment);
+            });
             this.state.thumbnails = this.images;
             this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${this.images.length})`;
         }
