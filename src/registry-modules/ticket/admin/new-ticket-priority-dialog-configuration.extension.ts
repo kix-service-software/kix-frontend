@@ -35,7 +35,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Icon", 'ICON', 'icon-input', false,
-                "Wählen Sie ein Icon für den Status aus."
+                "Wählen Sie ein Icon für die Priorität aus."
             ));
             fields.push(new FormField(
                 "Kommentar", TicketPriorityProperty.COMMENT, 'text-area-input', false,
