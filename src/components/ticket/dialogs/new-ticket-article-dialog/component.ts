@@ -60,10 +60,6 @@ class Component {
                         });
                 }
             }
-
-            if (formInstance) {
-                formInstance.reset();
-            }
         }, 300);
     }
 

@@ -58,10 +58,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.showError(error);
                     });
             }
-
-            if (formInstance) {
-                formInstance.reset();
-            }
         }, 300);
     }
 
