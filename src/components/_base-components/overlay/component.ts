@@ -240,7 +240,11 @@ class OverlayComponent {
     }
 
     private showShield(): boolean {
-        return this.state.type === OverlayType.WARNING;
+        return this.state.type === OverlayType.WARNING || this.state.type === OverlayType.CONFIRM;
+    }
+
+    public hasClosable(): boolean {
+        return !this.isToast() && this.state.type !== OverlayType.CONFIRM;
     }
 
     public isToast(): boolean {
