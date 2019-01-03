@@ -1,9 +1,9 @@
-import { KIXExtensions, IKIXModuleExtension } from '@kix/core/dist/extensions';
+import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
 import jsonfile = require('jsonfile');
-import { BaseTemplateInput } from '@kix/core/dist/common';
-import { ObjectData } from '@kix/core/dist/model';
+import { BaseTemplateInput } from '../core/common';
+import { ObjectData } from '../core/model';
 import { PluginService } from './PluginService';
-import { ProfilingService, LoggingService } from '@kix/core/dist/services';
+import { ProfilingService, LoggingService } from '../core/services';
 
 export class MarkoService {
 

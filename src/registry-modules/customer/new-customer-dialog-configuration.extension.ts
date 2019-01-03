@@ -1,12 +1,12 @@
 import {
     ContextConfiguration, FormField, CustomerSourceAttributeMapping, Form, FormContext, KIXObjectType, CustomerProperty
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     NewCustomerDialogContextConfiguration, NewCustomerDialogContext, CustomerLabelProvider
-} from "@kix/core/dist/browser/customer";
-import { CustomerService, ConfigurationService } from "@kix/core/dist/services";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
+} from "../../core/browser/customer";
+import { CustomerService, ConfigurationService } from "../../core/services";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
 
 export class NewCustomerDialogModuleExtension implements IConfigurationExtension {
 

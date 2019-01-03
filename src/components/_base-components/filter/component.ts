@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectPropertyFilter, TreeNode } from '@kix/core/dist/model';
+import { KIXObjectPropertyFilter, TreeNode } from '../../../core/model';
 
 class Component {
 

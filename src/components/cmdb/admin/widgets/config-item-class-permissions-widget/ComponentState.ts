@@ -1,4 +1,4 @@
-import { WidgetComponentState, ConfigItemClass, AbstractAction } from "@kix/core/dist/model";
+import { WidgetComponentState, ConfigItemClass, AbstractAction } from "../../../../../core/model";
 
 export class ComponentState extends WidgetComponentState<any> {
 

@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
-import { FAQContext } from '@kix/core/dist/browser/faq';
-import { ConfiguredWidget } from '@kix/core/dist/model';
-import { ComponentsService } from '@kix/core/dist/browser/components';
+import { ContextService } from '../../../core/browser';
+import { FAQContext } from '../../../core/browser/faq';
+import { ConfiguredWidget } from '../../../core/model';
+import { ComponentsService } from '../../../core/browser/components';
 
 class Component {
 

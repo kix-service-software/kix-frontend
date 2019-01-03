@@ -1,4 +1,4 @@
-import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "@kix/core/dist/model";
+import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "../../../../../core/model";
 
 export class ComponentState extends FormInputComponentState<Contact> {
 

@@ -1,7 +1,7 @@
-import { ComponentsService } from "@kix/core/dist/browser/components";
+import { ComponentsService } from "../../../../../core/browser/components";
 import { ComponentState } from "./ComponentState";
-import { FormService, IdService } from "@kix/core/dist/browser";
-import { FormField } from "@kix/core/dist/model";
+import { FormService, IdService } from "../../../../../core/browser";
+import { FormField } from "../../../../../core/model";
 
 class Component {
 

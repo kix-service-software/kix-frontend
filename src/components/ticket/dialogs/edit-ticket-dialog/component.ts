@@ -1,16 +1,16 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
+import { DialogService } from "../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, ServiceRegistry, KIXObjectService
-} from "@kix/core/dist/browser";
+    OverlayService, FormService, ContextService, KIXObjectService
+} from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType,
     ToastContent,
     TicketProperty,
     ContextType,
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService, TicketDetailsContext } from "@kix/core/dist/browser/ticket";
+import { TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 
 class Component {
 

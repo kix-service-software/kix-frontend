@@ -1,5 +1,5 @@
-import { Customer, KIXObjectType } from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { Customer, KIXObjectType } from "../../../core/model";
+import { KIXObjectService } from "../../../core/browser";
 import { ComponentState } from './ComponentState';
 
 class CustomerInfoComponent {

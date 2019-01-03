@@ -1,4 +1,4 @@
-import { Attachment, Article } from "@kix/core/dist/model";
+import { Attachment, Article } from "../../../core/model";
 
 export class ComponentState {
 

@@ -1,8 +1,8 @@
-import { ContextService } from '@kix/core/dist/browser/context/';
-import { ConfiguredWidget, Context, ContextType } from '@kix/core/dist/model/';
-import { ComponentsService } from '@kix/core/dist/browser/components';
+import { ContextService } from '../../../core/browser/context/';
+import { ConfiguredWidget, Context, ContextType } from '../../../core/model/';
+import { ComponentsService } from '../../../core/browser/components';
 import { ComponentState } from './ComponentState';
-import { IdService } from '@kix/core/dist/browser';
+import { IdService } from '../../../core/browser';
 
 class Component {
 

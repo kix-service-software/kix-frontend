@@ -3,11 +3,11 @@ import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight,
     ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import {
     KIXObjectType, Link, KIXObject, DataType, WidgetType, Context
-} from '@kix/core/dist/model';
-import { LinkUtil } from '@kix/core/dist/browser/link';
+} from '../../../core/model';
+import { LinkUtil } from '../../../core/browser/link';
 
 class Component {
 

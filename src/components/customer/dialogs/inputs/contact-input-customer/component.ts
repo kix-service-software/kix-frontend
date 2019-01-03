@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, Customer, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { ContextService, KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 

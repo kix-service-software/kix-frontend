@@ -1,9 +1,9 @@
 import {
     FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
-} from "@kix/core/dist/model";
+} from "../../../../../core/model";
 import { CompontentState } from "./CompontentState";
-import { SearchOperator, KIXObjectService } from "@kix/core/dist/browser";
+import { SearchOperator, KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 

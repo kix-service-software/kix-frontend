@@ -1,7 +1,7 @@
 import { FormComponentState } from './FormComponentState';
-import { WidgetType, FormContext, FormField } from '@kix/core/dist/model';
-import { FormService } from '@kix/core/dist/browser/form';
-import { WidgetService } from '@kix/core/dist/browser';
+import { WidgetType, FormContext, FormField } from '../../../../core/model';
+import { FormService } from '../../../../core/browser/form';
+import { WidgetService } from '../../../../core/browser';
 
 class FormComponent {
 

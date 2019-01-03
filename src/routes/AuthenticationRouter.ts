@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import { ReleaseInfo } from '@kix/core/dist/model';
-import { ConfigurationService } from '@kix/core/dist/services';
+import { ReleaseInfo } from '../core/model';
+import { ConfigurationService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 
 export class AuthenticationRouter extends KIXRouter {

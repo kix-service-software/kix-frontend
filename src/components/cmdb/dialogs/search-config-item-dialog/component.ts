@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { FormService, DialogService, AbstractMarkoComponent } from "@kix/core/dist/browser";
+import { FormService, DialogService, AbstractMarkoComponent } from "../../../../core/browser";
 
 class Component extends AbstractMarkoComponent {
 

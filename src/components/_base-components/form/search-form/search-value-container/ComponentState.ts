@@ -1,4 +1,4 @@
-import { KIXObjectType, TreeNode } from "@kix/core/dist/model";
+import { KIXObjectType, TreeNode } from "../../../../../core/model";
 import { FormSearchValue } from "./FormSearchValue";
 
 export class ComponentState {

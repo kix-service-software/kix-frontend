@@ -1,4 +1,4 @@
-import { ConfiguredWidget } from "@kix/core/dist/model";
+import { ConfiguredWidget } from "../../../core/model";
 
 export class ComponentState {
 

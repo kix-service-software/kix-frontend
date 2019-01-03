@@ -1,15 +1,15 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectPropertyFilter, TableFilterCriteria,
     TicketProperty, FilterCriteria, FilterDataType, FilterType, FormField, KIXObjectType, Form,
     FormContext, ContextConfiguration
-} from '@kix/core/dist/model';
-import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/model';
+import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator, SearchProperty
-} from '@kix/core/dist/browser';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/browser';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../core/services';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
 

@@ -1,5 +1,5 @@
-import { StandardTable } from '@kix/core/dist/browser';
-import { Article, IAction, WidgetComponentState, Ticket } from '@kix/core/dist/model';
+import { StandardTable } from '../../../../core/browser';
+import { Article, IAction, WidgetComponentState, Ticket } from '../../../../core/model';
 
 import { ArticleListSettings } from './ArticleListSettings';
 

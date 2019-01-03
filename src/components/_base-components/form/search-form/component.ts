@@ -1,13 +1,13 @@
 import {
     WidgetType, OverlayType, StringContent,
     KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener, CacheState
-} from '@kix/core/dist/model';
-import { FormService } from '@kix/core/dist/browser/form';
+} from '../../../../core/model';
+import { FormService } from '../../../../core/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, ServiceRegistry,
     IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
     TableRowHeight, IKIXObjectService, StandardTable, SearchProperty
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 
 class Component implements ISearchFormListener {

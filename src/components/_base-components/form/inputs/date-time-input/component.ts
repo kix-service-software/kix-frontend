@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, FormFieldOptions, DateTimeUtil } from '@kix/core/dist/model';
+import { FormInputComponent, FormFieldOptions, DateTimeUtil } from '../../../../../core/model';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 

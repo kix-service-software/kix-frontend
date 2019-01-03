@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { TicketService } from '@kix/core/dist/browser/ticket';
-import { Article, KIXObjectType, KIXObjectLoadingOptions } from '@kix/core/dist/model';
-import { KIXObjectService } from "@kix/core/dist/browser";
-import { InlineContent } from '@kix/core/dist/browser/components';
+import { TicketService } from '../../../core/browser/ticket';
+import { Article, KIXObjectType, KIXObjectLoadingOptions } from '../../../core/model';
+import { KIXObjectService } from "../../../core/browser";
+import { InlineContent } from '../../../core/browser/components';
 
 class Component {
 

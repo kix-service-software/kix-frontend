@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { FormService, DialogService } from "@kix/core/dist/browser";
+import { FormService, DialogService } from "../../../../core/browser";
 
 class Component {
 

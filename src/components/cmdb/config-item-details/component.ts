@@ -1,8 +1,8 @@
-import { ContextService, ActionFactory } from "@kix/core/dist/browser";
+import { ContextService, ActionFactory } from "../../../core/browser";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, ConfigItem } from "@kix/core/dist/model";
-import { ComponentsService } from "@kix/core/dist/browser/components";
-import { ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
+import { KIXObjectType, AbstractAction, ConfigItem } from "../../../core/model";
+import { ComponentsService } from "../../../core/browser/components";
+import { ConfigItemDetailsContext } from "../../../core/browser/cmdb";
 
 class Component {
 

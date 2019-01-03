@@ -1,10 +1,10 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, SearchOperator, KIXObjectService } from '@kix/core/dist/browser';
+import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
 import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
     TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
-} from '@kix/core/dist/model';
-import { TicketContext } from '@kix/core/dist/browser/ticket';
+} from '../../../../core/model';
+import { TicketContext } from '../../../../core/browser/ticket';
 
 export class Component {
 

@@ -1,6 +1,6 @@
-import { WidgetComponentState, AbstractAction, KIXObjectPropertyFilter } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
-import { StandardTable } from "@kix/core/dist/browser";
+import { WidgetComponentState, AbstractAction, KIXObjectPropertyFilter } from "../../../../core/model";
+import { FAQArticle } from "../../../../core/model/kix/faq";
+import { StandardTable } from "../../../../core/browser";
 
 export class ComponentState extends WidgetComponentState {
 

@@ -1,5 +1,5 @@
-import { GeneralCatalogItem, Ticket } from '@kix/core/dist/model';
-import { DynamicField } from '@kix/core/dist/model/kix/dynamic-field/DynamicField';
+import { GeneralCatalogItem, Ticket } from '../../../core/model';
+import { DynamicField } from '../../../core/model/kix/dynamic-field/DynamicField';
 
 export class ComponentState {
 

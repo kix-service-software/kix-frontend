@@ -1,9 +1,9 @@
-import { ContextConfiguration } from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+import { ContextConfiguration } from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     EditLinkedObjectsDialogContext,
     EditLinkedObjectsDialogContextConfiguration
-} from "@kix/core/dist/browser/link";
+} from "../../core/browser/link";
 
 export class Extension implements IConfigurationExtension {
 

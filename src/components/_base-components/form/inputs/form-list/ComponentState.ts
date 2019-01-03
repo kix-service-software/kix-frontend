@@ -1,5 +1,5 @@
-import { TreeNode, AutoCompleteConfiguration } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
+import { IdService } from '../../../../../core/browser/IdService';
 
 export class ComponentState {
 

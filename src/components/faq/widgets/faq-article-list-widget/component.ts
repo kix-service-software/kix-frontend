@@ -2,10 +2,10 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
-} from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "@kix/core/dist/model";
-import { FAQArticleProperty, FAQCategory } from "@kix/core/dist/model/kix/faq";
-import { FAQContext } from "@kix/core/dist/browser/faq";
+} from "../../../../core/browser";
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
+import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
+import { FAQContext } from "../../../../core/browser/faq";
 
 class Component {
 

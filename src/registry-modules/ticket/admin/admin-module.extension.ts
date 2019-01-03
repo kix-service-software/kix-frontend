@@ -1,4 +1,4 @@
-import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType } from "@kix/core/dist/model";
+import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType } from "../../../core/model";
 
 class Extension implements IAdminModuleExtension {
 

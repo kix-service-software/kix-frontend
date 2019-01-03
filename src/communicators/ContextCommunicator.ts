@@ -2,10 +2,10 @@ import { KIXCommunicator } from './KIXCommunicator';
 import {
     SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
     ContextConfiguration, SaveContextConfigurationRequest
-} from '@kix/core/dist/model';
+} from '../core/model';
 
-import { CommunicatorResponse } from '@kix/core/dist/common';
-import { ConfigurationService, UserService } from '@kix/core/dist/services';
+import { CommunicatorResponse } from '../core/common';
+import { ConfigurationService, UserService } from '../core/services';
 import { PluginService } from '../services';
 
 export class ContextCommunicator extends KIXCommunicator {

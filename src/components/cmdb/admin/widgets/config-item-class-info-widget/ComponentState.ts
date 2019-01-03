@@ -1,5 +1,5 @@
-import { WidgetComponentState, AbstractAction, ConfigItemClass } from "@kix/core/dist/model";
-import { ConfigItemClassLabelProvider } from "@kix/core/dist/browser/cmdb";
+import { WidgetComponentState, AbstractAction, ConfigItemClass } from "../../../../../core/model";
+import { ConfigItemClassLabelProvider } from "../../../../../core/browser/cmdb";
 
 export class ComponentState extends WidgetComponentState<any> {
 

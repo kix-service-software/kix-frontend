@@ -1,4 +1,4 @@
-import { ConfiguredWidget, ConfiguredDialogWidget, ObjectIcon } from "@kix/core/dist/model";
+import { ConfiguredWidget, ConfiguredDialogWidget, ObjectIcon } from "../../../../core/model";
 
 export class MainDialogComponentState {
 

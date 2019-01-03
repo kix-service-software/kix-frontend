@@ -1,4 +1,4 @@
-import { AbstractAction, WidgetComponentState, Ticket, DynamicField } from '@kix/core/dist/model';
+import { AbstractAction, WidgetComponentState, Ticket, DynamicField } from '../../../../core/model';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 

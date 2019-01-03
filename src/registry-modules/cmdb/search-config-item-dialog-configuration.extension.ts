@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty
-} from '@kix/core/dist/model';
-import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '@kix/core/dist/browser/cmdb';
-import { ConfigurationService } from '@kix/core/dist/services';
-import { SearchProperty } from '@kix/core/dist/browser';
+} from '../../core/model';
+import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '../../core/browser/cmdb';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 

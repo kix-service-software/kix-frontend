@@ -1,5 +1,5 @@
-import { StandardTable, TableConfiguration } from "@kix/core/dist/browser";
-import { WidgetComponentState, AbstractAction, Contact } from "@kix/core/dist/model";
+import { StandardTable, TableConfiguration } from "../../../../core/browser";
+import { WidgetComponentState, AbstractAction, Contact } from "../../../../core/model";
 
 export class ComponentState extends WidgetComponentState<TableConfiguration> {
 

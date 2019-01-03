@@ -1,10 +1,10 @@
 
 import { ComponentState } from './ComponentState';
 import { StandardTableInput } from './StandardTableInput';
-import { TableRow, TableColumn, TableValue, ActionFactory, LabelService } from '@kix/core/dist/browser';
-import { SortOrder, KIXObject, IAction, ObjectIcon } from '@kix/core/dist/model';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { TableRow, TableColumn, TableValue, ActionFactory, LabelService } from '../../../core/browser';
+import { SortOrder, KIXObject, IAction, ObjectIcon } from '../../../core/model';
+import { ComponentsService } from '../../../core/browser/components';
+import { RoutingConfiguration } from '../../../core/browser/router';
 
 class StandardTableComponent<T extends KIXObject<T>> {
 

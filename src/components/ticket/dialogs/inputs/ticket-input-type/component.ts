@@ -1,8 +1,8 @@
 import { ComponentState } from "./ComponentState";
 import {
     ObjectIcon, TicketProperty, FormInputComponent, TreeNode, TicketType, KIXObjectType
-} from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<number, ComponentState> {
 

@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
 import {
     DialogService, FormService, OverlayService, KIXObjectService, ContextService
-} from "@kix/core/dist/browser";
+} from "../../../../core/browser";
 import {
     OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, KIXObjectType, ToastContent, ContextType, FormInstance
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 
 class Component {
 

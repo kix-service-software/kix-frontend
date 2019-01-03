@@ -1,6 +1,6 @@
 import { HomeComponentState } from './HomeComponentState';
-import { ContextService } from '@kix/core/dist/browser/context/';
-import { HomeContext } from '@kix/core/dist/browser/home';
+import { ContextService } from '../../../core/browser/context/';
+import { HomeContext } from '../../../core/browser/home';
 
 class HomeComponent {
 

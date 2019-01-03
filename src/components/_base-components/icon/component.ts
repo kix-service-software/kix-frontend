@@ -1,6 +1,6 @@
-import { ObjectIcon, KIXObjectType, ObjectIconLoadingOptions } from '@kix/core/dist/model';
+import { ObjectIcon, KIXObjectType, ObjectIconLoadingOptions } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { KIXObjectService } from '@kix/core/dist/browser';
+import { KIXObjectService } from '../../../core/browser';
 
 class IconComponent {
 

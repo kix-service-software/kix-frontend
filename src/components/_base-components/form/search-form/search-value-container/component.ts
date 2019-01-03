@@ -1,8 +1,10 @@
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService, DialogService
-} from '@kix/core/dist/browser';
-import { TreeNode, SearchFormInstance, CacheState, ISearchFormListener, KIXObjectType } from '@kix/core/dist/model';
+} from '../../../../../core/browser';
+import {
+    TreeNode, SearchFormInstance, CacheState, ISearchFormListener, KIXObjectType
+} from '../../../../../core/model';
 import { FormSearchValue } from './FormSearchValue';
 
 class Component implements IKIXObjectSearchListener {

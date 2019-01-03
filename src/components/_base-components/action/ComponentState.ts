@@ -1,4 +1,4 @@
-import { AbstractAction } from '@kix/core/dist/model';
+import { AbstractAction } from '../../../core/model';
 
 export class ComponentState {
 

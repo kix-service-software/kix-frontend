@@ -2,13 +2,13 @@
 import {
     ContextConfiguration, FormField, ConfigItemClassProperty, FormFieldValue, Form,
     KIXObjectType, FormContext, ConfiguredWidget
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
-import { ConfigurationService } from "@kix/core/dist/services";
+} from "../../../core/model";
+import { IConfigurationExtension } from "../../../core/extensions";
+import { ConfigurationService } from "../../../core/services";
 import {
     NewConfigItemClassDialogContext, NewConfigItemClassDialogContextConfiguration
-} from "@kix/core/dist/browser/cmdb";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
+} from "../../../core/browser/cmdb";
+import { FormGroup } from "../../../core/model/components/form/FormGroup";
 
 export class Extension implements IConfigurationExtension {
 

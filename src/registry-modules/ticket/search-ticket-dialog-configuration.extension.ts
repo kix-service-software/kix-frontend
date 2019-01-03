@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { TicketSearchContextConfiguration, TicketSearchContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../core/extensions';
+import { TicketSearchContextConfiguration, TicketSearchContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, KIXObjectType, TicketProperty, FormContext, SearchForm,
     ConfiguredWidget, WidgetConfiguration, WidgetSize
-} from '@kix/core/dist/model';
-import { ConfigurationService } from '@kix/core/dist/services';
-import { SearchProperty } from '@kix/core/dist/browser';
+} from '../../core/model';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 

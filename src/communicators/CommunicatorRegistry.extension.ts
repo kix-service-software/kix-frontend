@@ -1,4 +1,4 @@
-import { ICommunicatorRegistryExtension } from '@kix/core/dist/extensions';
+import { ICommunicatorRegistryExtension } from '../core/extensions';
 import { AuthenticationCommunicator } from '.';
 import { ConfigurationCommunicatior } from './ConfigurationCommunicator';
 import { ContextCommunicator } from './ContextCommunicator';

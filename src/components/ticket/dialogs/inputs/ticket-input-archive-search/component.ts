@@ -1,5 +1,5 @@
 import { ComponentState } from "./CompontentState";
-import { ArchiveFlag, FormInputComponent, TreeNode } from "@kix/core/dist/model";
+import { ArchiveFlag, FormInputComponent, TreeNode } from "../../../../../core/model";
 
 
 class Component extends FormInputComponent<number, ComponentState> {

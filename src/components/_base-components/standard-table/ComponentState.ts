@@ -1,6 +1,6 @@
-import { StandardTable } from '@kix/core/dist/browser';
+import { StandardTable } from '../../../core/browser';
 import { ResizeSettings } from './ResizeSettings';
-import { SortOrder, KIXObject } from '@kix/core/dist/model';
+import { SortOrder, KIXObject } from '../../../core/model';
 
 export class ComponentState<T extends KIXObject<T>> {
 

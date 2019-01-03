@@ -1,10 +1,10 @@
 import {
     AbstractMarkoComponent, ContextService, WidgetService, ActionFactory, IdService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TicketStateDetailsContext, TicketStateDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
-import { KIXObjectType, TicketState, WidgetType } from '@kix/core/dist/model';
-import { ComponentsService } from '@kix/core/dist/browser/components';
+import { TicketStateDetailsContext, TicketStateDetailsContextConfiguration } from '../../../../core/browser/ticket';
+import { KIXObjectType, TicketState, WidgetType } from '../../../../core/model';
+import { ComponentsService } from '../../../../core/browser/components';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

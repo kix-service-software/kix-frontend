@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ChartConfiguration } from 'chart.js';
-import { ContextService } from '@kix/core/dist/browser';
+import { ContextService } from '../../../core/browser';
 
 declare var Chart: any;
 

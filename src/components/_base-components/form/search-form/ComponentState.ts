@@ -1,5 +1,5 @@
-import { KIXObjectType, KIXObject, FormField } from "@kix/core/dist/model";
-import { StandardTable } from "@kix/core/dist/browser";
+import { KIXObjectType, KIXObject, FormField } from "../../../../core/model";
+import { StandardTable } from "../../../../core/browser";
 
 export class ComponentState {
 

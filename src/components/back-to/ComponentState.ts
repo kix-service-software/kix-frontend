@@ -1,4 +1,4 @@
-import { ContextHistoryEntry } from "@kix/core/dist/browser/context/ContextHistoryEntry";
+import { ContextHistoryEntry } from "../../core/browser/context/ContextHistoryEntry";
 
 export class ComponentState {
 

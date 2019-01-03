@@ -1,9 +1,9 @@
-import { ContextConfiguration, ConfigItemClass, KIXObjectType } from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
-import { ConfigurationService, KIXObjectServiceRegistry } from "@kix/core/dist/services";
+import { ContextConfiguration, ConfigItemClass, KIXObjectType } from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
+import { ConfigurationService, KIXObjectServiceRegistry } from "../../core/services";
 import {
     NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
-} from "@kix/core/dist/browser/cmdb";
+} from "../../core/browser/cmdb";
 
 export class Extension implements IConfigurationExtension {
 

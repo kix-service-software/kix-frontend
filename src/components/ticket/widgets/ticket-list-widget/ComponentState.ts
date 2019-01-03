@@ -1,5 +1,5 @@
-import { StandardTable } from '@kix/core/dist/browser';
-import { Ticket, WidgetComponentState, IAction, KIXObjectPropertyFilter } from '@kix/core/dist/model';
+import { StandardTable } from '../../../../core/browser';
+import { Ticket, WidgetComponentState, IAction, KIXObjectPropertyFilter } from '../../../../core/model';
 
 export class ComponentState extends WidgetComponentState {
 

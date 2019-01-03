@@ -1,14 +1,14 @@
 import {
     ContextService, DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
     FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty
-} from '@kix/core/dist/model';
+} from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService, ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
-import { RoutingService, RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { CMDBService, ConfigItemDetailsContext } from '../../../../core/browser/cmdb';
+import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
 
 class Component {
 

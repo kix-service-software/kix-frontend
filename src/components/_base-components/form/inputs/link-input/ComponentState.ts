@@ -1,5 +1,5 @@
-import { FormInputComponentState, CreateLinkDescription } from "@kix/core/dist/model";
-import { Label } from "@kix/core/dist/browser/components";
+import { FormInputComponentState, CreateLinkDescription } from "../../../../../core/model";
+import { Label } from "../../../../../core/browser/components";
 
 export class ComponentState extends FormInputComponentState<CreateLinkDescription[]> {
 

@@ -1,5 +1,5 @@
-import { ILabelProvider } from '@kix/core/dist/browser';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ILabelProvider } from '../../../core/browser';
+import { ObjectIcon } from '../../../core/model';
 
 export class ComponentState<T> {
 

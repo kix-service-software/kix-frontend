@@ -2,8 +2,8 @@ import { TicketArticleDetailsComponentState } from './TicketArticleDetailsCompon
 import {
     Article, Ticket, KIXObjectType, ContextMode,
     KIXObjectLoadingOptions, ArticlesLoadingOptions
-} from '@kix/core/dist/model';
-import { ContextService, KIXObjectService } from '@kix/core/dist/browser';
+} from '../../../core/model';
+import { ContextService, KIXObjectService } from '../../../core/browser';
 
 export class TicketArticleDetailsComponent {
 

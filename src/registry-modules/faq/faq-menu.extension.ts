@@ -1,5 +1,5 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { FAQContext, FAQDetailsContext } from '@kix/core/dist/browser/faq';
+import { IMainMenuExtension } from '../../core/extensions';
+import { FAQContext, FAQDetailsContext } from '../../core/browser/faq';
 
 export class Extension implements IMainMenuExtension {
 

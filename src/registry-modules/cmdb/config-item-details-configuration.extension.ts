@@ -1,15 +1,15 @@
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize,
     KIXObjectType,
     DataType
-} from "@kix/core/dist/model";
+} from "../../core/model";
 import {
     TableColumnConfiguration, TableConfiguration,
     TableHeaderHeight, TableRowHeight
-} from '@kix/core/dist/browser';
-import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "@kix/core/dist/browser/cmdb";
+} from '../../core/browser';
+import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "../../core/browser/cmdb";
 
 export class Extension implements IConfigurationExtension {
 

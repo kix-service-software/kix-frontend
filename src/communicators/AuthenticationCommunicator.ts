@@ -1,12 +1,12 @@
 import {
     AuthenticationResult, LoginRequest, AuthenticationEvent, SocketEvent
-} from '@kix/core/dist/model';
+} from '../core/model';
 
-import { HttpError } from '@kix/core/dist/api';
-import { CommunicatorResponse } from '@kix/core/dist/common';
+import { HttpError } from '../core/api';
+import { CommunicatorResponse } from '../core/common';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { LoggingService, AuthenticationService } from '@kix/core/dist/services';
+import { LoggingService, AuthenticationService } from '../core/services';
 
 export class AuthenticationCommunicator extends KIXCommunicator {
 

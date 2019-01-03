@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
-import { ReleaseInfo } from '@kix/core/dist/model';
+import { ContextService } from '../../../core/browser';
+import { ReleaseInfo } from '../../../core/model';
 
 class Component {
 

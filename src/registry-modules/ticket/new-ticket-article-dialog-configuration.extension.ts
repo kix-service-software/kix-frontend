@@ -1,12 +1,12 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { NewTicketArticleContextConfiguration, NewTicketArticleContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../core/extensions';
+import { NewTicketArticleContextConfiguration, NewTicketArticleContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { AutocompleteOption, AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { AutocompleteOption, AutocompleteFormFieldOption } from '../../core/browser/components';
+import { ConfigurationService } from '../../core/services';
 
 export class Extension implements IConfigurationExtension {
 

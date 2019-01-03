@@ -1,4 +1,4 @@
-import { Contact, WidgetConfiguration, ContextType } from '@kix/core/dist/model';
+import { Contact, WidgetConfiguration, ContextType } from '../../../../core/model';
 
 export class ComponentState {
 

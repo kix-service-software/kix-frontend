@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { LabelService, KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { LabelService, KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<KIXObject, ComponentState> {
 

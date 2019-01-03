@@ -1,11 +1,11 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { FormService, ContextService, OverlayService, ServiceRegistry } from "@kix/core/dist/browser";
+import { DialogService } from "../../../../core/browser/dialog/DialogService";
+import { FormService, ContextService, OverlayService, ServiceRegistry } from "../../../../core/browser";
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
     OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { CMDBService } from "@kix/core/dist/browser/cmdb";
+import { CMDBService } from "../../../../core/browser/cmdb";
 
 class Component {
 

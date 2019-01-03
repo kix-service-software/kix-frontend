@@ -1,5 +1,5 @@
-import { WidgetComponentState, AbstractAction, ConfigItem } from "@kix/core/dist/model";
-import { DisplayImageDescription } from "@kix/core/dist/browser/components/DisplayImageDescription";
+import { WidgetComponentState, AbstractAction, ConfigItem } from "../../../../core/model";
+import { DisplayImageDescription } from "../../../../core/browser/components/DisplayImageDescription";
 
 export class ComponentState extends WidgetComponentState {
 

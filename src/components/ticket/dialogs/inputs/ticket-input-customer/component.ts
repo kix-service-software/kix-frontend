@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
+import { ContextService } from "../../../../../core/browser/context";
 import {
     TicketProperty, FormFieldValue, FormInputComponent, FormField,
     KIXObjectType, Customer, TreeNode
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { IdService, KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { IdService, KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 

@@ -1,4 +1,4 @@
-import { FormField } from "@kix/core/dist/model";
+import { FormField } from "../../../../core/model";
 
 export class ComponentState {
 

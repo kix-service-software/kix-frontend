@@ -1,7 +1,7 @@
 import { SidebarMenuComponentState } from './SidebarMenuComponentState';
-import { ContextService } from '@kix/core/dist/browser/context';
-import { Context, ConfiguredWidget, ContextType } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser';
+import { ContextService } from '../../../core/browser/context';
+import { Context, ConfiguredWidget, ContextType } from '../../../core/model';
+import { IdService } from '../../../core/browser';
 
 class SidebarMenuComponent {
 

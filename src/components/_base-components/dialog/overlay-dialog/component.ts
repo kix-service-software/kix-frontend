@@ -1,8 +1,8 @@
-import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
+import { DialogService } from '../../../../core/browser/dialog/DialogService';
 import { ComponentState } from './ComponentState';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { ObjectIcon, WidgetType } from '@kix/core/dist/model';
-import { WidgetService, IOverlayDialogListener } from '@kix/core/dist/browser';
+import { ComponentsService } from '../../../../core/browser/components';
+import { ObjectIcon, WidgetType } from '../../../../core/model';
+import { WidgetService, IOverlayDialogListener } from '../../../../core/browser';
 
 export class OverlayDialogComponent implements IOverlayDialogListener {
 

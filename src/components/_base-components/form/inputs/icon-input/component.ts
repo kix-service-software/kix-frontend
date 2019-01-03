@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from "@kix/core/dist/model";
-import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from "@kix/core/dist/browser";
-import { OverlayService } from "@kix/core/dist/browser/OverlayService";
+import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from "../../../../../core/model";
+import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from "../../../../../core/browser";
+import { OverlayService } from "../../../../../core/browser/OverlayService";
 
 class Component extends FormInputComponent<any, ComponentState> {
 

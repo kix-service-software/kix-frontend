@@ -1,7 +1,7 @@
-import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
+import { DialogService } from '../../../../core/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
-import { IMainDialogListener, ContextService } from '@kix/core/dist/browser';
-import { ConfiguredDialogWidget, ObjectIcon, Context } from '@kix/core/dist/model';
+import { IMainDialogListener, ContextService } from '../../../../core/browser';
+import { ConfiguredDialogWidget, ObjectIcon, Context } from '../../../../core/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 

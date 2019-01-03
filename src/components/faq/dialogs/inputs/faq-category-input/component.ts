@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions
-} from "@kix/core/dist/model";
-import { FAQCategory, FAQCategoryProperty } from "@kix/core/dist/model/kix/faq";
-import { KIXObjectService, SearchOperator } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FAQCategory, FAQCategoryProperty } from "../../../../../core/model/kix/faq";
+import { KIXObjectService, SearchOperator } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 

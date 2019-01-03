@@ -1,8 +1,8 @@
-import { ContextService } from '@kix/core/dist/browser/context';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { ContextService } from '../../../core/browser/context';
+import { ComponentsService } from '../../../core/browser/components';
+import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { WidgetService, ActionFactory } from '@kix/core/dist/browser';
+import { WidgetService, ActionFactory } from '../../../core/browser';
 
 class TabLaneComponent {
 

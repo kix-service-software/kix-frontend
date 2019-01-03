@@ -1,15 +1,15 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     EditTicketDialogContextConfiguration, EditTicketDialogContext, PendingTimeFormValue
-} from '@kix/core/dist/browser/ticket';
+} from '../../core/browser/ticket';
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
     FormFieldOption, FormFieldOptions, WidgetSize
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { AutocompleteFormFieldOption, AutocompleteOption } from '@kix/core/dist/browser/components';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { AutocompleteFormFieldOption, AutocompleteOption } from '../../core/browser/components';
+import { ConfigurationService } from '../../core/services';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 

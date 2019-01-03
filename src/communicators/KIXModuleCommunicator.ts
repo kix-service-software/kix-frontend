@@ -1,8 +1,8 @@
 import { KIXCommunicator } from "./KIXCommunicator";
 import { Socket } from "socket.io";
-import { CommunicatorResponse } from "@kix/core/dist/common";
-import { KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse } from "@kix/core/dist/model";
-import { KIXExtensions, IKIXModuleExtension } from "@kix/core/dist/extensions";
+import { CommunicatorResponse } from "../core/common";
+import { KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse } from "../core/model";
+import { KIXExtensions, IKIXModuleExtension } from "../core/extensions";
 import { PluginService } from "../services";
 
 export class KIXModuleCommunicator extends KIXCommunicator {

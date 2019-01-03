@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
-import { CMDBContext } from '@kix/core/dist/browser/cmdb';
+import { ContextService } from '../../../core/browser';
+import { CMDBContext } from '../../../core/browser/cmdb';
 
 class Component {
 

@@ -1,7 +1,7 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
-import { TicketTypeDetailsContext } from '@kix/core/dist/browser/ticket';
-import { ConfigItemClassDetailsContextConfiguration } from '@kix/core/dist/browser/cmdb';
+import { IConfigurationExtension } from '../../../core/extensions';
+import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
+import { TicketTypeDetailsContext } from '../../../core/browser/ticket';
+import { ConfigItemClassDetailsContextConfiguration } from '../../../core/browser/cmdb';
 
 export class Extension implements IConfigurationExtension {
 

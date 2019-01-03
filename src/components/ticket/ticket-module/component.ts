@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { TicketContext } from '@kix/core/dist/browser/ticket';
-import { ContextService } from '@kix/core/dist/browser';
+import { TicketContext } from '../../../core/browser/ticket';
+import { ContextService } from '../../../core/browser';
 
 class Component {
 

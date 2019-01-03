@@ -1,4 +1,4 @@
-import { IKIXModuleExtension } from "@kix/core/dist/extensions";
+import { IKIXModuleExtension } from "../../core/extensions";
 
 class KIXModuleExtionsion implements IKIXModuleExtension {
 

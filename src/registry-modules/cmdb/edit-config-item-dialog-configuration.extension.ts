@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration, KIXObjectType, ConfigItemClass } from '@kix/core/dist/model';
+import { IConfigurationExtension } from '../../core/extensions';
+import { ContextConfiguration, KIXObjectType, ConfigItemClass } from '../../core/model';
 import {
     EditConfigItemDialogContext,
     EditConfigItemDialogContextConfiguration,
     ConfigItemFormFactory
-} from '@kix/core/dist/browser/cmdb';
-import { ConfigurationService, KIXObjectServiceRegistry } from '@kix/core/dist/services';
+} from '../../core/browser/cmdb';
+import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 
 export class EditConfigItemDialogModuleExtension implements IConfigurationExtension {
 

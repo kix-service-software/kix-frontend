@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { TreeNode, AutoCompleteConfiguration } from "@kix/core/dist/model";
+import { TreeNode, AutoCompleteConfiguration } from "../../../../../core/model";
 
 class Component {
 

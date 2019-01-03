@@ -1,0 +1,9 @@
+export { CreateSearchProfile } from "./CreateSearchProfile";
+export { CreateSearchProfileRequest } from "./CreateSearchProfileRequest";
+export { CreateSearchProfileResponse } from "./CreateSearchProfileResponse";
+export { SearchProfileResponse } from "./SearchProfileResponse";
+export { SearchProfilesResponse } from "./SearchProfilesResponse";
+export { SearchProfileCategoriesResponse } from "./SearchProfileCategoriesResponse";
+export { UpdateSearchProfile } from "./UpdateSearchProfile";
+export { UpdateSearchProfileRequest } from "./UpdateSearchProfileRequest";
+export { UpdateSearchProfileResponse } from "./UpdateSearchProfileResponse";

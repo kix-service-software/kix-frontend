@@ -1,4 +1,4 @@
-import { ObjectIcon } from "@kix/core/dist/model";
+import { ObjectIcon } from "../../../core/model";
 
 export class ComponentState {
 

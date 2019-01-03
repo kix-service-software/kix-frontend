@@ -1,4 +1,4 @@
-import { TableConfiguration } from "@kix/core/dist/browser";
+import { TableConfiguration } from "../../../../core/browser";
 
 export class ArticleListSettings {
 

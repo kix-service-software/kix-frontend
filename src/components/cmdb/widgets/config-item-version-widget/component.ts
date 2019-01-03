@@ -1,10 +1,10 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '../../../../core/browser/context';
 import { ComponentState } from './ComponentState';
 import {
     ActionFactory, StandardTableFactoryService, IdService, WidgetService, TableConfiguration
-} from '@kix/core/dist/browser';
-import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
+} from '../../../../core/browser';
+import { KIXObjectType, ConfigItem } from '../../../../core/model';
+import { EventService, IEventListener } from '../../../../core/browser/event';
 
 class Component implements IEventListener {
 
