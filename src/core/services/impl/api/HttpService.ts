@@ -48,6 +48,7 @@ export class HttpService {
             parameter = ' ' + JSON.stringify(options.qs);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
             parameter = ' ' + JSON.stringify(options.body);
+            parameter = parameter.replace('\\n', '\n');
         }
 
         // start profiling

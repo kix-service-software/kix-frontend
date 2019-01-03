@@ -2,12 +2,11 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    ConfigItemClassProperty, ObjectIcon, ConfigItemClassDefinitionProperty
+    ConfigItemClassProperty, ObjectIcon
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse, CreateConfigItemClass,
-    CreateConfigItemClassResponse, CreateConfigItemClassRequest, CreateConfigItemClassDefinition,
-    CreateConfigItemClassDefinitionRequest
+    CreateConfigItemClassResponse, CreateConfigItemClassRequest
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 
@@ -100,14 +99,7 @@ export class ConfigItemClassService extends KIXObjectService {
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
-
-            const definitionStringParameter = parameter.find((p) => p[0] === ConfigItemClassProperty.DEFINITION_STRING);
-            if (definitionStringParameter && definitionStringParameter[1]) {
-                parameter.push(this.prepareDefinition(definitionStringParameter[1]));
-            }
-
-            const createConfigItemClass = new CreateConfigItemClass(
-                parameter.filter((p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING)
+            const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON')
             );
             console.log(createConfigItemClass);
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
@@ -133,14 +125,4 @@ export class ConfigItemClassService extends KIXObjectService {
         throw new Error("Method not implemented.");
     }
 
-    private prepareDefinition(definitionString: string): [string, any] {
-        return [
-            'Definition',
-            new CreateConfigItemClassDefinitionRequest(
-                new CreateConfigItemClassDefinition([
-                    [ConfigItemClassDefinitionProperty.DEFINITION_STRING, definitionString]
-                ])
-            )
-        ];
-    }
 }
