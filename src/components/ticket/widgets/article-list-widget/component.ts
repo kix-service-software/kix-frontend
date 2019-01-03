@@ -131,7 +131,10 @@ export class Component implements IEventListener {
             let count = 0;
             this.state.articles.forEach((article) => {
                 if (article.Attachments) {
-                    count += article.Attachments.length;
+                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
+                    if (attachments.length > 0) {
+                        count += attachments.length;
+                    }
                 }
             });
 

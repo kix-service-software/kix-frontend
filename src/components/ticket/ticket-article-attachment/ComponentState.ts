@@ -1,6 +1,6 @@
 import { Attachment, Article, ObjectIcon } from '@kix/core/dist/model';
 
-export class ArticleAttachmentComponentState {
+export class ComponentState {
 
     public constructor(
         public article: Article = null,

@@ -1,15 +1,20 @@
-import { AttachementListComponentState } from './AttchementListComponentState';
+import { ComponentState } from './ComponentState';
+import { Attachment } from '@kix/core/dist/model';
 
 class TicketArticleAttchementListComponent {
 
-    private state: AttachementListComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new AttachementListComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.article = input.article;
+        if (input.article && input.article.Attachments) {
+            this.state.article = input.article;
+            const attachments: Attachment[] = input.article.Attachments;
+            this.state.attachments = attachments.filter((a) => a.Disposition !== 'inline');
+        }
     }
 
 }
