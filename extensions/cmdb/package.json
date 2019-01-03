@@ -7,6 +7,7 @@
             "cmdb-configuration": "../../dist/registry-modules/cmdb/cmdb-configuration.extension",
             "edit-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/edit-config-item-dialog-configuration.extension",
             "config-item-class-details-configuration": "../../dist/registry-modules/cmdb/admin/config-item-class-details-configuration.extension",
+            "new-config-item-class-dialog-configuration": "../../dist/registry-modules/cmdb/admin/new-config-item-class-dialog-configuration.extension",
             "search-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/search-config-item-dialog-configuration.extension"
         },
         "kix:modules": {
