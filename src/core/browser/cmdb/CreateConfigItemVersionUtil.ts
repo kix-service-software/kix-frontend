@@ -140,13 +140,20 @@ export class CreateConfigItemVersionUtil {
                     }
                 }
 
-                data = {};
+                data = null;
                 if (value) {
+                    data = {};
                     data[formField.property] = value;
                 }
-                subDataEntries.forEach((subData, property) => {
-                    data[property] = subData;
-                });
+
+                if (subDataEntries.size > 0) {
+                    if (!data) {
+                        data = {};
+                    }
+                    subDataEntries.forEach((subData, property) => {
+                        data[property] = subData;
+                    });
+                }
             }
         }
 
