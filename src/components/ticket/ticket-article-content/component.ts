@@ -1,6 +1,8 @@
-import { ComponentState } from './TicketArticleContentComponentState';
+import { ComponentState } from './ComponentState';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { Article } from '@kix/core/dist/model';
+import { Article, KIXObjectType, KIXObjectLoadingOptions } from '@kix/core/dist/model';
+import { KIXObjectService } from "@kix/core/dist/browser";
+import { InlineContent } from '@kix/core/dist/browser/components';
 
 class Component {
 
@@ -17,12 +19,29 @@ class Component {
         this.prepareContent();
     }
 
+
     public async prepareContent(): Promise<void> {
         if (this.article) {
             if (this.article.bodyAttachment) {
                 const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
                     this.article.TicketID, this.article.ArticleID, this.article.bodyAttachment.ID
                 );
+
+                const inlineAttachments = this.article.Attachments.filter((a) => a.Disposition === 'inline');
+                for (const inlineAttachment of inlineAttachments) {
+                    const attachment = await TicketService.getInstance().loadArticleAttachment(
+                        this.article.TicketID, this.article.ArticleID, inlineAttachment.ID
+                    );
+                    if (attachment) {
+                        inlineAttachment.Content = attachment.Content;
+                    }
+                }
+
+                const inlineContent: InlineContent[] = [];
+                inlineAttachments.forEach(
+                    (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
+                );
+                this.state.inlineContent = inlineContent;
                 this.state.content = new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8');
             } else {
                 this.state.content = this.article.Body;

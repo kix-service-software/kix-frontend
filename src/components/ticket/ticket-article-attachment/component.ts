@@ -1,16 +1,16 @@
 import { Attachment, ObjectIcon } from '@kix/core/dist/model';
 import { TicketService } from '@kix/core/dist/browser/ticket';
-import { ArticleAttachmentComponentState } from './ArticleAttachmentComponentState';
+import { ComponentState } from './ComponentState';
 import { BrowserUtil } from '@kix/core/dist/browser';
 
 declare var window: any;
 
 class ArticleAttachmentComponent {
 
-    private state: ArticleAttachmentComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new ArticleAttachmentComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {

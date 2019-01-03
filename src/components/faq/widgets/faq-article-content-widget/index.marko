@@ -6,22 +6,22 @@
                 <div>
                     <widget instanceId="faq-article-group" title="Symptom">
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field1 useReadonlyStyle=true/>
+                            <editor readOnly=true value=state.faqArticle.Field1 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
                     <widget instanceId="faq-article-group" title="Ursache">
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field2 useReadonlyStyle=true/>
+                            <editor readOnly=true value=state.faqArticle.Field2 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
                     <widget instanceId="faq-article-group" title="Lösung">
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field3 useReadonlyStyle=true/>
+                            <editor readOnly=true value=state.faqArticle.Field3 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
                     <widget instanceId="faq-article-group" title="Kommentar">
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field6 useReadonlyStyle=true/>
+                            <editor readOnly=true value=state.faqArticle.Field6 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
                 </div>
@@ -42,7 +42,7 @@
                     </div>
                     <div.faq-attachments>
                         <span>Anlagen:</span>
-                        <for(attachment in state.faqArticle.Attachments)>
+                        <for(attachment in state.attachments)>
                             <file-entry attachment=attachment on-fileClicked('download', attachment)/>
                         </for>
                     </div>
