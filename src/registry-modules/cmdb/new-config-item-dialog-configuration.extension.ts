@@ -1,6 +1,6 @@
-import { ContextConfiguration } from "@kix/core/dist/model";
+import { ContextConfiguration, ConfigItemClass, KIXObjectType } from "@kix/core/dist/model";
 import { IConfigurationExtension } from "@kix/core/dist/extensions";
-import { ConfigurationService, CMDBService } from "@kix/core/dist/services";
+import { ConfigurationService, KIXObjectServiceRegistry } from "@kix/core/dist/services";
 import {
     NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from "@kix/core/dist/browser/cmdb";
@@ -19,9 +19,13 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
-        const cmdbService = CMDBService.getInstance();
+        const configItemClassService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            KIXObjectType.CONFIG_ITEM_CLASS
+        );
 
-        const ciClasses = await cmdbService.loadConfigItemClassWithDefinitions(token);
+        const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
+            token, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
+        );
 
         for (const ciClass of ciClasses) {
             const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;

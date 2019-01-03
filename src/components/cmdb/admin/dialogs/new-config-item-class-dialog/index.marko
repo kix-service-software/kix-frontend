@@ -1,0 +1,24 @@
+<if(!state.loading)>
+    <widget instanceId="new-config-item-class-dialog">
+        <@content>
+            <if(state.formId)>
+                <main-form formId=state.formId/>
+            </if>
+            <div.dialog-button-container>
+                <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+                    <span.kix-icon-close/>
+                    Abbrechen
+                </button>
+                <if(state.formId)>
+                    <button.submit-button type="button" on-click("submit") title="Speichern">
+                        <span.kix-icon-check/>
+                        Speichern
+                    </button>
+                </if>
+            </div>
+        </@content>
+    </widget>
+</if>
+<else>
+    <loading-spinner/>
+</else>

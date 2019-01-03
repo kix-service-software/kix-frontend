@@ -6,7 +6,7 @@ import { BulkAction } from '@kix/core/dist/browser/actions';
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, KIXObjectCache, ConfigItemClassCacheHandler
 } from '@kix/core/dist/model';
 import {
     CMDBContext, NewConfigItemDialogContext, ConfigItemDetailsContext, ConfigItemSearchContext,
@@ -16,7 +16,8 @@ import {
     ConfigItemCreateAction, ConfigItemEditAction, ConfigItemPrintAction, ConfigItemVersionCompareAction,
     EditConfigItemDialogContext, ConfigItemFormService, ConfigItemClassLabelProvider, ConfigItemClassTableFactory,
     ConfigItemClassCreateAction, ConfigItemClassImportAction, ConfigItemClassDetailsContext, ConfigItemClassEditAction,
-    ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider
+    ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext,
+    ConfigItemClassService
 } from '@kix/core/dist/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -27,7 +28,11 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.getInstance().registerServiceInstance(CMDBService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassService.getInstance());
+
         ServiceRegistry.getInstance().registerServiceInstance(ConfigItemFormService.getInstance());
+
+        KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()
@@ -55,6 +60,7 @@ class Component extends AbstractMarkoComponent {
         this.registerContexts();
         this.registerAdminContexts();
         this.registerDialogs();
+        this.registerAdminDialogs();
         this.registerActions();
         this.registerAdminActions();
     }
@@ -98,6 +104,13 @@ class Component extends AbstractMarkoComponent {
             true, 'config-item-class-details', ['configitemclasses'], ConfigItemClassDetailsContext
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
+
+        const newConfigItemClassDetailsContext = new ContextDescriptor(
+            NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
+        );
+        ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
     }
 
     private registerDialogs(): void {
@@ -127,6 +140,17 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.SEARCH
+        ));
+    }
+
+    private registerAdminDialogs(): void {
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-config-item-class-dialog',
+            new WidgetConfiguration(
+                'new-config-item-class-dialog', 'Neue CMDB Klasse', [], {}, false, false, null, 'kix-icon-gear'
+            ),
+            KIXObjectType.CONFIG_ITEM_CLASS,
+            ContextMode.CREATE_ADMIN
         ));
     }
 
