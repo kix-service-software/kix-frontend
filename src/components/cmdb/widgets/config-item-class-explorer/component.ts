@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, KIXObjectService } from '@kix/core/dist/browser';
+import { ContextService, IdService, KIXObjectService } from '../../../../core/browser';
 import {
     TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
-} from '@kix/core/dist/model';
-import { CMDBContext } from '@kix/core/dist/browser/cmdb';
+} from '../../../../core/model';
+import { CMDBContext } from '../../../../core/browser/cmdb';
 
 export class Component {
 

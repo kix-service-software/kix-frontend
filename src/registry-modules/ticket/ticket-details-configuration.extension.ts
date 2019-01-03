@@ -1,4 +1,4 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration,
     ContextConfiguration,
@@ -8,12 +8,12 @@ import {
     TicketProperty,
     ArticleProperty,
     KIXObjectType
-} from '@kix/core/dist/model/';
+} from '../../core/model/';
 import {
     TableColumnConfiguration, TableConfiguration,
     ToggleOptions, TableHeaderHeight, TableRowHeight
-} from '@kix/core/dist/browser';
-import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/browser';
+import { TicketDetailsContextConfiguration } from '../../core/browser/ticket';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 

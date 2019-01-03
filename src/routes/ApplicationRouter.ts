@@ -1,6 +1,6 @@
-import { ISpecificCSSExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { ISpecificCSSExtension, KIXExtensions } from '../core/extensions';
 import { Request, Response } from 'express';
-import { ConfigurationService, AuthenticationService, UserService } from '@kix/core/dist/services';
+import { ConfigurationService, AuthenticationService, UserService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 import { PluginService } from '../services';
 

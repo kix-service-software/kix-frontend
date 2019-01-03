@@ -1,0 +1,9 @@
+export { CreateTextModule } from "./CreateTextModule";
+export { CreateTextModuleRequest } from "./CreateTextModuleRequest";
+export { CreateTextModuleResponse } from './CreateTextModuleResponse';
+export { TextModuleCategoriesResponse } from "./TextModuleCategoriesResponse";
+export { TextModuleResponse } from "./TextModuleResponse";
+export { TextModulesResponse } from "./TextModulesResponse";
+export { UpdateTextModule } from "./UpdateTextModule";
+export { UpdateTextModuleRequest } from "./UpdateTextModuleRequest";
+export { UpdateTextModuleResponse } from "./UpdateTextModuleResponse";

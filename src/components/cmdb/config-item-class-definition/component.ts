@@ -1,6 +1,6 @@
-import { AbstractMarkoComponent } from '@kix/core/dist/browser';
+import { AbstractMarkoComponent } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { ConfigItemClassDefinition } from '@kix/core/dist/model';
+import { ConfigItemClassDefinition } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

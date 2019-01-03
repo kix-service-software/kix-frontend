@@ -1,5 +1,5 @@
-import { StandardTable } from "@kix/core/dist/browser";
-import { KIXObjectPropertyFilter } from "@kix/core/dist/model";
+import { StandardTable } from "../../../../core/browser";
+import { KIXObjectPropertyFilter } from "../../../../core/model";
 
 export class ComponentState {
 

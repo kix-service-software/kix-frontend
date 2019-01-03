@@ -1,13 +1,13 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../../core/extensions';
 import {
     NewTicketPriorityDialogContext, NewTicketPriorityDialogContextConfiguration
-} from '@kix/core/dist/browser/ticket';
+} from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, TicketPriorityProperty
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../../core/model';
+import { FormGroup } from '../../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../../core/services';
 
 export class Extension implements IConfigurationExtension {
 

@@ -1,4 +1,4 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration,
     ConfiguredWidget,
@@ -10,15 +10,15 @@ import {
     FilterType,
     KIXObjectPropertyFilter,
     TableFilterCriteria
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     TableColumnConfiguration, SearchOperator, ToggleOptions, TableHeaderHeight,
     TableRowHeight,
     TableConfiguration
-} from '@kix/core/dist/browser';
-import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
-import { TicketProperty } from '@kix/core/dist/model/';
-import { TicketChartConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/browser';
+import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
+import { TicketProperty } from '../../core/model/';
+import { TicketChartConfiguration } from '../../core/browser/ticket';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 

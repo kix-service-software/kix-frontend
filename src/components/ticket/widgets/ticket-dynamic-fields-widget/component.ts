@@ -1,9 +1,9 @@
-import { ActionFactory } from '@kix/core/dist/browser';
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ActionFactory } from '../../../../core/browser';
+import { ContextService } from '../../../../core/browser/context';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Ticket } from '@kix/core/dist/model';
+import { KIXObjectType, Ticket } from '../../../../core/model';
 
 class Component {
 

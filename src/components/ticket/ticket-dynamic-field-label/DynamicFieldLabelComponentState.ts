@@ -1,4 +1,4 @@
-import { DynamicField, Ticket } from '@kix/core/dist/model';
+import { DynamicField, Ticket } from '../../../core/model';
 
 export class DynamicFieldLabelComponentState {
 

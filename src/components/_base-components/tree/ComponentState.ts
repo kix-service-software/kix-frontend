@@ -1,5 +1,5 @@
-import { TreeNode } from "@kix/core/dist/model";
-import { IdService } from "@kix/core/dist/browser";
+import { TreeNode } from "../../../core/model";
+import { IdService } from "../../../core/browser";
 
 export class ComponentState {
 

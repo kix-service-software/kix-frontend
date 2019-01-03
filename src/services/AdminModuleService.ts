@@ -1,6 +1,6 @@
 import { PluginService } from "./PluginService";
-import { KIXExtensions } from "@kix/core/dist/extensions";
-import { AdminModuleCategory, IAdminModuleExtension } from "@kix/core/dist/model";
+import { KIXExtensions } from "../core/extensions";
+import { AdminModuleCategory, IAdminModuleExtension } from "../core/model";
 
 export class AdminModuleService {
 

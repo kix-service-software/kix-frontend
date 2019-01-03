@@ -1,14 +1,14 @@
 import {
     AbstractMarkoComponent, SearchOperator, KIXObjectService, ContextService, LabelService,
     TableConfiguration, StandardTableFactoryService, WidgetService, ActionFactory
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
+import { EventService, IEventListener } from '../../../../core/browser/event';
 import {
     KIXObjectPropertyFilter, TableFilterCriteria, TicketPriority, KIXObjectType,
     SortUtil, DataType, SortOrder, TicketPriorityProperty
-} from '@kix/core/dist/model';
-import { AdminContext } from '@kix/core/dist/browser/admin';
+} from '../../../../core/model';
+import { AdminContext } from '../../../../core/browser/admin';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventListener {
 

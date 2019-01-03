@@ -1,7 +1,7 @@
 import Plugins = require('js-plugins');
 
-import { IConfigurationExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { LoggingService } from '@kix/core/dist/services';
+import { IConfigurationExtension, KIXExtensions } from '../core/extensions';
+import { LoggingService } from '../core/services';
 
 const host = { debug: true };
 

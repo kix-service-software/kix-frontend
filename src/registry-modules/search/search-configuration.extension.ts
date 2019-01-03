@@ -1,8 +1,8 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
-} from '@kix/core/dist/model';
-import { SearchContext, SearchContextConfiguration } from '@kix/core/dist/browser/search';
+} from '../../core/model';
+import { SearchContext, SearchContextConfiguration } from '../../core/browser/search';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 

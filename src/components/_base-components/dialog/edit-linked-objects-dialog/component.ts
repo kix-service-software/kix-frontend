@@ -4,15 +4,15 @@ import {
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
     TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
     ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions,
     ToastContent, LinkType, ContextType, SortUtil, DataType, KIXObjectCache
-} from '@kix/core/dist/model';
-import { LinkUtil } from '@kix/core/dist/browser/link';
+} from '../../../../core/model';
+import { LinkUtil } from '../../../../core/browser/link';
 
 class Component {
 

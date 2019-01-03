@@ -1,11 +1,11 @@
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, StandardTableFactoryService
-} from '@kix/core/dist/browser';
+} from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     ConfigItemClass, KIXObjectType, SortUtil, ConfigItemClassDefinitionProperty, DataType, SortOrder
-} from '@kix/core/dist/model';
-import { ConfigItemClassDetailsContext } from '@kix/core/dist/browser/cmdb';
+} from '../../../../../core/model';
+import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

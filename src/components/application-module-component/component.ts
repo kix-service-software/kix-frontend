@@ -1,26 +1,26 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
     StandardTableFactoryService, LabelService, DialogService, FactoryService
-} from '@kix/core/dist/browser';
+} from '../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchService, SearchResultPrintAction, SearchContext } from '@kix/core/dist/browser/search';
-import { CSVExportAction, BulkAction } from '@kix/core/dist/browser/actions';
+import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
+import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
     ConfiguredDialogWidget, WidgetConfiguration
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
     LinkObjectLabelProvider
-} from '@kix/core/dist/browser/link';
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '@kix/core/dist/browser/general-catalog';
-import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
+} from '../../core/browser/link';
+import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
+import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
-} from '@kix/core/dist/browser/text-modules';
-import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
-import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '@kix/core/dist/browser/sla';
-import { ObjectIconService, ObjectIconBrowserFactory } from '@kix/core/dist/browser/icon';
+} from '../../core/browser/text-modules';
+import { SysConfigService } from '../../core/browser/sysconfig';
+import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 
 class Component extends AbstractMarkoComponent {
 

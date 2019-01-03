@@ -1,7 +1,7 @@
 import { RouterComponentState } from './RouterComponentState';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { RoutingService, IRoutingServiceListener } from '@kix/core/dist/browser/router';
-import { ComponentRouter } from '@kix/core/dist/model';
+import { ComponentsService } from '../../../core/browser/components';
+import { RoutingService, IRoutingServiceListener } from '../../../core/browser/router';
+import { ComponentRouter } from '../../../core/model';
 
 export class RouterOutletComponent implements IRoutingServiceListener {
 

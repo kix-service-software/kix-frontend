@@ -1,8 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, IContextServiceListener } from "@kix/core/dist/browser";
-import { ContextType, Context, ContextConfiguration } from "@kix/core/dist/model";
-import { ContextHistoryEntry } from "@kix/core/dist/browser/context/ContextHistoryEntry";
-import { RoutingConfiguration, RoutingService } from "@kix/core/dist/browser/router";
+import { ContextService, IContextServiceListener } from "../../core/browser";
+import { ContextType, Context, ContextConfiguration } from "../../core/model";
+import { ContextHistoryEntry } from "../../core/browser/context/ContextHistoryEntry";
+import { RoutingConfiguration, RoutingService } from "../../core/browser/router";
 
 class Component implements IContextServiceListener {
 

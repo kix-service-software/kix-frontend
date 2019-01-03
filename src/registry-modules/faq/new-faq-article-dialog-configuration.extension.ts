@@ -1,11 +1,11 @@
 import {
     ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
-import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
-import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
-import { ConfigurationService } from "@kix/core/dist/services";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
+import { FAQArticleProperty } from "../../core/model/kix/faq";
+import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "../../core/browser/faq";
+import { ConfigurationService } from "../../core/services";
 
 export class Extension implements IConfigurationExtension {
 

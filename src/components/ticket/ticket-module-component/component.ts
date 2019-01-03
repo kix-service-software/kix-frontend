@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, StandardTableFactoryService, FactoryService,
     FormValidationService, ContextService, ActionFactory, DialogService, KIXObjectSearchService
-} from "@kix/core/dist/browser";
+} from "../../../core/browser";
 import {
     TicketService, TicketHistoryLabelProvider, ArticleLabelProvider, TicketLabelProvider, TicketTableFactory,
     TicketHistoryTableFactory, PendingTimeValidator, TicketBrowserFactory, ArticleBrowserFactory, TicketFormService,
@@ -32,12 +32,12 @@ import {
     TicketPriorityFormService,
     EditTicketStateDialogContext,
     TicketStateFormService
-} from "@kix/core/dist/browser/ticket";
+} from "../../../core/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
     ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
     TicketPriorityCacheHandler
-} from "@kix/core/dist/model";
+} from "../../../core/model";
 
 class Component extends AbstractMarkoComponent {
 

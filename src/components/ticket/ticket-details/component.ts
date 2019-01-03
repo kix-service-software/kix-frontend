@@ -1,10 +1,10 @@
-import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
-import { Ticket, WidgetType, KIXObjectType, TicketProperty } from '@kix/core/dist/model';
+import { TicketDetailsContext } from '../../../core/browser/ticket/';
+import { Ticket, WidgetType, KIXObjectType, TicketProperty } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser/context/';
-import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { ComponentsService } from '@kix/core/dist/browser/components';
+import { ContextService } from '../../../core/browser/context/';
+import { ActionFactory, WidgetService } from '../../../core/browser';
+import { IdService } from '../../../core/browser/IdService';
+import { ComponentsService } from '../../../core/browser/components';
 
 export class Component {
 

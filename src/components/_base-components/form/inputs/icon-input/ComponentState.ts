@@ -1,4 +1,4 @@
-import { FormInputComponentState, ObjectIcon, } from "@kix/core/dist/model";
+import { FormInputComponentState, ObjectIcon, } from "../../../../../core/model";
 
 export class ComponentState extends FormInputComponentState<any> {
 

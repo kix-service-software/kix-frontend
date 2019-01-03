@@ -1,9 +1,9 @@
-import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ContextService } from '../../../core/browser/context/ContextService';
 import { ComponentState } from './ComponentState';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { WidgetType } from '@kix/core/dist/model';
-import { WidgetService } from '@kix/core/dist/browser';
-import { IEventListener, EventService } from '@kix/core/dist/browser/event';
+import { IdService } from '../../../core/browser/IdService';
+import { WidgetType } from '../../../core/model';
+import { WidgetService } from '../../../core/browser';
+import { IEventListener, EventService } from '../../../core/browser/event';
 
 class WidgetComponent implements IEventListener {
 

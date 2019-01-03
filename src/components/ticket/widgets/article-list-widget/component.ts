@@ -1,4 +1,4 @@
-import { Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
@@ -7,15 +7,15 @@ import {
     ArticleTableToggleListener,
     ArticleTableToggleLayer,
     TicketDetailsContext
-} from "@kix/core/dist/browser/ticket";
-import { ContextService } from "@kix/core/dist/browser/context";
+} from "../../../../core/browser/ticket";
+import { ContextService } from "../../../../core/browser/context";
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
     TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration,
     WidgetService, OverlayService, TableFilterLayer
-} from "@kix/core/dist/browser";
-import { IdService } from "@kix/core/dist/browser/IdService";
-import { IEventListener, EventService } from "@kix/core/dist/browser/event";
+} from "../../../../core/browser";
+import { IdService } from "../../../../core/browser/IdService";
+import { IEventListener, EventService } from "../../../../core/browser/event";
 
 export class Component implements IEventListener {
 

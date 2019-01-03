@@ -1,5 +1,5 @@
 import { TicketArticleMetadataComponentState } from './TicketArticleMetadataComponentState';
-import { ArticleLabelProvider } from '@kix/core/dist/browser/ticket';
+import { ArticleLabelProvider } from '../../../core/browser/ticket';
 
 class TicketArticleMetadataComponent {
 

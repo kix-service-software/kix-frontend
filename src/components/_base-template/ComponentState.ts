@@ -1,4 +1,4 @@
-import { ObjectData } from "@kix/core/dist/model";
+import { ObjectData } from "../../core/model";
 
 export class ComponentState {
 

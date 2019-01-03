@@ -1,7 +1,7 @@
-import { AbstractMarkoComponent, ContextService } from '@kix/core/dist/browser';
+import { AbstractMarkoComponent, ContextService } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { AdminContext } from '@kix/core/dist/browser/admin';
-import { ContextDescriptor, KIXObjectType, ContextMode, ContextType } from '@kix/core/dist/model';
+import { AdminContext } from '../../../core/browser/admin';
+import { ContextDescriptor, KIXObjectType, ContextMode, ContextType } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent {
 

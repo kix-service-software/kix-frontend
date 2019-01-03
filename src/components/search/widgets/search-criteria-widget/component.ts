@@ -2,9 +2,9 @@ import { ComponentState } from './ComponentState';
 import {
     IKIXObjectSearchListener, KIXObjectSearchService,
     LabelService, ContextService, SearchOperatorUtil, SearchOperator
-} from '@kix/core/dist/browser';
-import { KIXObject, ContextMode, CacheState } from '@kix/core/dist/model';
-import { Label } from '@kix/core/dist/browser/components';
+} from '../../../../core/browser';
+import { KIXObject, ContextMode, CacheState } from '../../../../core/model';
+import { Label } from '../../../../core/browser/components';
 class Component implements IKIXObjectSearchListener {
 
     public listenerId: string = 'search-criteria-widget';

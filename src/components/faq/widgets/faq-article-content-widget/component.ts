@@ -1,12 +1,12 @@
-import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "../../../../core/model";
 import {
     ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService, LabelService
-} from "@kix/core/dist/browser";
+} from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
     FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
-} from "@kix/core/dist/model/kix/faq";
-import { InlineContent } from "@kix/core/dist/browser/components";
+} from "../../../../core/model/kix/faq";
+import { InlineContent } from "../../../../core/browser/components";
 
 class Component {
 

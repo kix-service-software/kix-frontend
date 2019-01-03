@@ -1,8 +1,8 @@
-import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
-import { ContextService, OverlayService } from "@kix/core/dist/browser";
-import { ContextMode, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
-import { ReleaseContext } from "@kix/core/dist/browser/release";
+import { ClientStorageService } from "../../../core/browser/ClientStorageService";
+import { ContextService, OverlayService } from "../../../core/browser";
+import { ContextMode, ComponentContent, ToastContent, OverlayType } from "../../../core/model";
+import { RoutingConfiguration } from "../../../core/browser/router";
+import { ReleaseContext } from "../../../core/browser/release";
 
 class KIXHeaderComponent {
 

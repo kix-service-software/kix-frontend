@@ -1,17 +1,17 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
+import { DialogService } from "../../../../../core/browser/dialog/DialogService";
 import {
     OverlayService, FormService, AbstractMarkoComponent, KIXObjectService
-} from "@kix/core/dist/browser";
+} from "../../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     ToastContent,
     KIXObjectType,
     ContextMode,
     TicketPriorityProperty,
-} from "@kix/core/dist/model";
+} from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketPriorityDetailsContext } from "@kix/core/dist/browser/ticket";
-import { RoutingConfiguration, RoutingService } from "@kix/core/dist/browser/router";
+import { TicketPriorityDetailsContext } from "../../../../../core/browser/ticket";
+import { RoutingConfiguration, RoutingService } from "../../../../../core/browser/router";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

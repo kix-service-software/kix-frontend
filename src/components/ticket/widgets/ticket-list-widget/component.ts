@@ -1,16 +1,16 @@
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, Context
-} from '@kix/core/dist/model/';
-import { ContextService } from "@kix/core/dist/browser/context";
+} from '../../../../core/model/';
+import { ContextService } from "../../../../core/browser/context";
 import {
     TicketTableContentLayer, TicketTableLabelLayer
-} from '@kix/core/dist/browser/ticket/';
+} from '../../../../core/browser/ticket/';
 import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
     ActionFactory, TableToggleLayer, StandardTableFactoryService, TableLayerConfiguration,
     TableListenerConfiguration, WidgetService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 
 class Component {
 

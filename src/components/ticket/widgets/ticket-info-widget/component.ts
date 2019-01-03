@@ -1,14 +1,14 @@
 import { ComponentState } from './ComponentState';
-import { TicketLabelProvider, TicketService } from "@kix/core/dist/browser/ticket";
-import { ContextService } from '@kix/core/dist/browser/context';
+import { TicketLabelProvider, TicketService } from "../../../../core/browser/ticket";
+import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
     ContextMode, CustomerProperty, ContactProperty
-} from '@kix/core/dist/model';
-import { ActionFactory, IdService } from '@kix/core/dist/browser';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
-import { ContactDetailsContext } from '@kix/core/dist/browser/contact';
-import { CustomerDetailsContext } from '@kix/core/dist/browser/customer';
+} from '../../../../core/model';
+import { ActionFactory, IdService } from '../../../../core/browser';
+import { RoutingConfiguration } from '../../../../core/browser/router';
+import { ContactDetailsContext } from '../../../../core/browser/contact';
+import { CustomerDetailsContext } from '../../../../core/browser/customer';
 
 class Component {
 

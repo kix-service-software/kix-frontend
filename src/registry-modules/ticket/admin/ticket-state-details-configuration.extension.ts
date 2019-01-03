@@ -1,6 +1,6 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
-import { TicketStateDetailsContextConfiguration, TicketStateDetailsContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../../core/extensions';
+import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
+import { TicketStateDetailsContextConfiguration, TicketStateDetailsContext } from '../../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
 

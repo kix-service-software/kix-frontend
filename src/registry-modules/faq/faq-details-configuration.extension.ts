@@ -1,9 +1,9 @@
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize, KIXObjectType
-} from "@kix/core/dist/model";
-import { FAQDetailsContextConfiguration, FAQDetailsContext } from "@kix/core/dist/browser/faq";
+} from "../../core/model";
+import { FAQDetailsContextConfiguration, FAQDetailsContext } from "../../core/browser/faq";
 
 export class Extension implements IConfigurationExtension {
 

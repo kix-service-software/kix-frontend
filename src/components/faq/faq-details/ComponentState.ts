@@ -1,6 +1,6 @@
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
-import { FAQDetailsContextConfiguration } from "@kix/core/dist/browser/faq";
-import { ConfiguredWidget } from "@kix/core/dist/model";
+import { FAQArticle } from "../../../core/model/kix/faq";
+import { FAQDetailsContextConfiguration } from "../../../core/browser/faq";
+import { ConfiguredWidget } from "../../../core/model";
 
 export class ComponentState {
 

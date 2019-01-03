@@ -1,6 +1,6 @@
-import { FormField } from "@kix/core/dist/model";
+import { FormField } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { FormService } from "@kix/core/dist/browser";
+import { FormService } from "../../../../core/browser";
 
 class FieldContainerComponent {
 

@@ -1,18 +1,18 @@
 import {
     AbstractMarkoComponent, StandardTableFactoryService, LabelService, ServiceRegistry,
     FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
     ConfiguredDialogWidget, WidgetSize, KIXObjectCache, ContactCacheHandler
-} from '@kix/core/dist/model';
+} from '../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
     NewContactDialogContext, ContactSearchContext, ContactSearchAction, ContactCreateAction,
     ContactEditAction, ContactCreateCustomerAction, ContactPrintAction, ContactCreateTicketAction,
     ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService
-} from '@kix/core/dist/browser/contact';
+} from '../../../core/browser/contact';
 
 class Component extends AbstractMarkoComponent {
 

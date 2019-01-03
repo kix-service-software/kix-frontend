@@ -1,4 +1,4 @@
-import { OverlayWidgetData, ComponentContent, StringContent } from '@kix/core/dist/model';
+import { OverlayWidgetData, ComponentContent, StringContent } from '../../../core/model';
 
 export class ComponentState {
 

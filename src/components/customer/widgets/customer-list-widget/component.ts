@@ -2,8 +2,8 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableListenerConfiguration, WidgetService, StandardTableFactoryService
-} from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter } from "@kix/core/dist/model";
+} from "../../../../core/browser";
+import { KIXObjectType, KIXObjectPropertyFilter } from "../../../../core/model";
 
 class Component {
 

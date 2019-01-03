@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { Attachment } from '@kix/core/dist/model';
+import { Attachment } from '../../../core/model';
 
 class TicketArticleAttchementListComponent {
 

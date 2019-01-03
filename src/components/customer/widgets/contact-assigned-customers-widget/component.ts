@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, TableColumn, ITableConfigurationListener, ActionFactory,
     TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
-} from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "@kix/core/dist/model";
-import { CustomerService } from "@kix/core/dist/browser/customer";
+} from "../../../../core/browser";
+import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "../../../../core/model";
+import { CustomerService } from "../../../../core/browser/customer";
 
 class Component {
 

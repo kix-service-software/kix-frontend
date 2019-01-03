@@ -3,7 +3,7 @@
     "configurations": [
         {
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "env": {
                 "NODE_ENV": "development",
                 "http_proxy": "",
@@ -11,14 +11,14 @@
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "LASSO_TIMEOUT": "200000"
             },
-            "name": "KIXng",
-            "program": "${workspaceRoot}/src/index.ts",
+            "name": "KIX",
+            "program": "${workspaceFolder}/src/index.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
             "type": "node",
             "outFiles": [
-                "${workspaceRoot}/dist/**/*.js"
+                "${workspaceFolder}/dist/*.js"
             ],
             "console": "integratedTerminal",
             "preLaunchTask": "gulp"
@@ -26,8 +26,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "KIXng Tests",
-            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "name": "KIX Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
                 "--no-timeouts",
                 "--reporter",
@@ -36,7 +36,7 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
-                "${workspaceRoot}/tests/services/api/**/*.test.ts"
+                "${workspaceFolder}/tests/services/api/**/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",
@@ -45,7 +45,7 @@
             },
             "sourceMaps": true,
             "stopOnEntry": false,
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "protocol": "inspector",
             "console": "integratedTerminal"
         }

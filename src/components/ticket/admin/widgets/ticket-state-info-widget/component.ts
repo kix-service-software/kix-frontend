@@ -1,7 +1,7 @@
-import { AbstractMarkoComponent, ActionFactory, ContextService } from '@kix/core/dist/browser';
+import { AbstractMarkoComponent, ActionFactory, ContextService } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TicketState, KIXObjectType } from '@kix/core/dist/model';
-import { TicketStateLabelProvider, TicketStateDetailsContext } from '@kix/core/dist/browser/ticket';
+import { TicketState, KIXObjectType } from '../../../../../core/model';
+import { TicketStateLabelProvider, TicketStateDetailsContext } from '../../../../../core/browser/ticket';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

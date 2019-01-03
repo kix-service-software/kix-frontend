@@ -2,13 +2,13 @@ import {
     ContextConfiguration, FormField, ContactSourceAttributeMapping,
     Form, FormContext, KIXObjectType,
     ContactProperty, FormFieldOption, FormFieldOptions, InputFieldTypes
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     NewContactDialogContextConfiguration, NewContactDialogContext, ContactLabelProvider
-} from "@kix/core/dist/browser/contact";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
-import { ConfigurationService, ContactService } from "@kix/core/dist/services";
+} from "../../core/browser/contact";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
+import { ConfigurationService, ContactService } from "../../core/services";
 
 export class NewContactDialogModuleExtension implements IConfigurationExtension {
 

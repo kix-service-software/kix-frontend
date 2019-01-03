@@ -1,5 +1,5 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { TicketContext, TicketDetailsContext } from '@kix/core/dist/browser/ticket';
+import { IMainMenuExtension } from '../../core/extensions';
+import { TicketContext, TicketDetailsContext } from '../../core/browser/ticket';
 
 export class Extension implements IMainMenuExtension {
 

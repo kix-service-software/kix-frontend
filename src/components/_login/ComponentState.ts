@@ -1,4 +1,4 @@
-import { ReleaseInfo } from "@kix/core/dist/model";
+import { ReleaseInfo } from "../../core/model";
 
 export class ComponentState {
 

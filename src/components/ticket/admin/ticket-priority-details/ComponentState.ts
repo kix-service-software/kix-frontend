@@ -1,4 +1,4 @@
-import { AbstractAction, ConfiguredWidget } from "@kix/core/dist/model";
+import { AbstractAction, ConfiguredWidget } from "../../../../core/model";
 
 export class ComponentState {
 

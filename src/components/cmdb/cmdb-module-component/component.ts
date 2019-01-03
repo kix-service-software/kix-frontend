@@ -1,13 +1,13 @@
 import {
     AbstractMarkoComponent, ContextService, DialogService, ActionFactory, KIXObjectSearchService,
     LabelService, StandardTableFactoryService, FactoryService, ServiceRegistry
-} from '@kix/core/dist/browser';
-import { BulkAction } from '@kix/core/dist/browser/actions';
+} from '../../../core/browser';
+import { BulkAction } from '../../../core/browser/actions';
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
     ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, KIXObjectCache, ConfigItemClassCacheHandler
-} from '@kix/core/dist/model';
+} from '../../../core/model';
 import {
     CMDBContext, NewConfigItemDialogContext, ConfigItemDetailsContext, ConfigItemSearchContext,
     ConfigItemSearchDefinition, ConfigItemVersionLabelProvider, ConfigItemVersionTableFactory,
@@ -18,7 +18,7 @@ import {
     ConfigItemClassCreateAction, ConfigItemClassImportAction, ConfigItemClassDetailsContext, ConfigItemClassEditAction,
     ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext,
     ConfigItemClassService
-} from '@kix/core/dist/browser/cmdb';
+} from '../../../core/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
 

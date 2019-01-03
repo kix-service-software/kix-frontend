@@ -33,7 +33,9 @@
     "reflect-metadata": "0.1.12",
     "request": "2.88.0",
     "request-promise": "4.2.2",
-    "socket.io": "2.1.1"
+    "socket.io": "2.1.1",
+    "winston": "3.1.0",
+    "winston-daily-rotate-file": "3.3.3"
   },
   "devDependencies": {
     "@types/chai": "4.1.6",

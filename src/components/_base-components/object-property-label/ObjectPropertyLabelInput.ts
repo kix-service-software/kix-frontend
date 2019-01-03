@@ -1,5 +1,5 @@
-import { ILabelProvider } from '@kix/core/dist/browser';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { ILabelProvider } from '../../../core/browser';
+import { RoutingConfiguration } from '../../../core/browser/router';
 
 export class ObjectPropertyLabelInput<T> {
 

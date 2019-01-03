@@ -1,13 +1,13 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '@kix/core/dist/model/';
-import { ContextService } from "@kix/core/dist/browser/context";
+import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '../../../../core/model/';
+import { ContextService } from "../../../../core/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
     LabelService, StandardTableFactoryService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
     KIXObjectSearchCache, IKIXObjectService, KIXObjectService, SearchProperty
-} from '@kix/core/dist/browser';
-import { ServiceRegistry } from '@kix/core/dist/browser';
+} from '../../../../core/browser';
+import { ServiceRegistry } from '../../../../core/browser';
 
 class Component implements IKIXObjectSearchListener {
 

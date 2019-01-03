@@ -1,5 +1,5 @@
-import { WidgetComponentState, AbstractAction, KIXObject } from "@kix/core/dist/model";
-import { StandardTable } from "@kix/core/dist/browser";
+import { WidgetComponentState, AbstractAction, KIXObject } from "../../../core/model";
+import { StandardTable } from "../../../core/browser";
 
 export class ComponentState extends WidgetComponentState {
 

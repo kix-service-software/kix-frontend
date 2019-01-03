@@ -1,5 +1,5 @@
-import { Contact } from "@kix/core/dist/model";
-import { ContactLabelProvider } from "@kix/core/dist/browser/contact";
+import { Contact } from "../../../core/model";
+import { ContactLabelProvider } from "../../../core/browser/contact";
 
 export class ComponentState {
 

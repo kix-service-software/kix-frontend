@@ -1,6 +1,6 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { CustomerContext, CustomerDetailsContext } from '@kix/core/dist/browser/customer';
-import { ContactDetailsContext } from '@kix/core/dist/browser/contact';
+import { IMainMenuExtension } from '../../core/extensions';
+import { CustomerContext, CustomerDetailsContext } from '../../core/browser/customer';
+import { ContactDetailsContext } from '../../core/browser/contact';
 
 export class CustomerMainMenuExtension implements IMainMenuExtension {
 

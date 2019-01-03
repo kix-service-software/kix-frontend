@@ -1,5 +1,5 @@
-import { ConfiguredWidget, ConfigItem } from "@kix/core/dist/model";
-import { ConfigItemDetailsContextConfiguration } from "@kix/core/dist/browser/cmdb";
+import { ConfiguredWidget, ConfigItem } from "../../../core/model";
+import { ConfigItemDetailsContextConfiguration } from "../../../core/browser/cmdb";
 
 export class ComponentState {
 

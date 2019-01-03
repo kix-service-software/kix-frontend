@@ -1,4 +1,4 @@
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { IdService } from '../../../core/browser/IdService';
 
 export class ComponentState {
 

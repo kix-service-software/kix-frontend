@@ -1,5 +1,5 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { CMDBContext, ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
+import { IMainMenuExtension } from '../../core/extensions';
+import { CMDBContext, ConfigItemDetailsContext } from '../../core/browser/cmdb';
 
 export class Extension implements IMainMenuExtension {
 

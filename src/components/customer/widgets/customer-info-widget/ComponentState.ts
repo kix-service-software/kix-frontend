@@ -1,5 +1,5 @@
-import { WidgetComponentState, Customer, AbstractAction } from "@kix/core/dist/model";
-import { CustomerLabelProvider } from "@kix/core/dist/browser/customer";
+import { WidgetComponentState, Customer, AbstractAction } from "../../../../core/model";
+import { CustomerLabelProvider } from "../../../../core/browser/customer";
 
 export class ComponentState extends WidgetComponentState {
 

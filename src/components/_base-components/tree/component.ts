@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { TreeUtil, TreeNode } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { TreeUtil, TreeNode } from '../../../core/model';
+import { IdService } from '../../../core/browser/IdService';
 
 class TreeComponent {
 

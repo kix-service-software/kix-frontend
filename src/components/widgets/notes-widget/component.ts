@@ -1,8 +1,8 @@
-import { ContextService } from "@kix/core/dist/browser/context";
-import { NotesService } from "@kix/core/dist/browser/notes";
+import { ContextService } from "../../../core/browser/context";
+import { NotesService } from "../../../core/browser/notes";
 import { NotesEditAction } from "./NotesEditAction";
 import { ComponentState } from './ComponentState';
-import { WidgetService } from "@kix/core/dist/browser";
+import { WidgetService } from "../../../core/browser";
 
 export class Component {
 

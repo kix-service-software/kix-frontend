@@ -1,20 +1,20 @@
 import {
     AbstractMarkoComponent, FactoryService, StandardTableFactoryService, LabelService, ServiceRegistry,
     KIXObjectSearchService, ContextService, DialogService, ActionFactory
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, KIXObjectCache, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
     WidgetConfiguration, WidgetSize
-} from '@kix/core/dist/model';
+} from '../../../core/model';
 import {
     FAQTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
-} from '@kix/core/dist/browser/faq';
-import { FAQCacheHandler } from '@kix/core/dist/model/kix/faq';
+} from '../../../core/browser/faq';
+import { FAQCacheHandler } from '../../../core/model/kix/faq';
 
 class Component extends AbstractMarkoComponent {
 

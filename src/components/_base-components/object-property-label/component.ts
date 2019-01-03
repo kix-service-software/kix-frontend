@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ObjectIcon } from '../../../core/model';
 
 export class ObjectPropertyLabelComponent<T> {
 

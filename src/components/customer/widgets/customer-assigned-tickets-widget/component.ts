@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
-} from "@kix/core/dist/browser";
+} from "../../../../core/browser";
 import {
     WidgetConfiguration, Customer, KIXObjectType, Ticket, TicketProperty
-} from "@kix/core/dist/model";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+} from "../../../../core/model";
+import { TicketService } from "../../../../core/browser/ticket";
 
 class Component {
 

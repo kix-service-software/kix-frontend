@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
-import { AutocompleteFormFieldOption, InlineContent } from '@kix/core/dist/browser/components';
+import { ServiceRegistry, IKIXObjectService } from '../../../core/browser';
+import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
 
 declare var CKEDITOR: any;
 

@@ -4,15 +4,15 @@ import {
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
     ITablePreventSelectionLayer, KIXObjectService, SearchOperator
-} from "@kix/core/dist/browser";
-import { FormService } from "@kix/core/dist/browser/form";
+} from "../../../../core/browser";
+import { FormService } from "../../../../core/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
     OverlayType, ComponentContent, TreeNode, DataType, ToastContent, LinkType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { LinkUtil } from "@kix/core/dist/browser/link";
+import { LinkUtil } from "../../../../core/browser/link";
 
 class LinkDialogComponent {
 

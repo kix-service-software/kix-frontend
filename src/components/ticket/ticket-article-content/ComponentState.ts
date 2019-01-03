@@ -1,4 +1,4 @@
-import { InlineContent } from '@kix/core/dist/browser/components';
+import { InlineContent } from '../../../core/browser/components';
 
 export class ComponentState {
 

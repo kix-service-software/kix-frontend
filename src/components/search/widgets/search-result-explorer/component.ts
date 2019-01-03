@@ -7,8 +7,8 @@ import {
     SearchResultCategory,
     ServiceRegistry,
     IKIXObjectService
-} from '@kix/core/dist/browser';
-import { TreeNode, KIXObjectType } from '@kix/core/dist/model';
+} from '../../../../core/browser';
+import { TreeNode, KIXObjectType } from '../../../../core/model';
 
 export class Component implements IKIXObjectSearchListener {
 

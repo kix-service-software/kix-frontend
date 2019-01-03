@@ -1,7 +1,7 @@
-import { ContextService } from "@kix/core/dist/browser/context";
-import { FormInputComponent, TreeNode } from "@kix/core/dist/model";
+import { ContextService } from "../../../../../core/browser/context";
+import { FormInputComponent, TreeNode } from "../../../../../core/model";
 import { CompontentState } from "./CompontentState";
-import { LanguageUtil } from "@kix/core/dist/browser";
+import { LanguageUtil } from "../../../../../core/browser";
 
 // TODO: als allgemeines input-valid implementieren
 class Component extends FormInputComponent<number, CompontentState> {

@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
-} from '@kix/core/dist/browser';
-import { WidgetConfiguration, Contact, KIXObjectType, Ticket, TicketProperty } from '@kix/core/dist/model';
-import { TicketService } from '@kix/core/dist/browser/ticket';
+} from '../../../../core/browser';
+import { WidgetConfiguration, Contact, KIXObjectType, Ticket, TicketProperty } from '../../../../core/model';
+import { TicketService } from '../../../../core/browser/ticket';
 
 class Component {
 

@@ -1,12 +1,12 @@
 import {
     MenuEntry, MainMenuEntriesRequest, MainMenuEntriesResponse,
     MainMenuConfiguration, MainMenuEvent
-} from '@kix/core/dist/model';
+} from '../core/model';
 
-import { IMainMenuExtension, KIXExtensions } from '@kix/core/dist/extensions';
-import { CommunicatorResponse } from '@kix/core/dist/common';
+import { IMainMenuExtension, KIXExtensions } from '../core/extensions';
+import { CommunicatorResponse } from '../core/common';
 import { KIXCommunicator } from './KIXCommunicator';
-import { ConfigurationService, UserService } from '@kix/core/dist/services';
+import { ConfigurationService, UserService } from '../core/services';
 import { PluginService } from '../services';
 
 export class MainMenuCommunicator extends KIXCommunicator {

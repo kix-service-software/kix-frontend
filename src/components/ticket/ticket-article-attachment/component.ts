@@ -1,7 +1,7 @@
-import { Attachment, ObjectIcon } from '@kix/core/dist/model';
-import { TicketService } from '@kix/core/dist/browser/ticket';
+import { Attachment, ObjectIcon } from '../../../core/model';
+import { TicketService } from '../../../core/browser/ticket';
 import { ComponentState } from './ComponentState';
-import { BrowserUtil } from '@kix/core/dist/browser';
+import { BrowserUtil } from '../../../core/browser';
 
 declare var window: any;
 

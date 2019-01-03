@@ -1,10 +1,10 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, KIXObjectService } from '@kix/core/dist/browser';
+import { ContextService, KIXObjectService } from '../../../core/browser';
 import {
     KIXObjectType, ConfigItem, KIXObjectLoadingOptions, ContextMode, ConfigItemProperty
-} from '@kix/core/dist/model';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
-import { ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
+} from '../../../core/model';
+import { RoutingConfiguration } from '../../../core/browser/router';
+import { ConfigItemDetailsContext } from '../../../core/browser/cmdb';
 
 class Component {
 

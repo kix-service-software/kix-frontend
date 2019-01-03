@@ -1,0 +1,73 @@
+import { KIXObjectService } from './KIXObjectService';
+import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo } from '../../../model';
+import {
+    CreateClientRegistration,
+    CreateClientRegistrationResponse,
+    CreateClientRegistrationRequest,
+    ClientRegistrationsResponse
+} from '../../../api';
+
+export class ClientRegistrationService extends KIXObjectService {
+
+    private static INSTANCE: ClientRegistrationService;
+
+    public static getInstance(): ClientRegistrationService {
+        if (!ClientRegistrationService.INSTANCE) {
+            ClientRegistrationService.INSTANCE = new ClientRegistrationService();
+        }
+        return ClientRegistrationService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
+
+
+    protected RESOURCE_URI: string = "clientregistration";
+
+    public kixObjectType: KIXObjectType = KIXObjectType.CLIENT_REGISTRATION;
+
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
+        return kixObjectType === KIXObjectType.CLIENT_REGISTRATION;
+    }
+
+    public async getClientRegistrations(
+        token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
+    ): Promise<ClientRegistration[]> {
+
+        const response = await this.getObjects<ClientRegistrationsResponse>(
+            token, limit, order, changedAfter, query
+        );
+
+        return response.ClientRegistration;
+    }
+
+    public async createClientRegistration(
+        token: string, createClientRegistration: CreateClientRegistration
+    ): Promise<SystemInfo> {
+        const response =
+            await this.sendCreateRequest<CreateClientRegistrationResponse, CreateClientRegistrationRequest>(
+                token, this.RESOURCE_URI, new CreateClientRegistrationRequest(createClientRegistration)
+            );
+
+        return response.SystemInfo;
+    }
+
+    public createObject(
+        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+    ): Promise<string | number> {
+        throw new Error("Method not implemented.");
+    }
+
+    public async updateObject(
+        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+    ): Promise<string | number> {
+        throw new Error("Method not implemented.");
+    }
+
+    public async deleteClientRegistration(token: string, clientId: number): Promise<void> {
+        const uri = this.buildUri(this.RESOURCE_URI, clientId);
+        await this.sendDeleteRequest<void>(token, uri);
+    }
+
+}

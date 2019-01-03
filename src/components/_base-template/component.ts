@@ -1,14 +1,14 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '@kix/core/dist/model';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
+import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser/context';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { IdService } from '@kix/core/dist/browser';
-import { RoutingService } from '@kix/core/dist/browser/router';
-import { HomeContext } from '@kix/core/dist/browser/home';
-import { EventService } from '@kix/core/dist/browser/event';
-import { ReleaseContext } from '@kix/core/dist/browser/release';
-import { KIXModulesService } from '@kix/core/dist/browser/modules';
+import { ContextService } from '../../core/browser/context';
+import { ComponentsService } from '../../core/browser/components';
+import { IdService } from '../../core/browser';
+import { RoutingService } from '../../core/browser/router';
+import { HomeContext } from '../../core/browser/home';
+import { EventService } from '../../core/browser/event';
+import { ReleaseContext } from '../../core/browser/release';
+import { KIXModulesService } from '../../core/browser/modules';
 
 declare var io: any;
 

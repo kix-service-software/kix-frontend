@@ -1,13 +1,13 @@
 import { ComponentState } from "./ComponentState";
 import {
     DialogService, FormService, OverlayService, ServiceRegistry, KIXObjectService, ContextService
-} from "@kix/core/dist/browser";
+} from "../../../../core/browser";
 import {
     OverlayType, StringContent, ComponentContent,
     ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent, CustomerProperty, ContextType
-} from "@kix/core/dist/model";
-import { CustomerService, CustomerDetailsContext } from "@kix/core/dist/browser/customer";
-import { RoutingService, RoutingConfiguration } from "@kix/core/dist/browser/router";
+} from "../../../../core/model";
+import { CustomerService, CustomerDetailsContext } from "../../../../core/browser/customer";
+import { RoutingService, RoutingConfiguration } from "../../../../core/browser/router";
 
 class Component {
 

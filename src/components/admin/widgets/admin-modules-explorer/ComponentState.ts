@@ -1,4 +1,4 @@
-import { WidgetComponentState, TreeNode } from "@kix/core/dist/model";
+import { WidgetComponentState, TreeNode } from "../../../../core/model";
 
 export class ComponentState extends WidgetComponentState {
 

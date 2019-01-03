@@ -1,5 +1,5 @@
-import { StandardTable } from "@kix/core/dist/browser";
-import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from "@kix/core/dist/model";
+import { StandardTable } from "../../../../core/browser";
+import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from "../../../../core/model";
 
 export class ComponentState {
 

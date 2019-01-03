@@ -1,6 +1,6 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { SearchContext } from '@kix/core/dist/browser/search';
-import { TicketListContext } from '@kix/core/dist/browser/ticket';
+import { IMainMenuExtension } from '../../core/extensions';
+import { SearchContext } from '../../core/browser/search';
+import { TicketListContext } from '../../core/browser/ticket';
 
 export class Extension implements IMainMenuExtension {
 

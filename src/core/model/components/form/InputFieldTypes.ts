@@ -1,0 +1,25 @@
+export enum InputFieldTypes {
+
+    ATTACHMENT = 'ATTACHMENT',
+
+    CI_REFERENCE = 'CI_REFERENCE',
+
+    DATE = 'DATE',
+
+    DATE_TIME = 'DATE_TIME',
+
+    DROPDOWN = 'DROPDOWN',
+
+    DUMMY = 'DUMMY',
+
+    GENERAL_CATALOG = 'GENERAL_CATALOG',
+
+    OBJECT_REFERENCE = 'OBJECT_REFERENCE',
+
+    PASSWORD = 'PASSWORD',
+
+    TEXT = 'TEXT',
+
+    TEXT_AREA = 'TEXT_AREA',
+
+}

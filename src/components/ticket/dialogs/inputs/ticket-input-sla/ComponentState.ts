@@ -1,4 +1,4 @@
-import { FormInputComponentState, TreeNode } from "@kix/core/dist/model";
+import { FormInputComponentState, TreeNode } from "../../../../../core/model";
 
 export class ComponentState extends FormInputComponentState<number> {
 

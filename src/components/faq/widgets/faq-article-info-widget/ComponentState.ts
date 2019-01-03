@@ -1,6 +1,6 @@
-import { WidgetComponentState, AbstractAction } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
-import { Label } from "@kix/core/dist/browser/components";
+import { WidgetComponentState, AbstractAction } from "../../../../core/model";
+import { FAQArticle } from "../../../../core/model/kix/faq";
+import { Label } from "../../../../core/browser/components";
 
 export class ComponentState extends WidgetComponentState {
 

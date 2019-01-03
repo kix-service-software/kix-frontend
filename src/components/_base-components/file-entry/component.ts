@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ObjectIcon } from '@kix/core/dist/model';
-import { BrowserUtil, AttachmentUtil } from '@kix/core/dist/browser';
+import { ObjectIcon } from '../../../core/model';
+import { BrowserUtil, AttachmentUtil } from '../../../core/browser';
 
 class ArticleAttachmentComponent {
 

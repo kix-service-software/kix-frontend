@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "../../../../core/model";
+import { KIXObjectService } from "../../../../core/browser";
 
 class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
 

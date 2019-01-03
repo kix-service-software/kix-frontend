@@ -1,5 +1,5 @@
-import { TicketPriorityLabelProvider } from "@kix/core/dist/browser/ticket";
-import { WidgetComponentState, AbstractAction, TicketPriority } from "@kix/core/dist/model";
+import { TicketPriorityLabelProvider } from "../../../../../core/browser/ticket";
+import { WidgetComponentState, AbstractAction, TicketPriority } from "../../../../../core/model";
 
 export class ComponentState extends WidgetComponentState<any> {
 

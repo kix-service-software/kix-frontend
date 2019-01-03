@@ -2,11 +2,11 @@ import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
     CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse,
     UpdateObjectRequest, UpdateObjectResponse, KIXObjectCache
-} from "@kix/core/dist/model";
+} from "../core/model";
 import { KIXCommunicator } from "./KIXCommunicator";
-import { CommunicatorResponse } from "@kix/core/dist/common";
-import { KIXObjectServiceRegistry, LoggingService } from "@kix/core/dist/services";
-import { ServiceMethod } from "@kix/core/dist/browser";
+import { CommunicatorResponse } from "../core/common";
+import { KIXObjectServiceRegistry, LoggingService } from "../core/services";
+import { ServiceMethod } from "../core/browser";
 
 export class KIXObjectCommunicator extends KIXCommunicator {
 

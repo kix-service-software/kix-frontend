@@ -1,9 +1,9 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { AdminContext } from '@kix/core/dist/browser/admin';
+import { IMainMenuExtension } from '../../core/extensions';
+import { AdminContext } from '../../core/browser/admin';
 import {
     TicketTypeDetailsContext, TicketStateDetailsContext, TicketPriorityDetailsContext
-} from '@kix/core/dist/browser/ticket';
-import { ConfigItemClassDetailsContext } from '@kix/core/dist/browser/cmdb';
+} from '../../core/browser/ticket';
+import { ConfigItemClassDetailsContext } from '../../core/browser/cmdb';
 
 export class Extension implements IMainMenuExtension {
 

@@ -1,12 +1,12 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '@kix/core/dist/browser/customer';
+import { IConfigurationExtension } from '../../core/extensions';
+import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '../../core/browser/customer';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize, ContactProperty, TicketProperty, DataType
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     TableColumnConfiguration, TableConfiguration, TableHeaderHeight, TableRowHeight
-} from '@kix/core/dist/browser';
+} from '../../core/browser';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 

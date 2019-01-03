@@ -1,4 +1,4 @@
-import { DisplayImageDescription } from "@kix/core/dist/browser/components/DisplayImageDescription";
+import { DisplayImageDescription } from "../../../../core/browser/components/DisplayImageDescription";
 
 export class ComponentState {
 

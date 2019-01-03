@@ -1,0 +1,19 @@
+export enum TicketTypeProperty {
+
+    ID = 'ID',
+
+    NAME = 'Name',
+
+    COMMENT = 'Comment',
+
+    VALID_ID = 'ValidID',
+
+    CREATE_TIME = 'CreateTime',
+
+    CREATE_BY = 'CreateBy',
+
+    CHANGE_TIME = 'ChangeTime',
+
+    CHANGE_BY = 'ChangeBy'
+
+}

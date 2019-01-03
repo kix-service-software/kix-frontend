@@ -1,4 +1,4 @@
-import { AutoCompleteConfiguration, FormInputComponentState, TreeNode, ConfigItem } from "@kix/core/dist/model";
+import { AutoCompleteConfiguration, FormInputComponentState, TreeNode, ConfigItem } from "../../../../core/model";
 
 export class ComponentState extends FormInputComponentState<ConfigItem> {
 
