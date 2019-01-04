@@ -52,6 +52,8 @@ class EditorComponent {
                 });
             }
 
+            CKEDITOR.config.extraPlugins = "base64image";
+
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
             // - siehe bei Notes-Sidebar (toggleEditMode))
