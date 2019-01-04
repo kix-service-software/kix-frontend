@@ -2,3 +2,5 @@ export { ConfigItemClassDetailsContextConfiguration } from './ConfigItemClassDet
 export { ConfigItemClassDetailsContext } from './ConfigItemClassDetailsContext';
 export { NewConfigItemClassDialogContext } from './NewConfigItemClassDialogContext';
 export { NewConfigItemClassDialogContextConfiguration } from './NewConfigItemClassDialogContextConfiguration';
+export { EditConfigItemClassDialogContext } from './EditConfigItemClassDialogContext';
+export { EditConfigItemClassDialogContextConfiguration } from './EditConfigItemClassDialogContextConfiguration';

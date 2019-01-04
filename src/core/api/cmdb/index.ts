@@ -18,3 +18,6 @@ export { ConfigItemImagesResponse } from './ConfigItemImagesResponse';
 export { ConfigItemImageResponse } from './ConfigItemImageResponse';
 export { ConfigItemAttachmentResponse } from './ConfigItemAttachmentResponse';
 export { ConfigItemAttachmentsResponse } from './ConfigItemAttachmentsResponse';
+export { UpdateConfigItemClass } from './UpdateConfigItemClass';
+export { UpdateConfigItemClassRequest } from './UpdateConfigItemClassRequest';
+export { UpdateConfigItemClassResponse } from './UpdateConfigItemClassResponse';

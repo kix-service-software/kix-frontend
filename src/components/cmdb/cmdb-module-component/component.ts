@@ -17,7 +17,9 @@ import {
     EditConfigItemDialogContext, ConfigItemFormService, ConfigItemClassLabelProvider, ConfigItemClassTableFactory,
     ConfigItemClassCreateAction, ConfigItemClassImportAction, ConfigItemClassDetailsContext, ConfigItemClassEditAction,
     ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext,
-    ConfigItemClassService
+    ConfigItemClassService,
+    EditConfigItemClassDialogContext,
+    ConfigItemClassFormService
 } from '../../../core/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -29,8 +31,8 @@ class Component extends AbstractMarkoComponent {
     public async onMount(): Promise<void> {
         ServiceRegistry.getInstance().registerServiceInstance(CMDBService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassService.getInstance());
-
         ServiceRegistry.getInstance().registerServiceInstance(ConfigItemFormService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 
@@ -111,6 +113,13 @@ class Component extends AbstractMarkoComponent {
             true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
         );
         ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
+
+        const editConfigItemClassDetailsContext = new ContextDescriptor(
+            EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
+        );
+        ContextService.getInstance().registerContext(editConfigItemClassDetailsContext);
     }
 
     private registerDialogs(): void {
@@ -151,6 +160,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-config-item-class-dialog',
+            new WidgetConfiguration(
+                'edit-config-item-class-dialog', 'CMDB Klasse bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+            ),
+            KIXObjectType.CONFIG_ITEM_CLASS,
+            ContextMode.EDIT_ADMIN
         ));
     }
 

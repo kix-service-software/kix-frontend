@@ -5,8 +5,9 @@ import {
     ConfigItemClassProperty, ObjectIcon
 } from "../../../model";
 import {
-    ConfigItemClassesResponse, ConfigItemClassResponse, CreateConfigItemClass,
-    CreateConfigItemClassResponse, CreateConfigItemClassRequest
+    ConfigItemClassesResponse, ConfigItemClassResponse,
+    CreateConfigItemClass, CreateConfigItemClassResponse, CreateConfigItemClassRequest,
+    UpdateConfigItemClassResponse, UpdateConfigItemClassRequest, UpdateConfigItemClass
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 
@@ -99,9 +100,7 @@ export class ConfigItemClassService extends KIXObjectService {
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
-            const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON')
-            );
-            console.log(createConfigItemClass);
+            const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
                 token, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass)
             ).catch((error) => {
@@ -122,7 +121,25 @@ export class ConfigItemClassService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
+            const updateConfigItemClass = new UpdateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
+
+            const response = await this.sendUpdateRequest<UpdateConfigItemClassResponse, UpdateConfigItemClassRequest>(
+                token, this.buildUri(this.RESOURCE_URI, objectId),
+                new UpdateConfigItemClassRequest(updateConfigItemClass)
+            ).catch((error) => {
+                throw error;
+            });
+
+            const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+            if (icon) {
+                icon.Object = 'ConfigItemClass';
+                icon.ObjectID = response.ConfigItemClassID;
+                await this.updateIcon(token, icon);
+            }
+
+            return response.ConfigItemClassID;
+        }
     }
 
 }
