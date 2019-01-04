@@ -11,7 +11,7 @@ export class TicketStateCreateAction extends AbstractAction {
     public run(): void {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_STATE, ContextMode.CREATE_ADMIN, null, null, 'Stammdaten hinzufügen'
+            null, KIXObjectType.TICKET_STATE, ContextMode.CREATE_ADMIN, null, true, 'Stammdaten hinzufügen'
         );
     }
 

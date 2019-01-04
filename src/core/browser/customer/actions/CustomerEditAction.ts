@@ -12,7 +12,7 @@ export class CustomerEditAction extends AbstractAction {
 
     public async run(): Promise<void> {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-customer-form', false);
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.EDIT);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.EDIT, null, true);
     }
 
 }

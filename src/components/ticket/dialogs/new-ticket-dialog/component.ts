@@ -1,13 +1,13 @@
 import { DialogService } from "../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ServiceRegistry
+    OverlayService, FormService, ServiceRegistry, ContextService
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
     KIXObjectType, ContextMode, ToastContent, TicketProperty
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
+import { TicketService, TicketDetailsContext, NewTicketDialogContext } from "../../../../core/browser/ticket";
 import { RoutingService, RoutingConfiguration } from "../../../../core/browser/router";
 
 class Component {
@@ -21,6 +21,8 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.loading = true;
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
+        context.reset();
         this.state.loading = false;
     }
 

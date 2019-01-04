@@ -13,7 +13,7 @@ export class TicketStateEditAction extends AbstractAction {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-state-form', false);
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_STATE, ContextMode.EDIT_ADMIN, null, null, 'Stammdaten bearbeiten'
+            null, KIXObjectType.TICKET_STATE, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
         );
     }
 

@@ -95,8 +95,6 @@ export class ContextService {
                 kixObjectType, title, null, singleTab
             );
 
-            context.reset();
-
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
                     context.getDescriptor().contextId, context, context.getDescriptor().contextType, false

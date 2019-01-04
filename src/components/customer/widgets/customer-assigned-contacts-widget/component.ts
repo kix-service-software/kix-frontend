@@ -105,15 +105,15 @@ class Component {
         }
     }
 
-    private tableRowClicked(contact: Contact, columnId: string): void {
+    public tableRowClicked(contact: Contact, columnId: string): void {
         if (columnId === 'contact-new-ticket' && contact.ValidID === 1) {
-            ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE);
+            ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
         } else {
             ContactService.getInstance().openContact(contact.ContactID, false);
         }
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.contactTable.setFilterSettings(filterValue);
     }

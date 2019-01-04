@@ -10,7 +10,7 @@ export class ConfigItemCreateAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true);
     }
 
 }

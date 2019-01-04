@@ -85,7 +85,7 @@ export class RoutingService {
             context = await ContextFactory.getInstance().getContextForUrl(url, null, mode);
             if (!context && mode === ContextMode.CREATE) {
                 await ContextService.getInstance().setDialogContext(
-                    null, null, mode
+                    null, null, mode, null, true
                 );
             }
         } else if (params.has('edit')) {
@@ -101,7 +101,7 @@ export class RoutingService {
         if (context) {
             const descriptor = context.getDescriptor();
             await ContextService.getInstance().setDialogContext(
-                descriptor.contextId, descriptor.kixObjectTypes[0], descriptor.contextMode
+                descriptor.contextId, descriptor.kixObjectTypes[0], descriptor.contextMode, null, true
             );
         }
     }

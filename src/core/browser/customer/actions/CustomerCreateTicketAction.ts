@@ -10,7 +10,7 @@ export class CustomerCreateTicketAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
     }
 
 }

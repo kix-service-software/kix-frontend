@@ -11,7 +11,7 @@ export class FAQArticleEditAction extends AbstractAction {
 
     public async run(): Promise<void> {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-faq-article-form', false);
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.EDIT);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.EDIT, null, true);
     }
 
 }

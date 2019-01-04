@@ -11,7 +11,7 @@ export class CustomerCreateAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.CREATE, null, true);
     }
 
 }
