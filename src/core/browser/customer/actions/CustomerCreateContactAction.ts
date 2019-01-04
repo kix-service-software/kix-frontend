@@ -10,7 +10,7 @@ export class CustomerCreateContactAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONTACT, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONTACT, ContextMode.CREATE, null, true);
     }
 
 }

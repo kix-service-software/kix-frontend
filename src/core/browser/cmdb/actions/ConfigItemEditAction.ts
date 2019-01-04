@@ -30,7 +30,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
             dialogContext.setAdditionalInformation([formId]);
         }
         ContextService.getInstance().setDialogContext(
-            EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT
+            EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT, null, true
         );
     }
 

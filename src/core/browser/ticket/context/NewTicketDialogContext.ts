@@ -80,6 +80,7 @@ export class NewTicketDialogContext
     public reset(): void {
         this.contact = null;
         this.customer = null;
+        this.initContext();
     }
 
 }

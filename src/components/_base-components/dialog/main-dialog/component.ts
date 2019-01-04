@@ -1,7 +1,7 @@
 import { DialogService } from '../../../../core/browser/dialog/DialogService';
 import { MainDialogComponentState } from './MainDialogComponentState';
 import { IMainDialogListener, ContextService } from '../../../../core/browser';
-import { ConfiguredDialogWidget, ObjectIcon, Context } from '../../../../core/model';
+import { ConfiguredDialogWidget, ObjectIcon, Context, ContextMode } from '../../../../core/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -27,10 +27,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             setTimeout(() => {
-                this.tabChanged(dialogs.find((d) => d.instanceId === dialogId));
-                setTimeout(() => {
-                    this.state.isLoading = false;
-                }, 100);
+                this.state.isLoading = false;
             }, 100);
         }
     }

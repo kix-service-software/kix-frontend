@@ -10,7 +10,7 @@ export class FAQArticleCreateAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE, null, true);
     }
 
 }

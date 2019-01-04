@@ -10,7 +10,7 @@ export class TicketSearchAction extends AbstractAction {
     }
 
     public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.SEARCH);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.SEARCH, null, true);
     }
 
 }

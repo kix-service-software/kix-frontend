@@ -41,6 +41,7 @@ export class ContextFactory {
             const configuration = await ContextSocketListener.getInstance()
                 .loadContextConfiguration<ContextConfiguration>(context.getDescriptor().contextId);
             context.setConfiguration(configuration);
+            context.reset();
         }
 
         return context;

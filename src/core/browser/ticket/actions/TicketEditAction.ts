@@ -12,7 +12,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
 
     public async run(): Promise<void> {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-form', false);
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.EDIT);
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.EDIT, null, true);
     }
 
 }

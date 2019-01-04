@@ -7,7 +7,7 @@ import { ReleaseContext } from "../../../core/browser/release";
 class KIXHeaderComponent {
 
     public openDialog(): void {
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
     }
 
     public showTemporaryComingSoon(): void {
