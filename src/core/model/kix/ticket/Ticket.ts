@@ -36,7 +36,7 @@ export class Ticket extends KIXObject<Ticket> {
 
     public TypeID: number;
 
-    public SLAID: number;
+    public SLAID: number | string;
 
     public ServiceID: number;
 
