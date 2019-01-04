@@ -33,7 +33,7 @@ export class SlaService extends KIXObjectService {
 
         if (!this.slas) {
             this.slas = await super.loadObjects<Sla>(
-                kixObjectType, objectIds, loadingOptions, objectLoadingOptions, cache
+                kixObjectType, null, loadingOptions, objectLoadingOptions, false
             );
         }
 

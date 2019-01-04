@@ -79,9 +79,8 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
     }
 
     private async initSla(ticket: Ticket): Promise<void> {
-        const slas = await KIXObjectService.loadObjects<Sla>(
-            KIXObjectType.SLA, [ticket.SLAID]
-        ).catch((error) => []);
+        const slaIds = ticket.SLAID && ticket.SLAID !== '' ? [ticket.SLAID] : null;
+        const slas = await KIXObjectService.loadObjects<Sla>(KIXObjectType.SLA, slaIds).catch((error) => []);
 
         if (slas && slas.length) {
             ticket.sla = slas[0];
