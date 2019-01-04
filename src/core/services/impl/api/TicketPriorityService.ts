@@ -87,10 +87,10 @@ export class TicketPriorityService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateTicketType = new UpdateTicketPriority(parameter);
+        const updateTicketPriority = new UpdateTicketPriority(parameter);
 
         const response = await this.sendUpdateRequest<UpdateTicketPriorityResponse, UpdateTicketPriorityRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketPriorityRequest(updateTicketType)
+            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketPriorityRequest(updateTicketPriority)
         ).catch((error) => {
             throw new Error(error.errorMessage.body);
         });

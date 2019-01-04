@@ -32,6 +32,7 @@ class Extension implements IKIXModuleExtension {
         ['config-item-class-versions-widget', 'cmdb/admin/widgets/config-item-class-versions-widget'],
         ['config-item-class-definition', 'cmdb/config-item-class-definition'],
         ['new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog'],
+        ['edit-config-item-class-dialog', 'cmdb/admin/dialogs/edit-config-item-class-dialog'],
     ];
 
 }
