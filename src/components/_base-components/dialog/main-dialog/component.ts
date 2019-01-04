@@ -24,6 +24,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.dialogIcon = dialogIcon;
             this.state.dialogWidgets = dialogs;
             this.state.show = true;
+            this.state.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             setTimeout(() => {
                 this.tabChanged(dialogs.find((d) => d.instanceId === dialogId));
