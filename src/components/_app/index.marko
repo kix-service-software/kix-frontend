@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="de">
-    <head>
-        <title>KIX 2018</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
-        <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
-        <style>            
+  <head>
+    <title>KIX 2018</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix.ico"/>
+    <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
+    <style>            
             @font-face {
                 font-family: 'kix_font';
                 src: url('/static/font/kix_font.eot?jrp1tp');
@@ -46,20 +46,19 @@
                 font-style: italic;
             }
         </style>
-        <lasso-head/>
-        <if(data.themeCSS)>
-            <link rel="stylesheet" href=data.themeCSS/>
-        </if>
-        <for(specificCSS in data.specificCSS)>
-            <link rel="stylesheet" href=specificCSS/>
-        </for>
-    </head>
-    <body>
-        <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId
-            tagLib=input.data.tagLib actionLib=input.data.actionLib/>
-        <script src="/static/thirdparty/socket.io.js"/>
-        <script src="/static/thirdparty/ckeditor-4.10.1/ckeditor.js"/>
-        <script src="/static/thirdparty/chart.min.js"/>
-        <lasso-body/>
-    </body>
+    <lasso-head/>
+    <if(data.themeCSS)>
+      <link rel="stylesheet" href=data.themeCSS/>
+    </if>
+    <for(specificCSS in data.specificCSS)>
+      <link rel="stylesheet" href=specificCSS/>
+    </for>
+  </head>
+  <body>
+    <_base-template contextId=input.data.contextId objectData=input.data.objectData objectId=input.data.objectId tagLib=input.data.tagLib actionLib=input.data.actionLib/>
+    <script src="/static/thirdparty/socket.io.js"/>
+    <script src="/static/thirdparty/ckeditor-4.11.1/ckeditor.js"/>
+    <script src="/static/thirdparty/chart.min.js"/>
+    <lasso-body/>
+  </body>
 </html>
