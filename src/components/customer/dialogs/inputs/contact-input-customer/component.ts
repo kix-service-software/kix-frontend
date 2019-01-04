@@ -46,7 +46,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     private async searchCustomers(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
         this.customers = await KIXObjectService.loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, null, loadingOptions
+            KIXObjectType.CUSTOMER, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
