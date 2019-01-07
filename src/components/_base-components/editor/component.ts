@@ -52,8 +52,6 @@ class EditorComponent {
                 });
             }
 
-            CKEDITOR.config.extraPlugins = "base64image";
-
             this.editor.on('paste', (event: any) => {
                 const fileSize = event.data.dataTransfer.getFilesCount();
                 if (fileSize > 0 && event.data.method === 'drop') {
