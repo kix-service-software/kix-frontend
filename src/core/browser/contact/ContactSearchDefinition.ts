@@ -80,11 +80,9 @@ export class ContactSearchDefinition extends SearchDefinition {
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
         const customerCategory = new SearchResultCategory('Kunden', KIXObjectType.CUSTOMER);
         const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
-        // TODO: type auf config item ändern
-        const ciCategory = new SearchResultCategory('CIs', KIXObjectType.ANY);
 
         return new SearchResultCategory(
-            'Ansprechpartner', KIXObjectType.CONTACT, [customerCategory, ticketCategory, ciCategory]
+            'Ansprechpartner', KIXObjectType.CONTACT, [customerCategory, ticketCategory]
         );
     }
 
