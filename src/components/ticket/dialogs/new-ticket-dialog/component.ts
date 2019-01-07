@@ -4,7 +4,7 @@ import {
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    KIXObjectType, ContextMode, ToastContent, TicketProperty
+    KIXObjectType, ContextMode, ToastContent, TicketProperty, FormInstance
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketService, TicketDetailsContext, NewTicketDialogContext } from "../../../../core/browser/ticket";
@@ -23,6 +23,7 @@ class Component {
         DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
         const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
         context.reset();
+        await FormService.getInstance().getFormInstance<FormInstance>('new-ticket-form', false);
         this.state.loading = false;
     }
 
