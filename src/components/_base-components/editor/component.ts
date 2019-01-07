@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ServiceRegistry, IKIXObjectService } from '../../../core/browser';
+import { ServiceRegistry, IKIXObjectService, AttachmentUtil } from '../../../core/browser';
 import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
 
 declare var CKEDITOR: any;
@@ -53,6 +53,34 @@ class EditorComponent {
             }
 
             CKEDITOR.config.extraPlugins = "base64image";
+
+            this.editor.on('paste', (event: any) => {
+                const fileSize = event.data.dataTransfer.getFilesCount();
+                if (fileSize > 0 && event.data.method === 'drop') {
+                    event.stop();
+                    for (let i = 0; i < fileSize; i++) {
+                        const file = event.data.dataTransfer.getFile(i);
+                        const valid = AttachmentUtil.checkMimeType(
+                            file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
+                        );
+                        if (valid) {
+                            const reader = new FileReader();
+                            reader.onload = (evt: any) => {
+                                const element = this.editor.document.createElement('img', {
+                                    attributes: {
+                                        src: evt.target.result
+                                    }
+                                });
+
+                                setTimeout(() => {
+                                    this.editor.insertElement(element);
+                                }, 0);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                }
+            });
 
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
