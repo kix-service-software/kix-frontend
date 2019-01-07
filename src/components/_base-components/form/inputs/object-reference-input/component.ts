@@ -31,8 +31,18 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
     public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             const value = this.state.defaultValue.value;
-            this.state.currentNode = await this.createTreeNode(value);
-            this.state.nodes = [this.state.currentNode];
+            if (this.state.nodes && this.state.nodes.length) {
+                const node = this.state.nodes.find((n) => n.id === value.ObjectId);
+                if (node) {
+                    this.state.currentNode = await this.createTreeNode(value);
+                }
+            }
+
+            if (this.state.autocomplete) {
+                this.state.currentNode = await this.createTreeNode(value);
+                this.state.nodes = [this.state.currentNode];
+            }
+
             super.provideValue(this.state.currentNode.id);
         }
     }
