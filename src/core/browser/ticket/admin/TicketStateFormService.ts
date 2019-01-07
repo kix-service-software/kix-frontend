@@ -1,5 +1,6 @@
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
-import { KIXObjectType, TicketState } from "../../../model";
+import { KIXObjectType, TicketState, TicketStateProperty } from "../../../model";
+import { KIXObjectService } from "../../kix";
 
 export class TicketStateFormService extends KIXObjectFormService<TicketState> {
 
@@ -19,5 +20,18 @@ export class TicketStateFormService extends KIXObjectFormService<TicketState> {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.TICKET_STATE;
+    }
+
+    protected async getValue(property: string, value: any, ticketState: TicketState): Promise<any> {
+        switch (property) {
+            case TicketStateProperty.TYPE_ID:
+                const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
+                if (stateTypes && stateTypes.length) {
+                    value = stateTypes[0];
+                }
+                break;
+            default:
+        }
+        return value;
     }
 }
