@@ -201,13 +201,16 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private addEmptySearchValue(): void {
-        if (!this.state.searchValues.some((sv) => sv.currentPropertyNode === null)) {
+        const index = this.state.searchValues.findIndex((sv) => sv.currentPropertyNode === null);
+        let emptyField: FormSearchValue;
+        if (index === -1) {
             const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(this.objectType);
-            this.state.searchValues = [
-                ...this.state.searchValues,
-                new FormSearchValue(this.objectType, searchDefinition)
-            ];
+            emptyField = new FormSearchValue(this.objectType, searchDefinition);
+        } else {
+            emptyField = this.state.searchValues.splice(index, 1)[0];
         }
+
+        this.state.searchValues = [...this.state.searchValues, emptyField];
     }
 
     private updateSearchValues(properties: string[]): void {
