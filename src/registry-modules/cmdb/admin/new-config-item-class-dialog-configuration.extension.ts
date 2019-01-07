@@ -43,7 +43,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 "Kommentar", ConfigItemClassProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für die CMDB Klasse ein.", null, null, null, null, null, null, null, 250
+                "Geben Sie einen Kommentar für die CMDB Klasse ein.", null, null, null, null, null, null, null, 200
             ));
             fields.push(new FormField(
                 "Gültigkeit", ConfigItemClassProperty.VALID_ID, 'valid-input', true,
