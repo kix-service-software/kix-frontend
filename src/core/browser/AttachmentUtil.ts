@@ -33,7 +33,7 @@ export class AttachmentUtil {
         return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Data : null;
     }
 
-    private static checkMimeType(file: File, mimeTypes: string[]): boolean {
+    public static checkMimeType(file: File, mimeTypes: string[]): boolean {
         const index = mimeTypes.findIndex((mt) => mt === file.type);
         return index !== -1;
     }
