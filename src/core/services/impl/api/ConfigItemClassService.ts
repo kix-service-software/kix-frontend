@@ -122,7 +122,9 @@ export class ConfigItemClassService extends KIXObjectService {
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
-            const updateConfigItemClass = new UpdateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
+            const updateConfigItemClass = new UpdateConfigItemClass(
+                parameter.filter((p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING)
+            );
 
             const response = await this.sendUpdateRequest<UpdateConfigItemClassResponse, UpdateConfigItemClassRequest>(
                 token, this.buildUri(this.RESOURCE_URI, objectId),
@@ -136,6 +138,18 @@ export class ConfigItemClassService extends KIXObjectService {
                 icon.Object = 'ConfigItemClass';
                 icon.ObjectID = response.ConfigItemClassID;
                 await this.updateIcon(token, icon);
+            }
+
+            const definitionParameter = parameter.find((p) => p[0] === ConfigItemClassProperty.DEFINITION_STRING);
+            if (definitionParameter) {
+                const uri = this.buildUri(this.RESOURCE_URI, objectId, 'definitions');
+                await this.sendCreateRequest(token, uri, {
+                    ConfigItemClassDefinition: {
+                        DefinitionString: definitionParameter[1]
+                    }
+                }).catch((error) => {
+                    throw error;
+                });
             }
 
             return response.ConfigItemClassID;

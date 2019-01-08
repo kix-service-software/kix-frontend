@@ -190,6 +190,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
                     ['Content', icon.Content]
                 ]).catch((error) => {
                     LoggingService.getInstance().error(error);
+                    throw error;
                 });
                 // TODO: cache-Handling überarbeiten
                 KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);
@@ -214,7 +215,10 @@ export abstract class KIXObjectService implements IKIXObjectService {
                         ['ContentType', icon.ContentType],
                         ['Content', icon.Content]
                     ],
-                    icons[0].ID);
+                    icons[0].ID
+                ).catch((error) => {
+                    throw error;
+                });
                 // TODO: cache-Handling überarbeiten
                 KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);
             } else {
