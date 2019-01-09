@@ -1,7 +1,9 @@
-import { AbstractAction, KIXObjectType, ContextMode, ContextType, ConfigItem } from "../../../model";
+import { AbstractAction, KIXObjectType, ContextMode, ContextType, ConfigItem, ConfigItemClass } from "../../../model";
 import { ContextService } from "../../context";
 import { FormService } from "../../form";
 import { EditConfigItemDialogContext } from "../context";
+import { ConfigItemFormFactory } from "../ConfigItemFormFactory";
+import { KIXObjectService } from "../../kix";
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
@@ -12,12 +14,17 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
     public async run(): Promise<void> {
         const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        let formId;
+        let formId: string;
         if (mainContext) {
             const configItem = await mainContext.getObject<ConfigItem>();
             if (configItem) {
-                if (configItem.ClassID && configItem.Class) {
-                    formId = `CMDB_CI_${configItem.Class}_${configItem.ClassID}_EDIT`;
+                if (configItem.ClassID) {
+                    const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                        KIXObjectType.CONFIG_ITEM_CLASS, [configItem.ClassID]
+                    );
+                    if (ciClasses && ciClasses.length) {
+                        formId = ConfigItemFormFactory.getInstance().getFormId(ciClasses[0], true);
+                    }
                 } else {
                     formId = null;
                 }

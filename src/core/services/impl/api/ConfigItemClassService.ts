@@ -10,6 +10,8 @@ import {
     UpdateConfigItemClassResponse, UpdateConfigItemClassRequest, UpdateConfigItemClass
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
+import { AppUtil } from "../../../common";
+import { setTimeout } from "timers";
 
 export class ConfigItemClassService extends KIXObjectService {
 
@@ -114,6 +116,8 @@ export class ConfigItemClassService extends KIXObjectService {
                 await this.createIcons(token, icon);
             }
 
+            await AppUtil.updateFormConfigurations(true);
+
             return response.ConfigItemClassID;
         }
     }
@@ -151,6 +155,8 @@ export class ConfigItemClassService extends KIXObjectService {
                     throw error;
                 });
             }
+
+            await AppUtil.updateFormConfigurations(true);
 
             return response.ConfigItemClassID;
         }

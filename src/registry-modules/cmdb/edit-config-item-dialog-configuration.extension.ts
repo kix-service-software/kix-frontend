@@ -1,9 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { ContextConfiguration, KIXObjectType, ConfigItemClass } from '../../core/model';
+import { ContextConfiguration, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions } from '../../core/model';
 import {
-    EditConfigItemDialogContext,
-    EditConfigItemDialogContextConfiguration,
-    ConfigItemFormFactory
+    EditConfigItemDialogContext, EditConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from '../../core/browser/cmdb';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 
@@ -17,7 +15,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
         return new EditConfigItemDialogContextConfiguration(this.getModuleId());
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
@@ -25,14 +23,18 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
+        const options = new KIXObjectLoadingOptions(null, null, null, null, null, [
+            'CurrentDefinition'
+        ]);
+
         const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
+            token, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
         );
 
         for (const ciClass of ciClasses) {
-            const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}_EDIT`;
+            const formId = ConfigItemFormFactory.getInstance().getFormId(ciClass, true);
             const existingForm = configurationService.getModuleConfiguration(formId, null);
-            if (!existingForm) {
+            if (formId && !existingForm || overwrite) {
                 const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId, true);
                 await configurationService.saveModuleConfiguration(formId, null, form);
             }

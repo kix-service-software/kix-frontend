@@ -1,9 +1,13 @@
 import { KIXCommunicator } from "./KIXCommunicator";
 import { Socket } from "socket.io";
-import { CommunicatorResponse } from "../core/common";
-import { KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse } from "../core/model";
+import { CommunicatorResponse, AppUtil } from "../core/common";
+import {
+    KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
+    LoadFormConfigurationsRequest, LoadFormConfigurationsResponse
+} from "../core/model";
 import { KIXExtensions, IKIXModuleExtension } from "../core/extensions";
 import { PluginService } from "../services";
+import { ConfigurationService } from "../core/services";
 
 export class KIXModuleCommunicator extends KIXCommunicator {
 
@@ -26,6 +30,9 @@ export class KIXModuleCommunicator extends KIXCommunicator {
 
     protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, KIXModulesEvent.LOAD_MODULES, this.loadModules.bind(this));
+
+        this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
+            this.loadFormConfigurations.bind(this));
     }
 
     private async loadModules(data: LoadKIXModulesRequest): Promise<CommunicatorResponse<LoadKIXModulesResponse>> {
@@ -43,6 +50,16 @@ export class KIXModuleCommunicator extends KIXCommunicator {
         );
 
         return response;
+    }
+
+    private async loadFormConfigurations(
+        data: LoadFormConfigurationsRequest
+    ): Promise<CommunicatorResponse<LoadFormConfigurationsResponse>> {
+        await AppUtil.updateFormConfigurations();
+        const forms = ConfigurationService.getInstance().getRegisteredForms();
+        const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
+        const response = new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext);
+        return new CommunicatorResponse(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED, response);
     }
 
 }

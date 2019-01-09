@@ -202,7 +202,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

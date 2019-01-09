@@ -1,6 +1,6 @@
 import { IKIXObjectCacheHandler } from "../../IKIXObjectCacheHandler";
 import { KIXObjectType } from "../KIXObjectType";
-import { ServiceMethod } from "../../../browser";
+import { ServiceMethod, FormService } from "../../../browser";
 import { KIXObjectCache } from "../../KIXObjectCache";
 import { KIXObjectSpecificDeleteOptions } from "../../KIXObjectSpecificDeleteOptions";
 import { KIXObjectSpecificCreateOptions } from "../../KIXObjectSpecificCreateOptions";

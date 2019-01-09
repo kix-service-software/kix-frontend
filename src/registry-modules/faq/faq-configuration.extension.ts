@@ -52,7 +52,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
         const linkFormId = 'link-faq-search-form';
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);

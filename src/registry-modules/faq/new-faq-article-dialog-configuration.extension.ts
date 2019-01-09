@@ -18,12 +18,12 @@ export class Extension implements IConfigurationExtension {
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-faq-article-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, true, "Geben Sie einen Titel / Bezeichnung für den FAQ-Eintrag ein."));
             fields.push(new FormField(

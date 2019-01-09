@@ -43,7 +43,7 @@ export class Extension implements IConfigurationExtension {
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         return;
     }
 

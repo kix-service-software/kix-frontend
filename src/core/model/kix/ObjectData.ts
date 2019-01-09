@@ -13,8 +13,6 @@ export class ObjectData {
         public servicesHierarchy: Service[] = [],
         public users: User[] = [],
         public currentUser: User = null,
-        public forms: Form[] = [],
-        public formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = [],
         public validObjects: ValidObject[] = [],
         public contactAttributes: Array<[string, string]> = [],
         public customerAttributes: Array<[string, string]> = [],

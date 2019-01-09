@@ -18,6 +18,13 @@ export class ConfigItemFormFactory {
 
     private constructor() { }
 
+    public getFormId(ciClass: ConfigItemClass, edit: boolean = false): string {
+        const editString = edit ? '_EDIT' : '';
+        return ciClass.CurrentDefinition
+            ? `CMDB_CI_${ciClass.Name}_${ciClass.ID}_${ciClass.CurrentDefinition.Version}${editString}`
+            : null;
+    }
+
     // tslint:disable:max-line-length
     public async createCIForm(ciClass: ConfigItemClass, formId: string, forEdit: boolean = false): Promise<Form> {
         const fields: FormField[] = [];

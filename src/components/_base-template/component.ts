@@ -3,7 +3,7 @@ import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService } from '../../core/browser';
+import { IdService, FormService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -46,7 +46,7 @@ class Component {
         });
 
         ContextService.getInstance().setObjectData(this.state.objectData);
-        this.bootstrapServices();
+        await this.bootstrapServices();
         this.setContext();
 
         EventService.getInstance().subscribe('APP_LOADING', {
@@ -71,7 +71,7 @@ class Component {
         const token = ClientStorageService.getToken();
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
-        const configurationSocket = io.connect(socketUrl + "/configuration", {
+        const configurationSocket = io.connect(socketUrl + "/kixmodules", {
             query: "Token=" + token
         });
 
@@ -80,7 +80,7 @@ class Component {
         });
     }
 
-    private bootstrapServices(): void {
+    private async bootstrapServices(): Promise<void> {
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
@@ -91,6 +91,9 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
+
+        FormService.getInstance();
+        await FormService.getInstance().loadFormConfigurations();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

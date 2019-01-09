@@ -1,6 +1,6 @@
 import { DialogService } from "../../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
 } from "../../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     DialogService.getInstance().closeMainDialog();
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showError(error);
+                    BrowserUtil.openErrorOverlay(error);
                 });
             }
         }, 300);
@@ -77,10 +77,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

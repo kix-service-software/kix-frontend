@@ -52,7 +52,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formIdEditTicket = 'edit-ticket-form';

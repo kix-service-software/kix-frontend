@@ -87,9 +87,6 @@ export abstract class KIXRouter implements IRouter {
         const services = await ServiceService.getInstance().getServices(token);
         const servicesHierarchy = await ServiceService.getInstance().getServiceHierarchy(token);
 
-        const forms = ConfigurationService.getInstance().getRegisteredForms();
-        const formIDsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
-
         const validObjects = await ValidObjectService.getInstance().getValidObjects(token);
 
         const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token);
@@ -121,7 +118,6 @@ export abstract class KIXRouter implements IRouter {
         const objectData = new ObjectData(
             services, servicesHierarchy,
             users, currentUser,
-            forms, formIDsWithContext,
             validObjects,
             contactAttributes, customerAttributes,
             faqVisibilities,

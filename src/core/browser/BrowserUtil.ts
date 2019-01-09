@@ -1,4 +1,16 @@
+import { OverlayService } from "./OverlayService";
+import { OverlayType, StringContent, ComponentContent, ToastContent } from "../model";
+
 export class BrowserUtil {
+
+    public static openErrorOverlay(error: string): void {
+        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+    }
+
+    public static openSuccessOverlay(message: string): void {
+        const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
+        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+    }
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');

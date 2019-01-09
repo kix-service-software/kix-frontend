@@ -137,12 +137,12 @@ export class Extension implements IConfigurationExtension {
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const linkFormId = 'link-config-item-search-form';
         const existingForm = configurationService.getModuleConfiguration(linkFormId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(
                 new FormField(

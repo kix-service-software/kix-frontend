@@ -23,12 +23,12 @@ export class Extension implements IConfigurationExtension {
         return new NewConfigItemClassDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-config-item-class-form';
         const existing = configurationService.getModuleConfiguration(formId, null);
-        if (!existing) {
+        if (!existing || overwrite) {
             const fields: FormField[] = [];
             fields.push(new FormField(
                 "Name", ConfigItemClassProperty.NAME, null, true, "Geben Sie einen Namen für die CMDB Klasse ein."

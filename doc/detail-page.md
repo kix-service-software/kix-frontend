@@ -82,7 +82,7 @@ export class Extension implements IModuleFactoryExtension {
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void>
         // do nothing
     }
 
