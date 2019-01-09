@@ -15,7 +15,7 @@ export class Extension implements IConfigurationExtension {
         return new EditLinkedObjectsDialogContextConfiguration();
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         return;
     }
 }

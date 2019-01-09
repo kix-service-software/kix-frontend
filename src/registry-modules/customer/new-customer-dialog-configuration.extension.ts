@@ -18,12 +18,12 @@ export class NewCustomerDialogModuleExtension implements IConfigurationExtension
         return new NewCustomerDialogContextConfiguration();
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-customer-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const customerService = CustomerService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;

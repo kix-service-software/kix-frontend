@@ -1,7 +1,6 @@
 export * from './action';
 export * from './charts';
 export * from './context';
-export * from './configuration';
 export * from './form';
 export * from './main-menu';
 export * from './overlay';

@@ -1,5 +1,5 @@
 import {
-    ContextService, DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService
+    DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
 } from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
@@ -7,7 +7,7 @@ import {
     FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService, ConfigItemDetailsContext } from '../../../../core/browser/cmdb';
+import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
 
 class Component {
@@ -26,8 +26,10 @@ class Component {
                     ConfigItemClassProperty.CURRENT_DEFINITION, SearchOperator.NOT_EQUALS,
                     FilterDataType.STRING, FilterType.AND, null
                 )], null, null, null,
-                ['CurrentDefinition,Definitions'])
+                ['CurrentDefinition,Definitions']),
+            null, false
         );
+
         this.state.classNodes = configItemClasses.map(
             (ci) => new TreeNode(ci, ci.Name)
         );
@@ -50,7 +52,7 @@ class Component {
         let formId;
         if (this.state.currentClassNode) {
             const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-            formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+            formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
         } else {
             formId = null;
         }
@@ -88,7 +90,7 @@ class Component {
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showError(error);
+                        BrowserUtil.openErrorOverlay(error);
                     });
             }
         }
@@ -115,12 +117,6 @@ class Component {
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
     }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
-
-
 
 }
 

@@ -1,6 +1,6 @@
 import { DialogService } from "../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, KIXObjectService
+    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
@@ -55,7 +55,7 @@ class Component {
                         DialogService.getInstance().closeMainDialog();
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showError(error);
+                        BrowserUtil.openErrorOverlay(error);
                     });
                 }
             }
@@ -82,10 +82,6 @@ class Component {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

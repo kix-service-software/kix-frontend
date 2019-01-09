@@ -1,6 +1,6 @@
 import { DialogService } from "../../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
 } from "../../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, ToastContent, KIXObjectType
@@ -45,14 +45,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 await KIXObjectService.updateObjectByForm(
                     KIXObjectType.CONFIG_ITEM_CLASS, this.state.formId, context.getObjectId()
-                ).then((ciClassId) => {
+                ).then(async (ciClassId) => {
+                    await FormService.getInstance().loadFormConfigurations();
                     context.getObject(KIXObjectType.CONFIG_ITEM_CLASS, true);
                     DialogService.getInstance().setMainDialogLoading(false);
                     this.showSuccessHint();
                     DialogService.getInstance().closeMainDialog();
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showError(error);
+                    BrowserUtil.openErrorOverlay(error);
                 });
             }
         }, 300);
@@ -78,10 +79,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

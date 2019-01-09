@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
         return new EditTicketTypeDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-ticket-type-form';

@@ -178,7 +178,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // tslint:disable:max-line-length
         const formIdLinkWithTicket = 'link-ticket-search-form';
         const existingFormLinkWithTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdLinkWithTicket, null);

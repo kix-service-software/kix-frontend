@@ -19,19 +19,11 @@ class Startup {
         ConfigurationService.getInstance().init(configDir, certDir);
 
         await this.bindServices();
-        await this.initConfigurations();
         this.server = Server.getInstance();
     }
 
     private async bindServices(): Promise<void> {
         await CoreServiceRegistry.getInstance().registerCoreServices();
-    }
-
-    private async initConfigurations(): Promise<void> {
-        const moduleFactories = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
-            KIXExtensions.CONFIGURATION
-        );
-        moduleFactories.forEach((mf) => mf.createFormDefinitions());
     }
 
 }

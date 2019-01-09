@@ -3,7 +3,7 @@ import {
     DialogService, OverlayService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
     TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
-    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService
+    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService, BrowserUtil
 } from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent,
@@ -340,7 +340,7 @@ class Component {
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
             ).catch((error) => {
-                this.showError('Verknüpfung nicht anlegbar (' + error + ')');
+                BrowserUtil.openErrorOverlay('Verknüpfung nicht anlegbar (' + error + ')');
                 ok = false;
                 return;
             });
@@ -362,9 +362,6 @@ class Component {
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
 }
 
 module.exports = Component;

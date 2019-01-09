@@ -36,8 +36,11 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
 
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             if (!KIXObjectCache.hasObjectCache(objectType)) {
+                const options = new KIXObjectLoadingOptions(null, null, null, null, null, [
+                    'CurrentDefinition'
+                ]);
                 const objects = await super.loadObjects(
-                    objectType, null, loadingOptions, objectLoadingOptions, cache
+                    objectType, null, options, objectLoadingOptions, false
                 );
                 objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
             }

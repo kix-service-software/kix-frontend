@@ -18,12 +18,12 @@ export class Extension implements IConfigurationExtension {
         return new EditCustomerDialogContextConfiguration();
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-customer-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const customerService = CustomerService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;

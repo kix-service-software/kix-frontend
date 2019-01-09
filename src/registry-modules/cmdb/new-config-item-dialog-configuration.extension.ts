@@ -1,4 +1,4 @@
-import { ContextConfiguration, ConfigItemClass, KIXObjectType } from "../../core/model";
+import { ContextConfiguration, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { ConfigurationService, KIXObjectServiceRegistry } from "../../core/services";
 import {
@@ -15,7 +15,7 @@ export class Extension implements IConfigurationExtension {
         return new NewConfigItemDialogContextConfiguration();
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
@@ -23,14 +23,18 @@ export class Extension implements IConfigurationExtension {
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
+        const options = new KIXObjectLoadingOptions(null, null, null, null, null, [
+            'CurrentDefinition'
+        ]);
+
         const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
+            token, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
         );
 
         for (const ciClass of ciClasses) {
-            const formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+            const formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
             const existingForm = configurationService.getModuleConfiguration(formId, null);
-            if (!existingForm) {
+            if (formId && !existingForm || overwrite) {
                 const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId);
                 await configurationService.saveModuleConfiguration(formId, null, form);
             }

@@ -28,10 +28,10 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const formId = 'search-ticket-form';
         const existingForm = ConfigurationService.getInstance().getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'Ticketsuche',

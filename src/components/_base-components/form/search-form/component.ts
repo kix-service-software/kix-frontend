@@ -6,7 +6,7 @@ import { FormService } from '../../../../core/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, OverlayService, ServiceRegistry,
     IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
-    TableRowHeight, IKIXObjectService, StandardTable, SearchProperty
+    TableRowHeight, IKIXObjectService, StandardTable, SearchProperty, BrowserUtil
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 
@@ -97,7 +97,7 @@ class Component implements ISearchFormListener {
                 this.setSearchResult(objects);
             })
             .catch((error) => {
-                this.showError(error);
+                BrowserUtil.openErrorOverlay(error);
             });
 
         DialogService.getInstance().setMainDialogLoading(false);
@@ -144,10 +144,6 @@ class Component implements ISearchFormListener {
             this.state.resultCount = objects ? objects.length : 0;
             this.state.table = table;
         }, 100);
-    }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
     private async setCanSearch(): Promise<void> {

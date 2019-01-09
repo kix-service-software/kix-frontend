@@ -6,6 +6,6 @@ export interface IConfigurationExtension {
 
     getDefaultConfiguration(): Promise<ContextConfiguration>;
 
-    createFormDefinitions(): void;
+    createFormDefinitions(overwrite: boolean): Promise<void>;
 
 }

@@ -51,7 +51,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         return new NewTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // tslint:disable:max-line-length
         const formIdNewTicket = 'new-ticket-form';
         const existingFormNewTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdNewTicket, null);
