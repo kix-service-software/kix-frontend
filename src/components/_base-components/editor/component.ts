@@ -54,7 +54,7 @@ class EditorComponent {
 
             this.editor.on('paste', (event: any) => {
                 const fileSize = event.data.dataTransfer.getFilesCount();
-                if (fileSize > 0 && event.data.method === 'drop') {
+                if (fileSize > 0) {
                     event.stop();
                     for (let i = 0; i < fileSize; i++) {
                         const file = event.data.dataTransfer.getFile(i);
