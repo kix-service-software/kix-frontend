@@ -2,7 +2,7 @@ import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix
 import {
     KIXObjectType, ConfigItemProperty, FilterCriteria, ConfigItemClass, FilterDataType,
     FilterType, GeneralCatalogItem, VersionProperty, KIXObjectLoadingOptions, InputFieldTypes,
-    TreeNode, ObjectIcon, DataType, AttributeDefinition, Customer, Contact
+    TreeNode, ObjectIcon, DataType, AttributeDefinition, Customer, Contact, InputDefinition, ConfigItem
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
@@ -142,15 +142,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
         if (input) {
             if (input.Type === 'GeneralCatalog') {
-                const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-                    'Class', SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, input['Class']
-                )]);
-
-                const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
-                );
-
+                const items = await this.getGeneralCatalogItems(input);
                 return items.map((item) => new TreeNode(
                     item.ItemID, item.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                 ));
@@ -158,6 +150,31 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         }
 
         return [];
+    }
+
+    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
+        let displayValue = await super.getDisplaySearchValue(property, parameter, value);
+        const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
+            property, classParameter ? classParameter[1] : null
+        );
+
+        if (input) {
+            if (input.Type === 'GeneralCatalog') {
+                const items = await this.getGeneralCatalogItems(input);
+                const item = items.find((i) => i.ItemID === value);
+                if (item) {
+                    displayValue = item.Name;
+                }
+            } else if (input.Type === 'CIClassReference') {
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(KIXObjectType.CONFIG_ITEM, [value]);
+                if (configItems && configItems.length) {
+                    displayValue = configItems[0].Name;
+                }
+            }
+        }
+
+        return displayValue;
     }
 
     private static isDropDown(property: string): boolean {
@@ -283,12 +300,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
 
         if (input.Type === 'CIClassReference') {
-            const classReference = input['ReferencedCIClassName'];
-            const ciClassNames = Array.isArray(classReference) ? classReference : [classReference];
-
-            const configItems = await CMDBService.getInstance().searchConfigItemsByClass(
-                ciClassNames, searchValue, limit
-            );
+            const configItems = await this.loadConfigItems(input, searchValue, limit);
             return configItems.map(
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
             );
@@ -364,6 +376,28 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
 
         return column;
+    }
+
+    private async getGeneralCatalogItems(input: InputDefinition): Promise<GeneralCatalogItem[]> {
+        const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
+            'Class', SearchOperator.EQUALS, FilterDataType.STRING,
+            FilterType.AND, input['Class']
+        )]);
+
+        const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
+            KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
+        );
+        return items;
+    }
+
+    private async loadConfigItems(input: InputDefinition, searchValue: string, limit: number): Promise<ConfigItem[]> {
+        const classReference = input['ReferencedCIClassName'];
+        const ciClassNames = Array.isArray(classReference) ? classReference : [classReference];
+
+        const configItems = await CMDBService.getInstance().searchConfigItemsByClass(
+            ciClassNames, searchValue, limit
+        );
+        return configItems;
     }
 
 }
