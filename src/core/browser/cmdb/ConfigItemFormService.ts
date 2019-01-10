@@ -75,6 +75,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 }
             } else {
                 newFormFields.push(formField);
+                this.formFieldValues.set(formField.instanceId, new FormFieldValue(null));
             }
         }
         return newFormFields;
@@ -161,6 +162,16 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     }
                 }
                 index++;
+            }
+        } else {
+            this.formFieldValues.set(ff.instanceId, new FormFieldValue(null));
+            if (ff.children && ff.children.length) {
+                let newChildren: FormField[] = [];
+                for (const child of ff.children) {
+                    const children = await this.prepareDataValues([], child);
+                    newChildren = [...newChildren, ...children];
+                }
+                ff.children = newChildren;
             }
         }
         return formFields;
