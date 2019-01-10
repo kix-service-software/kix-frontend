@@ -23,6 +23,11 @@ export abstract class SearchDefinition {
 
     public abstract getSearchResultCategories(): Promise<SearchResultCategory>;
 
+    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
+        return await labelProvider.getPropertyValueDisplayText(property, value);
+    }
+
     public async searchValues(
         property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
     ): Promise<TreeNode[]> {
