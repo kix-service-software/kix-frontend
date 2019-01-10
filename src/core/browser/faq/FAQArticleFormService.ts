@@ -38,6 +38,9 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
                     const inlineContent = await this.getInlineContent(faqArticle);
                     value = this.replaceInlineContent(faqArticle[property], inlineContent);
                     break;
+                case FAQArticleProperty.ATTACHMENTS:
+                    value = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
+                    break;
                 default:
             }
         }

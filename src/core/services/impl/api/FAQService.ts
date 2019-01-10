@@ -168,9 +168,7 @@ export class FAQService extends KIXObjectService {
         });
 
         const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
-        if (attachments && attachments.length) {
-            await this.updateAttachments(token, objectId, attachments[1]);
-        }
+        await this.updateAttachments(token, objectId, attachments && attachments.length ? attachments[1] : []);
 
         return response.FAQArticleID;
     }
@@ -178,13 +176,12 @@ export class FAQService extends KIXObjectService {
     private async updateAttachments(token: string, objectId: number, attachments: Attachment[]): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments');
 
-        const attachmentsResponse = await this.getObjectByUri<FAQArticleAttachmentsResponse>(token, uri, {
-            fields: 'Attachment.ID'
-        });
+        const attachmentsResponse = await this.getObjectByUri<FAQArticleAttachmentsResponse>(token, uri);
         const existingAttachments = attachmentsResponse.Attachment;
 
-        const deletableAttachments = existingAttachments ?
-            existingAttachments.filter((a) => !attachments.some((at) => at.ID === a.ID)) : [];
+        const deletableAttachments = existingAttachments
+            ? existingAttachments.filter((a) => a.Disposition !== 'inline' && !attachments.some((at) => at.ID === a.ID))
+            : [];
 
         for (const attachment of deletableAttachments) {
             const attachmentUri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments', attachment.ID);
