@@ -23,14 +23,16 @@ export class TicketStateFormService extends KIXObjectFormService<TicketState> {
     }
 
     protected async getValue(property: string, value: any, ticketState: TicketState): Promise<any> {
-        switch (property) {
-            case TicketStateProperty.TYPE_ID:
-                const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
-                if (stateTypes && stateTypes.length) {
-                    value = stateTypes[0];
-                }
-                break;
-            default:
+        if (value) {
+            switch (property) {
+                case TicketStateProperty.TYPE_ID:
+                    const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
+                    if (stateTypes && stateTypes.length) {
+                        value = stateTypes[0];
+                    }
+                    break;
+                default:
+            }
         }
         return value;
     }
