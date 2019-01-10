@@ -89,7 +89,7 @@ class Component implements IKIXObjectSearchListener {
 
             let emptyResultHint;
             if (!cache) {
-                emptyResultHint = 'Keine Suche ausgeführt';
+                emptyResultHint = 'Keine Suche ausgeführt.';
             }
 
             const tableConfiguration = new TableConfiguration(

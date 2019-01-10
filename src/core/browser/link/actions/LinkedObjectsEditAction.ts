@@ -15,7 +15,5 @@ export class LinkedObjectsEditAction extends AbstractAction {
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
         );
-
     }
-
 }

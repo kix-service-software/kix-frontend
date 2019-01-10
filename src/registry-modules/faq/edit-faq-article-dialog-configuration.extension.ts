@@ -35,10 +35,10 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField("Schlagworte", FAQArticleProperty.KEYWORDS, null, false, "Geben Sie Schlagwörter für den FAQ-Artikel ein. Schlagworte unterstützen u.a. das schnelle Auffinden von FAQ-Einträgen."));
             fields.push(new FormField(
-                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf. (intern = nur im KIX Agentenportal, extern = KIX Agentenportal  und KIX Kundenportal, öffentlich = KIX Agentenportal  und KIX Kundenportal sowie außerhalb von KIX).",
+                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf. (intern = nur im KIX Agentenportal, extern = KIX Agentenportal  und KIX Kundenportal, öffentlich = KIX Agentenportal und KIX Kundenportal sowie außerhalb von KIX).",
                 null, new FormFieldValue("internal")
             ));
-            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an den FAQ-Artikel anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB  pro Datei."));
+            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an den FAQ-Artikel anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
             fields.push(new FormField("Symptom", FAQArticleProperty.FIELD_1, 'rich-text-input', false, "Beschreiben Sie das Symptom so genau wie möglich."));
             fields.push(new FormField("Ursache", FAQArticleProperty.FIELD_2, 'rich-text-input', false, "Beschreiben Sie die Ursache so genau wie möglich."));
             fields.push(new FormField("Lösung", FAQArticleProperty.FIELD_3, 'rich-text-input', false, "Beschreiben Sie die Lösung für die Ursache des Symptoms so genau wie möglich."));
