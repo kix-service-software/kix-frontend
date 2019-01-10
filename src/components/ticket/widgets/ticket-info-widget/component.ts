@@ -76,14 +76,6 @@ class Component {
         }
     }
 
-    public print(): void {
-        alert('Drucken ...');
-    }
-
-    public edit(): void {
-        alert('Bearbeiten ...');
-    }
-
     public getIncidentStateId(): number {
         const serviceId = this.state.ticket.ServiceID;
         let incidentStateId = 0;

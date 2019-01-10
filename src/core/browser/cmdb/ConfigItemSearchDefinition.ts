@@ -164,7 +164,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
         const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
-        const faqCategory = new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE);
+        const faqCategory = new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE);
         return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, [ticketCategory, faqCategory]);
     }
 

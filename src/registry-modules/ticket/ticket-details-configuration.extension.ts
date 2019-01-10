@@ -48,7 +48,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     linkedObjectTypes: [
                         ["Tickets", KIXObjectType.TICKET],
                         ["Config Items", KIXObjectType.CONFIG_ITEM],
-                        ["FAQ", KIXObjectType.FAQ_ARTICLE],
+                        ["FAQs", KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
                 true, true, WidgetSize.BOTH, null, false)

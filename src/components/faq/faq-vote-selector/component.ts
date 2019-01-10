@@ -41,6 +41,7 @@ export class Component {
                 = ServiceRegistry.getInstance().getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
             const faqVote = new FAQVote();
             faqVote.Rating = rating;
+            // TODO: auf angemeldeten Agenten/IP ändern
             faqVote.Interface = 'agent';
             faqVote.IPAddress = '192.168.0.1';
 

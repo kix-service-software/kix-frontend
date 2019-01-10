@@ -34,7 +34,7 @@ export class Extension implements IConfigurationExtension {
                     {
                         linkedObjectTypes: [
                             ["Tickets", KIXObjectType.TICKET],
-                            ["FAQ", KIXObjectType.FAQ_ARTICLE],
+                            ["FAQs", KIXObjectType.FAQ_ARTICLE],
                             ["Config Items", KIXObjectType.CONFIG_ITEM]
                         ]
                     },
