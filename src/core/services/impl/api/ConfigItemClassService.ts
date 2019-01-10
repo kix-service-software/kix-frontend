@@ -153,9 +153,13 @@ export class ConfigItemClassService extends KIXObjectService {
                         DefinitionString: definitionParameter[1]
                     }
                 }).catch((error) => {
-                    LoggingService.getInstance().warning(
-                        `Could not create new definition of Config Item Class ${objectId}.`, error
-                    );
+                    if (error.status === 409) {
+                        LoggingService.getInstance().warning(
+                            `Could not create new definition of Config Item Class ${objectId}.`, error
+                        );
+                    } else {
+                        throw error;
+                    }
                 });
             }
 
