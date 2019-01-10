@@ -12,6 +12,7 @@ import {
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { AppUtil } from "../../../common";
 import { setTimeout } from "timers";
+import { LoggingService } from "../LoggingService";
 
 export class ConfigItemClassService extends KIXObjectService {
 
@@ -152,7 +153,9 @@ export class ConfigItemClassService extends KIXObjectService {
                         DefinitionString: definitionParameter[1]
                     }
                 }).catch((error) => {
-                    throw error;
+                    LoggingService.getInstance().warning(
+                        `Could not create new definition of Config Item Class ${objectId}.`, error
+                    );
                 });
             }
 
