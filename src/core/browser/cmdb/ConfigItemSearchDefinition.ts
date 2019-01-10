@@ -152,31 +152,6 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [];
     }
 
-    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
-        let displayValue = await super.getDisplaySearchValue(property, parameter, value);
-        const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
-            property, classParameter ? classParameter[1] : null
-        );
-
-        if (input) {
-            if (input.Type === 'GeneralCatalog') {
-                const items = await this.getGeneralCatalogItems(input);
-                const item = items.find((i) => i.ItemID === value);
-                if (item) {
-                    displayValue = item.Name;
-                }
-            } else if (input.Type === 'CIClassReference') {
-                const configItems = await KIXObjectService.loadObjects<ConfigItem>(KIXObjectType.CONFIG_ITEM, [value]);
-                if (configItems && configItems.length) {
-                    displayValue = configItems[0].Name;
-                }
-            }
-        }
-
-        return displayValue;
-    }
-
     private static isDropDown(property: string): boolean {
         return property === ConfigItemProperty.CUR_DEPL_STATE_ID
             || property === ConfigItemProperty.CUR_INCI_STATE_ID
@@ -305,17 +280,19 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
             );
         } else if (input.Type === 'Customer') {
-            const configItems = await KIXObjectService.loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, null, null, null, false
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+            const customers = await KIXObjectService.loadObjects<Customer>(
+                KIXObjectType.CUSTOMER, null, loadingOptions, null, false
             );
-            return configItems.map(
+            return customers.map(
                 (c) => new TreeNode(c.CustomerID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.CustomerID))
             );
         } else if (input.Type === 'Contact') {
-            const configItems = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null, null, null, false
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null, loadingOptions, null, false
             );
-            return configItems.map(
+            return contacts.map(
                 (c) => new TreeNode(c.ContactID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.ContactID))
             );
         }
@@ -376,6 +353,47 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
 
         return column;
+    }
+
+    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
+        let displayValue = await super.getDisplaySearchValue(property, parameter, value);
+        const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
+            property, classParameter ? classParameter[1] : null
+        );
+
+        if (input) {
+            if (input.Type === 'GeneralCatalog') {
+                const items = await this.getGeneralCatalogItems(input);
+                const item = items.find((i) => i.ItemID === value);
+                if (item) {
+                    displayValue = item.Name;
+                }
+            } else if (input.Type === 'CIClassReference') {
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(KIXObjectType.CONFIG_ITEM, [value]);
+                if (configItems && configItems.length) {
+                    displayValue = configItems[0].Name;
+                }
+            } else if (input.Type === 'Customer') {
+                const customers = await KIXObjectService.loadObjects<Customer>(
+                    KIXObjectType.CUSTOMER, [value], null, null, false
+                );
+
+                if (customers && customers.length) {
+                    displayValue = customers[0].DisplayValue;
+                }
+            } else if (input.Type === 'Contact') {
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, [value], null, null, false
+                );
+
+                if (contacts && contacts.length) {
+                    displayValue = contacts[0].DisplayValue;
+                }
+            }
+        }
+
+        return displayValue;
     }
 
     private async getGeneralCatalogItems(input: InputDefinition): Promise<GeneralCatalogItem[]> {
