@@ -41,4 +41,6 @@ export interface IFormInstance {
 
     getForm(): Form;
 
+    validateField(field: FormField): Promise<ValidationResult>;
+
 }

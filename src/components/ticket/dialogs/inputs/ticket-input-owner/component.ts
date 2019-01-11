@@ -31,6 +31,9 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

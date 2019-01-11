@@ -18,7 +18,7 @@ class Component {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             this.formListenerId = 'LinkableObjectsSearchButton';
-            formInstance.registerListener({
+            FormService.getInstance().registerFormInstanceListener(this.formListenerId, {
                 formListenerId: this.formListenerId,
                 formValueChanged: () => {
                     this.state.canSearch = formInstance.hasValues();
@@ -29,10 +29,7 @@ class Component {
     }
 
     public async onDestroy(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.removeListener('LinkableObjectsSearchButton');
-        }
+        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
     public executeSearch(): void {

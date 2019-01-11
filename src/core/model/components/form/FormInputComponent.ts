@@ -26,7 +26,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.inputComponentFormListenerId = IdService.generateDateBasedId('FormInputComponent');
-        formInstance.registerListener({
+        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.inputComponentFormListenerId,
             updateForm: () => {
                 FormInputComponent.prototype.setInvalidState.call(this);
@@ -38,8 +38,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     }
 
     public async onDestroy(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.removeListener(this.inputComponentFormListenerId);
+        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.inputComponentFormListenerId);
     }
 
     protected async provideValue(value: T): Promise<void> {
@@ -54,6 +53,14 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
             if (value) {
                 this.state.invalid = !value.valid;
             }
+        }
+    }
+
+    public async focusLost(event?: any): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            await formInstance.validateField(this.state.field);
+            FormInputComponent.prototype.setInvalidState.call(this);
         }
     }
 }

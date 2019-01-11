@@ -23,16 +23,15 @@ class Component extends AbstractNewDialog {
         await super.onMount();
         const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
         context.reset();
-        await FormService.getInstance().getFormInstance<FormInstance>('new-ticket-form', false);
         this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
-        super.onDestroy();
+        await super.onDestroy();
     }
 
     public async cancel(): Promise<void> {
-        super.cancel();
+        await super.cancel();
     }
 
     public async submit(): Promise<void> {

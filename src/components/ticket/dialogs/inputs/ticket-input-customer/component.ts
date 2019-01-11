@@ -22,9 +22,8 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.formListenerId = IdService.generateDateBasedId('TicketCustomerInput');
-        formInstance.registerListener({
+        FormService.getInstance().registerFormInstanceListener(this.formListenerId, {
             formListenerId: this.formListenerId,
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
@@ -57,8 +56,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.removeListener(this.formListenerId);
+        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
     public getPlaceholder(): string {
@@ -93,6 +91,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         super.provideValue(customer);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

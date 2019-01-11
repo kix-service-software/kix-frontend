@@ -211,6 +211,17 @@ export class FormInstance implements IFormInstance {
         return null;
     }
 
+    public async validateField(field: FormField): Promise<ValidationResult> {
+        let result;
+        const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
+        const formFieldValue = this.getFormFieldValue(field.instanceId);
+        if (formFieldValue) {
+            formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+            result = fieldResult;
+        }
+        return result;
+    }
+
     private findFormField(fields: FormField[], formFieldInstanceId: string): FormField {
         const field = fields.find((f) => f.instanceId === formFieldInstanceId);
 

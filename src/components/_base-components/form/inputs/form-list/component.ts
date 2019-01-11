@@ -82,7 +82,7 @@ class Component {
     public focusLost(): void {
         this.state.autocompleteSearchValue = null;
         this.state.filterValue = null;
-        // (this as any).emit('nodesChanged', this.state.selectedNodes);
+        (this as any).emit('focusLost');
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")

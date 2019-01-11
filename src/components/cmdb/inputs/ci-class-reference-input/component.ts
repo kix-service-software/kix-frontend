@@ -64,6 +64,9 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
         return new TreeNode(configItem.ConfigItemID, configItem.Name, 'kix-icon-ci');
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

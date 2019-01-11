@@ -105,6 +105,10 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
         return new TreeNode(o.ObjectId, text, icon);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
+
 }
 
 module.exports = Component;

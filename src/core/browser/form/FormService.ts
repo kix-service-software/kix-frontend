@@ -1,5 +1,5 @@
 import {
-    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form
+    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form, IFormInstanceListener
 } from "../../model";
 import { FormValidationService, RequiredFormFieldValidator } from ".";
 import { FormFactory } from "./FormFactory";
@@ -85,6 +85,20 @@ export class FormService {
             }
         }
         return formId;
+    }
+
+    public registerFormInstanceListener(formId: string, listener: IFormInstanceListener): void {
+        if (this.formInstances.has(formId)) {
+            const formInstance = this.formInstances.get(formId);
+            formInstance.registerListener(listener);
+        }
+    }
+
+    public removeFormInstanceListener(formId: string, listenerId: string): void {
+        if (this.formInstances.has(formId)) {
+            const formInstance = this.formInstances.get(formId);
+            formInstance.removeListener(listenerId);
+        }
     }
 
 }
