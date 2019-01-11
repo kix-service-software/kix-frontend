@@ -64,6 +64,9 @@ class Component extends FormInputComponent<Contact, ComponentState> {
         return new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

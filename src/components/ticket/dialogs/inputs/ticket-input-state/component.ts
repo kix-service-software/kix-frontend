@@ -106,6 +106,10 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
             super.provideValue(null);
         }
     }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

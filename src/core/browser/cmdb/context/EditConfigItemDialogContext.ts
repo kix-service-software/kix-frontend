@@ -1,8 +1,7 @@
 import { Context } from "../../../model/components/context/Context";
 import {
-    WidgetConfiguration, WidgetType, KIXObject,
-    KIXObjectType, TicketProperty, Customer, Contact,
-    ContextDescriptor, IFormInstanceListener, FormField, FormFieldValue, FormContext
+    WidgetConfiguration, WidgetType, KIXObjectType, ContextDescriptor,
+    IFormInstanceListener, FormField, FormFieldValue, FormContext
 } from "../../../model";
 import { EditConfigItemDialogContextConfiguration } from "./EditConfigItemDialogContextConfiguration";
 import { FormService } from "../../form";
@@ -22,12 +21,9 @@ export class EditConfigItemDialogContext
     }
 
     public async initContext(): Promise<void> {
-        const formiId = FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.CONFIG_ITEM);
-        const formInstance = await FormService.getInstance().getFormInstance(formiId);
-        if (formInstance) {
-            this.formListenerId = 'EditConfigItemDialogContext';
-            formInstance.registerListener(this);
-        }
+        const formId = FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.CONFIG_ITEM);
+        this.formListenerId = 'EditConfigItemDialogContext';
+        FormService.getInstance().registerFormInstanceListener(formId, this);
     }
 
     public updateForm(): void {

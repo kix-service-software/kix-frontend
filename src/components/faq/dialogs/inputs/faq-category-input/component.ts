@@ -71,7 +71,10 @@ class Component extends FormInputComponent<number[], ComponentState> {
                 ? this.state.currentNodes[0].id
                 : null
         );
+    }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 
 }

@@ -61,6 +61,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         return new TreeNode(customer.CustomerID, customer.DisplayValue, 'kix-icon-man-house');
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

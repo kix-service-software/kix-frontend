@@ -59,6 +59,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         (this as any).emit('valueChanged', this.state.currentValue);
         super.provideValue(this.state.currentValue);
     }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

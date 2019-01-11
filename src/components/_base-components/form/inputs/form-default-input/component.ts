@@ -35,11 +35,6 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public focusLost(event: any): void {
-        (this as any).emit('valueChanged', this.state.currentValue);
-        super.provideValue(this.state.currentValue);
-    }
-
     private valueChanged(event: any): void {
         if (event) {
             this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
@@ -60,6 +55,10 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
 
         return "nope";
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 
 }

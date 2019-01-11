@@ -52,9 +52,11 @@ class Component extends FormInputComponent<number[], ComponentState> {
     public queueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
-
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

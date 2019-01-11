@@ -122,6 +122,10 @@ export class SearchFormInstance implements IFormInstance {
         return [];
     }
 
+    public async validateField(field: FormField): Promise<ValidationResult> {
+        return;
+    }
+
     public getAutoCompleteConfiguration(): AutoCompleteConfiguration {
         return new AutoCompleteConfiguration();
     }

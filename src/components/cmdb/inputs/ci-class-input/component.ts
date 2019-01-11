@@ -44,6 +44,10 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
         super.provideValue(configItemClass);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
+
 }
 
 module.exports = Component;
