@@ -76,7 +76,6 @@ export class CreateConfigItemVersionUtil {
         if (!formField.empty || fieldType === InputFieldTypes.DUMMY) {
             const formValue = formInstance.getFormFieldValue(formField.instanceId);
 
-
             let value;
             if (formValue && formValue.value) {
                 switch (fieldType) {
