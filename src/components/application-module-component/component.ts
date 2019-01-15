@@ -21,6 +21,7 @@ import {
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
+import { BulkDialogContext } from '../../core/browser/bulk';
 
 class Component extends AbstractMarkoComponent {
 
@@ -80,6 +81,13 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext
         );
         ContextService.getInstance().registerContext(editLinkObjectDialogContext);
+
+        const bulkDialogContext = new ContextDescriptor(
+            BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
+            ContextType.DIALOG, ContextMode.EDIT_BULK,
+            false, 'edit-linked-objects-dialog', ['links'], BulkDialogContext
+        );
+        ContextService.getInstance().registerContext(bulkDialogContext);
     }
 
     private registerDialogs(): void {
@@ -90,6 +98,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'bulk-dialog',
+            new WidgetConfiguration(
+                'bulk-dialog', 'Objekte bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.ANY,
+            ContextMode.EDIT_BULK
         ));
     }
 

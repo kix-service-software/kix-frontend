@@ -1,9 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../core/browser/context";
-import {
-    ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent, KIXObjectType
-} from "../../../../../core/model";
-import { KIXObjectService } from "../../../../../core/browser";
+import { TicketProperty, TreeNode, FormInputComponent } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -17,12 +14,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null
-        );
-
-        this.state.nodes = this.prepareTree(queuesHierarchy);
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.QUEUE_ID);
         this.setCurrentNode();
     }
 
@@ -31,22 +23,6 @@ class Component extends FormInputComponent<number[], ComponentState> {
             this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
             super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
         }
-    }
-
-    private prepareTree(queues: Queue[]): TreeNode[] {
-        let nodes = [];
-        if (queues) {
-            nodes = queues.map((queue: Queue) => {
-                const treeNode = new TreeNode(
-                    queue.QueueID, queue.Name,
-                    new ObjectIcon('Queue', queue.QueueID),
-                    null,
-                    this.prepareTree(queue.SubQueues)
-                );
-                return treeNode;
-            });
-        }
-        return nodes;
     }
 
     public queueChanged(nodes: TreeNode[]): void {

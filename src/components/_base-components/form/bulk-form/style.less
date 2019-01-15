@@ -1,0 +1,32 @@
+@bulk-value-gap: .5rem;
+@bulk-dialog-padding-right: (@default-button-icon-width + @bulk-value-gap);
+.bulk-form {
+    margin-left: 1.75rem;
+    >.group-widget {
+        margin: 0;
+        >.widget-content {
+            padding-top: @margin-small;
+            >.bulk-value {
+                margin-left: 1.5rem;
+            }
+        }
+    }
+    >.dialog-button-container {
+        margin-left: 0;
+        padding: 0;
+    }
+    >.object-table {
+        margin-top: 4rem;
+        .object-table-head {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-gap: @margin-default;
+            margin-bottom: @margin-small;
+            align-items: center;
+            >span:first-child {
+                font-weight: bold;
+                display: inline-block;
+            }
+        }
+    }
+}

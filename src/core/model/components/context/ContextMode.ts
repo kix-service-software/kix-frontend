@@ -16,6 +16,8 @@ export enum ContextMode {
 
     EDIT_ADMIN = 'EDIT_ADMIN',
 
+    EDIT_BULK = 'EDIT_BULK',
+
     EDIT_LINKS = 'EDIT_LINK'
 
 }

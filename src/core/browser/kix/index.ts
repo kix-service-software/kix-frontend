@@ -6,5 +6,6 @@ export { FactoryService } from './FactoryService';
 export { KIXObjectService } from './KIXObjectService';
 export { ServiceType } from './ServiceType';
 export { ServiceMethod } from './ServiceMethod';
+export { ObjectDefinitionUtil } from './ObjectDefinitionUtil';
 
 export * from './search';

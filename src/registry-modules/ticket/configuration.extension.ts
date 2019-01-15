@@ -155,7 +155,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
                 'ticket-list-widget', 'Übersicht Tickets', [
-                    'ticket-create-action', 'ticket-bulk-action', 'csv-export-action', 'ticket-search-action'
+                    'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
                 ], new TableConfiguration(
                     1000, 25, null, [new FilterCriteria(
                         'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'

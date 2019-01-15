@@ -46,7 +46,7 @@ class Component {
                     ).then((faqArticleId) => {
                         context.getObject(KIXObjectType.FAQ_ARTICLE, true);
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showSuccessHint();
+                        BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                         DialogService.getInstance().closeMainDialog();
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading();
@@ -55,14 +55,6 @@ class Component {
                 }
             }
         }, 300);
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

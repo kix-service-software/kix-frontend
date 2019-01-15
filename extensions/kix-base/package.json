@@ -21,7 +21,8 @@
             "home-configuration": "../../dist/registry-modules/home/configuration.extension",
             "search-configuration": "../../dist/registry-modules/search/search-configuration.extension",
             "edit-linked-objects-dialog-configuration": "../../dist/registry-modules/link/edit-linked-objects-dialog-configuration.extension",
-            "release-configuration": "../../dist/registry-modules/release/configuration.extension"
+            "release-configuration": "../../dist/registry-modules/release/configuration.extension",
+            "bulk-dialog-configuration": "../../dist/registry-modules/application/bulk-dialog-configuration.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",

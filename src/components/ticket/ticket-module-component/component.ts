@@ -31,13 +31,15 @@ import {
     EditTicketPriorityDialogContext,
     TicketPriorityFormService,
     EditTicketStateDialogContext,
-    TicketStateFormService
+    TicketStateFormService,
+    TicketBulkManager
 } from "../../../core/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
     ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
     TicketPriorityCacheHandler
 } from "../../../core/model";
+import { BulkService } from "../../../core/browser/bulk";
 
 class Component extends AbstractMarkoComponent {
 
@@ -94,6 +96,8 @@ class Component extends AbstractMarkoComponent {
 
         TicketFormService.getInstance();
         TicketTypeFormService.getInstance();
+
+        BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
         this.registerContexts();
         this.registerAdminContexts();
@@ -235,7 +239,6 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
         ActionFactory.getInstance().registerAction('ticket-spam-action', TicketSpamAction);
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
-        ActionFactory.getInstance().registerAction('ticket-bulk-action', ArticleBulkAction);
         ActionFactory.getInstance().registerAction('ticket-search-action', TicketSearchAction);
 
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);

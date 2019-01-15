@@ -109,7 +109,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['ticket-bulk-action', 'csv-export-action'],
+            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
             new TableConfiguration(
                 500, null, null,
                 [
@@ -136,7 +136,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const newTicketsListWidget =
             new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Neue Tickets', ['ticket-bulk-action', 'csv-export-action'],
+                'ticket-list-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
                 new TableConfiguration(
                     500, null, [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 65),

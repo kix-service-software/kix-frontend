@@ -51,7 +51,7 @@ class Component {
                     ).then((ticketId) => {
                         context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showSuccessHint();
+                        BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                         DialogService.getInstance().closeMainDialog();
                     }).catch((error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
@@ -60,14 +60,6 @@ class Component {
                 }
             }
         }, 300);
-    }
-
-    public showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Ticketänderung gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public showValidationError(result: ValidationResult[]): void {

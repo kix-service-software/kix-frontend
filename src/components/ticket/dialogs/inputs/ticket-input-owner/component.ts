@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../core/browser/context";
-import { FormInputComponent, TreeNode } from "../../../../../core/model";
+import { FormInputComponent, TreeNode, TicketProperty } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -14,8 +14,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = objectData.users.map((a) => new TreeNode(a.UserID, a.UserFullname, 'kix-icon-man'));
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.OWNER_ID);
         this.setCurrentNode();
     }
 

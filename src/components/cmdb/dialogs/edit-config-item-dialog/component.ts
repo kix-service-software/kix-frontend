@@ -1,5 +1,5 @@
 import { DialogService } from "../../../../core/browser/dialog/DialogService";
-import { FormService, ContextService, OverlayService, ServiceRegistry } from "../../../../core/browser";
+import { FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil } from "../../../../core/browser";
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
     OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
@@ -67,27 +67,18 @@ class Component {
                                 KIXObjectType.CONFIG_ITEM, true,
                                 [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
                             );
-                            this.showSuccessHint(
-                                configItem.CurrentVersion
+                            const hint = configItem.CurrentVersion
                                 && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
-                            );
+                                ? 'Änderungen wurden gespeichert'
+                                : 'Neue Version wurde erstellt';
+                            BrowserUtil.openSuccessOverlay(hint);
+
                             DialogService.getInstance().closeMainDialog();
                         }
                     }
                 }
             }
         }, 300);
-    }
-
-    public showSuccessHint(noUpdate: boolean = false): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent(
-                'kix-icon-check',
-                (noUpdate ? 'Änderungen wurden gespeichert' : 'Neue Version wurde erstellt')
-            )
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public showValidationError(result: ValidationResult[]): void {
