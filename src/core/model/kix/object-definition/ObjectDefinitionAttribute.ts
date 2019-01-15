@@ -7,6 +7,7 @@ export class ObjectDefinitionAttribute {
         public Name: string = null,
         public Datatype: DataType = null,
         public PossibleValues: any[],
-        public ReferencedObject: KIXObjectType
+        public ReferencedObject: KIXObjectType,
+        public ReadOnly: boolean
     ) { }
 }

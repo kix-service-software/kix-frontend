@@ -20,3 +20,5 @@ export { SearchOperatorUtil } from './SearchOperatorUtil';
 export { BrowserUtil } from './BrowserUtil';
 export { LanguageUtil } from './LanguageUtil';
 export { SearchProperty } from './SearchProperty';
+export { PropertyOperator } from './PropertyOperator';
+export { ObjectPropertyValue } from './ObjectPropertyValue';

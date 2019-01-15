@@ -27,12 +27,4 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 
-    protected showSuccessHint(message: string = ''): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', message)
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-    }
-
 }

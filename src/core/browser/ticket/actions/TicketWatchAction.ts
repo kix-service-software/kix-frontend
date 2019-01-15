@@ -4,6 +4,7 @@ import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
+import { BrowserUtil } from '../../BrowserUtil';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
@@ -63,7 +64,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             if (successHint) {
                 const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
                 await context.getObject(KIXObjectType.TICKET, true);
-                this.showSuccessHint(successHint);
+                BrowserUtil.openSuccessOverlay(successHint);
             }
 
             EventService.getInstance().publish('APP_LOADING', { loading: false });

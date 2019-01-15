@@ -1,9 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../core/browser/context";
-import {
-    ObjectIcon, TicketProperty, FormInputComponent, TreeNode, KIXObjectType, Sla
-} from "../../../../../core/model";
-import { KIXObjectService } from "../../../../../core/browser";
+import { TicketProperty, FormInputComponent, TreeNode } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number, ComponentState>  {
 
@@ -17,10 +14,7 @@ class Component extends FormInputComponent<number, ComponentState>  {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const slas = await KIXObjectService.loadObjects<Sla>(KIXObjectType.SLA);
-        this.state.nodes = slas.map((s) =>
-            new TreeNode(s.SLAID, s.Name, null)
-        );
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.SLA_ID);
         this.setCurrentNode();
     }
 

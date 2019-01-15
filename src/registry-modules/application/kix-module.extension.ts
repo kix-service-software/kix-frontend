@@ -32,7 +32,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['date-time-input', '_base-components/form/inputs/date-time-input'],
         ['notes-widget', 'widgets/notes-widget'],
         ['linked-objects-widget', 'widgets/linked-objects-widget'],
-        ['help-widget', 'widgets/help-widget']
+        ['help-widget', 'widgets/help-widget'],
+        ['bulk-dialog', '_base-components/dialog/bulk-dialog']
     ];
 
 

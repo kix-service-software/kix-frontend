@@ -75,6 +75,11 @@ export class DialogService {
                     dialogIcon = contextIcon;
                     singleTab = true;
                     break;
+                case ContextMode.EDIT_BULK:
+                    dialogTitle = 'Sammelaktion';
+                    dialogIcon = 'kix-icon-arrow-collect';
+                    singleTab = true;
+                    break;
                 case ContextMode.EDIT_LINKS:
                     dialogTitle = contextTitle || 'Verknüpfungen bearbeiten';
                     dialogIcon = contextIcon;

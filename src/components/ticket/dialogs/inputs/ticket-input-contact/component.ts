@@ -1,5 +1,4 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../core/browser/context";
 import {
     Contact, FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions

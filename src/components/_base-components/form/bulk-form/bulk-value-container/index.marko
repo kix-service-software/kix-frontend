@@ -1,0 +1,28 @@
+<for(bulkValue in state.bulkValues | status-var=loop)>
+  <div.form-bulk-value>
+    <form-list nodes=bulkValue.propertyNodes selectedNodes=[bulkValue.currentPropertyNode] removeNode=false readonly=bulkValue.readonly on-nodesChanged('propertyChanged', bulkValue)/>
+    <form-list nodes=bulkValue.operationNodes selectedNodes=[bulkValue.currentOperationNode] removeNode=false readonly=bulkValue.readonly on-nodesChanged('operationChanged', bulkValue)/>
+    <div.bulk-value>
+      <if(bulkValue.currentPropertyNode && bulkValue.currentOperationNode)>
+        <if(bulkValue.isDropdown)>
+          <form-list nodes=bulkValue.nodes selectedNodes=bulkValue.currentValueNodes removeNode=((!bulkValue.readonly) || bulkValue.changeable) readonly=bulkValue.readonly on-nodesChanged('treeValueChanged', bulkValue) multiselect=bulkValue.isMultiselect autocomplete=bulkValue.isAutocomplete searchCallback=bulkValue.autoCompleteCallback/>
+        </if>
+        <else-if(bulkValue.isDate)>
+          <input.input-style type="date" on-change('dateValueChanged', bulkValue) value=bulkValue.date disabled=(bulkValue.readonly && (!bulkValue.changeable))/>
+        </else-if>
+        <else-if(bulkValue.isDateTime)>
+          <input.input-style type="date" on-change('dateValueChanged', bulkValue) value=bulkValue.date disabled=(bulkValue.readonly && (!bulkValue.changeable))/>
+          <input.input-style type="time" on-change('timeValueChanged', bulkValue) value=bulkValue.time disabled=(bulkValue.readonly && (!bulkValue.changeable))/>
+        </else-if>
+        <else>
+          <input.input-style value=bulkValue.currentValue type="text" on-keydown('textValueChanged', bulkValue) disabled=(bulkValue.readonly && (!bulkValue.changeable))/>
+        </else>
+      </if>
+    </div>
+    <if(!bulkValue.readonly && state.bulkValues.length > 1 && loop.getIndex() !== (state.bulkValues.length - 1))>
+      <button.form-control-button.button-without-text type="button" title="Parameter entfernen" on-click('removeValue', bulkValue)>
+        <span.kix-icon-minus/>
+      </button>
+    </if>
+  </div>
+</for>

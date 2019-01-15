@@ -21,3 +21,4 @@ export { TicketStateLabelProvider } from './TicketStateLabelProvider';
 export { TicketStateBrowserFactory } from './TicketStateBrowserFactory';
 export { TicketStateTypeLabelProvider } from './TicketStateTypeLabelProvider';
 export { TicketStateTypeBrowserFactory } from './TicketStateTypeBrowserFactory';
+export { TicketBulkManager } from './TicketBulkManager';

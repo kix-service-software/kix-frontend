@@ -3,7 +3,7 @@ import {
     WidgetService, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
-    ITablePreventSelectionLayer, KIXObjectService, SearchOperator
+    ITablePreventSelectionLayer, KIXObjectService, SearchOperator, BrowserUtil
 } from "../../../../core/browser";
 import { FormService } from "../../../../core/browser/form";
 import {
@@ -225,22 +225,12 @@ class LinkDialogComponent {
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]
             );
-            this.showSuccessHint(newLinks.length);
+            BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
             this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
             this.highlightLayer.setHighlightedObjects(newLinks.map((ld) => ld.linkableObject));
             this.setLinkedObjectsToTableLayer();
             this.state.standardTable.loadRows();
         }
-    }
-
-    private showSuccessHint(count: number): void {
-        const successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet.`;
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', successHint)
-        );
-
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private async setLinkTypes(): Promise<void> {

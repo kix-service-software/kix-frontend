@@ -18,7 +18,8 @@ export class ComponentState {
         public isLoading: boolean = false,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
-        public asMultiselect: boolean = false
+        public asMultiselect: boolean = false,
+        public removeNode: boolean = true
     ) { }
 
 }

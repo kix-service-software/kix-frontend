@@ -47,7 +47,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ).then((priorityId) => {
                     context.getObject(KIXObjectType.TICKET_PRIORITY, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showSuccessHint();
+                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                     DialogService.getInstance().closeMainDialog();
                 }).catch((error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
@@ -57,13 +57,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 300);
     }
 
-    public showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-    }
 
     public showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);

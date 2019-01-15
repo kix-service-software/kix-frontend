@@ -81,7 +81,7 @@ class Component {
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showSuccessHint();
+                        BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
                         DialogService.getInstance().closeMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
                             null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
@@ -94,14 +94,6 @@ class Component {
                     });
             }
         }
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Config Item wurde erfolgreich angelegt.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {

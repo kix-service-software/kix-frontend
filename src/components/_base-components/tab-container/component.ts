@@ -1,10 +1,13 @@
 import { ContextService } from '../../../core/browser/context';
-import { ComponentsService } from '../../../core/browser/components';
+import { ComponentsService, TabContainerEvent } from '../../../core/browser/components';
 import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { WidgetService, ActionFactory } from '../../../core/browser';
+import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
+import { IEventListener, EventService } from '../../../core/browser/event';
 
-class TabLaneComponent {
+class TabLaneComponent implements IEventListener {
+
+    public eventSubscriberId: string = IdService.generateDateBasedId('tab-container');
 
     private state: ComponentState;
 
@@ -22,6 +25,7 @@ class TabLaneComponent {
         this.state.tabWidgets.forEach(
             (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
         );
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
     public async onMount(): Promise<void> {
@@ -44,7 +48,6 @@ class TabLaneComponent {
                 this.state.activeTab = tab;
             }
         }
-
     }
 
     public async tabClicked(tab: ConfiguredWidget): Promise<void> {
@@ -81,6 +84,16 @@ class TabLaneComponent {
 
     public isActiveTab(tabId: string): boolean {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
+    }
+
+    public eventPublished(data: any, eventId: string): void {
+        if (eventId === TabContainerEvent.CHANGE_TITLE) {
+            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+            if (tab) {
+                tab.configuration.title = data.title;
+                (this as any).setStateDirty();
+            }
+        }
     }
 }
 

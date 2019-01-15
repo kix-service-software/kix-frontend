@@ -321,7 +321,7 @@ class Component {
 
         DialogService.getInstance().setMainDialogLoading(false);
         if (createLinksOK && deleteLinksOK) {
-            this.showSuccessHint();
+            BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
             DialogService.getInstance().closeMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
@@ -352,14 +352,6 @@ class Component {
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Verknüpfungen aktualisiert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
 }
