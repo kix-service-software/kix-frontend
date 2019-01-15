@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent {
         const bulkDialogContext = new ContextDescriptor(
             BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
             ContextType.DIALOG, ContextMode.EDIT_BULK,
-            false, 'edit-linked-objects-dialog', ['links'], BulkDialogContext
+            false, 'bulk-dialog', ['bulk'], BulkDialogContext
         );
         ContextService.getInstance().registerContext(bulkDialogContext);
 
