@@ -134,12 +134,14 @@ export class TicketBulkManager extends BulkManager {
                     );
                     if (contacts && contacts.length) {
                         const customerId = contacts[0].UserCustomerID;
-                        this.bulkValues.push(
-                            new ObjectPropertyValue(
-                                TicketProperty.CUSTOMER_ID, PropertyOperator.CHANGE, customerId,
-                                KIXObjectType.CUSTOMER, true, false
-                            )
+                        const value = new ObjectPropertyValue(
+                            TicketProperty.CUSTOMER_ID, PropertyOperator.CHANGE, customerId,
+                            KIXObjectType.CUSTOMER, true, false
                         );
+                        const index = this.bulkValues.findIndex(
+                            (bv) => bv.property === TicketProperty.CUSTOMER_USER_ID
+                        );
+                        this.bulkValues.splice(index + 1, 0, value);
                     }
                 }
             } else {
@@ -151,11 +153,13 @@ export class TicketBulkManager extends BulkManager {
         if (stateValue && stateValue.value) {
             const pendingState = await TicketService.getInstance().isPendingState(Number(stateValue.value));
             if (pendingState && !this.hasValueForProperty(TicketProperty.PENDING_TIME)) {
-                this.bulkValues.push(
-                    new ObjectPropertyValue(
-                        TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
-                    )
+                const value = new ObjectPropertyValue(
+                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
                 );
+                const index = this.bulkValues.findIndex(
+                    (bv) => bv.property === TicketProperty.STATE_ID
+                );
+                this.bulkValues.splice(index + 1, 0, value);
             }
         } else {
             await this.deleteValue(TicketProperty.PENDING_TIME);
