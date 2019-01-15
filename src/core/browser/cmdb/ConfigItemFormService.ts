@@ -3,7 +3,7 @@ import {
     KIXObjectType, FormFieldValue,
     Form, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Customer
+    FilterType, ConfigItemClass, Contact, Customer, FormFieldOptions, InputFieldTypes
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
@@ -144,37 +144,55 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
             let index = 0;
             for (const pd of relevantPreparedData) {
                 if (index < ff.countMax) {
-                    const value = await this.getDataValue(ff, pd);
                     if (index > 0) {
                         ff = this.getNewFormField(formField);
                         formFields.push(ff);
                     }
-                    this.formFieldValues.set(ff.instanceId, new FormFieldValue(value));
-                    if (ff.children && ff.children.length) {
-                        let newChildren: FormField[] = [];
-                        for (const child of ff.children) {
-                            const children = await this.prepareDataValues(
-                                pd.Sub ? pd.Sub : [], child
-                            );
-                            newChildren = [...newChildren, ...children];
-                        }
-                        ff.children = newChildren;
-                    }
+                    await this.setDataValue(ff, pd, index);
+                    await this.setDataChildren(ff, pd);
                 }
                 index++;
             }
         } else {
-            this.formFieldValues.set(ff.instanceId, new FormFieldValue(null));
-            if (ff.children && ff.children.length) {
-                let newChildren: FormField[] = [];
-                for (const child of ff.children) {
-                    const children = await this.prepareDataValues([], child);
-                    newChildren = [...newChildren, ...children];
-                }
-                ff.children = newChildren;
-            }
+            await this.setEmptyField(ff);
         }
         return formFields;
+    }
+
+    private async setDataValue(ff: FormField, pd: PreparedData, index: number): Promise<void> {
+        let value = await this.getDataValue(ff, pd);
+        if (ff.options && !!ff.options.length) {
+            const typeOption = ff.options.find((o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE);
+            if (typeOption && typeOption.value === InputFieldTypes.ATTACHMENT) {
+                value = [value];
+            }
+        }
+        this.formFieldValues.set(ff.instanceId, new FormFieldValue(value));
+    }
+
+    private async setDataChildren(ff: FormField, pd: PreparedData): Promise<void> {
+        if (ff.children && ff.children.length) {
+            let newChildren: FormField[] = [];
+            for (const child of ff.children) {
+                const children = await this.prepareDataValues(
+                    pd.Sub ? pd.Sub : [], child
+                );
+                newChildren = [...newChildren, ...children];
+            }
+            ff.children = newChildren;
+        }
+    }
+
+    private async setEmptyField(ff: FormField): Promise<void> {
+        this.formFieldValues.set(ff.instanceId, new FormFieldValue(null));
+        if (ff.children && ff.children.length) {
+            let newChildren: FormField[] = [];
+            for (const child of ff.children) {
+                const children = await this.prepareDataValues([], child);
+                newChildren = [...newChildren, ...children];
+            }
+            ff.children = newChildren;
+        }
     }
 
     private async getDataValue(formField: FormField, preparedData: PreparedData): Promise<any> {
