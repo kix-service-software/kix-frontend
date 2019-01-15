@@ -18,6 +18,8 @@ export enum ContextMode {
 
     EDIT_BULK = 'EDIT_BULK',
 
-    EDIT_LINKS = 'EDIT_LINK'
+    EDIT_LINKS = 'EDIT_LINK',
+
+    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS'
 
 }
