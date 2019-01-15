@@ -123,6 +123,11 @@ export class TicketBulkManager extends BulkManager {
     }
 
     protected async checkProperties(): Promise<void> {
+        await this.checkContactValue();
+        await this.checkStateValue();
+    }
+
+    private async checkContactValue(): Promise<void> {
         const contactValue = this.bulkValues.find((bv) => bv.property === TicketProperty.CUSTOMER_USER_ID);
         if (contactValue) {
             contactValue.objectType = KIXObjectType.CONTACT;
@@ -147,8 +152,12 @@ export class TicketBulkManager extends BulkManager {
             } else {
                 await this.deleteValue(TicketProperty.CUSTOMER_ID);
             }
+        } else {
+            await this.deleteValue(TicketProperty.CUSTOMER_ID);
         }
+    }
 
+    private async checkStateValue(): Promise<void> {
         const stateValue = this.bulkValues.find((bv) => bv.property === TicketProperty.STATE_ID);
         if (stateValue && stateValue.value) {
             const pendingState = await TicketService.getInstance().isPendingState(Number(stateValue.value));
@@ -156,9 +165,7 @@ export class TicketBulkManager extends BulkManager {
                 const value = new ObjectPropertyValue(
                     TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
                 );
-                const index = this.bulkValues.findIndex(
-                    (bv) => bv.property === TicketProperty.STATE_ID
-                );
+                const index = this.bulkValues.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
                 this.bulkValues.splice(index + 1, 0, value);
             }
         } else {
