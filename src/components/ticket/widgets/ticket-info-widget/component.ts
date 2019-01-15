@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { TicketLabelProvider, TicketService } from "../../../../core/browser/ticket";
+import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
@@ -29,7 +29,11 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.labelProvider = new TicketLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
+
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+
         context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
