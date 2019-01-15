@@ -1,9 +1,9 @@
-import { WidgetType } from '../../../../core/model';
+import { WidgetType, KIXObject } from '../../../../core/model';
 import {
-    WidgetService, DialogService, StandardTableFactoryService, TableHeaderHeight, TableRowHeight
+    WidgetService, DialogService, StandardTableFactoryService, TableHeaderHeight,
+    TableRowHeight, LabelService, TableListenerConfiguration, ITableSelectionListener, TableConfiguration
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { BulkManager } from '../../../../core/browser/bulk';
 
 class Component {
 
@@ -37,18 +37,42 @@ class Component {
     }
 
     private async createTable(): Promise<void> {
-        if (this.state.bulkManager && this.state.bulkManager.objects) {
-            const table = StandardTableFactoryService.getInstance().createStandardTable(
-                this.state.bulkManager.objectType, null, null, null, true, null, true
-            );
-            table.tableConfiguration.rowHeight = TableRowHeight.SMALL;
-            table.tableConfiguration.headerHeight = TableHeaderHeight.SMALL;
+        if (this.state.bulkManager) {
 
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.bulkManager.objects);
-            this.state.objectCount = this.state.bulkManager.objects.length;
-            await table.loadRows();
-            this.state.table = table;
+            if (this.state.bulkManager.objects) {
+
+                const configuration = new TableConfiguration(
+                    null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                );
+
+                const table = StandardTableFactoryService.getInstance().createStandardTable(
+                    this.state.bulkManager.objectType, configuration, null, null, true, null, true
+                );
+
+                table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.bulkManager.objects);
+
+                this.setTitle();
+                await table.loadRows();
+
+                table.listenerConfiguration.selectionListener.selectAll(
+                    table.getTableRows(true)
+                );
+
+                table.listenerConfiguration.selectionListener.addListener((objects: KIXObject[]) => {
+                    this.state.bulkManager.objects = objects;
+                    this.setTitle();
+                });
+
+                this.state.table = table;
+            }
         }
+    }
+
+    private setTitle(): void {
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.state.bulkManager.objectType);
+        const objectName = labelProvider.getObjectName(true);
+        const objectCount = this.state.bulkManager.objects.length;
+        this.state.tableTitle = `Ausgewählte ${objectName} (${objectCount})`;
     }
 }
 
