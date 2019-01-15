@@ -90,6 +90,11 @@ export class DialogService {
                     dialogIcon = dialogIcon || 'kix-icon-edit';
                     singleTab = true;
                     break;
+                case ContextMode.PERSONAL_SETTINGS:
+                    dialogTitle = dialogTitle || 'Persönliche Einstellungen';
+                    dialogIcon = dialogIcon || 'kix-icon-gear';
+                    singleTab = true;
+                    break;
                 default:
                     dialogTitle = 'Dialog';
             }

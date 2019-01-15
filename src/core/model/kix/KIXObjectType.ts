@@ -84,5 +84,7 @@ export enum KIXObjectType {
 
     VALID_OBJECT = 'ValidObject',
 
-    WATCHER = 'Watcher'
+    WATCHER = 'Watcher',
+
+    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS'
 }

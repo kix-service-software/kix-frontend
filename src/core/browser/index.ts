@@ -4,6 +4,7 @@ export * from './context';
 export * from './dialog';
 export * from './kix';
 export * from './marko';
+export * from './settings';
 
 export { ActionFactory } from './ActionFactory';
 export { AttachmentUtil } from './AttachmentUtil';

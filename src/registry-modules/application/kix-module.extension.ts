@@ -33,6 +33,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['notes-widget', 'widgets/notes-widget'],
         ['linked-objects-widget', 'widgets/linked-objects-widget'],
         ['help-widget', 'widgets/help-widget'],
+        ['personal-settings-dialog', '_base-components/dialog/personal-settings-dialog'],
         ['bulk-dialog', '_base-components/dialog/bulk-dialog']
     ];
 

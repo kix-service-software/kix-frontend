@@ -5,7 +5,7 @@ Am Beispiel FAQ Artikel
 ## Erstellkontext einbinden
 
 ### Kontext implementieren und Formularkonfiguration zur Verfügung stellen
-- "kix-module"-Extension in der package.json registrieren
+- "kix-module"-Extension in der package.json (extensions/...) registrieren
 
 ```javascript
 "kix:configuration": {
@@ -13,11 +13,11 @@ Am Beispiel FAQ Artikel
     "new-faq-article-dialog-configuration": "../../dist/registry-modules/faq/new-faq-article-dialog-configuration.extension",
 }
 ```
-- Context und ContextConfiguration implementieren (`@kix/core/browser/faq/context`)
+- Context und ContextConfiguration implementieren (`src/core/browser/faq/context`)
     - NewFAQArticleDialogContext
     - NewFAQArticleDialogContextConfiguration
 
-- Context registrieren (`ContextService`) in der Modul-Komponente (`faq-module-component`)
+- Context registrieren (`ContextService`) in der Modul-Komponente (`src/components/faq/faq-module-component`)
 
 ```javascript
 const newFAQArticleContext = new ContextDescriptor(

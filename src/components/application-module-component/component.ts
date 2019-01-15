@@ -21,6 +21,7 @@ import {
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
+import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
 
 class Component extends AbstractMarkoComponent {
@@ -88,6 +89,13 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-linked-objects-dialog', ['links'], BulkDialogContext
         );
         ContextService.getInstance().registerContext(bulkDialogContext);
+
+        const settingsDialogContext = new ContextDescriptor(
+            PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],
+            ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
+            false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
+        );
+        ContextService.getInstance().registerContext(settingsDialogContext);
     }
 
     private registerDialogs(): void {
@@ -98,6 +106,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'personal-settings-dialog',
+            new WidgetConfiguration(
+                'personal-settings-dialog', 'Persönliche Einstellungen bearbeiten',
+                [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.PERSONAL_SETTINGS,
+            ContextMode.PERSONAL_SETTINGS
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
