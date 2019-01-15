@@ -40,30 +40,34 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         DialogService.getInstance().closeMainDialog();
     }
 
-    public async submit(): Promise<void> {
-        setTimeout(async () => {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            const result = await formInstance.validateForm();
-            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-            if (validationError) {
-                AbstractNewDialog.prototype.showValidationError.call(this, result);
-            } else {
-                DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                await KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
-                    .then(async (ciClassId) => {
-                        await FormService.getInstance().loadFormConfigurations();
-                        DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openSuccessOverlay(this.successHint);
-                        DialogService.getInstance().closeMainDialog();
-                        if (this.routingConfiguration) {
-                            RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
-                        }
-                    }).catch((error) => {
-                        DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openErrorOverlay(error);
-                    });
-            }
-        }, 300);
+    public submit(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            setTimeout(async () => {
+                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                const result = await formInstance.validateForm();
+                const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+                if (validationError) {
+                    AbstractNewDialog.prototype.showValidationError.call(this, result);
+                } else {
+                    DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
+                    await KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
+                        .then(async (ciClassId) => {
+                            await FormService.getInstance().loadFormConfigurations();
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openSuccessOverlay(this.successHint);
+                            DialogService.getInstance().closeMainDialog();
+                            if (this.routingConfiguration) {
+                                RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
+                            }
+                            resolve();
+                        }).catch((error) => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openErrorOverlay(error);
+                            reject();
+                        });
+                }
+            }, 300);
+        });
     }
 
     protected showValidationError(result: ValidationResult[]): void {

@@ -42,9 +42,7 @@ export class TicketCacheHandler implements IKIXObjectCacheHandler {
         } else if (objectType === KIXObjectType.ARTICLE) {
             switch (method) {
                 case ServiceMethod.CREATE:
-                    const ticketId = (options && options instanceof CreateTicketArticleOptions)
-                        ? (options as CreateTicketArticleOptions).ticketId
-                        : null;
+                    const ticketId = (options as CreateTicketArticleOptions).ticketId;
                     if (ticketId) {
                         KIXObjectCache.removeObject(KIXObjectType.TICKET, Number(ticketId));
                     }
