@@ -1,6 +1,5 @@
 import {
-    KIXObjectSearchService, DialogService, OverlayService,
-    WidgetService, StandardTableFactoryService,
+    KIXObjectSearchService, DialogService, WidgetService, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
     ITablePreventSelectionLayer, KIXObjectService, SearchOperator, BrowserUtil
@@ -8,7 +7,7 @@ import {
 import { FormService } from "../../../../core/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    OverlayType, ComponentContent, TreeNode, DataType, ToastContent, LinkType, KIXObjectLoadingOptions,
+    TreeNode, DataType, LinkType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType
 } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
@@ -81,9 +80,8 @@ class LinkDialogComponent {
                 this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
+            await FormService.getInstance().getFormInstance(this.state.formId, false);
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            formInstance.reset();
         }
     }
 
@@ -108,8 +106,7 @@ class LinkDialogComponent {
         let formId;
         if (this.state.currentLinkableObjectNode) {
             formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
-            formInstance.reset();
+            await FormService.getInstance().getFormInstance(formId, false);
             await this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
