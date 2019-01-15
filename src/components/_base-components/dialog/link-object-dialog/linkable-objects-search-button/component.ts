@@ -18,7 +18,7 @@ class Component {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             this.formListenerId = 'LinkableObjectsSearchButton';
-            FormService.getInstance().registerFormInstanceListener(this.formListenerId, {
+            FormService.getInstance().registerFormInstanceListener(this.state.formId, {
                 formListenerId: this.formListenerId,
                 formValueChanged: () => {
                     this.state.canSearch = formInstance.hasValues();
