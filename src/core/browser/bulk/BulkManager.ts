@@ -3,6 +3,7 @@ import {
 } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
+import { KIXObjectService } from "../kix";
 
 export abstract class BulkManager {
 
@@ -11,12 +12,28 @@ export abstract class BulkManager {
 
     protected bulkValues: ObjectPropertyValue[] = [];
 
+    protected listeners: Map<string, () => void> = new Map();
+
+    public registerListener(listenerId: string, callback: () => void): void {
+        this.listeners.set(listenerId, callback);
+    }
+
+    protected notifyListeners(): void {
+        this.listeners.forEach((listener: () => void) => listener());
+    }
+
     public reset(): void {
         this.bulkValues = [];
     }
 
     public getBulkValues(): ObjectPropertyValue[] {
         return this.bulkValues;
+    }
+
+    public hasDefinedValues(): boolean {
+        return this.bulkValues.some(
+            (bv) => bv.property !== null && bv.operator !== null && bv.value !== null
+        );
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -49,6 +66,7 @@ export abstract class BulkManager {
         }
 
         await this.checkProperties();
+        this.notifyListeners();
     }
 
     public async removeValue(bulkValue: ObjectPropertyValue): Promise<void> {
@@ -58,6 +76,7 @@ export abstract class BulkManager {
         }
 
         await this.checkProperties();
+        this.notifyListeners();
     }
 
     protected async checkProperties(): Promise<void> {
@@ -70,6 +89,21 @@ export abstract class BulkManager {
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return [];
+    }
+
+    public async execute(object: KIXObject): Promise<void> {
+        const parameter: Array<[string, any]> = [];
+
+        this.bulkValues
+            .filter((bv) => bv.operator === PropertyOperator.CLEAR)
+            .forEach((bv) => parameter.push([bv.property, null]));
+
+        this.bulkValues
+            .filter((bv) => bv.operator === PropertyOperator.CHANGE)
+            .filter((bv) => bv.property !== null && bv.value !== null)
+            .forEach((bv) => parameter.push([bv.property, bv.value]));
+
+        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId);
     }
 
 }

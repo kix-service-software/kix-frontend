@@ -23,6 +23,13 @@ export class DefaultTableSelectionListener<T extends KIXObject> implements ITabl
         this.notifyListener();
     }
 
+    public objectSelectionChanged(object: KIXObject<T>, selected: boolean): void {
+        const row = this.selectedRows.find((r) => r.object.ObjectId === object.ObjectId);
+        if (row) {
+            this.selectionChanged(row, selected);
+        }
+    }
+
     public selectAll(rows: Array<TableRow<T>>): void {
         this.selectedRows = rows;
         this.allSelected = true;

@@ -5,6 +5,8 @@ export interface ITableSelectionListener<T extends KIXObject<T> = KIXObject> {
 
     selectionChanged(row: TableRow<T>, selected: boolean): void;
 
+    objectSelectionChanged(object: KIXObject<T>, selected: boolean): void;
+
     selectAll(rows: Array<TableRow<T>>): void;
 
     selectNone(): void;

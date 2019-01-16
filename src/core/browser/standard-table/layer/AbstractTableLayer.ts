@@ -50,4 +50,8 @@ export abstract class AbstractTableLayer implements ITableLayer {
         return;
     }
 
+    public replaceObjects(newObjects: KIXObject[]): void {
+        return;
+    }
+
 }

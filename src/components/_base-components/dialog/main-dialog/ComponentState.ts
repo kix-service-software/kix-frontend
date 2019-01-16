@@ -1,6 +1,6 @@
-import { ConfiguredWidget, ConfiguredDialogWidget, ObjectIcon } from "../../../../core/model";
+import { ConfiguredDialogWidget, ObjectIcon } from "../../../../core/model";
 
-export class MainDialogComponentState {
+export class ComponentState {
 
     public constructor(
         public show: boolean = false,
@@ -12,7 +12,9 @@ export class MainDialogComponentState {
         public dialogId: string = null,
         public dialogTitle: string = null,
         public dialogIcon: string | ObjectIcon = null,
-        public showClose: boolean = false
+        public showClose: boolean = false,
+        public time: number = null,
+        public cancelCallback: () => void = null
     ) { }
 
 }

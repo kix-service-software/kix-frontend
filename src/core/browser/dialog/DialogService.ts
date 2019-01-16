@@ -153,10 +153,11 @@ export class DialogService {
     }
 
     public setMainDialogLoading(
-        isLoading: boolean = false, loadingHint: string = '', showClose: boolean = false
+        isLoading: boolean = false, loadingHint: string = '', showClose: boolean = false,
+        time: number = null, cancelCallback: () => void = null
     ): void {
         if (this.mainDialogListener) {
-            this.mainDialogListener.setLoading(isLoading, loadingHint, showClose);
+            this.mainDialogListener.setLoading(isLoading, loadingHint, showClose, time, cancelCallback);
         }
     }
 

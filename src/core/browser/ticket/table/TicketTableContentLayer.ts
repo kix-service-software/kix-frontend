@@ -24,6 +24,15 @@ export class TicketTableContentLayer extends AbstractTableLayer {
         this.preLoadedTickets = (tickets as any);
     }
 
+    public replaceObjects(newObjects: Ticket[]): void {
+        newObjects.forEach((o) => {
+            const index = this.preLoadedTickets.findIndex((t) => t.ObjectId === o.ObjectId);
+            if (index !== -1) {
+                this.preLoadedTickets[index] = o;
+            }
+        });
+    }
+
     public async getRows(): Promise<any[]> {
         let loadedTickets = this.tickets;
         if (this.preLoadedTickets) {

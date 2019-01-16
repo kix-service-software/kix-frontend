@@ -86,16 +86,6 @@ export class TicketBulkManager extends BulkManager {
                 const label = await labelProvider.getPropertyText(attribute.Name);
                 properties.push([attribute.Name, label]);
             }
-
-            if (this.bulkValues.some((bv) => bv.property === TicketProperty.CUSTOMER_USER_ID)) {
-                const label = await labelProvider.getPropertyText(TicketProperty.CUSTOMER_ID);
-                properties.push([TicketProperty.CUSTOMER_ID, label]);
-            }
-
-            if (this.bulkValues.some((bv) => bv.property === TicketProperty.STATE_ID)) {
-                const label = await labelProvider.getPropertyText(TicketProperty.PENDING_TIME);
-                properties.push([TicketProperty.PENDING_TIME, label]);
-            }
         }
 
         properties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]));

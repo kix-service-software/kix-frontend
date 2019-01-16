@@ -28,6 +28,7 @@ export class TicketCacheHandler implements IKIXObjectCacheHandler {
                     break;
                 case ServiceMethod.UPDATE:
                     KIXObjectCache.removeObject(KIXObjectType.TICKET, Number(objectId));
+                    KIXObjectCache.clearCache(KIXObjectType.QUEUE_HIERARCHY);
                     break;
                 default:
             }
