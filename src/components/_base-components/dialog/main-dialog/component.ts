@@ -1,14 +1,14 @@
 import { DialogService } from '../../../../core/browser/dialog/DialogService';
-import { MainDialogComponentState } from './MainDialogComponentState';
+import { ComponentState } from './ComponentState';
 import { IMainDialogListener, ContextService } from '../../../../core/browser';
-import { ConfiguredDialogWidget, ObjectIcon, Context, ContextMode } from '../../../../core/model';
+import { ConfiguredDialogWidget, ObjectIcon } from '../../../../core/model';
 
 export class MainDialogComponent implements IMainDialogListener {
 
-    private state: MainDialogComponentState;
+    private state: ComponentState;
 
     public onCreate(): void {
-        this.state = new MainDialogComponentState();
+        this.state = new ComponentState();
     }
 
     public onMount(): void {
@@ -53,10 +53,15 @@ export class MainDialogComponent implements IMainDialogListener {
         this.state.dialogHint = hint;
     }
 
-    public setLoading(isLoading: boolean, loadingHint: string, showClose: boolean = false): void {
+    public setLoading(
+        isLoading: boolean, loadingHint: string, showClose: boolean = false,
+        time: number = null, cancelCallback: () => void
+    ): void {
         this.state.loadingHint = loadingHint;
         this.state.isLoading = isLoading;
         this.state.showClose = showClose;
+        this.state.time = time;
+        this.state.cancelCallback = cancelCallback;
     }
 
 }

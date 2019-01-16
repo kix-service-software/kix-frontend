@@ -44,6 +44,14 @@ export class LabelService {
         return null;
     }
 
+    public getObjectName(objectType: KIXObjectType, plural: boolean = false): string {
+        const labelProvider = this.getLabelProviderForType(objectType);
+        if (labelProvider) {
+            return labelProvider.getObjectName(plural);
+        }
+        return objectType;
+    }
+
     public getTooltip<T extends KIXObject>(object: T): string {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {

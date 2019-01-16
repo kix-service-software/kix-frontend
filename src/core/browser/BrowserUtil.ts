@@ -1,5 +1,5 @@
 import { OverlayService } from "./OverlayService";
-import { OverlayType, StringContent, ComponentContent, ToastContent } from "../model";
+import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOverlayContent } from "../model";
 
 export class BrowserUtil {
 
@@ -10,6 +10,17 @@ export class BrowserUtil {
     public static openSuccessOverlay(message: string): void {
         const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+    }
+
+    public static openConfirmOverlay(
+        title: string = 'Sicher?', confirmText: string = 'Sind Sie sicher?',
+        confirmCallback: () => void = null, cancelCallback: () => void = null,
+        labels: [string, string] = ['Ja', 'Nein']
+    ): void {
+        const content = new ComponentContent(
+            'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
     }
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {

@@ -84,7 +84,27 @@ export class DateTimeUtil {
             d1.getDate() === d2.getDate();
     }
 
+    public static getTimeByMillisec(millisec: number): string {
+
+        let seconds: string = (millisec / 1000).toFixed(0);
+        let minutes: string = DateTimeUtil.padZero(Math.floor(Number(seconds) / 60));
+        let hours: string = '';
+
+        if (Number(minutes) > 59) {
+            hours = DateTimeUtil.padZero(Math.floor(Number(minutes) / 60));
+            minutes = DateTimeUtil.padZero((Number(minutes) - (Number(hours) * 60)));
+        }
+        seconds = DateTimeUtil.padZero(Math.floor(Number(seconds) % 60));
+
+        if (hours === '') {
+            hours = '00';
+        }
+
+        return `${hours}:${minutes}:${seconds}`;
+    }
+
     private static padZero(value: number): string {
         return (value < 10 ? '0' + value : value).toString();
     }
+
 }

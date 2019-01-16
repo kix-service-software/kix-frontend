@@ -5,11 +5,11 @@ import { BulkManager } from "../../../../core/browser/bulk";
 export class ComponentState {
 
     public constructor(
-        public objectType: KIXObjectType = null,
         public objectCount: number = 0,
         public table: StandardTable<KIXObject> = null,
         public bulkManager: BulkManager = null,
-        public tableTitle: string = 'Ausgewählte Objekte'
+        public tableTitle: string = 'Ausgewählte Objekte',
+        public canRun: boolean = false
     ) { }
 
 }

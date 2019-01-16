@@ -22,4 +22,6 @@ export interface ITableLayer {
 
     setPreloadedObjects<T extends KIXObject>(objects: T[]): void;
 
+    replaceObjects(newObjects: KIXObject[]): void;
+
 }

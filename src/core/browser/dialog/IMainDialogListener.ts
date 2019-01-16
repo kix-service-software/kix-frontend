@@ -8,10 +8,12 @@ export interface IMainDialogListener {
 
     close(): void;
 
-    setTitle(title: string);
+    setTitle(title: string): void;
 
-    setHint(hint: string);
+    setHint(hint: string): void;
 
-    setLoading(isLoading: boolean, loadingHint: string, showClose: boolean);
+    setLoading(
+        isLoading: boolean, loadingHint: string, showClose: boolean, time: number, cancelCallback: () => void
+    ): void;
 
 }
