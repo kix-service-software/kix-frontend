@@ -4,7 +4,7 @@ import {
 } from '../../../../core/browser';
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult,
-    StringContent, KIXObjectType, ToastContent, ContextType
+    StringContent, KIXObjectType, ToastContent, ContextType, Error
 } from '../../../../core/model';
 
 class Component {
@@ -48,9 +48,9 @@ class Component {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                         DialogService.getInstance().closeMainDialog();
-                    }).catch((error) => {
+                    }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading();
-                        BrowserUtil.openErrorOverlay(error);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
                 }
             }

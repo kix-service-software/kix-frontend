@@ -1,7 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     Customer, CustomerFactory, CustomerSource, CustomerSourceAttributeMapping, CustomerProperty,
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, CustomerCacheHandler
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, CustomerCacheHandler, Error
 } from '../../../model';
 import {
     CustomerResponse, CustomersResponse, CustomerSourcesResponse, CreateCustomer, CreateCustomerResponse,
@@ -10,6 +10,7 @@ import {
 import { SearchOperator } from '../../../browser';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
+import { LoggingService } from '../LoggingService';
 
 export class CustomerService extends KIXObjectService {
 
@@ -170,8 +171,9 @@ export class CustomerService extends KIXObjectService {
 
         const response = await this.sendCreateRequest<CreateCustomerResponse, CreateCustomerRequest>(
             token, this.RESOURCE_URI, new CreateCustomerRequest(sourceID, createCustomer)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         return response.CustomerID;
@@ -194,8 +196,9 @@ export class CustomerService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateCustomerResponse, UpdateCustomerRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateCustomerRequest(updateCustomer)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         return response.CustomerID;
@@ -209,19 +212,6 @@ export class CustomerService extends KIXObjectService {
                 this.sourcesCache.push(s);
             }
         });
-    }
-
-    private buildCustomerIDFilter(customerIds: string[]): string {
-        const filter = {
-            Customer: {
-                AND: [{
-                    Field: CustomerProperty.CUSTOMER_ID,
-                    Operator: SearchOperator.IN,
-                    Value: customerIds
-                }]
-            }
-        };
-        return JSON.stringify(filter);
     }
 
     private buildSearchFilter(source: CustomerSource, searchValue: string, query: any): void {

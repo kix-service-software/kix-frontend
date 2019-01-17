@@ -3,7 +3,8 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions,
     Sla,
-    KIXObjectCache
+    KIXObjectCache,
+    Error
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SlasResponse } from "../../../api";
@@ -68,13 +69,13 @@ export class SlaService extends KIXObjectService {
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
     public updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         objectId: string | number, updateOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
 }

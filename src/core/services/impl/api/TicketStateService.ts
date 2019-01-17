@@ -6,12 +6,13 @@ import {
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, KIXObjectCache,
-    TicketStateCacheHandler, StateType, ObjectIcon
+    TicketStateCacheHandler, StateType, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
+import { LoggingService } from '../LoggingService';
 
 export class TicketStateService extends KIXObjectService {
 
@@ -81,8 +82,9 @@ export class TicketStateService extends KIXObjectService {
 
         const response = await this.sendCreateRequest<CreateTicketStateResponse, CreateTicketStateRequest>(
             token, this.RESOURCE_URI, new CreateTicketStateRequest(createTicketState)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
@@ -102,8 +104,9 @@ export class TicketStateService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateTicketStateResponse, UpdateTicketStateRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketStateRequest(updateTicketState)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');

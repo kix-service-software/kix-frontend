@@ -136,7 +136,7 @@ export class TicketService extends KIXObjectService {
         let tickets: Ticket[] = [];
 
         if (objectIds) {
-            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null);
+            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
             if (objectIds.length === 1) {
                 const response = await this.getObject<TicketResponse>(token, objectIds[0], query);
                 tickets = [TicketFactory.create(response.Ticket)];

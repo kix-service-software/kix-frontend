@@ -1,5 +1,5 @@
 import { UsersResponse, UserResponse, } from '../../../api';
-import { User, KIXObjectType } from '../../../model';
+import { User, KIXObjectType, Error } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 
 export class UserService extends KIXObjectService {
@@ -54,13 +54,13 @@ export class UserService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
 }

@@ -1,7 +1,8 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions
+    KIXObjectSpecificLoadingOptions,
+    Error
 } from '../../../model';
 import { GeneralCatalogItemsResponse, GeneralCatalogItemResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -124,13 +125,13 @@ export class GeneralCatalogService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
 }

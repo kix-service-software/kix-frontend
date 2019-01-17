@@ -3,7 +3,7 @@ import {
     OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
 } from "../../../../../core/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult, ToastContent, KIXObjectType
+    ValidationSeverity, OverlayType, ComponentContent, ValidationResult, KIXObjectType, Error
 } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { ConfigItemClassDetailsContext } from "../../../../../core/browser/cmdb";
@@ -51,9 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     DialogService.getInstance().setMainDialogLoading(false);
                     BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                     DialogService.getInstance().closeMainDialog();
-                }).catch((error) => {
+                }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openErrorOverlay(error);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }
         }, 300);

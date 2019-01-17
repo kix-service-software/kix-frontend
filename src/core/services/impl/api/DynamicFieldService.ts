@@ -1,5 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
-import { DynamicField, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions } from '../../../model';
+import {
+    DynamicField, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Error
+} from '../../../model';
 import { DynamicFieldsResponse, DynamicFieldResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
@@ -69,13 +71,13 @@ export class DynamicFieldService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
 }

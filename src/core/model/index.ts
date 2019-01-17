@@ -18,3 +18,4 @@ export { SystemInfo } from './SystemInfo';
 export { CacheState } from './CacheState';
 export { KIXObjectCache } from './KIXObjectCache';
 export { IKIXObjectCacheHandler } from './IKIXObjectCacheHandler';
+export { Error } from './Error';

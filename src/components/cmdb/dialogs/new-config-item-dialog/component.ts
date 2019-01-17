@@ -4,7 +4,7 @@ import {
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty
+    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty, Error
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
@@ -88,9 +88,9 @@ class Component {
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
-                    }).catch((error) => {
+                    }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openErrorOverlay(error);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
             }
         }

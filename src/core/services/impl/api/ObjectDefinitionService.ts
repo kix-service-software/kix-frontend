@@ -1,5 +1,5 @@
 import { KIXObjectService } from "./KIXObjectService";
-import { KIXObjectType } from "../../../model";
+import { KIXObjectType, Error } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { ObjectDefinition } from "../../../model/kix/object-definition/ObjectDefinition";
 import { ObjectDefinitionsResponse } from "../../../api/object-definition";
@@ -34,12 +34,12 @@ export class ObjectDefinitionService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 }

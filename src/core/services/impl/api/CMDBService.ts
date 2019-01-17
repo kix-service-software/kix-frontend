@@ -4,7 +4,7 @@ import {
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
     FilterCriteria, ConfigItemClassProperty, FilterType, FilterDataType,
     ConfigItemProperty, ConfigItem, ConfigItemFactory, ImagesLoadingOptions,
-    ConfigItemImage, ConfigItemImageFactory, ConfigItemAttachment, CreateConfigItemVersionOptions
+    ConfigItemImage, ConfigItemImageFactory, ConfigItemAttachment, CreateConfigItemVersionOptions, Error
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse, CreateConfigItem,
@@ -15,6 +15,7 @@ import {
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SearchOperator } from "../../../browser";
+import { LoggingService } from "../LoggingService";
 
 export class CMDBService extends KIXObjectService {
 
@@ -164,7 +165,7 @@ export class CMDBService extends KIXObjectService {
 
             return images.map((cii) => ConfigItemImageFactory.create(cii));
         } else {
-            throw new Error('No config item id given!');
+            throw new Error('', 'No config item id given!');
         }
     }
 
@@ -218,8 +219,9 @@ export class CMDBService extends KIXObjectService {
             const uri = this.buildUri(this.RESOURCE_URI, 'configitems');
             const response = await this.sendCreateRequest<CreateConfigItemResponse, CreateConfigItemRequest>(
                 token, uri, new CreateConfigItemRequest(createConfigItem)
-            ).catch((error) => {
-                throw error;
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
 
             const configItemId = response.ConfigItemID;
@@ -236,6 +238,6 @@ export class CMDBService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 }

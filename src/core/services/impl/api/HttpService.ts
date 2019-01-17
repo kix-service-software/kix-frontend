@@ -1,10 +1,10 @@
-import { HttpError } from '../../../api';
 import { IServerConfiguration } from '../../../common';
 
 import fs = require('fs');
 import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 import { ProfilingService } from '../ProfilingService';
+import { Error } from '../../../model';
 
 export class HttpService {
 
@@ -63,7 +63,7 @@ export class HttpService {
         const response = await this.request(options)
             .catch((error) => {
                 LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
-                return Promise.reject(this.createHttpError(error));
+                return Promise.reject(this.createError(error));
             });
 
         // stop profiling
@@ -120,9 +120,9 @@ export class HttpService {
         return `${this.apiURL}/${resource}`;
     }
 
-    private createHttpError(err: any): HttpError {
-        LoggingService.getInstance().error(err.statusCode + " - " + err.message);
-        return new HttpError(err.statusCode, err.response);
+    private createError(err: any): Error {
+        LoggingService.getInstance().error(`(${err.statusCode}) ${err.Code}  ${err.Message}`);
+        return new Error(err.error.Code, err.error.Message, err.statusCode);
     }
 
 }

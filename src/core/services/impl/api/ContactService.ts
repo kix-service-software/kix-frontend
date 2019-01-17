@@ -1,7 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     Contact, ContactFactory, ContactSource, ContactSourceAttributeMapping,
-    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, ContactCacheHandler
+    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, ContactCacheHandler, Error
 } from "../../../model";
 import {
     ContactResponse, ContactsResponse, ContactSourcesResponse,
@@ -11,6 +11,7 @@ import {
 import { SearchOperator } from '../../../browser/SearchOperator';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
+import { LoggingService } from '../LoggingService';
 
 export class ContactService extends KIXObjectService {
 
@@ -167,8 +168,9 @@ export class ContactService extends KIXObjectService {
         const createContact = new CreateContact(parameter);
         const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
             token, this.RESOURCE_URI, new CreateContactRequest(sourceID, createContact)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const customerIdValue = parameter.find((v) => v[0] === ContactProperty.USER_CUSTOMER_ID);
@@ -215,8 +217,9 @@ export class ContactService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateContactResponse, UpdateContactRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         return response.ContactID;

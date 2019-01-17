@@ -1,5 +1,5 @@
 import { KIXObjectService } from './KIXObjectService';
-import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo } from '../../../model';
+import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo, Error } from '../../../model';
 import {
     CreateClientRegistration,
     CreateClientRegistrationResponse,
@@ -56,13 +56,13 @@ export class ClientRegistrationService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async deleteClientRegistration(token: string, clientId: number): Promise<void> {

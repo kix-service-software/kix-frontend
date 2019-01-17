@@ -4,7 +4,7 @@ import {
 } from "../../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ToastContent, KIXObjectType,
+    ToastContent, KIXObjectType, Error,
 } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketStateDetailsContext } from "../../../../../core/browser/ticket";
@@ -49,9 +49,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     DialogService.getInstance().setMainDialogLoading(false);
                     BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                     DialogService.getInstance().closeMainDialog();
-                }).catch((error) => {
+                }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openErrorOverlay(error);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }
         }, 300);

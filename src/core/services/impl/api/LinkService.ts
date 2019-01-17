@@ -2,7 +2,7 @@ import { KIXObjectService } from './KIXObjectService';
 import {
     LinkType, KIXObjectType, CreateLinkObjectOptions,
     KIXObjectSpecificCreateOptions, LinkObjectProperty, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectCache, LinkCacheHandler
+    KIXObjectCache, LinkCacheHandler, Error
 } from '../../../model';
 import {
     CreateLink, CreateLinkResponse, CreateLinkRequest, LinkTypesResponse, LinkTypeResponse
@@ -94,14 +94,14 @@ export class LinkService extends KIXObjectService {
                     token, parameter, options
                 );
             default:
-                throw new Error('No create option for object type ' + objectType);
+                throw new Error('', 'No create option for object type ' + objectType);
         }
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     private async createLinkFromLinkObject(
