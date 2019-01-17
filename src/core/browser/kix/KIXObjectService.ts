@@ -4,7 +4,8 @@ import {
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
     ComponentContent,
-    KIXObjectCache
+    KIXObjectCache,
+    Error
 } from "../../model";
 import { KIXObjectSocketListener } from "./KIXObjectSocketListener";
 import { TableColumn } from "../standard-table";
@@ -41,11 +42,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             objects = await service.loadObjects(
                 objectType, objectIds ? [...objectIds] : null,
                 loadingOptions, objectLoadingOptions, cache
-            ).catch((error) => {
+            ).catch((error: Error) => {
                 const content = new ComponentContent('list-with-title',
                     {
                         title: `Fehler beim Laden (${objectType}):`,
-                        list: [error]
+                        list: [`${error.Code}: ${error.Message}`]
                     }
                 );
                 OverlayService.getInstance().openOverlay(
@@ -104,11 +105,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<string | number> {
         KIXObjectCache.updateCache(objectType, null, ServiceMethod.CREATE, parameter, createOptions);
         const objectId = await KIXObjectSocketListener.getInstance().createObject(objectType, parameter, createOptions)
-            .catch((error) => {
+            .catch((error: Error) => {
                 const content = new ComponentContent('list-with-title',
                     {
                         title: `Fehler beim Erstellen (${objectType}):`,
-                        list: [error]
+                        list: [`${error.Code}: ${error.Message}`]
                     }
                 );
                 OverlayService.getInstance().openOverlay(
@@ -152,11 +153,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
         KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
 
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId).catch((error) => {
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId).catch((error: Error) => {
             const content = new ComponentContent('list-with-title',
                 {
                     title: `Fehler beim Aktualisieren (${objectType}):`,
-                    list: [error]
+                    list: [`${error.Code}: ${error.Message}`]
                 }
             );
             OverlayService.getInstance().openOverlay(
@@ -172,11 +173,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
             objectType, parameter, objectId
-        ).catch((error) => {
+        ).catch((error: Error) => {
             const content = new ComponentContent('list-with-title',
                 {
                     title: `Fehler beim Aktualisieren (${objectType}):`,
-                    list: [error]
+                    list: [`${error.Code}: ${error.Message}`]
                 }
             );
             OverlayService.getInstance().openOverlay(
@@ -214,12 +215,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType, objectIds: Array<number | string>, deleteOptions?: KIXObjectSpecificDeleteOptions
     ): Promise<Array<number | string>> {
         const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
-        const errors: Error[] = [];
+        const errors: string[] = [];
         const failIds: Array<number | string> = [];
         for (const objectId of objectIds) {
             KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.DELETE);
-            await service.deleteObject(objectType, objectId, deleteOptions).catch((error) => {
-                errors.push(error);
+            await service.deleteObject(objectType, objectId, deleteOptions).catch((error: Error) => {
+                errors.push(`${error.Code}: ${error.Message}`);
                 failIds.push(objectId);
             });
         }

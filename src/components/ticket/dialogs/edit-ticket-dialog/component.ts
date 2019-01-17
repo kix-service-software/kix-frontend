@@ -8,6 +8,7 @@ import {
     ToastContent,
     TicketProperty,
     ContextType,
+    Error,
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
@@ -53,9 +54,9 @@ class Component {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
                         DialogService.getInstance().closeMainDialog();
-                    }).catch((error) => {
+                    }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openErrorOverlay(error);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
                 }
             }

@@ -2,7 +2,7 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    ConfigItemClassProperty, ObjectIcon
+    ConfigItemClassProperty, ObjectIcon, Error
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse,
@@ -106,8 +106,9 @@ export class ConfigItemClassService extends KIXObjectService {
             const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
                 token, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass)
-            ).catch((error) => {
-                throw error;
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
 
             const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
@@ -152,13 +153,13 @@ export class ConfigItemClassService extends KIXObjectService {
                     ConfigItemClassDefinition: {
                         DefinitionString: definitionParameter[1]
                     }
-                }).catch((error) => {
-                    if (error.status === 409) {
+                }).catch((error: Error) => {
+                    if (error.StatusCode === 409) {
                         LoggingService.getInstance().warning(
                             `Could not create new definition of Config Item Class ${objectId}.`, error
                         );
                     } else {
-                        throw error;
+                        throw new Error(error.Code, error.Message);
                     }
                 });
             }

@@ -1,7 +1,8 @@
 import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
-    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions, KIXObjectCache
+    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
+    KIXObjectCache, Error
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -138,8 +139,9 @@ export abstract class KIXObjectService implements IKIXObjectService {
         deleteOptions: KIXObjectSpecificDeleteOptions
     ): Promise<void> {
         return await this.sendDeleteRequest<void>(token, this.buildUri(this.RESOURCE_URI, objectId))
-            .catch((error) => {
-                throw new Error(error.errorMessage.body);
+            .catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
     }
 
@@ -170,8 +172,9 @@ export abstract class KIXObjectService implements IKIXObjectService {
                 const link = new CreateLink(source, sourceKey, target, targetKey, ld.linkTypeDescription.linkType.Name);
 
                 await this.sendCreateRequest(token, 'links', new CreateLinkRequest(link))
-                    .catch((error) => {
-                        LoggingService.getInstance().error(error);
+                    .catch((error: Error) => {
+                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                        throw new Error(error.Code, error.Message);
                     });
             }
         }
@@ -188,9 +191,9 @@ export abstract class KIXObjectService implements IKIXObjectService {
                     ['ObjectID', icon.ObjectID.toString()],
                     ['ContentType', icon.ContentType],
                     ['Content', icon.Content]
-                ]).catch((error) => {
-                    LoggingService.getInstance().error(error);
-                    throw error;
+                ]).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
                 });
                 // TODO: cache-Handling überarbeiten
                 KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);
@@ -216,8 +219,9 @@ export abstract class KIXObjectService implements IKIXObjectService {
                         ['Content', icon.Content]
                     ],
                     icons[0].ID
-                ).catch((error) => {
-                    throw error;
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
                 });
                 // TODO: cache-Handling überarbeiten
                 KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);

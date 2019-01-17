@@ -4,12 +4,13 @@ import {
 } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, TicketPriority, TicketPriorityCacheHandler, ObjectIcon
+    KIXObjectSpecificCreateOptions, KIXObjectCache, TicketPriority, TicketPriorityCacheHandler, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
+import { LoggingService } from '../LoggingService';
 
 export class TicketPriorityService extends KIXObjectService {
 
@@ -70,8 +71,9 @@ export class TicketPriorityService extends KIXObjectService {
 
         const response = await this.sendCreateRequest<CreateTicketPriorityResponse, CreateTicketPriorityRequest>(
             token, this.RESOURCE_URI, new CreateTicketPriorityRequest(createTicketPriority)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
@@ -91,10 +93,10 @@ export class TicketPriorityService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateTicketPriorityResponse, UpdateTicketPriorityRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketPriorityRequest(updateTicketPriority)
-        ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
-
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon) {
             icon.Object = 'Priority';

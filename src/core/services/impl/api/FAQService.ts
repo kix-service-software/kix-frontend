@@ -6,7 +6,8 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions,
-    KIXObjectCache
+    KIXObjectCache,
+    Error
 } from "../../../model";
 import {
     FAQCategoriesResponse, FAQCategoryResponse, FAQArticlesResponse, FAQArticleResponse, CreateFAQArticle,
@@ -163,8 +164,9 @@ export class FAQService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateFAQArticleResponse, UpdateFAQArticleRequest>(
             token, this.buildUri(this.RESOURCE_URI, 'articles', objectId), new UpdateFAQArticleRequest(updateFAQArticle)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
@@ -193,8 +195,9 @@ export class FAQService extends KIXObjectService {
             await this.sendCreateRequest<CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest>(
                 token, this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments'),
                 new CreateFAQArticleAttachmentRequest(attachment)
-            ).catch((error) => {
-                LoggingService.getInstance().error(error);
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
         }
     }
@@ -205,8 +208,9 @@ export class FAQService extends KIXObjectService {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles');
         const response = await this.sendCreateRequest<CreateFAQArticleResponse, CreateFAQArticleRequest>(
             token, uri, new CreateFAQArticleRequest(createFAQArticle)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const faqId = response.FAQArticleID;
@@ -223,8 +227,9 @@ export class FAQService extends KIXObjectService {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
         const response = await this.sendCreateRequest<CreateFAQVoteResponse, CreateFAQVoteRequest>(
             token, uri, new CreateFAQVoteRequest(createFAQVote)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         const faqId = response.FAQVoteID;

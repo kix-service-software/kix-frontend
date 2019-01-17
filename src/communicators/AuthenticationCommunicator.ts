@@ -1,8 +1,7 @@
 import {
-    AuthenticationResult, LoginRequest, AuthenticationEvent, SocketEvent
+    AuthenticationResult, LoginRequest, AuthenticationEvent, SocketEvent, Error
 } from '../core/model';
 
-import { HttpError } from '../core/api';
 import { CommunicatorResponse } from '../core/common';
 
 import { KIXCommunicator } from './KIXCommunicator';
@@ -46,8 +45,8 @@ export class AuthenticationCommunicator extends KIXCommunicator {
                 response = new CommunicatorResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, '/'));
-            }).catch((error: HttpError) => {
-                LoggingService.getInstance().error(error.errorMessage + ' - ' + error.status, error);
+            }).catch((error: Error) => {
+                LoggingService.getInstance().error(error.Code + ' - ' + error.Message);
                 response = new CommunicatorResponse(AuthenticationEvent.UNAUTHORIZED, error);
             });
         return response;

@@ -1,7 +1,7 @@
-import { KIXError } from "../common";
+import { Error } from "../model";
 
-export class RequiredError extends KIXError {
+export class RequiredError extends Error {
     public constructor(error: any) {
-        super(error);
+        super('', error);
     }
 }

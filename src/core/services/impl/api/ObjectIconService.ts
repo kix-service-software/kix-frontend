@@ -4,11 +4,12 @@ import {
 } from '../../../api';
 import {
     ObjectIcon, KIXObjectType, KIXObjectCache, ObjectIconCacheHandler,
-    KIXObjectLoadingOptions, ObjectIconLoadingOptions
+    KIXObjectLoadingOptions, ObjectIconLoadingOptions, Error
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
+import { LoggingService } from '../LoggingService';
 
 export class ObjectIconService extends KIXObjectService {
 
@@ -91,10 +92,11 @@ export class ObjectIconService extends KIXObjectService {
 
         const createObjectIcon = new CreateObjectIcon(parameter);
         const response = await this.sendCreateRequest<CreateObjectIconResponse, CreateObjectIconRequest>(
-            token, this.RESOURCE_URI, new CreateObjectIconRequest(createObjectIcon))
-            .catch((error) => {
-                throw error;
-            });
+            token, this.RESOURCE_URI, new CreateObjectIconRequest(createObjectIcon)
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
 
         return response.ObjectIconID;
     }
@@ -106,8 +108,9 @@ export class ObjectIconService extends KIXObjectService {
 
         const response = await this.sendUpdateRequest<UpdateObjectIconResponse, UpdateObjectIconRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateObjectIconRequest(updateObjectIcon)
-        ).catch((error) => {
-            throw error;
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         return response.ObjectIconID;

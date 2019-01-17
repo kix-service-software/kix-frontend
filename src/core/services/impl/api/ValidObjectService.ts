@@ -1,5 +1,5 @@
 import { ValidObjectResponse, ValidObjectsResponse } from '../../../api';
-import { ValidObject, SortOrder, KIXObjectType } from '../../../model';
+import { ValidObject, SortOrder, KIXObjectType, Error } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 
 export class ValidObjectService extends KIXObjectService {
@@ -46,13 +46,13 @@ export class ValidObjectService extends KIXObjectService {
     public createObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("Method not implemented.");
+        throw new Error('', "Method not implemented.");
     }
 
 }

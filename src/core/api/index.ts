@@ -26,6 +26,5 @@ export * from './ticket';
 export * from './user';
 export * from './valid-object';
 
-export { HttpError } from './HttpError';
 export { Query } from './Query';
 export { RequestObject } from './RequestObject';

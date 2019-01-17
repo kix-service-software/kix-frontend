@@ -1,5 +1,6 @@
 import {
-    ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType, KIXObjectSpecificCreateOptions
+    ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
+    KIXObjectSpecificCreateOptions, Error
 } from "../../model";
 import { OverlayService } from "../OverlayService";
 import { DialogService } from "./DialogService";
@@ -60,9 +61,9 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                                 RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
                             }
                             resolve();
-                        }).catch((error) => {
+                        }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
-                            BrowserUtil.openErrorOverlay(error);
+                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                             reject();
                         });
                 }

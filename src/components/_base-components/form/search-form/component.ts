@@ -1,6 +1,6 @@
 import {
     WidgetType, OverlayType, StringContent,
-    KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener, CacheState
+    KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener, CacheState, Error
 } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import {
@@ -96,8 +96,8 @@ class Component implements ISearchFormListener {
             .then((objects) => {
                 this.setSearchResult(objects);
             })
-            .catch((error) => {
-                BrowserUtil.openErrorOverlay(error);
+            .catch((error: Error) => {
+                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
 
         DialogService.getInstance().setMainDialogLoading(false);

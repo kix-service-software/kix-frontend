@@ -64,15 +64,6 @@ export class AuthenticationService {
         return true;
     }
 
-    private getToken(authorizationHeader: string): string {
-        if (authorizationHeader.startsWith(this.TOKEN_PREFIX)) {
-            const token = authorizationHeader.substr(this.TOKEN_PREFIX.length, authorizationHeader.length);
-            return token;
-        }
-
-        return null;
-    }
-
     private async validateToken(token): Promise<boolean> {
         const response = await HttpService.getInstance().get<SessionResponse>('session', {}, token)
             .catch((error) => {
