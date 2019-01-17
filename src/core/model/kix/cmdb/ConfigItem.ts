@@ -104,19 +104,21 @@ export class ConfigItem extends KIXObject<ConfigItem> {
         }
 
         const preparedData = [];
-        let found = false;
-        for (const attribute of data) {
-            if (attribute.Key === key) {
-                preparedData.push(attribute);
-                found = true;
-            }
-
-            if (attribute.Sub && !found) {
-                const subData = this.getPreparedData(key, attribute.Sub);
-                if (subData && subData.length) {
-                    subData.forEach((sd) => preparedData.push(sd));
+        if (data) {
+            let found = false;
+            data.forEach((attribute) => {
+                if (attribute.Key === key) {
+                    preparedData.push(attribute);
+                    found = true;
                 }
-            }
+
+                if (attribute.Sub && !found) {
+                    const subData = this.getPreparedData(key, attribute.Sub);
+                    if (subData && subData.length) {
+                        subData.forEach((sd) => preparedData.push(sd));
+                    }
+                }
+            });
         }
         return preparedData;
     }
