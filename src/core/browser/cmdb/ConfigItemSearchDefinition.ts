@@ -241,13 +241,6 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
                 );
                 break;
-            case VersionProperty.CUR_DEPL_STATE_ID:
-            case VersionProperty.CUR_INCI_STATE_ID:
-                const item = value as GeneralCatalogItem;
-                criteria.push(new FilterCriteria(
-                    property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, item.ItemID
-                ));
-                break;
             case SearchProperty.FULLTEXT:
                 criteria.push(new FilterCriteria(
                     ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
@@ -258,6 +251,15 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     FilterDataType.STRING, FilterType.OR, value
                 ));
                 break;
+            case VersionProperty.CUR_DEPL_STATE_ID:
+            case VersionProperty.CUR_INCI_STATE_ID:
+                if (value instanceof GeneralCatalogItem) {
+                    const item = value as GeneralCatalogItem;
+                    criteria.push(new FilterCriteria(
+                        property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, item.ItemID
+                    ));
+                    break;
+                }
             default:
                 criteria.push(new FilterCriteria(
                     property, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, value
