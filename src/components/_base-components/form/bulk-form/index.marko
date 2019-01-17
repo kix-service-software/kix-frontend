@@ -24,12 +24,14 @@
             <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
                 <span.kix-icon-close/>Abbrechen
             </button>
-            <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=(!state.run)>
-                <span.kix-icon-close/>Dialog schließen
-            </button>
-            <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=(!state.canRun)>
-                <span.kix-icon-edit/>Jetzt ausführen
-            </button>
+            <div.submit-buttons>
+                <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=(!state.run)>
+                    <span.kix-icon-check/>Dialog schließen
+                </button>
+                <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=(!state.canRun)>
+                    <span.kix-icon-edit/>Jetzt ausführen
+                </button>
+            </div>
         </div>
     </if>
 </div>

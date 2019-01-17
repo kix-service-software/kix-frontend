@@ -6,10 +6,22 @@
     grid-auto-flow: column;
     grid-gap: 1.75rem;
     padding: 0 3rem 0.5rem 0;
+    >.cancel-buttons {
+        display: grid;
+        justify-self: start;
+        grid-gap: 1.75rem;
+        grid-auto-flow: column;
+    }
+    >.submit-buttons {
+        display: grid;
+        justify-self: end;
+        grid-gap: 1.75rem;
+        grid-auto-flow: column;
+    }
     button:last-child {
-        justify-self: right
+        justify-self: end
     }
     button:first-child {
-        justify-self: left;
+        justify-self: start;
     }
 }
