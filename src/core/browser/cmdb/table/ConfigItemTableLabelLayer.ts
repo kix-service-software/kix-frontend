@@ -9,25 +9,7 @@ export class ConfigItemTableLabelLayer extends AbstractTableLayer {
     public async getColumns(): Promise<TableColumn[]> {
         const columns = await this.getPreviousLayer().getColumns();
         for (const col of columns) {
-            switch (col.id) {
-                case ConfigItemProperty.CLASS_ID:
-                case ConfigItemProperty.NUMBER:
-                case ConfigItemProperty.NAME:
-                case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                case ConfigItemProperty.CUR_INCI_STATE_ID:
-                case ConfigItemProperty.VERSION:
-                case ConfigItemProperty.CREATE_BY:
-                case ConfigItemProperty.CREATE_TIME:
-                case ConfigItemProperty.CHANGE_BY:
-                case ConfigItemProperty.CHANGE_TIME:
-                case ConfigItemProperty.CLASS:
-                case ConfigItemProperty.IMAGES:
-                case ConfigItemProperty.LAST_VERSION_ID:
-                case ConfigItemProperty.VERSIONS:
-                    col.text = await this.labelProvider.getPropertyText(col.id, null, true);
-                    break;
-                default:
-            }
+            col.text = await this.labelProvider.getPropertyText(col.id, null, true);
         }
         return columns;
     }
