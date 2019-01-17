@@ -1,4 +1,4 @@
-import { ConfiguredDialogWidget, ObjectIcon } from "../../model";
+import { ConfiguredDialogWidget, ObjectIcon } from "../../../model";
 
 export interface IOverlayDialogListener {
 

@@ -4,9 +4,9 @@ import {
     ActionFactory, StandardTableFactoryService, IdService, WidgetService, TableConfiguration
 } from '../../../../core/browser';
 import { KIXObjectType, ConfigItem } from '../../../../core/model';
-import { EventService, IEventListener } from '../../../../core/browser/event';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component implements IEventListener {
+class Component implements IEventSubscriber {
 
     public eventSubscriberId: string = IdService.generateDateBasedId('config-item-version-widget');
 

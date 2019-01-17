@@ -1,4 +1,4 @@
-import { ConfiguredDialogWidget, ObjectIcon } from "../../model";
+import { ConfiguredDialogWidget, ObjectIcon } from "../../../model";
 
 export interface IMainDialogListener {
 
@@ -6,7 +6,9 @@ export interface IMainDialogListener {
         dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string, dialogIcon?: string | ObjectIcon
     ): void;
 
-    close(): void;
+    close(data?: any): void;
+
+    submit(data?: any): void;
 
     setTitle(title: string): void;
 

@@ -1,17 +1,12 @@
-import { DialogService } from "../../../../core/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil
+    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil, DialogService
 } from "../../../../core/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    KIXObjectType,
-    ToastContent,
-    TicketProperty,
-    ContextType,
-    Error,
+    ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
+    KIXObjectType, TicketProperty, Error
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
+import { TicketDetailsContext } from "../../../../core/browser/ticket";
 
 class Component {
 
@@ -53,7 +48,7 @@ class Component {
                         context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
-                        DialogService.getInstance().closeMainDialog();
+                        DialogService.getInstance().submitMainDialog();
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);

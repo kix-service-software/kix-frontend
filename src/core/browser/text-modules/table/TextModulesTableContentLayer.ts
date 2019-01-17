@@ -18,11 +18,11 @@ export class TextModulesTableContentLayer extends AbstractTableLayer {
         this.preLoadedTicketTypes = (ticketTypes as any);
     }
 
-    public async getRows(): Promise<Array<TableRow<TextModule>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<TextModule>>> {
         let loadedTicketTypes = this.textModules;
         if (this.preLoadedTicketTypes) {
             loadedTicketTypes = this.preLoadedTicketTypes;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadTicketTypes();
             loadedTicketTypes = this.textModules;
         }

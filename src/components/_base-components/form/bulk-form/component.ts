@@ -37,12 +37,13 @@ class Component {
     }
 
     public cancel(): void {
-        this.reset();
         DialogService.getInstance().closeMainDialog();
     }
 
     public submit(): void {
-        // Bulkmanager.run()
+        if (this.state.run) {
+            DialogService.getInstance().submitMainDialog();
+        }
     }
 
     private async createTable(): Promise<void> {
@@ -107,6 +108,7 @@ class Component {
     }
 
     private async runBulkManager(): Promise<void> {
+        this.state.run = true;
         this.successHighlightLayer.setHighlightedObjects([]);
         this.errorHighlightLayer.setHighlightedObjects([]);
 

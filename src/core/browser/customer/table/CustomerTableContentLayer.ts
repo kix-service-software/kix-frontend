@@ -24,11 +24,11 @@ export class CustomerTableContentLayer extends AbstractTableLayer {
         this.preloadedCustomers = (customers as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedCustomers = this.customers;
         if (this.preloadedCustomers) {
             loadedCustomers = this.preloadedCustomers;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadCustomers();
             loadedCustomers = this.customers;
         }

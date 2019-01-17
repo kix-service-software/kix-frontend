@@ -18,7 +18,7 @@ export class ConfigItemClassDefinitionTableContentLayer extends AbstractTableLay
         this.preLoadedCIClassDefintions = (ciClassDefinitions as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedCIClassDefinitions = this.ciClassDefinitions;
         if (this.preLoadedCIClassDefintions) {
             loadedCIClassDefinitions = this.preLoadedCIClassDefintions;

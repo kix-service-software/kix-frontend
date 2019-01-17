@@ -3,9 +3,9 @@ import { ComponentsService, TabContainerEvent } from '../../../core/browser/comp
 import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
-import { IEventListener, EventService } from '../../../core/browser/event';
+import { IEventSubscriber, EventService } from '../../../core/browser/event';
 
-class TabLaneComponent implements IEventListener {
+class TabLaneComponent implements IEventSubscriber {
 
     public eventSubscriberId: string = IdService.generateDateBasedId('tab-container');
 

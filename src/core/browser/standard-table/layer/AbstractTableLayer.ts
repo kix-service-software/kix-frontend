@@ -38,8 +38,8 @@ export abstract class AbstractTableLayer implements ITableLayer {
         return await this.getPreviousLayer().getColumns();
     }
 
-    public async getRows(refresh: boolean = false): Promise<TableRow[]> {
-        return await this.getPreviousLayer().getRows(refresh);
+    public async getRows(reload: boolean = false): Promise<TableRow[]> {
+        return await this.getPreviousLayer().getRows(reload);
     }
 
     public setTableId(tableId: string): void {

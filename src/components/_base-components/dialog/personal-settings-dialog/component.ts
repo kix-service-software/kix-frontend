@@ -41,7 +41,7 @@ class Component {
         DialogService.getInstance().setMainDialogLoading(false);
         if (true) {
             // BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
-            DialogService.getInstance().closeMainDialog();
+            DialogService.getInstance().submitMainDialog();
         }
     }
 }

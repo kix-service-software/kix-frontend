@@ -218,6 +218,7 @@ class LinkDialogComponent {
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
+            // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
             DialogService.getInstance().publishDialogResult(
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]

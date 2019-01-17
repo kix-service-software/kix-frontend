@@ -1,8 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { CreateLinkDescription, FormInputComponent } from "../../../../../core/model";
-import { DialogService } from "../../../../../core/browser/dialog/DialogService";
-import { Label } from "../../../../../core/browser/components";
-import { FormService, LabelService, IdService } from "../../../../../core/browser";
+import { FormService, LabelService, IdService, DialogService, Label } from "../../../../../core/browser";
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 

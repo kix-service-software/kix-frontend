@@ -17,11 +17,11 @@ export class ConfigItemClassTableContentLayer extends AbstractTableLayer {
         this.preLoadedCIClasses = (priorities as any);
     }
 
-    public async getRows(): Promise<Array<TableRow<ConfigItemClass>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<ConfigItemClass>>> {
         let loadedCIClasses = this.ciClasses;
         if (this.preLoadedCIClasses) {
             loadedCIClasses = this.preLoadedCIClasses;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadCIClasses();
             loadedCIClasses = this.ciClasses;
         }

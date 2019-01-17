@@ -1,7 +1,9 @@
-import { DialogService } from '../../../../core/browser/dialog/DialogService';
 import { ComponentState } from './ComponentState';
-import { IMainDialogListener, ContextService } from '../../../../core/browser';
-import { ConfiguredDialogWidget, ObjectIcon } from '../../../../core/model';
+import {
+    DialogService, IMainDialogListener, ContextService, DialogEvents, DialogEventData
+} from '../../../../core/browser';
+import { ConfiguredDialogWidget, ObjectIcon, ContextType } from '../../../../core/model';
+import { EventService } from '../../../../core/browser/event';
 
 export class MainDialogComponent implements IMainDialogListener {
 
@@ -32,10 +34,33 @@ export class MainDialogComponent implements IMainDialogListener {
         }
     }
 
-    public close(): void {
+    public close(data?: any): void {
         this.state.show = false;
         document.body.style.overflow = 'unset';
-        ContextService.getInstance().closeDialogContext();
+        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (context) {
+            EventService.getInstance().publish(
+                DialogEvents.DIALOG_CANCELED,
+                new DialogEventData(this.state.dialogId, data),
+                context.getDialogSubscriberId()
+            );
+        }
+        if (data && data.byX) {
+            ContextService.getInstance().closeDialogContext();
+        }
+    }
+
+    public submit(data?: any): void {
+        this.state.show = false;
+        document.body.style.overflow = 'unset';
+        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (context) {
+            EventService.getInstance().publish(
+                DialogEvents.DIALOG_FINISHED,
+                new DialogEventData(this.state.dialogId, data),
+                context.getDialogSubscriberId()
+            );
+        }
     }
 
     public tabChanged(tab: ConfiguredDialogWidget): void {

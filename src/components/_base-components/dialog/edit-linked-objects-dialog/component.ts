@@ -322,7 +322,7 @@ class Component {
         DialogService.getInstance().setMainDialogLoading(false);
         if (createLinksOK && deleteLinksOK) {
             BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
-            DialogService.getInstance().closeMainDialog();
+            DialogService.getInstance().submitMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
                 activeContext.getObject(null, true);

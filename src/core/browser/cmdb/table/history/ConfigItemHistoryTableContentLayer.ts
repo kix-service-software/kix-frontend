@@ -11,7 +11,7 @@ export class ConfigItemHistoryTableContentLayer extends AbstractTableLayer {
         super();
     }
 
-    public async getRows(): Promise<Array<TableRow<ConfigItemHistory>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<ConfigItemHistory>>> {
         if (!this.dataLoaded) {
             this.loadConfigItemHistory();
         }

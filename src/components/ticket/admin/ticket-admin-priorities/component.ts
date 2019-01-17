@@ -3,14 +3,14 @@ import {
     TableConfiguration, StandardTableFactoryService, WidgetService, ActionFactory
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { EventService, IEventListener } from '../../../../core/browser/event';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import {
     KIXObjectPropertyFilter, TableFilterCriteria, TicketPriority, KIXObjectType,
     SortUtil, DataType, SortOrder, TicketPriorityProperty
 } from '../../../../core/model';
 import { AdminContext } from '../../../../core/browser/admin';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventListener {
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
     public eventSubscriberId: string;
 

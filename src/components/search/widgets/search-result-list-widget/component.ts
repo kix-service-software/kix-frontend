@@ -5,19 +5,21 @@ import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
     LabelService, StandardTableFactoryService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, IKIXObjectService, KIXObjectService, SearchProperty
+    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableEvents, TableEventData
 } from '../../../../core/browser';
-import { ServiceRegistry } from '../../../../core/browser';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component implements IKIXObjectSearchListener {
+class Component implements IKIXObjectSearchListener, IEventSubscriber {
 
     public listenerId: string;
+    public eventSubscriberId: string;
 
     public state: ComponentState;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.listenerId = this.state.instanceId;
+        this.eventSubscriberId = this.state.instanceId;
     }
 
     public onMount(): void {
@@ -31,10 +33,12 @@ class Component implements IKIXObjectSearchListener {
 
         KIXObjectSearchService.getInstance().registerListener(this);
         this.searchFinished();
+        EventService.getInstance().subscribe(TableEvents.REFRESH, this);
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(TableEvents.REFRESH, this);
     }
 
     public searchCleared(): void {
@@ -156,6 +160,32 @@ class Component implements IKIXObjectSearchListener {
 
     public async searchResultCategoryChanged(category: SearchResultCategory): Promise<void> {
         await this.initWidget(category ? category.objectType : null);
+    }
+
+    public async eventPublished(data: TableEventData, eventId: string): Promise<void> {
+        if (data && data.tableId === this.state.resultTable.tableId && eventId === TableEvents.REFRESH) {
+            // FIXME: sollte über ein Table-Refresh möglich sein, direkt über Tabelle, nicht über einbindendes Widget
+            await this.refreshTable();
+        }
+    }
+
+    private async refreshTable(): Promise<void> {
+        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+        let objectIds = [];
+        if (cache.objectType === category.objectType) {
+            objectIds = cache.result.map((o) => o.ObjectId);
+        } else {
+            objectIds = category.objectIds;
+        }
+        if (objectIds && !!objectIds.length) {
+            const objects = await KIXObjectService.loadObjects(
+                category.objectType, objectIds, null, null, false
+            );
+            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            await this.state.resultTable.loadRows(true);
+        }
+
     }
 }
 
