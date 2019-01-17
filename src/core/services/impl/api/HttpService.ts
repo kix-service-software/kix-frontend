@@ -121,7 +121,7 @@ export class HttpService {
     }
 
     private createError(err: any): Error {
-        LoggingService.getInstance().error(`(${err.statusCode}) ${err.Code}  ${err.Message}`);
+        LoggingService.getInstance().error(`(${err.statusCode}) ${err.error.Code}  ${err.error.Message}`);
         return new Error(err.error.Code, err.error.Message, err.statusCode);
     }
 
