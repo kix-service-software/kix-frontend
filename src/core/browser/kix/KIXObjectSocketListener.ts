@@ -4,7 +4,7 @@ import {
     LoadObjectsResponse, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     CreateObjectRequest, CreateObjectResponse, KIXObjectSpecificCreateOptions,
     DeleteObjectRequest, DeleteObjectResponse, UpdateObjectRequest, UpdateObjectResponse,
-    KIXObjectSpecificDeleteOptions, ISocketResponse, ISocketObjectRequest
+    KIXObjectSpecificDeleteOptions, ISocketResponse, ISocketObjectRequest, Error
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -122,7 +122,7 @@ export class KIXObjectSocketListener extends SocketListener {
                 // tslint:disable-next-line:max-line-length
                 const error = `Zeitüberschreitung der Anfrage (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
                 console.error(error);
-                reject(error);
+                reject(new Error('TIMEOUT', error));
             }, KIXObjectSocketListener.TIMEOUT);
 
             this.socket.on(finishEvent, (result: T) => {
