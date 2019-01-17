@@ -11,7 +11,7 @@ import {
     Lock, Queue, SenderType, Ticket, TicketProperty,
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     ArticlesLoadingOptions, KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, KIXObjectCache, TicketCacheHandler
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, KIXObjectCache, TicketCacheHandler, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -19,6 +19,7 @@ import { SearchOperator } from '../../../browser/SearchOperator';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
 import { UserService } from './UserService';
+import { LoggingService } from '../LoggingService';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -184,8 +185,9 @@ export class TicketService extends KIXObjectService {
 
             const response = await this.sendCreateRequest<CreateTicketResponse, CreateTicketRequest>(
                 token, this.RESOURCE_URI, new CreateTicketRequest(createTicket)
-            ).catch((error) => {
-                throw new Error(error.errorMessage.body);
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
 
             await this.createLinks(token, response.TicketID, this.getParameterValue(parameter, TicketProperty.LINK));
@@ -240,7 +242,8 @@ export class TicketService extends KIXObjectService {
         const response = await this.sendUpdateRequest<UpdateTicketResponse, UpdateTicketRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketRequest(updateTicket)
         ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
 
         if (createArticle) {
@@ -248,7 +251,8 @@ export class TicketService extends KIXObjectService {
                 token, this.buildUri(this.RESOURCE_URI, objectId, this.SUB_RESOURCE_URI),
                 new CreateArticleRequest(createArticle)
             ).catch((error) => {
-                throw new Error(error.errorMessage.body);
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
             });
         }
 
@@ -450,7 +454,8 @@ export class TicketService extends KIXObjectService {
         const response = await this.sendCreateRequest<CreateWatcherResponse, CreateWatcherRequest>(
             token, uri, new CreateWatcherRequest(createWatcher)
         ).catch((error) => {
-            throw new Error(error.errorMessage.body);
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
         });
         return response.WatcherID;
     }
