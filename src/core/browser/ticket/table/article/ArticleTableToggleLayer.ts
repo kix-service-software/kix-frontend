@@ -1,8 +1,8 @@
 import { TableToggleLayer, ITableToggleListener } from '../../..';
-import { IEventListener, EventService } from '../../../event';
+import { IEventSubscriber, EventService } from '../../../event';
 import { IdService } from '../../../IdService';
 
-export class ArticleTableToggleLayer extends TableToggleLayer implements IEventListener {
+export class ArticleTableToggleLayer extends TableToggleLayer implements IEventSubscriber {
 
     public eventSubscriberId: string;
 

@@ -17,11 +17,11 @@ export class TicketPriorityTableContentLayer extends AbstractTableLayer {
         this.preLoadedTicketPriorities = (priorities as any);
     }
 
-    public async getRows(): Promise<Array<TableRow<TicketPriority>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<TicketPriority>>> {
         let loadedPriorities = this.priorities;
         if (this.preLoadedTicketPriorities) {
             loadedPriorities = this.preLoadedTicketPriorities;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadTicketPriorities();
             loadedPriorities = this.priorities;
         }

@@ -28,11 +28,11 @@ export class ConfigItemTableContentLayer extends AbstractTableLayer {
         this.preLoadedConfigItems = (configItems as any);
     }
 
-    public async getRows(): Promise<TableRow[]> {
+    public async getRows(reload: boolean = false): Promise<TableRow[]> {
         let loadedConfigItems = this.configItems;
         if (this.preLoadedConfigItems) {
             loadedConfigItems = this.preLoadedConfigItems;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadConfigItems();
             loadedConfigItems = this.configItems;
         }

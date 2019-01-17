@@ -1,5 +1,6 @@
-import { DialogService } from "../../../../core/browser/dialog/DialogService";
-import { FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil } from "../../../../core/browser";
+import {
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, DialogService
+} from "../../../../core/browser";
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
     OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
@@ -73,7 +74,7 @@ class Component {
                                 : 'Neue Version wurde erstellt';
                             BrowserUtil.openSuccessOverlay(hint);
 
-                            DialogService.getInstance().closeMainDialog();
+                            DialogService.getInstance().submitMainDialog();
                         }
                     }
                 }

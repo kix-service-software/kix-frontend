@@ -1,4 +1,4 @@
-import { DisplayImageDescription } from "../components/DisplayImageDescription";
+import { DisplayImageDescription } from "../DisplayImageDescription";
 
 export interface IImageDialogListener {
 

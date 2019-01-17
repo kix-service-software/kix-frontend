@@ -25,11 +25,11 @@ export class FAQTableContentLayer extends AbstractTableLayer {
         this.preLoadedFAQArticles = (faqArticles as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedFAQArticles = this.faqArticles;
         if (this.preLoadedFAQArticles) {
             loadedFAQArticles = this.preLoadedFAQArticles;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadFAQArticles();
             loadedFAQArticles = this.faqArticles;
         }

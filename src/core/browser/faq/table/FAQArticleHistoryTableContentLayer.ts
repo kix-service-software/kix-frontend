@@ -21,11 +21,11 @@ export class FAQArticleHistoryTableContentLayer extends AbstractTableLayer {
         this.preLoadedFAQArticleHistory = (faqHistory as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedFAQArticleHistory = this.faqArticleHistory;
         if (this.preLoadedFAQArticleHistory) {
             loadedFAQArticleHistory = this.preLoadedFAQArticleHistory;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadFAQArticleHistory();
             loadedFAQArticleHistory = this.faqArticleHistory;
         }

@@ -99,8 +99,9 @@ class Component {
 
         const context = ContextService.getInstance().getActiveContext();
         if (this.state.widgetConfiguration.contextDependent && context) {
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-            this.setTitle(context.getObjectList().length);
+            const objects = await context.getObjectList();
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            this.setTitle(objects.length);
             await this.state.table.loadRows();
         }
     }

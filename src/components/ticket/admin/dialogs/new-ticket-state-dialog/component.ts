@@ -1,4 +1,3 @@
-import { DialogService } from "../../../../../core/browser/dialog/DialogService";
 import { AbstractNewDialog } from "../../../../../core/browser";
 import { KIXObjectType, ContextMode, TicketStateProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";

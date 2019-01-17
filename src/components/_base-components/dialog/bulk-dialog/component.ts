@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { DialogService, ContextService, BrowserUtil, LabelService } from '../../../../core/browser';
-import { BulkDialogContext, BulkManager, BulkService } from '../../../../core/browser/bulk';
+import { ContextService, LabelService } from '../../../../core/browser';
+import { BulkDialogContext, BulkService } from '../../../../core/browser/bulk';
 import { EventService } from '../../../../core/browser/event';
 import { TabContainerEvent } from '../../../../core/browser/components';
 
@@ -19,7 +19,7 @@ class Component {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
         if (context) {
-            const objects = context.getObjectList();
+            const objects = await context.getObjectList();
             if (objects && objects.length) {
                 const objectType = objects[0].KIXObjectType;
                 BulkService.getInstance().initBulkManager(objectType, objects);
@@ -37,15 +37,6 @@ class Component {
             }
         }
     }
-
-    public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
-    }
-
-    public async submit(): Promise<void> {
-        BrowserUtil.openSuccessOverlay('yeah');
-    }
-
 }
 
 module.exports = Component;

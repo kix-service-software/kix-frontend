@@ -15,6 +15,7 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     public explorerBarExpanded: boolean = true;
     public shownSidebars: string[] = [];
 
+    private dialogSubscriberId: string = null;
     private additionalInformation: string[] = [];
     private objectList: KIXObject[] = [];
     private filteredObjectList: KIXObject[] = [];
@@ -70,7 +71,15 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         this.additionalInformation = additionalInformation;
     }
 
-    public getObjectList(): KIXObject[] {
+    public setDialogSubscriberId(subscriberId: string): void {
+        this.dialogSubscriberId = subscriberId;
+    }
+
+    public getDialogSubscriberId(): string {
+        return this.dialogSubscriberId;
+    }
+
+    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
         return this.objectList;
     }
 

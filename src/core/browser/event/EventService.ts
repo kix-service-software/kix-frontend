@@ -1,9 +1,9 @@
-import { IEventListener } from "./IEventListener";
+import { IEventSubscriber } from "./IEventSubscriber";
 
 export class EventService {
 
     private static INSTANCE: EventService = null;
-    private listener: Map<string, IEventListener[]> = new Map();
+    private eventSubscribers: Map<string, IEventSubscriber[]> = new Map();
 
     public static getInstance(): EventService {
         if (!EventService.INSTANCE) {
@@ -15,35 +15,35 @@ export class EventService {
 
     private constructor() { }
 
-    public subscribe(eventId: string, listener: IEventListener): void {
-        if (this.listener.has(eventId)) {
-            const subscriberIndex = this.listener.get(eventId).findIndex(
-                (s) => s.eventSubscriberId === listener.eventSubscriberId
+    public subscribe(eventId: string, subscriber: IEventSubscriber): void {
+        if (this.eventSubscribers.has(eventId)) {
+            const subscriberIndex = this.eventSubscribers.get(eventId).findIndex(
+                (s) => s.eventSubscriberId === subscriber.eventSubscriberId
             );
             if (subscriberIndex !== -1) {
-                this.listener.get(eventId)[subscriberIndex] = listener;
+                this.eventSubscribers.get(eventId)[subscriberIndex] = subscriber;
             } else {
-                this.listener.get(eventId).push(listener);
+                this.eventSubscribers.get(eventId).push(subscriber);
             }
         } else {
-            this.listener.set(eventId, [listener]);
+            this.eventSubscribers.set(eventId, [subscriber]);
         }
     }
 
-    public unsubscribe(eventId: string, listener: IEventListener): void {
-        if (this.listener.has(eventId)) {
-            const subscriberIndex = this.listener.get(eventId).findIndex(
-                (s) => s.eventSubscriberId === listener.eventSubscriberId
+    public unsubscribe(eventId: string, subscriber: IEventSubscriber): void {
+        if (this.eventSubscribers.has(eventId)) {
+            const subscriberIndex = this.eventSubscribers.get(eventId).findIndex(
+                (s) => s.eventSubscriberId === subscriber.eventSubscriberId
             );
             if (subscriberIndex !== -1) {
-                this.listener.get(eventId).splice(subscriberIndex, 1);
+                this.eventSubscribers.get(eventId).splice(subscriberIndex, 1);
             }
         }
     }
 
-    public publish(eventId: string, data: any = {}): void {
-        if (this.listener.has(eventId)) {
-            this.listener.get(eventId).forEach((l) => l.eventPublished(data, eventId));
+    public publish(eventId: string, data: any = {}, subscriberId?: string): void {
+        if (this.eventSubscribers.has(eventId)) {
+            this.eventSubscribers.get(eventId).forEach((l) => l.eventPublished(data, eventId, subscriberId));
         }
     }
 }

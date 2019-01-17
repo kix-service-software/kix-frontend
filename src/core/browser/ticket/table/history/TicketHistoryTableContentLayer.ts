@@ -20,11 +20,11 @@ export class TicketHistoryTableContentLayer extends AbstractTableLayer {
         this.preLoadedTicketHistory = (ticketHistory as any);
     }
 
-    public async getRows(): Promise<Array<TableRow<TicketHistory>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<TicketHistory>>> {
         let loadedTicketHistory = this.ticketHistory;
         if (this.preLoadedTicketHistory) {
             loadedTicketHistory = this.preLoadedTicketHistory;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadTicketHistory();
             loadedTicketHistory = this.ticketHistory;
         }

@@ -23,11 +23,11 @@ export class ContactTableContentLayer extends AbstractTableLayer {
         this.preloadedContacts = (contacts as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedContacts = this.contacts;
         if (this.preloadedContacts) {
             loadedContacts = this.preloadedContacts;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadContacts();
             loadedContacts = this.contacts;
         }

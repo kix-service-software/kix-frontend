@@ -21,7 +21,7 @@ export class LinkObjectTableContentLayer extends AbstractTableLayer {
         this.preloadedLinkObjects = (linkObjects as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let linkObjects = this.linkObjects;
         if (this.preloadedLinkObjects) {
             linkObjects = this.preloadedLinkObjects;

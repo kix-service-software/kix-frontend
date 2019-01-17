@@ -45,8 +45,8 @@ class Component implements IKIXObjectSearchListener {
 
     public async searchFinished(): Promise<void> {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(cache.objectType);
         if (cache) {
+            const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(cache.objectType);
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
             this.state.title = `Gewählte Suchkriterien: ${labelProvider.getObjectName(true)}`;
             const displayCriteria: Array<[string, string, Label[]]> = [];

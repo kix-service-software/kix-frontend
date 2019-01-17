@@ -15,9 +15,9 @@ import {
     WidgetService, OverlayService, TableFilterLayer
 } from "../../../../core/browser";
 import { IdService } from "../../../../core/browser/IdService";
-import { IEventListener, EventService } from "../../../../core/browser/event";
+import { IEventSubscriber, EventService } from "../../../../core/browser/event";
 
-export class Component implements IEventListener {
+export class Component implements IEventSubscriber {
 
     private state: ComponentState;
     public eventSubscriberId: string = 'ArticleList';

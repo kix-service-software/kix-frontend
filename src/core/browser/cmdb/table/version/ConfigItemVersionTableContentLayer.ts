@@ -20,7 +20,7 @@ export class ConfigItemVersionTableContentLayer extends AbstractTableLayer {
         this.preLoadedConfigItemVersions = (configItemVersions as any);
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedConfigItems = this.configItemVersions;
         if (this.preLoadedConfigItemVersions) {
             loadedConfigItems = this.preLoadedConfigItemVersions;

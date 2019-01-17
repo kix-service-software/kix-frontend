@@ -17,11 +17,11 @@ export class TicketStateTableContentLayer extends AbstractTableLayer {
         this.preLoadedTicketStates = (ticketStates as any);
     }
 
-    public async getRows(): Promise<Array<TableRow<TicketState>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<TicketState>>> {
         let loadedTicketStates = this.ticketStates;
         if (this.preLoadedTicketStates) {
             loadedTicketStates = this.preLoadedTicketStates;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadTicketStates();
             loadedTicketStates = this.ticketStates;
         }

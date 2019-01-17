@@ -33,11 +33,11 @@ export class TicketTableContentLayer extends AbstractTableLayer {
         });
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         let loadedTickets = this.tickets;
         if (this.preLoadedTickets) {
             loadedTickets = this.preLoadedTickets;
-        } else if (!this.dataLoaded) {
+        } else if (!this.dataLoaded || reload) {
             await this.loadTickets();
             loadedTickets = this.tickets;
         }

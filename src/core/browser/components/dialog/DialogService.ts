@@ -1,9 +1,9 @@
-import { ObjectIcon, ConfiguredDialogWidget, ContextMode, ContextType, KIXObjectType } from "../../model";
+import { ObjectIcon, ConfiguredDialogWidget, ContextMode, ContextType, KIXObjectType } from "../../../model";
 import { IMainDialogListener } from ".";
 import { IOverlayDialogListener } from "./IOverlayDialogListener";
-import { DisplayImageDescription } from "../components/DisplayImageDescription";
+import { DisplayImageDescription } from "../../components/DisplayImageDescription";
 import { IImageDialogListener } from "./IImageDialogListener";
-import { ContextService } from '../context';
+import { ContextService } from '../../context';
 
 export class DialogService {
 
@@ -106,9 +106,19 @@ export class DialogService {
         }
     }
 
-    public closeMainDialog(): void {
+    public closeMainDialog(data?: any): void {
         if (this.mainDialogListener) {
-            this.mainDialogListener.close();
+            this.mainDialogListener.close(data);
+            if (this.overlayDialogListener) {
+                this.overlayDialogListener.close();
+            }
+        }
+        ContextService.getInstance().closeDialogContext();
+    }
+
+    public submitMainDialog(data?: any): void {
+        if (this.mainDialogListener) {
+            this.mainDialogListener.submit(data);
             if (this.overlayDialogListener) {
                 this.overlayDialogListener.close();
             }
@@ -165,6 +175,7 @@ export class DialogService {
         this.dialogs.push(dialogWidget);
     }
 
+    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public registerDialogResultListener<T>(listenerId: string, component: string, listener: (result: T) => void): void {
         if (this.resultListeners.has(listenerId)) {
             this.addListener<T>(listenerId, component, listener);
@@ -173,6 +184,7 @@ export class DialogService {
         }
     }
 
+    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     private addListener<T>(dialogId: string, component: string, listener: (result: T) => void): void {
         const listeners = this.resultListeners.get(dialogId);
         const index = listeners.findIndex((l) => l[0] === component);
@@ -182,6 +194,7 @@ export class DialogService {
         listeners.push([component, listener]);
     }
 
+    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public publishDialogResult<T>(listenerId: string, result: T): void {
         if (this.resultListeners.has(listenerId)) {
             this.resultListeners.get(listenerId).forEach((l) => l[1](result));

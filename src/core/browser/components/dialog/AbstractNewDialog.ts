@@ -1,14 +1,14 @@
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
     KIXObjectSpecificCreateOptions, Error
-} from "../../model";
-import { OverlayService } from "../OverlayService";
+} from "../../../model";
+import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
-import { KIXObjectService } from "../kix";
-import { FormService } from "../form";
-import { AbstractMarkoComponent } from "../marko";
-import { BrowserUtil } from "../BrowserUtil";
-import { RoutingConfiguration, RoutingService } from "../router";
+import { KIXObjectService } from "../../kix";
+import { FormService } from "../../form";
+import { AbstractMarkoComponent } from "../../marko";
+import { BrowserUtil } from "../../BrowserUtil";
+import { RoutingConfiguration, RoutingService } from "../../router";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
@@ -56,7 +56,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                             await FormService.getInstance().loadFormConfigurations();
                             DialogService.getInstance().setMainDialogLoading(false);
                             BrowserUtil.openSuccessOverlay(this.successHint);
-                            DialogService.getInstance().closeMainDialog();
+                            DialogService.getInstance().submitMainDialog();
                             if (this.routingConfiguration) {
                                 RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
                             }

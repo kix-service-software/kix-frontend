@@ -8,9 +8,9 @@ import {
     DataType, SortOrder
 } from '../../../../core/model';
 import { AdminContext } from '../../../../core/browser/admin';
-import { EventService, IEventListener } from '../../../../core/browser/event';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventListener {
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
     public eventSubscriberId: string;
 

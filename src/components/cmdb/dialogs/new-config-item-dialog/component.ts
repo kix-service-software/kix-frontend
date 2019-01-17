@@ -82,7 +82,7 @@ class Component {
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
-                        DialogService.getInstance().closeMainDialog();
+                        DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
                             null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true

@@ -28,7 +28,7 @@ export class BulkService {
         const bulkManager = this.bulkManager.find((bm) => bm.objectType === objectType);
         if (bulkManager) {
             bulkManager.objects = objects;
-            bulkManager.reset();
+            bulkManager.init();
         }
     }
 

@@ -3,9 +3,9 @@ import { ComponentState } from './ComponentState';
 import { IdService } from '../../../core/browser/IdService';
 import { WidgetType } from '../../../core/model';
 import { WidgetService } from '../../../core/browser';
-import { IEventListener, EventService } from '../../../core/browser/event';
+import { IEventSubscriber, EventService } from '../../../core/browser/event';
 
-class WidgetComponent implements IEventListener {
+class WidgetComponent implements IEventSubscriber {
 
     private state: ComponentState;
     public eventSubscriberId: string;

@@ -11,7 +11,7 @@ export class ArticleTableContentLayer extends AbstractTableLayer {
         super();
     }
 
-    public async getRows(): Promise<Array<TableRow<Article>>> {
+    public async getRows(reload: boolean = false): Promise<Array<TableRow<Article>>> {
         if (!this.articlesLoaded) {
             this.initArticles();
         }

@@ -1,6 +1,6 @@
 import {
     WidgetType, WidgetConfiguration, Queue, ConfiguredWidget, KIXObjectType,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
 } from "../../../model";
 import { TicketContextConfiguration } from "./TicketContextConfiguration";
 import { Context } from '../../../model/components/context/Context';
@@ -81,6 +81,13 @@ export class TicketContext extends Context<TicketContextConfiguration> {
         this.setObjectList(tickets);
 
         EventService.getInstance().publish('APP_LOADING', { loading: false });
+    }
+
+    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
+        if (reload) {
+            await this.loadTickets();
+        }
+        return await super.getObjectList();
     }
 
 }

@@ -1,5 +1,5 @@
 import { AbstractAction } from '../../../../model/components/action/AbstractAction';
-import { DialogService } from '../../../dialog';
+import { DialogService } from '../../../components';
 import { ContextMode, KIXObjectType } from '../../../../model';
 
 export class ArticleNewNoteAction extends AbstractAction {

@@ -1,7 +1,6 @@
 import {
     Context, ContextConfiguration, ObjectData, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor, KIXObject,
-    KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions
+    ContextType, KIXObjectType, ContextMode, ContextDescriptor
 } from '../../model';
 import { ContextSocketListener } from './ContextSocketListener';
 import { IContextServiceListener } from './IContextServiceListener';
@@ -9,8 +8,7 @@ import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
 import { RoutingService } from '../router';
 import { ContextFactory } from './ContextFactory';
-import { DialogService } from '../dialog';
-import { ServiceRegistry, KIXObjectService } from '../kix';
+import { DialogService } from '../components';
 
 export class ContextService {
 

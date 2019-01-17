@@ -16,7 +16,7 @@ export class LinkedTicketTableContentLayer extends AbstractTableLayer {
         super();
     }
 
-    public async getRows(): Promise<any[]> {
+    public async getRows(reload: boolean = false): Promise<any[]> {
         if (!this.dataLoaded) {
             await this.loadLinkedTickets();
         }

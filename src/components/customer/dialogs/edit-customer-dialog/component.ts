@@ -48,7 +48,7 @@ class Component {
                     context.getObject(KIXObjectType.CUSTOMER, true);
                     DialogService.getInstance().setMainDialogLoading(false);
                     BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
-                    DialogService.getInstance().closeMainDialog();
+                    DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading();
                     BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);

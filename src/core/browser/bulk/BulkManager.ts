@@ -11,6 +11,7 @@ export abstract class BulkManager {
     public objects: KIXObject[] = [];
 
     protected bulkValues: ObjectPropertyValue[] = [];
+    private bulkRun: boolean = false;
 
     protected listeners: Map<string, () => void> = new Map();
 
@@ -22,12 +23,21 @@ export abstract class BulkManager {
         this.listeners.forEach((listener: () => void) => listener());
     }
 
+    public init(): void {
+        this.reset();
+        this.bulkRun = false;
+    }
+
     public reset(): void {
         this.bulkValues = [];
     }
 
     public getBulkValues(): ObjectPropertyValue[] {
         return this.bulkValues;
+    }
+
+    public getBulkRunState() {
+        return this.bulkRun;
     }
 
     public hasDefinedValues(): boolean {
@@ -92,6 +102,7 @@ export abstract class BulkManager {
     }
 
     public async execute(object: KIXObject): Promise<void> {
+        this.bulkRun = true;
         const parameter: Array<[string, any]> = [];
 
         this.bulkValues
