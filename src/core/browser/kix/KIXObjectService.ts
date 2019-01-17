@@ -163,7 +163,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, content, 'Fehler!', true
             );
-            return null;
+            throw error;
         });
         return updatedObjectId;
     }
@@ -183,7 +183,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, content, 'Fehler!', true
             );
-            return null;
+            throw error;
         });
 
         KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE);
