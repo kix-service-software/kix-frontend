@@ -41,9 +41,7 @@ export abstract class BulkManager {
     }
 
     public hasDefinedValues(): boolean {
-        return this.bulkValues.some(
-            (bv) => bv.property !== null && bv.operator !== null && bv.value !== null
-        );
+        return this.getEditableValues().length > 0;
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {

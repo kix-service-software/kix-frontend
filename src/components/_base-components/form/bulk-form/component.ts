@@ -5,7 +5,6 @@ import {
     ITableHighlightLayer, KIXObjectService, PropertyOperator
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { BulkManager } from '../../../../core/browser/bulk';
 
 class Component {
 
