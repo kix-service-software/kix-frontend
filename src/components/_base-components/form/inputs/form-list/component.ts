@@ -18,9 +18,7 @@ class Component {
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
 
-        if (!this.state.asAutocomplete) {
-            this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-        }
+        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
 
         this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
             input.selectedNodes : this.state.selectedNodes;
