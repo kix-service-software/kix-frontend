@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectSearchService, ContextService, OverlayService } from '@kix/core/dist/browser';
-import { KIXObjectType, Ticket, OverlayType, StringContent } from '@kix/core/dist/model';
-import { SearchContext } from '@kix/core/dist/browser/search';
-import { EventService } from '@kix/core/dist/browser/event';
+import { KIXObjectSearchService, ContextService, OverlayService } from '../../core/browser';
+import { KIXObjectType, Ticket, OverlayType, StringContent } from '../../core/model';
+import { SearchContext } from '../../core/browser/search';
+import { EventService } from '../../core/browser/event';
 
 export class Component {
 

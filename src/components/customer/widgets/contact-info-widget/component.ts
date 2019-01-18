@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Contact, Context } from "@kix/core/dist/model";
-import { ContactDetailsContext } from "@kix/core/dist/browser/contact";
+import { ContextService, ActionFactory } from "../../../../core/browser";
+import { KIXObjectType, Contact, Context } from "../../../../core/model";
+import { ContactDetailsContext } from "../../../../core/browser/contact";
 
 class Component {
     private state: ComponentState;

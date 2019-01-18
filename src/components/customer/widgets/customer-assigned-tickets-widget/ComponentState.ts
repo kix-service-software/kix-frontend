@@ -1,5 +1,5 @@
-import { StandardTable, TableConfiguration } from "@kix/core/dist/browser";
-import { Customer, WidgetComponentState, AbstractAction, Ticket, WidgetConfiguration } from "@kix/core/dist/model";
+import { StandardTable, TableConfiguration } from "../../../../core/browser";
+import { Customer, WidgetComponentState, AbstractAction, Ticket, WidgetConfiguration } from "../../../../core/model";
 
 export class ComponentState extends WidgetComponentState<any> {
 
@@ -25,7 +25,17 @@ export class ComponentState extends WidgetComponentState<any> {
         public loadOpenTickets: boolean = false,
         public loadNewTickets: boolean = false,
         public loadPendingTickets: boolean = false,
-        public actions: AbstractAction[] = []
+        public actions: AbstractAction[] = [],
+        public openTicketIds: number[] = null,
+        public escalatedTicketIds: number[] = null,
+        public reminderTicketIds: number[] = null,
+        public newTicketIds: number[] = null,
+        public pendingTicketIds: number[] = null,
+        public openFilterCount: number = null,
+        public escalatedFilterCount: number = null,
+        public reminderFilterCount: number = null,
+        public newFilterCount: number = null,
+        public pendingFilterCount: number = null
     ) {
         super();
     }

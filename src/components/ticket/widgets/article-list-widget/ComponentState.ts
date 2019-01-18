@@ -1,5 +1,5 @@
-import { StandardTable } from '@kix/core/dist/browser';
-import { Article, IAction, WidgetComponentState, Ticket } from '@kix/core/dist/model';
+import { StandardTable } from '../../../../core/browser';
+import { Article, IAction, WidgetComponentState, Ticket } from '../../../../core/model';
 
 import { ArticleListSettings } from './ArticleListSettings';
 
@@ -17,7 +17,8 @@ export class ComponentState extends WidgetComponentState<ArticleListSettings> {
         public title: string = null,
         public attachmentCount: number = 0,
         public loading: boolean = true,
-        public eventSubscriberWidgetPrefix: string = 'ArticleListWidget'
+        public eventSubscriberWidgetPrefix: string = 'ArticleListWidget',
+        public filterCount: number = null
     ) {
         super();
     }

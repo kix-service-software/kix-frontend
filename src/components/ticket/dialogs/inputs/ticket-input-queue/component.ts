@@ -1,9 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    ObjectIcon, TicketProperty, TreeNode, Queue, FormInputComponent, KIXObjectType
-} from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { TicketProperty, TreeNode, FormInputComponent } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -17,12 +14,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null
-        );
-
-        this.state.nodes = this.prepareTree(queuesHierarchy);
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.QUEUE_ID);
         this.setCurrentNode();
     }
 
@@ -33,28 +25,14 @@ class Component extends FormInputComponent<number[], ComponentState> {
         }
     }
 
-    private prepareTree(queues: Queue[]): TreeNode[] {
-        let nodes = [];
-        if (queues) {
-            nodes = queues.map((queue: Queue) => {
-                const treeNode = new TreeNode(
-                    queue.QueueID, queue.Name,
-                    new ObjectIcon('Queue', queue.QueueID),
-                    null,
-                    this.prepareTree(queue.SubQueues)
-                );
-                return treeNode;
-            });
-        }
-        return nodes;
-    }
-
     public queueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
-
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

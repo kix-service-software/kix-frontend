@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ConfigItemLabelProvider } from '@kix/core/dist/browser/cmdb';
+import { ConfigItemLabelProvider } from '../../../core/browser/cmdb';
 
 class Component {
 

@@ -11,10 +11,10 @@
                 </@content>
             </widget>
             <if(state.isLoading)>
-                <loading-shield loadingHint=state.loadingHint/>
+                <loading-shield loadingHint=state.loadingHint cancelCallback=state.cancelCallback time=state.time/>
             </if>
             <if(!state.isLoading || state.showClose)>
-                <span.kix-icon-close.close-button on-click('close')/>
+                <span.kix-icon-close.close-button on-click('close', {byX: true})/>
             </if>
         </div>
     </div>

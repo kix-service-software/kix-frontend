@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, FormFieldOptions } from '@kix/core/dist/model';
+import { FormInputComponent, FormFieldOptions, DateTimeUtil } from '../../../../../core/model';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
@@ -32,7 +32,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     public setCurrentValue(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             this.state.currentValue = new Date(this.state.defaultValue.value);
-            // TODO: set correct default value
+            this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);
+            this.state.timeValue = DateTimeUtil.getKIXTimeString(this.state.currentValue, true);
             this.setValue();
         }
     }
@@ -52,12 +53,16 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     private setValue(): void {
-        const time = (this.state.timeValue ? this.state.timeValue : '');
-        this.state.currentValue = new Date(this.state.dateValue + time);
+        this.state.currentValue = this.state.dateValue ? new Date(
+            this.state.dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
+        ) : null;
         (this as any).emit('valueChanged', this.state.currentValue);
         super.provideValue(this.state.currentValue);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

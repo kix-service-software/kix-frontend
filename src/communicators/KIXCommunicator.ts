@@ -1,8 +1,8 @@
 import {
     ProfilingService, AuthenticationService,
-} from '@kix/core/dist/services';
-import { SocketEvent, ISocketRequest } from '@kix/core/dist/model';
-import { ICommunicator, CommunicatorResponse } from '@kix/core/dist/common';
+} from '../core/services';
+import { SocketEvent, ISocketRequest } from '../core/model';
+import { ICommunicator, CommunicatorResponse } from '../core/common';
 
 export abstract class KIXCommunicator implements ICommunicator {
 

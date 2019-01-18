@@ -1,4 +1,4 @@
-import { WidgetConfiguration, ContextType, TreeNode } from '@kix/core/dist/model';
+import { WidgetConfiguration, ContextType, TreeNode } from '../../../../core/model';
 
 export class ComponentState {
 

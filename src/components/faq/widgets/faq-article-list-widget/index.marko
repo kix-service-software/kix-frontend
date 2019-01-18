@@ -1,7 +1,8 @@
 <widget instanceId=state.instanceId title=state.title actions=state.actions
     icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")>
     <@headerFilter>
-        <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle FAQ" on-filter('filter')/>
+        <filter filterCount=state.filterCount predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle FAQ" on-filter('filter')/>
     </@headerFilter>
     <@content>
         <if(state.loading)>

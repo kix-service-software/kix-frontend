@@ -1,5 +1,5 @@
-import { TableRow, LabelService, TableColumn } from "@kix/core/dist/browser";
-import { KIXObject } from "@kix/core/dist/model";
+import { TableRow, LabelService, TableColumn } from "../../../../core/browser";
+import { KIXObject } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
 
 class Component {

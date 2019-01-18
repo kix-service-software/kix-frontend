@@ -2,9 +2,9 @@ import { ServerRouter } from './ServerRouter';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 
-import { IServerConfiguration } from '@kix/core/dist/common';
+import { IServerConfiguration } from './core/common';
 
-import { KIXExtensions, IStaticContentExtension } from '@kix/core/dist/extensions';
+import { KIXExtensions, IStaticContentExtension } from './core/extensions';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -22,10 +22,10 @@ import http = require('http');
 import https = require('https');
 import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
-import { CreateClientRegistration } from '@kix/core/dist/api';
+import { CreateClientRegistration } from './core/api';
 import {
     ConfigurationService, LoggingService, ClientRegistrationService
-} from '@kix/core/dist/services';
+} from './core/services';
 import { PluginService, MarkoService } from './services';
 import { SocketCommunicationService } from './services/SocketCommuncationService';
 

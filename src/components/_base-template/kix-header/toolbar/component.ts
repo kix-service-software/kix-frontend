@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ToolbarAction } from './ToolbarAction';
-import { ActionFactory, ContextService } from '@kix/core/dist/browser';
-import { ShowUserTicketsAction } from '@kix/core/dist/browser/ticket';
+import { ActionFactory, ContextService } from '../../../../core/browser';
+import { ShowUserTicketsAction } from '../../../../core/browser/ticket';
 
 class Component {
 

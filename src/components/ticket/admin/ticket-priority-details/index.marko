@@ -1,0 +1,36 @@
+<if(state.error)>
+    <span.error>${state.error}</span>
+</if>
+<else-if(state.loading)>
+    <loading-spinner/>
+</else-if>
+<else>
+    <div.details-container>
+        <widget instanceId=state.instanceId minimizable=true title=state.title contentActions=state.actions>
+            <@content>
+                <ul.lane-list no-update>
+                    <li key=component.getLaneKey()>
+                        <tab-container tabWidgets=state.tabWidgets title="Priorität Informationen" showSidebar=false/>
+                    </li>
+                    <for(lane in state.lanes)>
+                        <li.lane key=component.getLaneKey()>
+                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                                contextType: "MAIN", 
+                                instanceId: lane.instanceId, 
+                                type: component.getLaneWidgetType()
+                                })/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+        <div.ticket-priority-content key="ticket-priority-content">
+            <for(contentWidget in state.contentWidgets)>
+                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                    contextType: "MAIN",
+                    instanceId: contentWidget.instanceId
+                    })/>
+            </for>
+        </div>
+    </div>
+</else>

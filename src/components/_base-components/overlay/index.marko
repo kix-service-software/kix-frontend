@@ -4,12 +4,12 @@
     </if>
     <div.overlay key=state.overlayId>
         <div.overlay-content class=state.overlayClass on-click("overlayClicked") key="overlay">
-            <widget instanceId=state.overlayInstanceId title=state.title minimizable=false closable=(!component.isToast())
+            <widget instanceId=state.overlayInstanceId title=state.title minimizable=false closable=component.hasClosable()
                 on-closeWidget('closeOverlay') on-headerMousedown('startMove') icon=state.icon>
                 <@content>
                     <if(component.isComponentContent())>
                         <div>
-                            <include(component.getTemplate(), state.content.getComponentData())/>
+                            <include(component.getTemplate(), state.content.getComponentData()) on-closeOverlay("closeOverlay")/>
                         </div>
                     </if>
                     <else>

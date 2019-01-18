@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from "@kix/core/dist/browser/context";
-import { TicketChartConfiguration, TicketChartFactory } from '@kix/core/dist/browser/ticket';
-import { IdService } from '@kix/core/dist/browser';
-import { KIXObject, Ticket } from '@kix/core/dist/model';
+import { ContextService } from "../../../../core/browser/context";
+import { TicketChartConfiguration, TicketChartFactory } from '../../../../core/browser/ticket';
+import { IdService } from '../../../../core/browser';
+import { KIXObject, Ticket } from '../../../../core/model';
 
 class Component {
 

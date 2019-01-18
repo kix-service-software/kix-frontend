@@ -1,12 +1,12 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '../../../../core/browser/context';
 import { ComponentState } from './ComponentState';
 import {
     ActionFactory, StandardTableFactoryService, IdService, WidgetService, TableConfiguration
-} from '@kix/core/dist/browser';
-import { KIXObjectType, ConfigItem } from '@kix/core/dist/model';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
+} from '../../../../core/browser';
+import { KIXObjectType, ConfigItem } from '../../../../core/model';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component implements IEventListener {
+class Component implements IEventSubscriber {
 
     public eventSubscriberId: string = IdService.generateDateBasedId('config-item-version-widget');
 
@@ -71,7 +71,9 @@ class Component implements IEventListener {
                 new TableConfiguration(null, this.configItem.Versions.length), null, null, null, true
             );
 
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions);
+            this.configItem.Versions.forEach((v, index) => v.countNumber = index + 1);
+
+            table.layerConfiguration.contentLayer.setPreloadedObjects(this.configItem.Versions.reverse());
             await table.loadRows();
             this.state.table = table;
         }

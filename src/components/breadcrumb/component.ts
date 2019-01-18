@@ -1,7 +1,7 @@
-import { ContextType, Context } from "@kix/core/dist/model";
-import { IContextServiceListener, ContextService } from "@kix/core/dist/browser";
+import { ContextType, Context } from "../../core/model";
+import { IContextServiceListener, ContextService } from "../../core/browser";
 import { ComponentState } from './ComponentState';
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
+import { RoutingConfiguration } from "../../core/browser/router";
 
 class BreadcrumbComponent implements IContextServiceListener {
 
@@ -35,6 +35,20 @@ class BreadcrumbComponent implements IContextServiceListener {
             const currentContextDisplayText = await newContext.getDisplayText(true);
             this.state.contexts.push([newContextId, currentContextDisplayText]);
 
+            newContext.registerListener('kix-breadcrumb', {
+                objectChanged: async () => {
+                    const displayText = await newContext.getDisplayText(true);
+                    const index = this.state.contexts.findIndex((c) => c[0] === newContextId);
+                    if (index !== -1) {
+                        this.state.contexts[index][1] = displayText;
+                        (this as any).setStateDirty('contexts');
+                    }
+                },
+                objectListChanged: () => { return; },
+                explorerBarToggled: () => { return; },
+                filteredObjectListChanged: () => { return; },
+                sidebarToggled: () => { return; }
+            });
             this.state.loading = false;
         }
     }

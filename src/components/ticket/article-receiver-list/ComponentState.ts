@@ -1,4 +1,4 @@
-import { ArticleReceiver } from '@kix/core/dist/model';
+import { ArticleReceiver } from '../../../core/model';
 
 export class ComponentState {
 

@@ -1,5 +1,5 @@
-import { WidgetComponentState, AbstractAction, ConfigItem } from "@kix/core/dist/model";
-import { Label } from "@kix/core/dist/browser/components";
+import { WidgetComponentState, AbstractAction, ConfigItem } from "../../../../core/model";
+import { Label } from "../../../../core/browser/components";
 
 export class ComponentState extends WidgetComponentState {
 

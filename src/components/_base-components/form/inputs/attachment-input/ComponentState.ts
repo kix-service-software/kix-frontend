@@ -1,10 +1,10 @@
-import { FormInputComponentState } from "@kix/core/dist/model";
-import { Label } from "@kix/core/dist/browser/components";
+import { FormInputComponentState, Attachment } from "../../../../../core/model";
+import { Label } from "../../../../../core/browser/components";
 
 export class ComponentState extends FormInputComponentState<any> {
 
     public constructor(
-        public files: File[] = [],
+        public count: number = 0,
         public dragging: boolean = false,
         public minimized: boolean = false,
         public labels: Label[] = [],

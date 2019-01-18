@@ -1,8 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser";
-import { CustomerContext } from "@kix/core/dist/browser/customer";
-import { ConfiguredWidget } from "@kix/core/dist/model";
-import { ComponentsService } from "@kix/core/dist/browser/components";
+import { ContextService } from "../../../core/browser";
+import { CustomerContext } from "../../../core/browser/customer";
+import { ConfiguredWidget } from "../../../core/model";
+import { ComponentsService } from "../../../core/browser/components";
 
 class Component {
 

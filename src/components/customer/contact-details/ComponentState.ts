@@ -1,5 +1,5 @@
-import { ConfiguredWidget, AbstractAction, Contact } from "@kix/core/dist/model";
-import { ContactDetailsContextConfiguration } from "@kix/core/dist/browser/contact";
+import { ConfiguredWidget, AbstractAction, Contact } from "../../../core/model";
+import { ContactDetailsContextConfiguration } from "../../../core/browser/contact";
 
 export class ComponentState {
 

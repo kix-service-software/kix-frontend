@@ -6,7 +6,10 @@
         }
         min-height: 2em;
         display: grid;
-        grid-template-columns: 14.5rem 2rem auto max-content max-content;
+        grid-template-columns: 14.5rem 2rem auto max-content;
+        &.additionalFieldControlsNeeded {
+            grid-template-columns: 14.5rem 2rem auto max-content max-content;
+        }
         >.field-label {
             white-space: nowrap;
             font-weight: bold;

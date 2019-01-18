@@ -1,7 +1,7 @@
 import { Server } from './Server';
-import { KIXExtensions, IModuleFactoryExtension } from '@kix/core/dist/extensions';
+import { KIXExtensions, IConfigurationExtension } from './core/extensions';
 import { PluginService } from './services';
-import { CoreServiceRegistry, ConfigurationService } from '@kix/core/dist/services';
+import { CoreServiceRegistry, ConfigurationService } from './core/services';
 
 process.setMaxListeners(0);
 
@@ -19,19 +19,11 @@ class Startup {
         ConfigurationService.getInstance().init(configDir, certDir);
 
         await this.bindServices();
-        await this.registerModules();
         this.server = Server.getInstance();
     }
 
     private async bindServices(): Promise<void> {
         await CoreServiceRegistry.getInstance().registerCoreServices();
-    }
-
-    private async registerModules(): Promise<void> {
-        const moduleFactories = await PluginService.getInstance().getExtensions<IModuleFactoryExtension>(
-            KIXExtensions.MODUL
-        );
-        moduleFactories.forEach((mf) => mf.createFormDefinitions());
     }
 
 }

@@ -1,5 +1,5 @@
-import { KIXObjectType, FormContext } from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser";
+import { KIXObjectType, FormContext } from "../../../../core/model";
+import { FormService } from "../../../../core/browser";
 
 export class ComponentState {
 

@@ -1,12 +1,10 @@
 import { ComponentState } from './ComponentState';
 import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ObjectIcon } from '../../../core/model';
 
 export class ObjectPropertyLabelComponent<T> {
 
     private state: ComponentState<T>;
-
-    private hasIcon: boolean = false;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -16,7 +14,7 @@ export class ObjectPropertyLabelComponent<T> {
         this.state.object = input.object;
         this.state.property = input.property;
         this.state.labelProvider = input.labelProvider;
-        this.hasIcon = typeof input.showIcon !== 'undefined' ? input.showIcon : false;
+        this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
     }
 
     public onMount(): void {

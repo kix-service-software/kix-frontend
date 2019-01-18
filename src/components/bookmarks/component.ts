@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
-import { TreeNode, Bookmark } from '@kix/core/dist/model';
+import { ContextService } from '../../core/browser';
+import { TreeNode, Bookmark } from '../../core/model';
 
 class Component {
 

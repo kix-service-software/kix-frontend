@@ -1,4 +1,4 @@
-import { IKIXModuleExtension } from "@kix/core/dist/extensions";
+import { IKIXModuleExtension } from "../../core/extensions";
 
 class KIXModuleExtionsion implements IKIXModuleExtension {
 
@@ -40,7 +40,24 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue'],
         ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
         ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
-        ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search']
+        ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
+        ['ticket-admin-types', 'ticket/admin/ticket-admin-types'],
+        ['ticket-type-details', 'ticket/admin/ticket-type-details'],
+        ['ticket-type-info-widget', 'ticket/admin/widgets/ticket-type-info-widget'],
+        ['ticket-type-assigned-textmodules', 'ticket/admin/widgets/ticket-type-assigned-textmodules'],
+        ['new-ticket-type-dialog', 'ticket/admin/dialogs/new-ticket-type-dialog'],
+        ['edit-ticket-type-dialog', 'ticket/admin/dialogs/edit-ticket-type-dialog'],
+        ['ticket-admin-states', 'ticket/admin/ticket-admin-states'],
+        ['ticket-state-details', 'ticket/admin/ticket-state-details'],
+        ['ticket-state-info-widget', 'ticket/admin/widgets/ticket-state-info-widget'],
+        ['ticket-state-assigned-textmodules', 'ticket/admin/widgets/ticket-state-assigned-textmodules'],
+        ['new-ticket-state-dialog', 'ticket/admin/dialogs/new-ticket-state-dialog'],
+        ['ticket-admin-priorities', 'ticket/admin/ticket-admin-priorities'],
+        ['ticket-priority-details', 'ticket/admin/ticket-priority-details'],
+        ['ticket-priority-info-widget', 'ticket/admin/widgets/ticket-priority-info-widget'],
+        ['new-ticket-priority-dialog', 'ticket/admin/dialogs/new-ticket-priority-dialog'],
+        ['edit-ticket-priority-dialog', 'ticket/admin/dialogs/edit-ticket-priority-dialog'],
+        ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog']
     ];
 
 }

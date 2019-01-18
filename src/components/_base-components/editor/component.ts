@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ServiceRegistry, IKIXObjectService } from '@kix/core/dist/browser';
-import { AutocompleteFormFieldOption } from '@kix/core/dist/browser/components';
+import { ServiceRegistry, IKIXObjectService, AttachmentUtil } from '../../../core/browser';
+import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
 
 declare var CKEDITOR: any;
 
@@ -27,10 +27,8 @@ class EditorComponent {
             if (input.addValue) {
                 this.editor.insertHtml(input.addValue);
             } else if (input.value) {
-                const currentValue = this.editor.getData();
-                if (input.value !== currentValue) {
-                    this.editor.setData(input.value);
-                }
+                const contentString = this.replaceInlineContent(input.value, input.inlineContent);
+                this.editor.setData(contentString, this.editor.updateElement());
             }
             if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
                 this.state.readOnly = input.readOnly;
@@ -53,6 +51,34 @@ class EditorComponent {
                     ...this.state.config
                 });
             }
+
+            this.editor.on('paste', (event: any) => {
+                const fileSize = event.data.dataTransfer.getFilesCount();
+                if (fileSize > 0) {
+                    event.stop();
+                    for (let i = 0; i < fileSize; i++) {
+                        const file = event.data.dataTransfer.getFile(i);
+                        const valid = AttachmentUtil.checkMimeType(
+                            file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
+                        );
+                        if (valid) {
+                            const reader = new FileReader();
+                            reader.onload = (evt: any) => {
+                                const element = this.editor.document.createElement('img', {
+                                    attributes: {
+                                        src: evt.target.result
+                                    }
+                                });
+
+                                setTimeout(() => {
+                                    this.editor.insertElement(element);
+                                }, 0);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                }
+            });
 
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
@@ -146,6 +172,22 @@ class EditorComponent {
      */
     private instanceExists(): boolean {
         return CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[this.state.id];
+    }
+
+    private replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
+        let newString = value;
+        if (inlineContent) {
+            for (const contentItem of inlineContent) {
+                if (contentItem.contentId) {
+                    const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
+                    const contentIdLength = contentItem.contentId.length - 1;
+                    const contentId = contentItem.contentId.substring(1, contentIdLength);
+                    const regexpString = new RegExp('cid:' + contentId, "g");
+                    newString = newString.replace(regexpString, replaceString);
+                }
+            }
+        }
+        return newString;
     }
 }
 

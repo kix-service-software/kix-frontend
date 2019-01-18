@@ -1,14 +1,14 @@
 import { ComponentState } from './ComponentState';
-import { TicketLabelProvider, TicketService } from "@kix/core/dist/browser/ticket";
-import { ContextService } from '@kix/core/dist/browser/context';
+import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
+import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
     ContextMode, CustomerProperty, ContactProperty
-} from '@kix/core/dist/model';
-import { ActionFactory, IdService } from '@kix/core/dist/browser';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
-import { ContactDetailsContext } from '@kix/core/dist/browser/contact';
-import { CustomerDetailsContext } from '@kix/core/dist/browser/customer';
+} from '../../../../core/model';
+import { ActionFactory, IdService } from '../../../../core/browser';
+import { RoutingConfiguration } from '../../../../core/browser/router';
+import { ContactDetailsContext } from '../../../../core/browser/contact';
+import { CustomerDetailsContext } from '../../../../core/browser/customer';
 
 class Component {
 
@@ -29,7 +29,11 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.labelProvider = new TicketLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
+
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+
         context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
@@ -74,14 +78,6 @@ class Component {
                 this.state.widgetConfiguration.actions, [this.state.ticket]
             );
         }
-    }
-
-    public print(): void {
-        alert('Drucken ...');
-    }
-
-    public edit(): void {
-        alert('Bearbeiten ...');
     }
 
     public getIncidentStateId(): number {

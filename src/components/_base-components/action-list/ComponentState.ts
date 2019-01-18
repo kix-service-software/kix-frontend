@@ -1,4 +1,4 @@
-import { IAction } from '@kix/core/dist/model';
+import { IAction } from '../../../core/model';
 
 export class ComponentState {
 

@@ -1,15 +1,15 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '../../../../core/browser/context';
 import {
     ConfigItemHistoryTableLabelLayer, ConfigItemHistoryTableContentLayer
-} from '@kix/core/dist/browser/cmdb';
+} from '../../../../core/browser/cmdb';
 import { ComponentState } from './ComponentState';
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
     ActionFactory, TableLayerConfiguration, TableListenerConfiguration, ITableClickListener,
-} from '@kix/core/dist/browser';
-import { KIXObjectType, ConfigItem, ConfigItemHistory } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { EventService } from '@kix/core/dist/browser/event';
+} from '../../../../core/browser';
+import { KIXObjectType, ConfigItem, ConfigItemHistory } from '../../../../core/model';
+import { IdService } from '../../../../core/browser/IdService';
+import { EventService } from '../../../../core/browser/event';
 
 class Component {
 
@@ -78,6 +78,10 @@ class Component {
                 IdService.generateDateBasedId(),
                 this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
             );
+            this.state.standardTable.setTableListener(() => {
+                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('filterCount');
+            });
         }
     }
 
@@ -98,11 +102,10 @@ class Component {
         ContextService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.standardTable.setFilterSettings(filterValue);
     }
-
 }
 
 module.exports = Component;

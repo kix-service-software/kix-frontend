@@ -10,7 +10,8 @@
                 <widget instanceId="form-group" title=group.name on-minimizedChanged('handleFormGroupMinimizeState', group.name)
                     key=group.name>
                     <@content>
-                        <field-container fields=group.formFields formId=state.formId objectType=state.objectType/>
+                        <field-container fields=group.formFields formId=state.formId
+                            additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
                     </@content>
                 </widget>
                 <if(group.separatorString)>
@@ -18,7 +19,8 @@
                 </if>
             </if>
             <else>
-                <field-container fields=group.formFields formId=state.formId objectType=state.objectType/>
+                <field-container fields=group.formFields formId=state.formId
+                    additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
             </else>
         </for>
     </else-if>

@@ -1,23 +1,27 @@
-import { TicketDetailsContext } from '@kix/core/dist/browser/ticket/';
-import { Ticket, WidgetType, KIXObjectType, TicketProperty } from '@kix/core/dist/model';
+import { TicketDetailsContext } from '../../../core/browser/ticket/';
+import { Ticket, WidgetType, KIXObjectType, TicketProperty } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser/context/';
-import { ActionFactory, WidgetService } from '@kix/core/dist/browser';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { EventService } from '@kix/core/dist/browser/event';
+import { ContextService } from '../../../core/browser/context/';
+import { ActionFactory, WidgetService } from '../../../core/browser';
+import { IdService } from '../../../core/browser/IdService';
+import { ComponentsService } from '../../../core/browser/components';
 
 export class Component {
 
     private state: ComponentState;
+
+    private context: TicketDetailsContext;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = (ContextService.getInstance().getActiveContext() as TicketDetailsContext);
-        context.registerListener('ticket-details-component', {
+        this.context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+
+        this.context.registerListener('ticket-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
@@ -27,36 +31,38 @@ export class Component {
                     const scrollToArticle = changedProperties
                         ? changedProperties.some((p) => p === TicketProperty.ARTICLES)
                         : false;
-                    this.initWidget(context, ticket, scrollToArticle);
+                    this.initWidget(ticket, scrollToArticle);
                 }
             }
         });
-        await this.initWidget(context);
+
+        await this.initWidget();
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
-    private async initWidget(
-        context: TicketDetailsContext, ticket?: Ticket, scrollToArticle: boolean = false
-    ): Promise<void> {
+    private async initWidget(ticket?: Ticket, scrollToArticle: boolean = false): Promise<void> {
         this.state.error = null;
         this.state.loading = true;
-        this.state.ticket = ticket ? ticket : await context.getObject<Ticket>().catch((error) => null);
 
-        if (!this.state.ticket) {
-            this.state.error = `Kein Ticket mit ID ${context.getObjectId()} verfügbar.`;
+        if (this.context) {
+            this.state.ticket = ticket ? ticket : await this.context.getObject<Ticket>().catch((error) => null);
+
+            if (!this.state.ticket) {
+                this.state.error = `Kein Ticket mit ID ${this.context.getObjectId()} verfügbar.`;
+            }
+
+            this.state.ticketDetailsConfiguration = this.context.getConfiguration();
+            this.state.lanes = this.context.getLanes();
+            this.state.tabWidgets = this.context.getLaneTabs();
+            this.state.contentWidgets = this.context.getContent(true);
+
+            await this.getTitle();
+
+            this.setActions();
         }
-
-        this.state.ticketDetailsConfiguration = context.getConfiguration();
-        this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
-        this.state.contentWidgets = context.getContent(true);
-
-        await this.getTitle();
-
-        this.setActions();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -82,7 +88,7 @@ export class Component {
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
             const actions = ActionFactory.getInstance().generateActions(
-                config.generalActions, [this.state.ticket]
+                config.generalActions, this.state.ticket
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
@@ -98,14 +104,12 @@ export class Component {
     }
 
     public getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getActiveContext();
-        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        const config = this.context ? this.context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 
     public async getTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.title = await context.getDisplayText();
+        this.state.title = this.context ? await this.context.getDisplayText() : 'Ticket Details';
     }
 
     public getLaneKey(): string {

@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, KIXObjectService } from '@kix/core/dist/browser';
+import { ContextService, IdService, KIXObjectService } from '../../../../core/browser';
 import {
     TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
-} from '@kix/core/dist/model';
-import { CMDBContext } from '@kix/core/dist/browser/cmdb';
+} from '../../../../core/model';
+import { CMDBContext } from '../../../../core/browser/cmdb';
 
 export class Component {
 
@@ -24,7 +24,7 @@ export class Component {
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['ConfigItemStats']);
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions
+            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );
         this.state.nodes = this.prepareTreeNodes(ciClasses);
 

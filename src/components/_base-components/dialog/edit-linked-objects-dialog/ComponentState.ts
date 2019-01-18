@@ -1,5 +1,5 @@
-import { StandardTable } from "@kix/core/dist/browser";
-import { KIXObjectPropertyFilter } from "@kix/core/dist/model";
+import { StandardTable } from "../../../../core/browser";
+import { KIXObjectPropertyFilter } from "../../../../core/model";
 
 export class ComponentState {
 
@@ -9,7 +9,8 @@ export class ComponentState {
         public table: StandardTable = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public canDelete: boolean = false,
-        public canSubmit: boolean = false
+        public canSubmit: boolean = false,
+        public filterCount: number = null
     ) { }
 
 }

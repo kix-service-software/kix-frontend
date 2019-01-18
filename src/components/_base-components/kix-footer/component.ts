@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
-import { ReleaseInfo } from '@kix/core/dist/model';
+import { ContextService } from '../../../core/browser';
+import { ReleaseInfo } from '../../../core/model';
 
 class Component {
 
@@ -15,8 +15,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        const objectData = ContextService.getInstance().getObjectData();
+        this.state.currentUserLogin = objectData.currentUser.UserLogin;
+
         if (!this.state.releaseInfo) {
-            const objectData = ContextService.getInstance().getObjectData();
             this.state.releaseInfo = objectData.releaseInfo;
         }
 

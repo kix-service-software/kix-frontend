@@ -1,12 +1,12 @@
 import { Request, Response, Router } from 'express';
 
 import { IRouter } from './IRouter';
-import { IServerConfiguration, BaseTemplateInput } from '@kix/core/dist/common';
+import { IServerConfiguration, BaseTemplateInput } from '../core/common';
 import {
     ProfilingService, ConfigurationService, UserService, ServiceService, ValidObjectService,
     ContactService, CustomerService, ObjectDefinitionService
-} from '@kix/core/dist/services';
-import { ObjectData, ReleaseInfo } from '@kix/core/dist/model';
+} from '../core/services';
+import { ObjectData, ReleaseInfo } from '../core/model';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -87,9 +87,6 @@ export abstract class KIXRouter implements IRouter {
         const services = await ServiceService.getInstance().getServices(token);
         const servicesHierarchy = await ServiceService.getInstance().getServiceHierarchy(token);
 
-        const forms = ConfigurationService.getInstance().getRegisteredForms();
-        const formIDsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
-
         const validObjects = await ValidObjectService.getInstance().getValidObjects(token);
 
         const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token);
@@ -121,7 +118,6 @@ export abstract class KIXRouter implements IRouter {
         const objectData = new ObjectData(
             services, servicesHierarchy,
             users, currentUser,
-            forms, formIDsWithContext,
             validObjects,
             contactAttributes, customerAttributes,
             faqVisibilities,

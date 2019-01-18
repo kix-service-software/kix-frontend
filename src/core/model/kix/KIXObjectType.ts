@@ -1,0 +1,90 @@
+export enum KIXObjectType {
+
+    ANY = 'ANY',
+
+    ARTICLE = 'Article',
+
+    ARTICLE_TYPE = 'ARTICLE_TYPE',
+
+    SENDER_TYPE = 'SENDER_TYPE',
+
+    LOCK = 'LOCK',
+
+    CLIENT_REGISTRATION = 'CLIENT_REGISTRATION',
+
+    CONFIG_ITEM = 'ConfigItem',
+
+    CONFIG_ITEM_VERSION = 'ConfigItemVersion',
+
+    CONFIG_ITEM_CLASS = 'ConfigItemClass',
+
+    CONFIG_ITEM_CLASS_DEFINITION = 'ConfigItemClassDefinition',
+
+    CONFIG_ITEM_IMAGE = 'CONFIG_ITEM_IMAGE',
+
+    CONFIG_ITEM_HISTORY = 'CONFIG_ITEM_HISTORY',
+
+    CONFIG_ITEM_ATTACHMENT = 'CONFIG_ITEM_ATTACHMENT',
+
+    CONTACT = 'Contact',
+
+    CUSTOMER = 'Customer',
+
+    DYNAMIC_FIELD = 'DynamicField',
+
+    FAQ_ARTICLE = 'FAQArticle',
+
+    FAQ_ARTICLE_ATTACHMENT = 'FAQ_ARTICLE_ATTACHMENT',
+
+    FAQ_ARTICLE_HISTORY = 'FAQ_ARTICLE_HISTORY',
+
+    FAQ_CATEGORY = 'FAQ_CATEGORY',
+
+    FAQ_CATEGORY_HIERARCHY = 'FAQ_CATEGORY_HIERARCHY',
+
+    FAQ_VOTE = 'FAQ_VOTE',
+
+    GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
+
+    LINK = 'Link',
+
+    LINK_OBJECT = 'LINK_OBJECT',
+
+    LINK_TYPE = 'LINK_TYPE',
+
+    OBJECT_ICON = 'OBJECT_ICON',
+
+    OBJECT_DEFINITION = 'ObjectDefinition',
+
+    QUEUE = 'Queue',
+
+    QUEUE_HIERARCHY = 'QUEUE_HIERARCHY',
+
+    SERVICE = 'Service',
+
+    SLA = 'SLA',
+
+    SYS_CONFIG_ITEM = 'SysConfigItem',
+
+    TEXT_MODULE = "TextModule",
+
+    TICKET = 'Ticket',
+
+    TICKET_HISTORY = 'TICKET_HISTORY',
+
+    TICKET_PRIORITY = 'TICKET_PRIORITY',
+
+    TICKET_TYPE = 'TICKET_TYPE',
+
+    TICKET_STATE = 'TICKET_STATE',
+
+    TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
+
+    USER = 'User',
+
+    VALID_OBJECT = 'ValidObject',
+
+    WATCHER = 'Watcher',
+
+    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS'
+}

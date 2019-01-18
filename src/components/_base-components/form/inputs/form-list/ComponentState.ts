@@ -1,5 +1,5 @@
-import { TreeNode, AutoCompleteConfiguration } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
+import { IdService } from '../../../../../core/browser/IdService';
 
 export class ComponentState {
 
@@ -10,7 +10,7 @@ export class ComponentState {
         public listId: string = IdService.generateDateBasedId('form-list-'),
         public filterValue: string = null,
         public treeId: string = listId + '-tree',
-        public enabled: boolean = true,
+        public readonly: boolean = true,
         public invalid: boolean = false,
         public treeStyle: string = null,
         public asAutocomplete: boolean = false,
@@ -18,7 +18,8 @@ export class ComponentState {
         public isLoading: boolean = false,
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
-        public asMultiselect: boolean = false
+        public asMultiselect: boolean = false,
+        public removeNode: boolean = true
     ) { }
 
 }

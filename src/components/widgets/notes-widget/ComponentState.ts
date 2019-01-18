@@ -1,4 +1,4 @@
-import { WidgetConfiguration, ContextType, AbstractAction } from '@kix/core/dist/model';
+import { WidgetConfiguration, ContextType, AbstractAction } from '../../../core/model';
 
 export class ComponentState {
 

@@ -1,7 +1,7 @@
-import { DateTimeUtil, DynamicField, KIXObjectType } from "@kix/core/dist/model/";
-import { ContextService } from "@kix/core/dist/browser/context/";
+import { DateTimeUtil, DynamicField, KIXObjectType } from "../../../core/model/";
+import { ContextService } from "../../../core/browser/context/";
 import { DynamicFieldLabelComponentState } from './DynamicFieldLabelComponentState';
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { KIXObjectService } from "../../../core/browser";
 
 export class TicketPriorityLabelComponent {
 

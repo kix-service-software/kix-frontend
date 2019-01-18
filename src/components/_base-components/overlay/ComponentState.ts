@@ -1,5 +1,5 @@
-import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction, ComponentContent } from "@kix/core/dist/model";
-import { IdService } from "@kix/core/dist/browser";
+import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction, ComponentContent } from "../../../core/model";
+import { IdService } from "../../../core/browser";
 
 export class ComponentState {
 

@@ -1,6 +1,6 @@
-import { OverlayType, ComponentContent, StringContent } from '@kix/core/dist/model';
+import { OverlayType, ComponentContent, StringContent } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { OverlayService, IdService } from '@kix/core/dist/browser';
+import { OverlayService, IdService } from '../../../core/browser';
 
 class Component {
 

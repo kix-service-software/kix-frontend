@@ -1,4 +1,4 @@
-import { AbstractAction } from "@kix/core/dist/model";
+import { AbstractAction } from "../../../core/model";
 import { Component } from './component';
 
 export class NotesEditAction extends AbstractAction {

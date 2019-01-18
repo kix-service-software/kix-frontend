@@ -3,10 +3,10 @@
         <span.kix-icon-attachement/>Datei wählen
         <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>
     </button>
-    <span.file-upload-notice on-click('minimize') class={"has-text": !(!state.files.length)}>
-        <if(!!state.files.length)>
+    <span.file-upload-notice on-click('minimize') class={"has-text": !(!state.count)}>
+        <if(!!state.count)>
             <span>
-                ${state.files.length} Datei(en) angehangen
+                ${state.count} Datei(en) angehangen
                 <span.kix-icon-check/>
             </span>
         </if>

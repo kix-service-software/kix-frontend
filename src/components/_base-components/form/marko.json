@@ -3,6 +3,7 @@
         "./inputs/marko.json"
     ],
     "tags-dir": [
+        "bulk-form",
         "main-form",
         "inputs",
         "search-form",

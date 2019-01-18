@@ -1,4 +1,4 @@
-import { FormField, FormInputComponentState, InputFieldTypes } from '@kix/core/dist/model';
+import { FormField, FormInputComponentState, InputFieldTypes } from '../../../../../core/model';
 
 export class ComponentState extends FormInputComponentState<string> {
 

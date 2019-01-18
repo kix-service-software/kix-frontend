@@ -14,12 +14,7 @@
                 </div>
                 <div.image>
                     <if(state.image)>
-                        <if(state.image.isBase64)>
-                            <img alt=state.imageTitle src=("data:image/png;base64, " + state.image.content)/>
-                        </if>
-                        <else>
-                            <img alt=state.imageTitle src=state.image.content/>
-                        </else>
+                        <img alt=state.imageTitle src=state.image.content/>
                     </if>
                 </div>
                 <div.next-image on-click('nextImage') title="nächstes Bild">

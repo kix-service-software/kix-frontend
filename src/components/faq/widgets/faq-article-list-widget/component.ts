@@ -2,10 +2,10 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
-} from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "@kix/core/dist/model";
-import { FAQArticleProperty, FAQCategory } from "@kix/core/dist/model/kix/faq";
-import { FAQContext } from "@kix/core/dist/browser/faq";
+} from "../../../../core/browser";
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
+import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
+import { FAQContext } from "../../../../core/browser/faq";
 
 class Component {
 
@@ -40,7 +40,7 @@ class Component {
 
         await this.prepareFilter();
         this.prepareActions();
-        this.prepareTable();
+        await this.prepareTable();
 
         this.state.loading = false;
     }
@@ -67,9 +67,9 @@ class Component {
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
-    private prepareTable(): void {
+    private async prepareTable(): Promise<void> {
         const tableConfiguration = new TableConfiguration(
-            null, 25, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+            null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
 
         const table =
@@ -79,17 +79,24 @@ class Component {
 
         table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
 
-        table.setTableListener(() => {
-            this.state.title = this.getTitle();
-        });
-
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
         table.layerConfiguration.contentLayer.setPreloadedObjects(null);
         this.state.table = table;
 
+        this.state.table.setTableListener(() => {
+            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
+            (this as any).setStateDirty('filterCount');
+        });
+
         const context = ContextService.getInstance().getActiveContext();
         if (context.getDescriptor().contextId === FAQContext.CONTEXT_ID) {
             this.setCategoryFilter((context as FAQContext).faqCategory);
+        }
+        if (this.state.widgetConfiguration.contextDependent && context) {
+            const objects = await context.getObjectList();
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            this.setTitle(objects.length);
+            await table.loadRows();
         }
     }
 
@@ -97,12 +104,12 @@ class Component {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private getTitle(): string {
+    private setTitle(count: number = 0): void {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
         if (this.state.table) {
-            title = `${title} (${this.state.table.getTableRows(true).length})`;
+            title = `${title} (${count})`;
         }
-        return title;
+        this.state.title = title;
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
@@ -119,7 +126,7 @@ class Component {
             this.state.table.setFilterSettings(textFilterValue, newFilter);
 
             const context = ContextService.getInstance().getActiveContext();
-            const rows = this.state.table.getTableRows();
+            const rows = this.state.table.getTableRows(true);
             context.setFilteredObjectList(rows.map((r) => r.object));
         }
     }
@@ -127,10 +134,12 @@ class Component {
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
+            this.setTitle(objectList.length);
             await this.state.table.loadRows();
 
             const context = ContextService.getInstance().getActiveContext();
-            context.setFilteredObjectList(context.getObjectList());
+            const objects = await context.getObjectList();
+            context.setFilteredObjectList(objects);
         }
     }
 

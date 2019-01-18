@@ -1,18 +1,15 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, StandardTable, TableColumnConfiguration,
-    ITableClickListener, StandardTableFactoryService
-} from "@kix/core/dist/browser";
+    ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
+} from "../../../../core/browser";
 import {
     WidgetConfiguration, Customer, KIXObjectType, Ticket, TicketProperty
-} from "@kix/core/dist/model";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+} from "../../../../core/model";
+import { TicketService } from "../../../../core/browser/ticket";
 
 class Component {
 
     private state: ComponentState;
-
-    private clickListener: ITableClickListener<Ticket>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -53,23 +50,23 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
-            objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
+            objectChanged: (customerId: string, customer: Customer, type: KIXObjectType) => {
                 if (type === KIXObjectType.CUSTOMER) {
                     this.initWidget(customer);
                 }
             }
         });
 
-        await this.initWidget(await context.getObject<Customer>());
+        this.initWidget(await context.getObject<Customer>());
 
-
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
     private async initWidget(customer?: Customer): Promise<void> {
         this.state.customer = customer;
+        this.setActions();
         this.createTables();
         this.loadTickets();
-        this.setActions();
     }
 
     private setActions(): void {
@@ -92,25 +89,37 @@ class Component {
 
     private configureOpenTicketsTable(): void {
         if (this.state.openTicketsConfig) {
-            this.state.openTicketsTable = StandardTableFactoryService.getInstance().createStandardTable(
+            this.state.openTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
                 KIXObjectType.TICKET, this.state.openTicketsConfig.settings, null, null, true
             );
+            this.state.openTicketsTable.setTableListener(() => {
+                this.state.openFilterCount = this.state.openTicketsTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('openFilterCount');
+            });
         }
     }
 
     private configureEscalatedTicketsTable(): void {
         if (this.state.escalatedTicketsConfig) {
-            this.state.escalatedTicketsTable = StandardTableFactoryService.getInstance().createStandardTable(
+            this.state.escalatedTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
                 KIXObjectType.TICKET, this.state.escalatedTicketsConfig.settings, null, null, true
             );
+            this.state.escalatedTicketsTable.setTableListener(() => {
+                this.state.escalatedFilterCount = this.state.escalatedTicketsTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('escalatedFilterCount');
+            });
         }
     }
 
     private configureReminderTicketsTable(): void {
         if (this.state.reminderTicketsConfig) {
-            this.state.reminderTicketsTable = StandardTableFactoryService.getInstance().createStandardTable(
+            this.state.reminderTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
                 KIXObjectType.TICKET, this.state.reminderTicketsConfig.settings, null, null, true
             );
+            this.state.reminderTicketsTable.setTableListener(() => {
+                this.state.reminderFilterCount = this.state.reminderTicketsTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('reminderFilterCount');
+            });
         }
     }
 
@@ -119,18 +128,26 @@ class Component {
             this.state.newTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
                 KIXObjectType.TICKET, this.state.newTicketsConfig.settings, null, null, true
             );
+            this.state.newTicketsTable.setTableListener(() => {
+                this.state.newFilterCount = this.state.newTicketsTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('newFilterCount');
+            });
         }
     }
 
     private configurePendingTicketsTable(): void {
         if (this.state.pendingTicketsConfig) {
-            this.state.pendingTicketsTable = StandardTableFactoryService.getInstance().createStandardTable(
+            this.state.pendingTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
                 KIXObjectType.TICKET, this.state.pendingTicketsConfig.settings, null, null, true
             );
+            this.state.pendingTicketsTable.setTableListener(() => {
+                this.state.pendingFilterCount = this.state.pendingTicketsTable.getTableRows(true).length || 0;
+                (this as any).setStateDirty('pendingFilterCount');
+            });
         }
     }
 
-    private async  loadTickets(): Promise<void> {
+    private async loadTickets(): Promise<void> {
         this.loadEscalatedTickets();
         this.loadReminderTickets();
         this.loadNewTickets();
@@ -154,6 +171,7 @@ class Component {
         if (tickets && !!tickets.length) {
             this.openGroup('customer-escalated-tickets-group');
         }
+        this.state.escalatedTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
     }
 
     private async loadReminderTickets(): Promise<void> {
@@ -172,6 +190,7 @@ class Component {
         if (tickets && !!tickets.length) {
             this.openGroup('customer-reminder-tickets-group');
         }
+        this.state.reminderTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
     }
 
     private async loadNewTickets(): Promise<void> {
@@ -190,6 +209,7 @@ class Component {
         if (tickets && !!tickets.length) {
             this.openGroup('customer-new-tickets-group');
         }
+        this.state.newTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
     }
 
     private async loadOpenTickets(): Promise<void> {
@@ -208,6 +228,7 @@ class Component {
         if (tickets && !!tickets.length) {
             this.openGroup('customer-open-tickets-group');
         }
+        this.state.openTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
     }
 
     private async loadPendingTickets(): Promise<void> {
@@ -226,6 +247,7 @@ class Component {
         if (tickets && !!tickets.length) {
             this.openGroup('customer-pending-tickets-group');
         }
+        this.state.pendingTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
     }
 
     private openGroup(componentKey: string): void {
@@ -246,90 +268,98 @@ class Component {
     }
 
     private getTicketCount(): number {
-        const tickets: number[] = [];
+        const ticketIds: number[] = [];
 
-        if (this.state.escalatedTicketsTable) {
-            this.state.escalatedTicketsTable.getTableRows().forEach((r) => {
-                if (!tickets.some((t) => t === r.object.TicketID)) {
-                    tickets.push(r.object.TicketID);
+        if (this.state.escalatedTicketIds && !!this.state.escalatedTicketIds.length) {
+            this.state.escalatedTicketIds.forEach((r) => {
+                if (!ticketIds.some((t) => t === r)) {
+                    ticketIds.push(r);
                 }
             });
         }
 
-        if (this.state.newTicketsTable) {
-            this.state.newTicketsTable.getTableRows().forEach((r) => {
-                if (!tickets.some((t) => t === r.object.TicketID)) {
-                    tickets.push(r.object.TicketID);
+        if (this.state.newTicketIds && !!this.state.newTicketIds.length) {
+            this.state.newTicketIds.forEach((r) => {
+                if (!ticketIds.some((t) => t === r)) {
+                    ticketIds.push(r);
                 }
             });
         }
 
-        if (this.state.pendingTicketsTable) {
-            this.state.pendingTicketsTable.getTableRows().forEach((r) => {
-                if (!tickets.some((t) => t === r.object.TicketID)) {
-                    tickets.push(r.object.TicketID);
+        if (this.state.pendingTicketIds && !!this.state.pendingTicketIds.length) {
+            this.state.pendingTicketIds.forEach((r) => {
+                if (!ticketIds.some((t) => t === r)) {
+                    ticketIds.push(r);
                 }
             });
         }
 
-        if (this.state.reminderTicketsTable) {
-            this.state.reminderTicketsTable.getTableRows().forEach((r) => {
-                if (!tickets.some((t) => t === r.object.TicketID)) {
-                    tickets.push(r.object.TicketID);
+        if (this.state.reminderTicketIds && !!this.state.reminderTicketIds.length) {
+            this.state.reminderTicketIds.forEach((r) => {
+                if (!ticketIds.some((t) => t === r)) {
+                    ticketIds.push(r);
                 }
             });
         }
 
-        if (this.state.openTicketsTable) {
-            this.state.openTicketsTable.getTableRows().forEach((r) => {
-                if (!tickets.some((t) => t === r.object.TicketID)) {
-                    tickets.push(r.object.TicketID);
+        if (this.state.openTicketIds && !!this.state.openTicketIds.length) {
+            this.state.openTicketIds.forEach((r) => {
+                if (!ticketIds.some((t) => t === r)) {
+                    ticketIds.push(r);
                 }
             });
         }
 
-
-        return tickets.length;
+        return ticketIds.length;
     }
 
     public getEscalatedTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.state.escalatedTicketsConfig, this.state.escalatedTicketsTable, 'Escalated Tickets'
+            this.state.escalatedTicketsConfig,
+            this.state.escalatedTicketIds ? this.state.escalatedTicketIds.length : 0,
+            'Escalated Tickets'
         );
     }
 
     public getReminderTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.state.reminderTicketsConfig, this.state.reminderTicketsTable, 'Reminder Tickets'
+            this.state.reminderTicketsConfig,
+            this.state.reminderTicketIds ? this.state.reminderTicketIds.length : 0,
+            'Reminder Tickets'
         );
     }
 
     public getNewTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.state.newTicketsConfig, this.state.newTicketsTable, 'New Tickets'
+            this.state.newTicketsConfig,
+            this.state.newTicketIds ? this.state.newTicketIds.length : 0,
+            'New Tickets'
         );
     }
 
     public getOpenTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.state.openTicketsConfig, this.state.openTicketsTable, 'Reminder Tickets'
+            this.state.openTicketsConfig,
+            this.state.openTicketIds ? this.state.openTicketIds.length : 0,
+            'Reminder Tickets'
         );
     }
 
     public getPendingTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.state.pendingTicketsConfig, this.state.pendingTicketsTable, 'Pending Tickets'
+            this.state.pendingTicketsConfig,
+            this.state.pendingTicketIds ? this.state.pendingTicketIds.length : 0,
+            'Pending Tickets'
         );
 
     }
 
     private getTicketTableTitle(
         config: WidgetConfiguration,
-        table: StandardTable<Ticket>,
-        defaultTitle: string
+        count: number = 0,
+        defaultTitle: string = 'Tickets'
     ): string {
         const title = config ? config.title : defaultTitle;
-        const count = table ? table.getTableRows().length : 0;
         return `${title} (${count})`;
     }
 
@@ -358,7 +388,7 @@ class Component {
         this.filter(this.state.pendingTicketsTable, filterValue);
     }
 
-    public filter(table: StandardTable<Ticket>, filterValue: string) {
+    private filter(table: StandardTable<Ticket>, filterValue: string) {
         table.setFilterSettings(filterValue);
     }
 }
