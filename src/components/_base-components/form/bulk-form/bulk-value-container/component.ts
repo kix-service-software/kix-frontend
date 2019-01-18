@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { DialogService } from '../../../../../core/browser';
+import { DialogService, PropertyOperator } from '../../../../../core/browser';
 import { TreeNode } from '../../../../../core/model';
 import { BulkValue } from './BulkValue';
 import { BulkManager } from '../../../../../core/browser/bulk';
@@ -115,6 +115,11 @@ class Component {
 
         this.state.bulkValues = [...values];
         this.addEmptyBulkValue();
+    }
+
+    public showValueInput(bulkValue: BulkValue): boolean {
+        const value = bulkValue.getBulkValue();
+        return value && value.property && value.operator && value.operator !== PropertyOperator.CLEAR;
     }
 
 }
