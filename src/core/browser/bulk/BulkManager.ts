@@ -105,16 +105,24 @@ export abstract class BulkManager {
         this.bulkRun = true;
         const parameter: Array<[string, any]> = [];
 
-        this.bulkValues
-            .filter((bv) => bv.operator === PropertyOperator.CLEAR)
-            .forEach((bv) => parameter.push([bv.property, null]));
-
-        this.bulkValues
-            .filter((bv) => bv.operator === PropertyOperator.CHANGE)
-            .filter((bv) => bv.property !== null && bv.value !== null)
-            .forEach((bv) => parameter.push([bv.property, bv.value]));
-
+        const values = this.getEditableValues();
+        values.forEach((v) => parameter.push([v.property, v.operator === PropertyOperator.CLEAR ? null : v.value]));
         await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId);
+    }
+
+    public getEditableValues(): ObjectPropertyValue[] {
+        let values: ObjectPropertyValue[] = [];
+
+        values = [...this.bulkValues.filter((bv) => bv.operator === PropertyOperator.CLEAR)];
+
+        values = [
+            ...values,
+            ...this.bulkValues
+                .filter((bv) => bv.operator === PropertyOperator.CHANGE)
+                .filter((bv) => bv.property !== null && bv.value !== null && bv.value !== undefined)
+        ];
+
+        return values;
     }
 
 }

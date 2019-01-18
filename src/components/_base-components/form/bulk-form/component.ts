@@ -2,9 +2,10 @@ import { WidgetType, KIXObject } from '../../../../core/model';
 import {
     WidgetService, DialogService, StandardTableFactoryService, TableHeaderHeight,
     TableRowHeight, LabelService, TableConfiguration, BrowserUtil, TableHighlightLayer,
-    ITableHighlightLayer, KIXObjectService
+    ITableHighlightLayer, KIXObjectService, PropertyOperator
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
+import { BulkManager } from '../../../../core/browser/bulk';
 
 class Component {
 
@@ -97,12 +98,12 @@ class Component {
         this.cancelBulkProcess = false;
         const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
 
-        const bulkValues = this.state.bulkManager.getBulkValues();
         const objects = this.state.bulkManager.objects;
+        const editableValues = this.state.bulkManager.getEditableValues();
 
         BrowserUtil.openConfirmOverlay(
             'Jetzt ausführen?',
-            `Sie ändern ${bulkValues.length} Attribute an ${objects.length} ${objectName}. Jetzt starten?`,
+            `Sie ändern ${editableValues.length} Attribute an ${objects.length} ${objectName}. Jetzt starten?`,
             this.runBulkManager.bind(this)
         );
     }
