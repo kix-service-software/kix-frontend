@@ -182,7 +182,10 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
             const objects = await KIXObjectService.loadObjects(
                 category.objectType, objectIds, null, null, false
             );
+
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            const rows = this.state.resultTable.getTableRows(true);
+            this.state.resultTable.listenerConfiguration.selectionListener.updateSelections(rows);
             await this.state.resultTable.loadRows(true);
         }
 

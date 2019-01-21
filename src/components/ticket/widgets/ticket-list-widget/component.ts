@@ -118,6 +118,8 @@ class Component implements IEventSubscriber {
             if (context) {
                 const objects = await context.getObjectList(reload);
                 this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+                const rows = this.state.table.getTableRows(true);
+                this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
             }
         }
         await this.state.table.loadRows(reload);
