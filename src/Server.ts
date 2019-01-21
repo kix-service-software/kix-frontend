@@ -26,8 +26,7 @@ import { CreateClientRegistration } from './core/api';
 import {
     ConfigurationService, LoggingService, ClientRegistrationService
 } from './core/services';
-import { PluginService, MarkoService } from './services';
-import { SocketCommunicationService } from './services/SocketCommuncationService';
+import { PluginService, MarkoService, SocketCommunicationService } from './services';
 
 export class Server {
 
