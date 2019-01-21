@@ -2,7 +2,6 @@ import https = require('https');
 import http = require('http');
 import { PluginService } from './PluginService';
 import { KIXExtensions, ICommunicatorRegistryExtension } from '../core/extensions';
-import { ICommunicator } from '../core/common';
 
 export class SocketCommunicationService {
 

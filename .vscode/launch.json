@@ -36,7 +36,7 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
-                "${workspaceFolder}/tests/services/api/**/*.test.ts"
+                "${workspaceFolder}/tests/**/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",
