@@ -29,6 +29,7 @@ class Component {
 
     public async propertyChanged(bulkValue: BulkValue, nodes: TreeNode[]): Promise<void> {
         await bulkValue.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
+        await bulkValue.setCurrentValue(null);
         await this.provideBulkValue(bulkValue);
         await this.addEmptyBulkValue();
         (this as any).setStateDirty();
@@ -94,7 +95,7 @@ class Component {
 
     private async updateValues(): Promise<void> {
         for (const bv of this.state.bulkValues) {
-            await bv.setPropertyNode(bv.currentPropertyNode);
+            await bv.setPropertyNode(bv.currentPropertyNode, true);
         }
 
         const values = [];
