@@ -26,8 +26,9 @@ export class KIXObjectCache {
     }
 
     public static getObjectCache<T extends KIXObject>(objectType: KIXObjectType): T[] {
-        if (this.hasObjectCache(objectType)) {
-            return [...KIXObjectCache.getInstance().objectCache.get(objectType)] as T[];
+        if (KIXObjectCache.hasObjectCache(objectType)) {
+            const cache = KIXObjectCache.getInstance();
+            return [...cache.objectCache.get(objectType)] as T[];
         }
 
         return [];
