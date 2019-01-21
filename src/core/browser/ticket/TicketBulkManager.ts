@@ -157,6 +157,8 @@ export class TicketBulkManager extends BulkManager {
                 );
                 const index = this.bulkValues.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
                 this.bulkValues.splice(index + 1, 0, value);
+            } else {
+                await this.deleteValue(TicketProperty.PENDING_TIME);
             }
         } else {
             await this.deleteValue(TicketProperty.PENDING_TIME);
