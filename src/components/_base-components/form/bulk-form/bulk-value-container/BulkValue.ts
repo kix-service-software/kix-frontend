@@ -1,7 +1,7 @@
 import {
     IdService, LabelService, KIXObjectService, ObjectPropertyValue, PropertyOperator
 } from "../../../../../core/browser";
-import { TreeNode, InputFieldTypes, DateTimeUtil } from "../../../../../core/model";
+import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from "../../../../../core/model";
 import { BulkManager } from "../../../../../core/browser/bulk";
 import { PropertyOperatorUtil } from "../../../../../core/browser/PropertyOperatorUtil";
 
@@ -45,7 +45,7 @@ export class BulkValue {
                 const label = await labelProvider.getPropertyText(this.bulkValue.property);
                 propertyNode = new TreeNode(this.bulkValue.property, label);
             }
-            await this.setPropertyNode(propertyNode);
+            await this.setPropertyNode(propertyNode, true);
         }
 
         await this.createOperationNodes();
@@ -61,11 +61,16 @@ export class BulkValue {
         this.readonly = this.bulkValue.readonly;
     }
 
-    public async setPropertyNode(propertyNode: TreeNode): Promise<void> {
+    public async setPropertyNode(propertyNode: TreeNode, update: boolean = false): Promise<void> {
         this.currentPropertyNode = propertyNode;
         this.nodes = [];
         this.operationNodes = [];
         this.currentOperationNode = null;
+
+        if (!update) {
+            this.bulkValue.objectType = null;
+            this.currentValueNodes = [];
+        }
 
         if (this.currentPropertyNode) {
             const inputType = await this.bulkManager.getInputType(this.currentPropertyNode.id);
@@ -85,7 +90,7 @@ export class BulkValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            if (this.isDropdown) {
+            if (this.isDropdown && !this.isAutocomplete) {
                 this.nodes = await this.bulkManager.getTreeNodes(this.currentPropertyNode.id);
             }
         }
@@ -104,7 +109,6 @@ export class BulkValue {
     public async setCurrentValue(value: any): Promise<void> {
         this.currentValue = value;
         if (this.bulkValue.objectType && value) {
-            this.currentValueNodes = [];
             const objects = await KIXObjectService.loadObjects(this.bulkValue.objectType, [value]);
             let label = value;
             if (objects && objects.length) {
@@ -113,7 +117,7 @@ export class BulkValue {
             }
             this.currentValueNodes = [new TreeNode(value, label)];
         } else if (this.isDropdown && this.nodes && this.nodes.length) {
-            const node = this.nodes.find((n) => n.id === value);
+            const node = TreeUtil.findNode(this.nodes, value);
             this.currentValueNodes = [node];
         }
     }
