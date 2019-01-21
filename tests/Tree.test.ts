@@ -243,4 +243,59 @@ describe('Browser / Components / Tree', () => {
 
     });
 
+    describe('find nodes in tree', () => {
+
+        const tree = [
+            new TreeNode('Postmaster', 'Postmaster'),
+            new TreeNode('Raw', 'Raw'),
+            new TreeNode('Junk', 'Junk'),
+            new TreeNode('Misc', 'Misc'),
+            new TreeNode('Test 1', 'Test 1', null, null, [
+                new TreeNode('Test 1.1', 'Test 1.1', null, null, [
+                    new TreeNode('Test 1.1.1', 'Test 1.1.1', null, null, [
+                        new TreeNode('Test 1.1.1.1', 'Test 1.1.1.1')
+                    ], null, null, null, [], true)
+                ], null, null, null, [], true),
+                new TreeNode('Test 1.2', 'Test 1.2', null, null, [
+                    new TreeNode('Test 1.2.1', 'Test 1.2.1'),
+                    new TreeNode('Test 1.2.2', 'Test 1.2.2', null, null, [
+                        new TreeNode('Test 1.2.2.1', 'Test 1.2.2.1'),
+                        new TreeNode('Test 1.2.2.2', 'Test 1.2.2.2')
+                    ], null, null, null, [], true),
+                    new TreeNode('Test 1.2.3', 'Test 1.2.3')
+                ], null, null, null, [], true)
+            ], null, null, null, [], true)
+        ];
+
+        it('should find the node on first level', () => {
+            const node = TreeUtil.findNode(tree, 'Junk');
+            expect(node).not.undefined;
+            expect(node.id).equals('Junk');
+        });
+
+        it('should find the node on second level', () => {
+            const node = TreeUtil.findNode(tree, 'Test 1.2');
+            expect(node).not.undefined;
+            expect(node.id).equals('Test 1.2');
+        });
+
+        it('should find the node on third level', () => {
+            const node = TreeUtil.findNode(tree, 'Test 1.2.2');
+            expect(node).not.undefined;
+            expect(node.id).equals('Test 1.2.2');
+        });
+
+        it('should find the node on fourth level', () => {
+            const node = TreeUtil.findNode(tree, 'Test 1.2.2.2');
+            expect(node).not.undefined;
+            expect(node.id).equals('Test 1.2.2.2');
+        });
+
+        it('should not find a node for a invalid id', () => {
+            const node = TreeUtil.findNode(tree, 'invalid');
+            expect(node).undefined;
+        });
+
+    });
+
 });
