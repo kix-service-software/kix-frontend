@@ -105,7 +105,6 @@ class Component {
             if (existingValue) {
                 existingValue.setOperationNode(null, cv.operator);
                 existingValue.setCurrentValue(cv.value);
-                existingValue.setCurrentValue(cv.value);
                 values.push(existingValue);
             } else {
                 const bulkValue = new BulkValue(this.bulkManager, cv);

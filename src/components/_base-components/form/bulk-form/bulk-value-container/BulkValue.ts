@@ -1,7 +1,7 @@
 import {
     IdService, LabelService, KIXObjectService, ObjectPropertyValue, PropertyOperator
 } from "../../../../../core/browser";
-import { TreeNode, InputFieldTypes, DateTimeUtil } from "../../../../../core/model";
+import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from "../../../../../core/model";
 import { BulkManager } from "../../../../../core/browser/bulk";
 import { PropertyOperatorUtil } from "../../../../../core/browser/PropertyOperatorUtil";
 
@@ -117,7 +117,7 @@ export class BulkValue {
             }
             this.currentValueNodes = [new TreeNode(value, label)];
         } else if (this.isDropdown && this.nodes && this.nodes.length) {
-            const node = this.nodes.find((n) => n.id === value);
+            const node = TreeUtil.findNode(this.nodes, value);
             this.currentValueNodes = [node];
         }
     }

@@ -116,13 +116,15 @@ export class TreeUtil {
     }
 
     public static findNode(tree: TreeNode[], nodeId: string | number): TreeNode {
-        for (const node of tree) {
-            if (node.id === nodeId) {
-                return node;
-            } else {
-                const foundChild = TreeUtil.findNode(node.children, nodeId);
-                if (foundChild) {
-                    return foundChild;
+        if (tree) {
+            for (const node of tree) {
+                if (node.id === nodeId) {
+                    return node;
+                } else {
+                    const foundChild = TreeUtil.findNode(node.children, nodeId);
+                    if (foundChild) {
+                        return foundChild;
+                    }
                 }
             }
         }
