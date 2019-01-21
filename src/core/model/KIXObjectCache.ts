@@ -26,7 +26,11 @@ export class KIXObjectCache {
     }
 
     public static getObjectCache<T extends KIXObject>(objectType: KIXObjectType): T[] {
-        return [...KIXObjectCache.getInstance().objectCache.get(objectType)] as T[];
+        if (this.hasObjectCache(objectType)) {
+            return [...KIXObjectCache.getInstance().objectCache.get(objectType)] as T[];
+        }
+
+        return [];
     }
 
     public static getObject<T extends KIXObject>(objectType: KIXObjectType, objectId: string | number): T {
