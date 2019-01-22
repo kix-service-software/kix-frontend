@@ -1,4 +1,3 @@
-export { IPersonalSettingsExtension } from './IPersonalSettingsExtension';
 export { IStaticContentExtension } from './IStaticContentExtension';
 export { IRouterExtension } from './IRouterExtension';
 export { ICommunicatorRegistryExtension } from './ICommunicatorRegistryExtension';

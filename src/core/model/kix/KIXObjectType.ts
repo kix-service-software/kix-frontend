@@ -28,6 +28,8 @@ export enum KIXObjectType {
 
     CONTACT = 'Contact',
 
+    CURRENT_USER = 'CURRENT_USER',
+
     CUSTOMER = 'Customer',
 
     DYNAMIC_FIELD = 'DynamicField',
@@ -81,6 +83,8 @@ export enum KIXObjectType {
     TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
 
     USER = 'User',
+
+    USER_PREFERENCE = 'USER_PREFERENCE',
 
     VALID_OBJECT = 'ValidObject',
 

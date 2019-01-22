@@ -49,37 +49,41 @@ class FormComponent {
     }
 
     private prepareMultiGroupHandling(): void {
-        const form = this.state.formInstance.getForm();
-        if (form && form.singleFormGroupOpen && form.groups.length > 1) {
-            const formElement = (this as any).getEl();
-            if (formElement) {
-                formElement.style.opacity = 0;
-                setTimeout(() => {
-                    this.handleFormGroupMinimizeState(form.groups[0].name, false);
-                    formElement.style.opacity = null;
-                }, 50);
+        if (this.state.formInstance) {
+            const form = this.state.formInstance.getForm();
+            if (form && form.singleFormGroupOpen && form.groups.length > 1) {
+                const formElement = (this as any).getEl();
+                if (formElement) {
+                    formElement.style.opacity = 0;
+                    setTimeout(() => {
+                        this.handleFormGroupMinimizeState(form.groups[0].name, false);
+                        formElement.style.opacity = null;
+                    }, 50);
+                }
             }
         }
     }
 
     public handleFormGroupMinimizeState(groupName: string, minimized: boolean): void {
-        const form = this.state.formInstance.getForm();
-        if (form && form.singleFormGroupOpen && form.groups.length > 1) {
-            const otherGroups = form.groups.filter((g) => g.name !== groupName);
-            if (minimized === false) {
-                otherGroups.forEach((g) => {
-                    const groupComponent = (this as any).getComponent(g.name);
-                    if (groupComponent) {
-                        groupComponent.setMinizedState(true);
-                    }
-                });
-            } else if (minimized === true && form.groups.length === 2) {
-                otherGroups.forEach((g) => {
-                    const groupComponent = (this as any).getComponent(g.name);
-                    if (groupComponent) {
-                        groupComponent.setMinizedState(false);
-                    }
-                });
+        if (this.state.formInstance) {
+            const form = this.state.formInstance.getForm();
+            if (form && form.singleFormGroupOpen && form.groups.length > 1) {
+                const otherGroups = form.groups.filter((g) => g.name !== groupName);
+                if (minimized === false) {
+                    otherGroups.forEach((g) => {
+                        const groupComponent = (this as any).getComponent(g.name);
+                        if (groupComponent) {
+                            groupComponent.setMinizedState(true);
+                        }
+                    });
+                } else if (minimized === true && form.groups.length === 2) {
+                    otherGroups.forEach((g) => {
+                        const groupComponent = (this as any).getComponent(g.name);
+                        if (groupComponent) {
+                            groupComponent.setMinizedState(false);
+                        }
+                    });
+                }
             }
         }
     }
