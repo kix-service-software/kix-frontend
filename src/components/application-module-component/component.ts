@@ -1,13 +1,13 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    StandardTableFactoryService, LabelService, DialogService, FactoryService
+    StandardTableFactoryService, LabelService, DialogService, FactoryService, PersonalSettingsFormService
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
 import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration
+    ConfiguredDialogWidget, WidgetConfiguration, UserCacheHandler
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
@@ -23,6 +23,7 @@ import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/brow
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
+import { AgentService } from '../../core/browser/application';
 
 class Component extends AbstractMarkoComponent {
 
@@ -31,6 +32,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        ServiceRegistry.getInstance().registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(GeneralCatalogService.getInstance());
@@ -40,7 +42,10 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.getInstance().registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(ObjectIconService.getInstance());
 
+        ServiceRegistry.getInstance().registerServiceInstance(PersonalSettingsFormService.getInstance());
+
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
+        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()

@@ -1,1 +1,1 @@
-export { AuthenticationCommunicator } from './AuthenticationCommunicator';
+export { AgentCommunicator } from './AgentCommunicator';

@@ -1,6 +1,7 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { Tickets } from "./Tickets";
+import { UserPreference } from "./UserPreference";
 
 export class User extends KIXObject<User> {
 
@@ -20,8 +21,8 @@ export class User extends KIXObject<User> {
 
     public CreateTime?: string;
     public ChangeTime?: string;
-    public Preferences?: any[];
 
+    public Preferences: UserPreference[];
     public Tickets: Tickets;
 
     public constructor(user?: User) {
@@ -48,6 +49,7 @@ export class User extends KIXObject<User> {
                 this.Tickets.Watched = this.Tickets.Watched.map((t) => Number(t));
                 this.Tickets.WatchedAndUnseen = this.Tickets.WatchedAndUnseen.map((t) => Number(t));
             }
+            this.Preferences = this.Preferences ? this.Preferences.map((p) => new UserPreference(p)) : [];
         }
     }
 

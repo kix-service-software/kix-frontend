@@ -50,12 +50,13 @@ describe('User Service', () => {
             const userResponse = new UserResponse();
             const user = new User();
             user.UserID = 123456;
+            user.Preferences = [];
             userResponse.User = user;
 
             nockScope
                 .matchHeader('Authorization', "Token abcdefg12345")
                 .get('/user')
-                .query({ include: "Tickets" })
+                .query({ include: "Tickets,Preferences" })
                 .reply(200, userResponse);
         });
 

@@ -1,5 +1,7 @@
 .sub-field-container {
-    margin-bottom: @margin-small;
+    &:not(:last-child) {
+        margin-bottom: @margin-small;
+    }
     >.form-field {
         >.field-label {
             font-weight: normal;

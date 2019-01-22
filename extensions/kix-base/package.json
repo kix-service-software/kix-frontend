@@ -5,7 +5,7 @@
             "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
         },
         "kix:personal:settings": {
-            "personal-seetings-main-menu": "../../dist/registry-modules/main-menu/personal-settings.extension"
+            "personal-settings": "../../dist/registry-modules/application/personal-settings.extension"
         },
         "kix:menu:main": {
             "home-menu-main": "../../dist/registry-modules/home/menu.main.extension",

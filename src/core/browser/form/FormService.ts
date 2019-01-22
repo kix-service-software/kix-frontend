@@ -39,6 +39,17 @@ export class FormService {
         this.formIDsWithContext = formConfigurations[1];
     }
 
+    public addform(form: Form): void {
+        if (this.forms) {
+            const formIndex = this.forms.findIndex((f) => f.id === form.id);
+            if (formIndex !== 1) {
+                this.forms.splice(formIndex, 1, form);
+            } else {
+                this.forms.push(form);
+            }
+        }
+    }
+
     public async getFormInstance<T extends IFormInstance>(formId: string, cache: boolean = true): Promise<T> {
         let formInstance;
         if (formId) {

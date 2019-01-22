@@ -114,7 +114,7 @@ export class TicketService extends KIXObjectService {
                 sort: "Article.-CreateTime"
             };
 
-            const uri = this.buildUri(this.RESOURCE_URI, articleOptions.ticketId, 'articles');
+            const uri = this.buildUri(this.RESOURCE_URI, articleOptions.ticketId, this.SUB_RESOURCE_URI);
             const response = await this.getObjectByUri<ArticlesResponse>(token, uri, query);
 
             articles = response.Article.map((a) => new Article(a));

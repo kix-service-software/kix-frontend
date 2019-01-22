@@ -8,7 +8,6 @@ import {
     Error
 } from "../../model";
 import { KIXObjectSocketListener } from "./KIXObjectSocketListener";
-import { TableColumn } from "../standard-table";
 import { FormService } from "../form";
 import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
@@ -244,7 +243,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         await KIXObjectSocketListener.getInstance().deleteObject(objectType, objectId, deleteOptions);
     }
 
-    private async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
+    public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
