@@ -166,7 +166,7 @@ export class UserService extends KIXObjectService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.join("\n"));
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"));
         }
     }
 
