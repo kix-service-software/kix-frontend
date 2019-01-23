@@ -31,7 +31,7 @@ export class DefaultTableSelectionListener<T extends KIXObject> implements ITabl
     }
 
     public selectAll(rows: Array<TableRow<T>>): void {
-        this.selectedRows = rows;
+        this.selectedRows = [...rows];
         this.allSelected = true;
         this.notifyListener();
     }
@@ -65,7 +65,7 @@ export class DefaultTableSelectionListener<T extends KIXObject> implements ITabl
     }
 
     public updateSelections(updatedRows: Array<TableRow<T>> = []): void {
-        this.selectedRows = updatedRows.filter((r) => this.isRowSelected(r));
+        this.selectedRows = [...updatedRows.filter((r) => this.isRowSelected(r))];
         this.notifyListener();
     }
 }
