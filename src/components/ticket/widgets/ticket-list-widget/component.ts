@@ -118,11 +118,11 @@ class Component implements IEventSubscriber {
             if (context) {
                 const objects = await context.getObjectList(reload);
                 this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-                const rows = this.state.table.getTableRows(true);
-                this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
             }
         }
         await this.state.table.loadRows(reload);
+        const rows = this.state.table.getTableRows(true);
+        this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
         this.setTitle(this.state.table.getTableRows(true).length);
     }
 
@@ -173,7 +173,11 @@ class Component implements IEventSubscriber {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
             this.setTitle(objectList.length);
+
             await this.state.table.loadRows();
+
+            const rows = this.state.table.getTableRows(true);
+            this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
 
             const context = ContextService.getInstance().getActiveContext();
             context.setFilteredObjectList(objectList);

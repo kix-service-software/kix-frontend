@@ -184,9 +184,9 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
             );
 
             this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            await this.state.resultTable.loadRows(true);
             const rows = this.state.resultTable.getTableRows(true);
             this.state.resultTable.listenerConfiguration.selectionListener.updateSelections(rows);
-            await this.state.resultTable.loadRows(true);
         }
 
     }

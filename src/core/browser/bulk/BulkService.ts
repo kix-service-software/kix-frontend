@@ -32,4 +32,8 @@ export class BulkService {
         }
     }
 
+    public hasBulkManager(objectType: KIXObjectType): boolean {
+        return this.getBulkManager(objectType) !== undefined;
+    }
+
 }

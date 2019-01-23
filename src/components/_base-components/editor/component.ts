@@ -28,7 +28,9 @@ class EditorComponent {
                 this.editor.insertHtml(input.addValue);
             } else if (input.value) {
                 const contentString = this.replaceInlineContent(input.value, input.inlineContent);
-                this.editor.setData(contentString, this.editor.updateElement());
+                this.editor.setData(contentString, () => {
+                    this.editor.updateElement();
+                });
             }
             if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
                 this.state.readOnly = input.readOnly;
