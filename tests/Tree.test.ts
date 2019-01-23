@@ -9,9 +9,9 @@ const expect = chai.expect;
 
 describe('Browser / Components / Tree', () => {
 
-    describe('plain flat tree.', () => {
+    describe('Plain flat tree.', () => {
 
-        it('should link siblings correctly', () => {
+        it('Should link siblings correctly.', () => {
             const tree = [
                 new TreeNode('id1', 'label1'),
                 new TreeNode('id2', 'label2'),
@@ -37,7 +37,7 @@ describe('Browser / Components / Tree', () => {
             expect(tree[2].nextNode).not.exist;
         });
 
-        it('should link siblings correctly with given filter value', () => {
+        it('Should link siblings correctly with given filter value.', () => {
 
             const tree = [
                 new TreeNode('id1', 'label1'),
@@ -69,8 +69,8 @@ describe('Browser / Components / Tree', () => {
 
     });
 
-    describe('simple tree', () => {
-        it('should link children and parents correctly', () => {
+    describe('Simple tree', () => {
+        it('Should link children and parents correctly.', () => {
             const tree = [
                 new TreeNode('id1', 'label1', null, null, [
                     new TreeNode('sub-id1', 'sub1'),
@@ -116,8 +116,8 @@ describe('Browser / Components / Tree', () => {
         });
     });
 
-    describe('complexe tree', () => {
-        it('should link (grand)children and (grand)parents correctly', () => {
+    describe('Complexe tree', () => {
+        it('Should link (grand)children and (grand)parents correctly.', () => {
             const tree = [
                 new TreeNode('Test 1', 'Test 1', null, null, [
                     new TreeNode('Test 1.1', 'Test 1.1', null, null, [
@@ -158,7 +158,7 @@ describe('Browser / Components / Tree', () => {
 
         });
 
-        it('should link (grand)children and (grand)parents correctly', () => {
+        it('Should link (grand)children and (grand)parents correctly.', () => {
             const tree = [
                 new TreeNode('Postmaster', 'Postmaster'),
                 new TreeNode('Raw', 'Raw'),
@@ -243,7 +243,7 @@ describe('Browser / Components / Tree', () => {
 
     });
 
-    describe('find nodes in tree', () => {
+    describe('Find nodes in tree.', () => {
 
         const tree = [
             new TreeNode('Postmaster', 'Postmaster'),
@@ -267,31 +267,31 @@ describe('Browser / Components / Tree', () => {
             ], null, null, null, [], true)
         ];
 
-        it('should find the node on first level', () => {
+        it('Should find the node on first level.', () => {
             const node = TreeUtil.findNode(tree, 'Junk');
             expect(node).not.undefined;
             expect(node.id).equals('Junk');
         });
 
-        it('should find the node on second level', () => {
+        it('Should find the node on second level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2');
             expect(node).not.undefined;
             expect(node.id).equals('Test 1.2');
         });
 
-        it('should find the node on third level', () => {
+        it('Should find the node on third level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2.2');
             expect(node).not.undefined;
             expect(node.id).equals('Test 1.2.2');
         });
 
-        it('should find the node on fourth level', () => {
+        it('Should find the node on fourth level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2.2.2');
             expect(node).not.undefined;
             expect(node.id).equals('Test 1.2.2.2');
         });
 
-        it('should not find a node for a invalid id', () => {
+        it('Should not find a node for a invalid id.', () => {
             const node = TreeUtil.findNode(tree, 'invalid');
             expect(node).undefined;
         });

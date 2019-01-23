@@ -64,7 +64,7 @@ export class UserService extends KIXObjectService {
         return response.User;
     }
 
-    public async getPreferences(
+    private async getPreferences(
         token: string, loadingOptions: KIXObjectLoadingOptions, preferenceLoadingOptions: PreferencesLoadingOptions
     ): Promise<UserPreference[]> {
         let preferences = [];
@@ -76,7 +76,6 @@ export class UserService extends KIXObjectService {
 
             preferences = response.UserPreference.map((p) => new UserPreference(p));
         }
-
         return preferences;
     }
 

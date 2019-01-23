@@ -17,7 +17,7 @@ describe('Profiling Service', () => {
             expect(serverConfiguration.ENABLE_PROFILING).a('boolean');
         });
     });
-    describe('Start Profiling', () => {
+    describe('Start Profiling.', () => {
         it('Should throw an error if NO category and message are provided.', () => {
             let throwsError = false;
             try {
@@ -67,7 +67,7 @@ describe('Profiling Service', () => {
             expect(id).an('number');
         });
     });
-    describe('Stop Profiling', () => {
+    describe('Stop Profiling.', () => {
         it('Should not throw an error if task id is provided.', () => {
             try {
                 const id = ProfilingService.getInstance().start('category', 'test');

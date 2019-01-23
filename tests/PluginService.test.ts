@@ -12,7 +12,7 @@ describe('Plugin Service Service', () => {
         require('./TestSetup');
     });
 
-    describe('Register and load a Extension', () => {
+    describe('Register and load a Extension.', () => {
         it('Should register a plugin in the plugin manager.', async () => {
             PluginService.getInstance().pluginManager.register('test:extension', 'MyPlugin', (data, host, options) => {
                 return {
