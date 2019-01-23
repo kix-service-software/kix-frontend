@@ -7,7 +7,7 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public faqArticle: FAQArticle = null,
         public attachments: Attachment[] = [],
-        public inlineContent: InlineContent[] = [],
+        public inlineContent: InlineContent[] = null,
         public actions: AbstractAction[] = [],
         public loading: boolean = true,
     ) {
