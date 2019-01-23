@@ -21,7 +21,7 @@ describe('SysConfigIteme Service', () => {
         nockScope = nock(apiURL);
     });
 
-    it('service instance is registered in container.', () => {
+    it('Service instance is registered in container.', () => {
         expect(SysConfigService.getInstance()).exist;
     });
 
@@ -35,7 +35,7 @@ describe('SysConfigIteme Service', () => {
                 .reply(200, buildSysConfigItemsResponse(sysConfigKey));
         });
 
-        it('should return a sysConfigItem.', async () => {
+        it('Should return a sysConfigItem.', async () => {
             const sysConfigItems = await SysConfigService.getInstance().loadObjects<SysConfigItem>('token', KIXObjectType.SYS_CONFIG_ITEM, [sysConfigKey], null, null);
             expect(sysConfigItems).exist;
             expect(sysConfigItems).an('array');

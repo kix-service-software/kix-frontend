@@ -21,14 +21,14 @@ describe('Dialog Service Tests', () => {
             dialogs = [...dialogs, ...registerDialogs(ContextMode.CREATE, createDialogsCount)];
         });
 
-        it('Should retrieve edit dialogs', () => {
+        it('Should retrieve edit dialogs.', () => {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.EDIT);
             expect(dialogs).not.undefined;
             expect(dialogs).an('array');
             expect(dialogs.length).equals(editDialogsCount);
         });
 
-        it('Should retrieve create dialogs', () => {
+        it('Should retrieve create dialogs.', () => {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE);
             expect(dialogs).not.undefined;
             expect(dialogs).an('array');
@@ -59,7 +59,7 @@ describe('Dialog Service Tests', () => {
             dialogs = [...dialogs, ...registerDialogs(ContextMode.CREATE, 1, KIXObjectType.FAQ_ARTICLE)];
         });
 
-        it('Should retrieve edit dialogs for ticket', () => {
+        it('Should retrieve edit dialogs for ticket.', () => {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.EDIT, KIXObjectType.TICKET);
             expect(dialogs).not.undefined;
             expect(dialogs).an('array');
@@ -68,7 +68,7 @@ describe('Dialog Service Tests', () => {
             expect(dialogs[0].kixObjectType).equals(KIXObjectType.TICKET);
         });
 
-        it('Should retrieve multiple create dialogs for ticket', () => {
+        it('Should retrieve multiple create dialogs for ticket.', () => {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE, KIXObjectType.TICKET);
             expect(dialogs).not.undefined;
             expect(dialogs).an('array');
@@ -86,9 +86,9 @@ describe('Dialog Service Tests', () => {
 
     });
 
-    describe('Notify main dialog listeners', () => {
+    describe('Notify main dialog listeners.', () => {
 
-        it('should notify on submit', () => {
+        it('Should notify on submit.', () => {
 
             const listener: IMainDialogListener = {
                 submit: (data: any) => {
@@ -107,7 +107,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().submitMainDialog({ submit: true });
         });
 
-        it('should notify on close', () => {
+        it('Should notify on close.', () => {
 
             const listener: IMainDialogListener = {
                 submit: () => { },
@@ -126,7 +126,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().closeMainDialog({ close: true });
         });
 
-        it('should notify on open', async () => {
+        it('Should notify on open.', async () => {
 
             const listener: IMainDialogListener = {
                 submit: () => { },
@@ -145,7 +145,7 @@ describe('Dialog Service Tests', () => {
             await DialogService.getInstance().openMainDialog(ContextMode.CREATE, 'dialogId', KIXObjectType.TICKET, 'dialogTitle', 'kix-dialog-icon');
         });
 
-        it('should notify for new hint', async () => {
+        it('Should notify for new hint.', async () => {
 
             const listener: IMainDialogListener = {
                 submit: () => { },
@@ -160,7 +160,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().setMainDialogHint('Hinttext');
         });
 
-        it('should notify for loading', async () => {
+        it('Should notify for loading.', async () => {
 
             const listener: IMainDialogListener = {
                 submit: () => { },
@@ -182,7 +182,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().setMainDialogLoading(true, 'loadingHint', true, 1000, () => { });
         });
 
-        it('should notify for new title', async () => {
+        it('Should notify for new title.', async () => {
 
             const listener: IMainDialogListener = {
                 submit: () => { },
@@ -199,9 +199,9 @@ describe('Dialog Service Tests', () => {
 
     });
 
-    describe('Notify dialog result listeners', () => {
+    describe('Notify dialog result listeners.', () => {
 
-        it('should notify for new result', () => {
+        it('Should notify for new result.', () => {
             const listener = (result: any) => {
                 expect(result).not.undefined;
                 expect(result.result).not.undefined;
@@ -214,9 +214,9 @@ describe('Dialog Service Tests', () => {
 
     });
 
-    describe('Notify overlay dialog listeners', () => {
+    describe('Notify overlay dialog listeners.', () => {
 
-        it('should notify on open', () => {
+        it('Should notify on open.', () => {
             const listener: IOverlayDialogListener = {
                 close: () => { },
                 open: (dialogTagId: string, input?: any, title?: string, icon?: string | ObjectIcon) => {
@@ -234,7 +234,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().openOverlayDialog('dialogId', { input: true }, 'title', 'kix-icon');
         });
 
-        it('should notify on close', () => {
+        it('Should notify on close.', () => {
             const listener: IOverlayDialogListener = {
                 close: () => {
                     expect(true).true;
@@ -250,7 +250,7 @@ describe('Dialog Service Tests', () => {
             DialogService.getInstance().closeMainDialog();
         });
 
-        it('should notify on loading', () => {
+        it('Should notify on loading.', () => {
             const listener: IOverlayDialogListener = {
                 close: () => { },
                 open: () => { },

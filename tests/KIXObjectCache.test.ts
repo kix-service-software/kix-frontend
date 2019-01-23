@@ -14,12 +14,12 @@ describe('KIXObject Cache', () => {
         }
     });
 
-    it('Should contain tickets in cache after add', () => {
+    it('Should contain tickets in cache after add.', () => {
         expect(KIXObjectCache.hasObjectCache(KIXObjectType.TICKET)).true;
         expect(KIXObjectCache.getObjectCache(KIXObjectType.TICKET).length).equals(10);
     });
 
-    it('Should retrieve ticket from cache', () => {
+    it('Should retrieve ticket from cache.', () => {
         const ticketId = 98765;
         KIXObjectCache.addObject(KIXObjectType.TICKET, createTicket(ticketId));
         const cachedTicket = KIXObjectCache.getObject(KIXObjectType.TICKET, ticketId);
@@ -27,7 +27,7 @@ describe('KIXObject Cache', () => {
         expect(cachedTicket.ObjectId).equals(ticketId);
     });
 
-    it('Should retrieve multiple tickets from cache', () => {
+    it('Should retrieve multiple tickets from cache.', () => {
         const cachedTickets = KIXObjectCache.getCachedObjects(KIXObjectType.TICKET, [3, 6, 8]);
         expect(cachedTickets).not.undefined;
         expect(cachedTickets.length).equals(3);
@@ -36,13 +36,13 @@ describe('KIXObject Cache', () => {
         expect(cachedTickets[2].ObjectId).equals(8);
     });
 
-    it('Should return empty list for unknown cache object type', () => {
+    it('Should return empty list for unknown cache object type.', () => {
         const slas = KIXObjectCache.getObjectCache(KIXObjectType.SLA);
         expect(slas).not.undefined;
         expect(slas.length).equals(0);
     });
 
-    it('Should remove object from cache', () => {
+    it('Should remove object from cache.', () => {
         const ticketId = 54321;
         KIXObjectCache.addObject(KIXObjectType.TICKET, createTicket(ticketId));
         expect(KIXObjectCache.getObject(KIXObjectType.TICKET, ticketId)).not.undefined;
@@ -51,7 +51,7 @@ describe('KIXObject Cache', () => {
         expect(KIXObjectCache.getObject(KIXObjectType.TICKET, ticketId)).undefined;
     });
 
-    it('Should clear cache for objecttype', () => {
+    it('Should clear cache for objecttype.', () => {
         const ticketId = 54321;
         KIXObjectCache.addObject(KIXObjectType.TICKET, createTicket(ticketId));
         expect(KIXObjectCache.getObject(KIXObjectType.TICKET, ticketId)).not.undefined;

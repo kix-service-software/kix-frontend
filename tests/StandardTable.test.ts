@@ -21,9 +21,9 @@ describe('Browser / Components / StandardTable', () => {
         expect(table).exist;
     });
 
-    describe('Create table based on configuration', () => {
+    describe('Create table based on configuration.', () => {
 
-        it('table should have columns with correct properties', async () => {
+        it('Table should have columns with correct properties.', async () => {
             const table = createTable();
             const columns = await table.getColumns();
             expect(columns).exist;
@@ -59,7 +59,7 @@ describe('Browser / Components / StandardTable', () => {
             expect(columns[2].showText).equals(true);
         });
 
-        it('should have correct rows (limit)', async () => {
+        it('Should have correct rows (limit)', async () => {
             const table = createTable();
             await table.loadRows();
 
@@ -71,8 +71,8 @@ describe('Browser / Components / StandardTable', () => {
 
     });
 
-    describe('Prevent selection', () => {
-        it('should set some rows not selectable', async () => {
+    describe('Prevent selection.', () => {
+        it('Should set some rows not selectable.', async () => {
             const table = createTable();
 
             const testObjects = [];
@@ -96,8 +96,8 @@ describe('Browser / Components / StandardTable', () => {
         });
     });
 
-    describe('Highlight selection', () => {
-        it('should set highlight css class for some rows', async () => {
+    describe('Highlight selection.', () => {
+        it('Should set highlight css class for some rows.', async () => {
             const table = createTable();
 
             const testObjects = [];

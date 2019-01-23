@@ -18,7 +18,7 @@ describe('Browser / AttachmentUtil', () => {
         }
     });
 
-    describe('file check', () => {
+    describe('File check', () => {
         it('Should return the max upload file size.', async () => {
             const maxUploadFileSize = await AttachmentUtil.getMaxUploadFileSize();
             expect(maxUploadFileSize).exist;
@@ -63,7 +63,7 @@ describe('Browser / AttachmentUtil', () => {
 
     });
 
-    describe('human readable file size', () => {
+    describe('Human readable file size', () => {
         it('Should return a valid file size string with KB with 1 decimal place.', () => {
             const fileSize = 1024;
             const fileSizeString = AttachmentUtil.getFileSize(fileSize);

@@ -22,11 +22,11 @@ describe('Service Service', () => {
         nockScope = nock(apiURL);
     });
 
-    it('service instance is registered in container.', () => {
+    it('Service instance is registered in container.', () => {
         expect(ServiceService.getInstance()).exist;
     });
 
-    describe('Get multiple services', () => {
+    describe('Get multiple services.', () => {
         describe('Create a valid request to retrieve all services.', () => {
 
             before(() => {
@@ -36,7 +36,7 @@ describe('Service Service', () => {
                     .reply(200, buildServicesResponse(4));
             });
 
-            it('should return a list of services.', async () => {
+            it('Should return a list of services.', async () => {
                 const service: Service[] = await ServiceService.getInstance().getServices('');
                 expect(service).exist;
                 expect(service).an('array');
