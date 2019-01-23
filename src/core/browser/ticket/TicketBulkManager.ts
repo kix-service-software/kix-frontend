@@ -153,7 +153,7 @@ export class TicketBulkManager extends BulkManager {
             const pendingState = await TicketService.getInstance().isPendingState(Number(stateValue.value));
             if (pendingState) {
                 const pendingValue = this.bulkValues.find((bv) => bv.property === TicketProperty.PENDING_TIME);
-                if (!pendingValue || (pendingValue.value === null || typeof pendingValue.value === 'undefined')) {
+                if (!pendingValue) {
                     const value = new ObjectPropertyValue(
                         TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
                     );
