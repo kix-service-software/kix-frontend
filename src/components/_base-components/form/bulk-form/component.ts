@@ -135,7 +135,9 @@ class Component {
                 .catch(async (error) => {
                     errorObjects.push(object);
                     DialogService.getInstance().setMainDialogLoading(true, 'Es ist ein Fehler aufgetreten.');
-                    await this.handleObjectEditError(object, finishedObjects.length, objects.length);
+                    await this.handleObjectEditError(
+                        object, (finishedObjects.length + errorObjects.length), objects.length
+                    );
                 });
 
             if (this.cancelBulkProcess) {
