@@ -1,6 +1,6 @@
 import { AbstractAction } from '../../model/components/action/AbstractAction';
 import { StandardTable } from '../standard-table';
-import { ContextMode, KIXObjectType } from '../../model';
+import { ContextMode, KIXObjectType, KIXObject } from '../../model';
 import { ContextService } from '../context';
 import { BulkDialogContext, BulkService } from '../bulk';
 import { EventService, IEventSubscriber } from '../event';
@@ -33,23 +33,33 @@ export class BulkAction extends AbstractAction<StandardTable> implements IEventS
 
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
-            const context = await ContextService.getInstance().getContext<BulkDialogContext>(
-                BulkDialogContext.CONTEXT_ID
-            );
             const selectedObjects = this.data.listenerConfiguration.selectionListener.getSelectedObjects();
 
-            this.objectType = selectedObjects[0].KIXObjectType;
-
-            if (context) {
-                context.setObjectList(selectedObjects);
+            const objectType = selectedObjects[0].KIXObjectType;
+            if (BulkService.getInstance().hasBulkManager(objectType)) {
+                await this.openDialog(selectedObjects);
+            } else {
+                super.run(event);
             }
-
-            context.setDialogSubscriberId(this.eventSubscriberId);
-            EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
-            EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
-
-            ContextService.getInstance().setDialogContext(BulkDialogContext.CONTEXT_ID, null, ContextMode.EDIT_BULK);
         }
+    }
+
+    private async openDialog(selectedObjects: KIXObject[]): Promise<void> {
+        const context = await ContextService.getInstance().getContext<BulkDialogContext>(
+            BulkDialogContext.CONTEXT_ID
+        );
+
+        this.objectType = selectedObjects[0].KIXObjectType;
+
+        if (context) {
+            context.setObjectList(selectedObjects);
+        }
+
+        context.setDialogSubscriberId(this.eventSubscriberId);
+        EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
+        EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
+
+        ContextService.getInstance().setDialogContext(BulkDialogContext.CONTEXT_ID, null, ContextMode.EDIT_BULK);
     }
 
     public async eventPublished(data: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
