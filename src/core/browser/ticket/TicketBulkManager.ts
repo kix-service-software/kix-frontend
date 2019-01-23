@@ -151,12 +151,15 @@ export class TicketBulkManager extends BulkManager {
         const stateValue = this.bulkValues.find((bv) => bv.property === TicketProperty.STATE_ID);
         if (stateValue && stateValue.value) {
             const pendingState = await TicketService.getInstance().isPendingState(Number(stateValue.value));
-            if (pendingState && !this.hasValueForProperty(TicketProperty.PENDING_TIME)) {
-                const value = new ObjectPropertyValue(
-                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
-                );
-                const index = this.bulkValues.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
-                this.bulkValues.splice(index + 1, 0, value);
+            if (pendingState) {
+                const pendingValue = this.bulkValues.find((bv) => bv.property === TicketProperty.PENDING_TIME);
+                if (!pendingValue || (pendingValue.value === null || typeof pendingValue.value === 'undefined')) {
+                    const value = new ObjectPropertyValue(
+                        TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, null, true, true
+                    );
+                    const index = this.bulkValues.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
+                    this.bulkValues.splice(index + 1, 0, value);
+                }
             } else {
                 await this.deleteValue(TicketProperty.PENDING_TIME);
             }
