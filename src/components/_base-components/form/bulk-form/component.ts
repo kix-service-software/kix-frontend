@@ -185,10 +185,11 @@ class Component {
     }
 
     private handleObjectEditError(object: KIXObject, finishedCount: number, objectCount: number): Promise<void> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const oName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
+            const identifier = await LabelService.getInstance().getText(object);
             // tslint:disable-next-line:max-line-length
-            const confirmText = `${oName} ${object.ObjectId}: Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?`;
+            const confirmText = `${oName} ${identifier}: Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?`;
             BrowserUtil.openConfirmOverlay(
                 `${finishedCount}/${objectCount}`,
                 confirmText,
