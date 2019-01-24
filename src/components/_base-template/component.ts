@@ -9,6 +9,7 @@ import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
 import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
+import { ObjectIconService } from '../../core/browser/icon';
 
 declare var io: any;
 
@@ -31,6 +32,8 @@ class Component {
         await this.checkAuthentication();
 
         await KIXModulesService.getInstance().init();
+
+        await ObjectIconService.getInstance().init();
 
         const modules = KIXModulesService.getInstance().getModules();
         modules.forEach((m) => {
