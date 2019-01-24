@@ -24,6 +24,10 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         return 'ObjectIcon';
     }
 
+    public async init(): Promise<void> {
+        this.loadObjects(KIXObjectType.OBJECT_ICON, null);
+    }
+
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectIconLoadingOptions?: ObjectIconLoadingOptions,
@@ -36,16 +40,14 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
                 objects.forEach((i) => KIXObjectCache.addObject(objectType, i));
             }
 
-            if (!objectIds) {
-                if (objectIconLoadingOptions) {
-                    const icons: any[] = KIXObjectCache.getObjectCache<ObjectIcon>(objectType).filter(
-                        (oi) => oi.Object === objectIconLoadingOptions.object
-                            && oi.ObjectID.toString() === objectIconLoadingOptions.objectId.toString()
-                    );
-                    return icons;
-                } else {
-                    return KIXObjectCache.getObjectCache(objectType);
-                }
+            if (!objectIds && objectIconLoadingOptions) {
+                const icons: any[] = KIXObjectCache.getObjectCache<ObjectIcon>(objectType).filter(
+                    (oi) => oi.Object === objectIconLoadingOptions.object
+                        && oi.ObjectID.toString() === objectIconLoadingOptions.objectId.toString()
+                );
+                return icons;
+            } else {
+                return KIXObjectCache.getObjectCache(objectType);
             }
         }
         return await super.loadObjects<O>(
