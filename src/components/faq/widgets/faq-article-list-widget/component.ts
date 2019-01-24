@@ -1,11 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
+    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, ServiceRegistry
 } from "../../../../core/browser";
 import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
 import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
 import { FAQContext } from "../../../../core/browser/faq";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -50,7 +51,10 @@ class Component {
     }
 
     private async prepareFilter(): Promise<void> {
-        const languages = await LanguageUtil.getLanguages();
+        const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+            KIXObjectType.TRANSLATION
+        );
+        const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
                 l[1], [new TableFilterCriteria(FAQArticleProperty.LANGUAGE, SearchOperator.EQUALS, l[0])]

@@ -30,7 +30,7 @@ export class FormInstance implements IFormInstance {
 
     private async initFormFieldValues(): Promise<void> {
         if (this.form) {
-            const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
@@ -153,7 +153,7 @@ export class FormInstance implements IFormInstance {
         }
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
-            const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {

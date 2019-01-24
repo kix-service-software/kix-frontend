@@ -1,7 +1,7 @@
-import { ContextService } from "../../../../../core/browser/context";
-import { FormInputComponent, TreeNode } from "../../../../../core/model";
+import { FormInputComponent, TreeNode, KIXObjectType } from "../../../../../core/model";
 import { CompontentState } from "./CompontentState";
-import { LanguageUtil } from "../../../../../core/browser";
+import { ServiceRegistry } from "../../../../../core/browser";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 // TODO: als allgemeines input-valid implementieren
 class Component extends FormInputComponent<number, CompontentState> {
@@ -16,7 +16,10 @@ class Component extends FormInputComponent<number, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const languages = await LanguageUtil.getLanguages();
+        const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+            KIXObjectType.TRANSLATION
+        );
+        const languages = await translationService.getLanguages();
         this.state.nodes = languages.map((l) => new TreeNode(l[0], l[1]));
         this.setCurrentNode();
     }

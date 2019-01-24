@@ -30,7 +30,10 @@ export class CSVExportAction extends AbstractAction<StandardTable> {
                 // TODO: noch implementieren
             } else {
                 const columns = await this.data.getColumns();
-                let csvString = columns.map((c) => c.text.trim()).join(';');
+                let csvString = columns.map((c) => {
+
+                    return `"${this.escapeText(c.text.trim())}"`;
+                }).join(';');
                 csvString += "\n";
 
                 const selectedObjects = this.data.listenerConfiguration.selectionListener.getSelectedObjects();
@@ -40,9 +43,11 @@ export class CSVExportAction extends AbstractAction<StandardTable> {
 
                 for (const row of selectedRows) {
                     for (const value of row.values) {
-                        const displayValue
-                            = await LabelService.getInstance().getPropertyValueDisplayText(row.object, value.columnId);
-                        csvString += displayValue ? displayValue : value.displayValue;
+                        const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                            row.object, value.columnId
+                        );
+                        const csvValue = this.escapeText(displayValue ? displayValue : value.displayValue);
+                        csvString += `"${csvValue}"`;
                         csvString += ';';
                     }
                     csvString += "\n";
@@ -62,6 +67,11 @@ export class CSVExportAction extends AbstractAction<StandardTable> {
                 }
             }
         }
+    }
+
+    private escapeText(text: string): string {
+        text = text.replace(/\"/g, '\\"');
+        return text;
     }
 
 }

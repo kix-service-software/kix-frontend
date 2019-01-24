@@ -19,7 +19,7 @@ export class ObjectDefinitionService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(type: KIXObjectType): boolean {

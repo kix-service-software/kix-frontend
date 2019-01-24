@@ -48,15 +48,15 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(TicketService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketTypeService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketStateService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketPriorityService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
 
-        ServiceRegistry.getInstance().registerServiceInstance(TicketFormService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketTypeFormService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketPriorityFormService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TicketStateFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
         KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());

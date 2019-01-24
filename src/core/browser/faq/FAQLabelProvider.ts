@@ -4,10 +4,10 @@ import {
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
-import { LanguageUtil } from "../LanguageUtil";
-import { KIXObjectService } from "../kix";
+import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
 
@@ -151,7 +151,10 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = valid ? valid.Name : faqArticle.ValidID;
                 break;
             case FAQArticleProperty.LANGUAGE:
-                displayValue = await LanguageUtil.getLanguageName(faqArticle.Language);
+                const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+                    KIXObjectType.TRANSLATION
+                );
+                displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

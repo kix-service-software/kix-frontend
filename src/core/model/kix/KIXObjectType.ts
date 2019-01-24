@@ -82,6 +82,10 @@ export enum KIXObjectType {
 
     TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
 
+    TRANSLATION = 'Translation',
+
+    TRANSLATION_LANGUAGE = 'TranslationLanguage',
+
     USER = 'User',
 
     USER_PREFERENCE = 'USER_PREFERENCE',

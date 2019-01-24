@@ -25,6 +25,7 @@ export * from './text-module';
 export * from './ticket';
 export * from './user';
 export * from './valid-object';
+export * from './i18n';
 
 export { Query } from './Query';
 export { RequestObject } from './RequestObject';

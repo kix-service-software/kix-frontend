@@ -22,8 +22,8 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(CustomerService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(CustomerFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(CustomerService.getInstance());
+        ServiceRegistry.registerServiceInstance(CustomerFormService.getInstance());
 
         StandardTableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
         LabelService.getInstance().registerLabelProvider(new CustomerLabelProvider());

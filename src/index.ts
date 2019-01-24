@@ -23,7 +23,7 @@ class Startup {
     }
 
     private async bindServices(): Promise<void> {
-        await CoreServiceRegistry.getInstance().registerCoreServices();
+        await CoreServiceRegistry.registerCoreServices();
     }
 
 }

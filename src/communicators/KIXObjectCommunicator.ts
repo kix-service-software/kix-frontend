@@ -37,7 +37,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     private async loadObjects(data: LoadObjectsRequest): Promise<CommunicatorResponse<LoadObjectsResponse<any>>> {
         let response;
 
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             const loadingOptions = data.loadingOptions ? data.loadingOptions : new KIXObjectLoadingOptions();
             await service.loadObjects(
@@ -62,7 +62,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     private async createObject(data: CreateObjectRequest): Promise<CommunicatorResponse<CreateObjectResponse>> {
         let response;
 
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             KIXObjectCache.updateCache(data.objectType, null, ServiceMethod.CREATE, data.parameter, data.createOptions);
             await service.createObject(data.token, data.objectType, data.parameter, data.createOptions)
@@ -89,7 +89,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     private async updateObject(data: UpdateObjectRequest): Promise<CommunicatorResponse<UpdateObjectResponse>> {
         let response;
 
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.UPDATE, data.parameter);
             await service.updateObject(data.token, data.objectType, data.parameter, data.objectId, data.updateOptions)
@@ -116,7 +116,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
     private async deleteObject(data: DeleteObjectRequest): Promise<CommunicatorResponse<DeleteObjectResponse>> {
         let response;
 
-        const service = KIXObjectServiceRegistry.getInstance().getServiceInstance(data.objectType);
+        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.DELETE, null, data.deleteOptions);
             await service.deleteObject(data.token, data.objectType, data.objectId, data.deleteOptions)

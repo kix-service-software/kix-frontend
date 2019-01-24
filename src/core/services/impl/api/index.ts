@@ -20,3 +20,4 @@ export { TicketTypeService } from './TicketTypeService';
 export { TicketStateService } from './TicketStateService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { ConfigItemClassService } from './ConfigItemClassService';
+export { TranslationService } from './TranslationService';

@@ -43,7 +43,7 @@ export class TicketService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

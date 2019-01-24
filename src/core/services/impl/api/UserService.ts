@@ -22,7 +22,7 @@ export class UserService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
         KIXObjectCache.registerCacheHandler(new UserCacheHandler());
     }
 

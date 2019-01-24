@@ -2,7 +2,7 @@ import {
     ContactService, CustomerService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
-    TicketStateService, TicketPriorityService, ConfigItemClassService
+    TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService
 } from "./impl";
 import { SlaService } from "./impl/api/SlaService";
 
@@ -12,7 +12,7 @@ export class CoreServiceRegistry {
 
     private constructor() { }
 
-    public static getInstance(): CoreServiceRegistry {
+    private static getInstance(): CoreServiceRegistry {
         if (!CoreServiceRegistry.INSTANCE) {
             CoreServiceRegistry.INSTANCE = new CoreServiceRegistry();
         }
@@ -22,10 +22,12 @@ export class CoreServiceRegistry {
 
     private initialized: boolean = false;
 
-    public async registerCoreServices(): Promise<void> {
-        if (!this.initialized) {
+    public static async registerCoreServices(): Promise<void> {
+        const registry = CoreServiceRegistry.getInstance();
+        if (!registry.initialized) {
             const cachePromises: Array<Promise<any>> = [];
 
+            cachePromises.push(TranslationService.getInstance().initCache());
             cachePromises.push(CMDBService.getInstance().initCache());
             cachePromises.push(ConfigItemClassService.getInstance().initCache());
             cachePromises.push(ContactService.getInstance().initCache());
@@ -49,7 +51,7 @@ export class CoreServiceRegistry {
 
             await Promise.all(cachePromises);
 
-            this.initialized = true;
+            registry.initialized = true;
         }
     }
 

@@ -34,7 +34,7 @@ class Component {
     private async prepareForm(): Promise<Form> {
         let personalSettings: PersonalSetting[] = [];
 
-        const service: AgentService = ServiceRegistry.getInstance().getServiceInstance(
+        const service: AgentService = ServiceRegistry.getServiceInstance(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
         );
         if (service) {
@@ -75,7 +75,7 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const service: AgentService = ServiceRegistry.getInstance().getServiceInstance(
+                    const service: AgentService = ServiceRegistry.getServiceInstance(
                         KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
                     );
                     if (service) {
