@@ -1,4 +1,4 @@
-import { KIXObjectService } from "../kix";
+import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
     KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
@@ -10,8 +10,8 @@ import {
 } from "../../model/kix/faq";
 import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
-import { LanguageUtil } from "../LanguageUtil";
 import { BrowserUtil } from "../BrowserUtil";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class FAQService extends KIXObjectService {
 
@@ -116,7 +116,10 @@ export class FAQService extends KIXObjectService {
                     values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.APPROVED);
                     break;
                 case FAQArticleProperty.LANGUAGE:
-                    const languages = await LanguageUtil.getLanguages();
+                    const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+                        KIXObjectType.TRANSLATION
+                    );
+                    const languages = await translationService.getLanguages();
                     values = languages.map((l) => new TreeNode(l[0], l[1]));
                     break;
                 case FAQArticleProperty.VALID_ID:

@@ -120,7 +120,7 @@ class EditorComponent {
 
     public setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): void {
         autocompleteOption.autocompleteObjects.forEach((ao) => {
-            const service = (ServiceRegistry.getInstance().getServiceInstance(ao.objectType) as IKIXObjectService);
+            const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
             if (service) {
                 const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                 if (config) {

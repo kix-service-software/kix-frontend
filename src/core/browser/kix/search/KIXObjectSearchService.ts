@@ -205,7 +205,7 @@ export class KIXObjectSearchService {
     public async getTreeNodes(
         objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
     ): Promise<TreeNode[]> {
-        const objectService = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const objectService = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let nodes = await objectService.getTreeNodes(property);
         if (!nodes || !nodes.length) {
             const searchDefinition = this.getSearchDefinition(objectType);

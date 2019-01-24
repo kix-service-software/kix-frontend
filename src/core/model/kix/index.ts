@@ -10,6 +10,7 @@ export * from './ticket';
 export * from './user';
 export * from './customer';
 export * from './text-module';
+export * from './i18n';
 
 export { ClientRegistration } from './ClientRegistration';
 export { GeneralCatalogItem } from './GeneralCatalogItem';

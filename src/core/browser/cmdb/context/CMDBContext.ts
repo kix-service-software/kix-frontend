@@ -97,7 +97,7 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
     }
 
     private async getDeploymentStateIds(): Promise<number[]> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
+        const service = ServiceRegistry.getServiceInstance<CMDBService>(
             KIXObjectType.CONFIG_ITEM
         );
         const catalogItems = await service.getDeploymentStates();

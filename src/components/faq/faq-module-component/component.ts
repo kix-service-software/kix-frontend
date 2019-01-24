@@ -36,8 +36,8 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new FAQLabelProvider());
         LabelService.getInstance().registerLabelProvider(new FAQArticleHistoryLabelProvider());
 
-        ServiceRegistry.getInstance().registerServiceInstance(FAQService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(FAQArticleFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
 

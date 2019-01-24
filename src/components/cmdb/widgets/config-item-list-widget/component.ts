@@ -51,7 +51,7 @@ class Component {
     }
 
     private async prepareFilter(): Promise<void> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
+        const service = ServiceRegistry.getServiceInstance<CMDBService>(
             KIXObjectType.CONFIG_ITEM
         );
 

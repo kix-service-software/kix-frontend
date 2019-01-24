@@ -8,4 +8,5 @@ export class TableFilterCriteria {
         public value: string | number,
         public useObjectService: boolean = false
     ) { }
+
 }

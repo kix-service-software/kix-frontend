@@ -184,7 +184,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async createIcons(token: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
-            const iconService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             if (iconService) {
@@ -205,7 +205,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async updateIcon(token: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
-            const iconService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             const icons = await iconService.loadObjects<ObjectIcon>(

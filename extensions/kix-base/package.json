@@ -28,6 +28,9 @@
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "i18n-admin": "../../dist/registry-modules/admin/i18n-admin-module.extension"
         }
     }
 }

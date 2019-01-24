@@ -75,7 +75,7 @@ class Component {
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
                 const cmdbService
-                    = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                    = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
                 const ciClass = this.state.currentClassNode.id as ConfigItemClass;
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)

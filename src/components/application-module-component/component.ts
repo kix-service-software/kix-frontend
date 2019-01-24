@@ -1,13 +1,13 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    StandardTableFactoryService, LabelService, DialogService, FactoryService, PersonalSettingsFormService
+    StandardTableFactoryService, LabelService, DialogService, FactoryService
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
 import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration, UserCacheHandler
+    ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
@@ -23,7 +23,15 @@ import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/brow
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
+import { TranslationService } from '../../core/browser/i18n/TranslationService';
+import { TranslationLabelProvider, TranslationBrowserFactory } from '../../core/browser/i18n';
+import {
+    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction
+} from '../../core/browser/i18n/admin/actions';
+import { TranslationTableFactory } from '../../core/browser/i18n/admin/table';
 import { AgentService } from '../../core/browser/application';
+import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
+import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
 
 class Component extends AbstractMarkoComponent {
 
@@ -32,17 +40,18 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(AgentService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(SearchService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(LinkService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(GeneralCatalogService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TextModuleService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(SysConfigService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(DynamicFieldService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(SlaService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ObjectIconService.getInstance());
+        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
+        ServiceRegistry.registerServiceInstance(SearchService.getInstance());
+        ServiceRegistry.registerServiceInstance(LinkService.getInstance());
+        ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
+        ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
+        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
+        ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
+        ServiceRegistry.registerServiceInstance(SlaService.getInstance());
+        ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
 
-        ServiceRegistry.getInstance().registerServiceInstance(PersonalSettingsFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
         KIXObjectCache.registerCacheHandler(new UserCacheHandler());
@@ -50,25 +59,38 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
         );
-        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SLA, SlaBrowserFactory.getInstance()
-        );
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
-        StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 
-        LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
+        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
+        StandardTableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.SLA, SlaBrowserFactory.getInstance()
+        );
+        LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
+
+        StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
+        LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
+        ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
+
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+        );
+        StandardTableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
         ActionFactory.getInstance().registerAction('search-result-print-action', SearchResultPrintAction);
-        ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
         this.registerContexts();
         this.registerDialogs();

@@ -3,7 +3,7 @@ import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, DateTimeUtil, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Queue, Service, KIXObjectLoadingOptions, TicketPriority, TicketType,
-    KIXObjectCache, TicketState, StateType, KIXObject, KIXObjectSpecificLoadingOptions, Sla
+    KIXObjectCache, TicketState, StateType, KIXObject, KIXObjectSpecificLoadingOptions, Sla, TableFilterCriteria
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -391,9 +391,9 @@ export class TicketService extends KIXObjectService<Ticket> {
         return nodes;
     }
 
-    public checkFilterValue(ticket: Ticket, property: string, value: string | number): boolean {
-        if (property === TicketProperty.WATCHERS && ticket.Watchers) {
-            return ticket.Watchers.some((w) => w.UserID === value);
+    public checkFilterValue(ticket: Ticket, criteria: TableFilterCriteria): boolean {
+        if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
+            return ticket.Watchers.some((w) => w.UserID === criteria.value);
         }
         return true;
     }

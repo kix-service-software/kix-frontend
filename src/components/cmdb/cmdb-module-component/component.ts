@@ -29,10 +29,10 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(CMDBService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemFormService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(CMDBService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 

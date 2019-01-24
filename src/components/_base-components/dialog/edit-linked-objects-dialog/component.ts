@@ -331,7 +331,7 @@ class Component {
     }
 
     private async addLinks(): Promise<boolean> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {

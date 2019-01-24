@@ -58,9 +58,7 @@ export class TableFilterLayer extends AbstractTableLayer implements ITableFilter
             }
 
             if (c.useObjectService) {
-                const service
-                    = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(object.KIXObjectType);
-                returnValue = service.checkFilterValue(object, c.property, c.value);
+                returnValue = KIXObjectService.checkFilterValue(object.KIXObjectType, object, c);
             } else {
                 const objectValue = object[c.property] || null;
                 switch (c.operator) {
