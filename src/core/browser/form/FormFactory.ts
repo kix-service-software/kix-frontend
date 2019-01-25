@@ -14,7 +14,7 @@ export class FormFactory {
             ? fields.map((f) => new FormField(
                 f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
                 FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault, f.countMax, f.countMin,
-                f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly
+                f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly, f.placeholder
             ))
             : [];
     }

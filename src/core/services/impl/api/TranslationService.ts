@@ -74,8 +74,26 @@ export class TranslationService extends KIXObjectService {
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createTranslation = new CreateTranslation(parameter);
+        const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
 
+        const createParameter: Array<[string, any]> = [
+            [TranslationProperty.PATTERN, pattern[1]]
+        ];
+
+        const languages: TranslationLanguage[] = [];
+        const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
+        languageParameter.forEach((lp) => {
+            const translationLanguage = new TranslationLanguage();
+            translationLanguage.Language = lp[0];
+            translationLanguage.Value = lp[1];
+            languages.push(translationLanguage);
+        });
+
+        if (languages.length > 0) {
+            createParameter.push([TranslationProperty.LANGUAGES, languages]);
+        }
+
+        const createTranslation = new CreateTranslation(createParameter);
         const response = await this.sendCreateRequest<CreateTranslationResponse, CreateTranslationRequest>(
             token, this.RESOURCE_URI, new CreateTranslationRequest(createTranslation)
         ).catch((error: Error) => {

@@ -3,6 +3,7 @@ import { KIXObjectType, KIXObject, Service } from "./kix";
 import { IKIXObjectCacheHandler } from "./IKIXObjectCacheHandler";
 import { KIXObjectSpecificCreateOptions } from "./KIXObjectSpecificCreateOptions";
 import { KIXObjectSpecificDeleteOptions } from "./KIXObjectSpecificDeleteOptions";
+import { IKIXObjectCacheListener } from "./IKIXObjectCacheListener";
 
 export class KIXObjectCache {
 
@@ -20,6 +21,12 @@ export class KIXObjectCache {
     private cacheHandler: IKIXObjectCacheHandler[] = [];
 
     private objectCache: Map<KIXObjectType, KIXObject[]> = new Map();
+
+    private cacheListener: IKIXObjectCacheListener[] = [];
+
+    public static registerCacheListener(listener: IKIXObjectCacheListener): void {
+        KIXObjectCache.getInstance().cacheListener.push(listener);
+    }
 
     public static registerCacheHandler(handler: IKIXObjectCacheHandler): void {
         KIXObjectCache.getInstance().cacheHandler.push(handler);
@@ -57,6 +64,8 @@ export class KIXObjectCache {
         }
 
         cache.objectCache.get(objectType).push(object);
+
+        KIXObjectCache.getInstance().cacheListener.forEach((l) => l.objectAdded(objectType, object));
     }
 
     public static removeObject(objectType: KIXObjectType, objectId: string | number): void {
@@ -67,6 +76,7 @@ export class KIXObjectCache {
             );
             if (index !== -1) {
                 cache.objectCache.get(objectType).splice(index, 1);
+                KIXObjectCache.getInstance().cacheListener.forEach((l) => l.objectRemoved(objectType, objectId));
             }
         }
     }
@@ -75,6 +85,7 @@ export class KIXObjectCache {
         const cache = KIXObjectCache.getInstance();
         if (cache.objectCache.has(objectType)) {
             cache.objectCache.delete(objectType);
+            KIXObjectCache.getInstance().cacheListener.forEach((l) => l.cacheCleared(objectType));
         }
     }
 

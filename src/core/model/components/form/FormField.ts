@@ -27,6 +27,7 @@ export class FormField<T = any> {
         public empty: boolean = false,
         public asStructure: boolean = false,
         public readonly: boolean = false,
+        public placeholder: string = null
     ) {
         this.instanceId = IdService.generateDateBasedId(this.property);
     }

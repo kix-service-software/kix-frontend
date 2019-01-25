@@ -32,6 +32,7 @@ import { TranslationTableFactory } from '../../core/browser/i18n/admin/table';
 import { AgentService } from '../../core/browser/application';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
 import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
+import { NewTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 
 class Component extends AbstractMarkoComponent {
 
@@ -123,6 +124,13 @@ class Component extends AbstractMarkoComponent {
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
         ContextService.getInstance().registerContext(settingsDialogContext);
+
+        const translationDialogContext = new ContextDescriptor(
+            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
+        );
+        ContextService.getInstance().registerContext(translationDialogContext);
     }
 
     private registerDialogs(): void {
@@ -152,6 +160,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-translation-dialog',
+            new WidgetConfiguration(
+                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-gear'
+            ),
+            KIXObjectType.TRANSLATION,
+            ContextMode.CREATE_ADMIN
         ));
     }
 

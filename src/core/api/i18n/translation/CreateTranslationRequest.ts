@@ -1,9 +1,9 @@
-import { CreateTicketType } from '../..';
+import { CreateTranslation } from './CreateTranslation';
 
 export class CreateTranslationRequest {
-  public TicketType: CreateTicketType;
+  public Translation: CreateTranslation;
 
-  public constructor(createTicketType: CreateTicketType) {
-    this.TicketType = createTicketType;
+  public constructor(translation: CreateTranslation) {
+    this.Translation = translation;
   }
 }

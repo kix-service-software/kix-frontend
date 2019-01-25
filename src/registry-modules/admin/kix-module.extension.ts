@@ -10,7 +10,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['admin-module-component', 'admin/admin-module-component'],
         ['admin', 'admin/admin-module'],
         ['admin-modules-explorer', 'admin/widgets/admin-modules-explorer'],
-        ['i18n-admin-translations', 'i18n/admin/i18n-admin-translations']
+        ['i18n-admin-translations', 'i18n/admin/i18n-admin-translations'],
+        ['new-translation-dialog', 'i18n/admin/dialogs/new-translation-dialog']
     ];
 
 }

@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
 import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
+    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache
 } from '../../../../core/model';
 import { TicketContext } from '../../../../core/browser/ticket';
 
@@ -24,6 +24,21 @@ export class Component {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        await this.loadQueues(context);
+
+        KIXObjectCache.registerCacheListener({
+            objectAdded: () => { return; },
+            objectRemoved: () => { return; },
+            cacheCleared: (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
+                    this.loadQueues(context);
+                }
+            }
+        });
+    }
+
+    private async loadQueues(context: TicketContext): Promise<void> {
+        this.state.nodes = null;
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, null, null, [['TicketStats.StateType', 'Open']]
@@ -33,7 +48,6 @@ export class Component {
         );
 
         this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
-
         this.setActiveNode(context.queue);
     }
 
