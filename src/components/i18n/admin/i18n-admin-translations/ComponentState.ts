@@ -7,8 +7,8 @@ export class ComponentState {
         public table: StandardTable = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public actions: AbstractAction[] = [],
-        public instanceId: string = '201811271234-ticket-types-list',
-        public title: string = 'Stammdaten: Typen',
+        public instanceId: string = '201811271234-i18n-translation-list',
+        public title: string = 'Internationalisierung: Übersetzungen',
         public filterCount: number = null
     ) { }
 

@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../core/model';
+import { type } from 'os';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -9,7 +10,12 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
+        if (this.state.field.placeholder) {
+            this.state.placeholder = this.state.field.placeholder;
+        } else if (this.state.field.required) {
+            this.state.placeholder = this.state.field.label;
+        }
+
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
     }

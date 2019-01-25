@@ -5,11 +5,12 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, KIXObjectPropertyFilter, Translation, SortUtil, TranslationProperty,
-    DataType, SortOrder, TableFilterCriteria
+    DataType, SortOrder, TableFilterCriteria, KIXObjectCache
 } from '../../../../core/model';
 import { AdminContext } from '../../../../core/browser/admin';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { RouterOutletComponent } from '../../../_base-components/router-outlet/component';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -45,11 +46,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         this.prepareActions();
 
+        await this.setTranslations();
+
+        KIXObjectCache.registerCacheListener({
+            cacheCleared: async (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.TRANSLATION) {
+                    await this.setTranslations();
+                }
+            },
+            objectAdded: () => { return; },
+            objectRemoved: () => { return; }
+        });
+
+        EventService.getInstance().subscribe('TRANSLATION_LIST_UPDATED', this);
+    }
+
+    private async setTranslations(): Promise<void> {
         const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
         await this.prepareTitle(translations.length);
         await this.prepareTable(translations);
-
-        EventService.getInstance().subscribe('TRANSLATION_LIST_UPDATED', this);
     }
 
     private async prepareTitle(count: number): Promise<void> {

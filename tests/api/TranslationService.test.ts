@@ -2,7 +2,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { ConfigurationService, TranslationService } from '../../src/core/services';
-import { KIXObjectType, Translation, TranslationLanguage, TranslationLanguageLoadingOptions } from '../../src/core/model';
+import { KIXObjectType, Translation, TranslationLanguage, TranslationLanguageLoadingOptions, TranslationProperty } from '../../src/core/model';
 import { TranslationsResponse } from '../../src/core/api';
 
 chai.use(chaiAsPromised);
@@ -30,7 +30,7 @@ describe('Translation Service', () => {
         nockScope
             .get(resourcePath)
             .query({ include: 'Languages' })
-            .reply(200, buildTranslationsResponse([translationId1, translationId2, translationId3, translationId4], ['en', 'de', 'fr']));
+            .reply(200, buildTranslationsResponse([translationId1, translationId2, translationId3, translationId4], ['fr', 'en', 'de']));
     });
 
     it('Service instance exists.', () => {
@@ -125,6 +125,69 @@ describe('Translation Service', () => {
         });
 
     });
+
+    describe('Create new translations.', () => {
+
+        before(async () => {
+            nockScope
+                .post(resourcePath, {
+                    Translation: {
+                        Pattern: /.+/i
+                    }
+                })
+                .reply(201, {
+                    TranslationID: 24
+                });
+        });
+
+        it('should create a correct request to create a translation.', async () => {
+            const parameter: Array<[string, any]> = [
+                [TranslationProperty.PATTERN, 'BasePattern']
+            ]
+            const translationId = await TranslationService.getInstance().createObject('token', KIXObjectType.TRANSLATION, parameter)
+            expect(translationId).exist;
+            expect(translationId).equals(24);
+        });
+
+    });
+
+    describe('Create new translations with languages.', () => {
+
+        before(async () => {
+            nockScope
+                .post(resourcePath, {
+                    Translation: {
+                        Pattern: /.+/i,
+                        Languages: [
+                            {
+                                Language: 'de',
+                                Value: 'Das ist ein Test.'
+                            },
+                            {
+                                Language: 'en',
+                                Value: 'This is a test.'
+                            }
+                        ]
+                    }
+                })
+                .reply(201, {
+                    TranslationID: 24
+                });
+        });
+
+        it('should create a correct request to create a translation.', async () => {
+            const parameter: Array<[string, any]> = [
+                [TranslationProperty.PATTERN, 'BasePattern'],
+                ['de', 'Das ist ein Test.'],
+                ['en', 'This is a test.']
+            ]
+            const translationId = await TranslationService.getInstance().createObject('token', KIXObjectType.TRANSLATION, parameter)
+            expect(translationId).exist;
+            expect(translationId).equals(24);
+        });
+
+    });
+
 
 });
 
