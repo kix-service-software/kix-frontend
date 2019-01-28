@@ -9,12 +9,12 @@ export class TranslationEditAction extends AbstractAction {
         this.icon = "kix-icon-edit";
     }
 
-    public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-translation-form', false);
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_TYPE, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
-        );
-    }
+    // public async run(): Promise<void> {
+    //     await FormService.getInstance().getFormInstance<FormInstance>('edit-translation-form', false);
+    //     ContextService.getInstance().setDialogContext(
+    //         // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
+    //         null, KIXObjectType.TICKET_TYPE, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
+    //     );
+    // }
 
 }

@@ -8,6 +8,7 @@ import { KIXObjectService } from "../../kix";
 import { CMDBContext } from "./CMDBContext";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
+import { ApplicationEvent } from "../../application";
 
 export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextConfiguration> {
 
@@ -113,7 +114,9 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Config Item ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Config Item ...' }
+        );
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
@@ -138,7 +141,9 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
             );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: 'Lade Config Item ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Config Item ...' }
+        );
         return configItem;
     }
 

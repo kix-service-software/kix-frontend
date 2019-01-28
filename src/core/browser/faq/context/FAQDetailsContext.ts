@@ -9,6 +9,7 @@ import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
 import { ContextService } from "../../context";
+import { ApplicationEvent } from "../../application";
 
 export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
 
@@ -118,7 +119,9 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
     }
 
     private async loadFAQArticle(): Promise<FAQArticle> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade FAQ-Artikel ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade FAQ-Artikel ...' }
+        );
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
@@ -141,7 +144,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
             );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         return faqArticle;
     }
 }

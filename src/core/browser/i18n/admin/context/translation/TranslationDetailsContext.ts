@@ -4,9 +4,10 @@ import {
 } from "../../../../../model";
 import { TranslationDetailsContextConfiguration } from "./TranslationDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
-import { EventService } from "../../../../event";
-import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
+import { TranslationService } from "../../../TranslationService";
+import { EventService } from "../../../../event";
+import { ApplicationEvent } from "../../../../application";
 
 export class TranslationDetailsContext extends Context<TranslationDetailsContextConfiguration> {
 
@@ -96,7 +97,7 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TRANSLATION, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let ticketType;
+        let translation;
 
         if (!objectType) {
             objectType = KIXObjectType.TRANSLATION;
@@ -107,38 +108,32 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
         }
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.TRANSLATION, Number(this.objectId))) {
-            ticketType = await this.loadTranslation(changedProperties);
+            translation = await this.loadTranslation();
         } else {
-            ticketType = KIXObjectCache.getObject(KIXObjectType.TRANSLATION, Number(this.objectId));
+            translation = KIXObjectCache.getObject(KIXObjectType.TRANSLATION, Number(this.objectId));
         }
 
-        return ticketType;
+        return translation;
     }
 
-    private async loadTranslation(changedProperties: string[] = [], cache: boolean = true): Promise<Translation> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Übersetzung ...' });
+    private async loadTranslation(): Promise<Translation> {
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Übersetzung ...' }
+        );
 
-        const ticketTypeId = Number(this.objectId);
+        const translations = await TranslationService.getInstance().loadObjects<Translation>(
+            KIXObjectType.TRANSLATION, [this.objectId]
+        );
 
-        const ticketTypes = await KIXObjectService.loadObjects<Translation>(
-            KIXObjectType.TRANSLATION, [ticketTypeId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
+        const translation = translations && translations.length ? translations[0] : null;
+        this.listeners.forEach(
+            (l) => l.objectChanged(this.objectId, translation, KIXObjectType.TRANSLATION, [])
+        );
 
-        let ticketType: Translation;
-        if (ticketTypes && ticketTypes.length) {
-            ticketType = ticketTypes[0];
-            this.objectId = ticketType.ObjectId;
-            this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), ticketType, KIXObjectType.TRANSLATION, changedProperties)
-            );
-        }
-
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: '' });
-
-        return ticketType;
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Übersetzung ...' }
+        );
+        return translation;
     }
 
 }

@@ -6,7 +6,7 @@ export class TranslationCreateAction extends AbstractAction {
 
     public initAction(): void {
         this.text = "Neue Übersetzung";
-        this.icon = "kix-icon-gear";
+        this.icon = "kix-icon-new-gear";
     }
 
     public run(): void {

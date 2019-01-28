@@ -1,6 +1,5 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../core/model';
-import { type } from 'os';
 
 class Component extends FormInputComponent<string, ComponentState> {
 

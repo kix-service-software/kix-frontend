@@ -317,7 +317,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-type-dialog',
             new WidgetConfiguration(
-                'new-ticket-type-dialog', 'Typ hinzufügen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'new-ticket-type-dialog', 'Typ hinzufügen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.CREATE_ADMIN
@@ -336,7 +336,7 @@ class Component extends AbstractMarkoComponent {
             'new-ticket-priority-dialog',
             new WidgetConfiguration(
                 'new-ticket-priority-dialog', 'Priorität hinzufügen', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,
             ContextMode.CREATE_ADMIN
@@ -356,7 +356,7 @@ class Component extends AbstractMarkoComponent {
             'new-ticket-state-dialog',
             new WidgetConfiguration(
                 'new-ticket-state-dialog', 'Status hinzufügen', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_STATE,
             ContextMode.CREATE_ADMIN

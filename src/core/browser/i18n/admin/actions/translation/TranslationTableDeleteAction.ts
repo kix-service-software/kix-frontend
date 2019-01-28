@@ -5,6 +5,7 @@ import {
 import { OverlayService } from "../../../../OverlayService";
 import { KIXObjectService } from "../../../../kix";
 import { EventService } from "../../../../event";
+import { ApplicationEvent } from "../../../../application";
 
 export class TranslationTableDeleteAction extends AbstractAction {
 
@@ -51,7 +52,7 @@ export class TranslationTableDeleteAction extends AbstractAction {
 
     public async deleteTranslations(): Promise<void> {
         if (this.selectedObjects && !!this.selectedObjects.length) {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Entferne Übersetzungen ...'
             });
             const failIds = await KIXObjectService.deleteObject(
@@ -67,7 +68,7 @@ export class TranslationTableDeleteAction extends AbstractAction {
             EventService.getInstance().publish('TRANSLATION_LIST_UPDATED', {
                 loading: true, hint: 'Entferne Übersetzungen ...'
             });
-            EventService.getInstance().publish('APP_LOADING', { loading: false });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
 }

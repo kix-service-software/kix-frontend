@@ -10,6 +10,8 @@ import { EventService } from '../../core/browser/event';
 import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
 import { ObjectIconService } from '../../core/browser/icon';
+import { TranslationService } from '../../core/browser/i18n/TranslationService';
+import { ApplicationEvent } from '../../core/browser/application';
 
 declare var io: any;
 
@@ -33,8 +35,6 @@ class Component {
 
         await KIXModulesService.getInstance().init();
 
-        await ObjectIconService.getInstance().init();
-
         const modules = KIXModulesService.getInstance().getModules();
         modules.forEach((m) => {
             this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
@@ -50,12 +50,16 @@ class Component {
 
         ContextService.getInstance().setObjectData(this.state.objectData);
         await this.bootstrapServices();
+
+        await ObjectIconService.getInstance().init();
+        await TranslationService.getInstance().init();
+
         this.setContext();
 
-        EventService.getInstance().subscribe('APP_LOADING', {
+        EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {
             eventSubscriberId: 'BASE-TEMPLATE',
             eventPublished: (data: any, eventId: string) => {
-                if (eventId === 'APP_LOADING') {
+                if (eventId === ApplicationEvent.APP_LOADING) {
                     this.state.loading = data.loading;
                     this.state.loadingHint = data.hint;
                 }

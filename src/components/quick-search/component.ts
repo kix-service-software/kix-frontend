@@ -3,6 +3,7 @@ import { KIXObjectSearchService, ContextService, OverlayService } from '../../co
 import { KIXObjectType, Ticket, OverlayType, StringContent } from '../../core/model';
 import { SearchContext } from '../../core/browser/search';
 import { EventService } from '../../core/browser/event';
+import { ApplicationEvent } from '../../core/browser/application';
 
 export class Component {
 
@@ -14,7 +15,9 @@ export class Component {
 
     public async search(textValue: string): Promise<void> {
         if (textValue && textValue !== '') {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Suche Tickets ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Suche Tickets ...' }
+            );
 
             await KIXObjectSearchService.getInstance().executeFullTextSearch<Ticket>(
                 KIXObjectType.TICKET, textValue
@@ -26,7 +29,9 @@ export class Component {
 
             ContextService.getInstance().setContext(SearchContext.CONTEXT_ID, null, null, null, null, true);
 
-            EventService.getInstance().publish('APP_LOADING', { loading: false, hint: 'Suche Tickets ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: false, hint: 'Suche Tickets ...' }
+            );
         }
     }
 

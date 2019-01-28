@@ -105,7 +105,7 @@ export class DialogService {
                     break;
                 case ContextMode.PERSONAL_SETTINGS:
                     dialogTitle = dialogTitle || 'Persönliche Einstellungen';
-                    dialogIcon = dialogIcon || 'kix-icon-gear';
+                    dialogIcon = dialogIcon || 'kix-icon-new-gear';
                     singleTab = true;
                     break;
                 default:

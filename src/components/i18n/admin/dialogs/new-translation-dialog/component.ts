@@ -1,6 +1,8 @@
 import { AbstractNewDialog } from "../../../../../core/browser";
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, ContextMode, TranslationProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
 
 class Component extends AbstractNewDialog {
 
@@ -10,11 +12,10 @@ class Component extends AbstractNewDialog {
             'Übersetzung wird angelegt',
             'Übersetzung wurde erfolgreich angelegt.',
             KIXObjectType.TRANSLATION,
-            null
-            // new RoutingConfiguration(
-            //     null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
-            //     ContextMode.DETAILS, TicketTypeProperty.ID, true
-            // )
+            new RoutingConfiguration(
+                null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
+                ContextMode.DETAILS, TranslationProperty.ID, true
+            )
         );
     }
 

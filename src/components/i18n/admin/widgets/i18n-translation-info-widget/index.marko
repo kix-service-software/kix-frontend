@@ -1,0 +1,23 @@
+<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.translation)>
+            <div.translation-information>
+                <div.information-list>
+                    <div>
+                        <object-property-label object=state.translation property="CreateTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.translation property="ChangeBy" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.translation property="ChangeTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.translation property="CreateBy" labelProvider=state.labelProvider/>
+                    </div>
+                </div>
+            </div>
+        </if>
+    </@content>
+</widget>

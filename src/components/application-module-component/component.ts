@@ -7,7 +7,7 @@ import { SearchService, SearchResultPrintAction, SearchContext } from '../../cor
 import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration
+    ConfiguredDialogWidget, WidgetConfiguration, TranslationCacheHandler
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
@@ -24,15 +24,17 @@ import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
-import { TranslationLabelProvider, TranslationBrowserFactory } from '../../core/browser/i18n';
 import {
-    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction
+    TranslationLabelProvider, TranslationBrowserFactory, TranslationLanguageLabelProvider
+} from '../../core/browser/i18n';
+import {
+    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
 } from '../../core/browser/i18n/admin/actions';
-import { TranslationTableFactory } from '../../core/browser/i18n/admin/table';
+import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
 import { AgentService } from '../../core/browser/application';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
 import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
-import { NewTranslationDialogContext } from '../../core/browser/i18n/admin/context';
+import { NewTranslationDialogContext, TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 
 class Component extends AbstractMarkoComponent {
 
@@ -56,6 +58,7 @@ class Component extends AbstractMarkoComponent {
 
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
         KIXObjectCache.registerCacheHandler(new UserCacheHandler());
+        KIXObjectCache.registerCacheHandler(new TranslationCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
@@ -84,8 +87,11 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
         );
         StandardTableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        StandardTableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
@@ -131,6 +137,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
         );
         ContextService.getInstance().registerContext(translationDialogContext);
+
+        const translationDetailsContext = new ContextDescriptor(
+            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'i18n-translation-details', ['translations'], TranslationDetailsContext
+        );
+        ContextService.getInstance().registerContext(translationDetailsContext);
     }
 
     private registerDialogs(): void {
