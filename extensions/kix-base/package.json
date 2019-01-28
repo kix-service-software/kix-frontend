@@ -24,7 +24,8 @@
             "release-configuration": "../../dist/registry-modules/release/configuration.extension",
             "bulk-dialog-configuration": "../../dist/registry-modules/application/bulk-dialog-configuration.extension",
             "personal-settings-dialog-configuration": "../../dist/registry-modules/application/personal-settings-dialog-configuration.extension",
-            "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension"
+            "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension",
+            "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",

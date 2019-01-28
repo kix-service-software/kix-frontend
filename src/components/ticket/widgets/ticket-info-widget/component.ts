@@ -15,8 +15,8 @@ class Component {
     private state: ComponentState;
     private contextListernerId: string;
 
-    private customerRoutingConfiguration: RoutingConfiguration;
-    private contactRoutingConfiguration: RoutingConfiguration;
+    public customerRoutingConfiguration: RoutingConfiguration;
+    public contactRoutingConfiguration: RoutingConfiguration;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();

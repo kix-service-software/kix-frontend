@@ -7,6 +7,7 @@ import { IdService } from "../../../../IdService";
 import { TranslationTableContentLayer } from "./TranslationTableContentLayer";
 import { TranslationTableLabelLayer } from "./TranslationTableLabelLayer";
 import { RoutingConfiguration } from "../../../../router";
+import { TranslationDetailsContext } from "../../context";
 
 export class TranslationTableFactory implements IStandardTableFactory<Translation> {
 
@@ -49,12 +50,12 @@ export class TranslationTableFactory implements IStandardTableFactory<Translatio
             tableConfiguration.headerHeight = TableHeaderHeight.LARGE;
         }
 
-        // if (defaultRouting) {
-        //     tableConfiguration.routingConfiguration = new RoutingConfiguration(
-        //         null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
-        //         ContextMode.DETAILS, TranslationProperty.ID
-        //     );
-        // }
+        if (defaultRouting) {
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
+                ContextMode.DETAILS, TranslationProperty.ID
+            );
+        }
 
         return tableConfiguration;
     }

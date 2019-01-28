@@ -26,6 +26,10 @@ export class TranslationService extends KIXObjectService<Translation> {
         return 'Translation';
     }
 
+    public async init(): Promise<void> {
+        this.loadObjects(KIXObjectType.TRANSLATION, null);
+    }
+
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,

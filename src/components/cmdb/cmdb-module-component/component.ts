@@ -156,7 +156,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-class-dialog',
             new WidgetConfiguration(
-                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null, 'kix-icon-gear'
+                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null,
+                'kix-icon-new-gear'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.CREATE_ADMIN

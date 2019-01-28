@@ -1,6 +1,6 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, Error, SortUtil, DataType, SortOrder
+    KIXObjectSpecificCreateOptions, KIXObjectCache, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -13,7 +13,7 @@ import {
 } from '../../../api';
 import {
     TranslationCacheHandler, Translation, TranslationLanguageLoadingOptions,
-    TranslationLanguage, TranslationLanguageProperty, TranslationProperty
+    TranslationLanguage, TranslationProperty
 } from '../../../model/kix/i18n';
 
 export class TranslationService extends KIXObjectService {
@@ -83,10 +83,12 @@ export class TranslationService extends KIXObjectService {
         const languages: TranslationLanguage[] = [];
         const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
         languageParameter.forEach((lp) => {
-            const translationLanguage = new TranslationLanguage();
-            translationLanguage.Language = lp[0];
-            translationLanguage.Value = lp[1];
-            languages.push(translationLanguage);
+            if (typeof lp[1] !== 'undefined' && lp[1] !== null && lp[1] !== '') {
+                const translationLanguage = new TranslationLanguage();
+                translationLanguage.Language = lp[0];
+                translationLanguage.Value = lp[1];
+                languages.push(translationLanguage);
+            }
         });
 
         if (languages.length > 0) {

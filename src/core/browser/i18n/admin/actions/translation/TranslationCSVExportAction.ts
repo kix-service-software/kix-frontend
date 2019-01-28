@@ -6,7 +6,7 @@ export class TranslationCSVExportAction extends AbstractAction<StandardTable> {
 
     public initAction(): void {
         this.text = "CSV-Export";
-        this.icon = "kix-icon-print";
+        this.icon = "kix-icon-export";
     }
 
     public canRun(): boolean {

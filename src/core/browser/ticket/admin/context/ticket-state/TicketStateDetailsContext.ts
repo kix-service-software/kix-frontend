@@ -7,6 +7,7 @@ import { AdminContext } from "../../../../admin";
 import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
+import { ApplicationEvent } from "../../../../application";
 
 export class TicketStateDetailsContext extends Context<TicketStateDetailsContextConfiguration> {
 
@@ -117,7 +118,9 @@ export class TicketStateDetailsContext extends Context<TicketStateDetailsContext
     }
 
     private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ticketstatus ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticketstatus ...' }
+        );
 
         const ticketStateId = Number(this.objectId);
 
@@ -139,7 +142,7 @@ export class TicketStateDetailsContext extends Context<TicketStateDetailsContext
             );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: '' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ticketState;
     }

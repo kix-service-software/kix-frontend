@@ -7,6 +7,7 @@ import { FAQCategory, FAQArticleProperty } from "../../../model/kix/faq";
 import { EventService } from "../../event";
 import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
+import { ApplicationEvent } from "../../application";
 
 export class FAQContext extends Context<FAQContextConfiguration> {
 
@@ -69,7 +70,7 @@ export class FAQContext extends Context<FAQContextConfiguration> {
         }
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: `Lade FAQ Artikel ...`
             });
         }, 500);
@@ -81,7 +82,7 @@ export class FAQContext extends Context<FAQContextConfiguration> {
         window.clearTimeout(timeout);
         this.setObjectList(faqArticles);
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     public reset(): void {

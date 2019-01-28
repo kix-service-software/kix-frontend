@@ -5,6 +5,7 @@ import {
 import { OverlayService } from "../../../../OverlayService";
 import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
+import { ApplicationEvent } from "../../../../application";
 
 export class TicketPriorityTableDeleteAction extends AbstractAction {
 
@@ -51,7 +52,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction {
 
     public async deletePriorities(): Promise<void> {
         if (this.selectedObjects && !!this.selectedObjects.length) {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Entferne Prioritäten ...'
             });
             const failIds = await KIXObjectService.deleteObject(
@@ -67,7 +68,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction {
             EventService.getInstance().publish('TICKET_PRIORITY_LIST_UPDATED', {
                 loading: true, hint: 'Entferne Prioritäten ...'
             });
-            EventService.getInstance().publish('APP_LOADING', { loading: false });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
 

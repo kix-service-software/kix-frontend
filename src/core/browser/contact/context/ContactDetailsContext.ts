@@ -9,6 +9,7 @@ import { CustomerContext } from "../../customer";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
+import { ApplicationEvent } from "../../application";
 
 export class ContactDetailsContext extends Context<ContactDetailsContextConfiguration> {
 
@@ -108,7 +109,9 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
 
     private async loadContact(): Promise<Contact> {
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ansprechpartner ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ansprechpartner ...' }
+            );
         }, 500);
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['TicketStats', 'Tickets']);
@@ -128,7 +131,7 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
             this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), contact, KIXObjectType.CONTACT));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         return contact;
     }
 

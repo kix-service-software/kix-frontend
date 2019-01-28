@@ -5,6 +5,7 @@ import {
 import { OverlayService } from "../../../../OverlayService";
 import { KIXObjectService } from "../../../../kix";
 import { EventService } from "../../../../event";
+import { ApplicationEvent } from "../../../../application";
 
 export class TicketTypeTableDeleteAction extends AbstractAction {
 
@@ -51,7 +52,7 @@ export class TicketTypeTableDeleteAction extends AbstractAction {
 
     public async deleteTypes(): Promise<void> {
         if (this.selectedObjects && !!this.selectedObjects.length) {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Entferne Typen ...'
             });
             const failIds = await KIXObjectService.deleteObject(
@@ -67,7 +68,7 @@ export class TicketTypeTableDeleteAction extends AbstractAction {
             EventService.getInstance().publish('TICKET_TYPE_LIST_UPDATED', {
                 loading: true, hint: 'Entferne Typen ...'
             });
-            EventService.getInstance().publish('APP_LOADING', { loading: false });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
 }

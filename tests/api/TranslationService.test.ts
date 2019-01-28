@@ -159,14 +159,8 @@ describe('Translation Service', () => {
                     Translation: {
                         Pattern: /.+/i,
                         Languages: [
-                            {
-                                Language: 'de',
-                                Value: 'Das ist ein Test.'
-                            },
-                            {
-                                Language: 'en',
-                                Value: 'This is a test.'
-                            }
+                            { Language: 'de', Value: 'Das ist ein Test.' },
+                            { Language: 'en', Value: 'This is a test.' }
                         ]
                     }
                 })
@@ -179,6 +173,36 @@ describe('Translation Service', () => {
             const parameter: Array<[string, any]> = [
                 [TranslationProperty.PATTERN, 'BasePattern'],
                 ['de', 'Das ist ein Test.'],
+                ['en', 'This is a test.']
+            ]
+            const translationId = await TranslationService.getInstance().createObject('token', KIXObjectType.TRANSLATION, parameter)
+            expect(translationId).exist;
+            expect(translationId).equals(24);
+        });
+
+    });
+
+    describe('Create new translations with languages.', () => {
+
+        before(async () => {
+            nockScope
+                .post(resourcePath, {
+                    Translation: {
+                        Pattern: /.+/i,
+                        Languages: [{ Language: 'en', Value: 'This is a test.' }]
+                    }
+                })
+                .reply(201, {
+                    TranslationID: 24
+                });
+        });
+
+        it('should create a correct request with correct defined languages to create a translation.', async () => {
+            const parameter: Array<[string, any]> = [
+                [TranslationProperty.PATTERN, 'BasePattern'],
+                ['de', null],
+                ['fr', undefined],
+                ['es', ''],
                 ['en', 'This is a test.']
             ]
             const translationId = await TranslationService.getInstance().createObject('token', KIXObjectType.TRANSLATION, parameter)

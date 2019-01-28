@@ -9,6 +9,7 @@ import { TicketContext } from './TicketContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
+import { ApplicationEvent } from '../../application';
 
 export class TicketDetailsContext extends Context<TicketDetailsContextConfiguration> {
 
@@ -143,7 +144,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticket ...' });
 
         const loadingOptions = new KIXObjectLoadingOptions(
             ['Tickets.*'], null, null, null, null,
@@ -183,7 +184,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Ticket ...' });
 
         return ticket;
     }

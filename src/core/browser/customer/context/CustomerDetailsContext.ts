@@ -8,6 +8,7 @@ import { CustomerContext } from './CustomerContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
+import { ApplicationEvent } from '../../application';
 
 export class CustomerDetailsContext extends Context<CustomerDetailsContextConfiguration> {
 
@@ -111,7 +112,7 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
         );
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Kunde ...' });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Kunde ...' });
         }, 500);
 
         const customers = await KIXObjectService.loadObjects<Customer>(
@@ -129,7 +130,7 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
             this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), customer, KIXObjectType.CUSTOMER));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
         return customer;
     }
