@@ -1,4 +1,4 @@
-import { ContextService, ActionFactory, WidgetService, DialogService } from "../../../core/browser";
+import { ContextService, ActionFactory, WidgetService } from "../../../core/browser";
 import { FAQDetailsContext } from "../../../core/browser/faq";
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, AbstractAction, WidgetType } from "../../../core/model";
@@ -11,6 +11,8 @@ class Component {
 
     public LANE_WIDGET_TYPE = WidgetType.LANE;
 
+    private context: FAQDetailsContext;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -19,34 +21,36 @@ class Component {
         this.LANE_WIDGET_TYPE = WidgetType.LANE;
         WidgetService.getInstance().setWidgetType('faq-article-widget', WidgetType.LANE);
 
-        const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
-        context.registerListener('faq-details-component', {
+        this.context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
+        this.context.registerListener('faq-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
             objectChanged: (faqArticleId: string, faqArticle: FAQArticle, type: KIXObjectType) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, faqArticle);
+                    this.initWidget(faqArticle);
                 }
             }
         });
-        await this.initWidget(context);
+        await this.initWidget();
     }
 
-    private async initWidget(context: FAQDetailsContext, faqArticle?: FAQArticle): Promise<void> {
+    private async initWidget(faqArticle?: FAQArticle): Promise<void> {
         this.state.error = null;
         this.state.loading = true;
-        this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>().catch((error) => null);
+        this.state.faqArticle = faqArticle
+            ? faqArticle
+            : await this.context.getObject<FAQArticle>().catch((error) => null);
 
         if (!this.state.faqArticle) {
-            this.state.error = `Kein FAQ-Artikel mit ID ${context.getObjectId()} verfügbar.`;
+            this.state.error = `Kein FAQ-Artikel mit ID ${this.context.getObjectId()} verfügbar.`;
         }
 
-        this.state.configuration = context.getConfiguration();
-        this.state.lanes = context.getLanes(true);
-        this.state.tabWidgets = context.getLaneTabs(true);
-        this.state.contentWidgets = context.getContent();
+        this.state.configuration = this.context.getConfiguration();
+        this.state.lanes = this.context.getLanes(true);
+        this.state.tabWidgets = this.context.getLaneTabs(true);
+        this.state.contentWidgets = this.context.getContent();
 
         await this.prepareTitle();
 
@@ -56,8 +60,7 @@ class Component {
     }
 
     public async prepareTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.title = await context.getDisplayText();
+        this.state.title = await this.context.getDisplayText();
     }
 
     public getFAQActions(): AbstractAction[] {
@@ -79,8 +82,7 @@ class Component {
     }
 
     public getWidgetTemplate(instanceId: string): any {
-        const context = ContextService.getInstance().getActiveContext();
-        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        const config = this.context ? this.context.getWidgetConfiguration(instanceId) : undefined;
         return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
     }
 

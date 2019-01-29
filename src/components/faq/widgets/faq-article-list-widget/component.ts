@@ -26,7 +26,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         if (this.state.widgetConfiguration.contextDependent) {
