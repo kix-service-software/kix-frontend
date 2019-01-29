@@ -122,7 +122,7 @@ class Component {
 
     private async setInitialLinkDescriptions(): Promise<void> {
 
-        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE)
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE, null, null, null, false)
             .catch((error) => [] as LinkType[]);
 
         this.availableLinkObjects.forEach((lo) => {
