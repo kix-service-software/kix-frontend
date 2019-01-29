@@ -23,7 +23,7 @@ export class EditConfigItemDialogContext
     public async initContext(): Promise<void> {
         const formId = FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.CONFIG_ITEM);
         this.formListenerId = 'EditConfigItemDialogContext';
-        FormService.getInstance().registerFormInstanceListener(formId, this);
+        await FormService.getInstance().registerFormInstanceListener(formId, this);
     }
 
     public updateForm(): void {
