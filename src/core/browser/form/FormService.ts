@@ -98,11 +98,9 @@ export class FormService {
         return formId;
     }
 
-    public registerFormInstanceListener(formId: string, listener: IFormInstanceListener): void {
-        if (this.formInstances.has(formId)) {
-            const formInstance = this.formInstances.get(formId);
-            formInstance.registerListener(listener);
-        }
+    public async registerFormInstanceListener(formId: string, listener: IFormInstanceListener): Promise<void> {
+        const formInstance = await this.getFormInstance(formId);
+        formInstance.registerListener(listener);
     }
 
     public removeFormInstanceListener(formId: string, listenerId: string): void {
