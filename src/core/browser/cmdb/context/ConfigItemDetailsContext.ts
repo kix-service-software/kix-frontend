@@ -100,14 +100,21 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
     ): Promise<O> {
         let object;
 
-        if (reload && objectType === KIXObjectType.CONFIG_ITEM) {
-            KIXObjectCache.removeObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
+        if (!objectType) {
+            objectType = KIXObjectType.CONFIG_ITEM;
         }
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONFIG_ITEM, Number(this.objectId))) {
             object = await this.loadConfigItem();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
+        }
+
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
+            );
         }
 
         return object;
@@ -136,9 +143,6 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
         let configItem;
         if (configItems && configItems.length) {
             configItem = configItems[0];
-            this.listeners.forEach(
-                (l) => l.objectChanged(itemId, configItem, KIXObjectType.CONFIG_ITEM)
-            );
         }
 
         EventService.getInstance().publish(

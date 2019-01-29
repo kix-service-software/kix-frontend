@@ -111,8 +111,15 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.FAQ_ARTICLE, Number(this.objectId))) {
             object = await this.loadFAQArticle();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.FAQ_ARTICLE, Number(this.objectId));
+        }
+
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.FAQ_ARTICLE)
+            );
         }
 
         return object;
@@ -139,9 +146,6 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
         let faqArticle;
         if (faqArticles && faqArticles.length) {
             faqArticle = faqArticles[0];
-            this.listeners.forEach(
-                (l) => l.objectChanged(faqArticleId, faqArticle, KIXObjectType.FAQ_ARTICLE)
-            );
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });

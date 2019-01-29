@@ -103,12 +103,9 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             objectType = KIXObjectType.TICKET;
         }
 
-        if (reload && objectType === KIXObjectType.TICKET) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET, Number(this.objectId));
-        }
-
         if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET, Number(this.objectId))) {
             ticket = await this.loadTicket(changedProperties);
+            reload = true;
         } else {
             ticket = KIXObjectCache.getObject(KIXObjectType.TICKET, Number(this.objectId));
         }
@@ -134,6 +131,12 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
                 ticket.Articles = articles;
             }
             object = ticket;
+        }
+
+        if (reload && objectType === KIXObjectType.TICKET) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
+            );
         }
 
         return object;
@@ -179,9 +182,6 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
                     KIXObjectType.CONTACT
                 ));
             }
-            this.listeners.forEach(
-                (l) => l.objectChanged(ticketId, ticket, KIXObjectType.TICKET, changedProperties)
-            );
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Ticket ...' });

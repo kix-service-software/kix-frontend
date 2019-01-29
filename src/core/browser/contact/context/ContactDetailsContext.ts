@@ -100,8 +100,13 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONTACT, this.objectId)) {
             object = await this.loadContact();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.CONTACT, this.objectId);
+        }
+
+        if (reload) {
+            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CONTACT));
         }
 
         return object;
@@ -128,7 +133,6 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
         let contact;
         if (contacts && contacts.length) {
             contact = contacts[0];
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), contact, KIXObjectType.CONTACT));
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
