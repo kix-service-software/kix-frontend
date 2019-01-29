@@ -9,7 +9,7 @@ export class TicketCreateAction extends AbstractAction {
         this.icon = "kix-icon-new-ticket";
     }
 
-    public run(): void {
+    public async run(): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
     }
 

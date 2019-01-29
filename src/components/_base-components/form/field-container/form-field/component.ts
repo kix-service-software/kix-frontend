@@ -23,7 +23,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.formListenerId = IdService.generateDateBasedId('form-field-' + this.state.field.instanceId);
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: () => { return; },
             updateForm: async () => {

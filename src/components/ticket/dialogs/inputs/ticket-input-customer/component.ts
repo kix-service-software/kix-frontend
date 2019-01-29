@@ -23,7 +23,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.formListenerId = IdService.generateDateBasedId('TicketCustomerInput');
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {

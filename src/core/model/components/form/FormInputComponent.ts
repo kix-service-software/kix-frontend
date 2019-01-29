@@ -26,7 +26,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.inputComponentFormListenerId = IdService.generateDateBasedId('FormInputComponent');
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.inputComponentFormListenerId,
             updateForm: () => {
                 FormInputComponent.prototype.setInvalidState.call(this);
