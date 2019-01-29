@@ -30,11 +30,11 @@ class TreeNodeComponent {
         this.state.filterValue = null;
     }
 
-    private hasChildren(): boolean {
+    public hasChildren(): boolean {
         return (this.state.node.children && this.state.node.children.length > 0);
     }
 
-    private getLabel(): string {
+    public getLabel(): string {
         let title = this.state.node.label;
         if (this.state.node.properties) {
             const values = this.state.node.properties.map((prop) => prop.value);
@@ -47,7 +47,7 @@ class TreeNodeComponent {
         return this.state.activeNodes && this.state.activeNodes.some((n) => n.id === this.state.node.id);
     }
 
-    private toggleNode(event: any): void {
+    public toggleNode(event: any): void {
         event.stopPropagation();
         event.preventDefault(event);
         this.state.node.expanded = !this.state.node.expanded;
@@ -55,25 +55,25 @@ class TreeNodeComponent {
         (this as any).setStateDirty();
     }
 
-    private nodeClicked(): void {
+    public nodeClicked(): void {
         (this as any).emit('nodeClicked', this.state.node);
     }
 
-    private nodeHovered(): void {
+    public nodeHovered(): void {
         if (!this.isNodeActive()) {
             (this as any).emit('nodeHovered', this.state.node);
         }
     }
 
-    private childNodeHovered(node: TreeNode): void {
+    public childNodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
     }
 
-    private childNodeToggled(node: TreeNode): void {
+    public childNodeToggled(node: TreeNode): void {
         (this as any).emit('nodeToggled', node);
     }
 
-    private childNodeClicked(node: TreeNode): void {
+    public childNodeClicked(node: TreeNode): void {
         (this as any).emit('nodeClicked', node);
     }
 
@@ -113,7 +113,7 @@ class TreeNodeComponent {
         // }
     }
 
-    private navigationKeyPressed(event: any): boolean {
+    public navigationKeyPressed(event: any): boolean {
         return event.key === 'ArrowLeft'
             || event.key === 'ArrowRight'
             || event.key === 'ArrowUp'

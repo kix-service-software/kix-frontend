@@ -132,22 +132,32 @@ class Component {
     }
 
     public nodeClicked(node: TreeNode): void {
-        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1 && this.state.asMultiselect) {
-            this.state.selectedNodes.splice(nodeIndex, 1);
+        if (this.state.asMultiselect) {
+            this.handleMultiselect(node);
         } else {
-            if (!this.state.asMultiselect) {
-                this.state.selectedNodes = [node];
-                this.toggleList();
-            } else {
-                this.state.selectedNodes.push(node);
-            }
+            this.handleSingleselect(node);
         }
+
         if (this.state.selectedNodes.length) {
             this.state.filterValue = null;
         }
-        (this as any).setStateDirty('selectedNodes');
+
         (this as any).emit('nodesChanged', this.state.selectedNodes);
+    }
+
+    private handleMultiselect(node: TreeNode): void {
+        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
+        if (nodeIndex !== -1) {
+            this.state.selectedNodes.splice(nodeIndex, 1);
+        } else {
+            this.state.selectedNodes.push(node);
+        }
+        (this as any).setStateDirty('selectedNodes');
+    }
+
+    private handleSingleselect(node: TreeNode): void {
+        this.state.selectedNodes = [node];
+        this.toggleList();
     }
 
     public removeSelectedItem(node: TreeNode): void {
