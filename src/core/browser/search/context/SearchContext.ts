@@ -23,8 +23,4 @@ export class SearchContext extends Context<SearchContextConfiguration> {
         return widget ? widget.configuration : undefined;
     }
 
-    public reset(): void {
-        KIXObjectSearchService.getInstance().clearSearchCache();
-    }
-
 }
