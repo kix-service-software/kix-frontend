@@ -2,6 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory, StandardTableFactoryService, IdService } from "../../../../core/browser";
 import { KIXObjectType, Context } from "../../../../core/model";
 import { FAQArticle } from "../../../../core/model/kix/faq";
+import { FAQDetailsContext } from "../../../../core/browser/faq";
 
 class Component {
 
@@ -16,7 +17,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('faq-history-widget', {
