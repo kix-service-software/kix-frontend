@@ -103,6 +103,10 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             objectType = KIXObjectType.TICKET;
         }
 
+        if (reload && objectType === KIXObjectType.TICKET) {
+            KIXObjectCache.removeObject(KIXObjectType.TICKET, Number(this.objectId));
+        }
+
         if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET, Number(this.objectId))) {
             ticket = await this.loadTicket(changedProperties);
             reload = true;
