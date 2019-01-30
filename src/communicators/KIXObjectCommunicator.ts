@@ -91,7 +91,6 @@ export class KIXObjectCommunicator extends KIXCommunicator {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
-            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.UPDATE, data.parameter);
             await service.updateObject(data.token, data.objectType, data.parameter, data.objectId, data.updateOptions)
                 .then((id) => {
                     response = new CommunicatorResponse(
@@ -103,6 +102,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                         KIXObjectEvent.UPDATE_OBJECT_ERROR, error
                     );
                 });
+            KIXObjectCache.updateCache(data.objectType, data.objectId, ServiceMethod.UPDATE, data.parameter);
 
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;

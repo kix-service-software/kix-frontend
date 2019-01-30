@@ -1,5 +1,5 @@
+import { Translation, KIXObjectType, TranslationProperty } from "../../../model";
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
-import { KIXObjectType, Translation } from "../../../model";
 
 export class TranslationFormService extends KIXObjectFormService<Translation> {
 
@@ -19,5 +19,15 @@ export class TranslationFormService extends KIXObjectFormService<Translation> {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.TRANSLATION;
+    }
+
+    protected async getValue(property: string, value: any, translation: Translation): Promise<any> {
+        if (property !== TranslationProperty.PATTERN && translation.Languages) {
+            const language = translation.Languages.find((l) => l.Language === property);
+            if (language) {
+                value = language.Value;
+            }
+        }
+        return value;
     }
 }

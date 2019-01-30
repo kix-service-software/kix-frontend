@@ -35,7 +35,7 @@ export class Translation extends KIXObject<Translation> {
             this.ChangeTime = translation.ChangeTime;
             this.CreateBy = translation.CreateBy;
             this.CreateTime = translation.CreateTime;
-            this.Pattern = translation.Pattern ? translation.Pattern : translation['Value'];
+            this.Pattern = translation.Pattern;
 
             let languages = translation.Languages
                 ? translation.Languages.map((tl) => new TranslationLanguage(tl))

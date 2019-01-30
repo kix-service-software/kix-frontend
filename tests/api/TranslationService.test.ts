@@ -130,14 +130,8 @@ describe('Translation Service', () => {
 
         before(async () => {
             nockScope
-                .post(resourcePath, {
-                    Translation: {
-                        Pattern: /.+/i
-                    }
-                })
-                .reply(201, {
-                    TranslationID: 24
-                });
+                .post(resourcePath, { Translation: { Pattern: /.+/i } })
+                .reply(201, { TranslationID: 24 });
         });
 
         it('should create a correct request to create a translation.', async () => {
@@ -158,15 +152,10 @@ describe('Translation Service', () => {
                 .post(resourcePath, {
                     Translation: {
                         Pattern: /.+/i,
-                        Languages: [
-                            { Language: 'de', Value: 'Das ist ein Test.' },
-                            { Language: 'en', Value: 'This is a test.' }
-                        ]
+                        Languages: [{ Language: 'de', Value: 'Das ist ein Test.' }, { Language: 'en', Value: 'This is a test.' }]
                     }
                 })
-                .reply(201, {
-                    TranslationID: 24
-                });
+                .reply(201, { TranslationID: 24 });
         });
 
         it('should create a correct request to create a translation.', async () => {
@@ -186,15 +175,8 @@ describe('Translation Service', () => {
 
         before(async () => {
             nockScope
-                .post(resourcePath, {
-                    Translation: {
-                        Pattern: /.+/i,
-                        Languages: [{ Language: 'en', Value: 'This is a test.' }]
-                    }
-                })
-                .reply(201, {
-                    TranslationID: 24
-                });
+                .post(resourcePath, { Translation: { Pattern: /.+/i, Languages: [{ Language: 'en', Value: 'This is a test.' }] } })
+                .reply(201, { TranslationID: 24 });
         });
 
         it('should create a correct request with correct defined languages to create a translation.', async () => {
@@ -208,6 +190,58 @@ describe('Translation Service', () => {
             const translationId = await TranslationService.getInstance().createObject('token', KIXObjectType.TRANSLATION, parameter)
             expect(translationId).exist;
             expect(translationId).equals(24);
+        });
+
+    });
+
+    describe('Update existing translation pattern.', () => {
+
+        const translationId = 24;
+
+        before(async () => {
+            nockScope
+                .patch(resourcePath + '/' + translationId, { Translation: { Pattern: 'new-pattern' } })
+                .reply(200, { TranslationID: translationId });
+        });
+
+        it('should create a correct request to update a translation pattern.', async () => {
+            const parameter: Array<[string, any]> = [
+                [TranslationProperty.PATTERN, 'new-pattern']
+            ]
+            const resultId = await TranslationService.getInstance().updateObject(
+                'token', KIXObjectType.TRANSLATION, parameter, translationId
+            )
+            expect(resultId).exist;
+            expect(resultId).equals(24);
+        });
+
+    });
+
+    describe('Update existing translation pattern and a existing language.', () => {
+
+        const translationId = 24;
+        const languageId = 'de';
+
+        before(async () => {
+            nockScope
+                .patch(resourcePath + '/' + translationId, { Translation: { Pattern: 'new-pattern' } })
+                .reply(200, { TranslationID: translationId });
+
+            nockScope
+                .patch(resourcePath + '/' + translationId + '/' + languageId, { TranslationLanguage: { Value: 'new-value' } })
+                .reply(200, { TranslationID: translationId });
+        });
+
+        it('should create a correct request to update a translation pattern.', async () => {
+            const parameter: Array<[string, any]> = [
+                [TranslationProperty.PATTERN, 'new-pattern'],
+                ['de', 'new-value']
+            ]
+            const resultId = await TranslationService.getInstance().updateObject(
+                'token', KIXObjectType.TRANSLATION, parameter, translationId
+            )
+            expect(resultId).exist;
+            expect(resultId).equals(24);
         });
 
     });
