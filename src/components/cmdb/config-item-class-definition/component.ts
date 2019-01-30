@@ -1,6 +1,5 @@
 import { AbstractMarkoComponent } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { ConfigItemClassDefinition } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -10,7 +9,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         const code = input.definition ? input.definition.DefinitionString : '';
-        this.state.definitionString = '<pre><code class="language-perl">' + code + '</code></pre>';
+        this.state.definitionString = code;
     }
 
     public async onMount(): Promise<void> {
