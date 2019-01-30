@@ -29,7 +29,7 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
 
         switch (property) {
             case TranslationLanguageProperty.LANGUAGE:
-                displayValue = language.Language.toUpperCase();
+                displayValue = language.Language;
                 break;
             case TranslationLanguageProperty.VALUE:
                 displayValue = language.Value;

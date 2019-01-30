@@ -22,7 +22,7 @@ export class TranslationFormService extends KIXObjectFormService<Translation> {
     }
 
     protected async getValue(property: string, value: any, translation: Translation): Promise<any> {
-        if (property !== TranslationProperty.PATTERN && translation.Languages) {
+        if (translation && property !== TranslationProperty.PATTERN && translation.Languages) {
             const language = translation.Languages.find((l) => l.Language === property);
             if (language) {
                 value = language.Value;

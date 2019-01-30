@@ -24,7 +24,7 @@ export class TranslationEditAction extends AbstractAction {
                 const index = form.groups[0].formFields.findIndex((ff) => ff.property === l.Language);
                 if (index === -1) {
                     form.groups[0].formFields.push(new FormField(
-                        l.Language.toUpperCase(), l.Language, 'text-area-input', false,
+                        l.Language, l.Language, 'text-area-input', false,
                         `Geben Sie eine Übersetzung für die Sprache ${l.Language} ein.`
                     ));
                 }
