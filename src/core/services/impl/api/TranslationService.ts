@@ -9,11 +9,13 @@ import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 import {
     CreateTranslation, CreateTranslationResponse, CreateTranslationRequest, UpdateTranslation,
-    UpdateTranslationResponse, UpdateTranslationRequest, TranslationsResponse
+    UpdateTranslationResponse, UpdateTranslationRequest, TranslationsResponse, UpdateTranslationLanguage,
+    UpdateTranslationLanguageResponse, UpdateTranslationLanguageRequest, CreateTranslationLanguage,
+    CreateTranslationLanguageResponse, CreateTranslationLanguageRequest
 } from '../../../api';
 import {
     TranslationCacheHandler, Translation, TranslationLanguageLoadingOptions,
-    TranslationLanguage, TranslationProperty
+    TranslationLanguage, TranslationProperty, TranslationLanguageProperty
 } from '../../../model/kix/i18n';
 
 export class TranslationService extends KIXObjectService {
@@ -76,9 +78,7 @@ export class TranslationService extends KIXObjectService {
     ): Promise<number> {
         const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
 
-        const createParameter: Array<[string, any]> = [
-            [TranslationProperty.PATTERN, pattern[1]]
-        ];
+        const createParameter: Array<[string, any]> = [pattern];
 
         const languages: TranslationLanguage[] = [];
         const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
@@ -109,8 +109,8 @@ export class TranslationService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateTranslation = new UpdateTranslation(parameter);
-
+        const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
+        const updateTranslation = new UpdateTranslation([pattern]);
         const response = await this.sendUpdateRequest<UpdateTranslationResponse, UpdateTranslationRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTranslationRequest(updateTranslation)
         ).catch((error: Error) => {
@@ -118,7 +118,64 @@ export class TranslationService extends KIXObjectService {
             throw new Error(error.Code, error.Message);
         });
 
+        const translations = await this.getTranslations(token);
+        const translation = translations.find((t) => t.ID === objectId);
+        if (translation) {
+            const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
+            this.createOrUpdateLanguages(token, translation.ID, translation.Languages, languageParameter);
+        }
+
         return response.TranslationID;
+    }
+
+    private async createOrUpdateLanguages(
+        token: string, translationId: number, languages: TranslationLanguage[], parameter: Array<[string, any]>
+    ) {
+        for (const param of parameter) {
+            const existingLanguage = languages.find((l) => l.Language === param[0]);
+            if (existingLanguage) {
+
+                if (this.hasValue(param[1])) {
+                    const updateTranslationLanguage = new UpdateTranslationLanguage([
+                        [TranslationLanguageProperty.VALUE, param[1].trim()]
+                    ]);
+
+                    await this.sendUpdateRequest<UpdateTranslationLanguageResponse, UpdateTranslationLanguageRequest>(
+                        token, this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]),
+                        new UpdateTranslationLanguageRequest(updateTranslationLanguage)
+                    ).catch((error: Error) => {
+                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                        throw new Error(error.Code, error.Message);
+                    });
+                } else {
+                    await this.sendDeleteRequest(
+                        token, this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0])
+                    ).catch((error: Error) => {
+                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                        throw new Error(error.Code, error.Message);
+                    });
+                }
+
+            } else if (this.hasValue(param[1])) {
+                const createTranslationLanguage = new CreateTranslationLanguage([
+                    [TranslationLanguageProperty.LANGUAGE, param[0]],
+                    [TranslationLanguageProperty.VALUE, param[1].trim()]
+                ]);
+
+                await this.sendCreateRequest<CreateTranslationLanguageResponse, CreateTranslationLanguageRequest>(
+                    token, this.buildUri(this.RESOURCE_URI, translationId, 'languages'),
+                    new CreateTranslationLanguageRequest(createTranslationLanguage)
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
+
+            }
+        }
+    }
+
+    private hasValue(value: string): boolean {
+        return typeof value !== 'undefined' && value !== null && value.trim() !== '';
     }
 
     public async getTranslations(token: string): Promise<Translation[]> {

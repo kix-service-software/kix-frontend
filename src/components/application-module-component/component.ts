@@ -34,7 +34,10 @@ import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../
 import { AgentService } from '../../core/browser/application';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
 import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
-import { NewTranslationDialogContext, TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
+import {
+    NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
+} from '../../core/browser/i18n/admin/context';
+import { TranslationFormService } from '../../core/browser/i18n/admin/TranslationFormService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -53,6 +56,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
@@ -131,12 +135,19 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(settingsDialogContext);
 
-        const translationDialogContext = new ContextDescriptor(
+        const newTranslationDialogContext = new ContextDescriptor(
             NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
         );
-        ContextService.getInstance().registerContext(translationDialogContext);
+        ContextService.getInstance().registerContext(newTranslationDialogContext);
+
+        const editTranslationDialogContext = new ContextDescriptor(
+            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
+        );
+        ContextService.getInstance().registerContext(editTranslationDialogContext);
 
         const translationDetailsContext = new ContextDescriptor(
             TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
@@ -178,10 +189,19 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-translation-dialog',
             new WidgetConfiguration(
-                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-gear'
+                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-new-gear'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-translation-dialog',
+            new WidgetConfiguration(
+                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.TRANSLATION,
+            ContextMode.EDIT_ADMIN
         ));
     }
 

@@ -25,6 +25,7 @@
             "bulk-dialog-configuration": "../../dist/registry-modules/application/bulk-dialog-configuration.extension",
             "personal-settings-dialog-configuration": "../../dist/registry-modules/application/personal-settings-dialog-configuration.extension",
             "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension",
+            "i18n-edit-translation": "../../dist/registry-modules/admin/edit-translation-dialog-configuration.extension",
             "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension"
         },
         "kix:modules": {

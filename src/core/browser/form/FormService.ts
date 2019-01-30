@@ -50,33 +50,40 @@ export class FormService {
         }
     }
 
-    public async getFormInstance<T extends IFormInstance>(formId: string, cache: boolean = true): Promise<T> {
+    public async getFormInstance<T extends IFormInstance>(
+        formId: string, cache: boolean = true, form?: Form
+    ): Promise<T> {
         let formInstance;
         if (formId) {
             if (this.formInstances.has(formId) && cache) {
                 formInstance = this.formInstances.get(formId);
             } else {
                 this.deleteFormInstance(formId);
-                if (this.forms) {
-                    const configuredForm = this.forms.find((f) => f.id === formId);
+                if (!form && this.forms) {
+                    const configuredForm = this.getForm(formId);
                     if (configuredForm) {
-                        const form = { ...configuredForm };
-                        FormFactory.initForm(form);
-                        if (form.formContext === FormContext.SEARCH) {
-                            formInstance = new SearchFormInstance((form as SearchForm));
-                        } else {
-                            formInstance = new FormInstance(form);
-                            await formInstance.initFormInstance();
-                        }
-
-                        this.formInstances.set(formId, formInstance);
+                        form = { ...configuredForm };
                     } else {
                         BrowserUtil.openErrorOverlay(`No form configuration found for id ${formId}`);
                     }
                 }
+
+                FormFactory.initForm(form);
+                if (form.formContext === FormContext.SEARCH) {
+                    formInstance = new SearchFormInstance((form as SearchForm));
+                } else {
+                    formInstance = new FormInstance(form);
+                    await formInstance.initFormInstance();
+                }
+
+                this.formInstances.set(formId, formInstance);
             }
         }
         return formInstance;
+    }
+
+    public getForm(formId: string): Form {
+        return this.forms.find((f) => f.id === formId);
     }
 
     public deleteFormInstance(formId: string): void {

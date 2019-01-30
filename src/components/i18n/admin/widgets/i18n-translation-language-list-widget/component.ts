@@ -56,7 +56,7 @@ class Component {
         const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
-                l[0], [
+                l[0].toUpperCase(), [
                     new TableFilterCriteria(TranslationLanguageProperty.LANGUAGE, SearchOperator.EQUALS, l[0])
                 ]
             )
