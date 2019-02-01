@@ -4,6 +4,7 @@ import {
     TicketTypeDetailsContext, TicketStateDetailsContext, TicketPriorityDetailsContext
 } from '../../core/browser/ticket';
 import { ConfigItemClassDetailsContext } from '../../core/browser/cmdb';
+import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 
 export class Extension implements IMainMenuExtension {
 
@@ -14,6 +15,11 @@ export class Extension implements IMainMenuExtension {
         TicketTypeDetailsContext.CONTEXT_ID,
         TicketStateDetailsContext.CONTEXT_ID,
         TicketPriorityDetailsContext.CONTEXT_ID,
+        ConfigItemClassDetailsContext.CONTEXT_ID,
+        TranslationDetailsContext.CONTEXT_ID,
+        TicketTypeDetailsContext.CONTEXT_ID,
+        TicketPriorityDetailsContext.CONTEXT_ID,
+        TicketStateDetailsContext.CONTEXT_ID,
         ConfigItemClassDetailsContext.CONTEXT_ID
     ];
 
