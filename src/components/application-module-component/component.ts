@@ -198,7 +198,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
