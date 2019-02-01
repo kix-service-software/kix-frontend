@@ -92,11 +92,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
-    public async getOpenTickets(
-        id: string | number, type: KIXObjectType, properties: TicketProperty[]
-    ): Promise<Ticket[]> {
-        properties = [...properties, TicketProperty.TICKET_ID];
-
+    public async getOpenTickets(id: string | number, type: KIXObjectType): Promise<Ticket[]> {
         const filter: FilterCriteria[] = [];
 
         switch (type) {
@@ -128,19 +124,15 @@ export class TicketService extends KIXObjectService<Ticket> {
             TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
         ));
 
-        const loadingOptions = new KIXObjectLoadingOptions(properties, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions
+            KIXObjectType.TICKET, null, loadingOptions, null, false
         );
 
         return tickets;
     }
 
-    public async getNewTickets(
-        id: string | number, type: KIXObjectType, properties: TicketProperty[]
-    ): Promise<Ticket[]> {
-        properties = [...properties, TicketProperty.TICKET_ID];
-
+    public async getNewTickets(id: string | number, type: KIXObjectType): Promise<Ticket[]> {
         const filter: FilterCriteria[] = [];
 
         switch (type) {
@@ -172,19 +164,15 @@ export class TicketService extends KIXObjectService<Ticket> {
             TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
         ));
 
-        const loadingOptions = new KIXObjectLoadingOptions(properties, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions
+            KIXObjectType.TICKET, null, loadingOptions, null, false
         );
 
         return tickets;
     }
 
-    public async getPendingTickets(
-        id: string | number, type: KIXObjectType, properties: TicketProperty[]
-    ): Promise<Ticket[]> {
-        properties = [...properties, TicketProperty.TICKET_ID];
-
+    public async getPendingTickets(id: string | number, type: KIXObjectType): Promise<Ticket[]> {
         const filter: FilterCriteria[] = [];
 
         switch (type) {
@@ -220,19 +208,15 @@ export class TicketService extends KIXObjectService<Ticket> {
             TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
         ));
 
-        const loadingOptions = new KIXObjectLoadingOptions(properties, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions
+            KIXObjectType.TICKET, null, loadingOptions, null, false
         );
 
         return tickets;
     }
 
-    public async getReminderTickets(
-        id: string | number, type: KIXObjectType, properties: TicketProperty[]
-    ): Promise<Ticket[]> {
-        properties = [...properties, TicketProperty.TICKET_ID];
-
+    public async getReminderTickets(id: string | number, type: KIXObjectType): Promise<Ticket[]> {
         const filter: FilterCriteria[] = [];
 
         switch (type) {
@@ -254,19 +238,15 @@ export class TicketService extends KIXObjectService<Ticket> {
             DateTimeUtil.getKIXDateTimeString(new Date())
         ));
 
-        const loadingOptions = new KIXObjectLoadingOptions(properties, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions
+            KIXObjectType.TICKET, null, loadingOptions, null, false
         );
 
         return tickets;
     }
 
-    public async getEscalatedTickets(
-        id: string | number, type: KIXObjectType, properties: TicketProperty[]
-    ): Promise<Ticket[]> {
-        properties = [...properties, TicketProperty.TICKET_ID];
-
+    public async getEscalatedTickets(id: string | number, type: KIXObjectType): Promise<Ticket[]> {
         const filter: FilterCriteria[] = [];
 
         switch (type) {
@@ -287,9 +267,9 @@ export class TicketService extends KIXObjectService<Ticket> {
             TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, FilterDataType.NUMERIC, FilterType.AND, 0
         ));
 
-        const loadingOptions = new KIXObjectLoadingOptions(properties, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions
+            KIXObjectType.TICKET, null, loadingOptions, null, false
         );
 
         return tickets;

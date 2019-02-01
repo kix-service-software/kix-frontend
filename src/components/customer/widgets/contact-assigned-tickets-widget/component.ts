@@ -156,11 +156,8 @@ class Component {
     private async loadEscalatedTickets(): Promise<void> {
         this.state.loadEscalatedTickets = true;
 
-        const properties = this.state.escalatedTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
         const tickets = await TicketService.getInstance().getEscalatedTickets(
-            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT
         );
 
         this.state.escalatedTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
@@ -175,11 +172,8 @@ class Component {
     private async loadReminderTickets(): Promise<void> {
         this.state.loadReminderTickets = true;
 
-        const properties = this.state.reminderTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
         const tickets = await TicketService.getInstance().getReminderTickets(
-            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT
         );
 
         this.state.reminderTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
@@ -194,11 +188,8 @@ class Component {
     private async loadNewTickets(): Promise<void> {
         this.state.loadNewTickets = true;
 
-        const properties = this.state.newTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
         const tickets = await TicketService.getInstance().getNewTickets(
-            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT
         );
 
         this.state.newTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
@@ -213,11 +204,8 @@ class Component {
     private async loadOpenTickets(): Promise<void> {
         this.state.loadOpenTickets = true;
 
-        const properties = this.state.openTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
         const tickets = await TicketService.getInstance().getOpenTickets(
-            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT
         );
 
         this.state.openTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
@@ -232,11 +220,8 @@ class Component {
     private async loadPendingTickets(): Promise<void> {
         this.state.loadPendingTickets = true;
 
-        const properties = this.state.pendingTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
         const tickets = await TicketService.getInstance().getPendingTickets(
-            this.state.contact.ContactID, KIXObjectType.CONTACT, properties
+            this.state.contact.ContactID, KIXObjectType.CONTACT
         );
 
         this.state.pendingTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
