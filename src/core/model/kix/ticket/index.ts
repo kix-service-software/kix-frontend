@@ -3,7 +3,6 @@ export { Article } from './Article';
 export { ArticleFactory } from './ArticleFactory';
 export { ArticleFlag } from './ArticleFlag';
 export { ArticleReceiver } from './ArticleReceiver';
-export { ArticleType } from './ArticleType';
 export { ArticleProperty } from './ArticleProperty';
 export { Attachment } from './Attachment';
 export { SenderType } from './SenderType';

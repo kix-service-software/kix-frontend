@@ -40,6 +40,7 @@ import {
     TicketPriorityCacheHandler
 } from "../../../core/model";
 import { BulkService } from "../../../core/browser/bulk";
+import { ChannelService } from "../../../core/browser/channel";
 
 class Component extends AbstractMarkoComponent {
 
@@ -49,6 +50,7 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());
+        ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());

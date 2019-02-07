@@ -45,7 +45,7 @@ export class Extension implements IConfigurationExtension {
                     ]))
                 ])
             );
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Anlagen"));
+            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
 
             const group = new FormGroup('Artikeldaten', fields);
 

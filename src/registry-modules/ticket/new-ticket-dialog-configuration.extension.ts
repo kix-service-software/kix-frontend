@@ -77,7 +77,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     ]))
                 ])
             );
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an das Ticket anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
+            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an das Ticket anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
             fields.push(new FormField(
                 "Ticket verknüpfen mit", TicketProperty.LINK, 'link-input', false, "Verknüpfen Sie das Ticket mit einem anderen Ticket, Config Item oder einem FAQ-Artikel.")
             );

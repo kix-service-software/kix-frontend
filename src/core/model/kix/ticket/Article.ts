@@ -1,7 +1,6 @@
 import { KIXObject } from '../KIXObject';
 import { ArticleFlag } from './ArticleFlag';
 import { ArticleReceiver } from './ArticleReceiver';
-import { ArticleType } from './ArticleType';
 import { Attachment } from './Attachment';
 import { SenderType } from './SenderType';
 import { KIXObjectType } from '..';
@@ -45,7 +44,9 @@ export class Article extends KIXObject<Article> {
 
     public SenderTypeID: number;
 
-    public ArticleTypeID: number;
+    public ChannelID: number;
+
+    public Channel: string;
 
     public ContentType: string;
 
@@ -63,7 +64,6 @@ export class Article extends KIXObject<Article> {
 
     // UI Properties
 
-    public articleType: ArticleType;
     public senderType: SenderType;
     public toList: ArticleReceiver[];
     public ccList: ArticleReceiver[];
@@ -91,7 +91,6 @@ export class Article extends KIXObject<Article> {
             this.InReplyTo = article.InReplyTo;
             this.References = article.References;
             this.SenderTypeID = article.SenderTypeID;
-            this.ArticleTypeID = article.ArticleTypeID;
             this.ContentType = article.ContentType;
             this.Charset = article.Charset;
             this.MimeType = article.MimeType;
@@ -99,6 +98,8 @@ export class Article extends KIXObject<Article> {
             this.DynamicFields = article.DynamicFields;
             this.Attachments = article.Attachments;
             this.Flags = article.Flags;
+            this.Channel = article.Channel;
+            this.ChannelID = article.ChannelID;
 
             this.bodyAttachment = article.bodyAttachment;
         }

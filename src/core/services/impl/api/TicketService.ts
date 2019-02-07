@@ -1,5 +1,5 @@
 import {
-    ArticleAttachmentResponse, ArticleResponse, ArticlesResponse, ArticleTypesResponse,
+    ArticleAttachmentResponse, ArticleResponse, ArticlesResponse,
     CreateArticle, CreateAttachment, CreateTicket, CreateTicketRequest, CreateTicketResponse, LocksResponse,
     QueuesResponse, SenderTypesResponse, TicketResponse, TicketsResponse,
     CreateWatcherRequest, CreateWatcherResponse, CreateWatcher,
@@ -7,8 +7,7 @@ import {
 } from '../../../api';
 
 import {
-    Article, Attachment, ArticleType, ArticleProperty, FilterCriteria,
-    Lock, Queue, SenderType, Ticket, TicketProperty,
+    Article, Attachment, ArticleProperty, FilterCriteria, Lock, Queue, SenderType, Ticket, TicketProperty,
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     ArticlesLoadingOptions, KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
     KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, KIXObjectCache, TicketCacheHandler, Error
@@ -51,7 +50,6 @@ export class TicketService extends KIXObjectService {
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.QUEUE
             || kixObjectType === KIXObjectType.QUEUE_HIERARCHY
-            || kixObjectType === KIXObjectType.ARTICLE_TYPE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
             || kixObjectType === KIXObjectType.WATCHER;
@@ -64,7 +62,6 @@ export class TicketService extends KIXObjectService {
         KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
 
         const cachePromises: Array<Promise<any>> = [
-            this.getArticleTypes(token),
             this.getSenderTypes(token),
             this.getQueues(token),
             this.getQueuesHierarchy(token)
@@ -92,8 +89,6 @@ export class TicketService extends KIXObjectService {
             }
         } else if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
             objects = await this.getQueuesHierarchy(token);
-        } else if (objectType === KIXObjectType.ARTICLE_TYPE) {
-            objects = await this.getArticleTypes(token);
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             objects = await this.getSenderTypes(token);
         } else if (objectType === KIXObjectType.LOCK) {
@@ -260,12 +255,7 @@ export class TicketService extends KIXObjectService {
     }
 
     private async prepareArticleData(token: string, parameter: Array<[string, any]>): Promise<CreateArticle> {
-        const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENT));
-
-        let articleType = this.getParameterValue(parameter, ArticleProperty.ARTICLE_TYPE_ID);
-        if (!articleType) {
-            articleType = 9;
-        }
+        const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
 
         let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
         if (!senderType) {
@@ -285,7 +275,7 @@ export class TicketService extends KIXObjectService {
         if (subject && body) {
             createArticle = new CreateArticle(
                 subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
-                articleType, senderType, null, from, null, null, null, null, null, null, null, null,
+                null, senderType, null, from, null, null, null, null, null, null, null, null,
                 attachments.length ? attachments : null
             );
         }
@@ -372,21 +362,6 @@ export class TicketService extends KIXObjectService {
 
     private articleHasFlag(article: Article, flagName: string): boolean {
         return article.Flags && article.Flags.findIndex((f) => f.Name === flagName) !== -1;
-    }
-
-    // -----------------------------
-    // ArticleTypes implementation
-    // -----------------------------
-
-    public async getArticleTypes(token: string): Promise<ArticleType[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.ARTICLE_TYPE)) {
-            const uri = this.buildUri('articletypes');
-            const response = await this.getObjectByUri<ArticleTypesResponse>(token, uri);
-            response.ArticleType
-                .map((at) => new ArticleType(at))
-                .forEach((at) => KIXObjectCache.addObject(KIXObjectType.ARTICLE_TYPE, at));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.ARTICLE_TYPE);
     }
 
     // -----------------------------

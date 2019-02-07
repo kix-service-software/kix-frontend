@@ -2,7 +2,7 @@ import { PendingTimeFormValue } from ".";
 import {
     TicketProperty, ArticleProperty, Contact,
     DateTimeUtil, Attachment, Customer, Ticket,
-    Lock, KIXObjectType, ArticleType, SenderType,
+    Lock, KIXObjectType, SenderType,
     KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from "../../model";
 import { ContextService } from "../context";
@@ -45,10 +45,10 @@ export class TicketParameterUtil {
                 parameter.push([ArticleProperty.SUBJECT, value]);
             } else if (property === ArticleProperty.BODY) {
                 parameter.push([ArticleProperty.BODY, value]);
-            } else if (property === ArticleProperty.ATTACHMENT) {
+            } else if (property === ArticleProperty.ATTACHMENTS) {
                 if (value) {
                     const attachments = await TicketParameterUtil.prepareAttachments(value);
-                    parameter.push([ArticleProperty.ATTACHMENT, attachments]);
+                    parameter.push([ArticleProperty.ATTACHMENTS, attachments]);
                 }
             } else if (property === TicketProperty.OWNER_ID) {
                 parameter.push([property, value]);
@@ -91,12 +91,10 @@ export class TicketParameterUtil {
         const loadingOptionsArticleType = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'note-internal')
         ]);
-        const articleTypes = await KIXObjectService.loadObjects<ArticleType>(
-            KIXObjectType.ARTICLE_TYPE, null, loadingOptionsArticleType
-        );
 
         if (forUpdate) {
-            parameter.push([ArticleProperty.ARTICLE_TYPE_ID, articleTypes[0].ID]);
+            // FIXME: Channel
+            parameter.push([ArticleProperty.CHANNEL_ID, 0]);
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
 
             // TODO: richtigen Anzeigewert verwenden

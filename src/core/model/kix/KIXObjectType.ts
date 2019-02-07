@@ -6,6 +6,8 @@ export enum KIXObjectType {
 
     ARTICLE_TYPE = 'ARTICLE_TYPE',
 
+    CHANNEL = 'Channel',
+
     SENDER_TYPE = 'SENDER_TYPE',
 
     LOCK = 'LOCK',
