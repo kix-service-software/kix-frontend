@@ -1,5 +1,7 @@
 import { ILabelProvider } from "..";
-import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject } from "../../model";
+import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject, Channel } from "../../model";
+import { ChannelService } from "../channel";
+import { KIXObjectService } from "../kix";
 
 export class ArticleLabelProvider implements ILabelProvider<Article> {
 
@@ -30,9 +32,6 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
             case ArticleProperty.SENDER_TYPE_ID:
                 displayValue = 'Senderobjekt';
                 break;
-            case ArticleProperty.ARTICLE_TYPE_ID:
-                displayValue = 'Typ';
-                break;
             case ArticleProperty.FROM:
                 displayValue = 'Von';
                 break;
@@ -42,8 +41,11 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
             case ArticleProperty.INCOMING_TIME:
                 displayValue = 'Erstellt am';
                 break;
-            case ArticleProperty.ATTACHMENT:
+            case ArticleProperty.ATTACHMENTS:
                 displayValue = 'Anlagen';
+                break;
+            case ArticleProperty.CHANNEL_ID:
+                displayValue = 'Typ';
                 break;
             default:
                 displayValue = property;
@@ -54,12 +56,6 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
     public async getDisplayText(article: Article, property: string): Promise<string> {
         let displayValue;
         switch (property) {
-            case ArticleProperty.ARTICLE_TYPE_ID:
-                if (article.articleType) {
-                    displayValue = article.articleType.Name;
-                }
-                break;
-
             case ArticleProperty.FROM:
             case ArticleProperty.SUBJECT:
                 displayValue = article[property];
@@ -80,7 +76,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 displayValue = DateTimeUtil.getLocalDateTimeString(article[property] * 1000);
                 break;
 
-            case ArticleProperty.ATTACHMENT:
+            case ArticleProperty.ATTACHMENTS:
                 displayValue = '';
                 if (article.Attachments) {
                     const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
@@ -104,6 +100,14 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
 
             case ArticleProperty.ARTICLE_INFORMATION:
                 displayValue = article.isUnread() ? 'ungelesen' : 'gelesen';
+                break;
+
+            case ArticleProperty.CHANNEL_ID:
+                const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
+                if (channels) {
+                    const channel = channels.find((c) => c.ID === article.ChannelID);
+                    displayValue = channel ? channel.Name : article[property];
+                }
                 break;
 
             default:
@@ -155,7 +159,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
     public async getIcons(article: Article, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
         switch (property) {
-            case ArticleProperty.ATTACHMENT:
+            case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {
                     const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
                     if (attachments.length > 0) {
@@ -163,44 +167,17 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                     }
                 }
                 break;
-            case ArticleProperty.ARTICLE_TYPE_ID:
-                const typeIcon = this.getArticleTypeIcon(article.articleType.ID);
-                if (typeIcon) {
-                    icons.push(typeIcon);
-                }
-                break;
             case ArticleProperty.ARTICLE_INFORMATION:
                 if (article.isUnread()) {
                     icons.push('kix-icon-info');
                 }
                 break;
+            case ArticleProperty.CHANNEL_ID:
+                icons.push(new ObjectIcon('Channel', article.ChannelID));
+                break;
             default:
         }
         return icons;
-    }
-
-    private getArticleTypeIcon(typeId): string | ObjectIcon {
-        switch (typeId) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                return 'kix-icon-mail-forward-outline';
-            case 5:
-            case 7:
-                return 'kix-icon-call';
-            case 6:
-                return 'kix-icon-letter-white';
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-                return 'kix-icon-note';
-            default:
-                return undefined;
-        }
     }
 
 }

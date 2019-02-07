@@ -7,7 +7,7 @@ import { ComponentsService } from '../../../components';
 export class ArticleTableClickListener implements ITableClickListener<Article> {
 
     public rowClicked(article: Article, columnId: string, event: any): void {
-        if (columnId === ArticleProperty.ATTACHMENT) {
+        if (columnId === ArticleProperty.ATTACHMENTS) {
             if (article.Attachments && article.Attachments.length) {
                 const data = {
                     article

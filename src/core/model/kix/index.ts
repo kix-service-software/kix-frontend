@@ -1,3 +1,4 @@
+export * from './channel';
 export * from './contact';
 export * from './cmdb';
 export * from './dynamic-field';

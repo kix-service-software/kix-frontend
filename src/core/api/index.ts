@@ -1,5 +1,5 @@
-export * from './article-type';
 export * from './authentication';
+export * from './channel';
 export * from './client-registration';
 export * from './cmdb';
 export * from './contact';

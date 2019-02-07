@@ -1,4 +1,5 @@
 export { AuthenticationService } from './AuthenticationService';
+export { ChannelService } from './ChannelService';
 export { ClientRegistrationService } from './ClientRegistrationService';
 export { ContactService } from './ContactService';
 export { CustomerService } from './CustomerService';

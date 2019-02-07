@@ -164,14 +164,14 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                             ),
                             new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 120),
                             new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 300),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 75),
+                            new TableColumnConfiguration(ArticleProperty.CHANNEL_ID, false, true, false, true, 75),
                             new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
                             new TableColumnConfiguration(
                                 ArticleProperty.INCOMING_TIME, true, false, true, true, 125,
                                 true, false, DataType.DATE_TIME
                             ),
                             new TableColumnConfiguration(
-                                ArticleProperty.ATTACHMENT, true, true, false, false, 75, true, true),
+                                ArticleProperty.ATTACHMENTS, true, true, false, false, 75, true, true),
                         ], null, true,
                         true, new ToggleOptions('ticket-article-details', 'article', [
                             'article-print-action',
