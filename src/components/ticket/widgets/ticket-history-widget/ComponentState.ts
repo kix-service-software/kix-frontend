@@ -1,6 +1,6 @@
-import { StandardTable, TableConfiguration } from '@kix/core/dist/browser';
-import { AbstractAction, TicketHistory, Ticket } from '@kix/core/dist/model';
-import { WidgetComponentState } from '@kix/core/dist/model/';
+import { StandardTable, TableConfiguration } from '../../../../core/browser';
+import { AbstractAction, TicketHistory, Ticket } from '../../../../core/model';
+import { WidgetComponentState } from '../../../../core/model/';
 
 export class ComponentState extends WidgetComponentState<TableConfiguration> {
 
@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState<TableConfiguration> {
         public filterValue: string = '',
         public actions: AbstractAction[] = [],
         public ticket: Ticket = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public filterCount: number = null
     ) {
         super();
     }

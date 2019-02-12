@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
+import { ContextService } from "../../../../../core/browser/context";
 import {
     TicketProperty, FormFieldValue, FormInputComponent, FormField,
     KIXObjectType, Customer, TreeNode
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { IdService, KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { IdService, KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 
@@ -22,9 +22,8 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.formListenerId = IdService.generateDateBasedId('TicketCustomerInput');
-        formInstance.registerListener({
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
@@ -57,8 +56,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.removeListener(this.formListenerId);
+        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
     public getPlaceholder(): string {
@@ -93,6 +91,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         super.provideValue(customer);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

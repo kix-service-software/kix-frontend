@@ -1,6 +1,6 @@
-import { IconService } from '@kix/core/dist/browser/icon';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ObjectIcon, KIXObjectType, ObjectIconLoadingOptions } from '../../../core/model';
 import { ComponentState } from './ComponentState';
+import { KIXObjectService } from '../../../core/browser';
 
 class IconComponent {
 
@@ -22,8 +22,12 @@ class IconComponent {
 
     private async setIcon(): Promise<void> {
         if (this.state.icon instanceof ObjectIcon) {
-            const icon = await IconService.getInstance().getIcon(this.state.icon.Object, this.state.icon.ObjectID);
-            if (icon) {
+            const icons = await KIXObjectService.loadObjects<ObjectIcon>(
+                KIXObjectType.OBJECT_ICON, null, null,
+                new ObjectIconLoadingOptions(this.state.icon.Object, this.state.icon.ObjectID)
+            );
+            if (icons && !!icons.length) {
+                const icon = icons[0];
                 if (icon.ContentType === 'text') {
                     this.state.base64 = false;
                 } else {
@@ -31,6 +35,10 @@ class IconComponent {
                     this.state.contentType = icon.ContentType;
                 }
                 this.state.content = icon.Content;
+            } else if (this.state.icon.Content) {
+                this.state.base64 = true;
+                this.state.content = this.state.icon.Content;
+                this.state.contentType = this.state.icon.ContentType;
             } else if (this.state.showUnknown) {
                 this.state.base64 = false;
                 this.state.content = 'kix-icon-unknown';

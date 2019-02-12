@@ -1,19 +1,20 @@
 import {
     AbstractMarkoComponent, FactoryService, StandardTableFactoryService, LabelService, ServiceRegistry,
     KIXObjectSearchService, ContextService, DialogService, ActionFactory
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, KIXObjectCache, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
     WidgetConfiguration, WidgetSize
-} from '@kix/core/dist/model';
+} from '../../../core/model';
 import {
     FAQTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
-    FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleSearchDefinition
-} from '@kix/core/dist/browser/faq';
-import { FAQCacheHandler } from '@kix/core/dist/model/kix/faq';
+    FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
+    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
+} from '../../../core/browser/faq';
+import { FAQCacheHandler } from '../../../core/model/kix/faq';
 
 class Component extends AbstractMarkoComponent {
 
@@ -36,6 +37,7 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new FAQArticleHistoryLabelProvider());
 
         ServiceRegistry.getInstance().registerServiceInstance(FAQService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(FAQArticleFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
 
@@ -67,6 +69,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newFAQArticleContext);
 
+        const editFAQArticleContext = new ContextDescriptor(
+            EditFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.EDIT,
+            false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext
+        );
+        ContextService.getInstance().registerContext(editFAQArticleContext);
+
         const searchContactContext = new ContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
@@ -82,6 +90,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.CREATE
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-faq-article-dialog',
+            new WidgetConfiguration(
+                'edit-faq-article-dialog', 'FAQ Eintrag Bearbeiten', [], {}, false,
+                false, WidgetSize.BOTH, 'kix-icon-edit'
+            ),
+            KIXObjectType.FAQ_ARTICLE,
+            ContextMode.EDIT
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(

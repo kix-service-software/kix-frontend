@@ -1,5 +1,5 @@
-import { ConfiguredWidget, Ticket, AbstractAction } from '@kix/core/dist/model';
-import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
+import { ConfiguredWidget, Ticket, AbstractAction } from '../../../core/model';
+import { TicketDetailsContextConfiguration } from '../../../core/browser/ticket';
 
 export class ComponentState {
 

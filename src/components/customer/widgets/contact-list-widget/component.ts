@@ -3,9 +3,9 @@ import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     StandardTable, IdService, TableSortLayer, TableFilterLayer,
     TableLayerConfiguration, TableListenerConfiguration, WidgetService, StandardTableFactoryService, AbstractTableLayer
-} from "@kix/core/dist/browser";
-import { Contact, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "@kix/core/dist/model";
-import { ContactTableContentLayer, ContactTableLabelLayer } from "@kix/core/dist/browser/contact";
+} from "../../../../core/browser";
+import { Contact, KIXObjectType, ContextMode, KIXObjectPropertyFilter } from "../../../../core/model";
+import { ContactTableContentLayer, ContactTableLabelLayer } from "../../../../core/browser/contact";
 
 class Component {
 
@@ -60,7 +60,8 @@ class Component {
                 await this.state.standardTable.loadRows();
                 this.state.title = this.getTitle();
                 this.state.standardTable.setTableListener(() => {
-                    this.state.title = this.getTitle();
+                    this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                    (this as any).setStateDirty('filterCount');
                 });
             }, 200);
         }

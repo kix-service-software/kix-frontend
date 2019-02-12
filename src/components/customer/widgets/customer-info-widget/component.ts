@@ -1,8 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory } from "@kix/core/dist/browser";
-import { KIXObjectType, Customer } from "@kix/core/dist/model";
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
-import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
+import { ContextService, ActionFactory } from "../../../../core/browser";
+import { KIXObjectType, Customer } from "../../../../core/model";
+import { RoutingConfiguration } from '../../../../core/browser/router';
+import { CustomerDetailsContext } from "../../../../core/browser/customer";
 
 class Component {
     private state: ComponentState;

@@ -1,5 +1,5 @@
-import { WidgetComponentState, Customer, Contact, AbstractAction } from "@kix/core/dist/model";
-import { StandardTable, TableConfiguration } from "@kix/core/dist/browser";
+import { WidgetComponentState, Customer, Contact, AbstractAction } from "../../../../core/model";
+import { StandardTable, TableConfiguration } from "../../../../core/browser";
 
 export class ComponentState extends WidgetComponentState<TableConfiguration> {
 
@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState<TableConfiguration> {
         public filterValue: string = '',
         public title: string = '',
         public actions: AbstractAction[] = [],
-        public loading: boolean = false
+        public loading: boolean = false,
+        public filterCount: number = null
     ) {
         super();
     }

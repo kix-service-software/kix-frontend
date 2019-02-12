@@ -1,11 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
 import {
     Contact, FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<Contact, ComponentState> {
 
@@ -30,7 +29,7 @@ class Component extends FormInputComponent<Contact, ComponentState> {
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             const contact = this.state.defaultValue.value;
-            this.state.currentNode = new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
+            this.state.currentNode = this.createTreeNode(contact);
             this.state.nodes = [this.state.currentNode];
             super.provideValue(contact);
         }
@@ -47,19 +46,26 @@ class Component extends FormInputComponent<Contact, ComponentState> {
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
         this.contacts = await KIXObjectService.loadObjects<Contact>(
-            KIXObjectType.CONTACT, null, loadingOptions
+            KIXObjectType.CONTACT, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
         if (searchValue && searchValue !== '') {
             this.state.nodes = this.contacts.map(
-                (c) => new TreeNode(c.ContactID, c.DisplayValue, 'kix-icon-man-bubble')
+                (c) => this.createTreeNode(c)
             );
         }
 
         return this.state.nodes;
     }
 
+    private createTreeNode(contact: Contact): TreeNode {
+        return new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

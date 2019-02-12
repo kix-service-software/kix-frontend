@@ -1,10 +1,10 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
+import { ContextService, IdService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import {
     TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterDataType, FilterType, FilterCriteria
-} from '@kix/core/dist/model';
-import { FAQCategory, FAQCategoryProperty } from '@kix/core/dist/model/kix/faq';
-import { FAQContext } from '@kix/core/dist/browser/faq';
+} from '../../../../core/model';
+import { FAQCategory, FAQCategoryProperty } from '../../../../core/model/kix/faq';
+import { FAQContext } from '../../../../core/browser/faq';
 
 export class Component {
 

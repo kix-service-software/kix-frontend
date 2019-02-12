@@ -1,9 +1,9 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
     NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest
-} from '@kix/core/dist/model';
-import { CommunicatorResponse } from '@kix/core/dist/common';
-import { ConfigurationService, UserService } from '@kix/core/dist/services';
+} from '../core/model';
+import { CommunicatorResponse } from '../core/common';
+import { ConfigurationService, UserService } from '../core/services';
 
 export class NotesCommunicatior extends KIXCommunicator {
 

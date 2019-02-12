@@ -1,0 +1,37 @@
+<div.bulk-form>
+    <if(state.bulkManager)>
+        <widget instanceId="bulk-form-group" title="Zu ändernde Attribute" key="attributes">
+            <@content>
+                <div.bulk-value>
+                    <bulk-value-container bulkManager=input.bulkManager key="bulk-value-container"/>
+                </div>
+            </@content>
+        </widget>
+        <div.dialog-button-container>
+            <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
+                <span.kix-icon-delete/>Daten zurücksetzen
+            </button>
+        </div>
+        <if(state.table)>
+            <div.object-table>
+                <div.object-table-head>
+                    <span>${state.tableTitle}</span>
+                </div>
+                <standard-table standardTable=state.table/>
+            </div>
+        </if>
+        <div.dialog-button-container>
+            <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+                <span.kix-icon-close/>Abbrechen
+            </button>
+            <div.submit-buttons>
+                <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=(!state.run)>
+                    <span.kix-icon-check/>Dialog schließen
+                </button>
+                <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=(!state.canRun)>
+                    <span.kix-icon-edit/>Jetzt ausführen
+                </button>
+            </div>
+        </div>
+    </if>
+</div>

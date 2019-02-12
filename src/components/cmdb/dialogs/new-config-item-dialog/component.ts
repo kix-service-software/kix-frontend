@@ -1,14 +1,14 @@
 import {
-    ContextService, DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService
-} from '@kix/core/dist/browser';
+    DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty
-} from '@kix/core/dist/model';
+    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty, Error
+} from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService, ConfigItemDetailsContext } from '@kix/core/dist/browser/cmdb';
-import { RoutingService, RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
+import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
 
 class Component {
 
@@ -26,47 +26,41 @@ class Component {
                     ConfigItemClassProperty.CURRENT_DEFINITION, SearchOperator.NOT_EQUALS,
                     FilterDataType.STRING, FilterType.AND, null
                 )], null, null, null,
-                ['CurrentDefinition,Definitions'])
+                ['CurrentDefinition,Definitions']),
+            null, false
         );
+
         this.state.classNodes = configItemClasses.map(
             (ci) => new TreeNode(ci, ci.Name)
         );
     }
 
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
+    public async cancel(): Promise<void> {
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        DialogService.getInstance().closeMainDialog();
+    }
+
     public async classChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true);
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        FormService.getInstance().deleteFormInstance(this.state.formId);
         this.state.formId = null;
         let formId;
         if (this.state.currentClassNode) {
             const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-            formId = `CMDB_CI_${ciClass.Name}_${ciClass.ID}`;
+            formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
         } else {
             formId = null;
-        }
-
-        if (formId) {
-            await this.reset();
         }
 
         setTimeout(() => {
             this.state.formId = formId;
             DialogService.getInstance().setMainDialogLoading(false);
         }, 100);
-    }
-
-    public async cancel(): Promise<void> {
-        if (this.state.formId) {
-            await this.reset();
-        }
-        DialogService.getInstance().closeMainDialog();
-    }
-
-    private async reset(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.reset();
-        }
     }
 
     public async submit(): Promise<void> {
@@ -87,27 +81,19 @@ class Component {
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showSuccessHint();
-                        DialogService.getInstance().closeMainDialog();
+                        BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
+                        DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
                             null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
-                    }).catch((error) => {
+                    }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showError(error);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
             }
         }
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Config Item wurde erfolgreich angelegt.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -123,12 +109,6 @@ class Component {
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
     }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
-
-
 
 }
 

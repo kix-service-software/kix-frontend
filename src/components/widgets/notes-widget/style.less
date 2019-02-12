@@ -11,43 +11,45 @@
         }
     }
     .widget-content {
-        >.empty-notes {
-            border: 2px dotted @secondary-2;
-            color: @secondary-2;
-            height: 7rem;
-            padding: @margin-small;
-            margin: @margin-middle @margin-widget-content;
-            box-sizing: border-box;
-            text-align: center;
-            display: grid;
-            align-content: center;
-            opacity: 0.7;
-        }
-        >.editor-container {
-            >.cke {
-                >.cke_inner {
-                    >.cke_top {
-                        >.cke_toolbar {
-                            >.cke_toolgroup {
-                                >a.cke_button {
-                                    padding: 4px;
+        >.scroll-container {
+            >.empty-notes {
+                border: 2px dotted @secondary-2;
+                color: @secondary-2;
+                height: 7rem;
+                padding: @margin-small;
+                margin: @margin-middle @margin-widget-content;
+                box-sizing: border-box;
+                text-align: center;
+                display: grid;
+                align-content: center;
+                opacity: 0.7;
+            }
+            >.editor-container {
+                >.cke {
+                    >.cke_inner {
+                        >.cke_top {
+                            >.cke_toolbar {
+                                >.cke_toolgroup {
+                                    >a.cke_button {
+                                        padding: 4px;
+                                    }
                                 }
                             }
                         }
-                    }
-                    >.cke_bottom {
-                        display: none;
+                        >.cke_bottom {
+                            display: none;
+                        }
                     }
                 }
             }
-        }
-        >.notes-editor-buttons {
-            display: grid;
-            grid-template-columns: max-content auto;
-            grid-gap: @margin-widget-content + @margin-widget-content/2;
-            margin-top: @margin-widget-content;
-            >button {
-                min-width: unset;
+            >.notes-editor-buttons {
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-gap: @margin-widget-content + @margin-widget-content/2;
+                margin-top: @margin-widget-content;
+                >button {
+                    min-width: unset;
+                }
             }
         }
     }

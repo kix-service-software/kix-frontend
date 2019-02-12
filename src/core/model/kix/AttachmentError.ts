@@ -1,0 +1,7 @@
+export enum AttachmentError {
+
+    MAX_FILE_SIZE_EXCEEDED = 'MAX_FILE_SIZE_EXCEEDED',
+
+    INVALID_MIMETYPE = 'INVALID_MIMETYPE'
+
+}

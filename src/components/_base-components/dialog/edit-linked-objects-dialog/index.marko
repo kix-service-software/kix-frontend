@@ -7,8 +7,8 @@
             <div.edit-linked-objects-dialog-container>
                 <div.table-head>
                     <span>${"Vorhandene Verknüpfungen (" + state.linkObjectCount + ")"}</span>
-                    <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte" on-filter('filter')
-                        key="edit-linked-objects-filter"/>
+                    <filter predefinedFilter=state.predefinedTableFilter predefinedFilterPlaceholder="Alle Objekte"
+                        filterCount=state.filterCount on-filter('filter') key="edit-linked-objects-filter"/>
                 </div>
                 <if(state.table)>
                     <standard-table standardTable=state.table/>

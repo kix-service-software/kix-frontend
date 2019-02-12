@@ -1,10 +1,5 @@
-<if(!state.loading && state.formId)>
-    <widget instanceId="search-config-item-dialog">
-        <@content>
-            <main-form formId=state.formId/>
-        </@content>
-    </widget>
-</if>
-<else>
-    <loading-spinner/>
-</else>
+<widget instanceId="search-config-item-dialog">
+    <@content>
+        <main-form formId=state.formId/>
+    </@content>
+</widget>

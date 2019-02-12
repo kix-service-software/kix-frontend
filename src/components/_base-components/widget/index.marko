@@ -66,11 +66,8 @@
             </if>
         </if>
         <if(!state.minimized && component.isInputDefined(input.content))>
-            <include(input.content)/>
-        </if>
-        <if(state.isLoading)>
-            <div.widget-overlay.loading>
-                <loading-spinner/>
+            <div.scroll-container body-only-if(!component.isSidebarWidget())>
+                <include(input.content)/>
             </div>
         </if>
     </div>

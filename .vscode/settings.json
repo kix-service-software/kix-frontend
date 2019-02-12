@@ -13,5 +13,7 @@
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
   "less.lint.important": "warning",
-  "less.lint.float": "warning"
+  "less.lint.float": "warning",
+  "marko.beautify.maxLen": 120,
+  "marko.beautify.indent": "    "
 }

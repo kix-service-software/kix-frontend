@@ -1,6 +1,6 @@
-import { WidgetComponentState, AbstractAction, KIXObjectPropertyFilter } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
-import { StandardTable } from "@kix/core/dist/browser";
+import { WidgetComponentState, AbstractAction, KIXObjectPropertyFilter } from "../../../../core/model";
+import { FAQArticle } from "../../../../core/model/kix/faq";
+import { StandardTable } from "../../../../core/browser";
 
 export class ComponentState extends WidgetComponentState {
 
@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState {
         public table: StandardTable = null,
         public loading: boolean = true,
         public title: string = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = []
+        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
+        public filterCount: number = null
     ) {
         super();
     }

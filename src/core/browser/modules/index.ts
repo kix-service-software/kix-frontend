@@ -1,0 +1,1 @@
+export { KIXModulesService } from './KIXModulesService';

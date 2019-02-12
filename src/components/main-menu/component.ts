@@ -1,9 +1,9 @@
-import { MenuEntry, Context, ContextType, ContextMode } from '@kix/core/dist/model';
+import { MenuEntry, Context, ContextType, ContextMode } from '../../core/model';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser/context/ContextService';
+import { ContextService } from '../../core/browser/context/ContextService';
 import { MainMenuSocketListener } from './MainMenuSocketListener';
-import { IContextServiceListener } from '@kix/core/dist/browser';
-import { RoutingConfiguration } from '@kix/core/dist/browser/router';
+import { IContextServiceListener } from '../../core/browser';
+import { RoutingConfiguration } from '../../core/browser/router';
 
 class KIXMenuComponent implements IContextServiceListener {
 

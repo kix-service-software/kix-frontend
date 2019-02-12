@@ -4,16 +4,16 @@ Am Beispiel FAQ Artikel erstellen.
 
 ## Formulardefinition erstellen
 
-In der Extensionimplementierung des Kontextes muss die Methode `createFormDefinitions()` implementiert werden.
+In der Extensionimplementierung des Kontextes muss die Methode ` createFormDefinitions(overwrite: boolean)` implementiert werden.
 
 ```javascript
-public async createFormDefinitions(): Promise<void> {
+public async createFormDefinitions(overwrite: boolean): Promise<void> {
     const configurationService =
         ServiceContainer.getInstance().getClass<IConfigurationService>("IConfigurationService");
 
     const formId = 'new-faq-article-form';
     const existingForm = configurationService.getModuleConfiguration(formId, null);
-    if (!existingForm) {
+    if (!existingForm || overwrite) {
         const fields: FormField[] = [];
         fields.push(new FormField("Titel", FAQArticleProperty.TITLE, true, "Titel"));
 

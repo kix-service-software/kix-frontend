@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions
-} from "@kix/core/dist/model";
-import { FAQCategory, FAQCategoryProperty } from "@kix/core/dist/model/kix/faq";
-import { KIXObjectService, SearchOperator } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FAQCategory, FAQCategoryProperty } from "../../../../../core/model/kix/faq";
+import { KIXObjectService, SearchOperator } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -38,8 +38,13 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+            const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            this.state.currentNodes = node ? [node] : [];
+            super.provideValue(
+                this.state.currentNodes && this.state.currentNodes.length
+                    ? this.state.currentNodes[0].id
+                    : null
+            );
         }
     }
 
@@ -59,10 +64,17 @@ class Component extends FormInputComponent<number[], ComponentState> {
         return nodes;
     }
 
-    public queueChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+    public categoryChanged(nodes: TreeNode[]): void {
+        this.state.currentNodes = nodes && nodes;
+        super.provideValue(
+            this.state.currentNodes && this.state.currentNodes.length
+                ? this.state.currentNodes[0].id
+                : null
+        );
+    }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 
 }

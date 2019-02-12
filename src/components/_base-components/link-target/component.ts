@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
-import { RoutingService } from '@kix/core/dist/browser/router';
-import { ContextService, KIXObjectService } from '@kix/core/dist/browser';
-import { ContextType } from '@kix/core/dist/model';
+import { RoutingService } from '../../../core/browser/router';
+import { ContextService, KIXObjectService } from '../../../core/browser';
+import { ContextType } from '../../../core/model';
 
 class Component {
 

@@ -1,7 +1,0 @@
-## Beschreibung
-
-
-## Kriterien
-* [ ] ...
-
-/label ~Feature 

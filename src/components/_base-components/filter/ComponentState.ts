@@ -1,4 +1,4 @@
-import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from "@kix/core/dist/model";
+import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from "../../../core/model";
 
 export class ComponentState {
 
@@ -9,7 +9,9 @@ export class ComponentState {
         public predefinedFilterPlaceholder: string = 'Alle Objekte',
         public currentFilter: TreeNode = null,
         public icon: string | ObjectIcon = 'kix-icon-filter',
-        public placeholder: string = 'Filtern in Liste'
+        public placeholder: string = 'Filtern in Liste',
+        public filterCountString: string = null,
+        public showFilterCount: boolean = true
     ) { }
 
 }

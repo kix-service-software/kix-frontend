@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '@kix/core/dist/browser';
+import { ContextService } from '../../../core/browser';
 
 export class Component {
 

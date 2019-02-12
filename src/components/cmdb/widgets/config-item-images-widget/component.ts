@@ -1,11 +1,11 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, IdService, DialogService, KIXObjectService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import {
     KIXObjectType, Context, ConfigItem, ImagesLoadingOptions, ConfigItemImage
-} from '@kix/core/dist/model';
-import { DisplayImageDescription } from '@kix/core/dist/browser/components';
+} from '../../../../core/model';
+import { DisplayImageDescription } from '../../../../core/browser/components';
 
 class Component {
 
@@ -69,11 +69,10 @@ class Component {
                 null, null, new ImagesLoadingOptions(this.state.configItem.ConfigItemID)
             );
 
-            this.images = ciImages.map(
-                (i) => {
-                    return new DisplayImageDescription(i.ID, i.decodedContent, i.Comment, true);
-                }
-            );
+            this.images = ciImages.map((i) => {
+                const content = `data:${i.ContentType};base64,${i.Content}`;
+                return new DisplayImageDescription(i.ID, content, i.Comment);
+            });
             this.state.thumbnails = this.images;
             this.state.widgetTitle = `${this.state.widgetConfiguration.title} (${this.images.length})`;
         }

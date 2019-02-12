@@ -1,19 +1,28 @@
-import { ClientStorageService } from "@kix/core/dist/browser/ClientStorageService";
-import { ContextService, OverlayService } from "@kix/core/dist/browser";
-import { ContextMode, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
-import { ReleaseContext } from "@kix/core/dist/browser/release";
+import { ClientStorageService } from "../../../core/browser/ClientStorageService";
+import { ContextService, OverlayService } from "../../../core/browser";
+import { ContextMode, ComponentContent, ToastContent, OverlayType, KIXObjectType } from "../../../core/model";
+import { RoutingConfiguration } from "../../../core/browser/router";
+import { ReleaseContext } from "../../../core/browser/release";
+import { PersonalSettingsDialogContext } from "../../../core/browser";
 
 class KIXHeaderComponent {
 
     public openDialog(): void {
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
+        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
     }
 
     public showTemporaryComingSoon(): void {
         const content = new ComponentContent('toast', new ToastContent(
             'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon'
         ));
+        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
+    }
+
+    public showPersonalSettings(): void {
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon')
+        );
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 

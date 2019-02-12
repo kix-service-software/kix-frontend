@@ -1,6 +1,17 @@
 <div.loading-shield>
     <div.loading-info>
         <loading-spinner/>
-        <span.loading-hint>${input.loadingHint}</span>
+        <span>${input.loadingHint}</span>
+        <if(state.time && !state.cancel)>
+            <timer time=state.time/>
+        </if>
+        <else-if(state.cancel)>
+            <span>Bearbeiten wird abgebrochen</span>
+        </else-if>
+        <if(state.cancelCallback)>
+            <button.cancel-button type="button" on-click("cancel") title="Abbrechen" disabled=state.cancel>
+                <span.kix-icon-close/>Abbrechen
+            </button>
+        </if>
     </div>
 </div>

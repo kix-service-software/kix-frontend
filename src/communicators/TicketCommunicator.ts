@@ -1,11 +1,11 @@
 import {
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, SetArticleSeenFlagRequest,
     TicketEvent, LoadArticleZipAttachmentRequest,
-} from '@kix/core/dist/model/';
+} from '../core/model/';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { CommunicatorResponse } from '@kix/core/dist/common';
-import { TicketService } from '@kix/core/dist/services';
+import { CommunicatorResponse } from '../core/common';
+import { TicketService } from '../core/services';
 
 export class TicketCommunicator extends KIXCommunicator {
 

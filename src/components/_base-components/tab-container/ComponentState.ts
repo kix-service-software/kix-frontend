@@ -1,4 +1,4 @@
-import { ConfiguredWidget, ContextType, IAction } from "@kix/core/dist/model";
+import { ConfiguredWidget, ContextType, IAction } from "../../../core/model";
 
 export class ComponentState {
 

@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { FormInputComponent, KIXObjectType, FormFieldOptions } from "@kix/core/dist/model";
-import { IAutofillConfiguration, AutocompleteFormFieldOption } from "@kix/core/dist/browser/components";
+import { FormInputComponent, KIXObjectType, FormFieldOptions } from "../../../../../core/model";
+import { IAutofillConfiguration, AutocompleteFormFieldOption } from "../../../../../core/browser/components";
 
 class Component extends FormInputComponent<string, ComponentState> {
 

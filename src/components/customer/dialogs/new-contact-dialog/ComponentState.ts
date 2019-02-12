@@ -1,4 +1,4 @@
-import { KIXObjectType } from "@kix/core/dist/model";
+import { KIXObjectType } from "../../../../core/model";
 
 export class ComponentState {
 

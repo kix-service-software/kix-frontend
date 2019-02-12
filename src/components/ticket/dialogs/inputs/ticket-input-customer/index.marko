@@ -2,6 +2,7 @@
     <loading-spinner/>
 </if>
 <else>
-    <form-list enabled=state.hasContact selectedNodes=[state.currentNode] nodes=state.nodes
-        placeholder=component.getPlaceholder() on-nodesChanged('customerChanged') invalid=state.invalid/>
+    <form-list readonly=((!state.hasContact) || state.field.readonly) selectedNodes=[state.currentNode] nodes=state.nodes
+        placeholder=component.getPlaceholder() on-focusLost('focusLost') on-nodesChanged('customerChanged')
+        invalid=state.invalid/>
 </else>

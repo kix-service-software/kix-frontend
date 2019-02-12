@@ -1,10 +1,9 @@
 import {
     FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
-} from "@kix/core/dist/model";
+} from "../../../../../core/model";
 import { CompontentState } from "./CompontentState";
-import { ServiceRegistry, SearchOperator, KIXObjectService } from "@kix/core/dist/browser";
-import { GeneralCatalogService } from "@kix/core/dist/browser/general-catalog";
+import { SearchOperator, KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 
@@ -26,7 +25,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
             )]);
 
             const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
+                KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
             );
 
             let hasIcon: boolean = false;
@@ -35,7 +34,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
                 hasIcon = iconOption.value;
             }
 
-            this.state.nodes = items.map((item) => new TreeNode(item, item.Name, hasIcon
+            this.state.nodes = items.map((item) => new TreeNode(item.ItemID, item.Name, hasIcon
                 ? new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                 : null));
 
@@ -48,7 +47,8 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
+            const item = this.state.defaultValue.value as GeneralCatalogItem;
+            this.state.currentNode = this.state.nodes.find((n) => item.ItemID === n.id);
             super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
         }
     }
@@ -56,6 +56,10 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
     public valueChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 }
 

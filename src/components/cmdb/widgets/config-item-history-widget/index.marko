@@ -4,8 +4,7 @@
         <div.configitem-history-content>
             <if(state.configItem)>
                 <div.history-filter>
-                    <span.header>Änderungsverlauf</span>
-                    <filter on-filter('filter')/>
+                    <filter filterCount=state.filterCount on-filter('filter')/>
                 </div>
                 <div.history-container>
                     <if(state.standardTable)>

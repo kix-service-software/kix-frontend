@@ -1,4 +1,4 @@
-import { Label } from "@kix/core/dist/browser/components";
+import { Label } from "../../../core/browser/components";
 
 export class LabelComponentState {
 

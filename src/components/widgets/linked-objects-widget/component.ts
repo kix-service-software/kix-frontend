@@ -3,11 +3,11 @@ import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight,
     ObjectLinkDescriptionLabelLayer, TableColumn, WidgetService, IdService
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import {
-    KIXObjectType, Link, KIXObject, DataType, WidgetType, Context
-} from '@kix/core/dist/model';
-import { LinkUtil } from '@kix/core/dist/browser/link';
+    KIXObjectType, Link, KIXObject, DataType, WidgetType, ContextType
+} from '../../../core/model';
+import { LinkUtil } from '../../../core/browser/link';
 
 class Component {
 
@@ -25,12 +25,12 @@ class Component {
 
     public async onMount(): Promise<void> {
         WidgetService.getInstance().setWidgetType('linked-object-group', WidgetType.GROUP);
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
-                this.initWidget(context, object);
+                this.initWidget(object);
             },
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
@@ -38,10 +38,10 @@ class Component {
             filteredObjectListChanged: () => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<KIXObject>());
+        await this.initWidget(await context.getObject<KIXObject>());
     }
 
-    private async initWidget(context: Context, kixObject?: KIXObject): Promise<void> {
+    private async initWidget(kixObject?: KIXObject): Promise<void> {
         this.state.loading = true;
         this.state.kixObject = kixObject;
         this.setActions();

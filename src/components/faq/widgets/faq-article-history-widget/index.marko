@@ -1,18 +1,20 @@
 <widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
-        <if(state.loading)>
-            <loading-spinner/>
-        </if>
-        <else-if(!state.faqArticle)>
-            <span.error>No FAQ Article found available.</span>
-        </else-if>
-        <else>
-            <div.faq-article-history-container>
-                <if(state.table)>
-                    <standard-table standardTable=state.table/>
-                </if>
-            </div>
-        </else>
+        <div.faq-history-content>
+            <if(state.faqArticle)>
+                <div.history-filter>
+                    <filter filterCount=state.filterCount on-filter('filter')/>
+                </div>
+                <div.history-container>
+                    <if(state.standardTable)>
+                        <standard-table standardTable=state.standardTable/>
+                    </if>
+                </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
+        </div>
     </@content>
 </widget>

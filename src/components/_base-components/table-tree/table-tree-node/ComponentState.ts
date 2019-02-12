@@ -1,4 +1,4 @@
-import { TableTreeNode } from '@kix/core/dist/model';
+import { TableTreeNode } from '../../../../core/model';
 
 export class ComponentState {
 

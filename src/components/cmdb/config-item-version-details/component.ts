@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
 import {
     Version, ConfigItem, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup
-} from '@kix/core/dist/model';
-import { BrowserUtil, KIXObjectService } from '@kix/core/dist/browser';
-import { PreparedData } from '@kix/core/dist/model/kix/cmdb/PreparedData';
+} from '../../../core/model';
+import { BrowserUtil, KIXObjectService } from '../../../core/browser';
+import { PreparedData } from '../../../core/model/kix/cmdb/PreparedData';
 
 class Component {
 
@@ -46,7 +46,7 @@ class Component {
             let value = attr.DisplayValue;
             if (attr.Type === 'Date') {
                 value = DateTimeUtil.getLocalDateString(value);
-            } else if (attr.Type === 'Attachment') {
+            } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
             }
 

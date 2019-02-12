@@ -1,0 +1,20 @@
+{
+    "name": "kix-customer",
+    "extensions": {
+        "kix:configuration": {
+            "customer-configuration": "../../dist/registry-modules/customer/customer-configuration.extension",
+            "customer-details-configuration": "../../dist/registry-modules/customer/customer-details-configuration.extension",
+            "new-customer-dialog-configuration": "../../dist/registry-modules/customer/new-customer-dialog-configuration.extension",
+            "edit-customer-dialog-configuration": "../../dist/registry-modules/customer/edit-customer-dialog-configuration.extension",
+            "contact-details-configuration": "../../dist/registry-modules/customer/contact-details-configuration.extension",
+            "new-contact-dialog-configuration": "../../dist/registry-modules/customer/new-contact-dialog-configuration.extension",
+            "edit-contact-dialog-configuration": "../../dist/registry-modules/customer/edit-contact-dialog-configuration.extension",
+            "search-contact-dialog-configuration": "../../dist/registry-modules/customer/search-contact-dialog-configuration.extension",
+            "search-customer-dialog-configuration": "../../dist/registry-modules/customer/search-customer-dialog-configuration.extension"
+        },
+        "kix:modules": {
+            "contact-module": "../../dist/registry-modules/customer/kix-module-contact.extension",
+            "customer-module": "../../dist/registry-modules/customer/kix-module-customer.extension"
+        }
+    }
+}

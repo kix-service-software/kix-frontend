@@ -2,11 +2,12 @@
     <span.date-time-input>
         <input.input-style class={invalid: state.invalid} value=state.dateValue type="date"
             placeholder=(state.field.required ? state.placeholder : "") required=input.required
-            on-change('dateChanged')/>
+            readonly=state.field.readonly disabled=state.field.readonly on-change('dateChanged') on-blur('focusLost')/>
         <if(state.inputType === 'DATE_TIME')>
             <input.input-style class={invalid: state.invalid} value=state.timeValue type="time"
                 placeholder=(state.field.required ? state.placeholder : "") required=input.required
-                on-change('timeChanged')/>
+                readonly=state.field.readonly disabled=state.field.readonly on-change('timeChanged')
+                on-blur('focusLost')/>
         </if>
     </span>
 </if>

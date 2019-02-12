@@ -1,9 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, TreeNode, ConfigItem
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { CMDBService } from "@kix/core/dist/browser/cmdb";
+} from "../../../../core/model";
+import { FormService } from "../../../../core/browser/form";
+import { CMDBService } from "../../../../core/browser/cmdb";
 
 class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
@@ -27,10 +27,9 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => this.state.defaultValue.value.equals(n.id));
-            const configItem = this.state.currentNode ? this.configItems.find(
-                (cu) => cu.ConfigItemID === this.state.currentNode.id
-            ) : null;
+            const configItem = this.state.defaultValue.value;
+            this.state.currentNode = this.createTreeNode(configItem);
+            this.state.nodes = [this.state.currentNode];
             super.provideValue(configItem);
         }
     }
@@ -53,7 +52,7 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
             if (searchValue && searchValue !== '') {
                 this.state.nodes = this.configItems.map(
-                    (c) => new TreeNode(c, c.Name, 'kix-icon-ci')
+                    (c) => this.createTreeNode(c)
                 );
             }
         }
@@ -61,6 +60,13 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
         return this.state.nodes;
     }
 
+    private createTreeNode(configItem: ConfigItem): TreeNode {
+        return new TreeNode(configItem.ConfigItemID, configItem.Name, 'kix-icon-ci');
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

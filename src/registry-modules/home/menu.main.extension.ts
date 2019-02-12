@@ -1,5 +1,5 @@
-import { IMainMenuExtension } from '@kix/core/dist/extensions';
-import { HomeContext } from '@kix/core/dist/browser/home';
+import { IMainMenuExtension } from '../../core/extensions';
+import { HomeContext } from '../../core/browser/home';
 
 export class Extensions implements IMainMenuExtension {
 

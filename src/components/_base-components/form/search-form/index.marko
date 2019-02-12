@@ -1,16 +1,11 @@
 <div.search-form on-keydown('keyDown')>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else>
-        <widget instanceId="search-form-group" title="Attribute" key="attributes">
-            <@content>
-                <div.search-criteria>
-                    <search-value-container formId=input.formId objectType=input.objectType defaultProperties=state.defaultProperties/>
-                </div>
-            </@content>
-        </widget>
-    </else>
+    <widget instanceId="search-form-group" title="Attribute" key="attributes">
+        <@content>
+            <div.search-criteria>
+                <search-value-container formId=input.formId objectType=input.objectType/>
+            </div>
+        </@content>
+    </widget>
     <div.dialog-button-container>
         <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
             <span.kix-icon-delete/>Daten zurücksetzen

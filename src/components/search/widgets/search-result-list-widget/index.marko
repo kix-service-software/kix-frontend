@@ -4,7 +4,7 @@
 <else>
     <widget instanceId=state.instanceId title=state.resultTitle icon=state.resultIcon>
         <@headerFilter>
-            <filter on-filter('filter')/>
+            <filter filterCount=state.filterCount on-filter('filter')/>
         </@headerFilter>
         <@content>
             <if(state.resultTable && !state.noSearch)>

@@ -1,9 +1,10 @@
-import { ActionFactory } from '@kix/core/dist/browser';
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ActionFactory } from '../../../../core/browser';
+import { ContextService } from '../../../../core/browser/context';
 
 import { DynamicFieldsSettings } from './DynamicFieldsSettings';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Ticket } from '@kix/core/dist/model';
+import { KIXObjectType, Ticket, ContextType } from '../../../../core/model';
+import { TicketDetailsContext } from '../../../../core/browser/ticket';
 
 class Component {
 
@@ -19,7 +20,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
 
         this.state.widgetConfiguration = context
             ? context.getWidgetConfiguration<DynamicFieldsSettings>(this.state.instanceId)

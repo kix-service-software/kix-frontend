@@ -2,8 +2,8 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, ITableConfigurationListener, TableColumn,
     TableListenerConfiguration, WidgetService, StandardTableFactoryService
-} from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter } from "@kix/core/dist/model";
+} from "../../../../core/browser";
+import { KIXObjectType, KIXObjectPropertyFilter } from "../../../../core/model";
 
 class Component {
 
@@ -59,7 +59,8 @@ class Component {
                 await this.state.standardTable.loadRows();
                 this.state.title = this.getTitle();
                 this.state.standardTable.setTableListener(() => {
-                    this.state.title = this.getTitle();
+                    this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
+                    (this as any).setStateDirty('filterCount');
                 });
             }, 200);
         }

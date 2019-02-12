@@ -1,10 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ObjectIcon, TicketProperty, TreeNode, DateTimeUtil, TicketState, KIXObjectType, StateType
-} from "@kix/core/dist/model";
-import { PendingTimeFormValue, TicketStateOptions } from "@kix/core/dist/browser/ticket";
-import { FormInputComponent } from '@kix/core/dist/model/components/form/FormInputComponent';
-import { KIXObjectService } from "@kix/core/dist/browser";
+    TicketProperty, TreeNode, DateTimeUtil, TicketState, KIXObjectType, StateType
+} from "../../../../../core/model";
+import { PendingTimeFormValue, TicketStateOptions, TicketService } from "../../../../../core/browser/ticket";
+import { FormInputComponent } from '../../../../../core/model/components/form/FormInputComponent';
+import { KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
 
@@ -19,10 +19,7 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE, null);
-        this.state.nodes = states.map((t) =>
-            new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.STATE_ID, t.ID))
-        );
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.STATE_ID);
         this.setCurrentNode();
         this.showPendingTime();
     }
@@ -105,6 +102,10 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
         } else {
             super.provideValue(null);
         }
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 }
 

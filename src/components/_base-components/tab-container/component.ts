@@ -1,38 +1,31 @@
-import { ContextService } from '@kix/core/dist/browser/context';
-import { ComponentsService } from '@kix/core/dist/browser/components';
-import { WidgetType, ConfiguredWidget } from '@kix/core/dist/model';
+import { ContextService } from '../../../core/browser/context';
+import { ComponentsService, TabContainerEvent } from '../../../core/browser/components';
+import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { WidgetService, ActionFactory } from '@kix/core/dist/browser';
+import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
+import { IEventSubscriber, EventService } from '../../../core/browser/event';
 
-class TabLaneComponent {
+class TabLaneComponent implements IEventSubscriber {
+
+    public eventSubscriberId: string = IdService.generateDateBasedId('tab-container');
 
     private state: ComponentState;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
-    }
 
-
-    public onInput(input: any): void {
-        this.state.tabWidgets = input.tabWidgets;
+        this.state.tabWidgets = input.tabWidgets ? input.tabWidgets : [];
         this.state.tabId = input.tabId;
-        if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
-            const tab = this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId);
-            if (tab && tab.instanceId !== this.state.activeTab.instanceId) {
-                this.state.activeTab = tab;
-            }
-        }
+        this.state.title = input.title;
+        this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+        this.state.contextType = input.contextType;
+        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
 
         WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
         this.state.tabWidgets.forEach(
             (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
         );
-
-        this.state.title = input.title;
-        this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
-        this.state.contextType = input.contextType;
-        this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
-        this.setSidebars();
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
     public async onMount(): Promise<void> {
@@ -47,6 +40,13 @@ class TabLaneComponent {
 
         if (this.state.contextType) {
             this.setSidebars();
+        }
+
+        if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
+            const tab = this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId);
+            if (tab && tab.instanceId !== this.state.activeTab.instanceId) {
+                this.state.activeTab = tab;
+            }
         }
     }
 
@@ -84,6 +84,16 @@ class TabLaneComponent {
 
     public isActiveTab(tabId: string): boolean {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
+    }
+
+    public eventPublished(data: any, eventId: string): void {
+        if (eventId === TabContainerEvent.CHANGE_TITLE) {
+            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+            if (tab) {
+                tab.configuration.title = data.title;
+                (this as any).setStateDirty();
+            }
+        }
     }
 }
 

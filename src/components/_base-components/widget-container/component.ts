@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
-import { ComponentsService } from '@kix/core/dist/browser/components';
+import { ConfiguredWidget, WidgetSize } from '../../../core/model';
+import { ComponentsService } from '../../../core/browser/components';
 
 class Component {
 

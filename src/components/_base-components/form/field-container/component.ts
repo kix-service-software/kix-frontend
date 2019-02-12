@@ -1,6 +1,6 @@
-import { FormField } from "@kix/core/dist/model";
+import { FormField } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { FormService } from "@kix/core/dist/browser";
+import { FormService } from "../../../../core/browser";
 
 class FieldContainerComponent {
 
@@ -16,6 +16,7 @@ class FieldContainerComponent {
         this.state.fields = input.fields;
         this.formId = input.formId;
     }
+
     public canRemove(field: FormField): boolean {
         const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
         if (propertyFields.length === 1 && field.empty) {
@@ -29,34 +30,31 @@ class FieldContainerComponent {
         if (propertyFields.length === 1) {
             this.setFieldsEmpty(field, true);
         } else {
-            const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
-            this.state.fields.splice(index, 1);
-
             const formInstance = await FormService.getInstance().getFormInstance(this.formId);
             formInstance.removeFormField(field);
         }
-        this.state.fields = [...this.state.fields];
+        (this as any).setStateDirty('fields');
     }
 
     public canAdd(field: FormField): boolean {
         const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+        const index = propertyFields.findIndex((f) => f.instanceId === field.instanceId);
         if (propertyFields.length === 1 && field.empty) {
             return true;
         }
-        return field.countMax !== null && field.countMax > propertyFields.length;
+        return field.countMax !== null
+            && field.countMax > propertyFields.length
+            && index !== -1 && index === propertyFields.length - 1;
     }
 
     public async addField(field: FormField): Promise<void> {
         if (field.empty) {
             this.setFieldsEmpty(field, false);
         } else {
-            const newField = field.clone();
-
-            const index = this.state.fields.findIndex((f) => f.instanceId === field.instanceId);
-            this.state.fields.splice(index + 1, 0, newField);
+            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+            await formInstance.addFormField(field);
         }
-
-        this.state.fields = [...this.state.fields];
+        (this as any).setStateDirty('fields');
     }
 
     private setFieldsEmpty(field: FormField, empty: boolean): void {
