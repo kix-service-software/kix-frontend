@@ -1,5 +1,5 @@
-import { StandardTable } from '@kix/core/dist/browser';
-import { KIXObject } from '@kix/core/dist/model';
+import { StandardTable } from '../../../core/browser';
+import { KIXObject } from '../../../core/model';
 
 export class StandardTableInput<T extends KIXObject<T>> {
 

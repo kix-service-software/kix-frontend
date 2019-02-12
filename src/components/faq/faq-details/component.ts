@@ -1,9 +1,9 @@
-import { ContextService, ActionFactory, WidgetService, DialogService } from "@kix/core/dist/browser";
-import { FAQDetailsContext } from "@kix/core/dist/browser/faq";
+import { ContextService, ActionFactory, WidgetService, DialogService } from "../../../core/browser";
+import { FAQDetailsContext } from "../../../core/browser/faq";
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, WidgetType } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
-import { ComponentsService } from "@kix/core/dist/browser/components";
+import { KIXObjectType, AbstractAction, WidgetType } from "../../../core/model";
+import { FAQArticle } from "../../../core/model/kix/faq";
+import { ComponentsService } from "../../../core/browser/components";
 
 class Component {
 
@@ -19,7 +19,7 @@ class Component {
         this.LANE_WIDGET_TYPE = WidgetType.LANE;
         WidgetService.getInstance().setWidgetType('faq-article-widget', WidgetType.LANE);
 
-        const context = (ContextService.getInstance().getActiveContext() as FAQDetailsContext);
+        const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
         context.registerListener('faq-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },

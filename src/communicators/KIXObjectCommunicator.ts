@@ -2,11 +2,11 @@ import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
     CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse,
     UpdateObjectRequest, UpdateObjectResponse, KIXObjectCache
-} from "@kix/core/dist/model";
+} from "../core/model";
 import { KIXCommunicator } from "./KIXCommunicator";
-import { CommunicatorResponse } from "@kix/core/dist/common";
-import { KIXObjectServiceRegistry, LoggingService } from "@kix/core/dist/services";
-import { ServiceMethod } from "@kix/core/dist/browser";
+import { CommunicatorResponse } from "../core/common";
+import { KIXObjectServiceRegistry, LoggingService } from "../core/services";
+import { ServiceMethod } from "../core/browser";
 
 export class KIXObjectCommunicator extends KIXCommunicator {
 
@@ -48,7 +48,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 );
             }).catch((error) => {
                 LoggingService.getInstance().error(error);
-                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, this.getErrorMessage(error));
+                response = new CommunicatorResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, error);
             });
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
@@ -73,7 +73,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 }).catch((error) => {
                     LoggingService.getInstance().error(error);
                     response = new CommunicatorResponse(
-                        KIXObjectEvent.CREATE_OBJECT_ERROR, this.getErrorMessage(error)
+                        KIXObjectEvent.CREATE_OBJECT_ERROR, error
                     );
                 });
 
@@ -100,7 +100,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 }).catch((error) => {
                     LoggingService.getInstance().error(error);
                     response = new CommunicatorResponse(
-                        KIXObjectEvent.UPDATE_OBJECT_ERROR, this.getErrorMessage(error)
+                        KIXObjectEvent.UPDATE_OBJECT_ERROR, error
                     );
                 });
 
@@ -127,7 +127,7 @@ export class KIXObjectCommunicator extends KIXCommunicator {
                 }).catch((error) => {
                     LoggingService.getInstance().error(error);
                     response = new CommunicatorResponse(
-                        KIXObjectEvent.DELETE_OBJECT_ERROR, this.getErrorMessage(error)
+                        KIXObjectEvent.DELETE_OBJECT_ERROR, error
                     );
                 });
         } else {
@@ -139,14 +139,4 @@ export class KIXObjectCommunicator extends KIXCommunicator {
         return response;
     }
 
-    private getErrorMessage(error: any): string {
-        let errorMessage = error;
-        if (error.message) {
-            errorMessage = error.message;
-        } else if (error.errorMessage) {
-            errorMessage = error.errorMessage.body;
-        }
-
-        return errorMessage;
-    }
 }

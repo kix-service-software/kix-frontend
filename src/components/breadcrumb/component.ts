@@ -1,7 +1,7 @@
-import { ContextType, Context } from "@kix/core/dist/model";
-import { IContextServiceListener, ContextService } from "@kix/core/dist/browser";
+import { ContextType, Context } from "../../core/model";
+import { IContextServiceListener, ContextService } from "../../core/browser";
 import { ComponentState } from './ComponentState';
-import { RoutingConfiguration } from "@kix/core/dist/browser/router";
+import { RoutingConfiguration } from "../../core/browser/router";
 
 class BreadcrumbComponent implements IContextServiceListener {
 

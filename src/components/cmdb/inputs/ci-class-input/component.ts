@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "../../../../core/model";
+import { KIXObjectService } from "../../../../core/browser";
 
 class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
 
@@ -18,7 +18,7 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
         await super.onMount();
 
         const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null
+            KIXObjectType.CONFIG_ITEM_CLASS, null, null, null, false
         );
 
         this.state.nodes = classes.map(
@@ -42,6 +42,10 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         const configItemClass = this.state.currentNode ? this.state.currentNode.id : null;
         super.provideValue(configItemClass);
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 
 }

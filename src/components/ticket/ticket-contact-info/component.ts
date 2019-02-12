@@ -1,6 +1,6 @@
-import { Contact, KIXObjectType } from "@kix/core/dist/model";
+import { Contact, KIXObjectType } from "../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { KIXObjectService } from "../../../core/browser";
 
 class ContactInfoComponent {
 

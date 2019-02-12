@@ -1,8 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { CreateLinkDescription, FormInputComponent } from "@kix/core/dist/model";
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { Label } from "@kix/core/dist/browser/components";
-import { FormService, LabelService, IdService } from "@kix/core/dist/browser";
+import { CreateLinkDescription, FormInputComponent } from "../../../../../core/model";
+import { FormService, LabelService, IdService, DialogService, Label } from "../../../../../core/browser";
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 

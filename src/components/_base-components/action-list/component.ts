@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, AbstractContextServiceListener } from "@kix/core/dist/browser/context/";
-import { Context, KIXObject, IActionListener } from '@kix/core/dist/model';
-import { IContextListener } from '@kix/core/dist/browser/context/IContextListener';
-import { IdService, WidgetService } from '@kix/core/dist/browser';
+import { ContextService, AbstractContextServiceListener } from "../../../core/browser/context/";
+import { Context, KIXObject, IActionListener } from '../../../core/model';
+import { IContextListener } from '../../../core/browser/context/IContextListener';
+import { IdService, WidgetService } from '../../../core/browser';
 
 export class Component implements IActionListener {
 

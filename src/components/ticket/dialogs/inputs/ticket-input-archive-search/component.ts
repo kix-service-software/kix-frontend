@@ -1,5 +1,5 @@
 import { ComponentState } from "./CompontentState";
-import { ArchiveFlag, FormInputComponent, TreeNode } from "@kix/core/dist/model";
+import { ArchiveFlag, FormInputComponent, TreeNode } from "../../../../../core/model";
 
 
 class Component extends FormInputComponent<number, ComponentState> {
@@ -32,6 +32,10 @@ class Component extends FormInputComponent<number, ComponentState> {
     public nodesChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 }
 

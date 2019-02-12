@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ClientStorageService } from '@kix/core/dist/browser/ClientStorageService';
-import { AuthenticationService } from '@kix/core/dist/browser/authentication';
+import { ClientStorageService } from '../../core/browser/ClientStorageService';
+import { AuthenticationService } from '../../core/browser/authentication';
 
 class Component {
 

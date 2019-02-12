@@ -1,6 +1,6 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '@kix/core/dist/model';
-import { TicketTypeDetailsContextConfiguration, TicketTypeDetailsContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../../core/extensions';
+import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
+import { TicketTypeDetailsContextConfiguration, TicketTypeDetailsContext } from '../../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
 
@@ -10,7 +10,7 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ticketDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
+        const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
             'ticket-type-info-widget', 'Typ Informationen', ['ticket-admin-type-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
@@ -23,14 +23,14 @@ export class Extension implements IConfigurationExtension {
         return new TicketTypeDetailsContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
             ['ticket-type-assigned-textmodules'], [textmodulesWidget],
-            ['ticket-type-details-widget'], [ticketDetailsWidget],
+            ['ticket-type-details-widget'], [ticketTypesDetailsWidget],
             [], [],
             ['ticket-admin-type-create'],
             ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         return;
     }
 

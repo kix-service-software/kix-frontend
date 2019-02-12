@@ -2,8 +2,8 @@ import { ComponentState } from './ComponentState';
 import {
     WidgetType, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
     FilterType, GeneralCatalogItem, DynamicField
-} from '@kix/core/dist/model';
-import { WidgetService, KIXObjectService, SearchOperator } from '@kix/core/dist/browser';
+} from '../../../core/model';
+import { WidgetService, KIXObjectService, SearchOperator } from '../../../core/browser';
 
 class Component {
 

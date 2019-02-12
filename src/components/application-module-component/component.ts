@@ -1,25 +1,28 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
     StandardTableFactoryService, LabelService, DialogService, FactoryService
-} from '@kix/core/dist/browser';
+} from '../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchService, SearchResultPrintAction, SearchContext } from '@kix/core/dist/browser/search';
-import { CSVExportAction, BulkAction } from '@kix/core/dist/browser/actions';
+import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
+import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
     ConfiguredDialogWidget, WidgetConfiguration
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
     LinkObjectLabelProvider
-} from '@kix/core/dist/browser/link';
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '@kix/core/dist/browser/general-catalog';
-import { DynamicFieldService } from '@kix/core/dist/browser/dynamic-fields';
+} from '../../core/browser/link';
+import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
+import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
-} from '@kix/core/dist/browser/text-modules';
-import { SysConfigService } from '@kix/core/dist/browser/sysconfig';
-import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '@kix/core/dist/browser/sla';
+} from '../../core/browser/text-modules';
+import { SysConfigService } from '../../core/browser/sysconfig';
+import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
+import { PersonalSettingsDialogContext } from '../../core/browser';
+import { BulkDialogContext } from '../../core/browser/bulk';
 
 class Component extends AbstractMarkoComponent {
 
@@ -35,6 +38,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.getInstance().registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.getInstance().registerServiceInstance(SlaService.getInstance());
+        ServiceRegistry.getInstance().registerServiceInstance(ObjectIconService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
 
@@ -44,6 +48,9 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
         StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
@@ -75,6 +82,20 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext
         );
         ContextService.getInstance().registerContext(editLinkObjectDialogContext);
+
+        const bulkDialogContext = new ContextDescriptor(
+            BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
+            ContextType.DIALOG, ContextMode.EDIT_BULK,
+            false, 'bulk-dialog', ['bulk'], BulkDialogContext
+        );
+        ContextService.getInstance().registerContext(bulkDialogContext);
+
+        const settingsDialogContext = new ContextDescriptor(
+            PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],
+            ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
+            false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
+        );
+        ContextService.getInstance().registerContext(settingsDialogContext);
     }
 
     private registerDialogs(): void {
@@ -85,6 +106,25 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'personal-settings-dialog',
+            new WidgetConfiguration(
+                'personal-settings-dialog', 'Persönliche Einstellungen bearbeiten',
+                [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.PERSONAL_SETTINGS,
+            ContextMode.PERSONAL_SETTINGS
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'bulk-dialog',
+            new WidgetConfiguration(
+                'bulk-dialog', 'Objekte bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.ANY,
+            ContextMode.EDIT_BULK
         ));
     }
 

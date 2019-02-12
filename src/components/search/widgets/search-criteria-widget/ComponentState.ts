@@ -1,5 +1,5 @@
-import { FilterCriteria } from "@kix/core/dist/model";
-import { Label } from "@kix/core/dist/browser/components";
+import { FilterCriteria } from "../../../../core/model";
+import { Label } from "../../../../core/browser/components";
 
 export class ComponentState {
 

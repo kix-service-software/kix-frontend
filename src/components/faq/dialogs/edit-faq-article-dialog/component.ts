@@ -1,11 +1,11 @@
 import { ComponentState } from './ComponentState';
 import {
-    FormService, DialogService, OverlayService, ContextService, KIXObjectService
-} from '@kix/core/dist/browser';
+    FormService, DialogService, OverlayService, ContextService, KIXObjectService, BrowserUtil
+} from '../../../../core/browser';
 import {
     ValidationSeverity, ComponentContent, OverlayType, ValidationResult,
-    StringContent, KIXObjectType, ToastContent, ContextType
-} from '@kix/core/dist/model';
+    StringContent, KIXObjectType, ToastContent, ContextType, Error
+} from '../../../../core/model';
 
 class Component {
 
@@ -46,23 +46,15 @@ class Component {
                     ).then((faqArticleId) => {
                         context.getObject(KIXObjectType.FAQ_ARTICLE, true);
                         DialogService.getInstance().setMainDialogLoading(false);
-                        this.showSuccessHint();
-                        DialogService.getInstance().closeMainDialog();
-                    }).catch((error) => {
+                        BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                        DialogService.getInstance().submitMainDialog();
+                    }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading();
-                        this.showError(error);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
                 }
             }
         }, 300);
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -78,12 +70,6 @@ class Component {
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
     }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
-
-
 
 }
 

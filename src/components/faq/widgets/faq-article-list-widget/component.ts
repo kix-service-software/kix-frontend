@@ -2,10 +2,10 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
-} from "@kix/core/dist/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "@kix/core/dist/model";
-import { FAQArticleProperty, FAQCategory } from "@kix/core/dist/model/kix/faq";
-import { FAQContext } from "@kix/core/dist/browser/faq";
+} from "../../../../core/browser";
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
+import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
+import { FAQContext } from "../../../../core/browser/faq";
 
 class Component {
 
@@ -93,8 +93,9 @@ class Component {
             this.setCategoryFilter((context as FAQContext).faqCategory);
         }
         if (this.state.widgetConfiguration.contextDependent && context) {
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-            this.setTitle(context.getObjectList().length);
+            const objects = await context.getObjectList();
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            this.setTitle(objects.length);
             await table.loadRows();
         }
     }
@@ -137,7 +138,8 @@ class Component {
             await this.state.table.loadRows();
 
             const context = ContextService.getInstance().getActiveContext();
-            context.setFilteredObjectList(context.getObjectList());
+            const objects = await context.getObjectList();
+            context.setFilteredObjectList(objects);
         }
     }
 

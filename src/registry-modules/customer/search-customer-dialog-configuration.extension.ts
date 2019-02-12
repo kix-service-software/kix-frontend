@@ -1,10 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, CustomerProperty, WidgetSize, ConfiguredWidget, WidgetConfiguration
-} from '@kix/core/dist/model';
-import { CustomerSearchContext, CustomerSearchContextConfiguration } from '@kix/core/dist/browser/customer';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { CustomerSearchContext, CustomerSearchContextConfiguration } from '../../core/browser/customer';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -27,20 +28,19 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-customer-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'Kunden',
                 KIXObjectType.CUSTOMER,
                 FormContext.SEARCH,
                 null,
-                true,
-                [CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
+                [SearchProperty.FULLTEXT, CustomerProperty.CUSTOMER_COMPANY_NAME, CustomerProperty.CUSTOMER_ID]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

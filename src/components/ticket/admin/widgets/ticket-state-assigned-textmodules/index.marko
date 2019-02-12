@@ -1,0 +1,12 @@
+<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+    <@content>
+        <div.state-assigned-textmodules-container>
+            <div.textmodules-filter>
+                <filter filterCount=state.filterCount on-filter('filter')/>
+            </div>
+            <if(state.table)>
+                <standard-table standardTable=state.table/>
+            </if>
+        </div>
+    </@content>
+</widget>

@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
 import {
-    DialogService, FormService, OverlayService, KIXObjectService, ContextService
-} from "@kix/core/dist/browser";
+    DialogService, FormService, OverlayService, KIXObjectService, ContextService, BrowserUtil
+} from "../../../../core/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, KIXObjectType, ToastContent, ContextType, FormInstance
-} from "@kix/core/dist/model";
+    ValidationSeverity, ValidationResult, KIXObjectType, ToastContent, ContextType, FormInstance, Error
+} from "../../../../core/model";
 
 class Component {
 
@@ -45,22 +45,14 @@ class Component {
                 ).then((contactId) => {
                     context.getObject(KIXObjectType.CONTACT, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showSuccessHint();
-                    DialogService.getInstance().closeMainDialog();
-                }).catch((error) => {
+                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                    DialogService.getInstance().submitMainDialog();
+                }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading();
-                    this.showError(error);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }
         }
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -77,9 +69,6 @@ class Component {
         );
     }
 
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
 }
 
 module.exports = Component;

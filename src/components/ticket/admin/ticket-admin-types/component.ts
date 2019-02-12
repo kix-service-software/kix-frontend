@@ -1,16 +1,16 @@
 import {
     AbstractMarkoComponent, StandardTableFactoryService, SearchOperator,
     WidgetService, ActionFactory, TableConfiguration, KIXObjectService, LabelService, ContextService
-} from '@kix/core/dist/browser';
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, TicketType, SortUtil, TicketTypeProperty,
     DataType, SortOrder
-} from '@kix/core/dist/model';
-import { AdminContext } from '@kix/core/dist/browser/admin';
-import { EventService, IEventListener } from '@kix/core/dist/browser/event';
+} from '../../../../core/model';
+import { AdminContext } from '../../../../core/browser/admin';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventListener {
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
     public eventSubscriberId: string;
 
@@ -22,13 +22,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async onMount(): Promise<void> {
         this.state.predefinedTableFilter = [
             new KIXObjectPropertyFilter(
-                'Gültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 1, false)]
+                'Gültig', [new TableFilterCriteria(TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 1, false)]
             ),
             new KIXObjectPropertyFilter(
-                'Ungültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 2, false)]
+                'Ungültig', [new TableFilterCriteria(TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 2, false)]
             ),
             new KIXObjectPropertyFilter(
-                'Temporär ungültig', [new TableFilterCriteria('ValidID', SearchOperator.EQUALS, 3, false)]
+                'Temporär ungültig', [new TableFilterCriteria(
+                    TicketTypeProperty.VALID_ID, SearchOperator.EQUALS, 3, false
+                )]
             )
         ];
 

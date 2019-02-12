@@ -1,4 +1,4 @@
-import { AbstractAction, Article, WidgetComponentState, Ticket } from '@kix/core/dist/model';
+import { AbstractAction, Article, WidgetComponentState, Ticket } from '../../../../core/model';
 
 export class ComponentState extends WidgetComponentState {
 

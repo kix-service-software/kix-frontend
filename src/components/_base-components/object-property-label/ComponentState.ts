@@ -1,5 +1,5 @@
-import { ILabelProvider } from '@kix/core/dist/browser';
-import { ObjectIcon } from '@kix/core/dist/model';
+import { ILabelProvider } from '../../../core/browser';
+import { ObjectIcon } from '../../../core/model';
 
 export class ComponentState<T> {
 
@@ -10,7 +10,8 @@ export class ComponentState<T> {
         public showInfo: boolean = false,
         public propertyDisplayText: string = '',
         public propertyName: string = '',
-        public propertyIcon: string | ObjectIcon = null
+        public propertyIcon: string | ObjectIcon = null,
+        public hasText: boolean = true
     ) { }
 
 }

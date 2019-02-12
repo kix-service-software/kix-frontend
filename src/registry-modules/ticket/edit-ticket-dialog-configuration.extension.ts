@@ -1,15 +1,15 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     EditTicketDialogContextConfiguration, EditTicketDialogContext, PendingTimeFormValue
-} from '@kix/core/dist/browser/ticket';
+} from '../../core/browser/ticket';
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
     FormFieldOption, FormFieldOptions, WidgetSize
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { AutocompleteFormFieldOption, AutocompleteOption } from '@kix/core/dist/browser/components';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { AutocompleteFormFieldOption, AutocompleteOption } from '../../core/browser/components';
+import { ConfigurationService } from '../../core/services';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -52,7 +52,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formIdEditTicket = 'edit-ticket-form';
@@ -61,7 +61,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             const fields: FormField[] = [];
             fields.push(new FormField("Titel", TicketProperty.TITLE, null, true, "Geben Sie einen Titel für das Ticket ein"));
             fields.push(new FormField(
-                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ein Ansprechpartner ist ein Kontakt oder eine Person, die eine Anfrage im Kontext eines Kunden stellt. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit  bereits im System angelegten Ansprechpartner angezeigt. „***“ zeigt alle Einträge an."
+                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ein Ansprechpartner ist ein Kontakt oder eine Person, die eine Anfrage im Kontext eines Kunden stellt. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit bereits im System angelegten Ansprechpartner angezeigt. „***“ zeigt alle Einträge an."
             ));
             fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, "Kunden werden nach Auswahl eines Ansprechpartners automatisch zugewiesen."));
             fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', true, "Der Ticket-Typ dient zur Klassifizierung von Anfragen."));
@@ -80,9 +80,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ]))
             ]));
 
-            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an das Ticket anhängen.  Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB  pro Datei."));
+            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an das Ticket anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
             fields.push(new FormField(
-                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket  zuständig sein soll."
+                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig sein soll."
             ));
             fields.push(new FormField(
                 "Verantwortlicher", TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, "Der Verantwortliche ist die Person, die dafür verantwortlich ist, dass das Ticket gelöst wird (kann mit Bearbeiter identisch sein)."

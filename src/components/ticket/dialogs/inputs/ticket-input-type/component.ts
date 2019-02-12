@@ -1,8 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import {
-    ObjectIcon, TicketProperty, FormInputComponent, TreeNode, TicketType, KIXObjectType
-} from "@kix/core/dist/model";
-import { KIXObjectService } from "@kix/core/dist/browser";
+import { TicketProperty, FormInputComponent, TreeNode } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -16,10 +14,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE, null);
-        this.state.nodes = types.filter((t) => t.ValidID === 1).map(
-            (t) => new TreeNode(t.ID, t.Name, new ObjectIcon(TicketProperty.TYPE_ID, t.ID))
-        );
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.TYPE_ID);
         this.setCurrentNode();
     }
 
@@ -35,6 +30,9 @@ class Component extends FormInputComponent<number, ComponentState> {
         super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

@@ -1,9 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, TreeNode, ConfigItem
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { CMDBService } from "@kix/core/dist/browser/cmdb";
+} from "../../../../core/model";
+import { FormService } from "../../../../core/browser/form";
+import { CMDBService } from "../../../../core/browser/cmdb";
 
 class Component extends FormInputComponent<ConfigItem, ComponentState> {
 
@@ -61,9 +61,12 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
     }
 
     private createTreeNode(configItem: ConfigItem): TreeNode {
-        return new TreeNode(configItem, configItem.Name, 'kix-icon-ci');
+        return new TreeNode(configItem.ConfigItemID, configItem.Name, 'kix-icon-ci');
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

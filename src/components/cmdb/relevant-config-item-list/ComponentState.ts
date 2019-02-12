@@ -1,4 +1,4 @@
-import { ConfigItem } from "@kix/core/dist/model";
+import { ConfigItem } from "../../../core/model";
 
 export class ComponentState {
 

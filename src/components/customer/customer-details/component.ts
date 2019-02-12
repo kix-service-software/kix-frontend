@@ -1,10 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { KIXObjectType, WidgetType, Customer } from "@kix/core/dist/model";
+import { KIXObjectType, WidgetType, Customer } from "../../../core/model";
 import {
     ContextService, ActionFactory, IdService, WidgetService
-} from "@kix/core/dist/browser";
-import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
-import { ComponentsService } from "@kix/core/dist/browser/components";
+} from "../../../core/browser";
+import { CustomerDetailsContext } from "../../../core/browser/customer";
+import { ComponentsService } from "../../../core/browser/components";
 
 class Component {
 

@@ -1,13 +1,13 @@
 import { ComponentState } from "./ComponentState";
 import {
-    DialogService, FormService, OverlayService, ServiceRegistry, KIXObjectService, ContextService
-} from "@kix/core/dist/browser";
+    DialogService, FormService, OverlayService, ServiceRegistry, KIXObjectService, ContextService, BrowserUtil
+} from "../../../../core/browser";
 import {
     OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent, CustomerProperty, ContextType
-} from "@kix/core/dist/model";
-import { CustomerService, CustomerDetailsContext } from "@kix/core/dist/browser/customer";
-import { RoutingService, RoutingConfiguration } from "@kix/core/dist/browser/router";
+    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent, CustomerProperty, ContextType, Error
+} from "../../../../core/model";
+import { CustomerService, CustomerDetailsContext } from "../../../../core/browser/customer";
+import { RoutingService, RoutingConfiguration } from "../../../../core/browser/router";
 
 class Component {
 
@@ -47,22 +47,14 @@ class Component {
                 ).then((customerId) => {
                     context.getObject(KIXObjectType.CUSTOMER, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showSuccessHint();
-                    DialogService.getInstance().closeMainDialog();
-                }).catch((error) => {
+                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                    DialogService.getInstance().submitMainDialog();
+                }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading();
-                    this.showError(error);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }
         }
-    }
-
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private showValidationError(result: ValidationResult[]): void {
@@ -77,10 +69,6 @@ class Component {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 }
 

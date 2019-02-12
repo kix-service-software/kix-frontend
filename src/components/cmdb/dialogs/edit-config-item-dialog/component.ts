@@ -1,11 +1,12 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
-import { FormService, ContextService, OverlayService, ServiceRegistry } from "@kix/core/dist/browser";
+import {
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, DialogService
+} from "../../../../core/browser";
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
     OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { CMDBService } from "@kix/core/dist/browser/cmdb";
+import { CMDBService } from "../../../../core/browser/cmdb";
 
 class Component {
 
@@ -67,27 +68,18 @@ class Component {
                                 KIXObjectType.CONFIG_ITEM, true,
                                 [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
                             );
-                            this.showSuccessHint(
-                                configItem.CurrentVersion
+                            const hint = configItem.CurrentVersion
                                 && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
-                            );
-                            DialogService.getInstance().closeMainDialog();
+                                ? 'Änderungen wurden gespeichert'
+                                : 'Neue Version wurde erstellt';
+                            BrowserUtil.openSuccessOverlay(hint);
+
+                            DialogService.getInstance().submitMainDialog();
                         }
                     }
                 }
             }
         }, 300);
-    }
-
-    public showSuccessHint(noUpdate: boolean = false): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent(
-                'kix-icon-check',
-                (noUpdate ? 'Änderungen wurden gespeichert' : 'Neue Version wurde erstellt')
-            )
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public showValidationError(result: ValidationResult[]): void {

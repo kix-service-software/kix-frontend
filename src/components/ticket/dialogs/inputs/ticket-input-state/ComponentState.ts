@@ -1,5 +1,5 @@
-import { FormInputComponentState, TreeNode } from "@kix/core/dist/model";
-import { PendingTimeFormValue } from "@kix/core/dist/browser/ticket";
+import { FormInputComponentState, TreeNode } from "../../../../../core/model";
+import { PendingTimeFormValue } from "../../../../../core/browser/ticket";
 
 export class ComponentState extends FormInputComponentState<PendingTimeFormValue> {
 

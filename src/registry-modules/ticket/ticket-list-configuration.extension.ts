@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType, FilterType, ContextConfiguration
-} from '@kix/core/dist/model';
-import { TicketListContext, TicketListContextConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/model';
+import { TicketListContext, TicketListContextConfiguration } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator
-} from '@kix/core/dist/browser';
+} from '../../core/browser';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
@@ -18,7 +18,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const ticketListWidget =
             new ConfiguredWidget('20180927-ticket-list-widget', new WidgetConfiguration(
                 'ticket-list-widget', 'Tickets', [
-                    'ticket-create-action', 'ticket-search-action', 'csv-export-action'
+                    'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
                 ], new TableConfiguration(
                     2500, 25, null, [new FilterCriteria(
                         'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
@@ -47,7 +47,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         return;
     }
 

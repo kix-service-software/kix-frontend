@@ -1,11 +1,11 @@
 import {
     ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
-import { FAQArticleProperty } from "@kix/core/dist/model/kix/faq";
-import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "@kix/core/dist/browser/faq";
-import { ConfigurationService } from "@kix/core/dist/services";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
+import { FAQArticleProperty } from "../../core/model/kix/faq";
+import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from "../../core/browser/faq";
+import { ConfigurationService } from "../../core/services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,12 +18,12 @@ export class Extension implements IConfigurationExtension {
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-faq-article-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, true, "Geben Sie einen Titel / Bezeichnung für den FAQ-Eintrag ein."));
             fields.push(new FormField(
@@ -35,10 +35,10 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField("Schlagworte", FAQArticleProperty.KEYWORDS, null, false, "Geben Sie Schlagwörter für den FAQ-Artikel ein. Schlagworte unterstützen u.a. das schnelle Auffinden von FAQ-Einträgen."));
             fields.push(new FormField(
-                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf. (intern = nur im KIX Agentenportal, extern = KIX Agentenportal  und KIX Kundenportal, öffentlich = KIX Agentenportal  und KIX Kundenportal sowie außerhalb von KIX).",
+                "Sichtbarkeit", FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf. (intern = nur im KIX Agentenportal, extern = KIX Agentenportal und KIX Kundenportal, öffentlich = KIX Agentenportal und KIX Kundenportal sowie außerhalb von KIX).",
                 null, new FormFieldValue("internal")
             ));
-            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an den FAQ-Artikel anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB  pro Datei."));
+            fields.push(new FormField("Anlagen", FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an den FAQ-Artikel anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
             fields.push(new FormField(
                 "FAQ verknüpfen mit", FAQArticleProperty.LINK, 'link-input', false, "Verknüpfen Sie den FAQ-Artikel mit einem Ticket, einem anderen FAQ-Artikel oder einem Config Item.")
             );

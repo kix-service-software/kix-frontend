@@ -1,11 +1,12 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration
-} from '@kix/core/dist/model';
-import { FAQArticleSearchContext, FAQArticleSearchContextConfiguration } from '@kix/core/dist/browser/faq';
-import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { FAQArticleSearchContext, FAQArticleSearchContextConfiguration } from '../../core/browser/faq';
+import { FAQArticleProperty } from '../../core/model/kix/faq';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -28,20 +29,20 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-faq-article-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'FAQ-Artikel',
                 KIXObjectType.FAQ_ARTICLE,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
+                    SearchProperty.FULLTEXT,
                     FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID
                 ]
             );

@@ -1,3 +1,4 @@
-<form-list placeholder=(state.field.required ? field.placeholder : "") searchCallback=state.searchCallback
-    autoCompleteConfiguration=state.autoCompleteConfiguration on-nodesChanged('objectChanged')
-    selectedNodes=[state.currentNode] invalid=state.invalid autocomplete=true readonly=state.field.readonly/>
+<form-list placeholder=(state.field.required ? state.field.placeholder : "") searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration on-focusLost('focusLost')
+    on-nodesChanged('objectChanged') selectedNodes=[state.currentNode] nodes=state.nodes invalid=state.invalid
+    autocomplete=state.autocomplete readonly=state.field.readonly/>

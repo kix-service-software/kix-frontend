@@ -1,0 +1,15 @@
+{
+    "name": "kix-faq",
+    "extensions": {
+        "kix:configuration": {
+            "faq-configuration": "../../dist/registry-modules/faq/faq-configuration.extension",
+            "faq-details-configuration": "../../dist/registry-modules/faq/faq-details-configuration.extension",
+            "new-faq-article-dialog-configuration": "../../dist/registry-modules/faq/new-faq-article-dialog-configuration.extension",
+            "edit-faq-dialog-configuration": "../../dist/registry-modules/faq/edit-faq-article-dialog-configuration.extension",
+            "search-faq-article-dialog-configuration": "../../dist/registry-modules/faq/search-faq-article-dialog-configuration.extension"
+        },
+        "kix:modules": {
+            "faq-module": "../../dist/registry-modules/faq/kix-module.extension"
+        }
+    }
+}

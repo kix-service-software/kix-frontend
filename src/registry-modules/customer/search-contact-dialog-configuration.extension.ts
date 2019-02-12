@@ -1,10 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, ContactProperty, ConfiguredWidget, WidgetConfiguration, WidgetSize
-} from '@kix/core/dist/model';
-import { ContactSearchContext, ContactSearchContextConfiguration } from '@kix/core/dist/browser/contact';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { ContactSearchContext, ContactSearchContextConfiguration } from '../../core/browser/contact';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -27,20 +28,20 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-contact-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'Ansprechpartner',
                 KIXObjectType.CONTACT,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
+                    SearchProperty.FULLTEXT,
                     ContactProperty.USER_FIRST_NAME, ContactProperty.USER_LAST_NAME,
                     ContactProperty.USER_EMAIL, ContactProperty.USER_LOGIN
                 ]

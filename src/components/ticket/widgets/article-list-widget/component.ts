@@ -1,22 +1,23 @@
-import { Ticket, KIXObjectType, Context, ComponentContent, ToastContent, OverlayType } from "@kix/core/dist/model";
+import { Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
 import {
     ArticleTableContentLayer,
     ArticleTableLabelLayer,
     ArticleTableClickListener,
     ArticleTableToggleListener,
-    ArticleTableToggleLayer
-} from "@kix/core/dist/browser/ticket";
-import { ContextService } from "@kix/core/dist/browser/context";
+    ArticleTableToggleLayer,
+    TicketDetailsContext
+} from "../../../../core/browser/ticket";
+import { ContextService } from "../../../../core/browser/context";
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
     TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration,
     WidgetService, OverlayService, TableFilterLayer
-} from "@kix/core/dist/browser";
-import { IdService } from "@kix/core/dist/browser/IdService";
-import { IEventListener, EventService } from "@kix/core/dist/browser/event";
+} from "../../../../core/browser";
+import { IdService } from "../../../../core/browser/IdService";
+import { IEventSubscriber, EventService } from "../../../../core/browser/event";
 
-export class Component implements IEventListener {
+export class Component implements IEventSubscriber {
 
     private state: ComponentState;
     public eventSubscriberId: string = 'ArticleList';
@@ -27,7 +28,9 @@ export class Component implements IEventListener {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('article-list-widget', {
@@ -37,7 +40,7 @@ export class Component implements IEventListener {
             sidebarToggled: () => { return; },
             objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
-                    ticket = await context.getObject<Ticket>(KIXObjectType.ARTICLE);
+                    ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
                     this.initWidget(ticket);
                 }
             }
@@ -45,7 +48,7 @@ export class Component implements IEventListener {
 
         EventService.getInstance().subscribe('GotToTicketArticle', this);
 
-        await this.initWidget(await context.getObject<Ticket>(KIXObjectType.ARTICLE));
+        await this.initWidget(await context.getObject<Ticket>(KIXObjectType.TICKET));
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
@@ -128,7 +131,10 @@ export class Component implements IEventListener {
             let count = 0;
             this.state.articles.forEach((article) => {
                 if (article.Attachments) {
-                    count += article.Attachments.length;
+                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
+                    if (attachments.length > 0) {
+                        count += attachments.length;
+                    }
                 }
             });
 

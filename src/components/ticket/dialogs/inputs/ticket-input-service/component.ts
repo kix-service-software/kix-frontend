@@ -1,8 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "@kix/core/dist/browser/context";
-import {
-    ObjectIcon, TicketProperty, Service, TreeNode, FormInputComponent
-} from "@kix/core/dist/model";
+import { TicketProperty, TreeNode, FormInputComponent } from "../../../../../core/model";
+import { TicketService } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -16,8 +14,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.nodes = this.prepareTree(objectData.servicesHierarchy);
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.SERVICE_ID);
         this.setCurrentNode();
     }
 
@@ -42,26 +39,14 @@ class Component extends FormInputComponent<number, ComponentState> {
         }
     }
 
-    private prepareTree(services: Service[]): TreeNode[] {
-        let nodes = [];
-        if (services) {
-            nodes = services.map((service: Service) => {
-                return new TreeNode(
-                    service.ServiceID, service.Name,
-                    new ObjectIcon(TicketProperty.SERVICE_ID, service.ServiceID),
-                    new ObjectIcon('GeneralCatalogItem', service.IncidentState.CurInciStateID),
-                    this.prepareTree(service.SubServices)
-                );
-            });
-        }
-        return nodes;
-    }
-
     public serviceChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

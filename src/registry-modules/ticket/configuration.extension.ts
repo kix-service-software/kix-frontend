@@ -1,15 +1,15 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectPropertyFilter, TableFilterCriteria,
     TicketProperty, FilterCriteria, FilterDataType, FilterType, FormField, KIXObjectType, Form,
     FormContext, ContextConfiguration
-} from '@kix/core/dist/model';
-import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/model';
+import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator, SearchProperty
-} from '@kix/core/dist/browser';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/browser';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../core/services';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
@@ -155,7 +155,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
                 'ticket-list-widget', 'Übersicht Tickets', [
-                    'ticket-create-action', 'ticket-bulk-action', 'csv-export-action', 'ticket-search-action'
+                    'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
                 ], new TableConfiguration(
                     1000, 25, null, [new FilterCriteria(
                         'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
@@ -178,7 +178,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // tslint:disable:max-line-length
         const formIdLinkWithTicket = 'link-ticket-search-form';
         const existingFormLinkWithTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdLinkWithTicket, null);

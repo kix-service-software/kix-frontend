@@ -1,4 +1,4 @@
-import { LabelValueGroup } from "@kix/core/dist/model";
+import { LabelValueGroup } from "../../../core/model";
 
 export class ComponentState {
 

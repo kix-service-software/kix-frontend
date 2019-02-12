@@ -1,4 +1,4 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration,
     ConfiguredWidget,
@@ -10,15 +10,15 @@ import {
     FilterType,
     KIXObjectPropertyFilter,
     TableFilterCriteria
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     TableColumnConfiguration, SearchOperator, ToggleOptions, TableHeaderHeight,
     TableRowHeight,
     TableConfiguration
-} from '@kix/core/dist/browser';
-import { HomeContextConfiguration, HomeContext } from '@kix/core/dist/browser/home';
-import { TicketProperty } from '@kix/core/dist/model/';
-import { TicketChartConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/browser';
+import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
+import { TicketProperty } from '../../core/model/';
+import { TicketChartConfiguration } from '../../core/browser/ticket';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -109,7 +109,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['ticket-bulk-action', 'csv-export-action'],
+            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
             new TableConfiguration(
                 500, null, null,
                 [
@@ -136,7 +136,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const newTicketsListWidget =
             new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Neue Tickets', ['ticket-bulk-action', 'csv-export-action'],
+                'ticket-list-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
                 new TableConfiguration(
                     500, null, [
                         new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 65),
@@ -193,7 +193,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

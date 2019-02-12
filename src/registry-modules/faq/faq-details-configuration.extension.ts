@@ -1,9 +1,9 @@
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
     WidgetSize, KIXObjectType
-} from "@kix/core/dist/model";
-import { FAQDetailsContextConfiguration, FAQDetailsContext } from "@kix/core/dist/browser/faq";
+} from "../../core/model";
+import { FAQDetailsContextConfiguration, FAQDetailsContext } from "../../core/browser/faq";
 
 export class Extension implements IConfigurationExtension {
 
@@ -34,7 +34,7 @@ export class Extension implements IConfigurationExtension {
                     {
                         linkedObjectTypes: [
                             ["Tickets", KIXObjectType.TICKET],
-                            ["FAQ", KIXObjectType.FAQ_ARTICLE],
+                            ["FAQs", KIXObjectType.FAQ_ARTICLE],
                             ["Config Items", KIXObjectType.CONFIG_ITEM]
                         ]
                     },
@@ -80,7 +80,7 @@ export class Extension implements IConfigurationExtension {
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

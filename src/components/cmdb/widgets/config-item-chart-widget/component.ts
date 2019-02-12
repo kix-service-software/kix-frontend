@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from "@kix/core/dist/browser/context";
-import { IdService } from '@kix/core/dist/browser';
-import { KIXObject, ConfigItem } from '@kix/core/dist/model';
-import { ConfigItemChartConfiguration, ConfigItemChartFactory } from '@kix/core/dist/browser/cmdb';
+import { ContextService } from "../../../../core/browser/context";
+import { IdService } from '../../../../core/browser';
+import { KIXObject, ConfigItem } from '../../../../core/model';
+import { ConfigItemChartConfiguration, ConfigItemChartFactory } from '../../../../core/browser/cmdb';
 
 class Component {
 

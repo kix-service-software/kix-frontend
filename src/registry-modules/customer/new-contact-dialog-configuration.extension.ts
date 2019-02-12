@@ -2,13 +2,13 @@ import {
     ContextConfiguration, FormField, ContactSourceAttributeMapping,
     Form, FormContext, KIXObjectType,
     ContactProperty, FormFieldOption, FormFieldOptions, InputFieldTypes
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     NewContactDialogContextConfiguration, NewContactDialogContext, ContactLabelProvider
-} from "@kix/core/dist/browser/contact";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
-import { ConfigurationService, ContactService } from "@kix/core/dist/services";
+} from "../../core/browser/contact";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
+import { ConfigurationService, ContactService } from "../../core/services";
 
 export class NewContactDialogModuleExtension implements IConfigurationExtension {
 
@@ -20,12 +20,12 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         return new NewContactDialogContextConfiguration();
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-contact-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const contactService = ContactService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
@@ -71,7 +71,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {
                         group.formFields.push(
                             // tslint:disable-next-line:max-line-length
-                            new FormField('Password', ContactProperty.USER_PASSWORD, null, true, 'Legen Sie ein Passwort für den Ansprechpartner fest.',
+                            new FormField('Passwort', ContactProperty.USER_PASSWORD, null, true, 'Legen Sie ein Passwort für den Ansprechpartner fest.',
                                 [
                                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                                 ])
@@ -110,13 +110,13 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                 hint = 'Geben Sie eine gültige E-Mail-Adresse für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_STREET:
-                hint = 'Geben Sie die Straße der  Ansprechpartner-Adresse ein.';
+                hint = 'Geben Sie die Straße der Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_ZIP:
-                hint = 'Geben Sie die Postleitzahl (PLZ) der  Ansprechpartner-Adresse ein.';
+                hint = 'Geben Sie die Postleitzahl (PLZ) der Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_CITY:
-                hint = 'Geben Sie den Ort der  Ansprechpartner-Adresse ein.';
+                hint = 'Geben Sie den Ort der Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_TITLE:
                 hint = 'Geben Sie einen Titel für den Ansprechpartner ein.';
@@ -125,10 +125,10 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                 hint = 'Wählen Sie den Kunden, für welchen der Ansprechpartner zugeordnet sein soll. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit bereits im System angelegten Kunden angezeigt.  „***“ zeigt alle Einträge an. (Suchfelder: „Kunden ID“ und „Kundenname“)';
                 break;
             case ContactProperty.USER_MOBILE:
-                hint = 'Geben Sie  eine Mobilfunknummer für den Ansprechpartner ein.';
+                hint = 'Geben Sie eine Mobilfunknummer für den Ansprechpartner ein.';
                 break;
             case ContactProperty.USER_COUNTRY:
-                hint = 'Geben Sie  ein Land für die Ansprechpartner-Adresse ein.';
+                hint = 'Geben Sie ein Land für die Ansprechpartner-Adresse ein.';
                 break;
             case ContactProperty.USER_COMMENT:
                 hint = 'Geben Sie zusätzliche Informationen zum Kunden an.';

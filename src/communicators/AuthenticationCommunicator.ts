@@ -1,12 +1,11 @@
 import {
-    AuthenticationResult, LoginRequest, AuthenticationEvent, SocketEvent
-} from '@kix/core/dist/model';
+    AuthenticationResult, LoginRequest, AuthenticationEvent, SocketEvent, Error
+} from '../core/model';
 
-import { HttpError } from '@kix/core/dist/api';
-import { CommunicatorResponse } from '@kix/core/dist/common';
+import { CommunicatorResponse } from '../core/common';
 
 import { KIXCommunicator } from './KIXCommunicator';
-import { LoggingService, AuthenticationService } from '@kix/core/dist/services';
+import { LoggingService, AuthenticationService } from '../core/services';
 
 export class AuthenticationCommunicator extends KIXCommunicator {
 
@@ -46,8 +45,8 @@ export class AuthenticationCommunicator extends KIXCommunicator {
                 response = new CommunicatorResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, '/'));
-            }).catch((error: HttpError) => {
-                LoggingService.getInstance().error(error.errorMessage + ' - ' + error.status, error);
+            }).catch((error: Error) => {
+                LoggingService.getInstance().error(error.Code + ' - ' + error.Message);
                 response = new CommunicatorResponse(AuthenticationEvent.UNAUTHORIZED, error);
             });
         return response;

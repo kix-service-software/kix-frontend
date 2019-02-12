@@ -2,9 +2,9 @@ import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, Customer, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions
-} from "@kix/core/dist/model";
-import { FormService } from "@kix/core/dist/browser/form";
-import { ContextService, KIXObjectService } from "@kix/core/dist/browser";
+} from "../../../../../core/model";
+import { FormService } from "../../../../../core/browser/form";
+import { KIXObjectService } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<Customer, ComponentState> {
 
@@ -46,7 +46,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
     private async searchCustomers(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
         this.customers = await KIXObjectService.loadObjects<Customer>(
-            KIXObjectType.CUSTOMER, null, loadingOptions
+            KIXObjectType.CUSTOMER, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
@@ -61,6 +61,9 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         return new TreeNode(customer.CustomerID, customer.DisplayValue, 'kix-icon-man-house');
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
 }
 
 module.exports = Component;

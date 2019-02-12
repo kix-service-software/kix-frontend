@@ -1,13 +1,13 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
     FormField, Form, FormContext, KIXObjectType
-} from '@kix/core/dist/model';
-import { FAQContext, FAQContextConfiguration } from '@kix/core/dist/browser/faq';
-import { SearchProperty } from '@kix/core/dist/browser';
-import { FAQArticleProperty } from '@kix/core/dist/model/kix/faq';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { FAQContext, FAQContextConfiguration } from '../../core/browser/faq';
+import { SearchProperty } from '../../core/browser';
+import { FAQArticleProperty } from '../../core/model/kix/faq';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../core/services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -52,7 +52,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
         const linkFormId = 'link-faq-search-form';
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);

@@ -1,8 +1,8 @@
-import { IConfigurationExtension, KIXExtensions } from '@kix/core/dist/extensions';
+import { IConfigurationExtension, KIXExtensions } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, AdminModuleCategory, AdminModule,
-} from '@kix/core/dist/model';
-import { AdminContext, AdminContextConfiguration } from '@kix/core/dist/browser/admin';
+} from '../../core/model';
+import { AdminContext, AdminContextConfiguration } from '../../core/browser/admin';
 import { PluginService, AdminModuleService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -37,7 +37,7 @@ export class Extension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         return;
     }
 

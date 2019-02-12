@@ -1,10 +1,11 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '../../../../core/browser/context';
 import { ComponentState } from './ComponentState';
 import {
     ITableClickListener, ActionFactory, TableListenerConfiguration, StandardTableFactoryService,
-} from '@kix/core/dist/browser';
-import { TicketHistory, KIXObjectType, Ticket, TicketHistoryProperty } from '@kix/core/dist/model';
-import { EventService } from '@kix/core/dist/browser/event';
+} from '../../../../core/browser';
+import { TicketHistory, KIXObjectType, Ticket, TicketHistoryProperty } from '../../../../core/model';
+import { EventService } from '../../../../core/browser/event';
+import { TicketDetailsContext } from '../../../../core/browser/ticket';
 
 class Component {
 
@@ -19,7 +20,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('ticket-history-widget', {

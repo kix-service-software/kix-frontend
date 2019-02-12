@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { NewTicketArticleContextConfiguration, EditTicketTypeDialogContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../../core/extensions';
+import { EditTicketTypeDialogContext, EditTicketTypeDialogContextConfiguration } from '../../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, TicketTypeProperty
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../../core/model';
+import { FormGroup } from '../../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../../core/services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,10 +18,10 @@ export class Extension implements IConfigurationExtension {
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketArticleContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new EditTicketTypeDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-ticket-type-form';
@@ -32,17 +32,22 @@ export class Extension implements IConfigurationExtension {
                 "Name", TicketTypeProperty.NAME, null, true, "Geben Sie einen Namen für den Typ ein."
             ));
             fields.push(new FormField(
-                "Kommentar", TicketTypeProperty.COMMENT, null, false, "Geben Sie einen Kommentar für den Typ ein."
+                "Icon", 'ICON', 'icon-input', false,
+                "Wählen Sie ein Icon für den Typ aus."
+            ));
+            fields.push(new FormField(
+                "Kommentar", TicketTypeProperty.COMMENT, 'text-area-input',
+                false, "Geben Sie einen Kommentar für den Typ ein."
             ));
             fields.push(new FormField(
                 "Gültigkeit", TicketTypeProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                "Legen Sie fest, ob der Typ „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
                 null, new FormFieldValue(1)
             ));
 
             const group = new FormGroup('Typdaten', fields);
 
-            const form = new Form(formId, 'Typ hinzufügen', [group], KIXObjectType.TICKET_TYPE, true, FormContext.EDIT);
+            const form = new Form(formId, 'Typ bearbeiten', [group], KIXObjectType.TICKET_TYPE, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET_TYPE, formId);

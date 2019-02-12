@@ -1,5 +1,5 @@
-import { ILabelProvider } from '@kix/core/dist/browser';
-import { AbstractAction, Ticket, WidgetComponentState } from '@kix/core/dist/model';
+import { ILabelProvider } from '../../../../core/browser';
+import { AbstractAction, Ticket, WidgetComponentState } from '../../../../core/model';
 
 export class ComponentState extends WidgetComponentState<any> {
 

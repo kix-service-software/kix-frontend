@@ -1,4 +1,4 @@
-import { IKIXModuleExtension } from "@kix/core/dist/extensions";
+import { IKIXModuleExtension } from "../../core/extensions";
 
 class KIXModuleExtionsion implements IKIXModuleExtension {
 
@@ -23,6 +23,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['rich-text-input', '_base-components/form/inputs/rich-text-input'],
         ['valid-input', '_base-components/form/inputs/valid-input'],
         ['attachment-input', '_base-components/form/inputs/attachment-input'],
+        ['icon-input', '_base-components/form/inputs/icon-input'],
         ['link-input', '_base-components/form/inputs/link-input'],
         ['language-input', '_base-components/form/inputs/language-input'],
         ['general-catalog-input', '_base-components/form/inputs/general-catalog-input'],
@@ -31,7 +32,9 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['date-time-input', '_base-components/form/inputs/date-time-input'],
         ['notes-widget', 'widgets/notes-widget'],
         ['linked-objects-widget', 'widgets/linked-objects-widget'],
-        ['help-widget', 'widgets/help-widget']
+        ['help-widget', 'widgets/help-widget'],
+        ['personal-settings-dialog', '_base-components/dialog/personal-settings-dialog'],
+        ['bulk-dialog', '_base-components/dialog/bulk-dialog']
     ];
 
 

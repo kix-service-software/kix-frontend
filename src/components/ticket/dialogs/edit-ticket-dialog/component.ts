@@ -1,16 +1,12 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, ContextService, ServiceRegistry
-} from "@kix/core/dist/browser";
+    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil, DialogService
+} from "../../../../core/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    KIXObjectType,
-    ToastContent,
-    TicketProperty,
-    ContextType,
-} from "@kix/core/dist/model";
+    ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
+    KIXObjectType, TicketProperty, Error
+} from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketService } from "@kix/core/dist/browser/ticket";
+import { TicketDetailsContext } from "../../../../core/browser/ticket";
 
 class Component {
 
@@ -42,30 +38,24 @@ class Component {
                 this.showValidationError(result);
             } else {
                 DialogService.getInstance().setMainDialogLoading(true, "Ticket wird aktualisiert");
-                const service = ServiceRegistry.getInstance().getServiceInstance<TicketService>(KIXObjectType.TICKET);
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                if (service && context) {
-                    await service.updateObjectByForm(KIXObjectType.TICKET, this.state.formId, context.getObjectId())
-                        .then((ticketId) => {
-                            context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            this.showSuccessHint();
-                            DialogService.getInstance().closeMainDialog();
-                        }).catch((error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            this.showError(error);
-                        });
+                const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                    TicketDetailsContext.CONTEXT_ID
+                );
+                if (context) {
+                    await KIXObjectService.updateObjectByForm(
+                        KIXObjectType.TICKET, this.state.formId, context.getObjectId()
+                    ).then((ticketId) => {
+                        context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                        DialogService.getInstance().submitMainDialog();
+                    }).catch((error: Error) => {
+                        DialogService.getInstance().setMainDialogLoading(false);
+                        BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                    });
                 }
             }
         }, 300);
-    }
-
-    public showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Ticketänderung gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public showValidationError(result: ValidationResult[]): void {
@@ -80,10 +70,6 @@ class Component {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

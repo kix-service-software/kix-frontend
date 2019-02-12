@@ -1,5 +1,5 @@
-import { Article } from '@kix/core/dist/model';
-import { ArticleLabelProvider } from '@kix/core/dist/browser/ticket';
+import { Article } from '../../../core/model';
+import { ArticleLabelProvider } from '../../../core/browser/ticket';
 
 export class TicketArticleMetadataComponentState {
 

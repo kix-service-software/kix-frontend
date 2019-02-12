@@ -1,15 +1,15 @@
-import { ContextService } from '@kix/core/dist/browser/context';
+import { ContextService } from '../../../../core/browser/context';
 import {
     ConfigItemHistoryTableLabelLayer, ConfigItemHistoryTableContentLayer
-} from '@kix/core/dist/browser/cmdb';
+} from '../../../../core/browser/cmdb';
 import { ComponentState } from './ComponentState';
 import {
     StandardTable, ITableConfigurationListener, TableColumn,
     ActionFactory, TableLayerConfiguration, TableListenerConfiguration, ITableClickListener,
-} from '@kix/core/dist/browser';
-import { KIXObjectType, ConfigItem, ConfigItemHistory } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
-import { EventService } from '@kix/core/dist/browser/event';
+} from '../../../../core/browser';
+import { KIXObjectType, ConfigItem, ConfigItemHistory } from '../../../../core/model';
+import { IdService } from '../../../../core/browser/IdService';
+import { EventService } from '../../../../core/browser/event';
 
 class Component {
 

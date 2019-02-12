@@ -1,4 +1,4 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration,
     ContextConfiguration,
@@ -8,12 +8,12 @@ import {
     TicketProperty,
     ArticleProperty,
     KIXObjectType
-} from '@kix/core/dist/model/';
+} from '../../core/model/';
 import {
     TableColumnConfiguration, TableConfiguration,
     ToggleOptions, TableHeaderHeight, TableRowHeight
-} from '@kix/core/dist/browser';
-import { TicketDetailsContextConfiguration } from '@kix/core/dist/browser/ticket';
+} from '../../core/browser';
+import { TicketDetailsContextConfiguration } from '../../core/browser/ticket';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -48,7 +48,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     linkedObjectTypes: [
                         ["Tickets", KIXObjectType.TICKET],
                         ["Config Items", KIXObjectType.CONFIG_ITEM],
-                        ["FAQ", KIXObjectType.FAQ_ARTICLE],
+                        ["FAQs", KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
                 true, true, WidgetSize.BOTH, null, false)
@@ -202,7 +202,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

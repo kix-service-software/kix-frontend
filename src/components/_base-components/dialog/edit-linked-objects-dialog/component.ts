@@ -3,16 +3,16 @@ import {
     DialogService, OverlayService,
     ContextService, StandardTableFactoryService, ITableHighlightLayer,
     TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
-    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService
-} from '@kix/core/dist/browser';
+    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService, BrowserUtil
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent,
     KIXObject, LinkObject, KIXObjectType,
     CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions,
     ToastContent, LinkType, ContextType, SortUtil, DataType, KIXObjectCache
-} from '@kix/core/dist/model';
-import { LinkUtil } from '@kix/core/dist/browser/link';
+} from '../../../../core/model';
+import { LinkUtil } from '../../../../core/browser/link';
 
 class Component {
 
@@ -321,8 +321,8 @@ class Component {
 
         DialogService.getInstance().setMainDialogLoading(false);
         if (createLinksOK && deleteLinksOK) {
-            this.showSuccessHint();
-            DialogService.getInstance().closeMainDialog();
+            BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
+            DialogService.getInstance().submitMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
                 activeContext.getObject(null, true);
@@ -340,7 +340,7 @@ class Component {
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
             ).catch((error) => {
-                this.showError('Verknüpfung nicht anlegbar (' + error + ')');
+                BrowserUtil.openErrorOverlay('Verknüpfung nicht anlegbar (' + error + ')');
                 ok = false;
                 return;
             });
@@ -354,17 +354,6 @@ class Component {
         return !failIds || !!!failIds.length;
     }
 
-    private showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Verknüpfungen aktualisiert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-    }
-
-    private showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
-    }
 }
 
 module.exports = Component;

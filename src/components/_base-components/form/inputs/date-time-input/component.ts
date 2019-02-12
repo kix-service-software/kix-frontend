@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, FormFieldOptions, DateTimeUtil } from '@kix/core/dist/model';
+import { FormInputComponent, FormFieldOptions, DateTimeUtil } from '../../../../../core/model';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
@@ -58,6 +58,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         ) : null;
         (this as any).emit('valueChanged', this.state.currentValue);
         super.provideValue(this.state.currentValue);
+    }
+
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
     }
 }
 

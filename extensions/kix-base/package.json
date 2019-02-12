@@ -19,50 +19,15 @@
         "kix:configuration": {
             "admin-configuration": "../../dist/registry-modules/admin/configuration.extension",
             "home-configuration": "../../dist/registry-modules/home/configuration.extension",
-            "ticket-configuration": "../../dist/registry-modules/ticket/configuration.extension",
-            "ticket-list-configuration": "../../dist/registry-modules/ticket/ticket-list-configuration.extension",
-            "ticket-details-configuration": "../../dist/registry-modules/ticket/ticket-details-configuration.extension",
-            "new-ticket-dialog-configuration": "../../dist/registry-modules/ticket/new-ticket-dialog-configuration.extension",
-            "new-ticket-article-dialog-configuration": "../../dist/registry-modules/ticket/new-ticket-article-dialog-configuration.extension",
-            "edit-ticket-dialog-configuration": "../../dist/registry-modules/ticket/edit-ticket-dialog-configuration.extension",
-            "search-ticket-dialog-configuration": "../../dist/registry-modules/ticket/search-ticket-dialog-configuration.extension",
-            "ticket-type-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-type-details-configuration.extension",
-            "new-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-type-dialog-configuration.extension",
-            "edit-ticket-type-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-type-dialog-configuration.extension",
-            "customer-configuration": "../../dist/registry-modules/customer/customer-configuration.extension",
-            "customer-details-configuration": "../../dist/registry-modules/customer/customer-details-configuration.extension",
-            "new-customer-dialog-configuration": "../../dist/registry-modules/customer/new-customer-dialog-configuration.extension",
-            "edit-customer-dialog-configuration": "../../dist/registry-modules/customer/edit-customer-dialog-configuration.extension",
-            "contact-details-configuration": "../../dist/registry-modules/customer/contact-details-configuration.extension",
-            "new-contact-dialog-configuration": "../../dist/registry-modules/customer/new-contact-dialog-configuration.extension",
-            "edit-contact-dialog-configuration": "../../dist/registry-modules/customer/edit-contact-dialog-configuration.extension",
             "search-configuration": "../../dist/registry-modules/search/search-configuration.extension",
-            "search-contact-dialog-configuration": "../../dist/registry-modules/customer/search-contact-dialog-configuration.extension",
-            "search-customer-dialog-configuration": "../../dist/registry-modules/customer/search-customer-dialog-configuration.extension",
-            "search-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/search-config-item-dialog-configuration.extension",
-            "faq-configuration": "../../dist/registry-modules/faq/faq-configuration.extension",
-            "faq-details-configuration": "../../dist/registry-modules/faq/faq-details-configuration.extension",
-            "new-faq-article-dialog-configuration": "../../dist/registry-modules/faq/new-faq-article-dialog-configuration.extension",
-            "edit-faq-dialog-configuration": "../../dist/registry-modules/faq/edit-faq-article-dialog-configuration.extension",
-            "search-faq-article-dialog-configuration": "../../dist/registry-modules/faq/search-faq-article-dialog-configuration.extension",
-            "edit-linked-objects-dialog-configuration": "../../dist/registry-modules/link/edit-linked-objects-dialog-configuration.extension",
-            "new-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/new-config-item-dialog-configuration.extension",
-            "config-item-details-configuration": "../../dist/registry-modules/cmdb/config-item-details-configuration.extension",
-            "cmdb-configuration": "../../dist/registry-modules/cmdb/cmdb-configuration.extension",
-            "edit-config-item-dialog-configuration": "../../dist/registry-modules/cmdb/edit-config-item-dialog-configuration.extension",
-            "release-configuration": "../../dist/registry-modules/release/configuration.extension"
+            "edit-linked-objects-dialog-configuration": "../../dist/registry-modules/application/edit-linked-objects-dialog-configuration.extension",
+            "release-configuration": "../../dist/registry-modules/release/configuration.extension",
+            "bulk-dialog-configuration": "../../dist/registry-modules/application/bulk-dialog-configuration.extension",
+            "personal-settings-dialog-configuration": "../../dist/registry-modules/application/personal-settings-dialog-configuration.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",
-            "faq-module": "../../dist/registry-modules/faq/kix-module.extension",
-            "contact-module": "../../dist/registry-modules/customer/kix-module-contact.extension",
-            "customer-module": "../../dist/registry-modules/customer/kix-module-customer.extension",
-            "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension",
-            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension",
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
-        },
-        "kix:admin-module": {
-            "ticket-types": "../../dist/registry-modules/ticket/admin-module.extension"
         }
     }
 }

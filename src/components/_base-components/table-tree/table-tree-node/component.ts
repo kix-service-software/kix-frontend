@@ -1,6 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { TreeNode, TableTreeNode } from '@kix/core/dist/model';
-import { AttachmentUtil, BrowserUtil } from '@kix/core/dist/browser';
+import { TreeNode, TableTreeNode } from '../../../../core/model';
 
 class TreeNodeComponent {
 

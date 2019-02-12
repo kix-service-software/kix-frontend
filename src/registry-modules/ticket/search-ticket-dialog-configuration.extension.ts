@@ -1,10 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { TicketSearchContextConfiguration, TicketSearchContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../core/extensions';
+import { TicketSearchContextConfiguration, TicketSearchContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, KIXObjectType, TicketProperty, FormContext, SearchForm,
     ConfiguredWidget, WidgetConfiguration, WidgetSize
-} from '@kix/core/dist/model';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -27,18 +28,17 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const formId = 'search-ticket-form';
         const existingForm = ConfigurationService.getInstance().getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'Ticketsuche',
                 KIXObjectType.TICKET,
                 FormContext.SEARCH,
                 null,
-                true,
-                [TicketProperty.TITLE, TicketProperty.QUEUE_ID]
+                [SearchProperty.FULLTEXT, TicketProperty.TITLE, TicketProperty.QUEUE_ID]
             );
             await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
         }

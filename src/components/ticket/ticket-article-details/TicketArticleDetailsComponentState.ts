@@ -1,4 +1,4 @@
-import { Article, Ticket } from '@kix/core/dist/model';
+import { Article, Ticket } from '../../../core/model';
 
 export class TicketArticleDetailsComponentState {
 

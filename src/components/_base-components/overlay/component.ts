@@ -1,10 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { OverlayService, ActionFactory, WidgetService } from "@kix/core/dist/browser";
+import { OverlayService, ActionFactory, WidgetService } from "../../../core/browser";
 import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
-} from "@kix/core/dist/model";
-import { ContextService } from "@kix/core/dist/browser/context";
-import { ComponentsService } from "@kix/core/dist/browser/components";
+} from "../../../core/model";
+import { ContextService } from "../../../core/browser/context";
+import { ComponentsService } from "../../../core/browser/components";
 
 class OverlayComponent {
 
@@ -240,7 +240,11 @@ class OverlayComponent {
     }
 
     private showShield(): boolean {
-        return this.state.type === OverlayType.WARNING;
+        return this.state.type === OverlayType.WARNING || this.state.type === OverlayType.CONFIRM;
+    }
+
+    public hasClosable(): boolean {
+        return !this.isToast() && this.state.type !== OverlayType.CONFIRM;
     }
 
     public isToast(): boolean {

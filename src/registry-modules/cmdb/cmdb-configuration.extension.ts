@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form
-} from '@kix/core/dist/model';
-import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '@kix/core/dist/browser/cmdb';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../core/services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -137,12 +137,12 @@ export class Extension implements IConfigurationExtension {
     }
 
     // tslint:disable:max-line-length
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const linkFormId = 'link-config-item-search-form';
         const existingForm = configurationService.getModuleConfiguration(linkFormId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(
                 new FormField(

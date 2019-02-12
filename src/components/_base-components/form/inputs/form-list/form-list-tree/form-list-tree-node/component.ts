@@ -1,13 +1,13 @@
-import { TreeNodeComponentState } from './TreeNodeComponentState';
-import { TreeNode } from '@kix/core/dist/model';
+import { ComponentState } from './ComponentState';
+import { TreeNode } from '../../../../../../../core/model';
 
 class TreeNodeComponent {
 
-    private state: TreeNodeComponentState;
+    private state: ComponentState;
     private hasListener: boolean = false;
 
     public onCreate(input: any): void {
-        this.state = new TreeNodeComponentState(input.node);
+        this.state = new ComponentState(input.node);
     }
 
     public onInput(input: any): void {

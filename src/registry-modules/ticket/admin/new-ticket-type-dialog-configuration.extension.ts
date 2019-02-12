@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { NewTicketArticleContextConfiguration, NewTicketTypeDialogContext } from '@kix/core/dist/browser/ticket';
+import { IConfigurationExtension } from '../../../core/extensions';
+import { NewTicketTypeDialogContext, NewTicketTypeDialogContextConfiguration } from '../../../core/browser/ticket';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
+    ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, TicketTypeProperty
-} from '@kix/core/dist/model';
-import { FormGroup } from '@kix/core/dist/model/components/form/FormGroup';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../../core/model';
+import { FormGroup } from '../../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../../core/services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -13,15 +13,15 @@ export class Extension implements IConfigurationExtension {
         return NewTicketTypeDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<NewTicketTypeDialogContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketArticleContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new NewTicketTypeDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-ticket-type-form';
@@ -32,7 +32,12 @@ export class Extension implements IConfigurationExtension {
                 "Name", TicketTypeProperty.NAME, null, true, "Geben Sie einen Namen für den Typ ein."
             ));
             fields.push(new FormField(
-                "Kommentar", TicketTypeProperty.COMMENT, null, false, "Geben Sie einen Kommentar für den Typ ein."
+                "Icon", 'ICON', 'icon-input', false,
+                "Wählen Sie ein Icon für den Status aus."
+            ));
+            fields.push(new FormField(
+                "Kommentar", TicketTypeProperty.COMMENT, 'text-area-input', false,
+                "Geben Sie einen Kommentar für den Typ ein.", null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
                 "Gültigkeit", TicketTypeProperty.VALID_ID, 'valid-input', true,

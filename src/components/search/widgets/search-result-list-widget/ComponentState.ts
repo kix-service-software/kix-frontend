@@ -1,5 +1,5 @@
-import { WidgetConfiguration, ObjectIcon, KIXObject, IAction } from "@kix/core/dist/model";
-import { StandardTable } from "@kix/core/dist/browser";
+import { WidgetConfiguration, ObjectIcon, KIXObject, IAction } from "../../../../core/model";
+import { StandardTable } from "../../../../core/browser";
 
 export class ComponentState {
 

@@ -1,11 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContactDetailsContextConfiguration, ContactDetailsContext } from '@kix/core/dist/browser/contact';
+import { IConfigurationExtension } from '../../core/extensions';
+import { ContactDetailsContextConfiguration, ContactDetailsContext } from '../../core/browser/contact';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, CustomerProperty, TicketProperty, DataType
-} from '@kix/core/dist/model';
+} from '../../core/model';
 import {
     TableColumnConfiguration, TableConfiguration, TableHeaderHeight, TableRowHeight
-} from '@kix/core/dist/browser';
+} from '../../core/browser';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -213,7 +213,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "@kix/core/dist/browser";
-import { ConfirmOverlayContent } from "@kix/core/dist/model";
+import { AbstractMarkoComponent } from "../../../../core/browser";
+import { ConfirmOverlayContent } from "../../../../core/model";
 
 class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private confirmCallback: () => {} = null;
-    private cancelCallback: () => {} = null;
+    private confirmCallback: () => void = null;
+    private cancelCallback: () => void = null;
     private buttonLabels: [string, string];
 
     public onCreate(): void {

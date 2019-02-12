@@ -2,10 +2,10 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, TableColumn, ITableConfigurationListener,
     ActionFactory, TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
-} from "@kix/core/dist/browser";
-import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions, Context } from "@kix/core/dist/model";
-import { ContactService } from "@kix/core/dist/browser/contact";
-import { CustomerDetailsContext } from "@kix/core/dist/browser/customer";
+} from "../../../../core/browser";
+import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions } from "../../../../core/model";
+import { ContactService } from "../../../../core/browser/contact";
+import { CustomerDetailsContext } from "../../../../core/browser/customer";
 
 class Component {
 
@@ -105,15 +105,15 @@ class Component {
         }
     }
 
-    private tableRowClicked(contact: Contact, columnId: string): void {
+    public tableRowClicked(contact: Contact, columnId: string): void {
         if (columnId === 'contact-new-ticket' && contact.ValidID === 1) {
-            ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE);
+            ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
         } else {
             ContactService.getInstance().openContact(contact.ContactID, false);
         }
     }
 
-    private filter(filterValue: string): void {
+    public filter(filterValue: string): void {
         this.state.filterValue = filterValue;
         this.state.contactTable.setFilterSettings(filterValue);
     }

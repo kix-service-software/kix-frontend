@@ -1,12 +1,12 @@
 import {
     ContextConfiguration, FormField, CustomerSourceAttributeMapping, Form, FormContext, KIXObjectType, CustomerProperty
-} from "@kix/core/dist/model";
-import { IConfigurationExtension } from "@kix/core/dist/extensions";
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
 import {
     CustomerLabelProvider, EditCustomerDialogContext, EditCustomerDialogContextConfiguration
-} from "@kix/core/dist/browser/customer";
-import { CustomerService, ConfigurationService } from "@kix/core/dist/services";
-import { FormGroup } from "@kix/core/dist/model/components/form/FormGroup";
+} from "../../core/browser/customer";
+import { CustomerService, ConfigurationService } from "../../core/services";
+import { FormGroup } from "../../core/model/components/form/FormGroup";
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,12 +18,12 @@ export class Extension implements IConfigurationExtension {
         return new EditCustomerDialogContextConfiguration();
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-customer-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const customerService = CustomerService.getInstance();
 
             const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;

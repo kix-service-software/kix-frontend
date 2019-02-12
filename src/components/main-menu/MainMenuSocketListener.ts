@@ -1,8 +1,8 @@
 import {
     SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MainMenuEntriesRequest, MenuEntry
-} from '@kix/core/dist/model';
-import { SocketListener } from '@kix/core/dist/browser/SocketListener';
-import { ClientStorageService } from '@kix/core/dist/browser';
+} from '../../core/model';
+import { SocketListener } from '../../core/browser/SocketListener';
+import { ClientStorageService } from '../../core/browser';
 
 export class MainMenuSocketListener extends SocketListener {
 

@@ -1,11 +1,12 @@
-import { ComponentsService } from "@kix/core/dist/browser/components";
+import { ComponentsService } from "../../../../../core/browser/components";
 import { ComponentState } from "./ComponentState";
-import { FormService, IdService } from "@kix/core/dist/browser";
-import { FormField } from "@kix/core/dist/model";
+import { FormService, IdService } from "../../../../../core/browser";
+import { FormField } from "../../../../../core/model";
 
 class Component {
 
     private state: ComponentState;
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -21,9 +22,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.registerListener({
-            formListenerId: IdService.generateDateBasedId('form-field-' + this.state.field.instanceId),
+        this.formListenerId = IdService.generateDateBasedId('form-field-' + this.state.field.instanceId);
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+            formListenerId: this.formListenerId,
             formValueChanged: () => { return; },
             updateForm: async () => {
                 if (this.hasChildren()) {
@@ -31,6 +32,10 @@ class Component {
                 }
             }
         });
+    }
+
+    public async onDestroy(): Promise<void> {
+        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
     private async hasInvalidChildren(field: FormField = this.state.field): Promise<boolean> {

@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { TreeNode, AutoCompleteConfiguration } from "@kix/core/dist/model";
+import { TreeNode, AutoCompleteConfiguration } from "../../../../../core/model";
 
 class Component {
 
@@ -17,18 +17,23 @@ class Component {
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
+
         this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
+
         this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
             input.selectedNodes : this.state.selectedNodes;
         this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
+
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
             (this as any).emit('nodesChanged', this.state.selectedNodes);
         }
+
         if (this.state.asAutocomplete) {
             this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
             this.state.searchCallback = input.searchCallback;
         }
+        this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
     }
 
     public onMount(): void {
@@ -82,7 +87,7 @@ class Component {
     public focusLost(): void {
         this.state.autocompleteSearchValue = null;
         this.state.filterValue = null;
-        (this as any).emit('nodesChanged', this.state.selectedNodes);
+        (this as any).emit('focusLost');
     }
 
     // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")

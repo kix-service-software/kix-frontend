@@ -1,13 +1,11 @@
-import { DialogService } from "@kix/core/dist/browser/dialog/DialogService";
 import {
-    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService
-} from "@kix/core/dist/browser";
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil, DialogService
+} from "../../../../../core/browser";
 import {
-    ValidationSeverity, OverlayType, ComponentContent, StringContent, ValidationResult,
-    ToastContent, KIXObjectType,
-} from "@kix/core/dist/model";
+    ValidationSeverity, OverlayType, ComponentContent, ValidationResult, KIXObjectType, Error
+} from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { TicketTypeDetailsContext } from "@kix/core/dist/browser/ticket";
+import { TicketTypeDetailsContext } from "../../../../../core/browser/ticket";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -47,22 +45,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ).then((typeId) => {
                     context.getObject(KIXObjectType.TICKET_TYPE, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showSuccessHint();
-                    DialogService.getInstance().closeMainDialog();
-                }).catch((error) => {
+                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                    DialogService.getInstance().submitMainDialog();
+                }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
-                    this.showError(error);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }
         }, 300);
-    }
-
-    public showSuccessHint(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', 'Änderungen wurden gespeichert.')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public showValidationError(result: ValidationResult[]): void {
@@ -77,10 +67,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, 'Validierungsfehler', true
         );
-    }
-
-    public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
 }

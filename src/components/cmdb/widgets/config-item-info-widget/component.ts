@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, IdService } from "@kix/core/dist/browser";
-import { KIXObjectType, Context, ConfigItem, ConfigItemProperty, ObjectIcon } from "@kix/core/dist/model";
-import { ConfigItemLabelProvider } from "@kix/core/dist/browser/cmdb";
+import { ContextService, ActionFactory, IdService } from "../../../../core/browser";
+import { KIXObjectType, Context, ConfigItem, ConfigItemProperty, ObjectIcon } from "../../../../core/model";
+import { ConfigItemLabelProvider } from "../../../../core/browser/cmdb";
 
 class Component {
 

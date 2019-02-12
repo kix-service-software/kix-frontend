@@ -1,13 +1,13 @@
-import { TreeComponentState } from './TreeComponentState';
-import { TreeUtil, TreeNode } from '@kix/core/dist/model';
-import { IdService } from '@kix/core/dist/browser/IdService';
+import { ComponentState } from './ComponentState';
+import { TreeUtil, TreeNode } from '../../../../../../core/model';
+import { IdService } from '../../../../../../core/browser/IdService';
 
 class TreeComponent {
 
-    private state: TreeComponentState;
+    private state: ComponentState;
 
     public onCreate(input: any): void {
-        this.state = new TreeComponentState();
+        this.state = new ComponentState();
         this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
     }
 

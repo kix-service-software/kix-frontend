@@ -1,7 +1,7 @@
 import {
     AbstractMarkoComponent, StandardTableFactoryService, LabelService, ServiceRegistry,
     FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService
-} from '@kix/core/dist/browser';
+} from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     CustomerLabelProvider, CustomerBrowserFactory, CustomerContext, CustomerDetailsContext,
@@ -9,11 +9,11 @@ import {
     CustomerEditAction, CustomerCreateContactAction, CustomerPrintAction, CustomerCreateCIAction,
     CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition,
     EditCustomerDialogContext, CustomerFormService
-} from '@kix/core/dist/browser/customer';
+} from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
     ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
-} from '@kix/core/dist/model';
+} from '../../../core/model';
 
 class Component extends AbstractMarkoComponent {
 

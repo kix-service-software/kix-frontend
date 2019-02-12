@@ -1,9 +1,8 @@
-import { WidgetComponentState, WidgetType, ContextType } from "@kix/core/dist/model";
+import { WidgetComponentState, WidgetType, ContextType } from "../../../core/model";
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public isLoading: boolean = false,
         public widgetType: WidgetType = null,
         public isDialog: WidgetType = null,
         public contextType: ContextType = null,

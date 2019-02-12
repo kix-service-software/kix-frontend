@@ -1,5 +1,5 @@
-import { Customer } from "@kix/core/dist/model";
-import { CustomerLabelProvider } from "@kix/core/dist/browser/customer";
+import { Customer } from "../../../core/model";
+import { CustomerLabelProvider } from "../../../core/browser/customer";
 
 export class ComponentState {
 

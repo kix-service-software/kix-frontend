@@ -1,7 +1,7 @@
-import { DialogService } from '@kix/core/dist/browser/dialog/DialogService';
+import { DialogService } from '../../../../core/browser/components';
 import { ComponentState } from './ComponentState';
-import { IImageDialogListener } from '@kix/core/dist/browser';
-import { DisplayImageDescription } from '@kix/core/dist/browser/components/DisplayImageDescription';
+import { IImageDialogListener } from '../../../../core/browser';
+import { DisplayImageDescription } from '../../../../core/browser/components/DisplayImageDescription';
 
 export class Component implements IImageDialogListener {
 

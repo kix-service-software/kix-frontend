@@ -1,20 +1,22 @@
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, Context
-} from '@kix/core/dist/model/';
-import { ContextService } from "@kix/core/dist/browser/context";
+    KIXObjectPropertyFilter, KIXObjectType, KIXObject, TableFilterCriteria, Context, ContextType
+} from '../../../../core/model/';
+import { ContextService } from "../../../../core/browser/context";
 import {
     TicketTableContentLayer, TicketTableLabelLayer
-} from '@kix/core/dist/browser/ticket/';
+} from '../../../../core/browser/ticket/';
 import {
     ITableConfigurationListener, TableSortLayer, TableColumn, TableFilterLayer,
     ActionFactory, TableToggleLayer, StandardTableFactoryService, TableLayerConfiguration,
-    TableListenerConfiguration, WidgetService
-} from '@kix/core/dist/browser';
+    TableListenerConfiguration, WidgetService, IdService, TableEvents, TableEventData, StandardTable
+} from '../../../../core/browser';
+import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 
-class Component {
+class Component implements IEventSubscriber {
 
     public state: ComponentState;
+    public eventSubscriberId: string;
 
     private predefinedFilter: KIXObjectPropertyFilter;
     private textFilterValue: string;
@@ -22,6 +24,7 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.eventSubscriberId = IdService.generateDateBasedId('ticket-list-');
     }
 
     public onInput(input: any): void {
@@ -50,11 +53,13 @@ class Component {
         }
 
         this.prepareActions();
-        await this.setTableConfiguration(context);
+        await this.setTableConfiguration();
+        EventService.getInstance().subscribe(TableEvents.REFRESH, this);
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(TableEvents.REFRESH, this);
     }
 
     private prepareActions(): void {
@@ -67,7 +72,7 @@ class Component {
         }
     }
 
-    private async setTableConfiguration(context: Context): Promise<void> {
+    private async setTableConfiguration(): Promise<void> {
         if (this.state.widgetConfiguration) {
 
             const tableConfiguration = this.state.widgetConfiguration.settings;
@@ -97,24 +102,28 @@ class Component {
 
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
 
-            if (this.state.widgetConfiguration.contextDependent && context) {
-                table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-                await table.loadRows();
-            }
-
             table.setTableListener(() => {
                 this.state.filterCount = this.state.table.getTableRows(true).length || 0;
                 (this as any).setStateDirty('filterCount');
             });
 
             this.state.table = table;
-            if (this.state.widgetConfiguration.contextDependent && context) {
-                this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-                this.setTitle(context.getObjectList().length);
-            }
-            await this.state.table.loadRows();
-            this.setTitle(this.state.table.getTableRows(true).length);
+            await this.prepareTable();
         }
+    }
+
+    private async prepareTable(reload: boolean = false): Promise<void> {
+        if (this.state.widgetConfiguration.contextDependent) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            if (context) {
+                const objects = await context.getObjectList(reload);
+                this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            }
+        }
+        await this.state.table.loadRows(reload);
+        const rows = this.state.table.getTableRows(true);
+        this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
+        this.setTitle(this.state.table.getTableRows(true).length);
     }
 
     private columnConfigurationChanged(column: TableColumn): void {
@@ -164,10 +173,21 @@ class Component {
         if (this.state.table) {
             this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
             this.setTitle(objectList.length);
+
             await this.state.table.loadRows();
+
+            const rows = this.state.table.getTableRows(true);
+            this.state.table.listenerConfiguration.selectionListener.updateSelections(rows);
 
             const context = ContextService.getInstance().getActiveContext();
             context.setFilteredObjectList(objectList);
+        }
+    }
+
+    public async eventPublished(data: TableEventData, eventId: string): Promise<void> {
+        if (data && data.tableId === this.state.table.tableId && eventId === TableEvents.REFRESH) {
+            // FIXME: sollte über ein Table-Refresh möglich sein, direkt über Tabelle, nicht über einbindendes Widget
+            await this.prepareTable(true);
         }
     }
 

@@ -2,11 +2,11 @@ import { ComponentState } from "./ComponentState";
 import {
     ContextService, ActionFactory, StandardTableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, ServiceRegistry
-} from "@kix/core/dist/browser";
+} from "../../../../core/browser";
 import {
     KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject, ConfigItemClass, ConfigItemProperty
-} from "@kix/core/dist/model";
-import { CMDBContext, CMDBService } from "@kix/core/dist/browser/cmdb";
+} from "../../../../core/model";
+import { CMDBContext, CMDBService } from "../../../../core/browser/cmdb";
 
 class Component {
 
@@ -99,8 +99,9 @@ class Component {
 
         const context = ContextService.getInstance().getActiveContext();
         if (this.state.widgetConfiguration.contextDependent && context) {
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(context.getObjectList());
-            this.setTitle(context.getObjectList().length);
+            const objects = await context.getObjectList();
+            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
+            this.setTitle(objects.length);
             await this.state.table.loadRows();
         }
     }

@@ -1,6 +1,6 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
-import { ContextConfiguration } from '@kix/core/dist/model';
-import { ReleaseContextConfiguration, ReleaseContext } from '@kix/core/dist/browser/release';
+import { IConfigurationExtension } from '../../core/extensions';
+import { ContextConfiguration } from '../../core/model';
+import { ReleaseContextConfiguration, ReleaseContext } from '../../core/browser/release';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -25,7 +25,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
     }
 
-    public createFormDefinitions(): void {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

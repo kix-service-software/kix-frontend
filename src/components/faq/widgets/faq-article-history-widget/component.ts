@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, StandardTableFactoryService, IdService } from "@kix/core/dist/browser";
-import { KIXObjectType, Context } from "@kix/core/dist/model";
-import { FAQArticle } from "@kix/core/dist/model/kix/faq";
+import { ContextService, ActionFactory, StandardTableFactoryService, IdService } from "../../../../core/browser";
+import { KIXObjectType, Context } from "../../../../core/model";
+import { FAQArticle } from "../../../../core/model/kix/faq";
 
 class Component {
 

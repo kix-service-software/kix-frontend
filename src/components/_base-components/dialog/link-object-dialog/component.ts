@@ -1,18 +1,17 @@
 import {
-    KIXObjectSearchService, DialogService, OverlayService,
-    WidgetService, StandardTableFactoryService,
+    KIXObjectSearchService, DialogService, WidgetService, StandardTableFactoryService,
     TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
     TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
-    ITablePreventSelectionLayer, KIXObjectService, SearchOperator
-} from "@kix/core/dist/browser";
-import { FormService } from "@kix/core/dist/browser/form";
+    ITablePreventSelectionLayer, KIXObjectService, SearchOperator, BrowserUtil
+} from "../../../../core/browser";
+import { FormService } from "../../../../core/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    OverlayType, ComponentContent, TreeNode, DataType, ToastContent, LinkType, KIXObjectLoadingOptions,
+    TreeNode, DataType, LinkType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType
-} from "@kix/core/dist/model";
+} from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { LinkUtil } from "@kix/core/dist/browser/link";
+import { LinkUtil } from "../../../../core/browser/link";
 
 class LinkDialogComponent {
 
@@ -81,9 +80,8 @@ class LinkDialogComponent {
                 this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
+            await FormService.getInstance().getFormInstance(this.state.formId, false);
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            formInstance.reset();
         }
     }
 
@@ -108,8 +106,7 @@ class LinkDialogComponent {
         let formId;
         if (this.state.currentLinkableObjectNode) {
             formId = this.state.currentLinkableObjectNode.id.toString();
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
-            formInstance.reset();
+            await FormService.getInstance().getFormInstance(formId, false);
             await this.prepareResultTable([]);
         } else {
             this.state.standardTable = null;
@@ -221,26 +218,17 @@ class LinkDialogComponent {
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
+            // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
             DialogService.getInstance().publishDialogResult(
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]
             );
-            this.showSuccessHint(newLinks.length);
+            BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
             this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
             this.highlightLayer.setHighlightedObjects(newLinks.map((ld) => ld.linkableObject));
             this.setLinkedObjectsToTableLayer();
             this.state.standardTable.loadRows();
         }
-    }
-
-    private showSuccessHint(count: number): void {
-        const successHint = `${count} Verknüpfung(en) erfolgreich zugeordnet.`;
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-check', successHint)
-        );
-
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     private async setLinkTypes(): Promise<void> {
@@ -263,7 +251,7 @@ class LinkDialogComponent {
             ]);
 
             const linkTypes = await KIXObjectService.loadObjects<LinkType>(
-                KIXObjectType.LINK_TYPE, null, loadingOptions
+                KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
             );
 
             linkTypes.forEach((lt) => {

@@ -1,10 +1,11 @@
-import { IConfigurationExtension } from '@kix/core/dist/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty
-} from '@kix/core/dist/model';
-import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '@kix/core/dist/browser/cmdb';
-import { ConfigurationService } from '@kix/core/dist/services';
+} from '../../core/model';
+import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '../../core/browser/cmdb';
+import { ConfigurationService } from '../../core/services';
+import { SearchProperty } from '../../core/browser';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -27,21 +28,21 @@ export class ModuleExtension implements IConfigurationExtension {
         );
     }
 
-    public async createFormDefinitions(): Promise<void> {
+    public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-config-item-form';
         const existingForm = configurationService.getModuleConfiguration(formId, null);
-        if (!existingForm) {
+        if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
                 'Config Item',
                 KIXObjectType.CONFIG_ITEM,
                 FormContext.SEARCH,
                 null,
-                true,
                 [
-                    ConfigItemProperty.CLASS_ID, ConfigItemProperty.NUMBER
+                    SearchProperty.FULLTEXT, ConfigItemProperty.CLASS_ID,
+                    ConfigItemProperty.NAME, ConfigItemProperty.NUMBER
                 ]
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
