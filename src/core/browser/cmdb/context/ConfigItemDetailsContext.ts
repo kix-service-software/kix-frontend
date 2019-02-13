@@ -128,7 +128,7 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
             ['Versions', 'Links', 'History', VersionProperty.DATA, VersionProperty.PREPARED_DATA],
-            ['Versions', 'Links', 'History']
+            ['Links']
         );
 
         const itemId = Number(this.objectId);

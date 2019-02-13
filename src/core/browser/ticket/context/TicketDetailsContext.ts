@@ -156,7 +156,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         const loadingOptions = new KIXObjectLoadingOptions(
             ['Tickets.*'], null, null, null, null,
             ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
-            ['Links', 'Flags', 'History', 'Articles', 'Attachments']
+            ['Links']
         );
 
         const ticketId = Number(this.objectId);
