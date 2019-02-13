@@ -132,7 +132,8 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
-            ['Attachments', 'Votes', 'Links', 'History'], ['Attachments', 'Votes', 'Links', 'History']
+            ['Attachments', 'Votes', 'Links', 'History'],
+            ['Links']
         );
 
         const faqArticleId = Number(this.objectId);
