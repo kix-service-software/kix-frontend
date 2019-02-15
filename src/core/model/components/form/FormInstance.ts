@@ -165,6 +165,18 @@ export class FormInstance implements IFormInstance {
         }
     }
 
+    public addNewFormField(parent: FormField, newFields: FormField[], clearChildren: boolean = false): void {
+        if (parent) {
+            if (clearChildren) {
+                parent.children.forEach((c) => this.formFieldValues.delete(c.instanceId));
+                parent.children = [];
+            }
+            newFields.forEach((f) => parent.children.push((f)));
+            this.initValues(newFields);
+            this.listeners.forEach((l) => l.updateForm());
+        }
+    }
+
     public async provideFormFieldValue<T>(formFieldInstanceId: string, value: T): Promise<void> {
         if (!this.formFieldValues.has(formFieldInstanceId)) {
             this.formFieldValues.set(formFieldInstanceId, new FormFieldValue(value));

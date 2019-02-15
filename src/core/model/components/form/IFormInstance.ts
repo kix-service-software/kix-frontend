@@ -43,4 +43,6 @@ export interface IFormInstance {
 
     validateField(field: FormField): Promise<ValidationResult>;
 
+    addNewFormField(parent: FormField, newFields: FormField[], clearChildren?: boolean): void;
+
 }

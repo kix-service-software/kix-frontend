@@ -270,13 +270,15 @@ export class TicketService extends KIXObjectService {
 
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         const body = this.getParameterValue(parameter, ArticleProperty.BODY);
+        const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
 
         let createArticle;
         if (subject && body) {
             createArticle = new CreateArticle(
                 subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
                 null, senderType, null, from, null, null, null, null, null, null, null, null,
-                attachments.length ? attachments : null
+                attachments.length ? attachments : null,
+                customerVisible !== undefined ? customerVisible : false
             );
         }
         return createArticle;

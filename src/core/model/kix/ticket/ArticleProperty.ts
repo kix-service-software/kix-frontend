@@ -52,6 +52,8 @@ export enum ArticleProperty {
 
     ATTACHMENTS = 'Attachments',
 
-    ARTICLE_TAG = 'ArticleTag'
+    ARTICLE_TAG = 'ArticleTag',
+
+    CUSTOMER_VISIBLE = 'CustomerVisible'
 
 }
