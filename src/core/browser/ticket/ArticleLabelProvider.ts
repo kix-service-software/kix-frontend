@@ -1,6 +1,5 @@
 import { ILabelProvider } from "..";
-import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject, Channel } from "../../model";
-import { ChannelService } from "../channel";
+import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel } from "../../model";
 import { KIXObjectService } from "../kix";
 
 export class ArticleLabelProvider implements ILabelProvider<Article> {
@@ -29,6 +28,9 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
             case ArticleProperty.NUMBER:
                 displayValue = 'Nr.';
                 break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Sichtbarkeit im Kundenportal';
+                break;
             case ArticleProperty.SENDER_TYPE_ID:
                 displayValue = 'Senderobjekt';
                 break;
@@ -54,6 +56,9 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === ArticleProperty.CUSTOMER_VISIBLE) {
+            return 'kix-icon-flag';
+        }
         return;
     }
 
@@ -177,6 +182,11 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 break;
             case ArticleProperty.CHANNEL_ID:
                 icons.push(new ObjectIcon('Channel', article.ChannelID));
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                if (article.CustomerVisible) {
+                    icons.push('kix-icon-flag');
+                }
                 break;
             default:
         }

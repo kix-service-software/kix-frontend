@@ -1,8 +1,11 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { Ticket, KIXObjectType, TicketProperty } from "../../model";
+import {
+    Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty, FormFieldOptions, FormFieldOption
+} from "../../model";
 import { PendingTimeFormValue } from "./form";
 import { ContactService } from "../contact";
 import { CustomerService } from "../customer";
+import { AutocompleteOption, AutocompleteFormFieldOption } from "../components";
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -52,5 +55,26 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
             }
         }
         return value;
+    }
+
+    public getFormFieldsForChannel(channel: Channel): FormField[] {
+        const fields: FormField[] = [];
+
+        if (channel.Name === 'note') {
+            fields.push(new FormField(
+                "Anzeigen im Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, "Anzeigen im Kundenportal"
+            ));
+            fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));
+            fields.push(new FormField(
+                "Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
+                    new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
+                        new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                    ]))
+                ])
+            );
+            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
+        }
+        return fields;
     }
 }

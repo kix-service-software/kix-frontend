@@ -62,6 +62,8 @@ export class Article extends KIXObject<Article> {
 
     public Flags: ArticleFlag[];
 
+    public CustomerVisible: boolean;
+
     // UI Properties
 
     public senderType: SenderType;
@@ -100,6 +102,7 @@ export class Article extends KIXObject<Article> {
             this.Flags = article.Flags;
             this.Channel = article.Channel;
             this.ChannelID = article.ChannelID;
+            this.CustomerVisible = article.CustomerVisible;
 
             this.bodyAttachment = article.bodyAttachment;
         }

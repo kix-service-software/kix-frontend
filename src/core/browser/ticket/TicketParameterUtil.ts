@@ -42,6 +42,7 @@ export class TicketParameterUtil {
                     parameter.push([ArticleProperty.SUBJECT, value]);
                 }
             } else if (property === ArticleProperty.SUBJECT) {
+                parameter.push([TicketProperty.TITLE, value]);
                 parameter.push([ArticleProperty.SUBJECT, value]);
             } else if (property === ArticleProperty.BODY) {
                 parameter.push([ArticleProperty.BODY, value]);

@@ -44,6 +44,9 @@ export class ArticleTableFactory implements ITableFactory {
             ),
             new DefaultColumnConfiguration(ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(
+                ArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, false, false
+            ),
+            new DefaultColumnConfiguration(
                 ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true
             ),
             new DefaultColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, false, 500, true, true),

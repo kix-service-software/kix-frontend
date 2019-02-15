@@ -35,6 +35,7 @@ import { BulkService } from "../../../core/browser/bulk";
 import { ArticleTableFactory } from "../../../core/browser/ticket/table/ArticleTableFactory";
 import { ChannelService } from "../../../core/browser/channel";
 import { TableFactoryService } from "../../../core/browser/table";
+import { ChannelLabelProvider } from "../../../core/browser/channel/ChannelLabelProvider";
 
 class Component extends AbstractMarkoComponent {
 
@@ -68,6 +69,7 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());

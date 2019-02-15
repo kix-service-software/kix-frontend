@@ -37,15 +37,9 @@ export class Extension implements IConfigurationExtension {
         const existing = configurationService.getModuleConfiguration(formId, null);
         if (!existing) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Betreff", TicketProperty.TITLE, null, true, "Betreff"));
             fields.push(new FormField(
-                "Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
-                    new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                        new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-                    ]))
-                ])
+                "Kommunikationskanal", ArticleProperty.CHANNEL_ID, 'channel-input', true, "Kommunikationskanal")
             );
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
 
             const group = new FormGroup('Artikeldaten', fields);
 

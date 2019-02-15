@@ -9,7 +9,7 @@ export class CreateArticle extends RequestObject {
         channelId?: number, senderTypeId?: number, autoResponseType?: string, from?: string, historyType?: string,
         historyComment?: string, timeUnit?: string, noAgentNotify?: boolean, forceNotificationToUserID?: number[],
         excludeNotificationToUserID?: number[], excludeMuteNotificationToUserID?: number[],
-        dynamicFields?: DynamicField[], attachments?: CreateAttachment[]
+        dynamicFields?: DynamicField[], attachments?: CreateAttachment[], customerVisible?: boolean
     ) {
         super();
 
@@ -31,6 +31,7 @@ export class CreateArticle extends RequestObject {
         this.applyProperty("ExcludeMuteNotificationToUserID", excludeMuteNotificationToUserID);
         this.applyProperty("DynamicFields", dynamicFields);
         this.applyProperty(ArticleProperty.ATTACHMENTS, attachments);
+        this.applyProperty(ArticleProperty.CUSTOMER_VISIBLE, Number(customerVisible));
     }
 
 }

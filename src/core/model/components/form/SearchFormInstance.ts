@@ -53,6 +53,10 @@ export class SearchFormInstance implements IFormInstance {
         return;
     }
 
+    public addNewFormField(parent: FormField<any>, newFields: Array<FormField<any>>, clearChildren?: boolean): void {
+        return;
+    }
+
     public provideFormFieldValue<T>(fieldId: string, value: T): void {
         return;
     }
