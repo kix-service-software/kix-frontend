@@ -1,5 +1,5 @@
 import { WidgetType, Context, IAction, IActionListener, KIXObject } from "../model";
-import { StandardTable } from "./standard-table";
+import { ITable } from "./table";
 
 export class WidgetService {
 
@@ -62,7 +62,7 @@ export class WidgetService {
         }
     }
 
-    public setActionData(instanceId: string, data: KIXObject[] | StandardTable) {
+    public setActionData(instanceId: string, data: KIXObject[] | ITable) {
         if (this.widgetActions.has(instanceId)) {
             this.widgetActions.get(instanceId)[0].forEach((a) => a.setData(data));
             const listener = this.listeners.find((l) => l.listenerInstanceId === instanceId);

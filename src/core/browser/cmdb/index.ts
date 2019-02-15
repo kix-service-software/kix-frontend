@@ -17,3 +17,4 @@ export { ConfigItemFormService } from './ConfigItemFormService';
 export { ConfigItemClassAttributeUtil } from './ConfigItemClassAttributeUtil';
 export { ConfigItemClassLabelProvider } from './ConfigItemClassLabelProvider';
 export { ConfigItemClassDefinitionLabelProvider } from './ConfigItemClassDefinitionLabelProvider';
+export { ConfigItemVersionCompareLabelProvider } from './ConfigItemVersionCompareLabelProvider';

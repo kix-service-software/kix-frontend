@@ -29,7 +29,7 @@ describe('Translation Service', () => {
 
         nockScope
             .get(resourcePath)
-            .query({ include: 'Languages' })
+            .query({ sort: 'Translation.' + TranslationProperty.PATTERN, include: 'Languages' })
             .reply(200, buildTranslationsResponse([translationId1, translationId2, translationId3, translationId4], ['fr', 'en', 'de']));
     });
 

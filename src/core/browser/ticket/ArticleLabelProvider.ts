@@ -11,7 +11,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return value.toString();
     }
 
-    public async getPropertyText(property: string, article?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ArticleProperty.TO:
@@ -53,7 +53,11 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return displayValue;
     }
 
-    public async getDisplayText(article: Article, property: string): Promise<string> {
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
+    }
+
+    public async getDisplayText(article: Article, property: string, defaultValue?: string): Promise<string> {
         let displayValue;
         switch (property) {
             case ArticleProperty.FROM:
@@ -67,7 +71,6 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 }
                 break;
 
-            case ArticleProperty.NUMBER:
             case ArticleProperty.ARTICLE_TAG:
                 displayValue = '';
                 break;
@@ -111,7 +114,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 break;
 
             default:
-                displayValue = article[property];
+                displayValue = defaultValue ? defaultValue : article[property];
         }
         return displayValue;
     }

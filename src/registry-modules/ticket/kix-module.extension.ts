@@ -21,7 +21,6 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-customer-info', 'ticket/ticket-customer-info'],
         ['article-receiver-list', 'ticket/article-receiver-list'],
         ['article-list-widget', 'ticket/widgets/article-list-widget'],
-        ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
         ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
         ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],
         ['ticket-description-widget', 'ticket/widgets/ticket-description-widget'],
@@ -57,7 +56,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-priority-info-widget', 'ticket/admin/widgets/ticket-priority-info-widget'],
         ['new-ticket-priority-dialog', 'ticket/admin/dialogs/new-ticket-priority-dialog'],
         ['edit-ticket-priority-dialog', 'ticket/admin/dialogs/edit-ticket-priority-dialog'],
-        ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog']
+        ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog'],
+        ['go-to-article-cell', 'ticket/table/go-to-article-cell']
     ];
 
 }

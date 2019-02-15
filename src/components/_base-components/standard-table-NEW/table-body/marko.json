@@ -1,0 +1,8 @@
+{
+    "taglibImports": [
+        "./table-row/marko.json"
+    ],
+    "tags-dir": [
+        "table-row"
+    ]
+}

@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IContextServiceListener, KIXObjectSearchService } from "../../../core/browser";
 import { ContextMode, ContextType, ContextConfiguration, Context, CacheState } from "../../../core/model";
-import { SearchContext } from '../../../core/browser/search';
+import { SearchContext } from '../../../core/browser/search/context';
 
 class Component implements IContextServiceListener {
 

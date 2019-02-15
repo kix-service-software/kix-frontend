@@ -1,62 +1,54 @@
-import { TicketType, KIXObjectType, TicketTypeProperty, DataType, ContextMode } from "../../../../../model";
-import {
-    IStandardTableFactory, TableConfiguration, TableLayerConfiguration, TableListenerConfiguration,
-    StandardTable, TableColumnConfiguration, TableRowHeight, TableHeaderHeight, AbstractTableLayer
-} from "../../../../standard-table";
-import { IdService } from "../../../../IdService";
-import { TicketTypeTableContentLayer } from "./TicketTypeTableContentLayer";
-import { TicketTypeTableLabelLayer } from "./TicketTypeTableLabelLayer";
-import { RoutingConfiguration } from "../../../../router";
 import { TicketTypeDetailsContext } from "../../context";
+import { RoutingConfiguration } from "../../../../router";
+import {
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+} from "../../../../table";
+import { KIXObjectType, TicketTypeProperty, DataType, ContextMode } from "../../../../../model";
+import { TicketTypeTableContentProvider } from "./TicketTypeTableContentProvider";
 
-export class TicketTypeTableFactory implements IStandardTableFactory<TicketType> {
+export class TicketTypeTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean
-    ): StandardTable<TicketType> {
+        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration, defaultToggle);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
+        const table = new Table(tableConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('ticket-types-table'),
-            tableConfiguration, layerConfiguration, listenerConfiguration
-        );
+        table.setContentProvider(new TicketTypeTableContentProvider(table, objectIds, null, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new TableColumnConfiguration(TicketTypeProperty.NAME, true, false, true, true, 200, true),
-            new TableColumnConfiguration('ICON', false, true, false, true, 41, false),
-            new TableColumnConfiguration(TicketTypeProperty.VALID_ID, true, false, true, true, 150, true),
-            new TableColumnConfiguration(
-                TicketTypeProperty.CREATE_TIME, true, false, true, true, 150, true, false, DataType.DATE_TIME
+            new DefaultColumnConfiguration(TicketTypeProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(TicketTypeProperty.ID, false, true, false, true, 41, false),
+            new DefaultColumnConfiguration(TicketTypeProperty.VALID_ID, true, false, true, true, 150, true, true, true),
+            new DefaultColumnConfiguration(
+                TicketTypeProperty.CREATE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
             ),
-            new TableColumnConfiguration(TicketTypeProperty.CREATE_BY, true, false, true, true, 150, true),
-            new TableColumnConfiguration(
-                TicketTypeProperty.CHANGE_TIME, true, false, true, true, 150, true, false, DataType.DATE_TIME
+            new DefaultColumnConfiguration(TicketTypeProperty.CREATE_BY, true, false, true, true, 150, true, true),
+            new DefaultColumnConfiguration(
+                TicketTypeProperty.CHANGE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
             ),
-            new TableColumnConfiguration(TicketTypeProperty.CHANGE_BY, true, false, true, true, 150, true)
+            new DefaultColumnConfiguration(TicketTypeProperty.CHANGE_BY, true, false, true, true, 150, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration();
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.rowHeight = TableRowHeight.LARGE;
-            tableConfiguration.headerHeight = TableHeaderHeight.LARGE;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET_TYPE, null, null, tableColumns, null, true, false, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.LARGE
+            );
+            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.rowHeight = TableRowHeight.LARGE;
-            tableConfiguration.headerHeight = TableHeaderHeight.LARGE;
         }
 
         if (defaultRouting) {
@@ -67,30 +59,5 @@ export class TicketTypeTableFactory implements IStandardTableFactory<TicketType>
         }
 
         return tableConfiguration;
-    }
-
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration, defaultToggle?: boolean
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new TicketTypeTableContentLayer([]);
-            const labelLayer = new TicketTypeTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
-        }
-
-        return layerConfiguration;
-    }
-
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
     }
 }

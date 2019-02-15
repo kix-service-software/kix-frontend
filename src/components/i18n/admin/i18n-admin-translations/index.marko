@@ -1,11 +1,14 @@
 <widget instanceId=state.instanceId title=state.title actions=state.actions icon="kix-icon-gears">
     <@headerFilter>
-        <filter filterCount=state.filterCount predefinedFilter=state.predefinedTableFilter
-            predefinedFilterPlaceholder="Alle Sprachen" on-filter('filter')/>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle Sprachen"
+            on-filter("filter")/>
     </@headerFilter>
     <@content>
         <if(state.table)>
-            <standard-table standardTable=state.table key="translation-list-table"/>
+            <standard-table-NEW table=state.table/>
         </if>
     </@content>
 </widget>

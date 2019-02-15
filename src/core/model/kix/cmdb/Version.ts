@@ -1,6 +1,8 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { PreparedData } from "./PreparedData";
+import { AttributeDefinition } from "./AttributeDefinition";
+import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
 
 export class Version extends KIXObject<Version> {
 
@@ -32,6 +34,7 @@ export class Version extends KIXObject<Version> {
     public PreparedData: PreparedData[] = [];
     public isCurrentVersion: boolean = false;
     public countNumber: number;
+    public Definition: ConfigItemClassDefinition;
 
     public constructor(version?: Version) {
         super();
@@ -61,6 +64,7 @@ export class Version extends KIXObject<Version> {
             this.PreparedData = version.PreparedData;
             this.isCurrentVersion = version.isCurrentVersion;
             this.countNumber = version.countNumber;
+            this.Definition = version.Definition;
         }
     }
 

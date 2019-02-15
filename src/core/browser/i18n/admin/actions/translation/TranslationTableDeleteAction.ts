@@ -1,15 +1,14 @@
 import {
-    AbstractAction, KIXObject, ComponentContent, ConfirmOverlayContent,
-    OverlayType, ToastContent, KIXObjectType
+    AbstractAction, ComponentContent, ConfirmOverlayContent,
+    OverlayType, KIXObjectType, ToastContent
 } from "../../../../../model";
 import { OverlayService } from "../../../../OverlayService";
-import { KIXObjectService } from "../../../../kix";
 import { EventService } from "../../../../event";
+import { KIXObjectService } from "../../../../kix";
 import { ApplicationEvent } from "../../../../application";
+import { ITable } from "../../../../table";
 
-export class TranslationTableDeleteAction extends AbstractAction {
-
-    private selectedObjects: KIXObject[];
+export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
     public initAction(): void {
         this.text = "Löschen";
@@ -18,24 +17,20 @@ export class TranslationTableDeleteAction extends AbstractAction {
 
     public canRun(): boolean {
         let canRun: boolean = false;
-        if (
-            this.data
-            && this.data.tableConfiguration
-            && this.data.tableConfiguration.enableSelection
-            && this.data.listenerConfiguration.selectionListener
-        ) {
-            this.selectedObjects = this.data.listenerConfiguration.selectionListener.getSelectedObjects();
-            canRun = this.selectedObjects && !!this.selectedObjects.length;
+        if (this.data) {
+            const selectedRows = this.data.getSelectedRows();
+            canRun = selectedRows && !!selectedRows.length;
         }
         return canRun;
     }
 
     public run(): void {
         if (this.canRun()) {
+            const selectedRows = this.data.getSelectedRows();
             const content = new ComponentContent(
                 'confirm-overlay',
                 new ConfirmOverlayContent(
-                    `Die ausgewählten ${this.selectedObjects.length} Einträge werden gelöscht. Sind Sie sicher?`,
+                    `Die ausgewählten ${selectedRows.length} Einträge werden gelöscht. Sind Sie sicher?`,
                     this.deleteTranslations.bind(this)
                 )
             );
@@ -51,13 +46,17 @@ export class TranslationTableDeleteAction extends AbstractAction {
     }
 
     public async deleteTranslations(): Promise<void> {
-        if (this.selectedObjects && !!this.selectedObjects.length) {
+        const selectedRows = this.data.getSelectedRows();
+        if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Entferne Übersetzungen ...'
             });
             const failIds = await KIXObjectService.deleteObject(
-                KIXObjectType.TRANSLATION, this.selectedObjects.map((sO) => sO.ObjectId)
+                KIXObjectType.TRANSLATION, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
             );
+
+            this.data.reload(true);
+
             if (!failIds || !!!failIds.length) {
                 const content = new ComponentContent(
                     'toast',
@@ -65,10 +64,9 @@ export class TranslationTableDeleteAction extends AbstractAction {
                 );
                 OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
             }
-            EventService.getInstance().publish('TRANSLATION_LIST_UPDATED', {
-                loading: true, hint: 'Entferne Übersetzungen ...'
-            });
+
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
+
 }

@@ -17,7 +17,8 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['new-contact-dialog', 'customer/dialogs/new-contact-dialog'],
         ['edit-contact-dialog', 'customer/dialogs/edit-contact-dialog'],
         ['search-contact-dialog', 'customer/dialogs/search-contact-dialog'],
-        ['contact-input-customer', 'customer/dialogs/inputs/contact-input-customer']
+        ['contact-input-customer', 'customer/dialogs/inputs/contact-input-customer'],
+        ['create-new-ticket-cell', 'customer/table/create-new-ticket-cell']
     ];
 
 }

@@ -48,6 +48,18 @@ class Component {
         });
     }
 
+    public onDestroy(): void {
+        document.removeEventListener("click", (event) => {
+            if (this.state.expanded) {
+                if (this.keepExpanded) {
+                    this.keepExpanded = false;
+                } else {
+                    this.toggleList();
+                }
+            }
+        });
+    }
+
     public setKeepExpanded(): void {
         this.keepExpanded = true;
     }

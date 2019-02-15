@@ -9,10 +9,28 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
+        let displayValue = value;
+
+        const objectData = ContextService.getInstance().getObjectData();
+        switch (property) {
+            case VersionProperty.CREATE_BY:
+                const user = objectData.users.find(
+                    (u) => u.UserID.toString() === value.toString()
+                );
+                if (user) {
+                    displayValue = user.UserFullname;
+                }
+                break;
+            case VersionProperty.CURRENT:
+                displayValue = value ? '(aktuelle Version)' : '';
+                break;
+            default:
+        }
+
+        return displayValue.toString();
     }
 
-    public async getPropertyText(property: string, version?: Version): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let text = property;
         switch (property) {
             case VersionProperty.COUNT_NUMBER:
@@ -28,14 +46,13 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
                 text = 'Aktuelle Version';
                 break;
             default:
-                if (version) {
-                    text = await this.getVersionProperty(property, version);
-                } else {
-                    text = property;
-                }
-
+                text = property;
         }
         return text;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     private async getVersionProperty(property: string, version: Version): Promise<string> {
@@ -52,14 +69,12 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
         }
     }
 
-    public async getDisplayText(version: Version, property: string): Promise<string> {
+    public async getDisplayText(version: Version, property: string, value?: string | number): Promise<string> {
         let displayValue = property.toString();
 
         const objectData = ContextService.getInstance().getObjectData();
 
         switch (property) {
-            case VersionProperty.COUNT_NUMBER:
-                displayValue = version.countNumber ? version.countNumber.toString() : '';
             case VersionProperty.CREATE_BY:
                 const user = objectData.users.find((u) => u.UserID === version[property]);
                 if (user) {
@@ -73,7 +88,9 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
                 displayValue = version.isCurrentVersion ? '(aktuelle Version)' : '';
                 break;
             default:
-                displayValue = version[property];
+                displayValue = await this.getPropertyValueDisplayText(
+                    property, version[property] ? version[property] : value
+                );
         }
 
         return displayValue;

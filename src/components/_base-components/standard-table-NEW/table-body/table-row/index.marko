@@ -1,0 +1,73 @@
+<if(state.row)>
+    <tr
+        id=state.row.getRowId()
+        style=("height: " + input.height)
+        class={
+                opened: state.open,
+                "fist-column-fixed": component.firstColumnIsFixed()
+            }>
+        <if(input.selectionEnabled)>
+            <td.check>
+                <div style={
+                    height: input.height,
+                    "line-height": input.height
+                }>
+                    <if(state.selectable)>
+                        <input
+                            type="checkbox"
+                            on-click("changeSelect")
+                            checked=state.selected
+                            style={
+                                                        height: input.height
+                                                    }/>
+                    </if>
+                </div>
+            </td>
+        </if>
+        <for(column in component.getColumns() | status-var=loop)>
+            <table-cell-NEW
+                cell=component.getCell(column.getColumnId())
+                column=column
+                height=input.height
+                level=(loop.getIndex() === 0 && input.level > 0 ? input.level : null)/>
+        </for>
+        <td.column-spacer/>
+        <if(input.toggleEnabled)>
+            <td.toggle>
+                <div
+                    on-click("toggleRow")
+                    style={
+                                        height: input.height,
+                                        "line-height": input.height
+                                    }>
+                    <if(input.row && state.open)>
+                        <span.kix-icon-triangle-up>
+                            <span.path1/>
+                            <span.path2/>
+                        </span>
+                    </if>
+                    <else>
+                        <span.kix-icon-sort-down/>
+                    </else>
+                </div>
+            </td>
+        </if>
+    </tr>
+    <if(input.toggleEnabled)>
+        <table-toggle-row
+            row=state.row
+            open=state.open
+            columnLength=component.getFullColumnCount(input.selectionEnabled, input.toggleEnabled)/>
+    </if>
+    <if(state.children)>
+        <for(childRow in state.children)>
+            <table-row
+                row=childRow
+                columnLength=input.columnLength
+                height=input.height
+                selectionEnabled=input.selectionEnabled
+                toggleEnabled=input.toggleEnabled
+                level=(input.level + 1)/>
+        </for>
+    </if>
+</if>

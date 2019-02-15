@@ -1,6 +1,6 @@
 export enum TranslationLanguageProperty {
 
-    TRNASLATION_ID = 'TranslationID',
+    TRANSLATION_ID = 'TranslationID',
 
     LANGUAGE = 'Language',
 

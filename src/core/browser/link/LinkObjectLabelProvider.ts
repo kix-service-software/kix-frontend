@@ -23,7 +23,7 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
@@ -42,6 +42,10 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(linkObject: LinkObject, property: string): Promise<string> {

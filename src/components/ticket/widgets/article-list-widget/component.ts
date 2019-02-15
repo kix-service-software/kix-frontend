@@ -1,29 +1,22 @@
-import { Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType } from "../../../../core/model";
-import { ComponentState } from './ComponentState';
 import {
-    ArticleTableContentLayer,
-    ArticleTableLabelLayer,
-    ArticleTableClickListener,
-    ArticleTableToggleListener,
-    ArticleTableToggleLayer,
-    TicketDetailsContext
-} from "../../../../core/browser/ticket";
+    Ticket, KIXObjectType, ComponentContent, ToastContent, OverlayType, TicketEvent
+} from "../../../../core/model";
+import { ComponentState } from './ComponentState';
+import { TicketDetailsContext, } from "../../../../core/browser/ticket";
 import { ContextService } from "../../../../core/browser/context";
 import {
-    StandardTable, ITableConfigurationListener, TableColumn,
-    TableSortLayer, ActionFactory, TableListenerConfiguration, TableLayerConfiguration,
-    WidgetService, OverlayService, TableFilterLayer
+    ActionFactory, WidgetService, OverlayService, TableFactoryService, TableEvent
 } from "../../../../core/browser";
-import { IdService } from "../../../../core/browser/IdService";
-import { IEventSubscriber, EventService } from "../../../../core/browser/event";
+import { EventService, IEventSubscriber } from "../../../../core/browser/event";
 
-export class Component implements IEventSubscriber {
+export class Component {
 
     private state: ComponentState;
-    public eventSubscriberId: string = 'ArticleList';
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(Number(input.ticketId));
+        this.state = new ComponentState();
         this.state.instanceId = input.instanceId;
     }
 
@@ -46,90 +39,46 @@ export class Component implements IEventSubscriber {
             }
         });
 
-        EventService.getInstance().subscribe('GotToTicketArticle', this);
+        this.subscriber = {
+            eventSubscriberId: 'article-list-widget',
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === TicketEvent.SCROLL_TO_ARTICLE) {
+                    EventService.getInstance().publish(
+                        TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID,
+                        {
+                            tableId: this.state.table.getTableId(),
+                            objectId: data
+                        }
+                    );
+                }
+            }
+        };
+        EventService.getInstance().subscribe(TicketEvent.SCROLL_TO_ARTICLE, this.subscriber);
 
         await this.initWidget(await context.getObject<Ticket>(KIXObjectType.TICKET));
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.loading = true;
-        this.state.ticket = ticket;
-        this.prepareArticles();
-        this.prepareActions();
-        this.prepareArticleTableConfiguration();
+        this.prepareArticles(ticket);
+        this.prepareActions(ticket);
+        await this.prepareTable();
         setTimeout(() => {
             this.state.loading = false;
         }, 100);
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe('ShowArticleInTicketDetails', this);
-        EventService.getInstance().unsubscribe('ArticleTableRowToggled', this);
-
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
-    private prepareActions(): void {
-        if (this.state.widgetConfiguration && this.state.ticket) {
-            this.state.generalArticleActions = ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.settings.generalActions, [this.state.ticket]);
-
-            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.generalArticleActions);
-        }
-    }
-
-    private prepareArticleTableConfiguration(): void {
-        if (this.state.widgetConfiguration) {
-
-            const tableConfiguration = this.state.widgetConfiguration.settings.tableConfiguration;
-            tableConfiguration.displayLimit = this.state.articles.length;
-
-            const layerConfiguration = new TableLayerConfiguration(
-                new ArticleTableContentLayer(this.state.ticket),
-                new ArticleTableLabelLayer(),
-                [new TableFilterLayer()],
-                [new TableSortLayer()],
-                new ArticleTableToggleLayer(new ArticleTableToggleListener(), true)
-            );
-
-            const configurationListener: ITableConfigurationListener = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
-            const listenerConfiguration = new TableListenerConfiguration(
-                new ArticleTableClickListener(), null, configurationListener
-            );
-
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                tableConfiguration, layerConfiguration, listenerConfiguration
-            );
-            this.state.standardTable.setTableListener(() => {
-                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-        }
-    }
-
-    private columnConfigurationChanged(column: TableColumn): void {
-        const index =
-            this.state.widgetConfiguration.settings.tableConfiguration.tableColumns
-                .findIndex((tc) => tc.columnId === column.id);
-
-        if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableConfiguration.tableColumns[index].size = column.size;
-            ContextService.getInstance().saveWidgetConfiguration(
-                this.state.instanceId, this.state.widgetConfiguration
-            );
-        }
-    }
-
-    private prepareArticles(): void {
-        if (this.state.ticket) {
-            this.state.articles = [...this.state.ticket.Articles];
-            this.state.title = 'Artikelübersicht (' + (this.state.articles ? this.state.articles.length : '0') + ')';
+    private prepareArticles(ticket: Ticket): void {
+        if (ticket) {
+            const articles = [...ticket.Articles];
+            this.state.title = 'Artikelübersicht (' + (articles ? articles.length : '0') + ')';
 
             let count = 0;
-            this.state.articles.forEach((article) => {
+            articles.forEach((article) => {
                 if (article.Attachments) {
                     const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
                     if (attachments.length > 0) {
@@ -142,6 +91,27 @@ export class Component implements IEventSubscriber {
         }
     }
 
+    private prepareActions(ticket: Ticket): void {
+        if (this.state.widgetConfiguration && ticket) {
+            const generalArticleActions = ActionFactory.getInstance()
+                .generateActions(this.state.widgetConfiguration.settings.generalActions, [ticket]);
+
+            WidgetService.getInstance().registerActions(this.state.instanceId, generalArticleActions);
+        }
+    }
+
+    private async prepareTable(): Promise<void> {
+        if (this.state.widgetConfiguration) {
+            const tableConfiguration = this.state.widgetConfiguration.settings.tableConfiguration;
+            const table = TableFactoryService.getInstance().createTable(
+                KIXObjectType.ARTICLE, tableConfiguration, null, TicketDetailsContext.CONTEXT_ID, false, true
+            );
+
+            await table.initialize();
+            this.state.table = table;
+        }
+    }
+
     public attachmentsClicked(): void {
         const content = new ComponentContent('toast', new ToastContent(
             'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon'
@@ -150,28 +120,10 @@ export class Component implements IEventSubscriber {
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        this.state.standardTable.setFilterSettings(filterValue);
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 
-    public eventPublished(data: any, eventId: string): void {
-        const widgetComponent = (this as any).getComponent('article-list-widget');
-        if (widgetComponent && widgetComponent.state.minimized) {
-            widgetComponent.state.minimized = false;
-        }
-
-        if (eventId === 'GotToTicketArticle') {
-            setTimeout(() => {
-                this.filter('');
-                setTimeout(() => {
-                    const tableComponent = (this as any).getComponent('article-list-table');
-                    if (tableComponent) {
-                        tableComponent.scrollToObject(data, true);
-                    }
-                }, 100);
-            }, 200);
-        }
-    }
 }
 
 module.exports = Component;

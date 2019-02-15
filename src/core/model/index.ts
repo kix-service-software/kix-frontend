@@ -20,3 +20,4 @@ export { KIXObjectCache } from './KIXObjectCache';
 export { IKIXObjectCacheHandler } from './IKIXObjectCacheHandler';
 export { Error } from './Error';
 export { IKIXObjectCacheListener } from './IKIXObjectCacheListener';
+export { FilterUtil } from './FilterUtil';

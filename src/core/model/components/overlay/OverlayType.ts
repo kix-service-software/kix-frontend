@@ -12,6 +12,8 @@ export enum OverlayType {
 
     CONTENT_OVERLAY = 'CONTENT_OVERLAY',
 
-    CONFIRM = 'CONFIRM'
+    CONFIRM = 'CONFIRM',
+
+    TABLE_COLUMN_FILTER = 'TABLE_COLUMN_FILTER'
 
 }

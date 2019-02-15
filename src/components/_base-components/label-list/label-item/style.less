@@ -1,0 +1,34 @@
+.label-item-container {
+    height: 1.5rem;
+    overflow: hidden;
+    margin-right: .5rem;
+    display: inline-block;
+    max-width: 100%;
+    >.label-item {
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        grid-gap: @margin-small;
+        grid-template-rows: 1.5rem;
+        background-color: @secondary-5;
+        border-radius: @border-radius;
+        padding: 0 @margin-small;
+        white-space: nowrap;
+        span:first-child[class^="kix-icon-"],
+        span:first-child[class*=" kix-icon-"] {
+            font-size: .875rem;
+        }
+        .label-text {
+            .shorten-text;
+            align-self: end;
+        }
+        .kix-icon-close {
+            font-size: .75rem;
+            color: @secondary-2;
+            cursor: pointer;
+            &:hover {
+                color: darken(@secondary-2, 20%);
+            }
+        }
+    }
+}

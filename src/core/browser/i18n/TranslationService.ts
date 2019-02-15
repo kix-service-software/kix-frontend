@@ -27,7 +27,7 @@ export class TranslationService extends KIXObjectService<Translation> {
     }
 
     public async init(): Promise<void> {
-        this.loadObjects(KIXObjectType.TRANSLATION, null);
+        await this.loadObjects(KIXObjectType.TRANSLATION, null);
     }
 
     public async loadObjects<O extends KIXObject>(

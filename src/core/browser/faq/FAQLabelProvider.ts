@@ -35,7 +35,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -116,6 +116,10 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(faqArticle: FAQArticle, property: string): Promise<string> {

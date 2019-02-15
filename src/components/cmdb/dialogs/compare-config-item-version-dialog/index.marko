@@ -1,0 +1,19 @@
+<widget instanceId="compare-config-item-version-dialog">
+    <@content>
+        <div.compare-content>
+            <if(state.compareWidget)>
+                <${component.getCompareWidgetTemplate()} ...{
+                    contextType: "DIALOG",
+                    instanceId: state.compareWidget.instanceId
+                }/>
+            </if>
+            <div.dialog-button-container>
+                <span/>
+                <button.submit-button type="button" on-click("submit") title="Speichern">
+                    <span.kix-icon-check/>
+                    Fenster schließen
+                </button>
+            </div>
+        </div>
+    </@content>
+</widget>

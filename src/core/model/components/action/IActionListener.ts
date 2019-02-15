@@ -1,11 +1,11 @@
 import { KIXObject } from "../../kix";
-import { StandardTable } from "../../../browser";
+import { ITable } from "../../../browser";
 
 export interface IActionListener {
 
     listenerInstanceId: string;
 
-    actionDataChanged(data?: KIXObject[] | StandardTable): void;
+    actionDataChanged(data?: KIXObject[] | ITable): void;
 
     actionsChanged(): void;
 

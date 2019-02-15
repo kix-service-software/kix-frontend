@@ -154,7 +154,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticket ...' });
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            ['Tickets.*'], null, null, null, null,
+            null, null, null, null, null,
             ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
             ['Links']
         );

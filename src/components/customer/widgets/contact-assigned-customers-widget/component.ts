@@ -1,9 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import {
-    ContextService, TableColumn, ITableConfigurationListener, ActionFactory,
-    TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
-} from "../../../../core/browser";
-import { KIXObjectType, Customer, Contact, KIXObjectLoadingOptions } from "../../../../core/model";
+import { ContextService, ActionFactory, TableFactoryService } from "../../../../core/browser";
+import { KIXObjectType, Customer, Contact } from "../../../../core/model";
 import { CustomerService } from "../../../../core/browser/customer";
 
 class Component {
@@ -45,11 +42,11 @@ class Component {
         this.state.title = this.state.widgetConfiguration.title
             + (this.state.contact.UserCustomerIDs && !!this.state.contact.UserCustomerIDs.length ?
                 ` (${this.state.contact.UserCustomerIDs.length})` : '');
-        this.setTable();
-        this.setActions();
+        this.prepareTable();
+        this.prepareActions();
     }
 
-    private setActions(): void {
+    private prepareActions(): void {
         if (this.state.widgetConfiguration && this.state.contact) {
             this.state.actions = ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.contact]
@@ -57,54 +54,19 @@ class Component {
         }
     }
 
-    private async setTable(): Promise<void> {
+    private async prepareTable(): Promise<void> {
         if (this.state.contact && this.state.widgetConfiguration) {
-            const configurationListener: ITableConfigurationListener = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
-            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            this.state.customerTable = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings,
-                null, listenerConfiguration, true
-            );
-
-            this.state.customerTable.setTableListener(() => {
-                this.state.filterCount = this.state.customerTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, null, ['TicketStats']
-            );
-            const customer = await KIXObjectService.loadObjects(
-                KIXObjectType.CUSTOMER, this.state.contact.UserCustomerIDs, loadingOptions, null, false
-            );
-
-            this.state.customerTable.layerConfiguration.contentLayer.setPreloadedObjects(customer);
-            this.state.customerTable.loadRows();
-        }
-    }
-
-    private columnConfigurationChanged(column: TableColumn): void {
-        const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
-
-        if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-            ContextService.getInstance().saveWidgetConfiguration(
-                this.state.instanceId, this.state.widgetConfiguration
+            this.state.table = TableFactoryService.getInstance().createTable(
+                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings, this.state.contact.UserCustomerIDs,
+                null, true
             );
         }
-    }
-
-    public tableRowClicked(customer: Customer, columnId: string): void {
-        CustomerService.getInstance().openCustomer(customer.CustomerID, false);
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        this.state.customerTable.setFilterSettings(filterValue);
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 }
 

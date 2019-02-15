@@ -1,0 +1,15 @@
+<widget instanceId=state.instanceId title=state.title actions=state.actions icon=state.icon>
+    <@headerFilter>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle Tickets"
+            on-filter("filter")
+            key="table-widget-filter"/>
+    </@headerFilter>
+    <@content>
+        <if(state.table)>
+            <standard-table-NEW table=state.table key=state.table.getTableId()/>
+        </if>
+    </@content>
+</widget>

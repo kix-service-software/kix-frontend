@@ -58,7 +58,7 @@ export class TranslationService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.TRANSLATION) {
-            const translations = await this.getTranslations(token);
+            const translations = await this.getTranslations(token, loadingOptions);
             if (objectIds && objectIds.length) {
                 objects = translations.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
             } else {
@@ -178,13 +178,16 @@ export class TranslationService extends KIXObjectService {
         return typeof value !== 'undefined' && value !== null && value.trim() !== '';
     }
 
-    public async getTranslations(token: string): Promise<Translation[]> {
+    public async getTranslations(token: string, loadingOptions?: KIXObjectLoadingOptions): Promise<Translation[]> {
         if (!KIXObjectCache.hasObjectCache(KIXObjectType.TRANSLATION)) {
             const uri = this.buildUri(this.RESOURCE_URI);
 
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, null, [TranslationProperty.LANGUAGES]
-            );
+            if (!loadingOptions) {
+                loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, 'Translation.' + TranslationProperty.PATTERN,
+                    null, null, [TranslationProperty.LANGUAGES]
+                );
+            }
             const query = this.prepareQuery(loadingOptions);
 
             const response = await this.getObjectByUri<TranslationsResponse>(token, uri, query);

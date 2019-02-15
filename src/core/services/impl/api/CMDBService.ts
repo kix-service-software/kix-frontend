@@ -1,17 +1,15 @@
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    FilterCriteria, ConfigItemClassProperty, FilterType, FilterDataType,
-    ConfigItemProperty, ConfigItem, ConfigItemFactory, ImagesLoadingOptions,
-    ConfigItemImage, ConfigItemImageFactory, ConfigItemAttachment, CreateConfigItemVersionOptions, Error
+    KIXObjectSpecificCreateOptions, ConfigItemProperty, ConfigItem, ConfigItemFactory, ImagesLoadingOptions,
+    ConfigItemImage, ConfigItemImageFactory, ConfigItemAttachment, CreateConfigItemVersionOptions,
+    Error, FilterDataType, FilterType, FilterCriteria
 } from "../../../model";
 import {
-    ConfigItemClassesResponse, ConfigItemClassResponse, CreateConfigItem,
-    CreateConfigItemResponse, CreateConfigItemRequest, ConfigItemResponse,
+    CreateConfigItem, CreateConfigItemResponse, CreateConfigItemRequest, ConfigItemResponse,
     ConfigItemsResponse, ConfigItemImagesResponse, ConfigItemImageResponse,
     ConfigItemAttachmentResponse, ConfigItemAttachmentsResponse,
-    CreateConfigItemVersionResponse, CreateConfigItemVersionRequest, CreateConfigItemVersion
+    CreateConfigItemVersionResponse, CreateConfigItemVersionRequest, CreateConfigItemVersion, GeneralCatalogItem
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SearchOperator } from "../../../browser";
@@ -41,6 +39,21 @@ export class CMDBService extends KIXObjectService {
             || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION
             || kixObjectType === KIXObjectType.CONFIG_ITEM_IMAGE
             || kixObjectType === KIXObjectType.CONFIG_ITEM_ATTACHMENT;
+    }
+
+    public async getDeploymentStates(token: string): Promise<GeneralCatalogItem[]> {
+        const loadingOptions = new KIXObjectLoadingOptions(null, [
+            new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
+            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'postproductive')
+        ]);
+
+        const catalogItems = await this.loadObjects<GeneralCatalogItem>(
+            token, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
+        );
+
+        return catalogItems;
     }
 
     public async loadObjects<T>(

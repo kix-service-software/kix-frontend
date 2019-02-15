@@ -25,7 +25,7 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
         return object instanceof Customer;
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -74,6 +74,10 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(customer: Customer, property: string): Promise<string> {

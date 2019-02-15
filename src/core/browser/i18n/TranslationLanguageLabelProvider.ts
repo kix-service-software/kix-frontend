@@ -3,13 +3,13 @@ import { TranslationLanguage, KIXObjectType, ObjectIcon, TranslationLanguageProp
 
 export class TranslationLanguageLabelProvider implements ILabelProvider<TranslationLanguage> {
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION;
+    public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
     public isLabelProviderFor(language: TranslationLanguage): boolean {
         return language instanceof TranslationLanguage;
     }
 
-    public async getPropertyText(property: string, language?: TranslationLanguage, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TranslationLanguageProperty.LANGUAGE:
@@ -22,6 +22,10 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public getDisplayText(language: TranslationLanguage, property: string): Promise<string> {
@@ -75,7 +79,7 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
     public async getIcons(
         language: TranslationLanguage, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === 'ICON') {
+        if (property === TranslationLanguageProperty.TRANSLATION_ID) {
             return [new ObjectIcon('TranslationLanguage', language.ObjectId)];
         }
         return null;

@@ -1,78 +1,50 @@
-import { KIXObjectType, TranslationLanguage, TranslationLanguageProperty } from "../../../../../model";
+import { KIXObjectType, TranslationLanguageProperty } from "../../../../../model";
 import {
-    IStandardTableFactory, TableConfiguration, TableLayerConfiguration, TableListenerConfiguration,
-    StandardTable, TableColumnConfiguration, TableRowHeight, TableHeaderHeight
-} from "../../../../standard-table";
-import { IdService } from "../../../../IdService";
-import { TranslationLanguageTableContentLayer } from "./TranslationLanguageTableContentLayer";
-import { TranslationLanguageTableLabelLayer } from "./TranslationLanguageTableLabelLayer";
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+} from "../../../../table";
+import { TranslationLanguageTableContentProvider } from "./TranslationLanguageTableContentProvider";
 
-export class TranslationLanguageTableFactory implements IStandardTableFactory<TranslationLanguage> {
+export class TranslationLanguageTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean
-    ): StandardTable<TranslationLanguage> {
+        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration, defaultToggle);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
+        const table = new Table(tableConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('i18n-translation-language-table'),
-            tableConfiguration, layerConfiguration, listenerConfiguration
-        );
+        table.setContentProvider(new TranslationLanguageTableContentProvider(table, objectIds, null, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new TableColumnConfiguration(TranslationLanguageProperty.LANGUAGE, true, false, true, true, 150),
-            new TableColumnConfiguration(TranslationLanguageProperty.VALUE, true, false, true, true, 400)
+            new DefaultColumnConfiguration(
+                TranslationLanguageProperty.LANGUAGE, true, false, true, true, 150, true, true, true
+            ),
+            new DefaultColumnConfiguration(TranslationLanguageProperty.VALUE, true, false, true, true, 400, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration();
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.rowHeight = TableRowHeight.LARGE;
-            tableConfiguration.headerHeight = TableHeaderHeight.LARGE;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns, null, false, false, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.LARGE
+            );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.rowHeight = TableRowHeight.LARGE;
-            tableConfiguration.headerHeight = TableHeaderHeight.LARGE;
+        }
+
+        if (defaultRouting) {
+            //
         }
 
         return tableConfiguration;
-    }
-
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration, defaultToggle?: boolean
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer = new TranslationLanguageTableContentLayer([]);
-            const labelLayer = new TranslationLanguageTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
-        }
-
-        return layerConfiguration;
-    }
-
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
     }
 }

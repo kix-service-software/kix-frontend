@@ -12,7 +12,7 @@ export abstract class AbstractMarkoComponent<CS = any, I = any> implements IMark
         return;
     }
 
-    public onMount(): Promise<void> {
+    public async onMount(): Promise<void> {
         return;
     }
 

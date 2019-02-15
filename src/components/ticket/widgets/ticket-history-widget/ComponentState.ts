@@ -1,15 +1,11 @@
-import { StandardTable, TableConfiguration } from '../../../../core/browser';
-import { AbstractAction, TicketHistory, Ticket } from '../../../../core/model';
-import { WidgetComponentState } from '../../../../core/model/';
+import { ITable } from '../../../../core/browser';
+import { AbstractAction, WidgetComponentState } from '../../../../core/model';
 
-export class ComponentState extends WidgetComponentState<TableConfiguration> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public standardTable: StandardTable<TicketHistory> = null,
-        public filterValue: string = '',
+        public table: ITable = null,
         public actions: AbstractAction[] = [],
-        public ticket: Ticket = null,
-        public loading: boolean = true,
         public filterCount: number = null
     ) {
         super();

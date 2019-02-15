@@ -1,0 +1,20 @@
+<div.table-container
+    on-scroll("onScroll")
+    style=("height:" + state.tableHeight)
+    key=(state.table.getTableId() + "table-container")>
+    <if(state.table && !state.loading)>
+        <table.standard-table-NEW>
+            <thead>
+                <table-head-row table=state.table/>
+            </thead>
+            <table-body
+                rows=state.rows
+                columnLength=state.columns.length
+                tableConfig=state.table.getTableConfiguration()
+                key=(state.table.getTableId() + "table-body")/>
+        </table>
+    </if>
+    <else>
+        <loading-spinner/>
+    </else>
+</div>

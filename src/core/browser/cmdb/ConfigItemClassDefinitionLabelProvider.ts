@@ -13,7 +13,7 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return value;
     }
 
-    public async getPropertyText(property: string, object?: KIXObject, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemClassDefinitionProperty.VERSION:
@@ -32,6 +32,10 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(ciClassDefinition: ConfigItemClassDefinition, property: string): Promise<string> {

@@ -2,21 +2,18 @@ import { ComponentState } from "./ComponentState";
 import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import {
-    KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, TranslationLanguageProperty, KIXObject, Translation
+    KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, TranslationLanguageProperty, Translation
 } from "../../../../../core/model";
 import {
-    ContextService, ServiceRegistry, WidgetService, SearchOperator, ActionFactory, TableConfiguration,
-    TableHeaderHeight, TableRowHeight, StandardTableFactoryService
+    ContextService, ServiceRegistry, WidgetService, SearchOperator, ActionFactory,
+    TableFactoryService, AbstractMarkoComponent, TableEvent
 } from "../../../../../core/browser";
+import { IEventSubscriber, EventService } from "../../../../../core/browser/event";
 import { TranslationLabelProvider } from "../../../../../core/browser/i18n";
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    private predefinedFilter: KIXObjectPropertyFilter;
-    private textFilterValue: string;
-    private additionalFilterCriteria: TableFilterCriteria[] = [];
+    public tableSubscriber: IEventSubscriber;
 
     public labelProvider: TranslationLabelProvider;
 
@@ -30,23 +27,78 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.labelProvider = new TranslationLabelProvider();
-        this.additionalFilterCriteria = [];
         const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
             TranslationDetailsContext.CONTEXT_ID
         );
 
-        this.state.translation = await context.getObject<Translation>(KIXObjectType.TRANSLATION);
+        this.state.translation = context ? await context.getObject<Translation>(KIXObjectType.TRANSLATION) : null;
+
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
+        context.registerListener('translation-languages-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: async (ciClassId: string, translation: Translation, type: KIXObjectType) => {
+                if (type === KIXObjectType.TRANSLATION_LANGUAGE) {
+                    this.state.translation = translation;
+                }
+            }
+        });
+
         await this.prepareFilter();
+        this.prepareTable();
         this.prepareActions();
-        await this.prepareTable();
-        this.setTitle();
-        this.state.loading = false;
+        this.prepareTitle();
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+    }
+
+    private prepareTitle(): void {
+        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        const count = this.state.table ? this.state.table.getRows(true).length : 0;
+        this.state.title = `${title} (${count})`;
+    }
+
+    private prepareTable(): void {
+        const table = TableFactoryService.getInstance().createTable(
+            KIXObjectType.TRANSLATION_LANGUAGE, null, null, TranslationDetailsContext.CONTEXT_ID, true
+        );
+
+        WidgetService.getInstance().setActionData(this.state.instanceId, table);
+
+        this.tableSubscriber = {
+            eventSubscriberId: 'translation-admin-languages-table-listener',
+            eventPublished: (data: any, eventId: string) => {
+                if (data === table.getTableId()) {
+                    if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
+                        this.state.filterCount = this.state.table.isFiltered()
+                            ? this.state.table.getRows().length : null;
+                        this.prepareTitle();
+                    }
+
+                    WidgetService.getInstance().updateActions(this.state.instanceId);
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        this.state.table = table;
+    }
+
+    private prepareActions(): void {
+        if (this.state.widgetConfiguration) {
+            this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.widgetConfiguration.actions, null
+            );
+        }
+        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
     private async prepareFilter(): Promise<void> {
@@ -63,73 +115,12 @@ class Component {
         );
     }
 
-    private prepareActions(): void {
-        if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, null
-            );
-        }
-        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
-    }
-
-    private async prepareTable(): Promise<void> {
-        const tableConfiguration = new TableConfiguration(
-            null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-        );
-
-        const table = StandardTableFactoryService.getInstance().createStandardTable(
-            KIXObjectType.TRANSLATION_LANGUAGE, tableConfiguration, null, null, true
-        );
-
-        table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
-
-        WidgetService.getInstance().setActionData(this.state.instanceId, table);
-
-        if (this.state.translation) {
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.translation.Languages);
-        }
-
-        await table.loadRows();
-
-        this.state.table = table;
-
-        this.state.table.setTableListener(() => {
-            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
-            (this as any).setStateDirty('filterCount');
-        });
-
-        this.setTitle();
-    }
-
-    private setActionsDirty(): void {
-        WidgetService.getInstance().updateActions(this.state.instanceId);
-    }
-
-    private setTitle(): void {
-        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
-        if (this.state.table) {
-            const rows = this.state.table.getTableRows(true);
-            title = `${title} (${rows.length})`;
-        }
-        this.state.title = title;
-    }
-
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
         if (this.state.table) {
-            this.predefinedFilter = filter;
-            this.textFilterValue = textFilterValue;
-
-            const name = this.predefinedFilter ? this.predefinedFilter.name : null;
-            const predefinedCriteria = this.predefinedFilter ? this.predefinedFilter.criteria : [];
-            const newFilter = new KIXObjectPropertyFilter(
-                name, [...predefinedCriteria, ...this.additionalFilterCriteria]
-            );
-
-            this.state.table.setFilterSettings(textFilterValue, newFilter);
-
-            const context = ContextService.getInstance().getActiveContext();
-            const rows = this.state.table.getTableRows(true);
-            context.setFilteredObjectList(rows.map((r) => r.object));
+            if (this.state.table) {
+                this.state.table.setFilter(textFilterValue, filter ? filter.criteria : []);
+                this.state.table.filter();
+            }
         }
     }
 }

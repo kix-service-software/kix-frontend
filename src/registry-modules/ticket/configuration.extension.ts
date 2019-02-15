@@ -154,16 +154,20 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Übersicht Tickets', [
+                'table-widget', 'Übersicht Tickets', [
                     'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
-                ], new TableConfiguration(
-                    1000, 25, null, [new FilterCriteria(
-                        'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                    )],
-                    true, true,
-                    new ToggleOptions('ticket-article-details', 'article', [], true),
-                    null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                ),
+                ],
+                {
+                    objectType: KIXObjectType.TICKET,
+                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                        1000, 25, null, [new FilterCriteria(
+                            'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                        )],
+                        true, true,
+                        new ToggleOptions('ticket-article-details', 'article', [], true),
+                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                },
                 false, false, WidgetSize.LARGE, 'kix-icon-ticket', true, predefinedTicketFilter)
             );
 

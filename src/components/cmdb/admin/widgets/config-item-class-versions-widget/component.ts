@@ -1,14 +1,16 @@
 import {
-    AbstractMarkoComponent, ActionFactory, ContextService, StandardTableFactoryService
+    AbstractMarkoComponent, ActionFactory, ContextService, WidgetService, TableEvent, TableFactoryService
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     ConfigItemClass, KIXObjectType, SortUtil, ConfigItemClassDefinitionProperty, DataType, SortOrder
 } from '../../../../../core/model';
 import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
+import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    public tableSubscriber: IEventSubscriber;
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -21,12 +23,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
             ConfigItemClassDetailsContext.CONTEXT_ID
         );
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('config-item-class-versions-widget', {
-            sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
-            objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
             objectChanged: async (ciClassId: string, ciClass: ConfigItemClass, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM_CLASS) {
                     this.initWidget(ciClass);
@@ -34,38 +37,48 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         });
 
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
         await this.initWidget(await context.getObject<ConfigItemClass>());
     }
 
     private async initWidget(ciClass: ConfigItemClass): Promise<void> {
-        this.prepareTable(ciClass);
-        this.setActions(ciClass);
+        this.prepareActions(ciClass);
+        this.prepareTable();
     }
 
-    private async prepareTable(ciClass: ConfigItemClass): Promise<void> {
-        this.state.table = null;
-        if (ciClass && ciClass.Definitions) {
-            const table = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION
-            );
-
-            const definitions = SortUtil.sortObjects(
-                ciClass.Definitions, ConfigItemClassDefinitionProperty.CREATE_TIME, DataType.DATE, SortOrder.UP
-            );
-            table.layerConfiguration.contentLayer.setPreloadedObjects(definitions);
-            await table.loadRows();
-            this.state.table = table;
-        }
+    public onDestroy(): void {
+        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
     }
 
-    private setActions(ciClass: ConfigItemClass): void {
+    private async prepareTable(): Promise<void> {
+        const table = TableFactoryService.getInstance().createTable(
+            KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, ConfigItemClassDetailsContext.CONTEXT_ID, true
+        );
+
+        WidgetService.getInstance().setActionData(this.state.instanceId, table);
+
+        this.tableSubscriber = {
+            eventSubscriberId: 'config-item-admin-class-definitions-table-listener',
+            eventPublished: (data: any, eventId: string) => {
+                if (data === table.getTableId()) {
+                    WidgetService.getInstance().updateActions(this.state.instanceId);
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        this.state.table = table;
+    }
+
+    private prepareActions(ciClass: ConfigItemClass): void {
         if (this.state.widgetConfiguration && ciClass) {
             this.state.actions = ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [ciClass]
             );
         }
+        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
 }

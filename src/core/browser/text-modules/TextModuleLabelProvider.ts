@@ -12,7 +12,7 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return textModule instanceof TextModule;
     }
 
-    public async getPropertyText(property: string, textModule?: TextModule, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -52,6 +52,10 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public getDisplayText(textModule: TextModule, property: string): Promise<string> {

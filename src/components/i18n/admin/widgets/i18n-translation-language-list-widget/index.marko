@@ -1,20 +1,23 @@
-<widget instanceId=state.instanceId title=state.title actions=state.actions
+<widget
+    instanceId=state.instanceId
+    title=state.title
+    actions=state.actions
     icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")>
     <@headerFilter>
-        <filter filterCount=state.filterCount predefinedFilter=state.predefinedTableFilter
-            predefinedFilterPlaceholder="Alle Sprachen" on-filter('filter')/>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle Sprachen"
+            on-filter("filter")/>
     </@headerFilter>
     <@content>
-        <if(state.loading)>
-            <loading-spinner/>
-        </if>
-        <else>
+        <if(state.translation)>
             <div.translation-language-container>
-            <object-property-label object=state.translation property="Pattern" labelProvider=component.labelProvider/>
+                <object-property-label object=state.translation property="Pattern" labelProvider=component.labelProvider/>
                 <if(state.table)>
-                    <standard-table standardTable=state.table/>
+                    <standard-table-NEW table=state.table/>
                 </if>
             </div>
-        </else>
+        </if>
     </@content>
 </widget>

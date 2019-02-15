@@ -1,12 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, ServiceRegistry
+    ContextService, ActionFactory, SearchOperator, WidgetService, ServiceRegistry, TableFactoryService, TableEvent
 } from "../../../../core/browser";
 import {
-    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject, ConfigItemClass, ConfigItemProperty
+    KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject, ConfigItemProperty
 } from "../../../../core/model";
 import { CMDBContext, CMDBService } from "../../../../core/browser/cmdb";
+import { EventService } from "../../../../core/browser/event";
 
 class Component {
 
@@ -41,9 +41,18 @@ class Component {
 
         this.prepareFilter();
         this.prepareActions();
-        await this.prepareTable();
 
-        this.state.loading = false;
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, {
+            eventSubscriberId: 'customer-list-widget' + this.state.instanceId,
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
+                    this.prepareTitle();
+                    this.setActionsDirty();
+                }
+            }
+        });
+
+        await this.prepareTable();
     }
 
     public onDestroy(): void {
@@ -77,43 +86,24 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const tableConfiguration = new TableConfiguration(
-            null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-        );
-
         const table =
-            StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CONFIG_ITEM, tableConfiguration, null, null, true, true
+            TableFactoryService.getInstance().createTable(
+                KIXObjectType.CONFIG_ITEM, null, null, CMDBContext.CONTEXT_ID
             );
 
-        table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
-
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
-        table.layerConfiguration.contentLayer.setPreloadedObjects([]);
+
         this.state.table = table;
-
-        this.state.table.setTableListener(() => {
-            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
-            (this as any).setStateDirty('filterCount');
-        });
-
-        const context = ContextService.getInstance().getActiveContext();
-        if (this.state.widgetConfiguration.contextDependent && context) {
-            const objects = await context.getObjectList();
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-            this.setTitle(objects.length);
-            await this.state.table.loadRows();
-        }
     }
 
     private setActionsDirty(): void {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private setTitle(count: number = 0): void {
+    private prepareTitle(): void {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
         if (this.state.table) {
-            title = `${title} (${count})`;
+            title = `${title} (${this.state.table.getRows().length})`;
         }
         this.state.title = title;
     }
@@ -129,39 +119,21 @@ class Component {
                 name, [...predefinedCriteria, ...this.additionalFilterCriteria]
             );
 
-            await this.state.table.setFilterSettings(textFilterValue, newFilter);
+            await this.state.table.setFilter(textFilterValue, newFilter ? newFilter.criteria : null);
+            this.state.table.filter();
 
-            const context = ContextService.getInstance().getActiveContext();
-            const rows = this.state.table.getTableRows();
-            context.setFilteredObjectList(rows.map((r) => r.object));
+            const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
+            const rows = this.state.table.getRows();
+            context.setFilteredObjectList(rows.map((r) => r.getRowObject().getObject()));
         }
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
         if (this.state.table) {
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
-            this.setTitle(objectList.length);
-            await this.state.table.loadRows();
-
-            const context = ContextService.getInstance().getActiveContext();
+            this.prepareTitle();
+            const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
             context.setFilteredObjectList(objectList);
         }
-    }
-
-    private setConfigItemClassFilter(configItemClass: ConfigItemClass): void {
-        this.additionalFilterCriteria = [];
-
-        if (configItemClass) {
-            this.additionalFilterCriteria = [
-                new TableFilterCriteria(ConfigItemProperty.CLASS_ID, SearchOperator.EQUALS, configItemClass.ID)
-            ];
-        }
-
-        if (!this.predefinedFilter) {
-            this.predefinedFilter = new KIXObjectPropertyFilter('Config Item Klasse', []);
-        }
-
-        this.filter(this.textFilterValue, this.predefinedFilter);
     }
 
 }

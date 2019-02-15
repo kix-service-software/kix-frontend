@@ -1,0 +1,20 @@
+<tbody class={
+    "with-toggle": component.toggleEnabled
+}>
+    <if(state.rows && !!state.rows.length)>
+        <for(row in state.rows)>
+            <table-row
+                row=row
+                columnLength=component.getFullColumnLength()
+                height=component.getRowHeight()
+                selectionEnabled=component.selectionEnabled
+                toggleEnabled=component.toggleEnabled
+                level=0/>
+        </for>
+    </if>
+    <else>
+        <tr.empty-row style=("height: " + component.getRowHeight())>
+            <td colspan=component.getFullColumnLength()>${component.getEmptyString()}</td>
+        </tr>
+    </else>
+</tbody>
