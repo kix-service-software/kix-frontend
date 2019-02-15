@@ -8,7 +8,7 @@ import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
 import { ConfigItemClassAttributeUtil } from "./ConfigItemClassAttributeUtil";
 import { CMDBService } from "./CMDBService";
-import { TableColumn } from "../standard-table";
+import { IColumnConfiguration, DefaultColumnConfiguration } from "../table";
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -301,7 +301,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [];
     }
 
-    public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<TableColumn[]> {
+    public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
         const classParameter = searchParameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
         let attributes: AttributeDefinition[];
         if (classParameter) {
@@ -309,7 +309,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             attributes = await ConfigItemClassAttributeUtil.getInstance().getAttributeDefinitions(classIds);
         }
 
-        const columns = [];
+        const columns: IColumnConfiguration[] = [];
         for (const p of searchParameter) {
             switch (p[0]) {
                 case ConfigItemProperty.CLASS_ID:
@@ -317,9 +317,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.NAME:
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
-                    columns.push(new TableColumn(
-                        p[0], DataType.STRING, p[1], null, true, true, 100, true, false, true, true, null)
-                    );
+                    columns.push(new DefaultColumnConfiguration(
+                        p[0], false, true, false, true, 55, true, true, false, DataType.STRING, false
+                    ));
                     break;
                 default:
                     if (attributes) {
@@ -337,7 +337,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return columns;
     }
 
-    private getColumn(attribute: AttributeDefinition): TableColumn {
+    private getColumn(attribute: AttributeDefinition): IColumnConfiguration {
         let type = DataType.STRING;
         switch (attribute.Input.Type) {
             case 'Date':
@@ -350,8 +350,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 type = DataType.STRING;
         }
 
-        const column = new TableColumn(
-            attribute.Key, type, attribute.Name, null, true, true, 100, true, false, true, true, null
+        const column = new DefaultColumnConfiguration(
+            attribute.Key, true, false, true, false, 150, true, true, false, type
         );
 
         return column;

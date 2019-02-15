@@ -49,6 +49,18 @@
             "cwd": "${workspaceFolder}",
             "protocol": "inspector",
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Cucumber",
+            "program": "${workspaceFolder}/node_modules/cucumber/bin/cucumber-js",
+            "args": [
+                "dist/features/"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "npm: build-cucumber"
         }
     ]
 }

@@ -1,0 +1,14 @@
+<td.content-cell
+    class=state.stateClass
+    style=(typeof input.level === "number" ? `padding-left: ${input.level + 0.5}rem` : "")>
+    <link-target object=state.object routingConfiguration=state.routingConfiguration objectId=state.objectId>
+        <@content>
+            <if(state.showDefaultCell)>
+                <default-cell-content cell=state.cell/>
+            </if>
+            <else>
+                <${component.getCellTemplate()} cell=state.cell/>
+            </else>
+        </@content>
+    </link-target>
+</td>

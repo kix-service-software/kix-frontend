@@ -1,6 +1,6 @@
 import {
-    AbstractMarkoComponent, StandardTableFactoryService, LabelService, ServiceRegistry,
-    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService
+    AbstractMarkoComponent, LabelService, ServiceRegistry,
+    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -25,7 +25,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(CustomerService.getInstance());
         ServiceRegistry.registerServiceInstance(CustomerFormService.getInstance());
 
-        StandardTableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
+        TableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
         LabelService.getInstance().registerLabelProvider(new CustomerLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CUSTOMER, CustomerBrowserFactory.getInstance());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new CustomerSearchDefinition());

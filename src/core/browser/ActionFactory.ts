@@ -1,6 +1,5 @@
-import { AbstractAction, IAction, KIXObject } from "../model";
-import { ClientStorageService } from ".";
-import { StandardTable } from "./standard-table";
+import { AbstractAction } from "../model";
+
 
 export class ActionFactory<T extends AbstractAction> {
 

@@ -1,73 +1,63 @@
 <widget key=state.instanceId instanceId=state.instanceId title=component.getTitle() contentActions=state.actions>
     <@content>
         <div.assigned-tickets-container>
-            <widget key="customer-escalated-tickets-group" instanceId="customer-escalated-tickets-group"
+            <widget
+                key="customer-escalated-tickets-group"
+                instanceId="customer-escalated-tickets-group"
                 title=component.getEscalatedTicketsTitle()>
                 <@content>
-                    <if(state.escalatedTicketsTable && !state.loadEscalatedTickets)>
+                    <if(state.escalatedTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.escalatedFilterCount on-filter('filterEscalated')/>
+                            <filter filterCount=state.escalatedTicketsFilterCount on-filter("filterEscalated")/>
                         </div>
-                        <standard-table standardTable=state.escalatedTicketsTable/>
+                        <standard-table-NEW table=state.escalatedTicketsTable/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </@content>
             </widget>
-            <widget key="customer-reminder-tickets-group" instanceId="customer-reminder-tickets-group"
+            <widget
+                key="customer-reminder-tickets-group"
+                instanceId="customer-reminder-tickets-group"
                 title=component.getReminderTicketsTitle()>
                 <@content>
-                    <if(state.reminderTicketsTable && !state.loadReminderTickets)>
+                    <if(state.reminderTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.reminderFilterCount on-filter('filterReminder')/>
+                            <filter filterCount=state.reminderTicketsFilterCount on-filter("filterReminder")/>
                         </div>
-                        <standard-table standardTable=state.reminderTicketsTable/>
+                        <standard-table-NEW table=state.reminderTicketsTable/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </@content>
             </widget>
             <widget key="customer-new-tickets-group" instanceId="customer-new-tickets-group" title=component.getNewTicketsTitle()>
                 <@content>
-                    <if(state.newTicketsTable && !state.loadNewTickets)>
+                    <if(state.newTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.newFilterCount on-filter('filterNew')/>
+                            <filter filterCount=state.newTicketsFilterCount on-filter("filterNew")/>
                         </div>
-                        <standard-table standardTable=state.newTicketsTable/>
+                        <standard-table-NEW table=state.newTicketsTable/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </@content>
             </widget>
-            <widget key="customer-open-tickets-group" instanceId="customer-open-tickets-group"
-                title=component.getOpenTicketsTitle()>
+            <widget key="customer-open-tickets-group" instanceId="customer-open-tickets-group" title=component.getOpenTicketsTitle()>
                 <@content>
-                    <if(state.openTicketsTable && !state.loadOpenTickets)>
+                    <if(state.openTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.openFilterCount on-filter('filterOpen')/>
+                            <filter filterCount=state.openTicketsFilterCount on-filter("filterOpen")/>
                         </div>
-                        <standard-table standardTable=state.openTicketsTable/>
+                        <standard-table-NEW table=state.openTicketsTable/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </@content>
             </widget>
-            <widget key="customer-pending-tickets-group" instanceId="customer-pending-tickets-group"
+            <widget
+                key="customer-pending-tickets-group"
+                instanceId="customer-pending-tickets-group"
                 title=component.getPendingTicketsTitle()>
                 <@content>
-                    <if(state.pendingTicketsTable && !state.loadPendingTickets)>
+                    <if(state.pendingTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.pendingFilterCount on-filter('filterPending')/>
+                            <filter filterCount=state.pendingTicketsFilterCount on-filter("filterPending")/>
                         </div>
-                        <standard-table standardTable=state.pendingTicketsTable/>
+                        <standard-table-NEW table=state.pendingTicketsTable/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </@content>
             </widget>
         </div>

@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import {
-    AbstractMarkoComponent, ServiceRegistry, LabelService, StandardTableFactoryService, FactoryService,
+    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService,
     FormValidationService, ContextService, ActionFactory, DialogService, KIXObjectSearchService
 } from "../../../core/browser";
 import {
@@ -13,26 +13,18 @@ import {
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
-    TicketTypeBrowserFactory, TicketTypeDetailsContext, TicketTypeTableDeleteAction,
-    TicketPriorityImportAction, TicketPriorityTableDeleteAction, TicketPriorityDeleteAction,
-    TicketPriorityTableFactory, TicketPriorityLabelProvider, TicketPriorityBrowserFactory,
-    EditTicketTypeDialogContext, TicketTypeEditTextmodulesAction, TicketStateService,
-    TicketStateLabelProvider, TicketStateTypeLabelProvider,
+    TicketTypeBrowserFactory, TicketTypeDetailsContext, TicketTypeTableDeleteAction, TicketPriorityImportAction,
+    TicketPriorityTableDeleteAction, TicketPriorityDeleteAction, TicketPriorityTableFactory,
+    TicketPriorityLabelProvider, TicketPriorityBrowserFactory, EditTicketTypeDialogContext,
+    TicketTypeEditTextmodulesAction, TicketStateService, TicketStateLabelProvider, TicketStateTypeLabelProvider,
     TicketStateTableFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, TicketStateCreateAction,
     TicketStateTableDeleteAction, TicketStateImportAction, TicketStateDetailsContext, TicketStateEditTextmodulesAction,
-    TicketStateEditAction, TicketStateDuplicateAction, TicketStateDeleteAction,
-    TicketPriorityCreateAction, TicketTypeDuplicateAction,
-    TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService, TicketTypeService, TicketPriorityService,
-    TicketPriorityDetailsContext,
-    TicketPriorityEditAction,
-    TicketPriorityDuplicateAction,
-    NewTicketPriorityDialogContext,
-    NewTicketStateDialogContext,
-    EditTicketPriorityDialogContext,
-    TicketPriorityFormService,
-    EditTicketStateDialogContext,
-    TicketStateFormService,
-    TicketBulkManager
+    TicketStateEditAction, TicketStateDuplicateAction, TicketStateDeleteAction, TicketPriorityCreateAction,
+    TicketTypeDuplicateAction, TicketTypeEditAction, NewTicketTypeDialogContext, TicketTypeFormService,
+    TicketTypeService, TicketPriorityService, TicketPriorityDetailsContext, TicketPriorityEditAction,
+    TicketPriorityDuplicateAction, NewTicketPriorityDialogContext, NewTicketStateDialogContext,
+    EditTicketPriorityDialogContext, TicketPriorityFormService, EditTicketStateDialogContext,
+    TicketStateFormService, TicketBulkManager
 } from "../../../core/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -40,7 +32,9 @@ import {
     TicketPriorityCacheHandler
 } from "../../../core/model";
 import { BulkService } from "../../../core/browser/bulk";
+import { ArticleTableFactory } from "../../../core/browser/ticket/table/ArticleTableFactory";
 import { ChannelService } from "../../../core/browser/channel";
+import { TableFactoryService } from "../../../core/browser/table";
 
 class Component extends AbstractMarkoComponent {
 
@@ -75,11 +69,12 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
 
-        StandardTableFactoryService.getInstance().registerFactory(new TicketTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
 

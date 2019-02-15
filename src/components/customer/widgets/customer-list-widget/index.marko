@@ -1,10 +1,10 @@
 <widget instanceId=state.instanceId icon="kix-icon-man-house" title=state.title>
     <@headerFilter>
-        <filter filterCount=state.filterCount on-filter('filter')/>
+        <filter filterCount=state.filterCount on-filter("filter")/>
     </@headerFilter>
     <@content>
-        <if(state.standardTable)>
-            <standard-table standardTable=state.standardTable/>
+        <if(state.table)>
+            <standard-table-NEW table=state.table/>
         </if>
     </@content>
 </widget>

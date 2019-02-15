@@ -1,5 +1,5 @@
-import { WidgetConfiguration, ObjectIcon, KIXObject, IAction } from "../../../../core/model";
-import { StandardTable } from "../../../../core/browser";
+import { WidgetConfiguration, ObjectIcon, IAction } from "../../../../core/model";
+import { ITable } from "../../../../core/browser";
 
 export class ComponentState {
 
@@ -8,7 +8,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = null,
         public resultTitle: string = "Trefferliste:",
         public resultIcon: string | ObjectIcon = null,
-        public resultTable: StandardTable<KIXObject> = null,
+        public table: ITable = null,
         public noSearch: boolean = true,
         public actions: IAction[] = [],
         public loading: boolean = false,

@@ -1,27 +1,33 @@
 <div class=component.getWidgetClasses()>
-    <div.widget-header class={minimizable: state.minimizable} on-click('minimizeWidget', false)
-        on-mousedown('headerMousedown', false)>
+    <div.widget-header
+        class={
+                minimizable: state.minimizable
+            }
+        on-click("minimizeWidget", false)
+        on-mousedown("headerMousedown", false)>
         <span.header-left>
             <if(input.explorer)>
-                <span.kix-icon-triangle-left.as-button on-click('minimizeExplorer')>
+                <span.kix-icon-triangle-left.as-button on-click("minimizeExplorer")>
                     <span.path1/>
                     <span.path2/>
                 </span>
             </if>
             <if(input.title)>
-                <div.widget-title class={"with-icon": component.isInputDefined(input.icon)}>
+                <div.widget-title class={
+                    "with-icon": component.isInputDefined(input.icon)
+                }>
                     <if(component.isInputDefined(input.icon))>
-                        <icon icon=input.icon on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)/>
+                        <icon icon=input.icon on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)/>
                     </if>
-                    <h2 title=input.title on-click('minimizeWidget', true) on-mousedown('headerMousedown', true)>${input.title}</h2>
+                    <h2 title=input.title on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)>${input.title}</h2>
                 </div>
             </if>
             <if(component.hasHeaderContent(input.headerContent))>
-                <include(input.headerContent)/>
+                <${input.headerContent}/>
             </if>
             <if(component.hasHeaderContent(input.headerFilter))>
                 <div.widget-filter>
-                    <include(input.headerFilter)/>
+                    <${input.headerFilter}/>
                 </div>
             </if>
         </span>
@@ -30,10 +36,10 @@
             <if(state.minimizable)>
                 <span.minimize-icon-wrapper>
                     <if(state.minimized)>
-                        <span.kix-icon-sort-down.as-button on-click('minimizeWidget', true)/>
+                        <span.kix-icon-sort-down.as-button on-click("minimizeWidget", true)/>
                     </if>
                     <else>
-                        <span.kix-icon-triangle-up.as-button on-click('minimizeWidget', true)>
+                        <span.kix-icon-triangle-up.as-button on-click("minimizeWidget", true)>
                             <span.path1/>
                             <span.path2/>
                         </span>
@@ -42,7 +48,7 @@
             </if>
             <if(state.closable)>
                 <span.close-icon-wrapper>
-                    <span.kix-icon-close.as-button on-click('closeClicked')/>
+                    <span.kix-icon-close.as-button on-click("closeClicked")/>
                 </span>
             </if>
         </span>
@@ -67,7 +73,7 @@
         </if>
         <if(!state.minimized && component.isInputDefined(input.content))>
             <div.scroll-container body-only-if(!component.isSidebarWidget())>
-                <include(input.content)/>
+                <${input.content} key=state.instanceId/>
             </div>
         </if>
     </div>

@@ -1,6 +1,6 @@
-import { Context, WidgetType, WidgetConfiguration, ObjectIcon } from "../../../model";
+import { WidgetType, WidgetConfiguration, ObjectIcon } from "../../../model";
 import { SearchContextConfiguration } from "./SearchContextConfiguration";
-import { KIXObjectSearchService } from "../../kix";
+import { Context } from '../../../model/components/context/Context';
 
 export class SearchContext extends Context<SearchContextConfiguration> {
 

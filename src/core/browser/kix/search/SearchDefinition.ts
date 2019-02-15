@@ -4,8 +4,8 @@ import {
     FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType
 } from "../../../model";
 import { SearchResultCategory } from "./SearchResultCategory";
-import { TableColumn } from "../../standard-table";
 import { LabelService } from "../../LabelService";
+import { IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
 
 export abstract class SearchDefinition {
 
@@ -50,8 +50,8 @@ export abstract class SearchDefinition {
         return [new FilterCriteria(property, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, value)];
     }
 
-    public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<TableColumn[]> {
-        const columns = [];
+    public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
+        const columns: IColumnConfiguration[] = [];
         for (const p of searchParameter) {
             let text = p[1];
             if (!text) {
@@ -61,8 +61,8 @@ export abstract class SearchDefinition {
                 }
             }
 
-            columns.push(new TableColumn(
-                p[0], DataType.STRING, text, null, true, true, 100, true, false, true, true, null)
+            columns.push(new DefaultColumnConfiguration(
+                p[0], true, false, true, false, 150, true, true, false, DataType.STRING, true)
             );
         }
         return columns;

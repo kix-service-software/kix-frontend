@@ -1,6 +1,4 @@
 import { Server } from './Server';
-import { KIXExtensions, IConfigurationExtension } from './core/extensions';
-import { PluginService } from './services';
 import { CoreServiceRegistry, ConfigurationService } from './core/services';
 
 process.setMaxListeners(0);

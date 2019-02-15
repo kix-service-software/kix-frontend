@@ -1,61 +1,61 @@
-import {
-    IStandardTableFactory, TableConfiguration, TableLayerConfiguration,
-    TableListenerConfiguration, StandardTable, TableSortLayer, TableFilterLayer,
-    AbstractTableLayer, TableColumnConfiguration, TableHeaderHeight, TableRowHeight
-} from "../../standard-table";
-import { KIXObjectType, ContextMode, Customer, CustomerProperty, KIXObject } from "../../../model";
-import { IdService } from "../../IdService";
-import { ContextService } from "../../context";
-import { CustomerTableLabelLayer } from "./CustomerTableLabelLayer";
-import { CustomerTableContentLayer } from "./CustomerTableContentLayer";
+import { KIXObjectType, ContextMode, CustomerProperty, KIXObjectLoadingOptions } from "../../../model";
 import { CustomerDetailsContext } from "../context";
 import { RoutingConfiguration } from "../../router";
+import {
+    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration, TableHeaderHeight, TableRowHeight
+} from "../../table";
+import { CustomerTableContentProvider } from "./CustomerTableContentProvider";
 
-export class CustomerTableFactory implements IStandardTableFactory {
+export class CustomerTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean
-    ): StandardTable<Customer> {
+        tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
+        const table = new Table(tableConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('customer-table'),
-            tableConfiguration, layerConfiguration, listenerConfiguration
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            tableConfiguration.limit, [CustomerProperty.TICKET_STATS]
         );
+
+        table.setContentProvider(new CustomerTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new TableColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, true, 230),
-            new TableColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, true, 350
+            new DefaultColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, false, 230, true, true),
+            new DefaultColumnConfiguration(
+                CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, false, 350, true, true
             ),
-            new TableColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_COUNTRY, true, false, true, true, 150
+            new DefaultColumnConfiguration(
+                CustomerProperty.CUSTOMER_COMPANY_COUNTRY, true, false, true, false, 150, true, true
             ),
-            new TableColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_City, true, false, true, true, 150
+            new DefaultColumnConfiguration(
+                CustomerProperty.CUSTOMER_COMPANY_City, true, false, true, false, 150, true, true
             ),
-            new TableColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_STREET, true, false, true, true, 150
+            new DefaultColumnConfiguration(
+                CustomerProperty.CUSTOMER_COMPANY_STREET, true, false, true, false, 150, true, true
             ),
-            new TableColumnConfiguration(CustomerProperty.VALID_ID, true, false, true, true, 130),
+            new DefaultColumnConfiguration(CustomerProperty.VALID_ID, true, false, true, false, 150, true, true),
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                null, 5, tableColumns, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                KIXObjectType.CUSTOMER, null, 5, tableColumns, null, false, false, null, null,
+                TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
+            tableConfiguration.enableSelection = true;
+            tableConfiguration.toggle = false;
+            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -67,36 +67,8 @@ export class CustomerTableFactory implements IStandardTableFactory {
             );
         }
 
+        tableConfiguration.objectType = KIXObjectType.CUSTOMER;
         return tableConfiguration;
-    }
-
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new CustomerTableContentLayer(
-                [], tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
-            );
-            const labelLayer = new CustomerTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
-        }
-
-        return layerConfiguration;
-    }
-
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
     }
 
 }

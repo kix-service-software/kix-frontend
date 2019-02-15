@@ -1,20 +1,17 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <div.configitem-history-content>
-            <if(state.configItem)>
-                <div.history-filter>
-                    <filter filterCount=state.filterCount on-filter('filter')/>
-                </div>
-                <div.history-container>
-                    <if(state.standardTable)>
-                        <standard-table standardTable=state.standardTable/>
-                    </if>
-                </div>
-            </if>
-            <else>
-                <loading-spinner/>
-            </else>
+            <div.history-filter>
+                <filter filterCount=state.filterCount on-filter("filter")/>
+            </div>
+            <div.history-container>
+                <if(state.table)>
+                    <standard-table-NEW table=state.table/>
+                </if>
+            </div>
         </div>
     </@content>
 </widget>

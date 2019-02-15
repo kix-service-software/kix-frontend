@@ -1,8 +1,9 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, StandardTableFactoryService, IdService } from "../../../../core/browser";
-import { KIXObjectType, Context } from "../../../../core/model";
-import { FAQArticle } from "../../../../core/model/kix/faq";
-import { FAQDetailsContext } from "../../../../core/browser/faq";
+import { ContextService } from '../../../../core/browser/context';
+import { ComponentState } from './ComponentState';
+import { ActionFactory, TableFactoryService } from '../../../../core/browser';
+import { KIXObjectType } from '../../../../core/model';
+import { FAQArticle } from '../../../../core/model/kix/faq';
+import { FAQDetailsContext } from '../../../../core/browser/faq';
 
 class Component {
 
@@ -21,63 +22,47 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('faq-history-widget', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
                     this.initWidget(faqArticle);
                 }
-            },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
-            objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            }
         });
 
         await this.initWidget(await context.getObject<FAQArticle>());
 
     }
 
-    private async initWidget(faqArticle?: FAQArticle): Promise<void> {
-        this.state.loading = true;
-        this.state.faqArticle = faqArticle;
-
-        if (this.state.faqArticle) {
-            this.setActions();
-            this.prepareTable();
+    private async initWidget(faqArticle: FAQArticle): Promise<void> {
+        if (faqArticle) {
+            this.setActions(faqArticle);
+            await this.prepareTable();
         }
-
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 50);
     }
 
-    private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.faqArticle) {
+    private setActions(faqArticle: FAQArticle): void {
+        if (this.state.widgetConfiguration && faqArticle) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, [faqArticle]
             );
         }
     }
 
-    private prepareTable(): void {
-        const table = StandardTableFactoryService.getInstance().createStandardTable(KIXObjectType.FAQ_ARTICLE_HISTORY);
+    private async prepareTable(): Promise<void> {
+        const table = TableFactoryService.getInstance().createTable(
+            KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, FAQDetailsContext.CONTEXT_ID
+        );
 
-        if (table) {
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.faqArticle.History);
-            table.loadRows();
-
-            this.state.standardTable = table;
-            this.state.standardTable.setTableListener(() => {
-                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-        }
+        this.state.table = table;
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        if (this.state.standardTable) {
-            this.state.standardTable.setFilterSettings(filterValue);
-        }
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 
 }

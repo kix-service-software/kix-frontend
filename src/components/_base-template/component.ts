@@ -12,6 +12,7 @@ import { KIXModulesService } from '../../core/browser/modules';
 import { ObjectIconService } from '../../core/browser/icon';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
+import { ConfigItemClassService } from '../../core/browser/cmdb';
 
 declare var io: any;
 
@@ -52,7 +53,9 @@ class Component {
         await this.bootstrapServices();
 
         await ObjectIconService.getInstance().init();
-        await TranslationService.getInstance().init();
+        // FIXME: nur temporär auskommentiert
+        // await TranslationService.getInstance().init();
+        await ConfigItemClassService.getInstance().init();
 
         this.setContext();
 

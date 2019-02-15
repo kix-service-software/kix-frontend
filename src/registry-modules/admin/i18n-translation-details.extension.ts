@@ -1,10 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ContextConfiguration, ConfiguredWidget, WidgetSize, TranslationLanguageProperty,
+    WidgetConfiguration, ContextConfiguration, ConfiguredWidget, WidgetSize, TranslationLanguageProperty, KIXObjectType,
 } from '../../core/model/';
-import {
-    TableColumnConfiguration, TableConfiguration, TableHeaderHeight, TableRowHeight
-} from '../../core/browser';
+import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import {
     TranslationDetailsContextConfiguration, TranslationDetailsContext
 } from '../../core/browser/i18n/admin/context';
@@ -31,20 +29,7 @@ export class Extension implements IConfigurationExtension {
 
         const languagesListWidget =
             new ConfiguredWidget("20190125104012-languages-list", new WidgetConfiguration(
-                "i18n-translation-language-list-widget", "Übersetzungen", [],
-                {
-                    generalActions: [],
-                    tableConfiguration: new TableConfiguration(
-                        null, null, [
-                            new TableColumnConfiguration(
-                                TranslationLanguageProperty.LANGUAGE, true, false, false, true, 60, true, false
-                            ),
-                            new TableColumnConfiguration(
-                                TranslationLanguageProperty.VALUE, true, false, false, true, 60, true, false
-                            )
-                        ], null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
-                },
+                "i18n-translation-language-list-widget", "Übersetzungen", [], null,
                 false, true, WidgetSize.LARGE, null, false)
             );
 

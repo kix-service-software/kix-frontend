@@ -1,3 +1,2 @@
-export { ConfigItemClassDefinitionTableContentLayer } from './ConfigItemClassDefinitionTableContentLayer';
+export { ConfigItemClassDefinitionTableContentProvider } from './ConfigItemClassDefinitionTableContentProvider';
 export { ConfigItemClassDefinitionTableFactory } from './ConfigItemClassDefinitionTableFactory';
-export { ConfigItemClassDefinitionTableLabelLayer } from './ConfigItemClassDefinitionTableLabelLayer';

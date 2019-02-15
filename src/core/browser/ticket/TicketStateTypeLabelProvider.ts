@@ -10,15 +10,13 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return ticketStateType instanceof TicketStateType;
     }
 
-    public async getPropertyText(
-        property: string, ticketStateType?: TicketStateType, short?: boolean
-    ): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TicketStateProperty.NAME:
                 displayValue = 'Name';
                 break;
-            case 'ICON':
+            case TicketStateProperty.ID:
                 displayValue = 'Icon';
                 break;
             default:
@@ -27,11 +25,15 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return displayValue;
     }
 
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
+    }
+
     public getDisplayText(ticketStateType: TicketStateType, property: string): Promise<string> {
         let displayValue = ticketStateType[property];
 
         switch (property) {
-            case 'ICON':
+            case TicketStateProperty.ID:
                 displayValue = ticketStateType.Name;
                 break;
             default:
@@ -74,7 +76,7 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
     public async getIcons(
         ticketStateType: TicketStateType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === 'ICON') {
+        if (property === TicketStateProperty.ID) {
             return [new ObjectIcon('StateTypes', ticketStateType.ID)];
         }
         return null;

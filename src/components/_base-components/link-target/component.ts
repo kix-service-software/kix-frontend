@@ -43,7 +43,7 @@ class Component {
         }
         if (!externalLink) {
             if (event.preventDefault) {
-                event.preventDefault(event);
+                event.preventDefault();
             }
             RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
         }

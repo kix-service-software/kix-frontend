@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, DialogService, ActionFactory, KIXObjectSearchService,
-    LabelService, StandardTableFactoryService, FactoryService, ServiceRegistry
+    LabelService, FactoryService, ServiceRegistry, TableFactoryService
 } from '../../../core/browser';
 import { BulkAction } from '../../../core/browser/actions';
 import { ComponentState } from './ComponentState';
@@ -19,7 +19,11 @@ import {
     ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext,
     ConfigItemClassService,
     EditConfigItemClassDialogContext,
-    ConfigItemClassFormService
+    ConfigItemClassFormService,
+    ConfigItemHistoryTableFactory,
+    CompareConfigItemVersionDialogContext,
+    CompareConfigItemVersionTableFactory,
+    ConfigItemVersionCompareLabelProvider
 } from '../../../core/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -46,16 +50,19 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.CONFIG_ITEM_IMAGE, ConfigItemImageBrowserFactory.getInstance()
         );
 
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new CompareConfigItemVersionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new ConfigItemLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemVersionCompareLabelProvider());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
 
@@ -97,6 +104,13 @@ class Component extends AbstractMarkoComponent {
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
+
+        const compareConfigItemContext = new ContextDescriptor(
+            CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
+            ContextType.DIALOG, ContextMode.EDIT,
+            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext
+        );
+        ContextService.getInstance().registerContext(compareConfigItemContext);
     }
 
     private registerAdminContexts(): void {
@@ -149,6 +163,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.SEARCH
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'compare-config-item-version-dialog',
+            new WidgetConfiguration(
+                'compare-config-item-version-dialog', 'Versionen vergleichen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-comparison-version'
+            ),
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
+            ContextMode.EDIT
         ));
     }
 

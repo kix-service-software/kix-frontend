@@ -55,6 +55,12 @@ export class BrowserUtil {
         return 0;
     }
 
+    public static getBrowserFontsize(): number {
+        const browserFontSizeSetting = getComputedStyle(document.getElementsByTagName("body")[0])
+            .getPropertyValue("font-size");
+        return Number(browserFontSizeSetting.replace('px', ''));
+    }
+
     private static round(value: number, step: number = 0.5): number {
         const inv = 1.0 / step;
         return Math.round(value * inv) / inv;

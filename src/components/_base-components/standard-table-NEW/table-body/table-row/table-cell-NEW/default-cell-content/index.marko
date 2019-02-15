@@ -1,0 +1,21 @@
+<div.table-cell-content
+    class={
+        "with-icons": component.showIcons
+    }
+    style={
+        height: input.height
+    }
+    title=state.displayText>
+    <if(!state.loading)>
+        <if(component.showIcons)>
+            <span>
+                <for(icon in state.icons)>
+                    <icon icon=icon showUnknown=true/>
+                </for>
+            </span>
+        </if>
+        <if(component.showText)>
+            <span.text>${state.displayText}</span>
+        </if>
+    </if>
+</div>

@@ -1,10 +1,13 @@
 import { WidgetType, KIXObject } from '../../../../core/model';
 import {
-    WidgetService, DialogService, StandardTableFactoryService, TableHeaderHeight,
-    TableRowHeight, LabelService, TableConfiguration, BrowserUtil, TableHighlightLayer,
-    ITableHighlightLayer, KIXObjectService, PropertyOperator
+    WidgetService, DialogService, TableHeaderHeight,
+    TableRowHeight, LabelService, TableConfiguration, BrowserUtil,
+    KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
+import { IEventSubscriber, EventService } from '../../../../core/browser/event';
+import { BulkDialogContext } from '../../../../core/browser/bulk';
+import { finished } from 'stream';
 
 class Component {
 
@@ -12,8 +15,7 @@ class Component {
 
     private cancelBulkProcess: boolean = false;
 
-    private successHighlightLayer: ITableHighlightLayer;
-    private errorHighlightLayer: ITableHighlightLayer;
+    private tableSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -26,6 +28,10 @@ class Component {
             this.state.canRun = this.state.bulkManager.hasDefinedValues();
         });
         this.createTable();
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
     }
 
     public async reset(): Promise<void> {
@@ -52,42 +58,40 @@ class Component {
             if (this.state.bulkManager.objects) {
 
                 const configuration = new TableConfiguration(
-                    null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    null, null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
-                const table = StandardTableFactoryService.getInstance().createStandardTable(
-                    this.state.bulkManager.objectType, configuration, null, null, true, null, true
+                const table = TableFactoryService.getInstance().createTable(
+                    this.state.bulkManager.objectType, configuration, null, BulkDialogContext.CONTEXT_ID,
+                    true, null, true
                 );
 
-                table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.bulkManager.objects);
+                this.prepareTitle();
 
-                this.successHighlightLayer = new TableHighlightLayer();
-                table.addAdditionalLayerOnTop(this.successHighlightLayer);
+                this.tableSubscriber = {
+                    eventSubscriberId: 'bulk-table-listener',
+                    eventPublished: (data: any, eventId: string) => {
+                        if (data === table.getTableId()) {
+                            if (eventId === TableEvent.TABLE_INITIALIZED) {
+                                table.selectAll();
+                            }
+                            const rows = this.state.table.getSelectedRows();
+                            const objects = rows.map((r) => r.getRowObject().getObject());
+                            this.state.bulkManager.objects = objects;
+                            this.prepareTitle();
+                        }
+                    }
+                };
 
-                this.errorHighlightLayer = new TableHighlightLayer('error');
-                table.addAdditionalLayerOnTop(this.errorHighlightLayer);
-
-                this.successHighlightLayer = new TableHighlightLayer();
-                table.addAdditionalLayerOnTop(this.successHighlightLayer);
-
-                this.setTitle();
-                await table.loadRows();
-
-                table.listenerConfiguration.selectionListener.selectAll(
-                    table.getTableRows(true)
-                );
-
-                table.listenerConfiguration.selectionListener.addListener((objects: KIXObject[]) => {
-                    this.state.bulkManager.objects = objects;
-                    this.setTitle();
-                });
+                EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
 
                 this.state.table = table;
             }
         }
     }
 
-    private setTitle(): void {
+    private prepareTitle(): void {
         const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         const objectCount = this.state.bulkManager.objects.length;
         this.state.tableTitle = `Ausgewählte ${objectName} (${objectCount})`;
@@ -109,8 +113,6 @@ class Component {
 
     private async runBulkManager(): Promise<void> {
         this.state.run = true;
-        this.successHighlightLayer.setHighlightedObjects([]);
-        this.errorHighlightLayer.setHighlightedObjects([]);
 
         const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         const objects = this.state.bulkManager.objects;
@@ -130,7 +132,7 @@ class Component {
             await this.state.bulkManager.execute(object)
                 .then(() => {
                     finishedObjects.push(object);
-                    this.state.table.listenerConfiguration.selectionListener.objectSelectionChanged(object, false);
+                    this.state.table.selectRowByObject(object, false);
                 })
                 .catch(async (error) => {
                     errorObjects.push(object);
@@ -149,21 +151,29 @@ class Component {
             this.setLoadingInformation(objectTimes, start, end, finishedObjects.length, objects.length);
         }
 
-        const finishedIds = finishedObjects.map((o) => o.ObjectId);
-        const newObjects = await KIXObjectService.loadObjects(
-            this.state.bulkManager.objectType, finishedIds, null, null, false
-        );
-
-        this.state.table.layerConfiguration.contentLayer.replaceObjects(newObjects);
-        this.successHighlightLayer.setHighlightedObjects(newObjects);
-        this.errorHighlightLayer.setHighlightedObjects(errorObjects);
-        await this.state.table.loadRows();
+        await this.updateTable(errorObjects);
 
         if (!errorObjects.length) {
             BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert');
         }
 
+        this.state.table.setRowObjectValueState(errorObjects, ValueState.HIGHLIGHT_ERROR);
+        this.state.table.setRowObjectValueState(finishedObjects, ValueState.HIGHLIGHT_SUCCESS);
+
         DialogService.getInstance().setMainDialogLoading(false);
+    }
+
+    private async updateTable(errorObjects: KIXObject[]): Promise<void> {
+        const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
+        const oldObjects = await context.getObjectList();
+        const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
+
+        const newObjects = await KIXObjectService.loadObjects(
+            this.state.bulkManager.objectType, idsToLoad, null, null, false
+        );
+        context.setObjectList(newObjects);
+
+        errorObjects.forEach((o) => this.state.table.selectRowByObject(o));
     }
 
     private setLoadingInformation(

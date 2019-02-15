@@ -1,24 +1,21 @@
 import {
-    AbstractMarkoComponent, StandardTableFactoryService, WidgetService, ActionFactory,
-    TableConfiguration, KIXObjectService, LabelService, ContextService, ServiceRegistry, SearchOperator
+    AbstractMarkoComponent, WidgetService, ActionFactory,
+    LabelService, ContextService, ServiceRegistry, SearchOperator, TableEvent, TableFactoryService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, KIXObjectPropertyFilter, Translation, SortUtil, TranslationProperty,
-    DataType, SortOrder, TableFilterCriteria, KIXObjectCache
+    KIXObjectType, KIXObjectPropertyFilter, TranslationProperty, TableFilterCriteria, KIXObjectCache
 } from '../../../../core/model';
 import { AdminContext } from '../../../../core/browser/admin';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
-import { RouterOutletComponent } from '../../../_base-components/router-outlet/component';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string;
+    private tableSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.eventSubscriberId = 'i18n-admin-translation';
     }
 
     public async onMount(): Promise<void> {
@@ -46,55 +43,60 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         this.prepareActions();
 
-        await this.setTranslations();
+        await this.prepareTitle();
+        await this.prepareTable();
 
         KIXObjectCache.registerCacheListener({
             cacheCleared: async (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.TRANSLATION) {
-                    await this.setTranslations();
+                    this.state.table.reload();
                 }
             },
             objectAdded: () => { return; },
             objectRemoved: () => { return; }
         });
-
-        EventService.getInstance().subscribe('TRANSLATION_LIST_UPDATED', this);
-    }
-
-    private async setTranslations(): Promise<void> {
-        const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-        await this.prepareTitle(translations.length);
-        await this.prepareTable(translations);
-    }
-
-    private async prepareTitle(count: number): Promise<void> {
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TRANSLATION);
-        const objectName = labelProvider.getObjectName(true);
-        this.state.title = `${context.categoryName}: ${objectName} (${count})`;
-    }
-
-    private async prepareTable(translations: Translation[]): Promise<void> {
-        const tableConfiguration = new TableConfiguration(null, null, null, null, true);
-        const table = StandardTableFactoryService.getInstance().createStandardTable(
-            KIXObjectType.TRANSLATION, tableConfiguration, null, null, true
-        );
-
-        translations = SortUtil.sortObjects(
-            translations, TranslationProperty.PATTERN, DataType.STRING, SortOrder.DOWN
-        );
-
-        table.layerConfiguration.contentLayer.setPreloadedObjects(translations);
-        table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
-
-        WidgetService.getInstance().setActionData(this.state.instanceId, table);
-        await table.loadRows();
-        this.state.table = table;
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        EventService.getInstance().unsubscribe('TRANSLATION_LIST_UPDATED', this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+    }
+
+    private async prepareTitle(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TRANSLATION);
+        const objectName = labelProvider.getObjectName(true);
+        const count = this.state.table ? this.state.table.getRows(true).length : 0;
+        this.state.title = `${context.categoryName}: ${objectName} (${count})`;
+    }
+
+    private async prepareTable(): Promise<void> {
+        const table = TableFactoryService.getInstance().createTable(
+            KIXObjectType.TRANSLATION, null, null, null, true
+        );
+
+        WidgetService.getInstance().setActionData(this.state.instanceId, table);
+
+        this.tableSubscriber = {
+            eventSubscriberId: 'i18n-admin-translations-table-listener',
+            eventPublished: (data: any, eventId: string) => {
+                if (data === table.getTableId()) {
+                    if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
+                        this.state.filterCount = this.state.table.getRows().length;
+                        this.prepareTitle();
+                    }
+
+                    WidgetService.getInstance().updateActions(this.state.instanceId);
+                }
+            }
+        };
+
+        this.state.table = table;
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
     }
 
     private prepareActions(): void {
@@ -109,29 +111,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }
 
-    private setActionsDirty(): void {
-        WidgetService.getInstance().updateActions(this.state.instanceId);
-    }
-
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
         if (this.state.table) {
-            await this.state.table.setFilterSettings(textFilterValue, filter);
-            this.state.filterCount = this.state.table.getTableRows(true).length;
-            (this as any).setStateDirty('filterCount');
+            this.state.table.setFilter(textFilterValue, filter ? filter.criteria : []);
+            this.state.table.filter();
         }
     }
 
-    public async eventPublished(data: any, eventId: string): Promise<void> {
-        if (eventId === 'TRANSLATION_LIST_UPDATED') {
-            const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-            await this.prepareTitle(translations.length);
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(translations);
-            await this.state.table.loadRows();
-            this.state.table.listenerConfiguration.selectionListener.updateSelections(
-                this.state.table.getTableRows(true)
-            );
-        }
-    }
 }
 
 module.exports = Component;

@@ -1,15 +1,9 @@
 import { ContextService } from '../../../../core/browser/context';
-import {
-    ConfigItemHistoryTableLabelLayer, ConfigItemHistoryTableContentLayer
-} from '../../../../core/browser/cmdb';
 import { ComponentState } from './ComponentState';
-import {
-    StandardTable, ITableConfigurationListener, TableColumn,
-    ActionFactory, TableLayerConfiguration, TableListenerConfiguration, ITableClickListener,
-} from '../../../../core/browser';
-import { KIXObjectType, ConfigItem, ConfigItemHistory } from '../../../../core/model';
-import { IdService } from '../../../../core/browser/IdService';
-import { EventService } from '../../../../core/browser/event';
+import { ActionFactory, TableFactoryService } from '../../../../core/browser';
+import { KIXObjectType, ConfigItem } from '../../../../core/model';
+import { ConfigItemDetailsContext } from '../../../../core/browser/cmdb';
+
 
 class Component {
 
@@ -21,12 +15,12 @@ class Component {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.state.configItemId = Number(input.configItemId);
-        this.setHistoryTableConfiguration();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
+            ConfigItemDetailsContext.CONTEXT_ID
+        );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('config-item-history-widget', {
@@ -45,67 +39,39 @@ class Component {
     }
 
     private async initWidget(configItem: ConfigItem): Promise<void> {
-        this.state.configItem = configItem;
-        this.setActions();
-        this.setHistoryTableConfiguration();
+        if (configItem) {
+            this.setActions(configItem);
+            await this.prepareTable();
+        }
     }
 
-    private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.configItem) {
+    private setActions(configItem: ConfigItem): void {
+        if (this.state.widgetConfiguration && configItem) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.configItem]
+                this.state.widgetConfiguration.actions, [configItem]
             );
         }
     }
 
-    private setHistoryTableConfiguration(): void {
-        if (this.state.widgetConfiguration) {
-            const contentLayer = new ConfigItemHistoryTableContentLayer(this.state.configItem);
-            const labelLayer = new ConfigItemHistoryTableLabelLayer();
-            const layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
+    private async prepareTable(): Promise<void> {
+        const table = TableFactoryService.getInstance().createTable(
+            KIXObjectType.CONFIG_ITEM_HISTORY, null, null, ConfigItemDetailsContext.CONTEXT_ID
+        );
 
-            const configurationListener: ITableConfigurationListener = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
-
-            const clickListener: ITableClickListener = {
-                rowClicked: this.navigateToVersion.bind(this)
-            };
-
-            const listenerConfiguration = new TableListenerConfiguration(clickListener, null, configurationListener);
-
-            this.state.standardTable = new StandardTable(
-                IdService.generateDateBasedId(),
-                this.state.widgetConfiguration.settings, layerConfiguration, listenerConfiguration
-            );
-            this.state.standardTable.setTableListener(() => {
-                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-        }
-    }
-
-    private navigateToVersion(historyEntry: ConfigItemHistory, columnId: string): void {
-        if (columnId === 'Content' && historyEntry.VersionID) {
-            EventService.getInstance().publish('GotToConfigItemVersion', historyEntry.VersionID);
-        }
-    }
-
-    private columnConfigurationChanged(column: TableColumn): void {
-        const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
-
-        if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-        }
-
-        ContextService.getInstance().saveWidgetConfiguration(this.state.instanceId, this.state.widgetConfiguration);
+        this.state.table = table;
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        this.state.standardTable.setFilterSettings(filterValue);
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
+
+    // private navigateToVersion(historyEntry: ConfigItemHistory, columnId: string): void {
+    //     if (columnId === 'Content' && historyEntry.VersionID) {
+    //         EventService.getInstance().publish('GotToConfigItemVersion', historyEntry.VersionID);
+    //     }
+    // }
+
 }
 
 module.exports = Component;

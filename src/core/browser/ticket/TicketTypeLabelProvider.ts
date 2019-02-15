@@ -11,7 +11,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
         return ticketType instanceof TicketType;
     }
 
-    public async getPropertyText(property: string, ticketType?: TicketType, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -38,13 +38,17 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
             case TicketTypeProperty.VALID_ID:
                 displayValue = 'Gültigkeit';
                 break;
-            case 'ICON':
+            case TicketTypeProperty.ID:
                 displayValue = 'Icon';
                 break;
             default:
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public getDisplayText(ticketType: TicketType, property: string): Promise<string> {
@@ -70,7 +74,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
                     displayValue = valid.Name;
                 }
                 break;
-            case 'ICON':
+            case TicketTypeProperty.ID:
                 displayValue = ticketType.Name;
                 break;
             default:
@@ -79,7 +83,29 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     }
 
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
+        let displayValue = value;
+        const objectData = ContextService.getInstance().getObjectData();
+        switch (property) {
+            case TicketTypeProperty.VALID_ID:
+                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                if (valid) {
+                    displayValue = valid.Name;
+                }
+                break;
+            case TicketTypeProperty.CREATE_BY:
+            case TicketTypeProperty.CHANGE_BY:
+                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
+                if (user) {
+                    displayValue = user.UserFullname;
+                }
+                break;
+            case TicketTypeProperty.CREATE_TIME:
+            case TicketTypeProperty.CHANGE_TIME:
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
+        }
+        return displayValue.toString();
     }
 
     public getDisplayTextClasses(ticketType: TicketType, property: string): string[] {
@@ -113,7 +139,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     public async getIcons(
         ticketType: TicketType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === 'ICON') {
+        if (property === TicketTypeProperty.ID) {
             return [new ObjectIcon('TicketType', ticketType.ID)];
         }
         return null;

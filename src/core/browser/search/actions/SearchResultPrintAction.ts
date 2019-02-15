@@ -1,4 +1,4 @@
-import { AbstractAction } from '../../../model/components/action/AbstractAction';
+import { AbstractAction } from "../../../model";
 
 export class SearchResultPrintAction extends AbstractAction {
 

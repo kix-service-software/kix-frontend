@@ -1,5 +1,4 @@
 export { TranslationTableFactory } from './TranslationTableFactory';
-export { TranslationTableContentLayer } from './TranslationTableContentLayer';
-export { TranslationTableLabelLayer } from './TranslationTableLabelLayer';
-export { TranslationLanguageTableContentLayer } from './TranslationLanguageTableContentLayer';
+export { TranslationTableContentProvider } from './TranslationTableContentProvider';
+export { TranslationLanguageTableContentProvider } from './TranslationLanguageTableContentProvider';
 export { TranslationLanguageTableFactory } from './TranslationLanguageTableFactory';

@@ -10,7 +10,7 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
         return value.toString();
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let text = property;
         switch (property) {
             case TicketHistoryProperty.HISTORY_TYPE:
@@ -32,6 +32,10 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
                 text = property;
         }
         return text;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(historyEntry: TicketHistory, property: string): Promise<string> {

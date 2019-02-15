@@ -14,11 +14,11 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane key=component.getLaneKey()>
-                            <include(component.getWidgetTemplate(lane.instanceId), { 
-                                contextType: "MAIN", 
-                                instanceId: lane.instanceId, 
+                            <${component.getWidgetTemplate(lane.instanceId)} ...{
+                                contextType: "MAIN",
+                                instanceId: lane.instanceId,
                                 type: component.getLaneWidgetType()
-                                })/>
+                            }/>
                         </li>
                     </for>
                 </ul>
@@ -26,10 +26,10 @@
         </widget>
         <div.ticket-content key="ticket-content">
             <for(contentWidget in state.contentWidgets)>
-                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget.instanceId
-                    })/>
+                }/>
             </for>
         </div>
     </div>

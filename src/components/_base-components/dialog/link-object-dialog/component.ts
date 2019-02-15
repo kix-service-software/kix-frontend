@@ -1,28 +1,27 @@
 import {
-    KIXObjectSearchService, DialogService, WidgetService, StandardTableFactoryService,
-    TableConfiguration, TableRowHeight, TableHeaderHeight, TablePreventSelectionLayer, TableHighlightLayer,
-    TableColumn, ObjectLinkDescriptionLabelLayer, StandardTable, ITableHighlightLayer,
-    ITablePreventSelectionLayer, KIXObjectService, SearchOperator, BrowserUtil
+    KIXObjectSearchService, DialogService, WidgetService, TableConfiguration, TableRowHeight,
+    TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
+    TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState
 } from "../../../../core/browser";
 import { FormService } from "../../../../core/browser/form";
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    TreeNode, DataType, LinkType, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType
+    TreeNode, LinkType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, DataType
 } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { LinkUtil } from "../../../../core/browser/link";
+import { LinkUtil, LinkObjectDialogContext } from "../../../../core/browser/link";
+import { EventService, IEventSubscriber } from "../../../../core/browser/event";
 
 class LinkDialogComponent {
 
     private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
-    private objectLinkLayer: ObjectLinkDescriptionLabelLayer;
-    private highlightLayer: ITableHighlightLayer;
-    private preventSelectionLayer: ITablePreventSelectionLayer;
     private resultListenerId: string;
     private linkPartners: Array<[string, KIXObjectType]> = [];
     private rootObject: KIXObject = null;
+    public selectedObjects: KIXObject[] = [];
+
+    private tableSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -42,19 +41,23 @@ class LinkDialogComponent {
     }
 
     public async onMount(): Promise<void> {
+        this.selectedObjects = [];
         await this.setLinkableObjects();
         await this.setDefaultLinkableObject();
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
+
+        const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
+            LinkObjectDialogContext.CONTEXT_ID
+        );
+        context.setObjectList([]);
+
         this.setLinkTypes();
         if (this.state.currentLinkableObjectNode) {
-            this.prepareResultTable([]);
-            if (this.state.standardTable) {
-                this.highlightLayer.setHighlightedObjects([]);
-            }
+            this.prepareResultTable();
         }
 
-        this.setCanSubmit();
+        this.setSubmitState();
     }
 
     private async setLinkableObjects(): Promise<void> {
@@ -98,18 +101,23 @@ class LinkDialogComponent {
         DialogService.getInstance().setOverlayDialogLoading(true);
 
         this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
-        this.state.selectedObjects = [];
+        this.selectedObjects = [];
         this.state.resultCount = 0;
 
         this.state.formId = null;
+
+        const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
+            LinkObjectDialogContext.CONTEXT_ID
+        );
+        context.setObjectList([]);
 
         let formId;
         if (this.state.currentLinkableObjectNode) {
             formId = this.state.currentLinkableObjectNode.id.toString();
             await FormService.getInstance().getFormInstance(formId, false);
-            await this.prepareResultTable([]);
+            await this.prepareResultTable();
         } else {
-            this.state.standardTable = null;
+            this.state.table = null;
             formId = null;
             this.state.resultCount = 0;
         }
@@ -120,7 +128,7 @@ class LinkDialogComponent {
 
         setTimeout(() => {
             this.state.formId = formId;
-            this.setCanSubmit();
+            this.setSubmitState();
             DialogService.getInstance().setOverlayDialogLoading(false);
         }, 50);
     }
@@ -135,16 +143,20 @@ class LinkDialogComponent {
                     ? [this.rootObject] : null
             );
 
-            await this.prepareResultTable(objects);
+            const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
+                LinkObjectDialogContext.CONTEXT_ID
+            );
+            context.setObjectList(objects);
+            await this.prepareResultTable();
             this.state.resultCount = objects.length;
-            this.setCanSubmit();
+            this.setSubmitState();
         }
 
         DialogService.getInstance().setOverlayDialogLoading(false);
     }
 
-    private async prepareResultTable(objects: KIXObject[]): Promise<void> {
-        this.state.standardTable = null;
+    private async prepareResultTable(): Promise<void> {
+        this.state.table = null;
 
         if (this.state.currentLinkableObjectNode) {
             const formInstance = await FormService.getInstance().getFormInstance(
@@ -154,67 +166,59 @@ class LinkDialogComponent {
             const objectType = formInstance.getObjectType();
 
             const tableConfiguration = new TableConfiguration(
-                null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                objectType, null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
-            const table = StandardTableFactoryService.getInstance().createStandardTable(
-                objectType, tableConfiguration, null, null, true, null, true
+            const table = TableFactoryService.getInstance().createTable(
+                objectType, tableConfiguration, null, LinkObjectDialogContext.CONTEXT_ID, null, null, true
             );
 
-            if (table) {
-                table.listenerConfiguration.selectionListener.addListener(
-                    this.objectSelectionChanged.bind(this)
-                );
+            this.state.table = table;
 
-                this.highlightLayer = new TableHighlightLayer();
-                table.addAdditionalLayerOnTop(this.highlightLayer);
-                this.preventSelectionLayer = new TablePreventSelectionLayer();
-                table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-                this.objectLinkLayer = new ObjectLinkDescriptionLabelLayer();
-                table.addAdditionalLayerOnTop(this.objectLinkLayer);
+            this.tableSubscriber = {
+                eventSubscriberId: 'link-object-dialog',
+                eventPublished: (data: any, eventId: string) => {
+                    if (data === table.getTableId()) {
+                        if (eventId === TableEvent.TABLE_INITIALIZED) {
+                            table.addColumns([
+                                new DefaultColumnConfiguration(
+                                    'LinkedAs', true, false, true, false, 100, true, true, false, DataType.STRING
+                                )
+                            ]);
+                            this.initSelectableRows();
+                        }
+                        this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
+                        this.setSubmitState();
+                    }
+                }
+            };
 
-                table.setColumns([
-                    new TableColumn(
-                        'LinkedAs', DataType.STRING, '', null, true, true, 120, true, false, true, false, null
-                    )
-                ]);
-
-                this.setLinkedObjectsToTableLayer(table);
-
-                table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-                await table.loadRows();
-                table.setTableListener(() => {
-                    this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
-                    (this as any).setStateDirty('filterCount');
-                });
-
-                setTimeout(() => {
-                    this.state.standardTable = table;
-                    this.state.tableId = 'Table-Links-' + objectType;
-                }, 300);
-            }
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
         }
     }
 
-    private setLinkedObjectsToTableLayer(table: StandardTable = this.state.standardTable): void {
-        if (this.state.linkDescriptions) {
-            this.objectLinkLayer.setLinkDescriptions(this.state.linkDescriptions);
-            const linkedObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
-            this.preventSelectionLayer.setPreventSelectionFilter(linkedObjects);
-        }
+    private initSelectableRows(): void {
+        const linkObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
+        const values = this.state.linkDescriptions.map((ld) => {
+            const name = ld.linkTypeDescription.asSource
+                ? ld.linkTypeDescription.linkType.SourceName
+                : ld.linkTypeDescription.linkType.TargetName;
+
+            const value: [any, [string, any]] = [ld.linkableObject, ['LinkedAs', name]];
+            return value;
+        });
+
+        this.state.table.setRowObjectValues(values);
+        this.state.table.setRowsSelectableByObject(linkObjects, false);
     }
 
-    private objectSelectionChanged(objects: KIXObject[]): void {
-        this.state.selectedObjects = objects;
-        this.setCanSubmit();
-    }
-
-    private setCanSubmit(): void {
-        this.state.canSubmit = this.state.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
+    private setSubmitState(): void {
+        this.state.canSubmit = this.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
     }
 
     public submitClicked(): void {
         if (this.state.canSubmit) {
-            const newLinks = this.state.selectedObjects.map(
+            const newLinks = this.selectedObjects.map(
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
@@ -224,10 +228,9 @@ class LinkDialogComponent {
                 [this.state.linkDescriptions, newLinks]
             );
             BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
-            this.state.standardTable.listenerConfiguration.selectionListener.selectNone();
-            this.highlightLayer.setHighlightedObjects(newLinks.map((ld) => ld.linkableObject));
-            this.setLinkedObjectsToTableLayer();
-            this.state.standardTable.loadRows();
+            this.initSelectableRows();
+            this.state.table.selectNone();
+            this.state.table.setRowObjectValueState(newLinks, ValueState.HIGHLIGHT_SUCCESS);
         }
     }
 
@@ -277,11 +280,12 @@ class LinkDialogComponent {
         this.state.currentLinkTypeNode = nodes && nodes.length ? nodes[0] : null;
         this.state.currentLinkTypeDescription = this.state.currentLinkTypeNode ?
             this.linkTypeDescriptions[this.state.currentLinkTypeNode.id] : null;
-        this.setCanSubmit();
+        this.setSubmitState();
     }
 
     public filter(filterValue: string): void {
-        this.state.standardTable.setFilterSettings(filterValue);
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 }
 

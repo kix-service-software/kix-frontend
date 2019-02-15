@@ -11,6 +11,7 @@ export { AttributeDefinition } from './AttributeDefinition';
 export { InputDefinition } from './InputDefinition';
 export { ConfigItemFactory } from './ConfigItemFactory';
 export { ConfigItemHistory } from './ConfigItemHistory';
+export { ConfigItemHistoryProperty } from './ConfigItemHistoryProperty';
 export { ImagesLoadingOptions } from './ImagesLoadingOptions';
 export { ConfigItemImageFactory } from './ConfigItemImageFactory';
 export { ConfigItemStats } from './ConfigItemStats';

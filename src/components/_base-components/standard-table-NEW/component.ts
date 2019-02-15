@@ -1,0 +1,213 @@
+import { ComponentState } from './ComponentState';
+import {
+    AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow
+} from '../../../core/browser';
+import { EventService, IEventSubscriber } from '../../../core/browser/event';
+
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
+
+    public eventSubscriberId: string;
+    private browserFontSize: number;
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState();
+        this.browserFontSize = BrowserUtil.getBrowserFontsize();
+    }
+
+    public onInput(input: any): void {
+        if ((!this.state.table && input.table) ||
+            (input.table && this.state.table.getTableId() !== input.table.getTableId())
+        ) {
+            this.init(input.table);
+        }
+    }
+
+    private async init(table: ITable): Promise<void> {
+        this.state.table = null;
+
+        this.state.loading = true;
+        this.state.table = table;
+
+        this.eventSubscriberId = this.state.table.getTableId();
+
+        await this.state.table.initialize();
+        this.state.rows = this.state.table.getRows();
+        this.state.columns = this.state.table.getColumns();
+        this.setTableHeight();
+
+        this.state.loading = false;
+        EventService.getInstance().publish(TableEvent.TABLE_INITIALIZED, this.state.table.getTableId());
+        EventService.getInstance().publish(TableEvent.TABLE_READY, this.state.table.getTableId());
+    }
+
+    public async onMount(): Promise<void> {
+        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
+        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
+        EventService.getInstance().subscribe(TableEvent.SORTED, this);
+        EventService.getInstance().subscribe(TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID, this);
+    }
+
+    public onUpdate(): void {
+        // nothing
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
+        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
+        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
+        EventService.getInstance().unsubscribe(TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID, this);
+    }
+
+    public async eventPublished(data: any, eventId: string, subscriberId?: string): Promise<void> {
+        if (this.state.table && data === this.state.table.getTableId()) {
+            if (eventId === TableEvent.REFRESH) {
+                this.state.columns = this.state.table.getColumns();
+                this.state.rows = this.state.table.getRows();
+
+                await this.provideContextContent();
+                this.setTableHeight();
+
+                EventService.getInstance().publish(TableEvent.TABLE_READY, this.state.table.getTableId());
+            }
+
+            if (eventId === TableEvent.ROW_TOGGLED) {
+                this.setTableHeight();
+            }
+
+            if (eventId === TableEvent.RERENDER_TABLE) {
+                this.state.loading = true;
+                this.state.columns = this.state.table.getColumns();
+                this.state.rows = this.state.table.getRows();
+
+                await this.provideContextContent();
+                this.setTableHeight();
+
+                setTimeout(() => {
+                    this.state.loading = false;
+                }, 50);
+            }
+        }
+
+        if (eventId === TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID) {
+            if (data && data.tableId && data.tableId === this.state.table.getTableId()) {
+                const row: IRow = this.state.table.getRowByObjectId(data.objectId);
+                if (row) {
+                    row.expand(true);
+                    EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
+                    let element: any = document.getElementById(row.getRowId());
+                    if (element) {
+                        if (element) {
+                            let top = 0;
+                            if (element.offsetParent) {
+                                do {
+                                    top += element.offsetTop;
+                                    element = element.offsetParent;
+                                } while (element !== null);
+                            }
+
+                            window.scroll(0, top);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        if (eventId === TableEvent.SORTED) {
+            if (data && data.tableId && data.tableId === this.state.table.getTableId()) {
+                const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
+                if (container) {
+                    container.scrollTop = 0;
+                }
+            }
+        }
+    }
+
+    private async provideContextContent(): Promise<void> {
+        if (this.state.table.getContextId()) {
+            const context = await ContextService.getInstance().getContext(this.state.table.getContextId());
+            if (context) {
+                const objects = this.state.table.getRows()
+                    .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
+                    .map((r) => r.getRowObject().getObject());
+
+                context.setFilteredObjectList(objects);
+            }
+        }
+    }
+
+    public setTableHeight(): void {
+        this.state.tableHeight = 'unset';
+        if (this.state.table) {
+            const rows = this.state.table.getRows(false);
+
+            const availableRowsCount = this.countRows(rows);
+
+            const limit = this.state.table.getTableConfiguration().displayLimit
+                ? this.state.table.getTableConfiguration().displayLimit
+                : availableRowsCount;
+
+            const minElements = availableRowsCount > limit ? limit : availableRowsCount;
+            const rowCount = minElements === 0 ? 1 : minElements;
+
+            const headerRowHeight = this.browserFontSize
+                * Number(this.state.table.getTableConfiguration().headerHeight);
+            const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
+
+            let height = ((rowCount * rowHeight) + headerRowHeight)
+                + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
+
+            rows.forEach((r) => {
+                if (r.isExpanded()) {
+                    height += (31.5 + 10) / 2 * this.browserFontSize;
+                }
+            });
+
+            this.state.tableHeight = height + 'px';
+        }
+    }
+
+    private countRows(rows: IRow[]): number {
+        let count = rows.length;
+        rows.forEach((r) => count += this.countRows(r.getChildren()));
+        return count;
+    }
+
+    private hScrollWillBeVisible(): boolean {
+        let withScroll = false;
+        const root = (this as any).getEl();
+        if (root) {
+            let columnWidth = 0;
+            const columns = this.state.table.getColumns();
+            columns.forEach((c) => columnWidth += this.getColumnSize(c));
+            if (this.state.table.getTableConfiguration().enableSelection) {
+                columnWidth += 2.875 * this.browserFontSize;
+            }
+            if (this.state.table.getTableConfiguration().toggle) {
+                columnWidth += 2.875 * this.browserFontSize;
+            }
+
+            withScroll = root.getBoundingClientRect().width < columnWidth;
+        }
+        return withScroll;
+    }
+
+    private getColumnSize(column: IColumn): number {
+        let minWidth: number = (2.875 * this.browserFontSize);
+        if (column.getColumnConfiguration().filterable) {
+            minWidth += this.browserFontSize;
+        }
+        if (column.getColumnConfiguration().sortable) {
+            minWidth += this.browserFontSize;
+        }
+        return column.getColumnConfiguration().size < minWidth ? minWidth : column.getColumnConfiguration().size;
+    }
+
+    public onScroll(): void {
+        // load rows
+    }
+}
+
+module.exports = Component;

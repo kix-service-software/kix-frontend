@@ -1,5 +1,5 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil, } from "../../model";
+import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil } from "../../model";
 import { ContextService } from "../context";
 
 export class TranslationLabelProvider implements ILabelProvider<Translation> {
@@ -10,7 +10,7 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return translation instanceof Translation;
     }
 
-    public async getPropertyText(property: string, translation?: Translation, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
 
         switch (property) {
@@ -36,6 +36,10 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(translation: Translation, property: string): Promise<string> {

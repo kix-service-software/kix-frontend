@@ -1,9 +1,9 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    StandardTableFactoryService, LabelService, DialogService, FactoryService
+    LabelService, DialogService, FactoryService, TableFactoryService
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
+import { SearchService } from '../../core/browser/search';
 import { CSVExportAction, BulkAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
@@ -11,7 +11,8 @@ import {
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
-    LinkObjectLabelProvider
+    LinkObjectLabelProvider,
+    LinkObjectDialogContext
 } from '../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../core/browser/dynamic-fields';
@@ -38,6 +39,9 @@ import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
 } from '../../core/browser/i18n/admin/context';
 import { TranslationFormService } from '../../core/browser/i18n/admin/TranslationFormService';
+import { SearchResultPrintAction } from '../../core/browser/search/actions';
+import { SearchContext } from '../../core/browser/search/context';
+import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 
 class Component extends AbstractMarkoComponent {
 
@@ -74,7 +78,7 @@ class Component extends AbstractMarkoComponent {
 
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        StandardTableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
@@ -82,7 +86,7 @@ class Component extends AbstractMarkoComponent {
         );
         LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
 
-        StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
+        TableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
@@ -90,8 +94,8 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
         );
-        StandardTableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
@@ -102,6 +106,7 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
         ActionFactory.getInstance().registerAction('search-result-print-action', SearchResultPrintAction);
+        ActionFactory.getInstance().registerAction('switch-column-order-action', SwitchColumnOrderAction);
 
         this.registerContexts();
         this.registerDialogs();
@@ -113,6 +118,13 @@ class Component extends AbstractMarkoComponent {
             false, 'search', ['search'], SearchContext
         );
         ContextService.getInstance().registerContext(searchContext);
+
+        const linkObjectDialogContext = new ContextDescriptor(
+            LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
+            ContextType.DIALOG, ContextMode.CREATE,
+            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
+        );
+        ContextService.getInstance().registerContext(linkObjectDialogContext);
 
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
