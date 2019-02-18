@@ -13,5 +13,18 @@
                 <span.channel-text>${component.getDisplayText(channel)}</span>
             </div>
         </for>
+        <if(state.noChannel)>
+            <div.channel-item
+                on-click("channelClicked", null)
+                titel="Kein Artikel"
+                class={
+                                active: component.isActive(null)
+                            }>
+                <span.channel-icon>
+                    <icon icon="kix-icon-unselect"/>
+                </span>
+                <span.channel-text>Kein Artikel</span>
+            </div>
+        </if>
     </div>
 </if>

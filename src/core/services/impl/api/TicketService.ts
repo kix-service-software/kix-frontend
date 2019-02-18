@@ -242,7 +242,7 @@ export class TicketService extends KIXObjectService {
         });
 
         if (createArticle) {
-            const articleResponse = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
+            await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
                 token, this.buildUri(this.RESOURCE_URI, objectId, this.SUB_RESOURCE_URI),
                 new CreateArticleRequest(createArticle)
             ).catch((error) => {
@@ -268,15 +268,16 @@ export class TicketService extends KIXObjectService {
             from = user.UserLogin;
         }
 
+        const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         const body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
 
         let createArticle;
-        if (subject && body) {
+        if (channelId && subject && body) {
             createArticle = new CreateArticle(
                 subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
-                null, senderType, null, from, null, null, null, null, null, null, null, null,
+                channelId, senderType, null, from, null, null, null, null, null, null, null, null,
                 attachments.length ? attachments : null,
                 customerVisible !== undefined ? customerVisible : false
             );
