@@ -8,7 +8,7 @@
         width: 3rem;
         height: 3rem;
         border: 1px solid @primary-1;
-        border-radius: 3px;
+        border-radius: @border-radius;
         color: @primary-1;
         font-size: 3rem;
         box-shadow: @shadow-1;
@@ -16,11 +16,9 @@
         align-items: center;
         text-align: center;
         >.channel-text {
+            .shorten-text();
             display: none;
             font-size: 1rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             font-weight: bold;
         }
         &:hover {

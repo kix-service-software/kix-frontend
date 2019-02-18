@@ -94,10 +94,7 @@ export class TicketParameterUtil {
         ]);
 
         if (forUpdate) {
-            // FIXME: Channel
-            parameter.push([ArticleProperty.CHANNEL_ID, 0]);
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
-
             // TODO: richtigen Anzeigewert verwenden
             parameter.push([ArticleProperty.FROM, objectData.currentUser.UserLogin]);
 

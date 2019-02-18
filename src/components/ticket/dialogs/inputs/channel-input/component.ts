@@ -28,9 +28,18 @@ class Component extends FormInputComponent<number, ComponentState> {
                 this.state.channelNames.push([channel.ID, name]);
             }
 
-            if (this.state.channels.length) {
-                await this.channelClicked(this.state.channels[0]);
-            }
+
+        }
+
+        const channelOption = this.state.field.options.find((o) => o.option === 'NO_CHANNEL');
+        if (channelOption) {
+            this.state.noChannel = channelOption.value;
+        }
+
+        if (this.state.noChannel) {
+            this.channelClicked(null);
+        } else if (this.state.channels.length) {
+            await this.channelClicked(this.state.channels[0]);
         }
     }
 
@@ -50,7 +59,10 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public isActive(channel: Channel): boolean {
-        return channel.ID === this.state.currentChannel.ID;
+        if (channel && this.state.currentChannel) {
+            return channel.ID === this.state.currentChannel.ID;
+        }
+        return channel === this.state.currentChannel;
     }
 
     public async channelClicked(channel: Channel): Promise<void> {
@@ -59,13 +71,16 @@ class Component extends FormInputComponent<number, ComponentState> {
         const formService = ServiceRegistry.getServiceInstance<TicketFormService>(
             KIXObjectType.TICKET, ServiceType.FORM
         );
-
-        const channelFields = formService.getFormFieldsForChannel(this.state.currentChannel);
-
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.addNewFormField(this.state.field, channelFields, true);
 
-        super.provideValue(this.state.currentChannel.ID);
+        if (this.state.currentChannel) {
+            const channelFields = formService.getFormFieldsForChannel(this.state.currentChannel);
+            formInstance.addNewFormField(this.state.field, channelFields, true);
+        } else {
+            formInstance.addNewFormField(this.state.field, [], true);
+        }
+
+        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
     }
 
 }

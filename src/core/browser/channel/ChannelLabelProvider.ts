@@ -51,7 +51,7 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
                     displayValue = 'Notiz';
                 }
                 if (channel.Name === 'email') {
-                    displayValue = 'Email';
+                    displayValue = 'E-Mail';
                 }
                 break;
             default:
