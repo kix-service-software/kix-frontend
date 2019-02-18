@@ -1,5 +1,5 @@
 import {
-    KIXObjectType, InputFieldTypes, TreeNode, KIXObject
+    KIXObjectType, InputFieldTypes, TreeNode, KIXObject, KIXObjectCache
 } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
@@ -105,7 +105,7 @@ export abstract class BulkManager {
 
         const values = this.getEditableValues();
         values.forEach((v) => parameter.push([v.property, v.operator === PropertyOperator.CLEAR ? null : v.value]));
-        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId);
+        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false);
     }
 
     public getEditableValues(): ObjectPropertyValue[] {

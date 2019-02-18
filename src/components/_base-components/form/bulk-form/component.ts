@@ -1,8 +1,8 @@
-import { WidgetType, KIXObject } from '../../../../core/model';
+import { WidgetType, KIXObject, KIXObjectCache } from '../../../../core/model';
 import {
     WidgetService, DialogService, TableHeaderHeight,
     TableRowHeight, LabelService, TableConfiguration, BrowserUtil,
-    KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState
+    KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState, ServiceMethod
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
