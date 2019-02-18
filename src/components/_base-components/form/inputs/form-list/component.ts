@@ -1,14 +1,15 @@
 import { ComponentState } from "./ComponentState";
 import { TreeNode, AutoCompleteConfiguration } from "../../../../../core/model";
+import { SelectionState } from "../../../../../core/browser";
 
 class Component {
 
     private state: ComponentState;
 
     private keepExpanded: boolean = false;
-    private timeout: any;
+    private autocompleteTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
@@ -18,11 +19,12 @@ class Component {
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
 
-        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-
-        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
-            input.selectedNodes : this.state.selectedNodes;
-        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
+        if (!this.state.asAutocomplete) {
+            this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
+            this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
+                input.selectedNodes : this.state.selectedNodes;
+            this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
+        }
 
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
@@ -34,6 +36,8 @@ class Component {
             this.state.searchCallback = input.searchCallback;
         }
         this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
+
+        this.setCheckState();
     }
 
     public onMount(): void {
@@ -46,6 +50,8 @@ class Component {
                 }
             }
         });
+
+        this.setCheckState();
     }
 
     public onDestroy(): void {
@@ -69,19 +75,21 @@ class Component {
             this.state.expanded = false;
         } else if (!this.state.readonly) {
             this.state.expanded = true;
-            this.timeout = setTimeout(this.setDropdownStyle.bind(this), 100);
+            setTimeout(this.setDropdownStyle.bind(this), 100);
+        }
+
+        this.state.filterValue = null;
+        this.state.autocompleteSearchValue = null;
+        if (this.state.asAutocomplete) {
+            this.state.nodes = [];
         }
     }
 
     public listToggleButtonClicked(): void {
         if (this.state.expanded) {
-            this.toggleList();
+            this.toggleList(true);
         } else {
-            if (this.state.selectedNodes.length && this.state.selectedNodes.length) {
-                this.toggleList(false);
-            } else {
-                this.focusInput();
-            }
+            this.toggleList(false);
         }
     }
 
@@ -96,39 +104,22 @@ class Component {
         }
     }
 
-    public focusLost(): void {
-        this.state.autocompleteSearchValue = null;
-        this.state.filterValue = null;
-        (this as any).emit('focusLost');
-    }
-
-    // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren (input nicht mehr vorhanden bei "expanded")
     public keyDown(event: any): void {
         if (this.state.expanded) {
             if (event.key === 'Escape' || event.key === 'Tab') {
                 this.toggleList();
             }
-            //     else if (event.key === 'Enter' || event.key === 'Tab') {
-            //         event.stopPropagation();
-            //         event.preventDefault();
-            //         this.nodeClicked(this.state.preSelectedNodes);
-            //     }
         }
     }
 
     public keyUp(event: any): void {
-        // TODO: Tastatur-Steuerung wieder aktivieren und korrigieren
-        // if (!this.state.expanded && event.key !== 'Escape' && event.key !== 'Enter' && event.key !== 'Tab') {
-        //     this.toggleList();
-        // }
-
-        if (!this.state.selectedNodes.length && !this.navigationKeyPressed(event)) {
+        if (!this.navigationKeyPressed(event)) {
             if (this.state.asAutocomplete && typeof event.target.value !== 'undefined' && this.state.searchCallback) {
                 this.state.autocompleteSearchValue = event.target.value;
                 this.startSearch();
             } else {
                 this.state.filterValue = event.target.value;
-                setTimeout(this.setDropdownStyle.bind(this), 100);
+                setTimeout(() => this.setDropdownStyle(), 50);
             }
         }
     }
@@ -186,14 +177,14 @@ class Component {
     }
 
     private startSearch(): void {
-        if (this.timeout && !this.state.isLoading) {
-            window.clearTimeout(this.timeout);
-            this.timeout = null;
+        if (this.autocompleteTimeout && !this.state.isLoading) {
+            window.clearTimeout(this.autocompleteTimeout);
+            this.autocompleteTimeout = null;
         }
         const hasMinLength =
             this.state.autocompleteSearchValue.length >= this.state.autoCompleteConfiguration.charCount;
         if (hasMinLength && !this.state.isLoading) {
-            this.timeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
+            this.autocompleteTimeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
         } else {
             this.state.nodes = [];
         }
@@ -206,14 +197,16 @@ class Component {
             this.state.autoCompleteConfiguration.limit, this.state.autocompleteSearchValue
         );
         this.state.isLoading = false;
-        this.timeout = null;
+        this.autocompleteTimeout = null;
+
+        setTimeout(() => this.setDropdownStyle(), 50);
+        this.focusInput();
     }
 
     private setDropdownStyle(): void {
-        const formListTree = (this as any).getComponent(this.state.treeId) ?
-            (this as any).getComponent(this.state.treeId).getTreeDOMElement() : null;
+        const valueList = (this as any).getEl("value-list-" + this.state.treeId);
         let transformValue = 1;
-        if (formListTree) {
+        if (valueList) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = formListInputContainer;
             while (container
@@ -225,15 +218,17 @@ class Component {
             const containerEnd = container.getBoundingClientRect().top + container.getBoundingClientRect().height;
             const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
                 + formListInputContainer.getBoundingClientRect().height
-                + formListTree.getBoundingClientRect().height;
+                + valueList.getBoundingClientRect().height;
             if (containerEnd < dropdownListEnd) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
-                    + formListTree.getBoundingClientRect().height
+                    + valueList.getBoundingClientRect().height
                     - 1;
+                this.state.treeStyle = { transform: `translate(0px, -${transformValue}px)` };
+            } else {
+                this.state.treeStyle = { top: formListInputContainer.getBoundingClientRect().height };
             }
         }
-        this.state.treeStyle = 'transform: translate(0px,-' + transformValue + 'px)';
     }
 
     public getAutocompleteNotFoundText(): string {
@@ -244,6 +239,41 @@ class Component {
 
     public clear(): void {
         this.state.selectedNodes = [];
+    }
+
+    public selectAll(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const checkBox = (this as any).getEl('selectAllCheckbox');
+        if (checkBox.checked) {
+            this.state.selectedNodes = [...this.state.nodes];
+        } else {
+            this.state.selectedNodes = [];
+        }
+        (this as any).emit('nodesChanged', this.state.selectedNodes);
+    }
+
+    private setCheckState(): void {
+        const checkBox = (this as any).getEl('selectAllCheckbox');
+        if (checkBox) {
+            if (this.state.selectedNodes.length === 0) {
+                checkBox.checked = false;
+                checkBox.indeterminate = false;
+            } else if (this.state.selectedNodes.length === this.state.nodes.length) {
+                checkBox.checked = true;
+                checkBox.indeterminate = false;
+            } else {
+                checkBox.checked = false;
+                checkBox.indeterminate = true;
+            }
+        }
+    }
+
+    public submit(): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.toggleList(true);
     }
 }
 

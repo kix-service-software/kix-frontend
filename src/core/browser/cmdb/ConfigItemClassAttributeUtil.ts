@@ -51,12 +51,14 @@ export class ConfigItemClassAttributeUtil {
         let attributes;
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            attributes = ciClasses[0].CurrentDefinition.Definition.map((d) => new AttributeDefinition(d));
-            if (ciClasses.length > 1) {
-                for (let i = 1; i < ciClasses.length; i++) {
-                    const definition = ciClasses[i].CurrentDefinition;
-                    if (definition && definition.Definition) {
-                        this.compareTrees(attributes, definition.Definition);
+            if (ciClasses[0].CurrentDefinition) {
+                attributes = ciClasses[0].CurrentDefinition.Definition.map((d) => new AttributeDefinition(d));
+                if (ciClasses.length > 1) {
+                    for (let i = 1; i < ciClasses.length; i++) {
+                        const definition = ciClasses[i].CurrentDefinition;
+                        if (definition && definition.Definition) {
+                            this.compareTrees(attributes, definition.Definition);
+                        }
                     }
                 }
             }

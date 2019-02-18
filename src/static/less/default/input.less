@@ -6,7 +6,7 @@
     border-radius: @border-radius;
     padding: 0 @margin-small;
     background-color: @secondary-6;
-    height: @default-input-height;
+    min-height: @default-input-height;
     width: 100%;
     color: @default-dark-font-color;
     input[type="text"]& {
@@ -47,7 +47,7 @@ textarea.input-style {
     position: relative;
     >.form-list-loading,
     >.form-list-autocomplete-no-results,
-    >.form-list-tree {
+    >.value-list {
         z-index: 1;
         position: absolute;
         top: @default-input-height;
@@ -55,20 +55,22 @@ textarea.input-style {
         right: 0;
         border: 1px solid @secondary-2;
         background-color: @secondary-6;
-        min-height: @default-input-height;
         padding: .25rem;
         box-sizing: border-box;
+        >input {
+            margin-bottom: @margin-small;
+        }
+        >.form-list-tree {
+            max-height: 15rem;
+            overflow: auto;
+            border-radius: @border-radius;
+        }
     }
     >.form-list-loading {
         >.loading-spinner {
             width: 1.75rem;
             height: 1.75rem;
         }
-    }
-    >.form-list-tree {
-        max-height: 15rem;
-        overflow: auto;
-        border-radius: @border-radius;
     }
     >div.form-list-input-container {
         min-height: 2rem;
