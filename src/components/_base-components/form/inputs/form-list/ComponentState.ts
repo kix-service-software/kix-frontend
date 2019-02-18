@@ -12,7 +12,7 @@ export class ComponentState {
         public treeId: string = listId + '-tree',
         public readonly: boolean = true,
         public invalid: boolean = false,
-        public treeStyle: string = null,
+        public treeStyle: any = null,
         public asAutocomplete: boolean = false,
         public autocompleteSearchValue: string = null,
         public isLoading: boolean = false,
