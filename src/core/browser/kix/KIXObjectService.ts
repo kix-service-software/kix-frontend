@@ -147,29 +147,30 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async updateObject(
-        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        updateCache: boolean = true
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
-
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId).catch((error: Error) => {
-            const content = new ComponentContent('list-with-title',
-                {
-                    title: `Fehler beim Aktualisieren (${objectType}):`,
-                    list: [`${error.Code}: ${error.Message}`]
-                }
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Fehler!', true
-            );
-            throw error;
-        });
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, updateCache)
+            .catch((error: Error) => {
+                const content = new ComponentContent('list-with-title',
+                    {
+                        title: `Fehler beim Aktualisieren (${objectType}):`,
+                        list: [`${error.Code}: ${error.Message}`]
+                    }
+                );
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, content, 'Fehler!', true
+                );
+                throw error;
+            });
         return updatedObjectId;
     }
 
     public async updateObject(
-        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        updateCache: boolean = true
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
             objectType, parameter, objectId
@@ -186,7 +187,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             throw error;
         });
 
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE);
+        if (updateCache) {
+            KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
+        }
 
         return updatedObjectId;
     }
