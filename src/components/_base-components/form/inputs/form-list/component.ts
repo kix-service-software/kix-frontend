@@ -219,14 +219,39 @@ class Component {
             const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
+
+            const input = (this as any).getEl("form-list-input-" + this.state.listId);
+            const list = (this as any).getEl(this.state.treeId);
+            const buttons = (this as any).getEl("buttonbar");
+
+
             if (containerEnd < dropdownListEnd) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
                     + valueList.getBoundingClientRect().height
                     - 1;
                 this.state.treeStyle = { transform: `translate(0px, -${transformValue}px)` };
+
+                if (input) {
+                    input.style = "grid-row: 3";
+                }
+                if (list) {
+                    list.style = "grid-row: 1";
+                }
+                if (buttons) {
+                    buttons.style = "grid-row: 2";
+                }
             } else {
                 this.state.treeStyle = { top: formListInputContainer.getBoundingClientRect().height };
+                if (input) {
+                    input.style = "grid-row: 1";
+                }
+                if (list) {
+                    list.style = "grid-row: 2";
+                }
+                if (buttons) {
+                    buttons.style = "grid-row: 3";
+                }
             }
         }
     }
