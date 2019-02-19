@@ -70,7 +70,7 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = 'Geändert am';
                 break;
             case ConfigItemProperty.CHANGE_BY:
-                displayValue = 'Letzter Bearbeiter';
+                displayValue = 'Geändert von';
                 break;
             case ConfigItemProperty.CREATE_TIME:
                 displayValue = 'Erstellt am';
