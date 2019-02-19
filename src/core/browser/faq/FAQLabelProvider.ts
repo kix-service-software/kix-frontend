@@ -54,7 +54,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = 'Geändert am';
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                displayValue = 'Letzter Bearbeiter';
+                displayValue = 'Geändert von';
                 break;
             case FAQArticleProperty.CREATED:
                 displayValue = 'Erstellt am';
