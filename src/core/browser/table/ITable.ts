@@ -82,4 +82,6 @@ export interface ITable {
 
     getRowByObjectId(objectId: string | number): IRow;
 
+    destroy(): void;
+
 }

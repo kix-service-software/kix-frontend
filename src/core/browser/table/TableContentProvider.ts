@@ -25,15 +25,24 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
             if (this.contextId) {
                 const context = await ContextService.getInstance().getContext(this.contextId);
                 if (context) {
-                    context.registerListener(IdService.generateDateBasedId('default-content-provider'), {
+                    context.registerListener(this.table.getTableId() + '-content-provider', {
                         explorerBarToggled: () => { return; },
                         filteredObjectListChanged: () => { return; },
-                        objectChanged: () => { this.objectListChanged.bind(this); },
+                        objectChanged: this.objectListChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
                         sidebarToggled: () => { return; },
                     });
                     this.initialized = true;
                 }
+            }
+        }
+    }
+
+    public async destroy(): Promise<void> {
+        if (this.contextId) {
+            const context = await ContextService.getInstance().getContext(this.contextId);
+            if (context) {
+                context.unregisterListener(this.table.getTableId() + '-content-provider');
             }
         }
     }

@@ -45,6 +45,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 case ValueState.HIGHLIGHT_ERROR:
                     this.state.stateClass = 'cell-value-highlight_error';
                     break;
+                case ValueState.HIGHLIGHT_REMOVED:
+                    this.state.stateClass = 'cell-value-highlight_removed';
+                    break;
+                case ValueState.HIGHLIGHT_UNAVAILABLE:
+                    this.state.stateClass = 'cell-value-highlight_unavailable';
+                    break;
                 case ValueState.HIGHLIGHT_SUCCESS:
                     this.state.stateClass = 'cell-value-highlight_success';
                     break;

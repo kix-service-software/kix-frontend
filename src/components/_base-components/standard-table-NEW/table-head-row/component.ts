@@ -21,15 +21,20 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async onMount(): Promise<void> {
         this.eventSubscriberId = this.table.getTableId() + '-head';
         EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this);
+        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
         this.setCheckState();
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
     }
 
     public eventPublished(data: any, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.SELECTION_CHANGED && data === this.table.getTableId()) {
+        if (
+            (eventId === TableEvent.SELECTION_CHANGED || eventId === TableEvent.REFRESH)
+            && data === this.table.getTableId()
+        ) {
             this.setCheckState();
         }
     }
@@ -38,16 +43,18 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         const checkBox = (this as any).getEl('allCheck');
         if (this.table && checkBox) {
             const checkState = this.table.getRowSelectionState();
-            if (checkState === SelectionState.ALL) {
-                checkBox.checked = true;
-                checkBox.indeterminate = false;
-            } else if (checkState === SelectionState.NONE) {
-                checkBox.checked = false;
-                checkBox.indeterminate = false;
-            } else {
-                checkBox.checked = false;
-                checkBox.indeterminate = true;
+            let checked = true;
+            let indeterminate = false;
+            if (checkState !== SelectionState.ALL) {
+                checked = false;
+                if (checkState !== SelectionState.NONE) {
+                    indeterminate = true;
+                }
             }
+            setTimeout(() => {
+                checkBox.checked = checked;
+                checkBox.indeterminate = indeterminate;
+            }, 10);
         }
     }
 

@@ -10,6 +10,8 @@ export interface ICell {
 
     getValue(): TableValue;
 
+    setValue(value: TableValue): void;
+
     filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean>;
 
     getRow(): IRow;

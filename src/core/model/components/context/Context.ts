@@ -112,6 +112,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         }
     }
 
+    public unregisterListener(listenerId: string): void {
+        if (this.listeners.has(listenerId)) {
+            this.listeners.delete(listenerId);
+        }
+    }
+
     public getExplorer(show: boolean = false): ConfiguredWidget[] {
         let explorer = this.configuration.explorerWidgets;
 

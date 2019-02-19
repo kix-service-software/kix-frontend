@@ -1,13 +1,13 @@
 .cell-value-changed {
-    background-color: #F9F293;
+    background-color: @tableCell-changed;
 }
 
 .cell-value-deleted {
-    background-color: #F9D2D3;
+    background-color: @tableCell-deleted;
 }
 
 .cell-value-new {
-    background-color: #CBEADA;
+    background-color: @tableCell-new;
 }
 
 .cell-value-not-existing {
@@ -15,11 +15,21 @@
 }
 
 .cell-value-highlight_error {
-    color: red;
+    color: @tertiary-0;
     font-weight: bold;
 }
 
+.cell-value-highlight_removed {
+    color: @tertiary-0;
+    font-weight: bold;
+    text-decoration: line-through;
+}
+
+.cell-value-highlight_unavailable {
+    color: @secondary-2;
+}
+
 .cell-value-highlight_success {
-    color: green;
+    color: @tertiary-5;
     font-weight: bold;
 }
