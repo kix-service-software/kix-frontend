@@ -24,25 +24,30 @@ export class Cell implements ICell {
         return this.tableValue;
     }
 
+    public setValue(value: TableValue): void {
+        this.tableValue = value;
+    }
+
     public async getDisplayValue(): Promise<string> {
-        let value = this.tableValue.objectValue ? this.tableValue.objectValue : '';
+        let value;
         const object = this.getRow().getRowObject().getObject();
 
         if (object) {
             value = await LabelService.getInstance().getPropertyValueDisplayText(
                 object, this.tableValue.property,
-                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : ''
+                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
             );
         } else {
             const objectType = this.getRow().getTable().getObjectType();
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             if (labelProvider) {
                 value = await labelProvider.getPropertyValueDisplayText(
-                    this.tableValue.property, this.tableValue.objectValue ? this.tableValue.objectValue.toString() : ''
+                    this.tableValue.property,
+                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
                 );
             }
         }
-        return value ? value : '';
+        return value ? value : this.tableValue.objectValue ? this.tableValue.objectValue.toString() : '';
     }
 
     public async filter(filterValue: string, criteria: TableFilterCriteria[]): Promise<boolean> {

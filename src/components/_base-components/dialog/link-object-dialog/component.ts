@@ -16,6 +16,7 @@ class LinkDialogComponent {
 
     private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
+    private newLinks: CreateLinkDescription[] = [];
     private resultListenerId: string;
     private linkPartners: Array<[string, KIXObjectType]> = [];
     private rootObject: KIXObject = null;
@@ -31,13 +32,10 @@ class LinkDialogComponent {
         this.state.linkDescriptions = !this.state.linkDescriptions
             ? input.linkDescriptions || []
             : this.state.linkDescriptions;
+        this.newLinks = [];
         this.state.objectType = input.objectType;
         this.resultListenerId = input.resultListenerId;
         this.rootObject = input.rootObject;
-    }
-
-    public onDestroy(): void {
-        this.state.linkDescriptions = null;
     }
 
     public async onMount(): Promise<void> {
@@ -58,6 +56,13 @@ class LinkDialogComponent {
         }
 
         this.setSubmitState();
+    }
+
+    public onDestroy(): void {
+        this.state.linkDescriptions = null;
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
     }
 
     private async setLinkableObjects(): Promise<void> {
@@ -184,7 +189,12 @@ class LinkDialogComponent {
                                     'LinkedAs', true, false, true, false, 100, true, true, false, DataType.STRING
                                 )
                             ]);
-                            this.initSelectableRows();
+                            // TODO: muss auch in ready, addColumns triggert table refresh
+                            //       ==> bei setRowObjectValues sind dadurch keine Rows vorhanden
+                            this.setLinkedAsValues(this.state.linkDescriptions);
+                        }
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.markNotSelectableRows();
                         }
                         this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
                         this.setSubmitState();
@@ -193,13 +203,13 @@ class LinkDialogComponent {
             };
 
             EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
         }
     }
 
-    private initSelectableRows(): void {
-        const linkObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
-        const values = this.state.linkDescriptions.map((ld) => {
+    private setLinkedAsValues(links: CreateLinkDescription[] = []) {
+        const values = links.map((ld) => {
             const name = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName
                 : ld.linkTypeDescription.linkType.TargetName;
@@ -207,9 +217,24 @@ class LinkDialogComponent {
             const value: [any, [string, any]] = [ld.linkableObject, ['LinkedAs', name]];
             return value;
         });
+        if (!!values.length) {
+            this.state.table.setRowObjectValues(values);
+        }
+    }
 
-        this.state.table.setRowObjectValues(values);
-        this.state.table.setRowsSelectableByObject(linkObjects, false);
+    private markNotSelectableRows(): void {
+        const knownLinkedObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
+        this.state.table.setRowObjectValueState(
+            knownLinkedObjects.filter(
+                (ko) => !this.newLinks.some((nl) => nl.linkableObject.equals(ko))
+            ),
+            ValueState.HIGHLIGHT_UNAVAILABLE
+        );
+        this.state.table.setRowObjectValueState(
+            this.newLinks.map((cld) => cld.linkableObject),
+            ValueState.HIGHLIGHT_SUCCESS
+        );
+        this.state.table.setRowsSelectableByObject(knownLinkedObjects, false);
     }
 
     private setSubmitState(): void {
@@ -222,15 +247,15 @@ class LinkDialogComponent {
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
+            this.newLinks = [...this.newLinks, ...newLinks];
             // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
             DialogService.getInstance().publishDialogResult(
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]
             );
             BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
-            this.initSelectableRows();
+            this.setLinkedAsValues(newLinks);
             this.state.table.selectNone();
-            this.state.table.setRowObjectValueState(newLinks, ValueState.HIGHLIGHT_SUCCESS);
         }
     }
 

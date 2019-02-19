@@ -376,4 +376,8 @@ class TestTableContentProvider implements ITableContentProvider {
         return objects;
     }
 
+    public async destroy(): Promise<void> {
+        //
+    }
+
 }

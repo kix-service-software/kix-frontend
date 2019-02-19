@@ -197,7 +197,7 @@ export class DialogService {
     private addListener<T>(dialogId: string, component: string, listener: (result: T) => void): void {
         const listeners = this.resultListeners.get(dialogId);
         const index = listeners.findIndex((l) => l[0] === component);
-        if (index === -1) {
+        if (index !== -1) {
             listeners.splice(index, 1);
         }
         listeners.push([component, listener]);

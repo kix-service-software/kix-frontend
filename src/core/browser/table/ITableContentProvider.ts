@@ -9,4 +9,6 @@ export interface ITableContentProvider<T = any> {
 
     loadData(): Promise<Array<IRowObject<T>>>;
 
+    destroy(): void;
+
 }

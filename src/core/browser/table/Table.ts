@@ -326,7 +326,7 @@ export class Table implements ITable {
                 row.selectable(selectable);
             }
         });
-        EventService.getInstance().publish(TableEvent.REFRESH, this.id);
+        EventService.getInstance().publish(TableEvent.RERENDER_TABLE, this.id);
     }
 
     private getRowByObject(object: any): IRow {
@@ -335,10 +335,10 @@ export class Table implements ITable {
     }
 
     public getRowSelectionState(all: boolean = false): SelectionState {
-        const allCount = this.getRows(all).length;
+        const selectableCount = this.getRows(all).filter((r) => r.isSelectable()).length;
         const selectedCount = this.getRows(all).filter((r) => r.isSelected()).length;
         let selectionState = SelectionState.ALL;
-        if (selectedCount < allCount) {
+        if (selectedCount < selectableCount) {
             selectionState = SelectionState.INDETERMINATE;
         }
         if (selectedCount === 0) {
@@ -370,6 +370,12 @@ export class Table implements ITable {
             if (row) {
                 const value = v[1];
                 row.getRowObject().addValue(new TableValue(value[0], value[1]));
+                const cell = row.getCell(value[0]);
+                if (cell) {
+                    cell.setValue(new TableValue(value[0], value[1]));
+                } else {
+                    row.addCell(new TableValue(value[0], value[1]));
+                }
             }
         });
         EventService.getInstance().publish(TableEvent.REFRESH, this.id);
@@ -409,6 +415,10 @@ export class Table implements ITable {
             return object && object.ObjectId === objectId;
         });
         return row;
+    }
+
+    public destroy(): void {
+        this.contentProvider.destroy();
     }
 
 }

@@ -14,6 +14,10 @@ export enum ValueState {
 
     HIGHLIGHT_ERROR,
 
+    HIGHLIGHT_REMOVED,
+
+    HIGHLIGHT_UNAVAILABLE,
+
     HIGHLIGHT_SUCCESS
 
 }

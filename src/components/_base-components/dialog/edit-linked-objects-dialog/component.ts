@@ -25,6 +25,8 @@ class Component {
     private tableSubscriber: IEventSubscriber;
     private linkDialogListenerId: string;
 
+    private setColorOfNew: boolean;
+
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
         this.mainObject = null;
@@ -163,12 +165,22 @@ class Component {
             eventSubscriberId: 'edit-link-object-dialog',
             eventPublished: (data: any, eventId: string) => {
                 if (data === table.getTableId()) {
-                    this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));
+                    if (eventId === TableEvent.SELECTION_CHANGED) {
+                        this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));
+                    }
+                    if (eventId === TableEvent.TABLE_READY) {
+                        // TODO: enthalten um Endlosschleife zu verhindern (Ready --> set --> Refresh --> Ready ...)
+                        if (this.setColorOfNew) {
+                            this.setColorOfNew = false;
+                            this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
+                        }
+                    }
                 }
             }
         };
 
         EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
 
         this.state.table = table;
     }
@@ -179,7 +191,7 @@ class Component {
     }
 
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
-        this.state.table.setFilter(textFilterValue, filter.criteria);
+        this.state.table.setFilter(textFilterValue, filter ? filter.criteria : []);
         this.state.table.filter();
     }
 
@@ -216,7 +228,7 @@ class Component {
         this.setCanSubmit();
     }
 
-    private async addNewLinks(newLinkDescriptions): Promise<void> {
+    private async addNewLinks(newLinkDescriptions: CreateLinkDescription[]): Promise<void> {
         if (newLinkDescriptions.length) {
             const newLinkObjects: LinkObject[] = [];
 
@@ -242,6 +254,7 @@ class Component {
                 EditLinkedObjectsDialogContext.CONTEXT_ID
             );
             context.setObjectList([...this.availableLinkObjects]);
+            context.getObjectList();
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
@@ -249,17 +262,20 @@ class Component {
             if (filter) {
                 filter.reset();
             }
+
+            this.setColorOfNew = true;
         }
     }
 
     public async markToDelete(): Promise<void> {
+        let deleteNewLinks: LinkObject[] = [];
         this.selectedLinkObjects.forEach((slo) => {
             const newLinkIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(slo));
             if (newLinkIndex !== -1) {
                 this.newLinkObjects.splice(newLinkIndex, 1);
                 const index = this.availableLinkObjects.findIndex((alo) => alo.equals(slo));
                 if (index !== -1) {
-                    this.availableLinkObjects.splice(index, 1);
+                    deleteNewLinks = [...deleteNewLinks, ...this.availableLinkObjects.splice(index, 1)];
                 }
             } else {
                 if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
@@ -268,8 +284,18 @@ class Component {
             }
         });
 
+        if (!!deleteNewLinks.length) {
+            this.state.table.removeRows(
+                this.state.table.getRows().filter(
+                    (r) => deleteNewLinks.some(
+                        (dl) => dl.equals(r.getRowObject().getObject())
+                    )
+                ).map((r) => r.getRowId())
+            );
+        }
+
         this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
-        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_ERROR);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
 
         this.state.canDelete = false;
         this.setCanSubmit();

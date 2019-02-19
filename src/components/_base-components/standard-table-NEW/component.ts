@@ -15,9 +15,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
-        if ((!this.state.table && input.table) ||
-            (input.table && this.state.table.getTableId() !== input.table.getTableId())
+        if (
+            (!this.state.table && input.table)
+            || (input.table && this.state.table.getTableId() !== input.table.getTableId())
         ) {
+            if (this.state.table && input.table && this.state.table.getTableId() !== input.table.getTableId()) {
+                this.state.table.destroy();
+            }
             this.init(input.table);
         }
     }
@@ -53,6 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
+        this.state.table.destroy();
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
         EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
@@ -81,7 +86,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.state.columns = this.state.table.getColumns();
                 this.state.rows = this.state.table.getRows();
 
-                await this.provideContextContent();
                 this.setTableHeight();
 
                 setTimeout(() => {

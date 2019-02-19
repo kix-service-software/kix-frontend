@@ -3,6 +3,7 @@ import { ICell } from "./ICell";
 import { ITable } from "./ITable";
 import { TableFilterCriteria } from "../../model";
 import { ValueState } from "./ValueState";
+import { TableValue } from "./TableValue";
 
 export interface IRow<T = any> {
 
@@ -35,5 +36,7 @@ export interface IRow<T = any> {
     getChildren(): IRow[];
 
     setValueState(state: ValueState): void;
+
+    addCell(value: TableValue): void;
 
 }

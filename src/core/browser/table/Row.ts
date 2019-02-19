@@ -117,7 +117,7 @@ export class Row<T = any> implements IRow<T> {
         const columns = this.getTable().getColumns();
         for (const column of columns) {
             const cell = this.getCell(column.getColumnId());
-            const match = await cell.filter(filterValue, null);
+            const match = cell ? await cell.filter(filterValue, null) : null;
             if (match) {
                 return true;
             }
@@ -133,14 +133,14 @@ export class Row<T = any> implements IRow<T> {
         if (selected) {
             if (this.isSelectable() && !this.isSelected()) {
                 this.selected = true;
+                EventService.getInstance().publish(TableEvent.SELECTION_CHANGED, this.getTable().getTableId());
             }
         } else {
             if (this.isSelected()) {
                 this.selected = false;
+                EventService.getInstance().publish(TableEvent.SELECTION_CHANGED, this.getTable().getTableId());
             }
         }
-
-        EventService.getInstance().publish(TableEvent.SELECTION_CHANGED, this.getTable().getTableId());
     }
 
     public isSelectable(): boolean {
@@ -187,6 +187,13 @@ export class Row<T = any> implements IRow<T> {
 
     public setValueState(state: ValueState): void {
         this.getRowObject().getValues().forEach((v) => v.state = state);
-        EventService.getInstance().publish(TableEvent.REFRESH, this.getTable().getTableId());
+        EventService.getInstance().publish(TableEvent.RERENDER_TABLE, this.getTable().getTableId());
+    }
+
+    public addCell(value: TableValue): void {
+        const cell = this.getCell(value.property);
+        if (!cell) {
+            this.cells.push(new Cell(this, value));
+        }
     }
 }
