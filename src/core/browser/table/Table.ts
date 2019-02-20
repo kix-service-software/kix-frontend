@@ -103,6 +103,14 @@ export class Table implements ITable {
 
     public createColumn(columnConfiguration: IColumnConfiguration): IColumn {
         const column = new Column(this, columnConfiguration);
+
+        this.rows.forEach((r) => {
+            const cell = r.getCell(column.getColumnId());
+            if (!cell) {
+                r.addCell(new TableValue(column.getColumnId(), null));
+            }
+        });
+
         this.columns.push(column);
         return column;
     }

@@ -1,3 +1,5 @@
-<div style="cursor: pointer;" on-click("labelClicked")>
-    <a href="/tickets?new">Neues Ticket</a>
-</div>
+<if(state.show)>
+    <div style="cursor: pointer;" on-click("labelClicked")>
+        <a href="/tickets?new">Neues Ticket</a>
+    </div>
+</if>

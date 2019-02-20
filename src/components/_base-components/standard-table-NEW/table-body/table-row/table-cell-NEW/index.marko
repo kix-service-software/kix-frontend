@@ -4,10 +4,10 @@
     <link-target object=state.object routingConfiguration=state.routingConfiguration objectId=state.objectId>
         <@content>
             <if(state.showDefaultCell)>
-                <default-cell-content cell=state.cell/>
+                <default-cell-content cell=input.cell/>
             </if>
             <else>
-                <${component.getCellTemplate()} cell=state.cell/>
+                <${component.getCellTemplate()} cell=input.cell/>
             </else>
         </@content>
     </link-target>
