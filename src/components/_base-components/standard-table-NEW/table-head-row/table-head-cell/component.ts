@@ -12,8 +12,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public column: IColumn;
     public size: number;
     private startOffset: number;
-    private filterClicked: boolean;
-
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -85,20 +83,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
     }
 
-    public columnFilterClicked(): void {
-        this.filterClicked = true;
-    }
-
-    public columnFilterHovered(hover: boolean = false): void {
-        this.state.filterHovered = hover;
-    }
-
     private isSortOrderDown(): boolean {
         return this.column.getSortOrder() && this.column.getSortOrder() === SortOrder.DOWN;
     }
 
     public sort(): void {
-        if (!this.filterClicked) {
+        if (!this.state.filterIsShown) {
             if (this.column.getColumnConfiguration().sortable) {
                 if (this.isSortOrderDown()) {
                     this.column.getTable().sort(this.column.getColumnId(), SortOrder.UP);
@@ -106,8 +96,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     this.column.getTable().sort(this.column.getColumnId(), SortOrder.DOWN);
                 }
             }
-        } else {
-            this.filterClicked = false;
         }
     }
 
@@ -145,9 +133,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
     }
 
+    private browserFontSize;
     private getMinWidth(headerColumn?): number {
-        const browserFontSize = BrowserUtil.getBrowserFontsize();
-        let minWidth: number = (2.875 * browserFontSize);
+        if (!this.browserFontSize) {
+            this.browserFontSize = BrowserUtil.getBrowserFontsize();
+        }
+        let minWidth: number = (2.5 * this.browserFontSize);
 
         if (headerColumn) {
             const minWidthString = getComputedStyle(headerColumn).getPropertyValue("min-width");
@@ -156,13 +147,27 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
         }
 
-        if (this.column.getColumnConfiguration().filterable) {
-            minWidth += browserFontSize;
+        const config = this.column.getColumnConfiguration();
+        if (config.showColumnIcon || config.showColumnTitle) {
+            if (config.filterable) {
+                minWidth += this.browserFontSize * 1.125;
+            }
+            if (config.sortable) {
+                minWidth += this.browserFontSize * 1.125;
+            }
+        } else if (config.filterable && config.sortable) {
+            minWidth += this.browserFontSize * 1.125;
         }
-        if (this.column.getColumnConfiguration().sortable) {
-            minWidth += browserFontSize;
-        }
+
         return minWidth;
+    }
+
+    public columnFilterHovered(hover: boolean = false): void {
+        this.state.filterHovered = hover;
+    }
+
+    public changeFilterShownState(shown: boolean = false): void {
+        this.state.filterIsShown = shown;
     }
 }
 

@@ -3,7 +3,7 @@
         <for(channel in state.channels)>
             <div.channel-item
                 on-click("channelClicked", channel)
-                titel=component.getDisplayText(channel)
+                title=component.getDisplayText(channel)
                 class={
                                 active: component.isActive(channel)
                             }>
@@ -16,7 +16,7 @@
         <if(state.noChannel)>
             <div.channel-item
                 on-click("channelClicked", null)
-                titel="Kein Artikel"
+                title="Kein Artikel"
                 class={
                                 active: component.isActive(null)
                             }>

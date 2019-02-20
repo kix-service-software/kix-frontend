@@ -60,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     container = container.parentNode ? container.parentNode : null;
                 }
                 if (container) {
-                    width = container.clientWidth - 2.875 * BrowserUtil.getBrowserFontsize();
+                    width = container.clientWidth - 2.5 * BrowserUtil.getBrowserFontsize();
                 }
             }
             this.state.width = (width ? width + 'px' : '100%');

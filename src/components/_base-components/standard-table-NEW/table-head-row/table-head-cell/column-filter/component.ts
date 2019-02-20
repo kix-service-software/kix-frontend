@@ -28,9 +28,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             const overlayIconListener = {
                 overlayOpened: () => {
                     this.state.show = true;
+                    (this as any).emit('changeFilterShownState', true);
                 },
                 overlayClosed: () => {
                     this.state.show = false;
+                    (this as any).emit('changeFilterShownState', false);
                 }
             };
             OverlayService.getInstance().registerOverlayListener(this.eventSubscriberId, overlayIconListener);
@@ -54,8 +56,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async showFilter(event: any): Promise<void> {
-        (this as any).emit('filterClicked');
-
         if (this.column && !this.state.show) {
             const content = new ComponentContent(
                 'table-column-filter-overlay', { column: this.column }

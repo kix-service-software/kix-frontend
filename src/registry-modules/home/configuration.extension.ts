@@ -133,20 +133,26 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                     tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
                         500, null, [
                             new DefaultColumnConfiguration(
-                                TicketProperty.PRIORITY_ID, false, true, false, true, 65, true, true, true
+                                TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
                             ),
-                            new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                            new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 463),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.TITLE, true, false, true, true, 463, true, true
+                            ),
                             new DefaultColumnConfiguration(
                                 TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
                             ),
-                            new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 225),
                             new DefaultColumnConfiguration(
-                                TicketProperty.CREATED, true, false, true, true, 155,
-                                true, false, false, DataType.DATE_TIME
+                                TicketProperty.CUSTOMER_ID, true, false, true, true, 225, true, true
                             ),
                             new DefaultColumnConfiguration(
-                                TicketProperty.AGE, true, false, true, true, 75, true, false, false, DataType.DATE_TIME
+                                TicketProperty.CREATED, true, false, true, true, 155,
+                                true, true, false, DataType.DATE_TIME
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                             ),
                         ],
                         [

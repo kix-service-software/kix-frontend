@@ -46,15 +46,11 @@
             <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
                 <input.input-style
                     type="text"
-                    class={
-                                        invalid: state.invalid
-                                    }
                     placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
                     value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                     key=("form-list-input-" + state.listId)
                     on-keydown("keyDown")
-                    on-keyup("keyUp")
-                    id=state.treeId/>
+                    on-keyup("keyUp")/>
                 <if(state.asAutocomplete && state.nodes.length === 0)>
                     <div.form-list-autocomplete-no-results>
                         <span>${component.getAutocompleteNotFoundText()}</span>
@@ -67,8 +63,7 @@
                         filterValue=state.filterValue
                         activeNodes=state.selectedNodes
                         on-nodeToggled("nodeToggled")
-                        on-nodeClicked("nodeClicked")
-                        filterInputId=state.treeId/>
+                        on-nodeClicked("nodeClicked")/>
                     <if(state.asMultiselect)>
                         <div.button-bar key="buttonbar">
                             <button.submit-button type="button" on-click("submit") title="Bestätigen">
@@ -76,7 +71,7 @@
                                 Bestätigen
                             </button>
                             <span on-click("selectAll")>
-                                <input id="selectAllCheckbox" type="checkbox" key="selectAllCheckbox"/>Alle auswählen
+                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>Alle auswählen
                             </span>
                         </div>
                     </if>

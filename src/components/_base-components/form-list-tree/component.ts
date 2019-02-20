@@ -37,8 +37,8 @@ class TreeComponent {
         (this as any).emit('nodeHovered', node);
     }
 
-    public getTreeDOMElement(): any {
-        return (this as any).getEl();
+    public getFilteredNodes(): any {
+        return this.state.nodes.filter((n) => n.visible);
     }
 }
 

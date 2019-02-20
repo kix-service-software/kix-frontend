@@ -1,4 +1,4 @@
-import { ObjectIcon, SortOrder } from "../../../../../core/model";
+import { ObjectIcon } from "../../../../../core/model";
 
 export class ComponentState {
 
@@ -10,5 +10,6 @@ export class ComponentState {
     public sortOrderDown: boolean = false;
     public resizeActive: boolean = false;
     public filterHovered: boolean = false;
+    public filterIsShown: boolean = false;
 
 }

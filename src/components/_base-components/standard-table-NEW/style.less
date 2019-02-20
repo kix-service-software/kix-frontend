@@ -1,4 +1,4 @@
-@cell-min-width: 2.875rem;
+@cell-min-width: 2.5rem;
 .table-container {
     width: 100%;
     overflow: auto;
@@ -46,18 +46,18 @@
                     }
                     &.table-head-cell {
                         >.table-head-cell-content {
-                            &.with-sortable {
-                                cursor: pointer;
-                            }
                             display: grid;
                             grid-template-columns: min-content auto;
                             grid-auto-flow: column;
                             grid-auto-columns: min-content;
                             align-content: center;
                             align-items: center;
-                            &:hover {
-                                >div>.sortable:not(.filter-hovered) {
-                                    display: grid;
+                            &.with-sortable:not(.filter-is-shown) {
+                                cursor: pointer;
+                                &:not(.filter-hovered):hover {
+                                    >div>.sortable {
+                                        display: grid;
+                                    }
                                 }
                             }
                             >.icons,
@@ -265,7 +265,7 @@
                         >div {
                             border-bottom-right-radius: @border-radius;
                             border-top-right-radius: @border-radius;
-                            padding-left: @margin-small;
+                            padding-left: @margin-small / 2;
                             margin-right: @margin-small;
                             cursor: pointer;
                             [class^="kix-icon-"],

@@ -5,22 +5,22 @@
                         height: input.height
                     }
             class={
-                        "with-sortable": component.column.getColumnConfiguration().sortable
-                    }
-            on-click("sort")>
-            <span.icons>
+                        "with-sortable": component.column.getColumnConfiguration().sortable,
+                        "filter-is-shown": state.filterIsShown,
+                        "filter-hovered": state.filterHovered
+                    }>
+            <span.icons on-click("sort")>
                 <if(component.column.getColumnConfiguration().showColumnIcon && state.icon)>
                     <icon icon=state.icon showUnknown=false/>
                 </if>
             </span>
-            <div>
+            <div on-click("sort")>
                 <span.column-tilte-text>
                     <if(component.column.getColumnConfiguration().showColumnTitle)>${state.title}</if>
                 </span>
                 <if(component.column.getColumnConfiguration().sortable)>
                     <span.sortable class={
                         sorted: state.isSorted,
-                        "filter-hovered": state.filterHovered,
                         "with-text": component.column.getColumnConfiguration().showColumnTitle
                     }>
                         <span class=(state.sortOrderDown ? "kix-icon-sort-down" : "kix-icon-sort-up")/>
@@ -28,7 +28,10 @@
                 </if>
             </div>
             <if(component.column.getColumnConfiguration().filterable)>
-                <column-filter column=component.column on-filterClicked("columnFilterClicked") on-filterHovered("columnFilterHovered")/>
+                <column-filter
+                    column=component.column
+                    on-changeFilterShownState("changeFilterShownState")
+                    on-filterHovered("columnFilterHovered")/>
             </if>
         </div>
         <if(component.column.getColumnConfiguration().resizable)>
