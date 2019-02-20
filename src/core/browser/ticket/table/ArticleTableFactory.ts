@@ -36,7 +36,7 @@ export class ArticleTableFactory implements ITableFactory {
                 ArticleProperty.NUMBER, true, false, true, false, 60, true, true, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 60,
+                ArticleProperty.ARTICLE_INFORMATION, false, true, true, false, 60,
                 false, false, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(
@@ -55,7 +55,7 @@ export class ArticleTableFactory implements ITableFactory {
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.ATTACHMENTS, true, true, false, false, 75, false, false, false, DataType.STRING, false)
+                ArticleProperty.ATTACHMENTS, true, true, true, false, 75, false, false, false, DataType.STRING, false)
         ];
 
         if (!tableConfiguration) {
