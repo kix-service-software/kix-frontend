@@ -1,19 +1,16 @@
 <widget instanceId=input.instanceId title="Legende" icon="kix-icon-legend">
     <@content>
-        <ul>
-            <li>
+        <if(state.show)>
+            <div.legend>
                 <div.legend-item.yellow/>
-                Geändert
-            </li>
-            <li>
-                <div.legend-item.yellow/>Gelöscht
-            </li>
-            <li>
-                <div.legend-item.yellow/>Neu
-            </li>
-            <li>
-                <div.legend-item.yellow/>Nicht vorhanden (nicht mehr oder noch nicht)
-            </li>
-        </ul>
+                <span>Geändert</span>
+                <div.legend-item.red/>
+                <span>Gelöscht</span>
+                <div.legend-item.green/>
+                <span>Neu</span>
+                <div.legend-item.gray/>
+                <span>Nicht vorhanden (nicht mehr oder noch nicht)</span>
+            </div>
+        </if>
     </@content>
 </widget>

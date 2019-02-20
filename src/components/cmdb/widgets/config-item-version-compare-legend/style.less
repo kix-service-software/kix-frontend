@@ -1,18 +1,22 @@
-ul li {
+div.legend {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
     >div.legend-item {
-        height: 2rem;
+        height: 1.5rem;
         width: 3rem;
         display: inline-block;
-        .yellow {
+        grid-row-gap: 1rem;
+        &.yellow {
             background-color: #F9F293;
         }
-        .red {
+        &.red {
             background-color: #F9D2D3;
         }
-        .gray {
+        &.gray {
             background-color: @secondary-3;
         }
-        .green {
+        &.green {
             background-color: #CBEADA;
         }
     }

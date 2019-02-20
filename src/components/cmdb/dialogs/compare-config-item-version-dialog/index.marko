@@ -4,7 +4,8 @@
             <if(state.compareWidget)>
                 <${component.getCompareWidgetTemplate()} ...{
                     contextType: "DIALOG",
-                    instanceId: state.compareWidget.instanceId
+                    instanceId: state.compareWidget.instanceId,
+                    title: state.title
                 }/>
             </if>
             <div.dialog-button-container>

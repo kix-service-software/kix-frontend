@@ -17,6 +17,11 @@ class Component {
             CompareConfigItemVersionDialogContext.CONTEXT_ID
         );
         this.state.compareWidget = this.context.getCompareWidget();
+
+        const versions = await this.context.getObjectList();
+        if (versions) {
+            this.state.title = `Gewählte Versionen (${versions.length})`;
+        }
     }
 
     public async submit(): Promise<void> {

@@ -7,7 +7,7 @@ export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Ver
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
 
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
+        return value ? value.toString() : '';
     }
 
     public async getPropertyText(property: string): Promise<string> {

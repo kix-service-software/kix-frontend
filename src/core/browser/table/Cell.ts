@@ -29,6 +29,10 @@ export class Cell implements ICell {
     }
 
     public async getDisplayValue(): Promise<string> {
+        if (this.getValue().displayValue) {
+            return this.getValue().displayValue;
+        }
+
         let value;
         const object = this.getRow().getRowObject().getObject();
 

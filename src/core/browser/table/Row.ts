@@ -20,6 +20,7 @@ export class Row<T = any> implements IRow<T> {
     private canBeSelected: boolean = true;
     private expanded: boolean = false;
     private children: IRow[] = [];
+    private filteredChildren: IRow[] = null;
 
     public constructor(
         private table: ITable, private rowObject?: IRowObject
@@ -49,8 +50,8 @@ export class Row<T = any> implements IRow<T> {
         return this.rowObject;
     }
 
-    public getChildren(): IRow[] {
-        return this.children;
+    public getChildrens(): IRow[] {
+        return this.filteredChildren ? this.filteredChildren : this.children;
     }
 
     public getCells(): ICell[] {
@@ -62,6 +63,11 @@ export class Row<T = any> implements IRow<T> {
     }
 
     public async filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean> {
+        if (!this.isFilterDefined(filterValue, criteria)) {
+            this.filteredChildren = null;
+            return true;
+        }
+
         let criteriaMatch = true;
         if (criteria && criteria.length) {
             criteriaMatch = await this.checkCriteria(criteria);
@@ -69,6 +75,21 @@ export class Row<T = any> implements IRow<T> {
 
         if (criteriaMatch) {
             criteriaMatch = criteriaMatch && await this.checkFilterValue(filterValue);
+        }
+
+        if (this.children && this.children.length) {
+            this.filteredChildren = [];
+            const children = [...this.children];
+            for (const child of children) {
+                const childMatch = await child.filter(filterValue, criteria);
+                if (childMatch) {
+                    this.filteredChildren.push(child);
+                }
+            }
+
+            if (!criteriaMatch) {
+                criteriaMatch = this.filteredChildren.length > 0;
+            }
         }
 
         return criteriaMatch;
@@ -195,5 +216,21 @@ export class Row<T = any> implements IRow<T> {
         if (!cell) {
             this.cells.push(new Cell(this, value));
         }
+    }
+
+    private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
+        return (value && value !== '') || (criteria && criteria.length !== 0);
+    }
+
+    public getRowCount(): number {
+        let count = 1;
+
+        if (this.filteredChildren) {
+            this.filteredChildren.forEach((c) => count += c.getRowCount());
+        } else {
+            this.children.forEach((c) => count += c.getRowCount());
+        }
+
+        return count;
     }
 }
