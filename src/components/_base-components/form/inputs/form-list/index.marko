@@ -44,13 +44,15 @@
         </if>
         <else-if(state.nodes)>
             <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
-                <input.input-style
-                    type="text"
-                    placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
-                    value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
-                    key=("form-list-input-" + state.listId)
-                    on-keydown("keyDown")
-                    on-keyup("keyUp")/>
+                <if(state.asAutocomplete || state.nodes.length > 7)>
+                    <input.input-style
+                        type="text"
+                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
+                        value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
+                        key=("form-list-input-" + state.listId)
+                        on-keydown("keyDown")
+                        on-keyup("keyUp")/>
+                </if>
                 <if(state.asAutocomplete && state.nodes.length === 0)>
                     <div.form-list-autocomplete-no-results>
                         <span>${component.getAutocompleteNotFoundText()}</span>
@@ -66,13 +68,13 @@
                         on-nodeClicked("nodeClicked")/>
                     <if(state.asMultiselect)>
                         <div.button-bar key="buttonbar">
+                            <span on-click("selectAll")>
+                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>Alle auswählen
+                            </span>
                             <button.submit-button type="button" on-click("submit") title="Bestätigen">
                                 <span.kix-icon-check/>
                                 Bestätigen
                             </button>
-                            <span on-click("selectAll")>
-                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>Alle auswählen
-                            </span>
                         </div>
                     </if>
                 </else>
