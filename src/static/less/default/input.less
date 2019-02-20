@@ -50,20 +50,31 @@ textarea.input-style {
     >.value-list {
         z-index: 15;
         position: absolute;
-        top: @default-input-height;
         left: 0;
         right: 0;
         border: 1px solid @secondary-2;
         background-color: @secondary-6;
         padding: .25rem;
         box-sizing: border-box;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
+        display: grid;
         >input {
             margin-bottom: @margin-small;
         }
         >.form-list-tree {
             max-height: 15rem;
             overflow: auto;
-            border-radius: @border-radius;
+        }
+        .button-bar {
+            margin: @margin-small;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            text-align: right;
+            align-items: center;
+            .select-all-Checkbox {
+                margin-right: .5rem;
+            }
         }
     }
     >.form-list-loading {
@@ -117,7 +128,7 @@ textarea.input-style {
             border-color: @tertiary-0;
         }
         >.selected-nodes {
-            padding: .25rem .25rem 0 .25rem;
+            padding: .25rem 2.5rem 0 .25rem;
             display: flex;
             flex-wrap: wrap;
             margin-top: -1px;

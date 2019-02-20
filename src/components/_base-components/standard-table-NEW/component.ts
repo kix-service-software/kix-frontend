@@ -187,10 +187,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             const columns = this.state.table.getColumns();
             columns.forEach((c) => columnWidth += this.getColumnSize(c));
             if (this.state.table.getTableConfiguration().enableSelection) {
-                columnWidth += 2.875 * this.browserFontSize;
+                columnWidth += 2.5 * this.browserFontSize;
             }
             if (this.state.table.getTableConfiguration().toggle) {
-                columnWidth += 2.875 * this.browserFontSize;
+                columnWidth += 2.5 * this.browserFontSize;
             }
 
             withScroll = root.getBoundingClientRect().width < columnWidth;
@@ -199,14 +199,19 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private getColumnSize(column: IColumn): number {
-        let minWidth: number = (2.875 * this.browserFontSize);
-        if (column.getColumnConfiguration().filterable) {
-            minWidth += this.browserFontSize;
+        let minWidth: number = (2.5 * this.browserFontSize);
+        const config = column.getColumnConfiguration();
+        if (config.showColumnIcon || config.showColumnTitle) {
+            if (config.filterable) {
+                minWidth += this.browserFontSize * 1.125;
+            }
+            if (config.sortable) {
+                minWidth += this.browserFontSize * 1.125;
+            }
+        } else if (config.filterable && config.sortable) {
+            minWidth += this.browserFontSize * 1.125;
         }
-        if (column.getColumnConfiguration().sortable) {
-            minWidth += this.browserFontSize;
-        }
-        return column.getColumnConfiguration().size < minWidth ? minWidth : column.getColumnConfiguration().size;
+        return config.size < minWidth ? minWidth : config.size;
     }
 
     public onScroll(): void {

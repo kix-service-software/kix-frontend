@@ -73,24 +73,24 @@ class Component {
     private toggleList(close: boolean = true): void {
         if (this.state.expanded && close) {
             this.state.expanded = false;
+            this.state.filterValue = null;
+            this.state.autocompleteSearchValue = null;
+            if (this.state.asAutocomplete) {
+                this.state.nodes = [];
+            }
         } else if (!this.state.readonly) {
             this.state.expanded = true;
-            setTimeout(this.setDropdownStyle.bind(this), 100);
-        }
-
-        this.state.filterValue = null;
-        this.state.autocompleteSearchValue = null;
-        if (this.state.asAutocomplete) {
-            this.state.nodes = [];
+            setTimeout(() => {
+                this.setDropdownStyle();
+                this.focusInput();
+            }, 100);
         }
     }
 
-    public listToggleButtonClicked(): void {
-        if (this.state.expanded) {
-            this.toggleList(true);
-        } else {
-            this.toggleList(false);
-        }
+    public listToggleButtonClicked(event: Event): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.toggleList();
     }
 
     public nodeToggled(): void {
@@ -119,7 +119,10 @@ class Component {
                 this.startSearch();
             } else {
                 this.state.filterValue = event.target.value;
-                setTimeout(() => this.setDropdownStyle(), 50);
+                setTimeout(() => {
+                    this.setDropdownStyle();
+                    this.setCheckState();
+                }, 50);
             }
         }
     }
@@ -141,9 +144,11 @@ class Component {
             this.handleSingleselect(node);
         }
 
-        if (this.state.selectedNodes.length) {
-            this.state.filterValue = null;
-        }
+        setTimeout(() => {
+            this.setDropdownStyle();
+            this.focusInput();
+            this.setCheckState();
+        }, 50);
 
         (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
@@ -167,10 +172,6 @@ class Component {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
         if (nodeIndex !== -1) {
             this.state.selectedNodes.splice(nodeIndex, 1);
-        }
-        if (!this.state.selectedNodes.length) {
-            this.state.filterValue = null;
-            this.focusInput();
         }
         (this as any).setStateDirty('selectedNodes');
         (this as any).emit('nodesChanged', this.state.selectedNodes);
@@ -199,8 +200,10 @@ class Component {
         this.state.isLoading = false;
         this.autocompleteTimeout = null;
 
-        setTimeout(() => this.setDropdownStyle(), 50);
-        this.focusInput();
+        setTimeout(() => {
+            this.setDropdownStyle();
+            this.focusInput();
+        }, 50);
     }
 
     private setDropdownStyle(): void {
@@ -224,7 +227,6 @@ class Component {
             const list = (this as any).getEl(this.state.treeId);
             const buttons = (this as any).getEl("buttonbar");
 
-
             if (containerEnd < dropdownListEnd) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
@@ -242,7 +244,7 @@ class Component {
                     buttons.style = "grid-row: 2";
                 }
             } else {
-                this.state.treeStyle = { top: formListInputContainer.getBoundingClientRect().height };
+                this.state.treeStyle = { top: (formListInputContainer.getBoundingClientRect().height - 1) + 'px' };
                 if (input) {
                     input.style = "grid-row: 1";
                 }
@@ -271,34 +273,56 @@ class Component {
         event.preventDefault();
 
         const checkBox = (this as any).getEl('selectAllCheckbox');
-        if (checkBox.checked) {
-            this.state.selectedNodes = [...this.state.nodes];
-        } else {
-            this.state.selectedNodes = [];
+        const tree = (this as any).getComponent(this.state.treeId);
+        if (checkBox && tree) {
+            const nodes = tree.getFilteredNodes() || [];
+            if (checkBox.checked) {
+                nodes.forEach((n) => {
+                    if (!this.state.selectedNodes.some((sn) => sn.id === n.id)) {
+                        this.state.selectedNodes.push(n);
+                    }
+                });
+            } else {
+                this.state.selectedNodes = this.state.selectedNodes.filter(
+                    (sn) => !nodes.some((n) => n.id === sn.id)
+                );
+            }
+            setTimeout(() => {
+                this.setDropdownStyle();
+                this.focusInput();
+                this.setCheckState();
+            }, 50);
+            (this as any).emit('nodesChanged', this.state.selectedNodes);
         }
-        (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
     private setCheckState(): void {
         const checkBox = (this as any).getEl('selectAllCheckbox');
-        if (checkBox) {
-            if (this.state.selectedNodes.length === 0) {
-                checkBox.checked = false;
-                checkBox.indeterminate = false;
-            } else if (this.state.selectedNodes.length === this.state.nodes.length) {
-                checkBox.checked = true;
-                checkBox.indeterminate = false;
-            } else {
-                checkBox.checked = false;
-                checkBox.indeterminate = true;
+        const tree = (this as any).getComponent(this.state.treeId);
+        if (checkBox && tree) {
+            const nodes = tree.getFilteredNodes() || [];
+            const checkNodes = this.state.selectedNodes.filter(
+                (sn) => nodes.some((n) => n.id === sn.id)
+            );
+            let checked = true;
+            let indeterminate = false;
+            if (checkNodes.length === 0) {
+                checked = false;
+            } else if (checkNodes.length < nodes.length) {
+                checked = false;
+                indeterminate = true;
             }
+            setTimeout(() => {
+                checkBox.checked = checked;
+                checkBox.indeterminate = indeterminate;
+            }, 10);
         }
     }
 
     public submit(): void {
         event.stopPropagation();
         event.preventDefault();
-        this.toggleList(true);
+        this.toggleList();
     }
 }
 
