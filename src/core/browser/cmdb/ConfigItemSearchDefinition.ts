@@ -36,7 +36,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
         if (parameter) {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-            const classAttributes = await ConfigItemClassAttributeUtil.getInstance().getMergedClassAttributeIds(
+            const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
                 classParameter ? classParameter[1] : null
             );
             classAttributes.forEach((ca) => properties.push(ca));
@@ -81,7 +81,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 break;
             default:
                 const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-                const type = await ConfigItemClassAttributeUtil.getInstance().getAttributeType(
+                const type = await ConfigItemClassAttributeUtil.getAttributeType(
                     property, classParameter ? classParameter[1] : null
                 );
                 if (type === 'Date') {
@@ -110,7 +110,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             return InputFieldTypes.DROPDOWN;
         } else {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-            const type = await ConfigItemClassAttributeUtil.getInstance().getAttributeType(
+            const type = await ConfigItemClassAttributeUtil.getAttributeType(
                 property, classParameter ? classParameter[1] : null
             );
 
@@ -136,7 +136,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public async getTreeNodes(property: string, parameter: Array<[string, any]>): Promise<TreeNode[]> {
         const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
+        const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter[1] : null
         );
 
@@ -205,7 +205,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     break;
                 default:
                     if (classIds) {
-                        const path = await ConfigItemClassAttributeUtil.getInstance().getAttributePath(
+                        const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );
                         if (path) {
@@ -272,7 +272,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
     ): Promise<TreeNode[]> {
         const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
+        const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter[1] : null
         );
 
@@ -306,7 +306,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         let attributes: AttributeDefinition[];
         if (classParameter) {
             const classIds = Array.isArray(classParameter[1]) ? classParameter[1] : [classParameter[1]];
-            attributes = await ConfigItemClassAttributeUtil.getInstance().getAttributeDefinitions(classIds);
+            attributes = await ConfigItemClassAttributeUtil.getAttributeDefinitions(classIds);
         }
 
         const columns: IColumnConfiguration[] = [];
@@ -360,7 +360,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
         let displayValue = await super.getDisplaySearchValue(property, parameter, value);
         const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-        const input = await ConfigItemClassAttributeUtil.getInstance().getAttributeInput(
+        const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter[1] : null
         );
 
