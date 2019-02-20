@@ -33,10 +33,12 @@ export interface IRow<T = any> {
 
     updateValues(): void;
 
-    getChildren(): IRow[];
+    getChildrens(): IRow[];
 
     setValueState(state: ValueState): void;
 
     addCell(value: TableValue): void;
+
+    getRowCount(): number;
 
 }

@@ -11,6 +11,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.instanceId = input.instanceId;
     }
 
+    public async onMount(): Promise<void> {
+        setTimeout(() => this.state.show = true, 50);
+    }
+
 }
 
 module.exports = Component;

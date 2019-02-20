@@ -17,7 +17,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selected = this.state.row.isSelected();
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
-            this.state.children = this.state.row.getChildren();
+            this.state.children = this.state.row.getChildrens();
         }
     }
 

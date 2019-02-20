@@ -23,7 +23,7 @@ export class Extension implements IConfigurationExtension {
         const legendSidebar =
             new ConfiguredWidget('20190214082400-compare-ci-version-legend', new WidgetConfiguration(
                 'config-item-version-compare-legend', 'Legende', [], null,
-                false, false, WidgetSize.LARGE, 'kix-icon-legend', false
+                false, false, WidgetSize.BOTH, 'kix-icon-legend', false
             ));
         return new CompareConfigItemVersionDialogContextConfiguration(
             ['20190214082400-compare-ci-version-legend'], [legendSidebar],

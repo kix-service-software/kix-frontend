@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableConfiguration, TableFactoryService
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService
 } from '../../../core/browser';
 class Component {
 
@@ -16,6 +16,8 @@ class Component {
 
     private contextType: ContextType;
 
+    private configuredTitle: boolean = true;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -23,6 +25,8 @@ class Component {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.contextType = input.contextType;
+        this.configuredTitle = input.title === undefined;
+        this.state.title = input.title;
     }
 
     public async onMount(): Promise<void> {
@@ -44,7 +48,7 @@ class Component {
                     if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
                         this.prepareTitle();
                         this.state.filterCount = this.state.table.isFiltered()
-                            ? this.state.table.getRows().length
+                            ? this.state.table.getRowCount()
                             : null;
                     }
                     WidgetService.getInstance().updateActions(this.state.instanceId);
@@ -82,11 +86,13 @@ class Component {
     }
 
     private prepareTitle(): void {
-        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
-        if (this.state.table) {
-            title = `${title} (${this.state.table.getRows(true).length})`;
+        if (this.configuredTitle) {
+            let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+            if (this.state.table) {
+                title = `${title} (${this.state.table.getRows().length})`;
+            }
+            this.state.title = title;
         }
-        this.state.title = title;
     }
 
 

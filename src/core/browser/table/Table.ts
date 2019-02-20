@@ -235,10 +235,12 @@ export class Table implements ITable {
         this.filterValue = filterValue;
         this.filterCriteria = criteria;
     }
+
     public async filter(): Promise<void> {
         if (this.isFilterDefined(this.filterValue, this.filterCriteria)) {
             this.filteredRows = [];
-            for (const row of this.rows) {
+            const rows = [...this.rows];
+            for (const row of rows) {
                 const match = await row.filter(this.filterValue, this.filterCriteria);
                 if (match) {
                     this.filteredRows.push(row);
@@ -246,6 +248,9 @@ export class Table implements ITable {
             }
         } else {
             this.filteredRows = null;
+            for (const row of this.rows) {
+                await row.filter(null, null);
+            }
         }
 
         await this.filterColumns();
@@ -269,9 +274,7 @@ export class Table implements ITable {
         }
     }
 
-    private isFilterDefined(
-        value: string = this.filterValue, criteria: TableFilterCriteria[] = this.filterCriteria
-    ): boolean {
+    private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 
@@ -397,7 +400,8 @@ export class Table implements ITable {
     }
 
     public isFiltered(): boolean {
-        return this.isFilterDefined() || this.getColumns().some((c) => c.isFiltered());
+        return this.isFilterDefined(this.filterValue, this.filterCriteria) ||
+            this.getColumns().some((c) => c.isFiltered());
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {
@@ -419,6 +423,12 @@ export class Table implements ITable {
 
     public destroy(): void {
         this.contentProvider.destroy();
+    }
+
+    public getRowCount(): number {
+        let count = 0;
+        this.getRows().forEach((r) => count += r.getRowCount());
+        return count;
     }
 
 }

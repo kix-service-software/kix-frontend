@@ -175,7 +175,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private countRows(rows: IRow[]): number {
         let count = rows.length;
-        rows.forEach((r) => count += this.countRows(r.getChildren()));
+        rows.forEach((r) => count += this.countRows(r.getChildrens()));
         return count;
     }
 
