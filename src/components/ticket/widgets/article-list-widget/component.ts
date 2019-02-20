@@ -51,9 +51,15 @@ export class Component {
                         }
                     );
                 }
+                if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
+                    this.state.filterCount = this.state.table.isFiltered()
+                        ? this.state.table.getRowCount()
+                        : null;
+                }
             }
         };
         EventService.getInstance().subscribe(TicketEvent.SCROLL_TO_ARTICLE, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
 
         await this.initWidget(await context.getObject<Ticket>(KIXObjectType.TICKET));
     }
