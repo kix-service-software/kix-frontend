@@ -123,7 +123,7 @@ class Component {
                             this.closeGroup('customer-escalated-tickets-group');
                         }
                         this.state.escalatedTicketsCount = this.state.escalatedTicketsTable.getRows().length;
-                        this.state.escalatedTicketsFilterCount = this.state.escalatedTicketsTable
+                        this.state.escalatedTicketsFilterCount = this.state.escalatedTicketsTable.isFiltered()
                             ? this.state.escalatedTicketsTable.getRows().length
                             : null;
                     }
@@ -162,7 +162,7 @@ class Component {
                         }
 
                         this.state.reminderTicketsCount = this.state.reminderTicketsTable.getRows().length;
-                        this.state.reminderTicketsFilterCount = this.state.reminderTicketsTable
+                        this.state.reminderTicketsFilterCount = this.state.reminderTicketsTable.isFiltered()
                             ? this.state.reminderTicketsTable.getRows().length
                             : null;
                     }
@@ -211,7 +211,7 @@ class Component {
                             this.closeGroup('customer-new-tickets-group');
                         }
                         this.state.newTicketsCount = this.state.newTicketsTable.getRows().length;
-                        this.state.newTicketsFilterCount = this.state.newTicketsTable
+                        this.state.newTicketsFilterCount = this.state.newTicketsTable.isFiltered()
                             ? this.state.newTicketsTable.getRows().length
                             : null;
                     }
@@ -258,7 +258,7 @@ class Component {
                             this.closeGroup('customer-open-tickets-group');
                         }
                         this.state.openTicketsCount = this.state.openTicketsTable.getRows().length;
-                        this.state.openTicketsFilterCount = this.state.openTicketsTable
+                        this.state.openTicketsFilterCount = this.state.openTicketsTable.isFiltered()
                             ? this.state.openTicketsTable.getRows().length
                             : null;
                     }
@@ -311,7 +311,7 @@ class Component {
                             this.closeGroup('customer-pending-tickets-group');
                         }
                         this.state.pendingTicketsCount = this.state.pendingTicketsTable.getRows().length;
-                        this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable
+                        this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable.isFiltered()
                             ? this.state.pendingTicketsTable.getRows().length
                             : null;
                     }
