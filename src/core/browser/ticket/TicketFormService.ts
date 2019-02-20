@@ -62,7 +62,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
 
         if (channel.Name === 'note') {
             fields.push(new FormField(
-                "Anzeigen im Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
                 false, "Anzeigen im Kundenportal"
             ));
             fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));

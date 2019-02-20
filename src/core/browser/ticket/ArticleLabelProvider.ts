@@ -29,7 +29,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 displayValue = 'Nr.';
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Sichtbarkeit im Kundenportal';
+                displayValue = 'Sichtbar in Kundenportal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
                 displayValue = 'Senderobjekt';
@@ -116,6 +116,10 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                     const channel = channels.find((c) => c.ID === article.ChannelID);
                     displayValue = channel ? channel.Name : article[property];
                 }
+                break;
+
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Sichtbar in Kundenportal';
                 break;
 
             default:
