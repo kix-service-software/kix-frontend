@@ -104,6 +104,10 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
             objectType = KIXObjectType.CONFIG_ITEM;
         }
 
+        if (reload && objectType === KIXObjectType.CONFIG_ITEM) {
+            KIXObjectCache.removeObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
+        }
+
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONFIG_ITEM, Number(this.objectId))) {
             object = await this.loadConfigItem();
             reload = true;
