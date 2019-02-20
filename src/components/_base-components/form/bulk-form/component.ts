@@ -2,7 +2,7 @@ import { WidgetType, KIXObject, KIXObjectCache } from '../../../../core/model';
 import {
     WidgetService, DialogService, TableHeaderHeight,
     TableRowHeight, LabelService, TableConfiguration, BrowserUtil,
-    KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState, ServiceMethod
+    KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState, ServiceMethod, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
@@ -31,7 +31,7 @@ class Component {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 
     public async reset(): Promise<void> {
@@ -70,8 +70,8 @@ class Component {
 
                 this.tableSubscriber = {
                     eventSubscriberId: 'bulk-table-listener',
-                    eventPublished: (data: any, eventId: string) => {
-                        if (data === table.getTableId()) {
+                    eventPublished: (data: TableEventData, eventId: string) => {
+                        if (data && data.tableId === table.getTableId()) {
                             if (eventId === TableEvent.TABLE_INITIALIZED) {
                                 table.selectAll();
                             }
@@ -83,7 +83,7 @@ class Component {
                     }
                 };
 
-                EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
                 EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
 
                 this.state.table = table;

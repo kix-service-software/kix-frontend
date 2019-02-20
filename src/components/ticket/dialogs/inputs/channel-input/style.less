@@ -9,9 +9,9 @@
         height: 3rem;
         box-sizing: border-box;
         overflow: hidden;
-        border: 1px solid @primary-1;
+        border: 1px solid @primary-2;
         border-radius: @border-radius;
-        color: @primary-1;
+        color: @primary-2;
         font-size: 2.75rem;
         line-height: 3rem;
         box-shadow: @shadow-1;
@@ -20,9 +20,13 @@
         justify-content: center;
         cursor: pointer;
         >.channel-text {
+            .font-size-small;
             .shorten-text();
+            white-space: normal;
+            line-height: 1rem;
+            max-height: 100%;
+            padding: .125rem;
             display: none;
-            font-size: 1rem;
             font-weight: bold;
         }
         &:hover {
@@ -35,7 +39,7 @@
             }
         }
         &.active {
-            background-color: @primary-1;
+            background-color: @primary-2;
             color: @secondary-6;
         }
     }

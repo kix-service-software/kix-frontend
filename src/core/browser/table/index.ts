@@ -19,5 +19,6 @@ export { TableHeaderHeight } from './TableHeaderHeight';
 export { TableFactoryService } from './TableFactoryService';
 export { ITableFactory } from './ITableFactory';
 export { TableEvent } from './TableEvent';
+export { TableEventData } from './TableEventData';
 export { ValueState } from './ValueState';
 export { TableValue } from './TableValue';

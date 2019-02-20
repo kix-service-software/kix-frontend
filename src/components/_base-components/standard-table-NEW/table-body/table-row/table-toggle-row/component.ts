@@ -3,7 +3,7 @@ import {
     ToggleOptions, ComponentsService, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
 } from '../../../../../../core/browser';
 import { IAction } from '../../../../../../core/model';
-import { IRow, TableEvent } from '../../../../../../core/browser/table';
+import { TableEvent, TableEventData } from '../../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
@@ -44,8 +44,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
     }
 
-    public eventPublished(data: any, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.REFRESH && data === this.state.row.getTable().getTableId()) {
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
+        if (eventId === TableEvent.REFRESH && data && data.tableId === this.state.row.getTable().getTableId()) {
             this.setWidth();
         }
     }

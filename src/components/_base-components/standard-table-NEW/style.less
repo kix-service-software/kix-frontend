@@ -294,9 +294,14 @@
                             align-items: center;
                             overflow: hidden;
                             &.with-icons {
-                                grid-template-columns: max-content auto;
-                                >*:first-child {
-                                    padding-right: @margin-small / 2;
+                                &.with-text {
+                                    grid-template-columns: max-content auto;
+                                    >*:first-child {
+                                        padding-right: @margin-small / 2;
+                                    }
+                                }
+                                &:not(.with-text) {
+                                    justify-content: center;
                                 }
                             }
                             >span>span.icon>* {

@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../core/browser';
-import { ITable, SelectionState, TableEvent } from '../../../../core/browser/table';
+import { ITable, SelectionState, TableEvent, TableEventData } from '../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
@@ -20,26 +20,26 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public async onMount(): Promise<void> {
         this.eventSubscriberId = this.table.getTableId() + '-head';
-        EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this);
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
         EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
         this.setCheckState();
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
     }
 
-    public eventPublished(data: any, eventId: string, subscriberId?: string): void {
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (
             (
-                eventId === TableEvent.SELECTION_CHANGED
+                eventId === TableEvent.ROW_SELECTION_CHANGED
                 || eventId === TableEvent.REFRESH
                 || eventId === TableEvent.ROW_TOGGLED
             )
-            && data === this.table.getTableId()
+            && data && data.tableId === this.table.getTableId()
         ) {
             this.setCheckState();
         }

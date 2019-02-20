@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, WidgetService, TableFactoryService, TableEvent
+    ContextService, ActionFactory, WidgetService, TableFactoryService, TableEvent, TableEventData
 } from "../../../../core/browser";
 import { KIXObjectType, KIXObjectPropertyFilter } from "../../../../core/model";
 import { EventService } from "../../../../core/browser/event";
@@ -30,8 +30,8 @@ class Component {
 
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, {
             eventSubscriberId: 'contact-list-widget' + this.state.instanceId,
-            eventPublished: (data: any, eventId: string) => {
-                if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (eventId === TableEvent.TABLE_READY && data && data.tableId === this.state.table.getTableId()) {
                     this.prepareTitle();
                 }
             }

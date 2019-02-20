@@ -5,6 +5,7 @@ import { SortOrder, TableFilterCriteria } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
+import { TableEventData } from "./TableEventData";
 
 export class Column<T = any> implements IColumn<T> {
 
@@ -73,7 +74,10 @@ export class Column<T = any> implements IColumn<T> {
 
         await this.getTable().filter();
 
-        EventService.getInstance().publish(TableEvent.COLUMN_FILTERED, this.getTable().getTableId());
+        EventService.getInstance().publish(
+            TableEvent.COLUMN_FILTERED,
+            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
+        );
     }
 
     public getFilter(): [string, TableFilterCriteria[]] {
@@ -82,7 +86,10 @@ export class Column<T = any> implements IColumn<T> {
 
     public setSize(size: number): void {
         this.columnConfiguration.size = size;
-        EventService.getInstance().publish(TableEvent.COLUMN_RESIZED, this.getTable().getTableId());
+        EventService.getInstance().publish(
+            TableEvent.COLUMN_RESIZED,
+            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
+        );
     }
 
     public isFiltered(): boolean {

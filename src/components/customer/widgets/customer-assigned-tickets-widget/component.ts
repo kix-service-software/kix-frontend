@@ -1,6 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, TableFactoryService, SearchOperator, KIXObjectService, TableEvent, ITable
+    ContextService, ActionFactory, TableFactoryService, SearchOperator, KIXObjectService,
+    TableEvent, ITable, TableEventData
 } from "../../../../core/browser";
 import {
     WidgetConfiguration, Customer, KIXObjectType, FilterCriteria, TicketProperty, FilterDataType,
@@ -117,8 +118,11 @@ class Component {
 
             this.tableEscalatedTicketsSubscriber = {
                 eventSubscriberId: 'customer-escalated-tickets-table',
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.escalatedTicketsTable.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.escalatedTicketsTable.getTableId()
+                    ) {
                         if (this.state.escalatedTicketsTable.getRows(true).length === 0) {
                             this.closeGroup('customer-escalated-tickets-group');
                         }
@@ -155,8 +159,11 @@ class Component {
 
             this.tableReminderTicketsSubscriber = {
                 eventSubscriberId: 'customer-reminder-tickets-table',
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.reminderTicketsTable.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.reminderTicketsTable.getTableId()
+                    ) {
                         if (this.state.reminderTicketsTable.getRows(true).length === 0) {
                             this.closeGroup('customer-reminder-tickets-group');
                         }
@@ -205,8 +212,11 @@ class Component {
 
             this.tableNewTicketsSubscriber = {
                 eventSubscriberId: 'customer-new-tickets-group',
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.newTicketsTable.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.newTicketsTable.getTableId()
+                    ) {
                         if (this.state.newTicketsTable.getRows(true).length === 0) {
                             this.closeGroup('customer-new-tickets-group');
                         }
@@ -252,8 +262,11 @@ class Component {
 
             this.tableOpenTicketsSubscriber = {
                 eventSubscriberId: 'customer-open-tickets-group',
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.openTicketsTable.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.openTicketsTable.getTableId()
+                    ) {
                         if (this.state.openTicketsTable.getRows(true).length === 0) {
                             this.closeGroup('customer-open-tickets-group');
                         }
@@ -305,8 +318,11 @@ class Component {
 
             this.tablePendingTicketsSubscriber = {
                 eventSubscriberId: 'customer-pending-tickets-group',
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.pendingTicketsTable.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.pendingTicketsTable.getTableId()
+                    ) {
                         if (this.state.pendingTicketsTable.getRows(true).length === 0) {
                             this.closeGroup('customer-pending-tickets-group');
                         }

@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, BrowserUtil } from '../../../../../core/browser';
-import { IColumn, ICell, TableEvent } from '../../../../../core/browser/table';
+import { AbstractMarkoComponent } from '../../../../../core/browser';
+import { IColumn, ICell, TableEvent, TableEventData } from '../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
@@ -17,29 +17,41 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selected = this.state.row.isSelected();
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
-            this.state.children = this.state.row.getChildrens();
+            this.state.children = this.state.row.getChildren();
         }
     }
 
     public async onMount(): Promise<void> {
         if (this.state.row) {
             this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
-            EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this);
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
+            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
+            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
         }
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
     }
 
-    public eventPublished(data: any, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.SELECTION_CHANGED && data === this.state.row.getTable().getTableId()) {
-            this.state.selected = this.state.row.isSelected();
-        }
-        if (eventId === TableEvent.ROW_TOGGLED && data === this.state.row.getTable().getTableId()) {
-            this.state.open = this.state.row.isExpanded();
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
+        if (data && data.tableId === this.state.row.getTable().getTableId()) {
+            if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
+                this.state.selected = this.state.row.isSelected();
+            }
+            if (eventId === TableEvent.ROW_TOGGLED && data.rowId === this.state.row.getRowId()) {
+                this.state.open = this.state.row.isExpanded();
+            }
+            if (
+                (eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)
+                && data.rowId === this.state.row.getRowId()
+            ) {
+                (this as any).setStateDirty('row');
+            }
         }
     }
 

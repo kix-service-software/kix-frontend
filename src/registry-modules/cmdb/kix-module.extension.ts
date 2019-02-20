@@ -22,7 +22,6 @@ class Extension implements IKIXModuleExtension {
         ['config-item-graph-widget', 'cmdb/widgets/config-item-graph-widget'],
         ['config-item-class-explorer', 'cmdb/widgets/config-item-class-explorer'],
         ['config-item-chart-widget', 'cmdb/widgets/config-item-chart-widget'],
-        ['config-item-list-widget', 'cmdb/widgets/config-item-list-widget'],
         ['config-item-images-widget', 'cmdb/widgets/config-item-images-widget'],
         ['cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes'],
         ['config-item-class-details', 'cmdb/admin/config-item-class-details'],

@@ -5,7 +5,7 @@ import { ComponentState } from './ComponentState';
 import { TicketDetailsContext, } from "../../../../core/browser/ticket";
 import { ContextService } from "../../../../core/browser/context";
 import {
-    ActionFactory, WidgetService, OverlayService, TableFactoryService, TableEvent
+    ActionFactory, WidgetService, OverlayService, TableFactoryService, TableEvent, TableEventData
 } from "../../../../core/browser";
 import { EventService, IEventSubscriber } from "../../../../core/browser/event";
 
@@ -43,15 +43,18 @@ export class Component {
             eventSubscriberId: 'article-list-widget',
             eventPublished: (data: any, eventId: string) => {
                 if (eventId === TicketEvent.SCROLL_TO_ARTICLE) {
-                    EventService.getInstance().publish(
-                        TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID,
-                        {
-                            tableId: this.state.table.getTableId(),
-                            objectId: data
-                        }
-                    );
+                    const row = this.state.table.getRowByObjectId(data);
+                    if (row) {
+                        EventService.getInstance().publish(
+                            TableEvent.SCROLL_TO_AND_TOGGLE_ROW,
+                            new TableEventData(this.state.table.getTableId(), row.getRowId())
+                        );
+                    }
                 }
-                if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
+                if (
+                    eventId === TableEvent.TABLE_READY && data
+                    && (data as TableEventData).tableId === this.state.table.getTableId()
+                ) {
                     this.state.filterCount = this.state.table.isFiltered()
                         ? this.state.table.getRowCount()
                         : null;

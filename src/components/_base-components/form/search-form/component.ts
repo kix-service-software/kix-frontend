@@ -4,7 +4,7 @@ import {
 import { FormService } from '../../../../core/browser/form';
 import {
     WidgetService, DialogService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
-    TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty
+    TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchContext } from '../../../../core/browser/search/context';
@@ -52,9 +52,9 @@ class Component implements ISearchFormListener {
 
         this.subscriber = {
             eventSubscriberId: 'search-result-list',
-            eventPublished: async (data: any, eventId: string) => {
+            eventPublished: async (data: TableEventData, eventId: string) => {
                 if (this.table) {
-                    if (data === this.table.getTableId()) {
+                    if (data && data.tableId === this.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
                             this.state.resultCount = this.table.getRows().length;
                         }

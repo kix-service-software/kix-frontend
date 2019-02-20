@@ -5,7 +5,7 @@ import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
     LabelService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEvents
+    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData
 } from '../../../../core/browser';
 import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
@@ -107,8 +107,8 @@ class Component implements IKIXObjectSearchListener {
 
             const tableSubscriber: IEventSubscriber = {
                 eventSubscriberId: 'search-result-table-listener',
-                eventPublished: async (data: any, eventId: string) => {
-                    if (data === table.getTableId()) {
+                eventPublished: async (data: TableEventData, eventId: string) => {
+                    if (data && data.tableId === table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED && isSearchMainObject) {
                             const parameter: Array<[string, any]> = [];
                             for (const c of cache.criteria) {

@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, IColumn, OverlayService, TableEvent, BrowserUtil
+    AbstractMarkoComponent, IColumn, OverlayService, TableEvent, TableEventData
 } from "../../../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import { ComponentContent, OverlayType } from "../../../../../../core/model";
@@ -44,8 +44,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         OverlayService.getInstance().unregisterOverlayListener(this.column.getColumnId());
     }
 
-    public eventPublished(data: any, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.COLUMN_FILTERED && data && data === this.column.getTable().getTableId()) {
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
+        if (eventId === TableEvent.COLUMN_FILTERED && data && data.tableId === this.column.getTable().getTableId()) {
             this.setActiveState();
         }
     }

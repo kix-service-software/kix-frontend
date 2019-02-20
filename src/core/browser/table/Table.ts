@@ -15,6 +15,7 @@ import { TableEvent } from "./TableEvent";
 import { TableConfiguration } from "./TableConfiguration";
 import { TableValue } from "./TableValue";
 import { ValueState } from "./ValueState";
+import { TableEventData } from "./TableEventData";
 
 export class Table implements ITable {
 
@@ -122,7 +123,7 @@ export class Table implements ITable {
         return this.filteredRows ? [...this.filteredRows] : [...this.rows];
     }
 
-    public getSelectedRows(all: boolean = false): IRow[] {
+    public getSelectedRows(all?: boolean): IRow[] {
         return this.getRows(all).filter((r) => r.isSelected());
     }
 
@@ -263,7 +264,7 @@ export class Table implements ITable {
 
         await this.filterColumns();
 
-        EventService.getInstance().publish(TableEvent.REFRESH, this.id);
+        EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
     }
 
     private async filterColumns(): Promise<void> {
@@ -300,8 +301,10 @@ export class Table implements ITable {
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
             }
-            EventService.getInstance().publish(TableEvent.REFRESH, this.id);
-            EventService.getInstance().publish(TableEvent.SORTED, { tableId: this.id, columnId });
+            EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+            EventService.getInstance().publish(
+                TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
+            );
         }
     }
 
@@ -337,7 +340,6 @@ export class Table implements ITable {
                 row.selectable(selectable);
             }
         });
-        EventService.getInstance().publish(TableEvent.RERENDER_TABLE, this.id);
     }
 
     private getRowByObject(object: any): IRow {
@@ -345,7 +347,7 @@ export class Table implements ITable {
             .find((r) => r.getRowObject().getObject() && r.getRowObject().getObject().equals(object));
     }
 
-    public getRowSelectionState(all: boolean = false): SelectionState {
+    public getRowSelectionState(all?: boolean): SelectionState {
         const selectableCount = this.getRows(all).filter((r) => r.isSelectable()).length;
         const selectedCount = this.getRows(all).filter((r) => r.isSelected()).length;
         let selectionState = SelectionState.ALL;
@@ -372,7 +374,7 @@ export class Table implements ITable {
                 (o) => this.selectRowByObject(o)
             );
         }
-        EventService.getInstance().publish(TableEvent.REFRESH, this.id);
+        EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
     }
 
     public setRowObjectValues(values: Array<[any, [string, any]]>): void {
@@ -387,9 +389,12 @@ export class Table implements ITable {
                 } else {
                     row.addCell(new TableValue(value[0], value[1]));
                 }
+                EventService.getInstance().publish(
+                    TableEvent.ROW_VALUE_CHANGED,
+                    new TableEventData(this.getTableId(), row.getRowId())
+                );
             }
         });
-        EventService.getInstance().publish(TableEvent.REFRESH, this.id);
     }
 
     public switchColumnOrder(): void {
@@ -399,7 +404,7 @@ export class Table implements ITable {
             this.columns.unshift(column[0]);
         }
 
-        EventService.getInstance().publish(TableEvent.RERENDER_TABLE, this.id);
+        EventService.getInstance().publish(TableEvent.RERENDER_TABLE, new TableEventData(this.getTableId()));
     }
 
     public resetFilter(): void {
@@ -433,9 +438,9 @@ export class Table implements ITable {
         this.contentProvider.destroy();
     }
 
-    public getRowCount(): number {
+    public getRowCount(all?: boolean): number {
         let count = 0;
-        this.getRows().forEach((r) => count += r.getRowCount());
+        this.getRows(all).forEach((r) => count += r.getRowCount());
         return count;
     }
 

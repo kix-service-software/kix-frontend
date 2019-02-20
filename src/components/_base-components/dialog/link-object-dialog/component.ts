@@ -1,7 +1,7 @@
 import {
     KIXObjectSearchService, DialogService, WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
-    TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState
+    TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState, TableEventData
 } from "../../../../core/browser";
 import { FormService } from "../../../../core/browser/form";
 import {
@@ -62,7 +62,7 @@ class LinkDialogComponent {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 
     private async setLinkableObjects(): Promise<void> {
@@ -181,8 +181,8 @@ class LinkDialogComponent {
 
             this.tableSubscriber = {
                 eventSubscriberId: 'link-object-dialog',
-                eventPublished: (data: any, eventId: string) => {
-                    if (data === table.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (data && data.tableId === table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED) {
                             table.addColumns([
                                 new DefaultColumnConfiguration(
@@ -204,7 +204,7 @@ class LinkDialogComponent {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         }
     }
 
