@@ -33,7 +33,7 @@ export interface IRow<T = any> {
 
     updateValues(): void;
 
-    getChildrens(): IRow[];
+    getChildren(): IRow[];
 
     setValueState(state: ValueState): void;
 

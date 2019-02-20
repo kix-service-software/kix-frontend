@@ -6,7 +6,7 @@ import {
 } from "../../../../../core/model";
 import {
     ContextService, ServiceRegistry, WidgetService, SearchOperator, ActionFactory,
-    TableFactoryService, AbstractMarkoComponent, TableEvent
+    TableFactoryService, AbstractMarkoComponent, TableEvent, TableEventData
 } from "../../../../../core/browser";
 import { IEventSubscriber, EventService } from "../../../../../core/browser/event";
 import { TranslationLabelProvider } from "../../../../../core/browser/i18n";
@@ -74,8 +74,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.tableSubscriber = {
             eventSubscriberId: 'translation-admin-languages-table-listener',
-            eventPublished: (data: any, eventId: string) => {
-                if (data === table.getTableId()) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
                         this.state.filterCount = this.state.table.isFiltered()
                             ? this.state.table.getRows().length : null;

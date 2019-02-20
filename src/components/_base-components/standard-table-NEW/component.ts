@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow
+    AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow, TableEventData
 } from '../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
 
@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().subscribe(TableEvent.SORTED, this);
-        EventService.getInstance().subscribe(TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID, this);
+        EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
     }
 
     public onUpdate(): void {
@@ -62,11 +62,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
-        EventService.getInstance().unsubscribe(TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID, this);
+        EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
     }
 
-    public async eventPublished(data: any, eventId: string, subscriberId?: string): Promise<void> {
-        if (this.state.table && data === this.state.table.getTableId()) {
+    public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
+        if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
             if (eventId === TableEvent.REFRESH) {
                 this.state.columns = this.state.table.getColumns();
                 this.state.rows = this.state.table.getRows();
@@ -74,15 +74,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 await this.provideContextContent();
                 this.setTableHeight();
 
-                EventService.getInstance().publish(TableEvent.TABLE_READY, this.state.table.getTableId());
-            }
-
-            if (eventId === TableEvent.ROW_TOGGLED) {
-                this.setTableHeight();
+                EventService.getInstance().publish(
+                    TableEvent.TABLE_READY,
+                    new TableEventData(this.state.table.getTableId())
+                );
             }
 
             if (eventId === TableEvent.RERENDER_TABLE) {
                 this.state.loading = true;
+
                 this.state.columns = this.state.table.getColumns();
                 this.state.rows = this.state.table.getRows();
 
@@ -92,11 +92,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     this.state.loading = false;
                 }, 50);
             }
+
+            if (eventId === TableEvent.ROW_TOGGLED) {
+                this.setTableHeight();
+            }
         }
 
-        if (eventId === TableEvent.SCROLL_AND_TOGGLE_TO_OBJECT_ID) {
-            if (data && data.tableId && data.tableId === this.state.table.getTableId()) {
-                const row: IRow = this.state.table.getRowByObjectId(data.objectId);
+        if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
+            if (data && data.tableId && data.tableId === this.state.table.getTableId() && data.rowId) {
+                const row: IRow = this.state.table.getRow(data.rowId);
                 if (row) {
                     row.expand(true);
                     EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
@@ -175,7 +179,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private countRows(rows: IRow[]): number {
         let count = rows.length;
-        rows.forEach((r) => count += this.countRows(r.getChildrens()));
+        rows.forEach((r) => count += this.countRows(r.getChildren()));
         return count;
     }
 

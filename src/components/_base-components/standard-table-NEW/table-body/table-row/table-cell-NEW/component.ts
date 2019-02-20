@@ -10,7 +10,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.cell = input.cell;
 
         if (input.column) {
             this.column = input.column;
@@ -18,10 +17,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.showDefaultCell = !componentId || componentId === '';
         }
 
-        if (this.state.cell) {
-            const table = this.state.cell.getRow().getTable();
+        if (input.cell) {
+            const table = input.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
-            this.state.object = this.state.cell.getRow().getRowObject().getObject();
+            this.state.object = input.cell.getRow().getRowObject().getObject();
             if (tableConfiguration) {
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
                 if (this.state.routingConfiguration && this.state.object) {
@@ -29,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
 
-            switch (this.state.cell.getValue().state) {
+            switch (input.cell.getValue().state) {
                 case ValueState.CHANGED:
                     this.state.stateClass = 'cell-value-changed';
                     break;

@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, SearchOperator, WidgetService, ActionFactory, KIXObjectService,
-    LabelService, ContextService, TableFactoryService, TableEvent
+    LabelService, ContextService, TableFactoryService, TableEvent, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 
     private async prepareTitle(): Promise<void> {
@@ -69,8 +69,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.tableSubscriber = {
             eventSubscriberId: 'ticket-admin-priorities-table-listener',
-            eventPublished: (data: any, eventId: string) => {
-                if (data === table.getTableId()) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
                         this.state.filterCount = this.state.table.isFiltered()
                             ? this.state.table.getRows().length : null;
@@ -84,7 +84,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
 
         this.state.table = table;
     }

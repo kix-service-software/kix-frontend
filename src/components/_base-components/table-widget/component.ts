@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService, TableEventData
 } from '../../../core/browser';
 class Component {
 
@@ -44,8 +44,8 @@ class Component {
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data === this.state.table.getTableId()) {
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (eventId === TableEvent.TABLE_READY && data && data.tableId === this.state.table.getTableId()) {
                         this.prepareTitle();
                         this.state.filterCount = this.state.table.isFiltered()
                             ? this.state.table.getRowCount()
@@ -56,7 +56,7 @@ class Component {
             };
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
-            EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
 
             await this.prepareTable();
             this.prepareActions();
@@ -82,7 +82,7 @@ class Component {
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.SELECTION_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
     }
 
     private prepareTitle(): void {

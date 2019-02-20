@@ -1,10 +1,9 @@
 import {
-    AbstractMarkoComponent, ActionFactory, ContextService, WidgetService, TableEvent, TableFactoryService
+    AbstractMarkoComponent, ActionFactory, ContextService, WidgetService,
+    TableEvent, TableFactoryService, TableEventData
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import {
-    ConfigItemClass, KIXObjectType, SortUtil, ConfigItemClassDefinitionProperty, DataType, SortOrder
-} from '../../../../../core/model';
+import { ConfigItemClass, KIXObjectType } from '../../../../../core/model';
 import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -60,8 +59,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.tableSubscriber = {
             eventSubscriberId: 'config-item-admin-class-definitions-table-listener',
-            eventPublished: (data: any, eventId: string) => {
-                if (data === table.getTableId()) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
                     WidgetService.getInstance().updateActions(this.state.instanceId);
                 }
             }

@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     DialogService, ContextService, LabelService, ServiceRegistry, SearchOperator,
-    IKIXObjectService, KIXObjectService, BrowserUtil, TableFactoryService, TableEvent, ValueState
+    IKIXObjectService, KIXObjectService, BrowserUtil, TableFactoryService, TableEvent, ValueState, TableEventData
 } from '../../../../core/browser';
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
@@ -24,8 +24,6 @@ class Component {
 
     private tableSubscriber: IEventSubscriber;
     private linkDialogListenerId: string;
-
-    private setColorOfNew: boolean;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -66,6 +64,12 @@ class Component {
                 );
         }
         this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -163,23 +167,19 @@ class Component {
 
         this.tableSubscriber = {
             eventSubscriberId: 'edit-link-object-dialog',
-            eventPublished: (data: any, eventId: string) => {
-                if (data === table.getTableId()) {
-                    if (eventId === TableEvent.SELECTION_CHANGED) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
+                    if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
                         this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));
                     }
                     if (eventId === TableEvent.TABLE_READY) {
-                        // TODO: enthalten um Endlosschleife zu verhindern (Ready --> set --> Refresh --> Ready ...)
-                        if (this.setColorOfNew) {
-                            this.setColorOfNew = false;
-                            this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
-                        }
+                        this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
                     }
                 }
             }
         };
 
-        EventService.getInstance().subscribe(TableEvent.SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
 
         this.state.table = table;
@@ -262,8 +262,6 @@ class Component {
             if (filter) {
                 filter.reset();
             }
-
-            this.setColorOfNew = true;
         }
     }
 

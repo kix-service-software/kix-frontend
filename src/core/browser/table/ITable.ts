@@ -84,6 +84,6 @@ export interface ITable {
 
     destroy(): void;
 
-    getRowCount(): number;
+    getRowCount(all?: boolean): number;
 
 }

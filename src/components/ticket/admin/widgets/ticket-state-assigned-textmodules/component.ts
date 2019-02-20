@@ -1,9 +1,10 @@
 import {
-    AbstractMarkoComponent, ContextService, ActionFactory, TableFactoryService, WidgetService, TableEvent
+    AbstractMarkoComponent, ContextService, ActionFactory, TableFactoryService,
+    WidgetService, TableEvent, TableEventData
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { TicketStateDetailsContext } from '../../../../../core/browser/ticket';
-import { TicketState, KIXObjectType, KIXObjectPropertyFilter } from '../../../../../core/model';
+import { KIXObjectType, KIXObjectPropertyFilter } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -51,8 +52,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.tableSubscriber = {
             eventSubscriberId: 'ticket-admin-priorities-table-listener',
-            eventPublished: (data: any, eventId: string) => {
-                if (data === table.getTableId()) {
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
                         this.state.filterCount = this.state.table.isFiltered()
                             ? this.state.table.getRows().length : null;

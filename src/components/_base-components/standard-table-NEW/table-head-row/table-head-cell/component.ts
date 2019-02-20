@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, IColumn, BrowserUtil, LabelService, TableEvent
+    AbstractMarkoComponent, IColumn, BrowserUtil, LabelService, TableEvent, TableEventData
 } from '../../../../../core/browser';
 import { SortOrder } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
@@ -61,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
     }
 
-    public eventPublished(data: any, eventId: string, subscriberId?: string): void {
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (eventId === TableEvent.SORTED
             && data
             && data.tableId && data.tableId === this.column.getTable().getTableId()

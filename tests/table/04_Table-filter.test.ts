@@ -5,7 +5,7 @@ import chaiAsPromised = require('chai-as-promised');
 
 import { TableFilterCriteria, KIXObjectType } from '../../src/core/model';
 import { SearchOperator, TableValue } from '../../src/core/browser';
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableEvent } from '../../src/core/browser/table';
+import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableEvent, TableEventData } from '../../src/core/browser/table';
 import { EventService, IEventSubscriber } from '../../src/core/browser/event';
 
 chai.use(chaiAsPromised);
@@ -328,8 +328,8 @@ describe('Table Filter Tests', () => {
 
             subscriber = {
                 eventSubscriberId: 'test-subscriber',
-                eventPublished: (data: any, eventId: string, subscriberId?: string) => {
-                    expect(data).equals(table.getTableId());
+                eventPublished: (data: TableEventData, eventId: string, subscriberId?: string) => {
+                    expect(data.tableId).equals(table.getTableId());
                     expect(eventId).equals(TableEvent.REFRESH);
                 }
             };
