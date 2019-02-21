@@ -94,9 +94,17 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
+        objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
     ): Promise<O> {
         let object;
+
+        if (!objectType) {
+            objectType = KIXObjectType.CONTACT;
+        }
+
+        if (reload && objectType === KIXObjectType.CONTACT) {
+            KIXObjectCache.removeObject(KIXObjectType.CONTACT, Number(this.objectId));
+        }
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONTACT, this.objectId)) {
             object = await this.loadContact();

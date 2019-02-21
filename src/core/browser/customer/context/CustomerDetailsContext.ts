@@ -93,9 +93,17 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = KIXObjectType.CUSTOMER, reload: boolean = false
+        objectType: KIXObjectType = KIXObjectType.CUSTOMER, reload: boolean = false
     ): Promise<O> {
         let object;
+
+        if (!objectType) {
+            objectType = KIXObjectType.CUSTOMER;
+        }
+
+        if (reload && objectType === KIXObjectType.CUSTOMER) {
+            KIXObjectCache.removeObject(KIXObjectType.CUSTOMER, this.objectId);
+        }
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CUSTOMER, this.objectId)) {
             object = await this.loadCustomer();
