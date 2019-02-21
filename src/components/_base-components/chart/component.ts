@@ -43,7 +43,8 @@ class Component {
             explorerBarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
 
         window.addEventListener("resize", this.createChart.bind(this), false);

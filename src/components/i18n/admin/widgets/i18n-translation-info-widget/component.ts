@@ -24,6 +24,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: async (translationId: string, translation: Translation, type: KIXObjectType) => {
                 if (type === KIXObjectType.TRANSLATION) {
                     this.initWidget(translation);

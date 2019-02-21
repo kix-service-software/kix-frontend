@@ -39,6 +39,7 @@ class Component {
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);

@@ -38,7 +38,8 @@ class Component {
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
 
         await this.initWidget(context, await context.getObject<FAQArticle>());

@@ -32,7 +32,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             explorerBarToggled: () => { this.setWidth(); },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
         window.addEventListener("resize", this.setWidth.bind(this), false);
         this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();

@@ -31,6 +31,7 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
                         objectChanged: this.objectListChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
                         sidebarToggled: () => { return; },
+                        scrollInformationChanged: () => { return; }
                     });
                     this.initialized = true;
                 }
