@@ -10,7 +10,7 @@ export class FAQArticleTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
+        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean,
         short?: boolean
     ): ITable {
@@ -20,7 +20,7 @@ export class FAQArticleTableFactory implements ITableFactory {
         );
 
         const table = new Table(tableConfiguration);
-        const contentProvider = new FAQArticleTableContentProvider(table, null, null, contextId);
+        const contentProvider = new FAQArticleTableContentProvider(table, objectIds, null, contextId);
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
