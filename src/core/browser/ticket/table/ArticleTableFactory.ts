@@ -1,13 +1,19 @@
 import { KIXObjectType, DataType, ArticleProperty } from "../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions,
-    ITableFactory, TableHeaderHeight, TableRowHeight
+    ITableFactory, TableHeaderHeight, TableRowHeight, TableEvent
 } from "../../table";
 import { ArticleTableContentProvider } from "./new";
+import { EventService } from "../../event";
+import { ArticleTableToggleSubscriber } from "./ArticleTableToggleSubscriber";
 
 export class ArticleTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.ARTICLE;
+
+    public constructor() {
+        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, new ArticleTableToggleSubscriber());
+    }
 
     public createTable(
         tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
