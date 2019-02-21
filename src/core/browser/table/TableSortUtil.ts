@@ -51,7 +51,7 @@ export class TableSortUtil {
         switch (dataType) {
             case DataType.DATE:
             case DataType.DATE_TIME:
-                return cell.getValue();
+                return cell.getValue().objectValue;
             default:
                 return cell.getDisplayValue();
         }
