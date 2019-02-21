@@ -13,6 +13,9 @@
             <if(state.table)>
                 <standard-table-NEW table=state.table/>
             </if>
+            <else>
+                <loading-spinner/>
+            </else>
             <div.dialog-button-container>
                 <button.form-blank-cancel-button
                     type="button"
