@@ -30,6 +30,11 @@ export class FAQService extends KIXObjectService {
         super();
     }
 
+    public async init(): Promise<void> {
+        await this.loadObjects(KIXObjectType.FAQ_CATEGORY, null);
+        await this.loadObjects(KIXObjectType.FAQ_CATEGORY_HIERARCHY, null);
+    }
+
     public async loadObjects<O extends KIXObject>(
         kixObjectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,

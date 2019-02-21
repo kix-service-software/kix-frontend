@@ -13,6 +13,8 @@ import { ObjectIconService } from '../../core/browser/icon';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
 import { ConfigItemClassService } from '../../core/browser/cmdb';
+import { FAQService } from '../../core/browser/faq';
+import { SysConfigService } from '../../core/browser/sysconfig';
 
 declare var io: any;
 
@@ -56,6 +58,8 @@ class Component {
         // FIXME: nur temporär auskommentiert
         // await TranslationService.getInstance().init();
         await ConfigItemClassService.getInstance().init();
+        await FAQService.getInstance().init();
+        await SysConfigService.getInstance().init();
 
         this.setContext();
 
