@@ -32,6 +32,9 @@ export class Table implements ITable {
 
     private initialized: boolean = false;
 
+    private sortColumnId: string;
+    private sortOrder: SortOrder;
+
     public constructor(
         private tableConfiguration?: TableConfiguration,
         private contextId?: string
@@ -74,6 +77,10 @@ export class Table implements ITable {
             this.columns = [];
             if (this.columnConfiguration) {
                 this.columnConfiguration.forEach((c) => this.createColumn(c));
+            }
+
+            if (this.sortColumnId && this.sortOrder) {
+                await this.sort(this.sortColumnId, this.sortOrder);
             }
 
             this.initialized = true;
@@ -288,6 +295,9 @@ export class Table implements ITable {
     }
 
     public async sort(columnId: string, sortOrder: SortOrder): Promise<void> {
+        this.sortColumnId = columnId;
+        this.sortOrder = sortOrder;
+
         this.getColumns().forEach((c) => c.setSortOrder(null));
         const column = this.getColumn(columnId);
         if (column) {

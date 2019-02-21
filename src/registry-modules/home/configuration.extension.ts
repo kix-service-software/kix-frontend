@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType, ContextConfiguration,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType
+    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, SortOrder
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, DefaultColumnConfiguration
@@ -102,6 +102,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             'table-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
             {
                 objectType: KIXObjectType.TICKET,
+                sort: [TicketProperty.AGE, SortOrder.UP],
                 tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
                     500, null, null,
                     [
@@ -130,6 +131,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 'table-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
                 {
                     objectType: KIXObjectType.TICKET,
+                    sort: [TicketProperty.AGE, SortOrder.DOWN],
                     tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
                         500, null, [
                             new DefaultColumnConfiguration(

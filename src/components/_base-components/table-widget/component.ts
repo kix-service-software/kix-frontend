@@ -111,6 +111,10 @@ class Component {
                 this.objectType, settings.tableConfiguration, null, contextId, true, true
             );
 
+            if (settings.sort) {
+                await table.sort(settings.sort[0], settings.sort[1]);
+            }
+
             this.state.table = table;
         }
     }
