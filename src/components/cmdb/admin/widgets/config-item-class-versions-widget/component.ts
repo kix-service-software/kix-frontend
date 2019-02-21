@@ -29,6 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: async (ciClassId: string, ciClass: ConfigItemClass, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM_CLASS) {
                     this.initWidget(ciClass);

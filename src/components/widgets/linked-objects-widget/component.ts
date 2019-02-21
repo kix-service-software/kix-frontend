@@ -32,7 +32,8 @@ class Component {
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<KIXObject>());

@@ -34,7 +34,8 @@ export class ConfigItemHistoryTableFactory implements ITableFactory {
                 DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
-                ConfigItemHistoryProperty.VERSION_ID, true, true, false, false, 150, false, false
+                ConfigItemHistoryProperty.VERSION_ID, true, true, false, false, 150,
+                false, false, false, DataType.STRING, false, 'go-to-version-cell'
             ),
         ];
 

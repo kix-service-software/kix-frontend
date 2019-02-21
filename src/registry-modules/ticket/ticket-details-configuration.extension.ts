@@ -141,16 +141,9 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 
         const articleListWidget =
             new ConfiguredWidget("20180921-article-list", new WidgetConfiguration(
-                "article-list-widget", "Artikelübersicht", [],
-                {
-                    generalActions: ['article-bulk-action', 'article-new-note-action'],
-                    tableConfiguration: new TableConfiguration(KIXObjectType.ARTICLE,
-                        null, null, null, null, true,
-                        true, null,
-                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
-                },
-                false, true, WidgetSize.LARGE, null, false)
+                "table-widget", "Artikelübersicht", ['article-bulk-action', 'article-new-note-action'],
+                { objectType: KIXObjectType.ARTICLE },
+                false, true, WidgetSize.LARGE, null, true)
             );
 
         const content = ['20180921-article-list'];

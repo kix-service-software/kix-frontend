@@ -34,7 +34,8 @@ class Component {
                 sidebarToggled: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: this.contextObjectListChanged.bind(this),
-                filteredObjectListChanged: () => { return; }
+                filteredObjectListChanged: () => { return; },
+                scrollInformationChanged: () => { return; }
             });
         }
 

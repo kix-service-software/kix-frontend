@@ -27,6 +27,7 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (faqArticleId: string, faqArticle: FAQArticle, type: KIXObjectType) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
                     this.initWidget(faqArticle);

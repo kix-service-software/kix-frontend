@@ -73,7 +73,10 @@ class Component {
                             filterComponent.reset();
                         }
                     },
-                    sidebarToggled: () => { return; }
+                    sidebarToggled: () => { return; },
+                    scrollInformationChanged: (objectType: KIXObjectType, objectId: string | number) => {
+                        this.scrollToRow(objectType, objectId);
+                    }
                 });
             }
         }
@@ -135,6 +138,18 @@ class Component {
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
             this.state.table.setFilter(textFilterValue, newFilter);
             await this.state.table.filter();
+        }
+    }
+
+    private scrollToRow(objectType: KIXObjectType, objectId: string | number): void {
+        if (this.state.table.getObjectType() === objectType) {
+            const row = this.state.table.getRowByObjectId(objectId);
+            if (row) {
+                EventService.getInstance().publish(
+                    TableEvent.SCROLL_TO_AND_TOGGLE_ROW,
+                    new TableEventData(this.state.table.getTableId(), row.getRowId())
+                );
+            }
         }
     }
 

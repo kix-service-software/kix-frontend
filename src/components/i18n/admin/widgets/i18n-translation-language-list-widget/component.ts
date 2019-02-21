@@ -40,6 +40,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: async (ciClassId: string, translation: Translation, type: KIXObjectType) => {
                 if (type === KIXObjectType.TRANSLATION_LANGUAGE) {
                     this.state.translation = translation;

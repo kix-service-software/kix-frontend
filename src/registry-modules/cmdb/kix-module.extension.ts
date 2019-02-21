@@ -32,7 +32,8 @@ class Extension implements IKIXModuleExtension {
         ['new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog'],
         ['edit-config-item-class-dialog', 'cmdb/admin/dialogs/edit-config-item-class-dialog'],
         ['compare-config-item-version-dialog', 'cmdb/dialogs/compare-config-item-version-dialog'],
-        ['config-item-version-compare-legend', 'cmdb/widgets/config-item-version-compare-legend']
+        ['config-item-version-compare-legend', 'cmdb/widgets/config-item-version-compare-legend'],
+        ['go-to-version-cell', 'cmdb/table/go-to-version-cell']
     ];
 
 }

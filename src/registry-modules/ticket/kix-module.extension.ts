@@ -20,7 +20,6 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-contact-info', 'ticket/ticket-contact-info'],
         ['ticket-customer-info', 'ticket/ticket-customer-info'],
         ['article-receiver-list', 'ticket/article-receiver-list'],
-        ['article-list-widget', 'ticket/widgets/article-list-widget'],
         ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
         ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],
         ['ticket-description-widget', 'ticket/widgets/ticket-description-widget'],

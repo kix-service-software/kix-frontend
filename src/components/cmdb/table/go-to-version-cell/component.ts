@@ -17,13 +17,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public goToArticleClicked(event: any): void {
+    public goToClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();
 
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context) {
-            context.provideScrollInformation(KIXObjectType.ARTICLE, this.state.cell.getValue().objectValue);
+            context.provideScrollInformation(KIXObjectType.CONFIG_ITEM_VERSION, this.state.cell.getValue().objectValue);
         }
     }
 
