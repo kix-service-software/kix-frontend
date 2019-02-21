@@ -1,5 +1,7 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, ComponentsService, IColumn, ValueState } from '../../../../../../core/browser';
+import {
+    AbstractMarkoComponent, ComponentsService, IColumn, ValueState, ICell, TableCSSHandlerRegsitry
+} from '../../../../../../core/browser';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -28,33 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
 
-            switch (input.cell.getValue().state) {
-                case ValueState.CHANGED:
-                    this.state.stateClass = 'cell-value-changed';
-                    break;
-                case ValueState.DELETED:
-                    this.state.stateClass = 'cell-value-deleted';
-                    break;
-                case ValueState.NEW:
-                    this.state.stateClass = 'cell-value-new';
-                    break;
-                case ValueState.NOT_EXISTING:
-                    this.state.stateClass = 'cell-value-not-existing';
-                    break;
-                case ValueState.HIGHLIGHT_ERROR:
-                    this.state.stateClass = 'cell-value-highlight_error';
-                    break;
-                case ValueState.HIGHLIGHT_REMOVED:
-                    this.state.stateClass = 'cell-value-highlight_removed';
-                    break;
-                case ValueState.HIGHLIGHT_UNAVAILABLE:
-                    this.state.stateClass = 'cell-value-highlight_unavailable';
-                    break;
-                case ValueState.HIGHLIGHT_SUCCESS:
-                    this.state.stateClass = 'cell-value-highlight_success';
-                    break;
-                default:
-            }
+            this.setValueStateClass(input.cell);
         }
     }
 
@@ -65,6 +41,50 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
         }
         return undefined;
+    }
+
+    private setValueStateClass(cell: ICell): void {
+        const classes = [];
+        if (cell.getValue().state) {
+            switch (cell.getValue().state) {
+                case ValueState.CHANGED:
+                    classes.push('cell-value-changed');
+                    break;
+                case ValueState.DELETED:
+                    classes.push('cell-value-deleted');
+                    break;
+                case ValueState.NEW:
+                    classes.push('cell-value-new');
+                    break;
+                case ValueState.NOT_EXISTING:
+                    classes.push('cell-value-not-existing');
+                    break;
+                case ValueState.HIGHLIGHT_ERROR:
+                    classes.push('cell-value-highlight_error');
+                    break;
+                case ValueState.HIGHLIGHT_REMOVED:
+                    classes.push('cell-value-highlight_removed');
+                    break;
+                case ValueState.HIGHLIGHT_UNAVAILABLE:
+                    classes.push('cell-value-highlight_unavailable');
+                    break;
+                case ValueState.HIGHLIGHT_SUCCESS:
+                    classes.push('cell-value-highlight_success');
+                    break;
+                default:
+            }
+
+            const object = cell.getRow().getRowObject().getObject();
+            if (object) {
+                const objectType = cell.getRow().getTable().getObjectType();
+                const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+                if (cssHandler) {
+                    const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
+                    valueClasses.forEach((c) => classes.push(c));
+                }
+            }
+        }
+        this.state.stateClasses = classes;
     }
 }
 

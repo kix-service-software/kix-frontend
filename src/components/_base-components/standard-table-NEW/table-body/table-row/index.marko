@@ -1,11 +1,5 @@
 <if(state.row)>
-    <tr
-        id=state.row.getRowId()
-        style=("height: " + input.height)
-        class={
-                opened: state.open,
-                "fist-column-fixed": component.firstColumnIsFixed()
-            }>
+    <tr id=state.row.getRowId() style=("height: " + input.height) class=component.getRowClasses()>
         <if(input.selectionEnabled)>
             <td.check>
                 <div style={
