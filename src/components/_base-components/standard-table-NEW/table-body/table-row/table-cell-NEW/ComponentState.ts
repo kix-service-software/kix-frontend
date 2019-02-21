@@ -8,7 +8,7 @@ export class ComponentState {
         public object: any = null,
         public objectId: string | number = null,
         public showDefaultCell: boolean = true,
-        public stateClass: string = null
+        public stateClasses: string[] = null
     ) { }
 
 }

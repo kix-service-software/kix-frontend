@@ -1,6 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../core/browser';
-import { IColumn, ICell, TableEvent, TableEventData } from '../../../../../core/browser/table';
+import {
+    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegsitry
+} from '../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
@@ -88,6 +90,30 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public firstColumnIsFixed(): boolean {
         return this.state.row.getTable().getTableConfiguration().fixedFirstColumn;
+    }
+
+    public getRowClasses(): string[] {
+        const object = this.state.row.getRowObject().getObject();
+        const stateClass = [];
+
+        if (this.state.open) {
+            stateClass.push('opened');
+        }
+
+        if (this.firstColumnIsFixed()) {
+            stateClass.push("fist-column-fixed");
+        }
+
+        if (object) {
+            const objectType = this.state.row.getTable().getObjectType();
+            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            if (cssHandler) {
+                const classes = cssHandler.getRowCSSClasses(object);
+                classes.forEach((c) => stateClass.push(c));
+            }
+        }
+
+        return stateClass;
     }
 
 }

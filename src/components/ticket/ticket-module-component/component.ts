@@ -24,7 +24,7 @@ import {
     TicketTypeService, TicketPriorityService, TicketPriorityDetailsContext, TicketPriorityEditAction,
     TicketPriorityDuplicateAction, NewTicketPriorityDialogContext, NewTicketStateDialogContext,
     EditTicketPriorityDialogContext, TicketPriorityFormService, EditTicketStateDialogContext,
-    TicketStateFormService, TicketBulkManager
+    TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler
 } from "../../../core/browser/ticket";
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
@@ -34,7 +34,7 @@ import {
 import { BulkService } from "../../../core/browser/bulk";
 import { ArticleTableFactory } from "../../../core/browser/ticket/table/ArticleTableFactory";
 import { ChannelService } from "../../../core/browser/channel";
-import { TableFactoryService } from "../../../core/browser/table";
+import { TableFactoryService, TableCSSHandlerRegsitry } from "../../../core/browser/table";
 import { ChannelLabelProvider } from "../../../core/browser/channel/ChannelLabelProvider";
 
 class Component extends AbstractMarkoComponent {
@@ -77,6 +77,9 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
+
+        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
+        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
 
