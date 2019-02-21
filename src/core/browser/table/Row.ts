@@ -199,22 +199,25 @@ export class Row<T = any> implements IRow<T> {
     }
 
     public expand(expanded: boolean = true): void {
+        let notify = false;
+
         if (expanded) {
             if (!this.isExpanded()) {
                 this.expanded = true;
-                EventService.getInstance().publish(
-                    TableEvent.ROW_TOGGLED,
-                    new TableEventData(this.getTable().getTableId(), this.getRowId())
-                );
+                notify = true;
             }
         } else {
             if (this.isExpanded()) {
                 this.expanded = false;
-                EventService.getInstance().publish(
-                    TableEvent.ROW_TOGGLED,
-                    new TableEventData(this.getTable().getTableId(), this.getRowId())
-                );
+                notify = true;
             }
+        }
+
+        if (notify) {
+            EventService.getInstance().publish(
+                TableEvent.ROW_TOGGLED,
+                new TableEventData(this.getTable().getTableId(), this.getRowId(), null, this.getTable())
+            );
         }
     }
 
