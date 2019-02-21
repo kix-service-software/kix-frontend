@@ -55,7 +55,9 @@ export class ArticleTableFactory implements ITableFactory {
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.ATTACHMENTS, true, true, true, false, 75, false, false, false, DataType.STRING, false)
+                ArticleProperty.ATTACHMENTS, true, true, true, false, 75,
+                false, false, false, DataType.STRING, false, 'article-attachment-cell'
+            )
         ];
 
         if (!tableConfiguration) {
