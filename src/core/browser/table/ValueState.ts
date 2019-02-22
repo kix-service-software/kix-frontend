@@ -1,6 +1,6 @@
 export enum ValueState {
 
-    CHANGED,
+    CHANGED = 1 << 0,
 
     DELETED,
 

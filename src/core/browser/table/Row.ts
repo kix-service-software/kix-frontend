@@ -152,22 +152,25 @@ export class Row<T = any> implements IRow<T> {
     }
 
     public select(selected: boolean = true): void {
+        let notify = false;
+
         if (selected) {
             if (this.isSelectable() && !this.isSelected()) {
                 this.selected = true;
-                EventService.getInstance().publish(
-                    TableEvent.ROW_SELECTION_CHANGED,
-                    new TableEventData(this.getTable().getTableId(), this.getRowId())
-                );
+                notify = true;
             }
         } else {
             if (this.isSelected()) {
                 this.selected = false;
-                EventService.getInstance().publish(
-                    TableEvent.ROW_SELECTION_CHANGED,
-                    new TableEventData(this.getTable().getTableId(), this.getRowId())
-                );
+                notify = true;
             }
+        }
+
+        if (notify) {
+            EventService.getInstance().publish(
+                TableEvent.ROW_SELECTION_CHANGED,
+                new TableEventData(this.getTable().getTableId(), this.getRowId())
+            );
         }
     }
 
@@ -176,20 +179,27 @@ export class Row<T = any> implements IRow<T> {
     }
 
     public selectable(selectable: boolean = true): void {
+        let notify = false;
+
         if (selectable) {
-            this.canBeSelected = true;
-            EventService.getInstance().publish(
-                TableEvent.ROW_SELECTABLE_CHANGED,
-                new TableEventData(this.id, this.getRowId())
-            );
-        } else {
-            this.canBeSelected = false;
-            if (this.isSelected()) {
-                this.select(false);
+            if (!this.isSelectable()) {
+                this.canBeSelected = true;
+                notify = true;
             }
+        } else {
+            if (this.isSelectable()) {
+                this.canBeSelected = false;
+                if (this.isSelected()) {
+                    this.select(false);
+                }
+                notify = true;
+            }
+        }
+
+        if (notify) {
             EventService.getInstance().publish(
                 TableEvent.ROW_SELECTABLE_CHANGED,
-                new TableEventData(this.id, this.getRowId())
+                new TableEventData(this.getTable().getTableId(), this.getRowId())
             );
         }
     }
@@ -231,7 +241,7 @@ export class Row<T = any> implements IRow<T> {
     }
 
     public setValueState(state: ValueState): void {
-        this.getRowObject().getValues().forEach((v) => v.state = state);
+        this.getRowObject().setValueState(state);
         EventService.getInstance().publish(
             TableEvent.ROW_VALUE_STATE_CHANGED,
             new TableEventData(this.getTable().getTableId(), this.getRowId())

@@ -40,8 +40,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.setTableHeight();
 
         this.state.loading = false;
-        EventService.getInstance().publish(TableEvent.TABLE_INITIALIZED, this.state.table.getTableId());
-        EventService.getInstance().publish(TableEvent.TABLE_READY, this.state.table.getTableId());
+        EventService.getInstance().publish(
+            TableEvent.TABLE_INITIALIZED,
+            new TableEventData(this.state.table.getTableId())
+        );
+        EventService.getInstance().publish(TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId()));
     }
 
     public async onMount(): Promise<void> {

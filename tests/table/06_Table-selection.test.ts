@@ -18,10 +18,10 @@ describe('Table Selection Tests', () => {
         table.setColumnConfiguration([
             new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
         ]);
+        await table.initialize();
     });
 
     describe('Select rows and get them.', () => {
-        beforeEach(async () => await table.initialize(true));
 
         it('Should return no rows if no rows are selected (initial).', async () => {
             const rows = await table.getSelectedRows();
@@ -84,7 +84,6 @@ describe('Table Selection Tests', () => {
 
     describe('Select rows and get them (with active filter).', () => {
         beforeEach(async () => {
-            await table.initialize(true);
             table.setFilter('value-1'); // value-1, value-10 ... value-19 (11)
             await table.filter();
         });
@@ -145,7 +144,8 @@ describe('Table Selection Tests', () => {
             table.setContentProvider(new TestTableContentProvider(10, 3));
         });
         beforeEach(async () => {
-            await table.initialize(true);
+            table['initialized'] = false;
+            await table.initialize();
         });
 
         it('Should return false if row is not selected (initial).', async () => {

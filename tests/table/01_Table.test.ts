@@ -3,7 +3,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { ITable, Row, Column, Table, IRow, IColumn, RowObject, DefaultColumnConfiguration } from '../../src/core/browser/table';
+import { ITable, Row, Column, Table, IRow, IColumn, RowObject, DefaultColumnConfiguration, TableConfiguration } from '../../src/core/browser/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -304,18 +304,48 @@ describe('Table Tests', () => {
         });
     });
 
+    describe('Set column configuration.', () => {
+        let table: ITable;
+
+        before(() => {
+            table = new Table();
+        });
+
+        it('Column configuration should have 4 entries.', () => {
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3')
+            ]);
+            expect(table['columnConfiguration']).exist;
+            expect(table['columnConfiguration']).is.an('array');
+            expect(table['columnConfiguration'].length).equal(4);
+        });
+    });
+
     describe('Get columns.', () => {
         let table: ITable;
 
         before(() => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('1'));
-            table.createColumn(new DefaultColumnConfiguration('1'));
-            table.createColumn(new DefaultColumnConfiguration('2'));
-            table.createColumn(new DefaultColumnConfiguration('3'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3')
+            ])
         });
 
-        it('Should return all columns.', () => {
+        it('Should return no columns (not initialized yet).', () => {
+            const columns = table.getColumns();
+            expect(columns).exist;
+            expect(columns).is.an('array');
+            expect(columns).is.empty;
+        });
+
+        it('Should return all columns.', async () => {
+            await table.initialize();
             const columns = table.getColumns();
             expect(columns).exist;
             expect(columns).is.an('array');
@@ -326,70 +356,105 @@ describe('Table Tests', () => {
 
     describe('Get specific column.', () => {
         let table: ITable;
-        let column: IColumn;
+        const columnId = '1';
 
         before(() => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('0'))
-            column = table.createColumn(new DefaultColumnConfiguration('1'));
-            table.createColumn(new DefaultColumnConfiguration('2'))
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2')
+            ]);
+            table.initialize();
         });
 
         it('Should return requested column.', () => {
-            const result = table.getColumn(column.getColumnId());
+            const result = table.getColumn(columnId);
             expect(result).exist;
             expect(result).is.instanceOf(Column);
-            expect(result.getColumnId()).equals(column.getColumnId());
+            expect(result.getColumnId()).equals(columnId);
         });
     });
 
     describe('Remove two columns.', () => {
         let table: ITable;
-        let column1: IColumn;
-        let column2: IColumn;
+        let columnId1 = '1';
+        let columnId2 = '3';
 
         before(() => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('0'));
-            column1 = table.createColumn(new DefaultColumnConfiguration('1'));
-            table.createColumn(new DefaultColumnConfiguration('2'));
-            column2 = table.createColumn(new DefaultColumnConfiguration('3'));
-            table.createColumn(new DefaultColumnConfiguration('4'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3'),
+                new DefaultColumnConfiguration('4')
+            ]);
+            table.initialize();
         });
 
         it('Should remove two columns.', () => {
-            const removedColumns = table.removeColumns([column1.getColumnId(), column2.getColumnId()]);
+            const removedColumns = table.removeColumns([columnId1, columnId2]);
             expect(removedColumns).exist;
             expect(removedColumns).is.an('array');
             expect(removedColumns.length).equals(2);
 
-            expect(removedColumns.some((c) => c.getColumnId() === column1.getColumnId())).true;
-            expect(removedColumns.some((c) => c.getColumnId() === column2.getColumnId())).true;
+            expect(removedColumns.some((c) => c.getColumnId() === columnId1)).true;
+            expect(removedColumns.some((c) => c.getColumnId() === columnId2)).true;
 
             const columns = table.getColumns();
             expect(columns).exist;
             expect(columns).is.an('array');
             expect(columns.length).equals(3);
 
-            expect(columns.some((c) => c.getColumnId() === column1.getColumnId()), 'removeColumns removes wrong column').is.false;
-            expect(columns.some((c) => c.getColumnId() === column2.getColumnId()), 'removeColumns removes wrong column').is.false;
+            expect(columns.some((c) => c.getColumnId() === columnId1), 'removeColumns removes wrong column').is.false;
+            expect(columns.some((c) => c.getColumnId() === columnId2), 'removeColumns removes wrong column').is.false;
         });
     });
 
     describe('Add two columns.', () => {
         let table: ITable;
 
-        before(() => {
+        beforeEach(() => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('1'));
-            table.createColumn(new DefaultColumnConfiguration('2'));
-            table.createColumn(new DefaultColumnConfiguration('3'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3'),
+            ]);
         });
 
-        it('Should return a list with all columns which contains the new columns.', () => {
+        it('Should return a list with 0 columns (not initialized yet).', () => {
+
+            const columns = table.getColumns();
+            expect(columns).exist;
+            expect(columns).is.an('array');
+            expect(columns).is.empty;
+        });
+
+        it('Should return a list with 5 columns (addColumn before initialization).', async () => {
             const column1 = new DefaultColumnConfiguration('4');
             const column2 = new DefaultColumnConfiguration('5');
 
+            table.addColumns([column1, column2]);
+            await table.initialize();
+
+            const columns = table.getColumns();
+            expect(columns).exist;
+            expect(columns).is.an('array');
+            expect(columns.length).equals(5);
+
+            expect(columns.some((c) => c.getColumnId() === column1.property)).is.true;
+            expect(columns.some((c) => c.getColumnId() === column2.property)).is.true;
+
+            expect(columns[columns.length - 1].getColumnId()).equals(column2.property);
+        });
+
+        it('Should return a list with 5 columns (addColumn after initialization).', async () => {
+            const column1 = new DefaultColumnConfiguration('4');
+            const column2 = new DefaultColumnConfiguration('5');
+
+            await table.initialize();
             table.addColumns([column1, column2]);
 
             const columns = table.getColumns();
@@ -407,10 +472,13 @@ describe('Table Tests', () => {
     describe('Add one column twice.', () => {
         let table: ITable;
 
-        before(() => {
+        before(async () => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('0'));
-            table.createColumn(new DefaultColumnConfiguration('1'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1')
+            ]);
+            await table.initialize();
         });
 
         it('Should add the column only one time.', () => {
@@ -431,38 +499,42 @@ describe('Table Tests', () => {
 
     describe('Replace two columns.', () => {
         let table: ITable;
-        let column1: IColumn, column2: IColumn;
+        let columnId1 = '1';
+        let columnId2 = '2';
 
-        before(() => {
+        before(async () => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('0'));
-            column1 = table.createColumn(new DefaultColumnConfiguration('1'));
-            column2 = table.createColumn(new DefaultColumnConfiguration('2'));
-            table.createColumn(new DefaultColumnConfiguration('3'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3'),
+            ]);
+            await table.initialize();
         });
 
         it('Should return a list of columns without the replaced columns.', () => {
             const newColumn1 = new Column(table, new DefaultColumnConfiguration('4'));
             const newColumn2 = new Column(table, new DefaultColumnConfiguration('5'));
             const replacedColumns = table.replaceColumns([
-                [column1.getColumnId(), newColumn1],
-                [column2.getColumnId(), newColumn2]
+                [columnId1, newColumn1],
+                [columnId2, newColumn2]
             ]);
 
             expect(replacedColumns).exist;
             expect(replacedColumns).is.an('array');
             expect(replacedColumns.length).equals(2);
 
-            expect(replacedColumns.some((r) => r.getColumnId() === column1.getColumnId())).true;
-            expect(replacedColumns.some((r) => r.getColumnId() === column2.getColumnId())).true;
+            expect(replacedColumns.some((r) => r.getColumnId() === columnId1)).true;
+            expect(replacedColumns.some((r) => r.getColumnId() === columnId2)).true;
 
             const columns = table.getColumns();
             expect(columns).exist;
             expect(columns).is.an('array');
             expect(columns.length).equals(4);
 
-            expect(columns.some((c) => c.getColumnId() === column1.getColumnId())).false;
-            expect(columns.some((c) => c.getColumnId() === column2.getColumnId())).false;
+            expect(columns.some((c) => c.getColumnId() === columnId1)).false;
+            expect(columns.some((c) => c.getColumnId() === columnId2)).false;
 
             expect(columns.some((c) => c.getColumnId() === newColumn1.getColumnId())).true;
             expect(columns.some((c) => c.getColumnId() === newColumn2.getColumnId())).true;
@@ -471,38 +543,41 @@ describe('Table Tests', () => {
 
     describe('Replace two columns but one with already exiting column.', () => {
         let table: ITable;
-        let column1: IColumn;
-        let column2: IColumn;
-        let existingColumn: IColumn;
+        let columnId1 = '0';
+        let columnId2 = '1';
 
-        before(() => {
+        before(async () => {
             table = new Table();
-            column1 = table.createColumn(new DefaultColumnConfiguration('0'));
-            column2 = table.createColumn(new DefaultColumnConfiguration('1'));
-            existingColumn = table.createColumn(new DefaultColumnConfiguration('2'));
-            table.createColumn(new DefaultColumnConfiguration('3'))
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1'),
+                new DefaultColumnConfiguration('2'),
+                new DefaultColumnConfiguration('3'),
+            ]);
+            await table.initialize();
         });
         it('Should return columns (replace with existing column should remove exiting column and replace old with new column).', () => {
             const newColumn = new Column(table, new DefaultColumnConfiguration('4'));
+            const existingColumn = table.getColumn('2');
             const replacedColumns = table.replaceColumns([
-                [column1.getColumnId(), newColumn],
-                [column2.getColumnId(), existingColumn]
+                [columnId1, newColumn],
+                [columnId2, existingColumn]
             ]);
 
             expect(replacedColumns).exist;
             expect(replacedColumns).is.an('array');
             expect(replacedColumns.length).equals(2);
 
-            expect(replacedColumns.some((r) => r.getColumnId() === column1.getColumnId())).true;
-            expect(replacedColumns.some((r) => r.getColumnId() === column2.getColumnId())).true;
+            expect(replacedColumns.some((r) => r.getColumnId() === columnId1)).true;
+            expect(replacedColumns.some((r) => r.getColumnId() === columnId2)).true;
 
             const columns = table.getColumns();
             expect(columns).exist;
             expect(columns).is.an('array');
             expect(columns.length).equals(3);
 
-            expect(columns.some((c) => c.getColumnId() === column1.getColumnId())).false;
-            expect(columns.some((c) => c.getColumnId() === column2.getColumnId())).false;
+            expect(columns.some((c) => c.getColumnId() === columnId1)).false;
+            expect(columns.some((c) => c.getColumnId() === columnId2)).false;
 
             expect(columns.some((c) => c.getColumnId() === newColumn.getColumnId())).true;
             expect(columns.some((c) => c.getColumnId() === existingColumn.getColumnId())).true;
@@ -512,10 +587,13 @@ describe('Table Tests', () => {
     describe('Replace not exiting column.', () => {
         let table: ITable;
 
-        before(() => {
+        before(async () => {
             table = new Table();
-            table.createColumn(new DefaultColumnConfiguration('0'));
-            table.createColumn(new DefaultColumnConfiguration('1'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1')
+            ]);
+            await table.initialize();
         });
 
         it('No replace should be done.', () => {
@@ -541,17 +619,21 @@ describe('Table Tests', () => {
 
     describe('Replace not exiting column with column which already exist.', () => {
         let table: ITable;
-        let column: IColumn;
 
-        before(() => {
+        before(async () => {
             table = new Table();
-            column = table.createColumn(new DefaultColumnConfiguration('0'));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0'),
+                new DefaultColumnConfiguration('1')
+            ]);
+            await table.initialize();
         });
 
         it('No replace should be done and existing column should not be deleted.', () => {
             const notExistingColumnId = 'does-not-exists';
+            const existingColumn = table.getColumn('1');
             const replacedColumns = table.replaceColumns([
-                [notExistingColumnId, column]
+                [notExistingColumnId, existingColumn]
             ]);
 
             expect(replacedColumns).exist;
@@ -561,10 +643,10 @@ describe('Table Tests', () => {
             const columns = table.getColumns();
             expect(columns).exist;
             expect(columns).is.an('array');
-            expect(columns.length).equals(1);
+            expect(columns.length).equals(2);
 
             expect(columns.some((c) => c.getColumnId() === notExistingColumnId)).is.false;
-            expect(columns.some((c) => c.getColumnId() === column.getColumnId())).true;
+            expect(columns.some((c) => c.getColumnId() === existingColumn.getColumnId())).true;
         });
     });
 

@@ -14,7 +14,7 @@ export interface ITable {
 
     getContextId(): string;
 
-    initialize(reset?: boolean): Promise<void>;
+    initialize(): Promise<void>;
 
     getTableConfiguration(): TableConfiguration;
 
@@ -37,8 +37,6 @@ export interface ITable {
     addRows(addRows: IRow[], index?: number): void;
 
     replaceRows(replaceRows: Array<[string, IRow]>): IRow[];
-
-    createColumn(columnConfiguration: IColumnConfiguration): IColumn;
 
     getColumns(): IColumn[];
 

@@ -45,8 +45,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private setValueStateClass(cell: ICell): void {
         const classes = [];
-        if (cell.getValue().state) {
-            switch (cell.getValue().state) {
+        const state = cell.getValue().state && cell.getValue().state !== ValueState.NONE
+            ? cell.getValue().state : cell.getRow().getRowObject().getValueState();
+        if (state) {
+            switch (state) {
                 case ValueState.CHANGED:
                     classes.push('cell-value-changed');
                     break;
@@ -73,17 +75,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     break;
                 default:
             }
+        }
 
-            const object = cell.getRow().getRowObject().getObject();
-            if (object) {
-                const objectType = cell.getRow().getTable().getObjectType();
-                const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
-                if (cssHandler) {
-                    const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
-                    valueClasses.forEach((c) => classes.push(c));
-                }
+        const object = cell.getRow().getRowObject().getObject();
+        if (object) {
+            const objectType = cell.getRow().getTable().getObjectType();
+            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            if (cssHandler) {
+                const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
+                valueClasses.forEach((c) => classes.push(c));
             }
         }
+
         this.state.stateClasses = classes;
     }
 }

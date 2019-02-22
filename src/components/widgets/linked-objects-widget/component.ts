@@ -1,19 +1,19 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, TableConfiguration, TableHeaderHeight, TableRowHeight,
-    WidgetService, IdService, TableFactoryService
+    WidgetService, TableFactoryService, DefaultColumnConfiguration, TableEventData,
+    TableEvent, AbstractMarkoComponent
 } from '../../../core/browser';
-import { KIXObjectType, Link, KIXObject, WidgetType, ContextType } from '../../../core/model';
+import { KIXObjectType, Link, KIXObject, WidgetType, ContextType, DataType } from '../../../core/model';
 import { LinkUtil } from '../../../core/browser/link';
+import { EventService, IEventSubscriber } from '../../../core/browser/event';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-    private contextListenerId: string;
+    private tableSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.contextListenerId = IdService.generateDateBasedId('kix-object-linked-objects-widget');
     }
 
     public onInput(input: any): void {
@@ -25,7 +25,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener(this.contextListenerId, {
+        context.registerListener('kix-object-linked-objects-widget', {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget(object);
             },
@@ -37,6 +37,10 @@ class Component {
         });
 
         await this.initWidget(await context.getObject<KIXObject>());
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
     }
 
     private async initWidget(kixObject?: KIXObject): Promise<void> {
@@ -59,6 +63,8 @@ class Component {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
 
+            this.state.title = `${this.state.widgetConfiguration.title}`;
+
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
                 const objectLinks = this.state.kixObject.Links.filter((link) => this.checkLink(link, lot[1]));
@@ -74,19 +80,48 @@ class Component {
                 const table = TableFactoryService.getInstance().createTable(
                     lot[1], tableConfiguration, objects.map((o) => o.ObjectId), null, true, null, true
                 );
+                table.addColumns([
+                    new DefaultColumnConfiguration(
+                        'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
+                    )
+                ]);
 
                 objectsCount += objects.length;
                 const title = `${lot[0]} (${objects.length})`;
-                this.state.linkedObjectGroups.push([title, table, objects.length]);
-                // table.setColumns([
-                //     new TableColumn(
-                //         'LinkedAs', DataType.STRING, '', null, true, true, 120, true, true, true, false, null
-                //     )
-                // ]);
+                this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
             }
 
             this.state.title = `${this.state.widgetConfiguration.title} (${objectsCount})`;
+            this.initTableSubscriber();
         }
+    }
+
+    private initTableSubscriber(): void {
+        this.tableSubscriber = {
+            eventSubscriberId: 'linked-objects-widget',
+            eventPublished: (data: TableEventData, eventId: string) => {
+                const group = data ? this.state.linkedObjectGroups.find(
+                    (g) => g[1].getTableId() === data.tableId
+                ) : null;
+                if (group) {
+                    if (eventId === TableEvent.TABLE_READY) {
+                        const values = group[3].map((ld) => {
+                            const name = ld.linkTypeDescription.asSource
+                                ? ld.linkTypeDescription.linkType.SourceName
+                                : ld.linkTypeDescription.linkType.TargetName;
+
+                            const value: [any, [string, any]] = [ld.linkableObject, ['LinkedAs', name]];
+                            return value;
+                        });
+                        if (!!values.length) {
+                            group[1].setRowObjectValues(values);
+                        }
+                    }
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
     }
 
     public setGroupMinimizedStates(): void {

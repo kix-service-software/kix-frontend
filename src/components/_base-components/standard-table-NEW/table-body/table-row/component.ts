@@ -27,6 +27,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         if (this.state.row) {
             this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this);
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTABLE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
@@ -35,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTABLE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
@@ -44,6 +46,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         if (data && data.tableId === this.state.row.getTable().getTableId()) {
             if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
                 this.state.selected = this.state.row.isSelected();
+            }
+            if (eventId === TableEvent.ROW_SELECTABLE_CHANGED) {
+                this.state.selectable = this.state.row.isSelectable();
             }
             if (eventId === TableEvent.ROW_TOGGLED && data.rowId === this.state.row.getRowId()) {
                 this.state.open = this.state.row.isExpanded();

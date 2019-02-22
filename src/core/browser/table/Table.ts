@@ -64,8 +64,8 @@ export class Table implements ITable {
         this.columnConfiguration = columnConfiguration;
     }
 
-    public async initialize(reset: boolean = false): Promise<void> {
-        if (!this.initialized || reset) {
+    public async initialize(): Promise<void> {
+        if (!this.initialized) {
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
@@ -109,7 +109,7 @@ export class Table implements ITable {
         return row;
     }
 
-    public createColumn(columnConfiguration: IColumnConfiguration): IColumn {
+    private createColumn(columnConfiguration: IColumnConfiguration): IColumn {
         const column = new Column(this, columnConfiguration);
 
         this.rows.forEach((r) => {
@@ -211,13 +211,21 @@ export class Table implements ITable {
     }
 
     public addColumns(columns: IColumnConfiguration[]): void {
-        columns.forEach((c) => {
-            if (!this.hasColumn(c.property)) {
-                this.createColumn(c);
-                this.updateRowValues();
+        if (!this.initialized) {
+            if (!this.columnConfiguration) {
+                this.columnConfiguration = [...columns];
+            } else {
+                this.columnConfiguration.push(...columns);
             }
-        });
-        this.reload();
+        } else {
+            columns.forEach((c) => {
+                if (!this.hasColumn(c.property)) {
+                    this.createColumn(c);
+                    this.updateRowValues();
+                }
+            });
+            this.reload();
+        }
     }
 
     private updateRowValues(): void {
@@ -387,26 +395,6 @@ export class Table implements ITable {
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
     }
 
-    public setRowObjectValues(values: Array<[any, [string, any]]>): void {
-        values.forEach((v) => {
-            const row = this.getRowByObject(v[0]);
-            if (row) {
-                const value = v[1];
-                row.getRowObject().addValue(new TableValue(value[0], value[1]));
-                const cell = row.getCell(value[0]);
-                if (cell) {
-                    cell.setValue(new TableValue(value[0], value[1]));
-                } else {
-                    row.addCell(new TableValue(value[0], value[1]));
-                }
-                EventService.getInstance().publish(
-                    TableEvent.ROW_VALUE_CHANGED,
-                    new TableEventData(this.getTableId(), row.getRowId())
-                );
-            }
-        });
-    }
-
     public switchColumnOrder(): void {
         this.columns = this.columns.reverse();
         if (this.getTableConfiguration().fixedFirstColumn) {
@@ -425,6 +413,26 @@ export class Table implements ITable {
     public isFiltered(): boolean {
         return this.isFilterDefined(this.filterValue, this.filterCriteria) ||
             this.getColumns().some((c) => c.isFiltered());
+    }
+
+    public setRowObjectValues(values: Array<[any, [string, any]]>): void {
+        values.forEach((v) => {
+            const row = this.getRowByObject(v[0]);
+            if (row) {
+                const value = v[1];
+                row.getRowObject().addValue(new TableValue(value[0], value[1]));
+                const cell = row.getCell(value[0]);
+                if (cell) {
+                    cell.setValue(new TableValue(value[0], value[1]));
+                } else {
+                    row.addCell(new TableValue(value[0], value[1]));
+                }
+                EventService.getInstance().publish(
+                    TableEvent.ROW_VALUE_CHANGED,
+                    new TableEventData(this.getTableId(), row.getRowId())
+                );
+            }
+        });
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {
