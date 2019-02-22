@@ -5,7 +5,7 @@ import { Table } from "../Table";
 export class SwitchColumnOrderAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "Reihenfolge tauschen";
+        this.text = "Tauschen";
         this.icon = "kix-icon-exchange";
     }
 
