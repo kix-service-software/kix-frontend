@@ -62,9 +62,11 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList() : [];
         } else {
-            objects = await KIXObjectService.loadObjects<T>(
-                this.objectType, this.objectIds, this.loadingOptions, null, false
-            );
+            if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
+                objects = await KIXObjectService.loadObjects<T>(
+                    this.objectType, this.objectIds, this.loadingOptions, null, false
+                );
+            }
         }
 
         const rowObjects = objects.map((t) => {
