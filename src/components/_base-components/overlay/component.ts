@@ -83,7 +83,6 @@ class OverlayComponent {
 
         this.applyWidgetConfiguration(widgetInstanceId);
 
-        this.state.keepShow = true;
         this.state.show = true;
 
         if (this.isToast()) {
