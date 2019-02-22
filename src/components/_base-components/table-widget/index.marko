@@ -1,4 +1,9 @@
 <widget instanceId=state.instanceId title=state.title actions=state.actions icon=state.icon>
+    <@header-content>
+        <for(componentId in state.headerTitleComponents)>
+            <${component.getTemplate(componentId)}/>
+        </for>
+    </@header-content>
     <@headerFilter>
         <filter
             filterCount=state.filterCount

@@ -9,7 +9,8 @@ export class ComponentState extends WidgetComponentState {
         public actions: IAction[] = [],
         public title: string = null,
         public icon: string | ObjectIcon = null,
-        public filterCount: number = null
+        public filterCount: number = null,
+        public headerTitleComponents: string[] = []
     ) {
         super();
     }
