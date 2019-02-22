@@ -2,7 +2,8 @@ import { ComponentState } from './ComponentState';
 import { TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService, TableEventData
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
+    TableEventData, ComponentsService
 } from '../../../core/browser';
 class Component {
 
@@ -58,6 +59,7 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
 
+            await this.prepareHeader();
             await this.prepareTable();
             this.prepareActions();
 
@@ -86,6 +88,13 @@ class Component {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+    }
+
+    private async prepareHeader(): Promise<void> {
+        const settings = this.state.widgetConfiguration.settings;
+        if (settings && settings.headerComponents) {
+            this.state.headerTitleComponents = settings.headerComponents;
+        }
     }
 
     private prepareTitle(): void {
@@ -151,6 +160,10 @@ class Component {
                 );
             }
         }
+    }
+
+    public getTemplate(componentId: string): any {
+        return ComponentsService.getInstance().getComponentTemplate(componentId);
     }
 
 }

@@ -142,7 +142,10 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const articleListWidget =
             new ConfiguredWidget("20180921-article-list", new WidgetConfiguration(
                 "table-widget", "Artikelübersicht", ['article-bulk-action', 'article-new-note-action'],
-                { objectType: KIXObjectType.ARTICLE },
+                {
+                    objectType: KIXObjectType.ARTICLE,
+                    headerComponents: ['article-attachment-count']
+                },
                 false, true, WidgetSize.LARGE, null, true)
             );
 
