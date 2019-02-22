@@ -92,7 +92,7 @@ class Component {
         if (this.configuredTitle) {
             let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
             if (this.state.table) {
-                title = `${title} (${this.state.table.getRows().length})`;
+                title = `${title} (${this.state.table.getRowCount(true)})`;
             }
             this.state.title = title;
         }
