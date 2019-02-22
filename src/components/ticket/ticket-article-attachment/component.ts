@@ -15,13 +15,14 @@ class ArticleAttachmentComponent {
 
     public onInput(input: any): void {
         this.state.attachment = input.attachment;
+        this.state.article = input.article;
 
         if (this.state.attachment) {
             this.state.icon = new ObjectIcon("MIMEType", this.state.attachment.ContentType);
         }
     }
 
-    private async download(): Promise<void> {
+    public async download(): Promise<void> {
         if (!this.state.progress && this.state.article && this.state.attachment) {
             this.state.progress = true;
             const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
