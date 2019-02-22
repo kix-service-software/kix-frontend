@@ -60,7 +60,6 @@ class LinkDialogComponent {
 
     public onDestroy(): void {
         this.state.linkDescriptions = null;
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
@@ -176,6 +175,11 @@ class LinkDialogComponent {
             const table = TableFactoryService.getInstance().createTable(
                 objectType, tableConfiguration, null, LinkObjectDialogContext.CONTEXT_ID, null, null, true
             );
+            table.addColumns([
+                new DefaultColumnConfiguration(
+                    'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
+                )
+            ]);
 
             this.state.table = table;
 
@@ -183,17 +187,8 @@ class LinkDialogComponent {
                 eventSubscriberId: 'link-object-dialog',
                 eventPublished: (data: TableEventData, eventId: string) => {
                     if (data && data.tableId === table.getTableId()) {
-                        if (eventId === TableEvent.TABLE_INITIALIZED) {
-                            table.addColumns([
-                                new DefaultColumnConfiguration(
-                                    'LinkedAs', true, false, true, false, 100, true, true, false, DataType.STRING
-                                )
-                            ]);
-                            // TODO: muss auch in ready, addColumns triggert table refresh
-                            //       ==> bei setRowObjectValues sind dadurch keine Rows vorhanden
-                            this.setLinkedAsValues(this.state.linkDescriptions);
-                        }
                         if (eventId === TableEvent.TABLE_READY) {
+                            this.setLinkedAsValues(this.state.linkDescriptions);
                             this.markNotSelectableRows();
                         }
                         this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
@@ -202,7 +197,6 @@ class LinkDialogComponent {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         }
@@ -255,6 +249,7 @@ class LinkDialogComponent {
             );
             BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
             this.setLinkedAsValues(newLinks);
+            this.markNotSelectableRows();
             this.state.table.selectNone();
         }
     }

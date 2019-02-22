@@ -186,57 +186,68 @@
                             border-right: 1px solid @secondary-4;
                         }
                         >td.toggle {
-                            box-shadow: 1px 0 0 0 inset @secondary-4;
-                        }
-                    }
-                    &.opened {
-                        background-color: @primary-5;
-                        color: @primary-0;
-                        font-weight: bold;
-                        &.fist-column-fixed {
-                            >:first-child:not(.check) {
-                                background-color: @primary-5;
-                            }
-                            >.check+td {
-                                background-color: @primary-5;
-                            }
-                        }
-                        >.check {
                             >div {
-                                background-color: @primary-5;
-                                box-shadow: 0 2px 2px 0 @secondary-2;
+                                box-shadow: 1px 0 0 0 inset @secondary-4;
                             }
                         }
-                        >.toggle {
-                            >div {
-                                background-color: @primary-5;
-                                box-shadow: 0 2px 2px 0 @secondary-2, 2px 1px 2px 0 @secondary-2;
+                        &.opened {
+                            background-color: @primary-5;
+                            color: @primary-0;
+                            font-weight: bold;
+                            &.fist-column-fixed {
+                                >:first-child:not(.check) {
+                                    background-color: @primary-5;
+                                }
+                                >.check+td {
+                                    background-color: @primary-5;
+                                }
+                            }
+                            &:not(:hover) {
+                                >.toggle {
+                                    >div {
+                                        box-shadow: 1px 0 0 0 inset @secondary-4, 0 2px 2px 0 @secondary-2, 2px 1px 2px 0 @secondary-2;
+                                    }
+                                }
+                            }
+                            >.check {
+                                >div {
+                                    background-color: @primary-5;
+                                    box-shadow: 0 2px 2px 0 @secondary-2;
+                                }
+                            }
+                            >.toggle {
+                                >div {
+                                    background-color: @primary-5;
+                                    box-shadow: 1px 0 0 0 inset @secondary-4, 0 2px 2px 0 @secondary-2, 2px 1px 2px 0 @secondary-2;
+                                }
                             }
                         }
                     }
                     &:hover:not(.opened) {
                         background-color: @secondary-3;
                         border-color: @secondary-2;
-                        >td:not(.toggle):not(.column-spacer) {
-                            border-right: 1px solid @secondary-2;
-                        }
-                        &.fist-column-fixed {
-                            >:first-child:not(.check) {
-                                background-color: @secondary-3;
+                        &:not(.spacer-rows):not(.empty-row) {
+                            >td:not(.toggle):not(.column-spacer) {
+                                border-right: 1px solid @secondary-2;
                             }
-                            >.check+td {
-                                background-color: @secondary-3;
+                            &.fist-column-fixed {
+                                >:first-child:not(.check) {
+                                    background-color: @secondary-3;
+                                }
+                                >.check+td {
+                                    background-color: @secondary-3;
+                                }
                             }
-                        }
-                        >.check {
-                            >div {
-                                background-color: @secondary-3;
+                            >.check {
+                                >div {
+                                    background-color: @secondary-3;
+                                }
                             }
-                        }
-                        >.toggle {
-                            >div {
-                                background-color: @secondary-3;
-                                box-shadow: 1px 0 0 0 inset @secondary-2;
+                            >.toggle {
+                                >div {
+                                    background-color: @secondary-3;
+                                    box-shadow: 1px 0 0 0 inset @secondary-2;
+                                }
                             }
                         }
                     }

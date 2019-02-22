@@ -18,11 +18,10 @@ describe('Table Toggle Tests', () => {
         table.setColumnConfiguration([
             new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
         ]);
+        await table.initialize();
     });
 
     describe('Toggle one row.', () => {
-        beforeEach(async () => await table.initialize());
-
         it('Should return false on initnal state.', async () => {
             const row = await table.getRows()[0];
             expect(row).exist;
