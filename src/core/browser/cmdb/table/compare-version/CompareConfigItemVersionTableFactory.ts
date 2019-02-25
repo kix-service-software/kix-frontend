@@ -39,7 +39,7 @@ export class CompareConfigItemVersionTableFactory implements ITableFactory {
             KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns, null, false, false, null, null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE, null, null, true
         );
-        tableConfiguration.displayLimit = null;
+        tableConfiguration.displayLimit = 18;
 
         return tableConfiguration;
     }
