@@ -22,8 +22,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (input.cell) {
             const table = input.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
-            this.state.object = input.cell.getRow().getRowObject().getObject();
-            if (tableConfiguration) {
+            if (tableConfiguration && tableConfiguration.routingConfiguration) {
+                this.state.object = input.cell.getRow().getRowObject().getObject();
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
                 if (this.state.routingConfiguration && this.state.object) {
                     this.state.objectId = this.state.object[this.state.routingConfiguration.objectIdProperty];
