@@ -344,7 +344,7 @@ export class Table implements ITable {
         this.getRows(withoutFilter).forEach((r) => r.select(false));
     }
 
-    public selectRowByObject(object: any, select: boolean = true): void {
+    public selectRowByObject(object: any, select?: boolean): void {
         const row = this.getRowByObject(object);
         if (row) {
             row.select(select);
