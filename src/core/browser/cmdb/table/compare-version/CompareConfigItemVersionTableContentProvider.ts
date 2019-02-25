@@ -198,6 +198,13 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         tree2.forEach((a2) => {
             const a1 = tree1.find((a) => a2.Key === a.Key);
             if (a1) {
+
+                const currentNames = a1.Name.split(' / ');
+                if (!currentNames.some((n) => n === a2.Name)) {
+                    currentNames.push(a2.Name);
+                    a1.Name = currentNames.join(' / ');
+                }
+
                 if (a1.Sub && a2.Sub) {
                     this.compareTrees(a1.Sub, a2.Sub);
                 } else if (!a1.Sub && a2.Sub) {
