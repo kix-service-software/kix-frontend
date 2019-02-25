@@ -49,7 +49,7 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
     }
 
     private objectListChanged(): void {
-        this.table.reload();
+        this.table.reload(true);
     }
 
     public getObjectType(): KIXObjectType {
