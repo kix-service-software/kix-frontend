@@ -32,7 +32,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 displayValue = 'Sichtbar in Kundenportal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                displayValue = 'Senderobjekt';
+                displayValue = 'Sender';
                 break;
             case ArticleProperty.FROM:
                 displayValue = 'Von';
@@ -115,6 +115,11 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 if (channels) {
                     const channel = channels.find((c) => c.ID === article.ChannelID);
                     displayValue = channel ? channel.Name : article[property];
+                    if (displayValue === 'email') {
+                        displayValue = 'E-Mail';
+                    } else if (displayValue === 'note') {
+                        displayValue = 'Notiz';
+                    }
                 }
                 break;
 
@@ -185,7 +190,22 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CHANNEL_ID:
-                icons.push(new ObjectIcon('Channel', article.ChannelID));
+                const channels = await KIXObjectService.loadObjects<Channel>(
+                    KIXObjectType.CHANNEL, [article.ChannelID]
+                );
+                if (channels && channels.length && channels[0].Name === 'email') {
+                    const mailIcon = article.isUnsent()
+                        ? 'kix-icon-mail-warning'
+                        : new ObjectIcon('Channel', article.ChannelID);
+                    let directionIcon = 'kix-icon-arrow-receive';
+                    if (article.senderType.Name === 'agent') {
+                        directionIcon = 'kix-icon-arrow-outward';
+                    }
+                    icons.push(mailIcon);
+                    icons.push(directionIcon);
+                } else {
+                    icons.push(new ObjectIcon('Channel', article.ChannelID));
+                }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
                 if (article.CustomerVisible) {
