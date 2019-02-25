@@ -190,7 +190,11 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public checkFilterValue(ticket: Ticket, criteria: TableFilterCriteria): boolean {
         if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
-            return ticket.Watchers.some((w) => w.UserID === criteria.value);
+            let value = criteria.value;
+            if (criteria.value === KIXObjectType.CURRENT_USER) {
+                value = ContextService.getInstance().getObjectData().currentUser.UserID;
+            }
+            return ticket.Watchers.some((w) => w.UserID === value);
         }
         return true;
     }
