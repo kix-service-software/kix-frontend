@@ -117,9 +117,17 @@ export class Article extends KIXObject<Article> {
 
     public isUnsent(): boolean {
         if (this.Flags) {
-            return this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'unsent-error');
+            return this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
         }
         return false;
+    }
+
+    public getUnsentError(): string {
+        const flag = this.Flags.find((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
+        if (flag) {
+            return flag.Value;
+        }
+        return '';
     }
 
     public equals(article: Article): boolean {
