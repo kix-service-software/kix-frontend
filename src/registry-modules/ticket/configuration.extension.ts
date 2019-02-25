@@ -40,10 +40,12 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Bearbeiter', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Beobachtete Tickets', [
-                new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
+                new TableFilterCriteria(
+                    TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
+                )
             ]),
             new KIXObjectPropertyFilter('Eskalierte Tickets', [
                 new TableFilterCriteria(TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, 0)
@@ -55,9 +57,10 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
             new KIXObjectPropertyFilter('Verantwortliche Tickets', [
-                new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(
+                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
+                )
             ]),
-
 
         ];
 

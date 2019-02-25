@@ -89,13 +89,17 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const predefinedToDoTableFilter = [
             new KIXObjectPropertyFilter('Verantwortliche Tickets', [
-                new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(
+                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
+                )
             ]),
             new KIXObjectPropertyFilter('Bearbeiter', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Beobachtete Tickets', [
-                new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
+                new TableFilterCriteria(
+                    TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
+                )
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
@@ -108,11 +112,11 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                     [
                         new FilterCriteria(
                             TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                            FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                         ),
                         new FilterCriteria(
                             TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
+                            FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                         ),
                         new FilterCriteria(
                             TicketProperty.LOCK_ID, SearchOperator.EQUALS,

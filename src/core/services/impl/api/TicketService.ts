@@ -548,7 +548,7 @@ export class TicketService extends KIXObjectService {
 
     private setUserID(filter: FilterCriteria, user: User): void {
         if (filter.property === TicketProperty.OWNER_ID || filter.property === TicketProperty.RESPONSIBLE_ID) {
-            if (filter.value === 'CURRENT_USER') {
+            if (filter.value === KIXObjectType.CURRENT_USER) {
                 filter.value = user.UserID;
             }
         }
