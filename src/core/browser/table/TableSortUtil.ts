@@ -9,17 +9,14 @@ export class TableSortUtil {
         rows: IRow[], columnId: string, sortOrder: SortOrder, dataType: DataType
     ): Promise<IRow[]> {
         if (columnId && sortOrder && dataType) {
-
-            rows = await TableSortUtil.sortRows(rows, columnId, dataType);
-
-            if (sortOrder === SortOrder.DOWN) {
-                rows = rows.reverse();
-            }
+            rows = await TableSortUtil.sortRows(rows, columnId, dataType, sortOrder);
         }
         return rows;
     }
 
-    private static async sortRows(rows: IRow[], columnId: string, dataType: DataType): Promise<IRow[]> {
+    private static async sortRows(
+        rows: IRow[], columnId: string, dataType: DataType, sortOrder: SortOrder
+    ): Promise<IRow[]> {
         const len = rows.length;
         for (let i = len - 1; i >= 0; i--) {
             for (let j = 1; j <= i; j++) {
@@ -37,6 +34,11 @@ export class TableSortUtil {
                 } else {
                     compare = valueA - valueB;
                 }
+
+                if (sortOrder === SortOrder.DOWN) {
+                    compare = compare * (-1);
+                }
+
                 if (compare > 0) {
                     const temp = rows[j - 1];
                     rows[j - 1] = rows[j];
@@ -56,6 +58,5 @@ export class TableSortUtil {
                 return cell.getDisplayValue();
         }
     }
-
 
 }
