@@ -16,15 +16,15 @@ export class ArticleTableFactory implements ITableFactory {
     }
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         const contentProvider = new ArticleTableContentProvider(table, null, null, contextId);
 

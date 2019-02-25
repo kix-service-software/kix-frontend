@@ -162,7 +162,8 @@ class Component {
         this.state.table = null;
 
         const table = TableFactoryService.getInstance().createTable(
-            KIXObjectType.LINK_OBJECT, null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
+            'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
+            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
         );
 
         this.tableSubscriber = {

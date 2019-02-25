@@ -11,12 +11,12 @@ export class TicketPriorityTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         table.setContentProvider(new TicketPriorityTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

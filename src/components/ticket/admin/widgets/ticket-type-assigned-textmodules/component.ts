@@ -45,7 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private prepareTable(): void {
         const table = TableFactoryService.getInstance().createTable(
-            KIXObjectType.TEXT_MODULE, null, null, null, true
+            'ticket-type-assigned-text-modules', KIXObjectType.TEXT_MODULE, null, null, null, true
         );
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);

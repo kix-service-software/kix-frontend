@@ -1,5 +1,3 @@
-import { AbstractAction } from "../model";
-
 export class ClientStorageService {
 
     private static INSTANCE: ClientStorageService = null;
@@ -72,7 +70,10 @@ export class ClientStorageService {
     }
 
     public static getOption(key: string): string {
-        return window.localStorage.getItem(key);
+        if (typeof window !== 'undefined') {
+            return window.localStorage.getItem(key);
+        }
+        return null;
     }
 
 }

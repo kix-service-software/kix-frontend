@@ -59,7 +59,8 @@ class Component {
         if (this.state.contact && this.state.widgetConfiguration) {
 
             this.state.table = TableFactoryService.getInstance().createTable(
-                KIXObjectType.CUSTOMER, this.state.widgetConfiguration.settings, this.state.contact.UserCustomerIDs,
+                'contact-assigned-customer', KIXObjectType.CUSTOMER,
+                this.state.widgetConfiguration.settings, this.state.contact.UserCustomerIDs,
                 null, true
             );
         }

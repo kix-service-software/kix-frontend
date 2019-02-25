@@ -12,6 +12,8 @@ export interface ITable {
 
     getTableId(): string;
 
+    getTableKey(): string;
+
     getContextId(): string;
 
     initialize(): Promise<void>;

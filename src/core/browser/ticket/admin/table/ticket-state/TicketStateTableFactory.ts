@@ -12,13 +12,13 @@ export class TicketStateTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
         table.setContentProvider(new TicketStateTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

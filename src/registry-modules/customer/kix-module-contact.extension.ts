@@ -11,7 +11,6 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['contact-module-component', 'customer/contact-module-component'],
         ['contact-details', 'customer/contact-details'],
         ['contact-info-widget', 'customer/widgets/contact-info-widget'],
-        ['contact-list-widget', 'customer/widgets/contact-list-widget'],
         ['contact-assigned-customers-widget', 'customer/widgets/contact-assigned-customers-widget'],
         ['contact-assigned-tickets-widget', 'customer/widgets/contact-assigned-tickets-widget'],
         ['new-contact-dialog', 'customer/dialogs/new-contact-dialog'],

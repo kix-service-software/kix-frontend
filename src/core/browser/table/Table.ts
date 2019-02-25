@@ -36,12 +36,17 @@ export class Table implements ITable {
     private sortOrder: SortOrder;
 
     public constructor(
+        private tableKey: string,
         private tableConfiguration?: TableConfiguration,
         private contextId?: string
     ) { }
 
     public getTableId(): string {
         return this.id;
+    }
+
+    public getTableKey(): string {
+        return this.tableKey;
     }
 
     public getContextId(): string {

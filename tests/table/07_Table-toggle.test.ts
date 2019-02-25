@@ -13,7 +13,7 @@ describe('Table Toggle Tests', () => {
     let table: ITable;
 
     before(async () => {
-        table = new Table();
+        table = new Table('test');
         table.setContentProvider(new TestTableContentProvider(10, 3));
         table.setColumnConfiguration([
             new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')

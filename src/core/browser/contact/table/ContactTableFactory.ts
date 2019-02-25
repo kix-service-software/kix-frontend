@@ -11,7 +11,7 @@ export class ContactTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
@@ -22,7 +22,7 @@ export class ContactTableFactory implements ITableFactory {
             tableConfiguration.limit, ['TicketStats']
         );
 
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
         table.setContentProvider(new ContactTableContentProvider(table, objectIds, loadingOptions, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
         return table;

@@ -9,13 +9,13 @@ export class LinkObjectTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
         table.setContentProvider(new LinkObjectTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

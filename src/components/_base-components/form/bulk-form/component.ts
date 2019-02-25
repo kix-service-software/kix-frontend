@@ -68,7 +68,8 @@ class Component {
                 );
 
                 const table = TableFactoryService.getInstance().createTable(
-                    this.state.bulkManager.objectType, configuration, null, BulkDialogContext.CONTEXT_ID,
+                    `bulk-form-list-${this.state.bulkManager.objectType}`, this.state.bulkManager.objectType,
+                    configuration, null, BulkDialogContext.CONTEXT_ID,
                     true, null, true
                 );
 

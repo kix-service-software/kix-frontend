@@ -173,7 +173,8 @@ class Component implements ISearchFormListener {
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         this.table = TableFactoryService.getInstance().createTable(
-            this.objectType, tableConfiguration, null, SearchContext.CONTEXT_ID, true, false, true
+            `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
+            null, SearchContext.CONTEXT_ID, true, false, true
         );
 
         KIXObjectSearchService.getInstance().provideResult();

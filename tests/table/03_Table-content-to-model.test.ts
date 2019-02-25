@@ -14,7 +14,7 @@ describe('Table Content Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
         });
 
         it('Should create a instance with a table provider.', () => {
@@ -44,7 +44,7 @@ describe('Table Content Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
         });
 
         it('table should contains rows', async () => {
@@ -61,7 +61,7 @@ describe('Table Content Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
         });
 
         it('Table should contain rows.', async () => {
@@ -86,7 +86,7 @@ describe('Table Content Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(4, 10, true));
             await table.initialize();
         });
@@ -111,7 +111,7 @@ describe('Table Content Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(1, 2, true));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('1'),

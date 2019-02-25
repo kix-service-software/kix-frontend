@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         const table = TableFactoryService.getInstance().createTable(
-            KIXObjectType.TICKET_PRIORITY, null, null, null, true
+            'ticket-priorities', KIXObjectType.TICKET_PRIORITY, null, null, null, true
         );
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);

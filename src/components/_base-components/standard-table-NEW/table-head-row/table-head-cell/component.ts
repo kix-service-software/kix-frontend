@@ -130,6 +130,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.startOffset = undefined;
             this.state.resizeActive = false;
             this.column.setSize(this.size);
+            EventService.getInstance().publish(
+                TableEvent.COLUMN_RESIZED,
+                new TableEventData(this.column.getTable().getTableId(), null, this.column.getColumnId())
+            );
         }
     }
 
