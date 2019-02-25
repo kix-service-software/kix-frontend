@@ -11,7 +11,7 @@ export class TicketTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
@@ -24,7 +24,7 @@ export class TicketTableFactory implements ITableFactory {
             tableConfiguration.limit, [TicketProperty.WATCHERS]
         );
 
-        const table = new Table(tableConfiguration, contextId);
+        const table = new Table(tableKey, tableConfiguration, contextId);
 
         const contentProvider = new TicketTableContentProvider(table, objectIds, loadingOptions, contextId);
 

@@ -19,13 +19,13 @@ TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(objectType);
+    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
     await table.initialize();
 });
 
 Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(objectType, null, null, null, false, false, true);
+    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
     await table.initialize();
 });

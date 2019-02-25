@@ -12,12 +12,12 @@ export class TranslationTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, tableConfiguration.filter, tableConfiguration.sortOrder

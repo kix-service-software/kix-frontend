@@ -14,7 +14,7 @@ describe('Table Sort Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),

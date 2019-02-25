@@ -28,12 +28,15 @@ export class TableFactoryService {
     }
 
     public createTable(
-        objectType: KIXObjectType, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short: boolean = false
+        tableKey: string, objectType: KIXObjectType, tableConfiguration?: TableConfiguration,
+        objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
+        defaultToggle?: boolean, short: boolean = false
     ): ITable {
         const factory = this.factories.find((f) => f.objectType === objectType);
         const table = factory
-            ? factory.createTable(tableConfiguration, objectIds, contextId, defaultRouting, defaultToggle, short)
+            ? factory.createTable(
+                tableKey, tableConfiguration, objectIds, contextId, defaultRouting, defaultToggle, short
+            )
             : null;
         return table;
     }

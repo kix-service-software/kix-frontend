@@ -12,7 +12,7 @@ describe('Table Column Configuration Tests', () => {
     describe('Create a table instance with column configuration.', () => {
         let table: ITable;
 
-        before(() => table = new Table());
+        before(() => table = new Table('test'));
 
         it('DefaultColumnConfguration should have right defaults.', async () => {
             const config = new DefaultColumnConfiguration('1');

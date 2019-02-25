@@ -11,12 +11,12 @@ export class TicketTypeTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         table.setContentProvider(new TicketTypeTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

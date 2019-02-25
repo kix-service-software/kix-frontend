@@ -10,12 +10,12 @@ export class FAQArticleHistoryTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE_HISTORY;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>, contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         table.setContentProvider(new FAQArticleHistoryContentProvider(table, null, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

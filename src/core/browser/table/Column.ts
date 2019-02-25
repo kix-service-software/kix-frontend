@@ -6,6 +6,7 @@ import { SearchOperator } from "../SearchOperator";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
 import { TableEventData } from "./TableEventData";
+import { ClientStorageService } from "../ClientStorageService";
 
 export class Column<T = any> implements IColumn<T> {
 
@@ -21,6 +22,10 @@ export class Column<T = any> implements IColumn<T> {
         private columnConfiguration: IColumnConfiguration
     ) {
         this.id = columnConfiguration.property;
+        const size = ClientStorageService.getOption(this.getSizeConfifurationKey());
+        if (size && Number(size)) {
+            this.columnConfiguration.size = Number(size);
+        }
     }
 
     public getColumnId(): string {
@@ -86,16 +91,17 @@ export class Column<T = any> implements IColumn<T> {
 
     public setSize(size: number): void {
         this.columnConfiguration.size = size;
-        EventService.getInstance().publish(
-            TableEvent.COLUMN_RESIZED,
-            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
-        );
+        ClientStorageService.setOption(this.getSizeConfifurationKey(), size.toString());
     }
 
     public isFiltered(): boolean {
         const filter = this.getFilter();
         return (filter[0] !== null && filter[0] !== undefined && filter[0] !== '') ||
             (filter[1] !== null && filter[1] !== undefined && filter[1].length > 0);
+    }
+
+    private getSizeConfifurationKey(): string {
+        return this.getTable().getTableKey() + '-' + this.columnConfiguration.property + '-size';
     }
 
 }

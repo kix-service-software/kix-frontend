@@ -17,7 +17,7 @@ describe('Table Filter Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
@@ -94,7 +94,7 @@ describe('Table Filter Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
@@ -183,7 +183,7 @@ describe('Table Filter Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
@@ -241,7 +241,7 @@ describe('Table Filter Tests', () => {
         let table: ITable;
 
         beforeEach(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
@@ -319,7 +319,7 @@ describe('Table Filter Tests', () => {
         let subscriber: IEventSubscriber;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(5, 5));
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')

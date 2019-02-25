@@ -56,7 +56,7 @@ class Component {
 
     private async prepareTable(): Promise<void> {
         const table = TableFactoryService.getInstance().createTable(
-            KIXObjectType.CONFIG_ITEM_HISTORY, null, null, ConfigItemDetailsContext.CONTEXT_ID
+            'config-item-history', KIXObjectType.CONFIG_ITEM_HISTORY, null, null, ConfigItemDetailsContext.CONTEXT_ID
         );
 
         this.state.table = table;

@@ -6,8 +6,8 @@ export interface ITableFactory {
     objectType: KIXObjectType;
 
     createTable(
-        tableConfiguration?: TableConfiguration, objectids?: Array<number | string>, contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectids?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable;
 
 }

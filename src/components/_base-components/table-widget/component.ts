@@ -46,13 +46,15 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: (data: TableEventData, eventId: string) => {
-                    if (eventId === TableEvent.TABLE_READY && data && data.tableId === this.state.table.getTableId()) {
-                        this.prepareTitle();
-                        this.state.filterCount = this.state.table.isFiltered()
-                            ? this.state.table.getRowCount()
-                            : null;
+                    if (data && data.tableId === this.state.table.getTableId()) {
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.prepareTitle();
+                            this.state.filterCount = this.state.table.isFiltered()
+                                ? this.state.table.getRowCount()
+                                : null;
+                        }
+                        WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
-                    WidgetService.getInstance().updateActions(this.state.instanceId);
                 }
             };
 
@@ -120,7 +122,8 @@ class Component {
                 : null;
 
             const table = TableFactoryService.getInstance().createTable(
-                this.objectType, settings.tableConfiguration, null, contextId, true, true
+                `table-widget-${this.state.instanceId}`, this.objectType,
+                settings.tableConfiguration, null, contextId, true, true
             );
 
             if (settings.sort) {

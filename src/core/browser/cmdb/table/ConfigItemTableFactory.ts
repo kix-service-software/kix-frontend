@@ -11,16 +11,15 @@ export class ConfigItemTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean,
-        short?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableConfiguration, contextId);
+        const table = new Table(tableKey, tableConfiguration, contextId);
         table.setContentProvider(new ConfigItemTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

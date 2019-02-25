@@ -74,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         const table = TableFactoryService.getInstance().createTable(
-            KIXObjectType.TRANSLATION, null, null, null, true
+            'i18n-translations', KIXObjectType.TRANSLATION, null, null, null, true
         );
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);

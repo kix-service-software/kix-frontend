@@ -11,12 +11,12 @@ export class CustomerTableFactory implements ITableFactory {
     public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
 
     public createTable(
-        tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
-        const table = new Table(tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, tableConfiguration.filter, tableConfiguration.sortOrder, null,

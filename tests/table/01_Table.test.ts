@@ -13,7 +13,7 @@ describe('Table Tests', () => {
     describe('Create a new table instance.', () => {
 
         it('Should create a new table instance with given table id.', () => {
-            const table: ITable = new Table();
+            const table: ITable = new Table('test');
             expect(table).exist;
             expect(table.getTableId()).exist;
         });
@@ -24,7 +24,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
         });
 
         it('Should create a row which contains the ITableObject.', () => {
@@ -39,7 +39,7 @@ describe('Table Tests', () => {
     describe('Create new row in table.', () => {
         let table: ITable;
 
-        before(() => table = new Table());
+        before(() => table = new Table('test'));
 
         it('Should create a new row in the table.', () => {
             const row: IRow = table.createRow();
@@ -54,7 +54,7 @@ describe('Table Tests', () => {
         let row1: IRow, row2: IRow, row3: IRow;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             row1 = table.createRow();
             row2 = table.createRow();
             row3 = table.createRow();
@@ -79,7 +79,7 @@ describe('Table Tests', () => {
         let row: IRow;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
             row = table.createRow();
             table.createRow();
@@ -97,7 +97,7 @@ describe('Table Tests', () => {
         let row: IRow;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
             row = table.createRow();
             table.createRow();
@@ -125,7 +125,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
             table.createRow();
             table.createRow();
@@ -154,7 +154,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
             table.createRow();
             table.createRow();
@@ -179,7 +179,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
             table.createRow();
         });
@@ -203,7 +203,7 @@ describe('Table Tests', () => {
         let oldRow2: IRow;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             oldRow1 = table.createRow();
             oldRow2 = table.createRow();;
         });
@@ -244,7 +244,7 @@ describe('Table Tests', () => {
         let existingRow;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             oldRow1 = table.createRow();
             oldRow2 = table.createRow();
             existingRow = table.createRow();
@@ -280,7 +280,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.createRow();
         });
 
@@ -308,7 +308,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
         });
 
         it('Column configuration should have 4 entries.', () => {
@@ -328,7 +328,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('1'),
                 new DefaultColumnConfiguration('1'),
@@ -359,7 +359,7 @@ describe('Table Tests', () => {
         const columnId = '1';
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1'),
@@ -382,7 +382,7 @@ describe('Table Tests', () => {
         let columnId2 = '3';
 
         before(() => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1'),
@@ -416,7 +416,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         beforeEach(() => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('1'),
                 new DefaultColumnConfiguration('2'),
@@ -473,7 +473,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1')
@@ -503,7 +503,7 @@ describe('Table Tests', () => {
         let columnId2 = '2';
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1'),
@@ -547,7 +547,7 @@ describe('Table Tests', () => {
         let columnId2 = '1';
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1'),
@@ -588,7 +588,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1')
@@ -621,7 +621,7 @@ describe('Table Tests', () => {
         let table: ITable;
 
         before(async () => {
-            table = new Table();
+            table = new Table('test');
             table.setColumnConfiguration([
                 new DefaultColumnConfiguration('0'),
                 new DefaultColumnConfiguration('1')
