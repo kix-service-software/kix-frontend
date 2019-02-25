@@ -31,15 +31,23 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         }
 
-        const channelOption = this.state.field.options.find((o) => o.option === 'NO_CHANNEL');
-        if (channelOption) {
-            this.state.noChannel = channelOption.value;
+        const noChannelOption = this.state.field.options.find((o) => o.option === 'NO_CHANNEL');
+        if (noChannelOption) {
+            this.state.noChannel = noChannelOption.value;
         }
 
-        if (this.state.noChannel) {
+        const defaultChannelOption = this.state.field.options.find((o) => o.option === 'CHANNEL_ID');
+        if (defaultChannelOption && defaultChannelOption.value) {
+            const defaultChannel = this.state.channels.find((c) => c.ID === defaultChannelOption.value);
+            if (defaultChannel) {
+                this.channelClicked(defaultChannel);
+            }
+        }
+
+        if (this.state.noChannel && !this.state.currentChannel) {
             this.channelClicked(null);
-        } else if (this.state.channels.length) {
-            await this.channelClicked(this.state.channels[0]);
+        } else if (!this.state.noChannel && !this.state.currentChannel && this.state.channels.length) {
+            this.channelClicked(this.state.channels[0]);
         }
     }
 
