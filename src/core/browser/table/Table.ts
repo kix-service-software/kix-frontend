@@ -16,6 +16,7 @@ import { TableConfiguration } from "./TableConfiguration";
 import { TableValue } from "./TableValue";
 import { ValueState } from "./ValueState";
 import { TableEventData } from "./TableEventData";
+import { SearchOperator } from "../SearchOperator";
 
 export class Table implements ITable {
 
@@ -292,8 +293,13 @@ export class Table implements ITable {
             const filter: [string, TableFilterCriteria[]] = column.getFilter();
             if (this.isFilterDefined(filter[0], filter[1])) {
                 const rows: IRow[] = [];
+                if (filter[0] && filter[0] !== '') {
+                    filter[1] = [
+                        new TableFilterCriteria(column.getColumnId(), SearchOperator.CONTAINS, filter[0])
+                    ];
+                }
                 for (const row of this.getRows()) {
-                    const match = await row.filter(filter[0], filter[1]);
+                    const match = await row.filter(null, filter[1]);
                     if (match) {
                         rows.push(row);
                     }

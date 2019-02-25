@@ -272,17 +272,17 @@ describe('Table Filter Tests', () => {
             expect(rows.length).equals(5);
         });
 
-        it('should filter the rows for given text value', async () => {
+        it('should filter the rows for given text value in relevant column', async () => {
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             const column = table.getColumn('2');
             await column.filter(null, 'value-1-2');
 
             const rows = table.getRows();
             expect(rows).exist;
             expect(rows).an('array');
-            expect(rows.length).equals(4);
+            expect(rows.length).equals(2);
         });
 
         it('should filter the rows for list value', async () => {
