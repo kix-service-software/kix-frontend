@@ -42,6 +42,7 @@ import { TranslationFormService } from '../../core/browser/i18n/admin/Translatio
 import { SearchResultPrintAction } from '../../core/browser/search/actions';
 import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
+import { SystemAddressService } from '../../core/browser/system-address';
 
 class Component extends AbstractMarkoComponent {
 
@@ -56,6 +57,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
+        ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());

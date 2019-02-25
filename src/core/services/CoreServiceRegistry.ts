@@ -5,6 +5,7 @@ import {
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService, ChannelService
 } from "./impl";
 import { SlaService } from "./impl/api/SlaService";
+import { SystemAddressService } from "./impl/api/SystemAddressService";
 
 export class CoreServiceRegistry {
 
@@ -49,6 +50,7 @@ export class CoreServiceRegistry {
             cachePromises.push(UserService.getInstance().initCache());
             cachePromises.push(ValidObjectService.getInstance().initCache());
             cachePromises.push(ObjectIconService.getInstance().initCache());
+            cachePromises.push(SystemAddressService.getInstance().initCache());
 
             await Promise.all(cachePromises);
 

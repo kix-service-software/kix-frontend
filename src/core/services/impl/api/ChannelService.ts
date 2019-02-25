@@ -71,7 +71,7 @@ export class ChannelService extends KIXObjectService {
         throw new Error('0', 'Method not implemented');
     }
 
-    public async getChannels(token: string): Promise<TicketType[]> {
+    public async getChannels(token: string): Promise<Channel[]> {
         if (!KIXObjectCache.hasObjectCache(KIXObjectType.CHANNEL)) {
             const uri = this.buildUri(this.RESOURCE_URI);
             const response = await this.getObjectByUri<ChannelsResponse>(token, uri);

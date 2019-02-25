@@ -72,6 +72,8 @@ export enum KIXObjectType {
 
     SYS_CONFIG_ITEM = 'SysConfigItem',
 
+    SYSTEM_ADDRESS = 'SystemAddress',
+
     TEXT_MODULE = "TextModule",
 
     TICKET = 'Ticket',

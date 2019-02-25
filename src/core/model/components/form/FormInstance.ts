@@ -200,6 +200,20 @@ export class FormInstance implements IFormInstance {
         return this.formFieldValues.get(formFieldInstanceId);
     }
 
+    public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
+        const iterator = this.getAllFormFieldValues().entries();
+
+        let value = iterator.next();
+        while (value.value !== null && value.value !== undefined) {
+            const formField = await this.getFormField(value.value[0]);
+            if (formField && formField.property === property) {
+                return value.value[1];
+            }
+            value = iterator.next();
+        }
+        return null;
+    }
+
     public getAutoCompleteConfiguration(): AutoCompleteConfiguration {
         return this.autoCompleteConfiguration;
     }

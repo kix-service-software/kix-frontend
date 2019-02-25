@@ -80,7 +80,6 @@ export class TicketParameterUtil {
 
     public static async getPredefinedParameter(forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
-        const objectData = ContextService.getInstance().getObjectData();
 
         const loadingOptionsSenderType = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'agent')
@@ -89,15 +88,8 @@ export class TicketParameterUtil {
             KIXObjectType.SENDER_TYPE, null, loadingOptionsSenderType
         );
 
-        const loadingOptionsArticleType = new KIXObjectLoadingOptions(null, [
-            new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'note-internal')
-        ]);
-
         if (forUpdate) {
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
-            // TODO: richtigen Anzeigewert verwenden
-            parameter.push([ArticleProperty.FROM, objectData.currentUser.UserLogin]);
-
         }
 
         return parameter;

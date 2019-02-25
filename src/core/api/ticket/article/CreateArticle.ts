@@ -9,7 +9,8 @@ export class CreateArticle extends RequestObject {
         channelId?: number, senderTypeId?: number, autoResponseType?: string, from?: string, historyType?: string,
         historyComment?: string, timeUnit?: string, noAgentNotify?: boolean, forceNotificationToUserID?: number[],
         excludeNotificationToUserID?: number[], excludeMuteNotificationToUserID?: number[],
-        dynamicFields?: DynamicField[], attachments?: CreateAttachment[], customerVisible?: boolean
+        dynamicFields?: DynamicField[], attachments?: CreateAttachment[], customerVisible?: boolean,
+        to?: string, cc?: string, bcc?: string
     ) {
         super();
 
@@ -32,6 +33,9 @@ export class CreateArticle extends RequestObject {
         this.applyProperty("DynamicFields", dynamicFields);
         this.applyProperty(ArticleProperty.ATTACHMENTS, attachments);
         this.applyProperty(ArticleProperty.CUSTOMER_VISIBLE, Number(customerVisible));
+        this.applyProperty(ArticleProperty.TO, to);
+        this.applyProperty(ArticleProperty.CC, cc);
+        this.applyProperty(ArticleProperty.BCC, bcc);
     }
 
 }
