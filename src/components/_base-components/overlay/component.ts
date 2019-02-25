@@ -14,6 +14,7 @@ class OverlayComponent {
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
     private position: [number, number] = null;
+    private keepShow: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -31,6 +32,10 @@ class OverlayComponent {
         document.addEventListener('mouseup', this.mouseUp.bind(this));
     }
 
+    public onUpdate(): void {
+        this.setOverlayPosition();
+    }
+
     public onDestroy(): void {
         document.removeEventListener("click", (event: any) => {
             this.closeOverlayEventHandler(event);
@@ -41,8 +46,8 @@ class OverlayComponent {
 
     private closeOverlayEventHandler(event: any): void {
         if (this.state.show && !this.showShield() && event.button === 0) {
-            if (this.state.keepShow) {
-                this.state.keepShow = false;
+            if (this.keepShow) {
+                this.keepShow = false;
             } else {
                 this.closeOverlay();
             }
@@ -50,11 +55,7 @@ class OverlayComponent {
     }
 
     public overlayClicked(): void {
-        this.state.keepShow = true;
-    }
-
-    public onUpdate(): void {
-        this.setOverlayPosition();
+        this.keepShow = true;
     }
 
     private openOverlay<T extends KIXObject<T>>(
@@ -84,6 +85,10 @@ class OverlayComponent {
         this.applyWidgetConfiguration(widgetInstanceId);
 
         this.state.show = true;
+        this.keepShow = true;
+        setTimeout(() => {
+            this.keepShow = false;
+        }, 100);
 
         if (this.isToast()) {
             if (type && type === OverlayType.SUCCESS_TOAST) {

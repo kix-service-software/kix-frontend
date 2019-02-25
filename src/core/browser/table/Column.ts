@@ -97,7 +97,7 @@ export class Column<T = any> implements IColumn<T> {
     public isFiltered(): boolean {
         const filter = this.getFilter();
         return (filter[0] !== null && filter[0] !== undefined && filter[0] !== '') ||
-            (filter[1] !== null && filter[1] !== undefined && filter[1].length > 0);
+            (filter[1] !== null && filter[1] !== undefined && !!filter[1].length);
     }
 
     private getSizeConfifurationKey(): string {

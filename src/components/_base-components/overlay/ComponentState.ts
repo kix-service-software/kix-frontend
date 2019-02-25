@@ -10,7 +10,6 @@ export class ComponentState {
         public title: string = null,
         public actions: AbstractAction[] = null,
         public hasCloseButton: boolean = false,
-        public keepShow: boolean = false,
         public show: boolean = false,
         public overlayClass: string = null,
         public overlayInstanceId: string = 'overlay-widget',
