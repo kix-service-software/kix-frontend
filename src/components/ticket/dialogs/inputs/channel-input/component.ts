@@ -4,6 +4,7 @@ import {
     KIXObjectService, LabelService, ILabelProvider, FormService, ServiceRegistry, ServiceType
 } from '../../../../../core/browser';
 import { TicketFormService } from '../../../../../core/browser/ticket';
+import { isArray } from 'util';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -20,7 +21,20 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
-        this.state.channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+        const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+
+        const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
+        if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
+            channelsOption.value.forEach((cid) => {
+                const channel = channels.find((c) => c.ID === cid);
+                if (channel) {
+                    this.state.channels.push(channel);
+                }
+            });
+        } else {
+            this.state.channels = channels;
+        }
+
         if (this.state.channels) {
 
             for (const channel of this.state.channels) {
