@@ -117,9 +117,10 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         if (data && data.length) {
             let rootData: PreparedData[];
             if (parentKeys && parentKeys.length) {
-                rootData = data.filter((pd) => pd.Key === parentKeys[0][0]);
-                if (rootData[parentKeys[0][1]]) {
-                    rootData = [rootData[parentKeys[0][1]]];
+                const existingData = data.filter((pd) => pd.Key === parentKeys[0][0]);
+                const parentIndex = parentKeys[0][1];
+                if (existingData[parentIndex]) {
+                    rootData = [existingData[parentIndex]];
                 }
             } else {
                 rootData = data.filter((pd) => pd.Key === key);
