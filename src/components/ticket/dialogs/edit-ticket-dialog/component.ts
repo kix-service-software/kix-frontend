@@ -3,7 +3,7 @@ import {
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
-    KIXObjectType, TicketProperty, Error
+    KIXObjectType, TicketProperty, Error, Ticket
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
@@ -44,10 +44,17 @@ class Component {
                 if (context) {
                     await KIXObjectService.updateObjectByForm(
                         KIXObjectType.TICKET, this.state.formId, context.getObjectId()
-                    ).then((ticketId) => {
-                        context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+                    ).then(async (ticketId) => {
+                        const ticket = await context.getObject<Ticket>(
+                            KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]
+                        );
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                        const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+                        if (article.isUnsent()) {
+                            BrowserUtil.openErrorOverlay(article.getUnsentError());
+                        } else {
+                            BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                        }
                         DialogService.getInstance().submitMainDialog();
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
