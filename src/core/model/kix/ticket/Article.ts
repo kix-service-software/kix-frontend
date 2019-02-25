@@ -110,10 +110,14 @@ export class Article extends KIXObject<Article> {
 
     public isUnread(): boolean {
         if (this.Flags) {
-            const index = this.Flags.findIndex(
-                (af) => af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1"
-            );
-            return index === -1;
+            return !this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1");
+        }
+        return false;
+    }
+
+    public isUnsent(): boolean {
+        if (this.Flags) {
+            return this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'unsent-error');
         }
         return false;
     }
