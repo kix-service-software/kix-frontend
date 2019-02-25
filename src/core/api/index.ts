@@ -21,6 +21,7 @@ export * from './signature';
 export * from './sla';
 export * from './standard-attachment';
 export * from './sysconfig';
+export * from './system-addresses';
 export * from './text-module';
 export * from './ticket';
 export * from './user';

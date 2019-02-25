@@ -63,7 +63,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         if (channel.Name === 'note') {
             fields.push(new FormField(
                 "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Anzeigen im Kundenportal"
+                false, "Sichtbar im Kundenportal"
             ));
             fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));
             fields.push(new FormField(
@@ -74,7 +74,40 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                 ])
             );
             fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
+        } else if (channel.Name === "email") {
+            fields.push(new FormField(
+                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, "Sichtbar im Kundenportal"
+            ));
+
+            fields.push(new FormField(
+                "Von", ArticleProperty.FROM, 'article-email-from-input', true, "Von"
+            ));
+
+            fields.push(new FormField(
+                "An", ArticleProperty.TO, null, false, "An"
+            ));
+
+            fields.push(new FormField(
+                "Cc", ArticleProperty.CC, null, false, "Cc"
+            ));
+
+            fields.push(new FormField(
+                "Bcc", ArticleProperty.BCC, null, false, "Bcc"
+            ));
+
+            fields.push(new FormField(
+                "Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"
+            ));
+
+            fields.push(new FormField(
+                "Inhalt", ArticleProperty.BODY, 'rich-text-input', true, "Inhalt"
+            ));
+
+            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
         }
+
+
         return fields;
     }
 }

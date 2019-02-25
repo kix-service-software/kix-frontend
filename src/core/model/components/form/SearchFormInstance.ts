@@ -70,6 +70,10 @@ export class SearchFormInstance implements IFormInstance {
         }
     }
 
+    public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
+        return null;
+    }
+
     public getCriteria(): FilterCriteria[] {
         return this.filterCriteria;
     }

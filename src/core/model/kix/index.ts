@@ -29,3 +29,4 @@ export { StandardAttachment } from './StandardAttachment';
 export { ValidObject } from './ValidObject';
 export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
+export { SystemAddress } from './SystemAddress';

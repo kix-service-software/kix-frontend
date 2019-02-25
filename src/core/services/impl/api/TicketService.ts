@@ -19,6 +19,7 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ConfigurationService } from '../ConfigurationService';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
+import { ChannelService } from './ChannelService';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -158,7 +159,9 @@ export class TicketService extends KIXObjectService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         if (objectType === KIXObjectType.TICKET) {
-            const createArticle = await this.prepareArticleData(token, parameter);
+            const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
+
+            const createArticle = await this.prepareArticleData(token, parameter, queueId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
@@ -166,7 +169,7 @@ export class TicketService extends KIXObjectService {
                 this.getParameterValue(parameter, TicketProperty.CUSTOMER_ID),
                 this.getParameterValue(parameter, TicketProperty.STATE_ID),
                 this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
-                this.getParameterValue(parameter, TicketProperty.QUEUE_ID),
+                queueId,
                 null,
                 this.getParameterValue(parameter, TicketProperty.TYPE_ID),
                 this.getParameterValue(parameter, TicketProperty.SERVICE_ID),
@@ -190,7 +193,14 @@ export class TicketService extends KIXObjectService {
             return response.TicketID;
         } else if (objectType === KIXObjectType.ARTICLE) {
             const options = createOptions as CreateTicketArticleOptions;
-            const createArticle = await this.prepareArticleData(token, parameter);
+
+            let queueId;
+            const tickets = await this.getTickets(token, [options.ticketId], null);
+            if (tickets && tickets.length) {
+                queueId = tickets[0].QueueID;
+            }
+
+            const createArticle = await this.prepareArticleData(token, parameter, queueId);
             const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, this.SUB_RESOURCE_URI);
             const response = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
                 token, uri, new CreateArticleRequest(createArticle)
@@ -215,7 +225,9 @@ export class TicketService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const createArticle = await this.prepareArticleData(token, parameter);
+        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
+
+        const createArticle = await this.prepareArticleData(token, parameter, queueId);
 
         const updateTicket = new UpdateTicket(
             this.getParameterValue(parameter, TicketProperty.TITLE),
@@ -223,7 +235,7 @@ export class TicketService extends KIXObjectService {
             this.getParameterValue(parameter, TicketProperty.CUSTOMER_ID),
             this.getParameterValue(parameter, TicketProperty.STATE_ID),
             this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
-            this.getParameterValue(parameter, TicketProperty.QUEUE_ID),
+            queueId,
             this.getParameterValue(parameter, TicketProperty.LOCK_ID),
             this.getParameterValue(parameter, TicketProperty.TYPE_ID),
             this.getParameterValue(parameter, TicketProperty.SERVICE_ID),
@@ -254,7 +266,9 @@ export class TicketService extends KIXObjectService {
         return response.TicketID;
     }
 
-    private async prepareArticleData(token: string, parameter: Array<[string, any]>): Promise<CreateArticle> {
+    private async prepareArticleData(
+        token: string, parameter: Array<[string, any]>, queueId: number
+    ): Promise<CreateArticle> {
         const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
 
         let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
@@ -270,8 +284,23 @@ export class TicketService extends KIXObjectService {
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
-        const body = this.getParameterValue(parameter, ArticleProperty.BODY);
+        let body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
+        const to = this.getParameterValue(parameter, ArticleProperty.TO);
+        const cc = this.getParameterValue(parameter, ArticleProperty.CC);
+        const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
+
+        if (queueId) {
+            const channels = await ChannelService.getInstance().getChannels(token);
+            const channel = channels.find((c) => c.ID === channelId);
+            if (channel && channel.Name === 'email') {
+                const queues = await this.getQueues(token);
+                const queue = queues.find((q) => q.QueueID === queueId);
+                if (queue && queue.Signature) {
+                    body += `\n<p>--</p>\n${queue.Signature}`;
+                }
+            }
+        }
 
         let createArticle;
         if (channelId && subject && body) {
@@ -279,7 +308,8 @@ export class TicketService extends KIXObjectService {
                 subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
                 channelId, senderType, null, from, null, null, null, null, null, null, null, null,
                 attachments.length ? attachments : null,
-                customerVisible !== undefined ? customerVisible : false
+                customerVisible !== undefined ? customerVisible : false,
+                to, cc, bcc
             );
         }
         return createArticle;
