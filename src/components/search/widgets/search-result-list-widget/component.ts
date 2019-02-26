@@ -152,7 +152,7 @@ class Component implements IKIXObjectSearchListener {
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
         if (this.state.table) {
-            this.state.table.setFilter(textFilterValue, filter.criteria);
+            this.state.table.setFilter(textFilterValue, filter ? filter.criteria : null);
             this.state.table.filter();
         }
     }
