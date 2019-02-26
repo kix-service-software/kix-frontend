@@ -8,6 +8,7 @@ class Component {
 
     private keepExpanded: boolean = false;
     private autocompleteTimeout: any;
+    private freeText: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -18,6 +19,7 @@ class Component {
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
+        this.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
 
         if (!this.state.asAutocomplete) {
             this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
@@ -101,6 +103,7 @@ class Component {
         const input = (this as any).getEl('form-list-input-' + this.state.listId);
         if (input) {
             input.focus();
+            input.select();
         }
     }
 
@@ -124,6 +127,11 @@ class Component {
                     this.setCheckState();
                 }, 50);
             }
+        } else if (event.key === 'Enter' && this.freeText) {
+            const value = event.target.value;
+            const freeTextNode = new TreeNode(value, value);
+            this.nodeClicked(freeTextNode);
+            this.toggleList(true);
         }
     }
 

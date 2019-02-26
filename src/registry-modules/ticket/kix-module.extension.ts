@@ -41,6 +41,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
         ['channel-input', 'ticket/dialogs/inputs/channel-input'],
         ['article-email-from-input', 'ticket/dialogs/inputs/article-email-from-input'],
+        ['article-email-recipient-input', 'ticket/dialogs/inputs/article-email-recipient-input'],
         ['ticket-admin-types', 'ticket/admin/ticket-admin-types'],
         ['ticket-type-details', 'ticket/admin/ticket-type-details'],
         ['ticket-type-info-widget', 'ticket/admin/widgets/ticket-type-info-widget'],
