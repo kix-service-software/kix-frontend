@@ -6,8 +6,7 @@
                 invalid: state.invalid
             }
         key=("form-list-input-container-" + state.listId)
-        title=input.placeholder
-        on-click("toggleList", false)>
+        title=input.placeholder>
         <if(state.selectedNodes.length === 0)>
             <input.input-style
                 type="text"
@@ -16,10 +15,11 @@
                             }
                 readonly=state.readonly
                 disabled=state.readonly
-                placeholder=input.placeholder/>
+                placeholder=input.placeholder
+                on-click("toggleList", false)/>
         </if>
         <else>
-            <div.selected-nodes key=("form-list-selected-nodes-" + state.listId)>
+            <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
                 <for(node in state.selectedNodes)>
                     <div.selected-node title=node.label key=("form-list-selected-node-" + state.listId + "[]")>
                         <icon icon=node.icon showUnknown=true/>
@@ -34,7 +34,14 @@
                 </for>
             </div>
         </else>
-        <span.form-list-button.kix-icon-sort-down on-click("listToggleButtonClicked")/>
+        <div.form-input-control-list>
+            <div.input-action-list>
+                <for(action in state.actions)>
+                    <label-item label=action.label removeLabels=false on-labelClicked("actionClicked", action)/>
+                </for>
+            </div>
+            <span.form-list-button.kix-icon-sort-down on-click("listToggleButtonClicked")/>
+        </div>
     </div>
     <if(state.expanded)>
         <if(state.isLoading)>

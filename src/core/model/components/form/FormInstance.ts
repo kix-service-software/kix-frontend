@@ -117,10 +117,12 @@ export class FormInstance implements IFormInstance {
         await this.provideFormFieldValue(newFormField.instanceId, null);
     }
 
-    public async removeFormField(formField: FormField): Promise<void> {
+    public async removeFormField(formField: FormField, parent?: FormField): Promise<void> {
         let fields: FormField[];
-        if (formField.parent) {
-            const parent = await this.getFormField(formField.parent.instanceId);
+        if (parent) {
+            fields = parent.children;
+        } else if (formField.parent) {
+            parent = await this.getFormField(formField.parent.instanceId);
             fields = parent.children;
         } else {
             const group = this.form.groups.find(
@@ -171,7 +173,10 @@ export class FormInstance implements IFormInstance {
                 parent.children.forEach((c) => this.formFieldValues.delete(c.instanceId));
                 parent.children = [];
             }
-            newFields.forEach((f) => parent.children.push((f)));
+            newFields.forEach((f) => {
+                parent.children.push((f));
+                f.parent = parent;
+            });
             this.initValues(newFields);
             this.listeners.forEach((l) => l.updateForm());
         }

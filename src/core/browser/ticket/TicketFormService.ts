@@ -85,15 +85,9 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
             ));
 
             fields.push(new FormField(
-                "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An"
-            ));
-
-            fields.push(new FormField(
-                "Cc", ArticleProperty.CC, 'article-email-recipient-input', false, "Cc"
-            ));
-
-            fields.push(new FormField(
-                "Bcc", ArticleProperty.BCC, 'article-email-recipient-input', false, "Bcc"
+                "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An", [
+                    new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
+                ]
             ));
 
             fields.push(new FormField(

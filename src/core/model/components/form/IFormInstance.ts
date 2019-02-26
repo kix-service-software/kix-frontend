@@ -11,7 +11,7 @@ export interface IFormInstance {
 
     provideFormField(newFormField: FormField): Promise<void>;
 
-    removeFormField(formField: FormField, fields?: FormField[]): void;
+    removeFormField(formField: FormField, parent?: FormField): void;
 
     addFormField(formField: FormField, fields?: FormField[]): void;
 

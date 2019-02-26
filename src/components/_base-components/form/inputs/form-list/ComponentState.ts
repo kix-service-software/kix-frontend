@@ -1,5 +1,6 @@
 import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
 import { IdService } from '../../../../../core/browser/IdService';
+import { FormInputAction } from '../../../../../core/browser';
 
 export class ComponentState {
 
@@ -19,7 +20,8 @@ export class ComponentState {
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public asMultiselect: boolean = false,
-        public removeNode: boolean = true
+        public removeNode: boolean = true,
+        public actions: FormInputAction[] = []
     ) { }
 
 }
