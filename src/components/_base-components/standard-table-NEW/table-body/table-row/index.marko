@@ -1,50 +1,52 @@
 <if(state.row)>
-    <tr id=state.row.getRowId() style=("height: " + input.height) class=component.getRowClasses()>
-        <if(input.selectionEnabled)>
-            <td.check>
-                <div style={
-                    height: input.height,
-                    "line-height": input.height
-                }>
-                    <if(state.selectable)>
-                        <input
-                            type="checkbox"
-                            on-click("changeSelect")
-                            checked=state.selected
-                            style={
-                                                        height: input.height
-                                                    }/>
-                    </if>
-                </div>
-            </td>
-        </if>
-        <for(column in component.getColumns() | status-var=loop)>
-            <table-cell-NEW
-                cell=component.getCell(column.getColumnId())
-                column=column
-                height=input.height
-                level=(loop.getIndex() === 0 && input.level > 0 ? input.level : null)/>
-        </for>
-        <td.column-spacer/>
-        <if(input.toggleEnabled)>
-            <td.toggle>
-                <div
-                    on-click("toggleRow")
-                    style={
-                                        height: input.height,
-                                        "line-height": input.height
-                                    }>
-                    <if(input.row && state.open)>
-                        <span.kix-icon-triangle-up>
-                            <span.path1/>
-                            <span.path2/>
-                        </span>
-                    </if>
-                    <else>
-                        <span.kix-icon-sort-down/>
-                    </else>
-                </div>
-            </td>
+    <tr id=state.row.getRowId() style=("height: " + input.height) class=(state.show ? component.getRowClasses() : "")>
+        <if(state.show)>
+            <if(input.selectionEnabled)>
+                <td.check>
+                    <div style={
+                        height: input.height,
+                        "line-height": input.height
+                    }>
+                        <if(state.selectable)>
+                            <input
+                                type="checkbox"
+                                on-click("changeSelect")
+                                checked=state.selected
+                                style={
+                                                                height: input.height
+                                                            }/>
+                        </if>
+                    </div>
+                </td>
+            </if>
+            <for(column in component.getColumns() | status-var=loop)>
+                <table-cell-NEW
+                    cell=component.getCell(column.getColumnId())
+                    column=column
+                    height=input.height
+                    level=(loop.getIndex() === 0 && input.level > 0 ? input.level : null)/>
+            </for>
+            <td.column-spacer/>
+            <if(input.toggleEnabled)>
+                <td.toggle>
+                    <div
+                        on-click("toggleRow")
+                        style={
+                                                height: input.height,
+                                                "line-height": input.height
+                                            }>
+                        <if(input.row && state.open)>
+                            <span.kix-icon-triangle-up>
+                                <span.path1/>
+                                <span.path2/>
+                            </span>
+                        </if>
+                        <else>
+                            <span.kix-icon-sort-down/>
+                        </else>
+                    </div>
+                </td>
+            </if>
         </if>
     </tr>
     <if(input.toggleEnabled)>
