@@ -32,7 +32,8 @@ export class CompareConfigItemVersionDialogContext extends Context<CompareConfig
             this.configuration.compareWidget.configuration.settings.tableConfiguration = new TableConfiguration();
             const columns: IColumnConfiguration[] = [
                 new DefaultColumnConfiguration(
-                    'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true
+                    'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
+                    'multiline-cell'
                 )
             ];
 
@@ -45,7 +46,7 @@ export class CompareConfigItemVersionDialogContext extends Context<CompareConfig
                 columns.push(
                     new DefaultColumnConfiguration(
                         v.VersionID.toString(), true, false, true, false, 250,
-                        false, false, false, DataType.STRING, true, null,
+                        false, false, false, DataType.STRING, true, 'multiline-cell',
                         `Version ${this.getVersionNumber(v.VersionID, [...configItem.Versions])}`
                     )
                 );
