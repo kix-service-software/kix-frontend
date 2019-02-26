@@ -38,9 +38,11 @@ class Component extends AbstractNewDialog {
         await super.submit();
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
-        const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
-        if (article.isUnsent()) {
-            BrowserUtil.openErrorOverlay(article.getUnsentError());
+        if (ticket) {
+            const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+            if (article.isUnsent()) {
+                BrowserUtil.openErrorOverlay(article.getUnsentError());
+            }
         }
     }
 

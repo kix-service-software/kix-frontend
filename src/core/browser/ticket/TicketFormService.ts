@@ -1,11 +1,13 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty, FormFieldOptions, FormFieldOption
+    Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
+    FormFieldOptions, FormFieldOption, ContextType, ContextMode
 } from "../../model";
 import { PendingTimeFormValue } from "./form";
 import { ContactService } from "../contact";
 import { CustomerService } from "../customer";
 import { AutocompleteOption, AutocompleteFormFieldOption } from "../components";
+import { ContextService } from "../context";
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -84,11 +86,20 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                 "Von", ArticleProperty.FROM, 'article-email-from-input', true, "Von"
             ));
 
-            fields.push(new FormField(
-                "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An", [
-                    new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
-                ]
-            ));
+            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (context.getDescriptor().contextMode === ContextMode.CREATE) {
+                fields.push(new FormField(
+                    "Cc", ArticleProperty.CC, 'article-email-recipient-input', false, "Cc", [
+                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.BCC])
+                    ]
+                ));
+            } else {
+                fields.push(new FormField(
+                    "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An", [
+                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
+                    ]
+                ));
+            }
 
             fields.push(new FormField(
                 "Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"

@@ -30,9 +30,6 @@ export class TicketParameterUtil {
             } else if (property === TicketProperty.CUSTOMER_USER_ID) {
                 const contact = (value as Contact);
                 parameter.push([property, contact.ContactID]);
-                if (!forUpdate) {
-                    parameter.push([ArticleProperty.FROM, contact.UserEmail]);
-                }
             } else if (property === TicketProperty.CUSTOMER_ID) {
                 const customer = (value as Customer);
                 parameter.push([property, customer.CustomerID]);

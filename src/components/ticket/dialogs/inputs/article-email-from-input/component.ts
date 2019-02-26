@@ -25,7 +25,8 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         if (objectTypes.some((ot) => ot === KIXObjectType.ARTICLE) && contextMode === ContextMode.CREATE_SUB) {
             this.initValuesByContext();
-        } else if (objectTypes.some((ot) => ot === KIXObjectType.TICKET) && contextMode === ContextMode.EDIT) {
+        } else if (objectTypes.some((ot) => ot === KIXObjectType.TICKET)
+            && (contextMode === ContextMode.EDIT || contextMode === ContextMode.CREATE)) {
             this.initValuesByForm();
         }
     }
