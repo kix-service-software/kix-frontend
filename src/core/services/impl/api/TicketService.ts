@@ -20,6 +20,7 @@ import { ConfigurationService } from '../ConfigurationService';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
 import { ChannelService } from './ChannelService';
+import { ContactService } from './ContactService';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -160,8 +161,9 @@ export class TicketService extends KIXObjectService {
     ): Promise<number> {
         if (objectType === KIXObjectType.TICKET) {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
+            const contactId = this.getParameterValue(parameter, TicketProperty.CUSTOMER_USER_ID);
 
-            const createArticle = await this.prepareArticleData(token, parameter, queueId);
+            const createArticle = await this.prepareArticleData(token, parameter, queueId, contactId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
@@ -267,7 +269,7 @@ export class TicketService extends KIXObjectService {
     }
 
     private async prepareArticleData(
-        token: string, parameter: Array<[string, any]>, queueId: number
+        token: string, parameter: Array<[string, any]>, queueId: number, contactId?: string
     ): Promise<CreateArticle> {
         const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
 
@@ -286,7 +288,13 @@ export class TicketService extends KIXObjectService {
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         let body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
-        const to = this.getParameterValue(parameter, ArticleProperty.TO);
+        let to = this.getParameterValue(parameter, ArticleProperty.TO);
+        if (!to && contactId) {
+            const contact = await ContactService.getInstance().getContact(token, contactId);
+            if (contact) {
+                to = contact.UserEmail;
+            }
+        }
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
         const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
 

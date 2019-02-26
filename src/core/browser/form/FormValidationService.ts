@@ -21,7 +21,7 @@ export class FormValidationService {
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult[]> {
         const result = [];
-        if (!formField.empty) {
+        if (formField && !formField.empty) {
             const validators = this.formFieldValidators.filter((ffv) => ffv.isValidatorFor(formField, formId));
             for (const v of validators) {
                 const validationResult = await v.validate(formField, formId);

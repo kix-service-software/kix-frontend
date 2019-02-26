@@ -1,9 +1,10 @@
 import {
     IFormFieldValidator, FormField, ValidationResult, ValidationSeverity,
-    ArticleProperty, FormFieldValue, SystemAddress, KIXObjectType
+    ArticleProperty, FormFieldValue, SystemAddress, KIXObjectType, ContextType, ContextMode, TicketProperty
 } from "../../../../model";
 import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
+import { ContextService } from "../../../context";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
@@ -18,7 +19,16 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
-        const toValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.TO);
+        let toValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.TO);
+        let checkToValue = true;
+        if (!this.isDefined(toValue)) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (context && context.getDescriptor().contextMode === ContextMode.CREATE) {
+                toValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CUSTOMER_USER_ID);
+                checkToValue = false;
+            }
+        }
+
         const ccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.CC);
         const bccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.BCC);
 
@@ -32,9 +42,11 @@ export class EmailRecipientValidator implements IFormFieldValidator {
                 value = bccValue.value;
             }
 
-            const mailCheckResult = await this.checkEmail(value);
-            if (mailCheckResult.severity === ValidationSeverity.ERROR) {
-                return mailCheckResult;
+            if (formField.property !== ArticleProperty.TO || checkToValue) {
+                const mailCheckResult = await this.checkEmail(value);
+                if (mailCheckResult.severity === ValidationSeverity.ERROR) {
+                    return mailCheckResult;
+                }
             }
         } else {
             return new ValidationResult(
