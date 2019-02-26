@@ -39,6 +39,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['table-widget', '_base-components/table-widget'],
         // tslint:disable-next-line:max-line-length
         ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
+        ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
         ['checkbox-input', '_base-components/form/inputs/checkbox-input']
     ];
 

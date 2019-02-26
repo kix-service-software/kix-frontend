@@ -32,7 +32,8 @@ export class CompareConfigItemVersionTableFactory implements ITableFactory {
         const columns = tableConfiguration
             ? tableConfiguration.tableColumns
             : [new DefaultColumnConfiguration(
-                'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true
+                'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
+                'multiline-cell'
             )];
 
         tableConfiguration = new TableConfiguration(
