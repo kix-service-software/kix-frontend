@@ -22,6 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
+            this.prepareObserver();
         }
     }
 
@@ -50,19 +51,34 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private prepareObserver(): void {
-        const row = (this as any).getEl();
-        if (row) {
-            this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), {
-                threshold: [0, 1]
-            });
-            this.observer.observe(row);
+        if (this.supportsIntersectionObserver()) {
+            this.state.show = false;
+            const row = (this as any).getEl();
+            if (row) {
+                if (this.observer) {
+                    this.observer.disconnect();
+                }
+                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), {
+                    threshold: [0, 1]
+                });
+                this.observer.observe(row);
+            }
+        } else {
+            this.state.show = true;
         }
+    }
+
+    private supportsIntersectionObserver(): boolean {
+        return 'IntersectionObserver' in global
+            && 'IntersectionObserverEntry' in global
+            && 'intersectionRatio' in IntersectionObserverEntry.prototype;
     }
 
     private intersectionCallback(entries, observer): void {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 this.state.show = true;
+                this.observer.disconnect();
             }
         });
     }
