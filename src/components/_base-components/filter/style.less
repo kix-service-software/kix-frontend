@@ -16,9 +16,6 @@
                 min-height: @filter-height;
                 height: @filter-height;
                 border-color: @secondary-1;
-                &:not(.autocomplete) {
-                    padding-right: @filter-height - .25rem;
-                }
                 >.selected-nodes {
                     padding: .125rem .125rem 0;
                     line-height: @filter-height;
@@ -37,11 +34,14 @@
                     min-height: @filter-height;
                     display: block;
                 }
-                >span.form-list-button {
-                    height: @filter-height;
-                    width: @filter-height;
-                    line-height: @filter-height;
-                    border-color: @secondary-1;
+                >.form-input-control-list {
+                    grid-template-columns: max-content @filter-height;
+                    >span.form-list-button {
+                        height: @filter-height;
+                        width: @filter-height;
+                        line-height: @filter-height;
+                        border-color: @secondary-1;
+                    }
                 }
             }
             >ul.form-list-tree {

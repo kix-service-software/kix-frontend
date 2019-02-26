@@ -1,9 +1,11 @@
 .label-item-container {
     height: 1.5rem;
     overflow: hidden;
-    margin-right: .5rem;
     display: inline-block;
     max-width: 100%;
+    &:not(:last-child) {
+        margin-right: @margin-small;
+    }
     >.label-item {
         display: grid;
         grid-auto-flow: column;
