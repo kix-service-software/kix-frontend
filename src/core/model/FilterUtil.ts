@@ -1,6 +1,6 @@
 import { TableFilterCriteria } from "./components";
 import { SearchOperator, ContextService } from "../browser";
-import { KIXObjectType } from "./kix";
+import { KIXObjectType, KIXObject } from "./kix";
 
 export class FilterUtil {
 
@@ -15,8 +15,6 @@ export class FilterUtil {
     }
 
     public static checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): boolean {
-        value = value.toString();
-
         if (criteria.value === KIXObjectType.CURRENT_USER) {
             criteria.value = ContextService.getInstance().getObjectData().currentUser.UserID;
         }
@@ -35,7 +33,16 @@ export class FilterUtil {
             case SearchOperator.GREATER_THAN_OR_EQUAL:
                 return Number(value) >= criteria.value;
             case SearchOperator.IN:
-                return (criteria.value as any[]).some((v) => v.toString() === value.toString());
+                return (criteria.value as any[]).some((v) => {
+                    if (v instanceof KIXObject) {
+                        if (Array.isArray(value)) {
+                            return value.some((sv) => sv.equals(v));
+                        } else {
+                            return v.equals(value);
+                        }
+                    }
+                    return v.toString() === value.toString();
+                });
             default:
         }
     }

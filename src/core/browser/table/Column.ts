@@ -1,14 +1,14 @@
 import { IColumn } from "./IColumn";
 import { IColumnConfiguration } from "./IColumnConfiguration";
 import { ITable } from "./ITable";
-import { SortOrder, TableFilterCriteria } from "../../model";
+import { SortOrder, TableFilterCriteria, KIXObject } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
 import { TableEventData } from "./TableEventData";
 import { ClientStorageService } from "../ClientStorageService";
 
-export class Column<T = any> implements IColumn<T> {
+export class Column<T extends KIXObject = any> implements IColumn<T> {
 
     private id: string;
 
@@ -54,13 +54,28 @@ export class Column<T = any> implements IColumn<T> {
         this.getTable().getRows(true).forEach((r) => {
             const cell = r.getCell(this.id);
             if (cell) {
-                const value = cell.getValue();
-                const existingValue = values.find((v) => v[0] === value.objectValue);
-                if (existingValue) {
-                    existingValue[1] = existingValue[1] + 1;
+                let cellValues = [];
+                const cellValue = cell.getValue();
+                if (Array.isArray(cellValue.objectValue)) {
+                    cellValues = cellValue.objectValue;
                 } else {
-                    values.push([value.objectValue, 1]);
+                    cellValues.push(cellValue.objectValue);
                 }
+
+                cellValues.forEach((value) => {
+                    const existingValue = values.find((ev) => {
+                        if (ev[0] instanceof KIXObject) {
+                            return ev[0].equals(value);
+                        }
+                        return ev[0] === value;
+                    });
+                    if (existingValue) {
+                        existingValue[1] = existingValue[1] + 1;
+                    } else {
+                        values.push([value, 1]);
+                    }
+                });
+
             }
         });
 

@@ -24,8 +24,11 @@ export class TranslationLanguage extends KIXObject {
     }
 
     public equals(translationLanguage: TranslationLanguage): boolean {
-        return this.TranslationID === translationLanguage.TranslationID
-            && this.Language === translationLanguage.Language;
+        return this.ObjectId === translationLanguage.ObjectId;
+    }
+
+    public toString(): string {
+        return this.Language;
     }
 
 }
