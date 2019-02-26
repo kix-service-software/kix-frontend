@@ -15,6 +15,8 @@ class Component implements IKIXObjectSearchListener {
     public listenerId: string;
     public eventSubscriberId: string;
 
+    private tableSubscriber: IEventSubscriber;
+
     public state: ComponentState;
 
     public onCreate(input: any): void {
@@ -38,6 +40,8 @@ class Component implements IKIXObjectSearchListener {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
     }
 
     public searchCleared(): void {
@@ -106,7 +110,7 @@ class Component implements IKIXObjectSearchListener {
 
 
 
-            const tableSubscriber: IEventSubscriber = {
+            this.tableSubscriber = {
                 eventSubscriberId: 'search-result-table-listener',
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && data.tableId === table.getTableId()) {
@@ -123,11 +127,17 @@ class Component implements IKIXObjectSearchListener {
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
                             table.addColumns(columns);
                         }
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.state.filterCount = this.state.table.isFiltered()
+                                ? this.state.table.getRowCount()
+                                : null;
+                        }
                     }
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
 
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
             this.state.table = table;
