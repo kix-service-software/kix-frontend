@@ -93,10 +93,10 @@ textarea.input-style {
                 border-right: none;
                 margin: -1px;
             }
-            >.form-list-button {
-                top: -1px;
-                right: -1px;
-                font-size: 1.25rem;
+            >.form-input-control-list {
+                >.form-list-button {
+                    font-size: 1.25rem;
+                }
             }
         }
         &.autocomplete {
@@ -108,21 +108,21 @@ textarea.input-style {
         &.list-shown {
             border-color: darken(@secondary-3, 20%);
             >input.input-style:not(:disabled),
-            >input.input-style:not(:disabled)~.form-list-button,
+            >input.input-style:not(:disabled)~.form-input-control-list>.form-list-button,
             >.selected-nodes~.form-list-button {
                 border-color: darken(@secondary-3, 20%);
             }
         }
-        >input.input-style:focus:not(:disabled)~.form-list-button {
+        >input.input-style:focus:not(:disabled)~.form-input-control-list>.form-list-button {
             border-color: darken(@secondary-3, 20%);
         }
-        >input.input-style:not(:disabled)~.form-list-button:hover,
-        >.selected-nodes~.form-list-button:hover {
+        >input.input-style:not(:disabled)~.form-input-control-list>.form-list-button:hover,
+        >.selected-nodes~.form-input-control-list>.form-list-button:hover {
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
-        >input.invalid~.form-list-button {
+        >input.invalid~.form-input-control-list>.form-list-button {
             color: @tertiary-0;
             border-color: @tertiary-0;
         }
@@ -162,19 +162,36 @@ textarea.input-style {
                 }
             }
         }
-        >.form-list-button {
-            background-color: @secondary-4;
-            color: @secondary-2;
-            width: @default-input-height;
-            height: @default-input-height;
-            line-height: @default-input-height;
-            text-align: center;
-            border-radius: @border-radius;
-            border: 1px solid @secondary-3;
-            box-sizing: border-box;
+        >.form-input-control-list {
             position: absolute;
-            right: 0;
-            top: 0;
+            display: grid;
+            grid-template-columns: max-content 2rem;
+            grid-column-gap: 0.5rem;
+            top: -1px;
+            right: -1px;
+            >.input-action-list {
+                display: grid;
+                grid-auto-flow: column;
+                align-items: center;
+                .label-item {
+                    &:hover {
+                        background-color: darken(@secondary-4, 10%);
+                        color: darken(@secondary-2, 10%);
+                        cursor: pointer;
+                    }
+                }
+            }
+            >.form-list-button {
+                background-color: @secondary-4;
+                color: @secondary-2;
+                width: @default-input-height;
+                height: @default-input-height;
+                line-height: @default-input-height;
+                text-align: center;
+                border-radius: @border-radius;
+                border: 1px solid @secondary-3;
+                box-sizing: border-box;
+            }
         }
     }
 }

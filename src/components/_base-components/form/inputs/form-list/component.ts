@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { TreeNode, AutoCompleteConfiguration } from "../../../../../core/model";
-import { SelectionState } from "../../../../../core/browser";
+import { SelectionState, FormInputAction } from "../../../../../core/browser";
 
 class Component {
 
@@ -15,6 +15,7 @@ class Component {
     }
 
     public onInput(input: any): void {
+        this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
         this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
@@ -129,9 +130,11 @@ class Component {
             }
         } else if (event.key === 'Enter' && this.freeText) {
             const value = event.target.value;
-            const freeTextNode = new TreeNode(value, value);
-            this.nodeClicked(freeTextNode);
-            this.toggleList(true);
+            if (value && value !== '') {
+                const freeTextNode = new TreeNode(value, value);
+                this.nodeClicked(freeTextNode);
+                this.toggleList(true);
+            }
         }
     }
 
@@ -331,6 +334,10 @@ class Component {
         event.stopPropagation();
         event.preventDefault();
         this.toggleList();
+    }
+
+    public actionClicked(action: FormInputAction): void {
+        action.callback(action);
     }
 }
 

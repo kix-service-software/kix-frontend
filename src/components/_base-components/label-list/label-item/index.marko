@@ -1,6 +1,8 @@
 <if(input.label)>
-    <span.label-item-container title=input.label.tooltip>
-        <div.label-item>
+    <span.label-item-container title=input.label.tooltip on-click("labelClicked")>
+        <div.label-item class={
+            toggled: state.toggled
+        }>
             <icon icon=input.label.icon showUnknown=input.label.showUnknownIcon/>
             <span.label-text>${input.label.text}</span>
             <span>${input.label.additionalText}</span>
