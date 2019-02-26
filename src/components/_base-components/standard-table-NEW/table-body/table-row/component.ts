@@ -9,6 +9,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public eventSubscriberId: string;
 
+    private observer: IntersectionObserver;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
@@ -31,6 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
+            this.prepareObserver();
         }
     }
 
@@ -40,6 +43,28 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
+
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
+
+    private prepareObserver(): void {
+        const row = (this as any).getEl();
+        if (row) {
+            this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), {
+                threshold: [0, 1]
+            });
+            this.observer.observe(row);
+        }
+    }
+
+    private intersectionCallback(entries, observer): void {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                this.state.show = true;
+            }
+        });
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {

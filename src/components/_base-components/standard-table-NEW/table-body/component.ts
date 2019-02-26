@@ -23,7 +23,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        //
+        // nothing
     }
 
     public onDestroy(): void {
