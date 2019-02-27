@@ -79,7 +79,7 @@ export class ContextService {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
-                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode
+                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, reset
                 );
             }
         }

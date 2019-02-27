@@ -174,8 +174,8 @@ export class FormInstance implements IFormInstance {
                 parent.children = [];
             }
             newFields.forEach((f) => {
-                parent.children.push((f));
                 f.parent = parent;
+                parent.children.push(f);
             });
             this.initValues(newFields);
             this.listeners.forEach((l) => l.updateForm());
