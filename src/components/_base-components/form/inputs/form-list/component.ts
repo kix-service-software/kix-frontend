@@ -24,10 +24,10 @@ class Component {
 
         if (!this.state.asAutocomplete) {
             this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-            this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
-                input.selectedNodes : this.state.selectedNodes;
-            this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
         }
+        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' ?
+            input.selectedNodes : this.state.selectedNodes;
+        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
 
         if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
             this.state.selectedNodes.splice(1);
