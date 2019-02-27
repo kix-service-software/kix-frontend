@@ -1,7 +1,7 @@
 import { PendingTimeFormValue } from ".";
 import {
-    TicketProperty, ArticleProperty, Contact,
-    DateTimeUtil, Attachment, Customer, Ticket,
+    TicketProperty, ArticleProperty,
+    DateTimeUtil, Attachment, Ticket,
     Lock, KIXObjectType, SenderType,
     KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from "../../model";
@@ -27,12 +27,6 @@ export class TicketParameterUtil {
                         parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
                     }
                 }
-            } else if (property === TicketProperty.CUSTOMER_USER_ID) {
-                const contact = (value as Contact);
-                parameter.push([property, contact.ContactID]);
-            } else if (property === TicketProperty.CUSTOMER_ID) {
-                const customer = (value as Customer);
-                parameter.push([property, customer.CustomerID]);
             } else if (property === TicketProperty.TITLE) {
                 parameter.push([TicketProperty.TITLE, value]);
                 if (!forUpdate) {
@@ -41,8 +35,6 @@ export class TicketParameterUtil {
             } else if (property === ArticleProperty.SUBJECT) {
                 parameter.push([TicketProperty.TITLE, value]);
                 parameter.push([ArticleProperty.SUBJECT, value]);
-            } else if (property === ArticleProperty.BODY) {
-                parameter.push([ArticleProperty.BODY, value]);
             } else if (property === ArticleProperty.ATTACHMENTS) {
                 if (value) {
                     const attachments = await TicketParameterUtil.prepareAttachments(value);
