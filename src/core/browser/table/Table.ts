@@ -98,7 +98,9 @@ export class Table implements ITable {
         this.filteredRows = null;
         if (this.contentProvider) {
             const data = await this.contentProvider.loadData();
-            data.forEach((d) => this.createRow(d));
+            const rows = [];
+            data.forEach((d) => rows.push(this.createRow(d)));
+            this.rows = rows;
             if (this.tableConfiguration &&
                 this.tableConfiguration.toggle &&
                 this.tableConfiguration.toggleOptions.toggleFirst) {
