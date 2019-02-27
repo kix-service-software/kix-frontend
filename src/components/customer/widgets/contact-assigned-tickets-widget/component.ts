@@ -124,9 +124,6 @@ class Component {
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.escalatedTicketsTable.getTableId()
                     ) {
-                        if (this.state.escalatedTicketsTable.getRows(true).length === 0) {
-                            this.closeGroup('contact-escalated-tickets-group');
-                        }
                         this.state.escalatedTicketsCount = this.state.escalatedTicketsTable.getRows().length;
                         this.state.escalatedTicketsFilterCount = this.state.escalatedTicketsTable.isFiltered()
                             ? this.state.escalatedTicketsTable.getRows().length
@@ -137,10 +134,18 @@ class Component {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
 
-            this.state.escalatedTicketsTable = TableFactoryService.getInstance().createTable(
+            const table = TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-escalated', KIXObjectType.TICKET,
                 this.state.escalatedTicketsConfig.settings, null, null, true
             );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('contact-escalated-tickets-group');
+            }
+
+            this.state.escalatedTicketsTable = table;
         }
     }
 
@@ -166,9 +171,6 @@ class Component {
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.reminderTicketsTable.getTableId()
                     ) {
-                        if (this.state.reminderTicketsTable.getRows(true).length === 0) {
-                            this.closeGroup('contact-reminder-tickets-group');
-                        }
                         this.state.reminderTicketsCount = this.state.reminderTicketsTable.getRows().length;
                         this.state.reminderTicketsFilterCount = this.state.reminderTicketsTable.isFiltered()
                             ? this.state.reminderTicketsTable.getRows().length
@@ -179,10 +181,18 @@ class Component {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
 
-            this.state.reminderTicketsTable = TableFactoryService.getInstance().createTable(
+            const table = TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-reminder', KIXObjectType.TICKET,
                 this.state.reminderTicketsConfig.settings, null, null, true
             );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('contact-reminder-tickets-group');
+            }
+
+            this.state.reminderTicketsTable = table;
         }
     }
 
@@ -219,9 +229,6 @@ class Component {
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.newTicketsTable.getTableId()
                     ) {
-                        if (this.state.newTicketsTable.getRows(true).length === 0) {
-                            this.closeGroup('contact-new-tickets-group');
-                        }
                         this.state.newTicketsCount = this.state.newTicketsTable.getRows().length;
                         this.state.newTicketsFilterCount = this.state.newTicketsTable.isFiltered()
                             ? this.state.newTicketsTable.getRows().length
@@ -232,10 +239,18 @@ class Component {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
 
-            this.state.newTicketsTable = TableFactoryService.getInstance().createTable(
+            const table = TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-new', KIXObjectType.TICKET,
                 this.state.newTicketsConfig.settings, null, null, true
             );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('contact-new-tickets-group');
+            }
+
+            this.state.newTicketsTable = table;
         }
     }
 
@@ -270,9 +285,6 @@ class Component {
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.openTicketsTable.getTableId()
                     ) {
-                        if (this.state.openTicketsTable.getRows(true).length === 0) {
-                            this.closeGroup('contact-open-tickets-group');
-                        }
                         this.state.openTicketsCount = this.state.openTicketsTable.getRows().length;
                         this.state.openTicketsFilterCount = this.state.openTicketsTable.isFiltered()
                             ? this.state.openTicketsTable.getRows().length
@@ -283,10 +295,18 @@ class Component {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
 
-            this.state.openTicketsTable = TableFactoryService.getInstance().createTable(
+            const table = TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-open', KIXObjectType.TICKET,
                 this.state.openTicketsConfig.settings, null, null, true
             );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('contact-open-tickets-group');
+            }
+
+            this.state.openTicketsTable = table;
         }
     }
 
@@ -327,9 +347,6 @@ class Component {
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.openTicketsTable.getTableId()
                     ) {
-                        if (this.state.pendingTicketsTable.getRows(true).length === 0) {
-                            this.closeGroup('contact-pending-tickets-group');
-                        }
                         this.state.pendingTicketsCount = this.state.pendingTicketsTable.getRows().length;
                         this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable.isFiltered()
                             ? this.state.pendingTicketsTable.getRows().length
@@ -340,10 +357,18 @@ class Component {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
 
-            this.state.pendingTicketsTable = TableFactoryService.getInstance().createTable(
+            const table = TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-pending', KIXObjectType.TICKET,
                 this.state.pendingTicketsConfig.settings, null, null, true
             );
+
+            await table.initialize();
+
+            if (this.state.pendingTicketsTable.getRows(true).length === 0) {
+                this.closeGroup('contact-pending-tickets-group');
+            }
+
+            this.state.pendingTicketsTable = table;
         }
     }
 
