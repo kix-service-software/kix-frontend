@@ -26,10 +26,16 @@ export class LinkObjectTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(LinkObjectProperty.LINKED_OBJECT_TYPE, true, true, true, true, 200),
-            new DefaultColumnConfiguration(LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID, true, false, true, true, 200),
-            new DefaultColumnConfiguration(LinkObjectProperty.TITLE, true, false, true, true, 500),
-            new DefaultColumnConfiguration(LinkObjectProperty.LINKED_AS, true, false, true, true, 140),
+            new DefaultColumnConfiguration(
+                LinkObjectProperty.LINKED_OBJECT_TYPE, true, true, true, true, 200, true, true
+            ),
+            new DefaultColumnConfiguration(
+                LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID, true, false, true, true, 200, true, true
+            ),
+            new DefaultColumnConfiguration(LinkObjectProperty.TITLE, true, false, true, true, 500, true, true),
+            new DefaultColumnConfiguration(
+                LinkObjectProperty.LINKED_AS, true, false, true, true, 140, true, true, true
+            ),
         ];
 
         if (!tableConfiguration) {
