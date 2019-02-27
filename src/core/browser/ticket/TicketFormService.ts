@@ -41,18 +41,6 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                         );
                     }
                     break;
-                case TicketProperty.CUSTOMER_USER_ID:
-                    const contacts = await ContactService.getInstance().loadObjects(
-                        KIXObjectType.CONTACT, [value], null
-                    );
-                    value = contacts && !!contacts.length ? contacts[0] : null;
-                    break;
-                case TicketProperty.CUSTOMER_ID:
-                    const customers = await CustomerService.getInstance().loadObjects(
-                        KIXObjectType.CUSTOMER, [value], null
-                    );
-                    value = customers && !!customers.length ? customers[0] : null;
-                    break;
                 default:
             }
         }

@@ -1,13 +1,12 @@
 import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../core/browser/context";
 import {
     TicketProperty, FormFieldValue, FormInputComponent, FormField,
-    KIXObjectType, Customer, TreeNode
+    KIXObjectType, Customer, TreeNode, Contact
 } from "../../../../../core/model";
 import { FormService } from "../../../../../core/browser/form";
 import { IdService, KIXObjectService } from "../../../../../core/browser";
 
-class Component extends FormInputComponent<Customer, ComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
 
     private customers: Customer[] = [];
     private formListenerId: string;
@@ -25,13 +24,18 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         this.formListenerId = IdService.generateDateBasedId('TicketCustomerInput');
         await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
-            formValueChanged: (formField: FormField, value: FormFieldValue<any>) => {
+            formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
                 if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
                     if (value.value) {
-                        const contact = value.value;
-                        this.state.primaryCustomerId = contact.UserCustomerID;
-                        this.loadCustomers(contact.UserCustomerIDs);
-                        this.state.hasContact = true;
+                        const contacts = await KIXObjectService.loadObjects<Contact>(
+                            KIXObjectType.CONTACT, [value.value]
+                        );
+                        if (contacts && contacts.length) {
+                            const contact = contacts[0];
+                            this.state.primaryCustomerId = contact.UserCustomerID;
+                            this.loadCustomers(contact.UserCustomerIDs);
+                            this.state.hasContact = true;
+                        }
                     } else {
                         this.state.currentNode = null;
                         this.state.hasContact = false;
@@ -45,12 +49,20 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         this.setCurrentNode();
     }
 
-    public setCurrentNode(): void {
+    public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const customer = this.state.defaultValue.value;
-            this.state.currentNode = new TreeNode(customer.CustomerID, customer.DisplayValue, 'kix-icon-man-bubble');
-            this.state.nodes = [this.state.currentNode];
-            super.provideValue(customer);
+            const customers = await KIXObjectService.loadObjects<Customer>(
+                KIXObjectType.CUSTOMER, [this.state.defaultValue.value]
+            );
+
+            if (customers && customers.length) {
+                const customer = customers[0];
+                this.state.currentNode = new TreeNode(
+                    customer.CustomerID, customer.DisplayValue, 'kix-icon-man-bubble'
+                );
+                this.state.nodes = [this.state.currentNode];
+                super.provideValue(customer.CustomerID);
+            }
         }
     }
 
@@ -85,10 +97,7 @@ class Component extends FormInputComponent<Customer, ComponentState> {
 
     private customerChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const customer = this.state.currentNode ? this.customers.find(
-            (cu) => cu.CustomerID === this.state.currentNode.id
-        ) : null;
-        super.provideValue(customer);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 
     public async focusLost(event: any): Promise<void> {

@@ -6,7 +6,7 @@ import {
 import { FormService } from "../../../../../core/browser/form";
 import { KIXObjectService } from "../../../../../core/browser";
 
-class Component extends FormInputComponent<Customer, ComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
 
     private customers: Customer[];
 
@@ -26,21 +26,24 @@ class Component extends FormInputComponent<Customer, ComponentState> {
         this.setCurrentNode();
     }
 
-    public setCurrentNode(): void {
+    public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const customer = this.state.defaultValue.value;
-            this.state.currentNode = this.createTreeNode(customer);
-            this.state.nodes = [this.state.currentNode];
-            super.provideValue(customer);
+            const customers = await KIXObjectService.loadObjects<Customer>(
+                KIXObjectType.CUSTOMER, [this.state.defaultValue.value]
+            );
+
+            if (customers && customers.length) {
+                const customer = customers[0];
+                this.state.currentNode = this.createTreeNode(customer);
+                this.state.nodes = [this.state.currentNode];
+                super.provideValue(customer.CustomerID);
+            }
         }
     }
 
     public customerChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const customer = this.state.currentNode ? this.customers.find(
-            (cu) => cu.CustomerID === this.state.currentNode.id
-        ) : null;
-        super.provideValue(customer);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 
     private async searchCustomers(limit: number, searchValue: string): Promise<TreeNode[]> {
