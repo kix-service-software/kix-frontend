@@ -47,16 +47,4 @@ export class TicketStateService extends KIXObjectService<TicketState> {
         return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (property === TicketStateProperty.TYPE_ID && value instanceof TicketStateType) {
-            parameter.push([property, (value as TicketStateType).ObjectId]);
-        } else {
-            parameter.push([property, value]);
-        }
-
-        return parameter;
-    }
-
-
 }

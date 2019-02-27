@@ -6,7 +6,7 @@ import {
 import { FormService } from "../../../../../core/browser/form";
 import { LabelService, KIXObjectService } from "../../../../../core/browser";
 
-class Component extends FormInputComponent<KIXObject, ComponentState> {
+class Component extends FormInputComponent<any, ComponentState> {
 
     private objects: KIXObject[];
 
@@ -49,10 +49,7 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
 
     public objectChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const object = this.state.currentNode ? this.objects.find(
-            (cu) => cu.ObjectId === this.state.currentNode.id
-        ) : null;
-        super.provideValue(object);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 
     private async prepareNodes(): Promise<void> {
