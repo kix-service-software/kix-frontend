@@ -4,7 +4,7 @@ import { IRowObject } from "./IRowObject";
 import { ICell } from "./ICell";
 import { Cell } from "./Cell";
 import { ITable } from "./ITable";
-import { TableFilterCriteria, KIXObject } from "../../model";
+import { TableFilterCriteria, KIXObject, FilterCriteria } from "../../model";
 import { KIXObjectService } from "../kix";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
@@ -66,6 +66,7 @@ export class Row<T = any> implements IRow<T> {
     public async filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean> {
         if (!this.isFilterDefined(filterValue, criteria)) {
             this.filteredChildren = null;
+            this.children.forEach((cr) => cr.filter(filterValue, criteria));
             return true;
         }
 
