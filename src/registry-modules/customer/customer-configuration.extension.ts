@@ -17,6 +17,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 'table-widget', 'Übersicht Kunden', [
                     'customer-search-action',
                     'customer-create-action',
+                    'import-action',
                     'csv-export-action'
                 ], {
                     objectType: KIXObjectType.CUSTOMER,

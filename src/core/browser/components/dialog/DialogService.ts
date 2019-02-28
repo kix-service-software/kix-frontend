@@ -108,6 +108,11 @@ export class DialogService {
                     dialogIcon = dialogIcon || 'kix-icon-gear';
                     singleTab = true;
                     break;
+                case ContextMode.IMPORT:
+                    dialogTitle = 'Datenimport';
+                    dialogIcon = dialogIcon || 'kix-icon-import';
+                    singleTab = true;
+                    break;
                 default:
                     dialogTitle = 'Dialog';
             }

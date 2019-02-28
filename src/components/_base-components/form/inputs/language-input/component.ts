@@ -3,7 +3,6 @@ import { CompontentState } from "./CompontentState";
 import { ServiceRegistry } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
-// TODO: als allgemeines input-valid implementieren
 class Component extends FormInputComponent<number, CompontentState> {
 
     public onCreate(): void {

@@ -4,12 +4,13 @@
             <ul.tab-list>
                 <for(tab in state.tabWidgets)>
                     <li
+                        title=tab.configuration.title
                         class={
                                                 active: component.isActiveTab(tab.instanceId)
                                             }
                         on-click("tabClicked", tab)>
                         <if(tab.configuration.icon)>
-                            <span class=tab.configuration.icon/>
+                            <icon icon=tab.configuration.icon showUnknown=false/>
                         </if>
                         ${tab.configuration.title}
                     </li>

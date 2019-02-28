@@ -32,8 +32,8 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         if (this.canRun()) {
             const rows = this.data.getSelectedRows();
             const objects = rows.map((r) => r.getRowObject().getObject());
-            const objectType = this.data.getObjectType();
-            if (BulkService.getInstance().hasBulkManager(objectType)) {
+            this.objectType = this.data.getObjectType();
+            if (BulkService.getInstance().hasBulkManager(this.objectType)) {
                 await this.openDialog(objects);
             } else {
                 super.run(event);
@@ -45,8 +45,6 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(
             BulkDialogContext.CONTEXT_ID
         );
-
-        this.objectType = selectedObjects[0].KIXObjectType;
 
         if (context) {
             context.setObjectList(selectedObjects);

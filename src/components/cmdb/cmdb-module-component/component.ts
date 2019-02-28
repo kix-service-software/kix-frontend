@@ -201,7 +201,6 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'config-item-version-maximize-action', ConfigItemVersionMaximizeAction
         );
-        ActionFactory.getInstance().registerAction('config-item-bulk-action', BulkAction);
         ActionFactory.getInstance().registerAction('config-item-create-action', ConfigItemCreateAction);
         ActionFactory.getInstance().registerAction('config-item-edit-action', ConfigItemEditAction);
         ActionFactory.getInstance().registerAction('config-item-print-action', ConfigItemPrintAction);
