@@ -12,6 +12,7 @@ export { ValidationResult } from './ValidationResult';
 export { IFormInstanceListener } from './IFormInstanceListener';
 export { FormFieldOption } from './FormFieldOption';
 export { FormFieldOptions } from './FormFieldOptions';
+export { FormFieldOptionsForDefaultSelectInput } from './FormFieldOptionsForDefaultSelectInput';
 export { InputFieldTypes } from './InputFieldTypes';
 export { IFormInstance } from './IFormInstance';
 export { SearchFormInstance } from './SearchFormInstance';

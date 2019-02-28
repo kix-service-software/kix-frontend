@@ -1,9 +1,9 @@
-<widget instanceId="bulk-dialog">
-  <@content>
-    <form.form autocomplete="off">
-      <if(state.bulkManager)>
-        <bulk-form bulkManager=state.bulkManager/>
-      </if>
-    </form>
-  </@content>
+<widget instanceId=state.instanceId>
+    <@content>
+        <form.form autocomplete="off">
+            <if(state.bulkManager)>
+                <bulk-form bulkManager=state.bulkManager/>
+            </if>
+        </form>
+    </@content>
 </widget>

@@ -6,7 +6,7 @@ export class CustomerCreateContactAction extends AbstractAction {
 
     public initAction(): void {
         this.text = "Neuer Ansprechpartner";
-        this.icon = "kix-icon-man-house-new";
+        this.icon = "kix-icon-man-bubble-new";
     }
 
     public run(): void {
