@@ -135,11 +135,10 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                         )
                     ];
                 } else {
-                    rootData.forEach(
-                        (rd) => values.push(new TableValue(
-                            version.VersionID.toString(), rd.DisplayValue, rd.DisplayValue
-                        ))
-                    );
+                    rootData.forEach((rd) => {
+                        const displayValue = rd.DisplayValue ? rd.DisplayValue : null;
+                        values.push(new TableValue(version.VersionID.toString(), displayValue, displayValue));
+                    });
                 }
             } else if (this.hasAttributeInDefinition(key, version.Definition.Definition)) {
                 values.push(new TableValue(version.VersionID.toString(), null, null));
