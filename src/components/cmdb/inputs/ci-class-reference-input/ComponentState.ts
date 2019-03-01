@@ -1,6 +1,6 @@
 import { AutoCompleteConfiguration, FormInputComponentState, TreeNode, ConfigItem } from "../../../../core/model";
 
-export class ComponentState extends FormInputComponentState<ConfigItem> {
+export class ComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,

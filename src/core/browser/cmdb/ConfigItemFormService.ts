@@ -230,7 +230,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.CONTACT, [preparedData.Value], null
                 );
                 if (contacts && !!contacts.length) {
-                    value = contacts[0];
+                    value = contacts[0].ContactID;
                 } else {
                     value = new Contact();
                     value.ContactID = preparedData.Value;
@@ -243,12 +243,9 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.CUSTOMER, [preparedData.Value], null
                 );
                 if (customers && !!customers.length) {
-                    value = customers[0];
+                    value = customers[0].CustomerID;
                 } else {
-                    value = new Customer();
-                    value.CustomerID = preparedData.Value;
-                    value.ObjectId = preparedData.Value;
-                    value.DisplayValue = preparedData.DisplayValue;
+                    value = preparedData.Value;
                 }
                 break;
             case 'CIClassReference':
@@ -256,11 +253,9 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.CONFIG_ITEM, [Number(preparedData.Value)], null, null, false
                 );
                 if (configItems && !!configItems.length) {
-                    value = configItems[0];
+                    value = configItems[0].ConfigItemID;
                 } else {
-                    value = new ConfigItem();
-                    value.ConfigItemID = preparedData.Value;
-                    value.ObjectId = preparedData.Value;
+                    value = preparedData.Value;
                 }
                 break;
             case 'Date':
