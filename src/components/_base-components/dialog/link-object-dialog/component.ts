@@ -40,6 +40,7 @@ class LinkDialogComponent {
 
     public async onMount(): Promise<void> {
         this.selectedObjects = [];
+
         await this.setLinkableObjects();
         await this.setDefaultLinkableObject();
 
@@ -56,12 +57,14 @@ class LinkDialogComponent {
         }
 
         this.setSubmitState();
+        this.state.loading = false;
     }
 
     public onDestroy(): void {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async setLinkableObjects(): Promise<void> {
@@ -87,8 +90,8 @@ class LinkDialogComponent {
                 this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
             }
 
-            await FormService.getInstance().getFormInstance(this.state.formId, false);
             this.state.formId = this.state.currentLinkableObjectNode.id.toString();
+            await FormService.getInstance().getFormInstance(this.state.formId, false);
         }
     }
 

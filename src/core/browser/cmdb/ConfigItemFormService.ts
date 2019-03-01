@@ -30,10 +30,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     public async prepareFormFieldValues(
-        formFields: FormField[], configItem: ConfigItem
+        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         if (configItem) {
-            const fields = await this.prepareConfigItemValues(configItem, formFields);
+            const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues);
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
         } else {
@@ -49,48 +49,56 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 } else {
                     formFieldValue = new FormFieldValue(null);
                 }
-                this.formFieldValues.set(f.instanceId, formFieldValue);
+                formFieldValues.set(f.instanceId, formFieldValue);
                 if (f.children) {
-                    await this.prepareFormFieldValues(f.children, null);
+                    await this.prepareFormFieldValues(f.children, null, formFieldValues);
                 }
             }
         }
     }
 
-    private async prepareConfigItemValues(configItem: ConfigItem, formFields: FormField[]): Promise<FormField[]> {
+    private async prepareConfigItemValues(
+        configItem: ConfigItem, formFields: FormField[], formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<FormField[]> {
         let newFormFields: FormField[] = [];
         for (const formField of formFields) {
             if (configItem[formField.property]) {
                 newFormFields.push(formField);
-                await this.getConfigItemValue(formField, configItem[formField.property], configItem);
+                await this.getConfigItemValue(formField, configItem[formField.property], configItem, formFieldValues);
             } else if (configItem.CurrentVersion) {
                 if (configItem.CurrentVersion[formField.property]) {
                     newFormFields.push(formField);
-                    await this.getConfigItemValue(formField, configItem.CurrentVersion[formField.property], configItem);
+                    await this.getConfigItemValue(
+                        formField, configItem.CurrentVersion[formField.property], configItem, formFieldValues
+                    );
                 } else {
                     newFormFields = [
                         ...newFormFields,
-                        ...await this.prepareDataValues(configItem.CurrentVersion.PreparedData, formField)
+                        ...await this.prepareDataValues(
+                            configItem.CurrentVersion.PreparedData, formField, formFieldValues
+                        )
                     ];
                 }
             } else {
                 newFormFields.push(formField);
-                this.formFieldValues.set(formField.instanceId, new FormFieldValue(null));
+                formFieldValues.set(formField.instanceId, new FormFieldValue(null));
             }
         }
         return newFormFields;
     }
 
-    private async getConfigItemValue(formField: FormField, value: any, configItem: ConfigItem): Promise<void> {
+    private async getConfigItemValue(
+        formField: FormField, value: any, configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<void> {
         const newValue = await this.getValue(
             formField.property,
             value,
             configItem
         );
         const formFieldValue = new FormFieldValue(newValue);
-        this.formFieldValues.set(formField.instanceId, formFieldValue);
+        formFieldValues.set(formField.instanceId, formFieldValue);
         if (formField.children) {
-            await this.prepareConfigItemValues(configItem, formField.children);
+            await this.prepareConfigItemValues(configItem, formField.children, formFieldValues);
         }
     }
 
@@ -133,7 +141,9 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         return value;
     }
 
-    private async prepareDataValues(preparedData: PreparedData[], formField: FormField): Promise<FormField[]> {
+    private async prepareDataValues(
+        preparedData: PreparedData[], formField: FormField, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<FormField[]> {
         const formFields: FormField[] = [];
         const relevantPreparedData = preparedData.filter(
             (pd) => pd.Key === formField.property
@@ -148,18 +158,20 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                         ff = this.getNewFormField(formField);
                         formFields.push(ff);
                     }
-                    await this.setDataValue(ff, pd, index);
-                    await this.setDataChildren(ff, pd);
+                    await this.setDataValue(ff, pd, index, formFieldValues);
+                    await this.setDataChildren(ff, pd, formFieldValues);
                 }
                 index++;
             }
         } else {
-            await this.setEmptyField(ff);
+            await this.setEmptyField(ff, formFieldValues);
         }
         return formFields;
     }
 
-    private async setDataValue(ff: FormField, pd: PreparedData, index: number): Promise<void> {
+    private async setDataValue(
+        ff: FormField, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<void> {
         let value = await this.getDataValue(ff, pd);
         if (ff.options && !!ff.options.length) {
             const typeOption = ff.options.find((o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE);
@@ -167,15 +179,17 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 value = [value];
             }
         }
-        this.formFieldValues.set(ff.instanceId, new FormFieldValue(value));
+        formFieldValues.set(ff.instanceId, new FormFieldValue(value));
     }
 
-    private async setDataChildren(ff: FormField, pd: PreparedData): Promise<void> {
+    private async setDataChildren(
+        ff: FormField, pd: PreparedData, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<void> {
         if (ff.children && ff.children.length) {
             let newChildren: FormField[] = [];
             for (const child of ff.children) {
                 const children = await this.prepareDataValues(
-                    pd.Sub ? pd.Sub : [], child
+                    pd.Sub ? pd.Sub : [], child, formFieldValues
                 );
                 newChildren = [...newChildren, ...children];
             }
@@ -183,12 +197,12 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         }
     }
 
-    private async setEmptyField(ff: FormField): Promise<void> {
-        this.formFieldValues.set(ff.instanceId, new FormFieldValue(null));
+    private async setEmptyField(ff: FormField, formFieldValues: Map<string, FormFieldValue<any>>): Promise<void> {
+        formFieldValues.set(ff.instanceId, new FormFieldValue(null));
         if (ff.children && ff.children.length) {
             let newChildren: FormField[] = [];
             for (const child of ff.children) {
-                const children = await this.prepareDataValues([], child);
+                const children = await this.prepareDataValues([], child, formFieldValues);
                 newChildren = [...newChildren, ...children];
             }
             ff.children = newChildren;
