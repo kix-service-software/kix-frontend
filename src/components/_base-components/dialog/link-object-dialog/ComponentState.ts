@@ -16,6 +16,7 @@ export class ComponentState {
         public formId: string = null,
         public canSubmit: boolean = false,
         public tableId: string = null,
-        public filterCount: number = null
+        public filterCount: number = null,
+        public loading: boolean = true
     ) { }
 }

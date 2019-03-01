@@ -1,5 +1,5 @@
 <div.linkable-objects-dialog>
-    <if(!state.linkableObjectNodes || !state.linkableObjectNodes.length)>
+    <if(state.loading || !state.linkableObjectNodes || !state.linkableObjectNodes.length)>
         <span>Keine Linktypen verfügbar.</span>
     </if>
     <else>

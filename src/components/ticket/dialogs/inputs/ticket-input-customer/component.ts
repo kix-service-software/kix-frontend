@@ -25,7 +25,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
-                if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
+                if (formField && formField.property === TicketProperty.CUSTOMER_USER_ID) {
                     if (value.value) {
                         const contacts = await KIXObjectService.loadObjects<Contact>(
                             KIXObjectType.CONTACT, [value.value]

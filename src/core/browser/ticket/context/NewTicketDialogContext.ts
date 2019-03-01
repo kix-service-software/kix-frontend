@@ -36,7 +36,7 @@ export class NewTicketDialogContext
     }
 
     public async formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): Promise<void> {
-        if (formField.property === TicketProperty.CUSTOMER_ID) {
+        if (formField && formField.property === TicketProperty.CUSTOMER_ID) {
             if (value && value.value) {
                 const customers = await KIXObjectService.loadObjects<Customer>(
                     KIXObjectType.CUSTOMER, [value.value]
@@ -52,7 +52,7 @@ export class NewTicketDialogContext
                     );
                 }
             }
-        } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
+        } else if (formField && formField.property === TicketProperty.CUSTOMER_USER_ID) {
             if (value && value.value) {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, [value.value]
