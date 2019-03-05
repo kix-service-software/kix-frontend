@@ -2,7 +2,8 @@ import { KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions } 
 import { RoutingConfiguration } from "../../router";
 import { ContactDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableHeaderHeight, TableRowHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ContactTableContentProvider } from "./ContactTableContentProvider";
 
@@ -91,6 +92,11 @@ export class ContactTableFactory implements ITableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CONTACT;
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

@@ -41,7 +41,7 @@ export abstract class BulkManager {
     }
 
     public hasDefinedValues(): boolean {
-        return this.getEditableValues().length > 0;
+        return !!this.getEditableValues().length;
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -109,18 +109,9 @@ export abstract class BulkManager {
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
-        let values: ObjectPropertyValue[] = [];
-
-        values = [...this.bulkValues.filter((bv) => bv.operator === PropertyOperator.CLEAR)];
-
-        values = [
-            ...values,
-            ...this.bulkValues
-                .filter((bv) => bv.operator === PropertyOperator.CHANGE)
-                .filter((bv) => bv.property !== null && bv.value !== null && bv.value !== undefined)
-        ];
-
-        return values;
+        return [...this.bulkValues.filter(
+            (bv) => bv.operator === PropertyOperator.CLEAR
+                || bv.property !== null && bv.value !== null && bv.value !== undefined
+        )];
     }
-
 }

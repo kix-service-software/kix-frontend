@@ -2,7 +2,8 @@ import { KIXObjectType, ContextMode, ConfigItemProperty, DataType } from "../../
 import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, TableRowHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    ToggleOptions, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
 
@@ -100,5 +101,10 @@ export class ConfigItemTableFactory implements ITableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CONFIG_ITEM;
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 }

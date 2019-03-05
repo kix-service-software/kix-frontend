@@ -2,7 +2,7 @@ import { AbstractAction } from '../../model/components/action/AbstractAction';
 import { ContextMode, KIXObjectType } from '../../model';
 import { ContextService } from '../context';
 import { ITable } from '../table';
-import { ImportDialogContext } from '../import';
+import { ImportDialogContext, ImportService } from '../import';
 
 export class ImportAction extends AbstractAction<ITable> {
 
@@ -16,7 +16,11 @@ export class ImportAction extends AbstractAction<ITable> {
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
             this.objectType = this.data.getObjectType();
-            await this.openDialog();
+            if (ImportService.getInstance().hasImportManager(this.objectType)) {
+                await this.openDialog();
+            } else {
+                super.run(event);
+            }
         }
     }
 

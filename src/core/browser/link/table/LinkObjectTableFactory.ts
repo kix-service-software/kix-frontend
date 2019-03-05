@@ -1,6 +1,7 @@
-import { KIXObjectType, LinkObject, LinkObjectProperty, SortOrder, KIXObjectLoadingOptions } from "../../../model";
+import { KIXObjectType, LinkObject, LinkObjectProperty } from "../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { LinkObjectTableContentProvider } from "./LinkObjectTableContentProvider";
 
@@ -48,6 +49,11 @@ export class LinkObjectTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

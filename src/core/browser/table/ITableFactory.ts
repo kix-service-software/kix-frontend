@@ -1,5 +1,6 @@
 import { KIXObjectType } from "../../model";
 import { ITable, TableConfiguration } from "../table";
+import { IColumnConfiguration } from "./IColumnConfiguration";
 
 export interface ITableFactory {
 
@@ -10,4 +11,5 @@ export interface ITableFactory {
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable;
 
+    getDefaultColumnConfiguration(property: string): IColumnConfiguration;
 }

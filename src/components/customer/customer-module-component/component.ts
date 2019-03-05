@@ -8,12 +8,13 @@ import {
     NewCustomerDialogContext, CustomerSearchContext, CustomerSearchAction, CustomerCreateAction,
     CustomerEditAction, CustomerCreateContactAction, CustomerPrintAction, CustomerCreateCIAction,
     CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition,
-    EditCustomerDialogContext, CustomerFormService
+    EditCustomerDialogContext, CustomerFormService, CustomerImportManager
 } from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
     ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
 } from '../../../core/model';
+import { ImportService } from '../../../core/browser/import';
 
 class Component extends AbstractMarkoComponent {
 
@@ -31,6 +32,8 @@ class Component extends AbstractMarkoComponent {
         KIXObjectSearchService.getInstance().registerSearchDefinition(new CustomerSearchDefinition());
 
         KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
+
+        ImportService.getInstance().registerImportManager(new CustomerImportManager());
 
         this.registerContexts();
         this.registerDialogs();

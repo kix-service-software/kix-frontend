@@ -31,7 +31,7 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
             case SearchProperty.FULLTEXT:
                 displayValue = 'Volltext';
                 break;
-            case CustomerProperty.CUSTOMER_COMPANY_City:
+            case CustomerProperty.CUSTOMER_COMPANY_CITY:
                 displayValue = "Stadt";
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COMMENT:

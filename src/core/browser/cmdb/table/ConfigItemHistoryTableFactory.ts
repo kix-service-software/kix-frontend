@@ -1,6 +1,7 @@
 import { KIXObjectType, DataType, ConfigItemHistoryProperty } from "../../../model";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration, TableHeaderHeight
+    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemHistoryContentProvider } from "./ConfigItemHistoryContentProvider";
 
@@ -49,6 +50,11 @@ export class ConfigItemHistoryTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

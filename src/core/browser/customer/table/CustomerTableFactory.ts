@@ -2,7 +2,8 @@ import { KIXObjectType, ContextMode, CustomerProperty, KIXObjectLoadingOptions }
 import { CustomerDetailsContext } from "../context";
 import { RoutingConfiguration } from "../../router";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration, TableHeaderHeight, TableRowHeight
+    ITableFactory, ITable, TableConfiguration, Table, TableHeaderHeight,
+    TableRowHeight, IColumnConfiguration, DefaultColumnConfiguration
 } from "../../table";
 import { CustomerTableContentProvider } from "./CustomerTableContentProvider";
 
@@ -33,20 +34,12 @@ export class CustomerTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(CustomerProperty.CUSTOMER_ID, true, false, true, false, 230, true, true),
-            new DefaultColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_NAME, true, false, true, false, 350, true, true
-            ),
-            new DefaultColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_COUNTRY, true, false, true, false, 150, true, true
-            ),
-            new DefaultColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_City, true, false, true, false, 150, true, true
-            ),
-            new DefaultColumnConfiguration(
-                CustomerProperty.CUSTOMER_COMPANY_STREET, true, false, true, false, 150, true, true
-            ),
-            new DefaultColumnConfiguration(CustomerProperty.VALID_ID, true, false, true, false, 150, true, true),
+            this.getDefaultColumnConfiguration(CustomerProperty.CUSTOMER_ID),
+            this.getDefaultColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_NAME),
+            this.getDefaultColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_COUNTRY),
+            this.getDefaultColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_CITY),
+            this.getDefaultColumnConfiguration(CustomerProperty.CUSTOMER_COMPANY_STREET),
+            this.getDefaultColumnConfiguration(CustomerProperty.VALID_ID)
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
@@ -69,6 +62,32 @@ export class CustomerTableFactory implements ITableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CUSTOMER;
         return tableConfiguration;
+    }
+
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        let config;
+        switch (property) {
+            case CustomerProperty.CUSTOMER_ID:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 230, true, true);
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_NAME:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_CITY:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                break;
+            case CustomerProperty.CUSTOMER_COMPANY_STREET:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                break;
+            case CustomerProperty.VALID_ID:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                break;
+            default:
+        }
+        return config;
     }
 
 }

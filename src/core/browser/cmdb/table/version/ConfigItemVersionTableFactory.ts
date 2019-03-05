@@ -1,7 +1,7 @@
 import { KIXObjectType, VersionProperty, DataType } from "../../../../model";
 import {
     ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
-    TableHeaderHeight, TableRowHeight, ToggleOptions
+    TableHeaderHeight, TableRowHeight, ToggleOptions, IColumnConfiguration
 } from "../../../table";
 import { ConfigItemVersionContentProvider } from "./ConfigItemVersionContentProvider";
 
@@ -57,6 +57,11 @@ export class ConfigItemVersionTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

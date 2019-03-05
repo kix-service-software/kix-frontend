@@ -2,7 +2,8 @@ import {
     KIXObjectType, TicketHistoryProperty, DataType
 } from "../../../model";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration, TableHeaderHeight
+    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { TicketHistoryContentProvider } from "./TicketHistoryContentProvider";
 
@@ -50,6 +51,11 @@ export class TicketHistoryTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

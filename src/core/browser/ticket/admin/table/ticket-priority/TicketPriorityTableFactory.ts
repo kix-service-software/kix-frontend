@@ -1,7 +1,8 @@
 import { TicketPriorityDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketPriorityProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketPriorityTableContentProvider } from "./TicketPriorityTableContentProvider";
@@ -58,5 +59,10 @@ export class TicketPriorityTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 }
