@@ -2,7 +2,7 @@ import { KIXObjectType, TicketProperty, ContextMode, DataType, KIXObjectLoadingO
 import { RoutingConfiguration } from "../../router";
 import { TicketDetailsContext } from "../context";
 import {
-    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory, IColumnConfiguration
 } from "../../table";
 import { TicketTableContentProvider } from "./new";
 
@@ -110,6 +110,11 @@ export class TicketTableFactory implements ITableFactory {
 
         tableConfiguration.objectType = KIXObjectType.TICKET;
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

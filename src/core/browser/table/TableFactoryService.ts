@@ -1,7 +1,8 @@
 import { ITableFactory } from "./ITableFactory";
-import { KIXObjectType, KIXObjectLoadingOptions } from "../../model";
+import { KIXObjectType } from "../../model";
 import { ITable } from "../table";
 import { TableConfiguration } from "./TableConfiguration";
+import { IColumnConfiguration } from "./IColumnConfiguration";
 
 export class TableFactoryService {
 
@@ -39,5 +40,10 @@ export class TableFactoryService {
             )
             : null;
         return table;
+    }
+
+    public getDefaultColumnConfiguration(objectType: KIXObjectType, property: string): IColumnConfiguration {
+        const factory = this.factories.find((f) => f.objectType === objectType);
+        return factory ? factory.getDefaultColumnConfiguration(property) : null;
     }
 }

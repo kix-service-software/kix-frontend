@@ -1,10 +1,11 @@
 import {
-    KIXObjectType, DataType, ConfigItemClassProperty, ContextMode, KIXObjectLoadingOptions
+    KIXObjectType, DataType, ConfigItemClassProperty, ContextMode
 } from "../../../../../model";
 import { RoutingConfiguration } from "../../../../router";
 import { ConfigItemClassDetailsContext } from "../../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { ConfigItemClassTableContentProvider } from "./ConfigItemClassTableContentProvider";
 
@@ -62,5 +63,10 @@ export class ConfigItemClassTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 }

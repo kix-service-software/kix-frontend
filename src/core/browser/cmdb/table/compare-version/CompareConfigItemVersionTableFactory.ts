@@ -1,7 +1,7 @@
 import { KIXObjectType, DataType } from "../../../../model";
 import {
     ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
-    TableHeaderHeight, TableRowHeight
+    TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../../table";
 import { CompareConfigItemVersionTableContentProvider } from "./CompareConfigItemVersionTableContentProvider";
 
@@ -43,6 +43,11 @@ export class CompareConfigItemVersionTableFactory implements ITableFactory {
         tableConfiguration.displayLimit = 18;
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

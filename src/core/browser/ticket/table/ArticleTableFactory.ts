@@ -1,7 +1,7 @@
 import { KIXObjectType, DataType, ArticleProperty } from "../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions,
-    ITableFactory, TableHeaderHeight, TableRowHeight, TableEvent
+    ITableFactory, TableHeaderHeight, TableRowHeight, TableEvent, IColumnConfiguration
 } from "../../table";
 import { ArticleTableContentProvider } from "./new";
 import { EventService } from "../../event";
@@ -89,6 +89,11 @@ export class ArticleTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

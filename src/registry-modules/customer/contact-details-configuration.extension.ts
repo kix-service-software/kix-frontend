@@ -45,7 +45,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                         CustomerProperty.CUSTOMER_COMPANY_COUNTRY, true, false, true, true, 175, true, true
                     ),
                     new DefaultColumnConfiguration(
-                        CustomerProperty.CUSTOMER_COMPANY_City, true, false, true, true, 175, true, true
+                        CustomerProperty.CUSTOMER_COMPANY_CITY, true, false, true, true, 175, true, true
                     ),
                     new DefaultColumnConfiguration(
                         CustomerProperty.CUSTOMER_COMPANY_STREET, true, false, true, true, 250, true, true

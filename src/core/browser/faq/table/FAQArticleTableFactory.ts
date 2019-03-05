@@ -1,8 +1,11 @@
-import { KIXObjectType, ContextMode, DataType, KIXObjectLoadingOptions } from "../../../model";
+import { KIXObjectType, ContextMode, DataType } from "../../../model";
 import { FAQArticleProperty } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
-import { FAQDetailsContext, FAQContext } from "../context";
-import { ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration } from "../../table";
+import { FAQDetailsContext } from "../context";
+import {
+    ITableFactory, TableConfiguration, ITable, Table,
+    DefaultColumnConfiguration, IColumnConfiguration
+} from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
 
 export class FAQArticleTableFactory implements ITableFactory {
@@ -90,6 +93,11 @@ export class FAQArticleTableFactory implements ITableFactory {
 
         tableConfiguration.objectType = KIXObjectType.FAQ_ARTICLE;
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

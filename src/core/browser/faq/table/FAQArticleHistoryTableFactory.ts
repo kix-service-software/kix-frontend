@@ -1,7 +1,8 @@
 import { KIXObjectType, DataType } from "../../../model";
 import { FAQArticleHistoryProperty } from "../../../model/kix/faq";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableHeaderHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { FAQArticleHistoryContentProvider } from "./FAQArticleHistoryContentProvider";
 
@@ -44,6 +45,11 @@ export class FAQArticleHistoryTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

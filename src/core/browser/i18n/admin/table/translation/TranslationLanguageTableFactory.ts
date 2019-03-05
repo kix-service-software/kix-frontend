@@ -1,6 +1,7 @@
 import { KIXObjectType, TranslationLanguageProperty } from "../../../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration, TableRowHeight, TableHeaderHeight
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { TranslationLanguageTableContentProvider } from "./TranslationLanguageTableContentProvider";
 
@@ -46,5 +47,10 @@ export class TranslationLanguageTableFactory implements ITableFactory {
         }
 
         return tableConfiguration;
+    }
+
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 }

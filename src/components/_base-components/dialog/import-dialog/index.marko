@@ -1,15 +1,44 @@
 <widget instanceId=state.instanceId>
     <@content>
-        <if(!state.loading)>
-            <main-form formId=state.formId key="input-configuration-form"/>
-            <!-- <form.form autocomplete="off">
-                <if(state.bulkManager)>
-                    <bulk-form bulkManager=state.bulkManager/>
+        <div.import-container>
+            <if(!state.loading)>
+                <main-form formId=state.formId key="input-configuration-form"/>
+                <div.form.import-attributes-container>
+                    <if(state.importManager)>
+                        <widget instanceId="dynamic-form-field-group" title="Werte ersetzen" key="attributes">
+                            <@content>
+                                <div.import-attributes>
+                                    <dynamic-form-field-container manager=state.importManager/>
+                                </div>
+                            </@content>
+                        </widget>
+                    </if>
+                </div>
+                <if(state.table)>
+                    <div.object-table>
+                        <div.object-table-head>
+                            <span>${state.tableTitle}</span>
+                        </div>
+                        <standard-table-NEW table=state.table/>
+                    </div>
                 </if>
-            </form> -->
-        </if>
-        <else>
-            <loading-spinner/>
-        </else>
+                <div.dialog-button-container>
+                    <!-- <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+                    <span.kix-icon-close/>Abbrechen
+                </button>
+                <div.submit-buttons>
+                    <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=!state.run>
+                        <span.kix-icon-check/>Dialog schließen
+                    </button>
+                    <button.submit-button type="button" on-click("run") title="Import starten" disabled=!state.canRun>
+                        <span.kix-icon-edit/>Import starten
+                    </button>
+                </div> -->
+                </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
+        </div>
     </@content>
 </widget>

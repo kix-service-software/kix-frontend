@@ -1,3 +1,5 @@
+@form-property-column: 14.5rem;
+@form-property-hint-column: 2rem;
 .form {
     padding-left: @margin-widget-content;
     .form-field {
@@ -6,9 +8,9 @@
         }
         min-height: 2em;
         display: grid;
-        grid-template-columns: 14.5rem 2rem auto max-content;
+        grid-template-columns: @form-property-column @form-property-hint-column auto max-content;
         &.additionalFieldControlsNeeded {
-            grid-template-columns: 14.5rem 2rem auto max-content max-content;
+            grid-template-columns: @form-property-column @form-property-hint-column auto max-content max-content;
         }
         >.field-label {
             white-space: nowrap;
