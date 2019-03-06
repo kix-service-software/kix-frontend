@@ -288,6 +288,7 @@ export class Table implements ITable {
         await this.filterColumns();
 
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+        EventService.getInstance().publish(TableEvent.TABLE_FILTERED, new TableEventData(this.getTableId()));
     }
 
     private async filterColumns(): Promise<void> {

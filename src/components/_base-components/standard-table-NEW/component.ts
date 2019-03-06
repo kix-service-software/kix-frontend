@@ -52,6 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().subscribe(TableEvent.SORTED, this);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this);
         EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
     }
 
@@ -65,6 +66,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
         EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
     }
 
@@ -99,6 +101,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             if (eventId === TableEvent.ROW_TOGGLED) {
                 this.setTableHeight();
             }
+
+            if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
+                const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
+                if (container) {
+                    container.scrollTop = 0;
+                }
+            }
         }
 
         if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
@@ -122,15 +131,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                         }
 
                     }
-                }
-            }
-        }
-
-        if (eventId === TableEvent.SORTED) {
-            if (data && data.tableId && data.tableId === this.state.table.getTableId()) {
-                const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
-                if (container) {
-                    container.scrollTop = 0;
                 }
             }
         }
