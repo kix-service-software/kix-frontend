@@ -264,6 +264,7 @@ describe('Table Filter Tests', () => {
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             const column = table.getColumn('2');
+            column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-2-2']);
 
             const rows = table.getRows();
@@ -290,6 +291,7 @@ describe('Table Filter Tests', () => {
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             const column = table.getColumn('2');
+            column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-1-1'], null);
 
             const rows = table.getRows();
@@ -303,6 +305,7 @@ describe('Table Filter Tests', () => {
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
             const column = table.getColumn('2');
+            column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-1-1'], null);
             let rows = table.getRows();
             expect(rows.length).equals(2);

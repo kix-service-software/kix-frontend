@@ -125,9 +125,16 @@ export class Row<T = any> implements IRow<T> {
         const cell = this.getCell(criteria.property);
         const column = this.getTable().getColumn(criteria.property);
         if (cell && column) {
-            const match = await cell.filter(null, [criteria]);
-            if (!match) {
-                return false;
+            if (column.getColumnConfiguration().hasListFilter) {
+                const match = await cell.filter(null, [criteria]);
+                if (!match) {
+                    return false;
+                }
+            } else {
+                const match = await cell.filter(criteria.value.toString(), null);
+                if (!match) {
+                    return false;
+                }
             }
         } else {
             return false;
