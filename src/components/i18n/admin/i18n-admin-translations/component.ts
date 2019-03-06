@@ -84,7 +84,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: (data: TableEventData, eventId: string) => {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
-                        this.state.filterCount = this.state.table.isFiltered
+                        this.state.filterCount = this.state.table.isFiltered()
                             ? this.state.table.getRows().length : null;
                         this.prepareTitle();
                     }
